@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Colors */
+  --color-primary: #101010; /* gray-900 equivalent - Deep foundation */
+  --color-primary-50: #f9fafb;
+  --color-primary-100: #f3f4f6;
+  --color-primary-200: #e5e7eb;
+  --color-primary-300: #d1d5db;
+  --color-primary-400: #9ca3af;
+  --color-primary-500: #6b7280;
+  --color-primary-600: #4b5563;
+  --color-primary-700: #374151;
+  --color-primary-800: #1f2937;
+  --color-primary-900: #101010; /* Primary color */
+
+  /* Secondary Colors */
+  --color-secondary: #191919; /* gray-800 equivalent - Elevated surface */
+  --color-secondary-50: #f9fafb;
+  --color-secondary-100: #f3f4f6;
+  --color-secondary-200: #e5e7eb;
+  --color-secondary-300: #d1d5db;
+  --color-secondary-400: #9ca3af;
+  --color-secondary-500: #6b7280;
+  --color-secondary-600: #4b5563;
+  --color-secondary-700: #374151;
+  --color-secondary-800: #191919; /* Secondary color */
+  --color-secondary-900: #111827;
+
+  /* Accent Colors */
+  --color-accent: #3B82F6; /* blue-500 - Vibrant blue for primary actions */
+  --color-accent-50: #eff6ff;
+  --color-accent-100: #dbeafe;
+  --color-accent-200: #bfdbfe;
+  --color-accent-300: #93c5fd;
+  --color-accent-400: #60a5fa;
+  --color-accent-500: #3B82F6; /* Accent color */
+  --color-accent-600: #2563eb;
+  --color-accent-700: #1d4ed8;
+  --color-accent-800: #1e40af;
+  --color-accent-900: #1e3a8a;
+
+  /* Background Colors */
+  --color-background: #0A0A0A; /* gray-950 equivalent - Ultra-deep base */
+  --color-background-50: #f9fafb;
+  --color-background-100: #f3f4f6;
+  --color-background-200: #e5e7eb;
+  --color-background-300: #d1d5db;
+  --color-background-400: #9ca3af;
+  --color-background-500: #6b7280;
+  --color-background-600: #4b5563;
+  --color-background-700: #374151;
+  --color-background-800: #1f2937;
+  --color-background-900: #111827;
+  --color-background-950: #0A0A0A; /* Background color */
+
+  /* Surface Colors */
+  --color-surface: #1F1F1F; /* gray-800 equivalent - Interactive element background */
+  --color-surface-50: #f9fafb;
+  --color-surface-100: #f3f4f6;
+  --color-surface-200: #e5e7eb;
+  --color-surface-300: #d1d5db;
+  --color-surface-400: #9ca3af;
+  --color-surface-500: #6b7280;
+  --color-surface-600: #4b5563;
+  --color-surface-700: #374151;
+  --color-surface-800: #1F1F1F; /* Surface color */
+  --color-surface-900: #111827;
+
+  /* Text Colors */
+  --color-text-primary: #FFFFFF; /* white - Maximum readability */
+  --color-text-secondary: #A1A1AA; /* gray-400 - Muted gray for hierarchy */
+
+  /* Status Colors */
+  --color-success: #10B981; /* emerald-500 - Vibrant green for positive outcomes */
+  --color-success-50: #ecfdf5;
+  --color-success-100: #d1fae5;
+  --color-success-200: #a7f3d0;
+  --color-success-300: #6ee7b7;
+  --color-success-400: #34d399;
+  --color-success-500: #10B981; /* Success color */
+  --color-success-600: #059669;
+  --color-success-700: #047857;
+  --color-success-800: #065f46;
+  --color-success-900: #064e3b;
+
+  --color-warning: #F59E0B; /* amber-500 - Attention-grabbing amber */
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #F59E0B; /* Warning color */
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  --color-error: #EF4444; /* red-500 - Clear red for critical issues */
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #EF4444; /* Error color */
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer components {
+  .transition-micro {
+    transition: all 150ms ease-out;
+  }
+  
+  .transition-standard {
+    transition: all 200ms ease-out;
+  }
+  
+  .transition-smooth {
+    transition: all 300ms ease-out;
+  }
+  
+  .shadow-elevation-1 {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+  
+  .shadow-elevation-2 {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  }
+  
+  .shadow-elevation-3 {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .border-subtle {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
