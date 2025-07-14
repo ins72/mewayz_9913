@@ -725,34 +725,340 @@ class MewayzAPITester:
         except Exception as e:
             self.log_result("Unauthorized Access Handling", "FAIL", f"Request failed: {str(e)}")
             return False
-        """Test unauthorized access handling"""
+
+    # OAuth Testing Methods
+    def test_oauth_google_redirect(self):
+        """Test Google OAuth redirect"""
         try:
-            # Temporarily remove auth token
-            original_token = self.auth_token
-            self.auth_token = None
+            response = self.make_request('GET', '/auth/oauth/google')
             
-            response = self.make_request('GET', '/auth/me')
-            
-            # Restore auth token
-            self.auth_token = original_token
-            
-            if response.status_code == 401:
-                self.log_result("Unauthorized Access Handling", "PASS", "401 status returned for unauthorized request")
-                return True
-            elif response.status_code == 302:
-                # Laravel might redirect to login page for unauthenticated requests
-                self.log_result("Unauthorized Access Handling", "PASS", "302 redirect returned for unauthorized request (acceptable)")
-                return True
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('redirect_url'):
+                    self.log_result("OAuth Google Redirect", "PASS", "Google OAuth redirect URL generated successfully")
+                    return True
+                else:
+                    self.log_result("OAuth Google Redirect", "FAIL", "Response missing redirect_url", data)
+                    return False
             else:
-                try:
-                    response_data = response.json()
-                except:
-                    response_data = response.text[:200]  # First 200 chars if not JSON
-                self.log_result("Unauthorized Access Handling", "FAIL", f"Expected 401/302 but got {response.status_code}", response_data)
+                self.log_result("OAuth Google Redirect", "FAIL", f"Request failed with status {response.status_code}", response.json())
                 return False
                 
         except Exception as e:
-            self.log_result("Unauthorized Access Handling", "FAIL", f"Request failed: {str(e)}")
+            self.log_result("OAuth Google Redirect", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_oauth_facebook_redirect(self):
+        """Test Facebook OAuth redirect"""
+        try:
+            response = self.make_request('GET', '/auth/oauth/facebook')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('redirect_url'):
+                    self.log_result("OAuth Facebook Redirect", "PASS", "Facebook OAuth redirect URL generated successfully")
+                    return True
+                else:
+                    self.log_result("OAuth Facebook Redirect", "FAIL", "Response missing redirect_url", data)
+                    return False
+            else:
+                self.log_result("OAuth Facebook Redirect", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("OAuth Facebook Redirect", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_oauth_apple_redirect(self):
+        """Test Apple OAuth redirect"""
+        try:
+            response = self.make_request('GET', '/auth/oauth/apple')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('redirect_url'):
+                    self.log_result("OAuth Apple Redirect", "PASS", "Apple OAuth redirect URL generated successfully")
+                    return True
+                else:
+                    self.log_result("OAuth Apple Redirect", "FAIL", "Response missing redirect_url", data)
+                    return False
+            else:
+                self.log_result("OAuth Apple Redirect", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("OAuth Apple Redirect", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_oauth_twitter_redirect(self):
+        """Test Twitter OAuth redirect"""
+        try:
+            response = self.make_request('GET', '/auth/oauth/twitter')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('redirect_url'):
+                    self.log_result("OAuth Twitter Redirect", "PASS", "Twitter OAuth redirect URL generated successfully")
+                    return True
+                else:
+                    self.log_result("OAuth Twitter Redirect", "FAIL", "Response missing redirect_url", data)
+                    return False
+            else:
+                self.log_result("OAuth Twitter Redirect", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("OAuth Twitter Redirect", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_oauth_invalid_provider(self):
+        """Test OAuth with invalid provider"""
+        try:
+            response = self.make_request('GET', '/auth/oauth/invalid_provider')
+            
+            if response.status_code == 400:
+                data = response.json()
+                if not data.get('success') and 'Invalid OAuth provider' in data.get('message', ''):
+                    self.log_result("OAuth Invalid Provider", "PASS", "Invalid provider properly rejected")
+                    return True
+                else:
+                    self.log_result("OAuth Invalid Provider", "FAIL", "Expected invalid provider error", data)
+                    return False
+            else:
+                self.log_result("OAuth Invalid Provider", "FAIL", f"Expected 400 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("OAuth Invalid Provider", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_oauth_status(self):
+        """Test OAuth status endpoint"""
+        if not self.auth_token:
+            self.log_result("OAuth Status", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            response = self.make_request('GET', '/auth/oauth/status')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'oauth_status' in data:
+                    oauth_status = data['oauth_status']
+                    required_fields = ['linked', 'provider', 'has_password', 'can_unlink']
+                    if all(field in oauth_status for field in required_fields):
+                        self.log_result("OAuth Status", "PASS", "OAuth status retrieved successfully")
+                        return True
+                    else:
+                        self.log_result("OAuth Status", "FAIL", "Missing required OAuth status fields", data)
+                        return False
+                else:
+                    self.log_result("OAuth Status", "FAIL", "Response missing oauth_status", data)
+                    return False
+            else:
+                self.log_result("OAuth Status", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("OAuth Status", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    # 2FA Testing Methods
+    def test_2fa_generate_secret(self):
+        """Test 2FA secret generation"""
+        if not self.auth_token:
+            self.log_result("2FA Generate Secret", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            response = self.make_request('POST', '/auth/2fa/generate')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('secret') and data.get('qr_code_url'):
+                    self.log_result("2FA Generate Secret", "PASS", "2FA secret and QR code generated successfully")
+                    return data.get('secret')  # Return secret for further testing
+                else:
+                    self.log_result("2FA Generate Secret", "FAIL", "Response missing secret or QR code", data)
+                    return False
+            elif response.status_code == 400:
+                data = response.json()
+                if '2FA is already enabled' in data.get('message', ''):
+                    self.log_result("2FA Generate Secret", "PASS", "2FA already enabled (expected behavior)")
+                    return True
+                else:
+                    self.log_result("2FA Generate Secret", "FAIL", "Unexpected 400 error", data)
+                    return False
+            else:
+                self.log_result("2FA Generate Secret", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("2FA Generate Secret", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_2fa_enable_invalid_code(self):
+        """Test 2FA enable with invalid code"""
+        if not self.auth_token:
+            self.log_result("2FA Enable Invalid Code", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Try to enable 2FA with invalid code
+            invalid_data = {
+                "code": "000000"  # Invalid code
+            }
+            
+            response = self.make_request('POST', '/auth/2fa/enable', invalid_data)
+            
+            if response.status_code == 400:
+                data = response.json()
+                if not data.get('success') and 'Invalid verification code' in data.get('message', ''):
+                    self.log_result("2FA Enable Invalid Code", "PASS", "Invalid 2FA code properly rejected")
+                    return True
+                else:
+                    self.log_result("2FA Enable Invalid Code", "FAIL", "Expected invalid code error", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("2FA Enable Invalid Code", "PASS", "Validation errors returned correctly")
+                    return True
+                else:
+                    self.log_result("2FA Enable Invalid Code", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("2FA Enable Invalid Code", "FAIL", f"Expected 400/422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("2FA Enable Invalid Code", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_2fa_status(self):
+        """Test 2FA status endpoint"""
+        if not self.auth_token:
+            self.log_result("2FA Status", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            response = self.make_request('GET', '/auth/2fa/status')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'two_factor_enabled' in data:
+                    required_fields = ['two_factor_enabled', 'has_recovery_codes', 'recovery_codes_count']
+                    if all(field in data for field in required_fields):
+                        self.log_result("2FA Status", "PASS", "2FA status retrieved successfully")
+                        return True
+                    else:
+                        self.log_result("2FA Status", "FAIL", "Missing required 2FA status fields", data)
+                        return False
+                else:
+                    self.log_result("2FA Status", "FAIL", "Response missing 2FA status fields", data)
+                    return False
+            else:
+                self.log_result("2FA Status", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("2FA Status", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_2fa_disable_not_enabled(self):
+        """Test 2FA disable when not enabled"""
+        if not self.auth_token:
+            self.log_result("2FA Disable Not Enabled", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            disable_data = {
+                "code": "123456"  # Any code
+            }
+            
+            response = self.make_request('POST', '/auth/2fa/disable', disable_data)
+            
+            if response.status_code == 400:
+                data = response.json()
+                if not data.get('success') and 'not enabled' in data.get('message', ''):
+                    self.log_result("2FA Disable Not Enabled", "PASS", "2FA disable properly rejected when not enabled")
+                    return True
+                else:
+                    self.log_result("2FA Disable Not Enabled", "FAIL", "Expected 'not enabled' error", data)
+                    return False
+            else:
+                self.log_result("2FA Disable Not Enabled", "FAIL", f"Expected 400 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("2FA Disable Not Enabled", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_2fa_recovery_codes_not_enabled(self):
+        """Test 2FA recovery codes when not enabled"""
+        if not self.auth_token:
+            self.log_result("2FA Recovery Codes Not Enabled", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            response = self.make_request('POST', '/auth/2fa/recovery-codes')
+            
+            if response.status_code == 400:
+                data = response.json()
+                if not data.get('success') and 'not enabled' in data.get('message', ''):
+                    self.log_result("2FA Recovery Codes Not Enabled", "PASS", "Recovery codes properly rejected when 2FA not enabled")
+                    return True
+                else:
+                    self.log_result("2FA Recovery Codes Not Enabled", "FAIL", "Expected 'not enabled' error", data)
+                    return False
+            else:
+                self.log_result("2FA Recovery Codes Not Enabled", "FAIL", f"Expected 400 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("2FA Recovery Codes Not Enabled", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_enhanced_login_tracking(self):
+        """Test enhanced login with tracking"""
+        try:
+            # Test login to verify tracking fields are updated
+            response = self.make_request('POST', '/auth/login', self.admin_credentials)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('token'):
+                    # Now get user info to check if tracking fields are present
+                    temp_token = data['token']
+                    original_token = self.auth_token
+                    self.auth_token = temp_token
+                    
+                    user_response = self.make_request('GET', '/auth/me')
+                    self.auth_token = original_token
+                    
+                    if user_response.status_code == 200:
+                        user_data = user_response.json()
+                        user = user_data.get('user', {})
+                        
+                        # Check if user has 2FA fields
+                        if 'two_factor_enabled' in user:
+                            self.log_result("Enhanced Login Tracking", "PASS", "Login tracking and 2FA fields present")
+                            return True
+                        else:
+                            self.log_result("Enhanced Login Tracking", "FAIL", "Missing 2FA tracking fields", user)
+                            return False
+                    else:
+                        self.log_result("Enhanced Login Tracking", "FAIL", "Could not retrieve user info after login")
+                        return False
+                else:
+                    self.log_result("Enhanced Login Tracking", "FAIL", "Login succeeded but missing token", data)
+                    return False
+            else:
+                self.log_result("Enhanced Login Tracking", "FAIL", f"Login failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Enhanced Login Tracking", "FAIL", f"Request failed: {str(e)}")
             return False
 
     def run_all_tests(self):
