@@ -233,7 +233,7 @@ return [
                             ["name" => "3 pages"],
                             ["name" => "1 site"],
                             ["name" => "100mb storage"],
-                            ["name" => "Zeph Domain"],
+                            ["name" => "Mewayz Domain"],
                         ],
                         "popular_price" => false,
                         "text" => "",
