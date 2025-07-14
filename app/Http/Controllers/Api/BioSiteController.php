@@ -102,6 +102,7 @@ class BioSiteController extends Controller
                 'user_id' => $request->user()->id,
                 'title' => $request->title,
                 'slug' => Str::lower($request->slug),
+                'address' => Str::lower($request->slug), // Use slug as address for compatibility
                 'description' => $request->description,
                 'template_id' => $request->template_id ?? 1,
                 'theme_config' => json_encode($themeConfig),
