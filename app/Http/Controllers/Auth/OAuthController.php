@@ -63,7 +63,12 @@ class OAuthController extends Controller
         }
 
         try {
-            $socialUser = Socialite::driver($provider)->stateless()->user();
+            // Handle Twitter differently as it doesn't support stateless mode
+            if ($provider === 'twitter') {
+                $socialUser = Socialite::driver($provider)->user();
+            } else {
+                $socialUser = Socialite::driver($provider)->stateless()->user();
+            }
             
             // Check if user exists with this provider
             $existingUser = User::where('provider_id', $socialUser->getId())
