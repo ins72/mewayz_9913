@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::table('bio_sites', function (Blueprint $table) {
             if (!Schema::hasColumn('bio_sites', 'slug')) {
-                $table->string('slug')->unique()->after('title');
+                $table->string('slug')->unique()->after('name');
+            }
+            if (!Schema::hasColumn('bio_sites', 'title')) {
+                $table->string('title')->nullable()->after('name');
+            }
+            if (!Schema::hasColumn('bio_sites', 'description')) {
+                $table->text('description')->nullable()->after('bio');
             }
             if (!Schema::hasColumn('bio_sites', 'theme_config')) {
                 $table->json('theme_config')->nullable()->after('description');
@@ -23,6 +29,9 @@ return new class extends Migration
             }
             if (!Schema::hasColumn('bio_sites', 'click_count')) {
                 $table->integer('click_count')->default(0)->after('view_count');
+            }
+            if (!Schema::hasColumn('bio_sites', 'template_id')) {
+                $table->integer('template_id')->default(1)->after('click_count');
             }
         });
     }
