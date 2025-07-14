@@ -139,16 +139,6 @@ class _CustomTextFieldState extends State<CustomTextField> with SingleTickerProv
                 fontSize: 16,
               ),
               cursorColor: AppColors.primary,
-              onFocusChange: (focused) {
-                setState(() {
-                  _isFocused = focused;
-                });
-                if (focused) {
-                  _animationController.forward();
-                } else {
-                  _animationController.reverse();
-                }
-              },
             );
           },
         ),
