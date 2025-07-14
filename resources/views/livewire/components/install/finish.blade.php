@@ -8,7 +8,7 @@
         
 
         <p class="yena-text !whitespace-pre-line">
-            We're thrilled to inform you that everything is set up and ready for use. Now, you can fully enjoy all the features and capabilities of Zeph Ai builder.
+            We're thrilled to inform you that everything is set up and ready for use. Now, you can fully enjoy all the features and capabilities of Mewayz AI builder.
 
             To get started, please proceed to the login page. If you encounter any issues or have any questions, feel free to reach out for support.
 
