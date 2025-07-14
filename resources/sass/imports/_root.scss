@@ -526,3 +526,104 @@
         --shine-effect-2: linear-gradient(120deg, transparent, var(--c-mix-14), transparent);
         --shine-transition: all 0.65s ease-in-out;
 }
+
+/* Dark theme variables */
+[data-theme="dark"] {
+        --yena-colors-body-text: #E4E4E7;
+        --yena-colors-white: #09090B;
+        --yena-colors-black: #FAFAFA;
+        --yena-colors-gray-50: #09090B;
+        --yena-colors-gray-100: #18181B;
+        --yena-colors-gray-200: #27272A;
+        --yena-colors-gray-300: #3F3F46;
+        --yena-colors-gray-400: #52525B;
+        --yena-colors-gray-500: #71717A;
+        --yena-colors-gray-600: #A1A1AA;
+        --yena-colors-gray-700: #D4D4D8;
+        --yena-colors-gray-800: #E4E4E7;
+        --yena-colors-gray-900: #F4F4F5;
+        --yena-colors-gradient-light: linear-gradient(180deg, #18181B 0%, #09090B 100%);
+        --yena-colors-gradient-dark: linear-gradient(180deg, #09090B 0%, #18181B 100%);
+        --yena-colors-blackAlpha-50: rgba(255, 255, 255, 0.04);
+        --yena-colors-blackAlpha-100: rgba(255, 255, 255, 0.06);
+        --yena-colors-blackAlpha-200: rgba(255, 255, 255, 0.08);
+        --yena-colors-blackAlpha-300: rgba(255, 255, 255, 0.16);
+        --yena-colors-blackAlpha-400: rgba(255, 255, 255, 0.24);
+        --yena-colors-blackAlpha-500: rgba(255, 255, 255, 0.36);
+        --yena-colors-blackAlpha-600: rgba(255, 255, 255, 0.48);
+        --yena-colors-blackAlpha-700: rgba(255, 255, 255, 0.64);
+        --yena-colors-blackAlpha-800: rgba(255, 255, 255, 0.80);
+        --yena-colors-blackAlpha-900: rgba(255, 255, 255, 0.92);
+        --yena-colors-whiteAlpha-50: rgba(0, 0, 0, 0.04);
+        --yena-colors-whiteAlpha-100: rgba(0, 0, 0, 0.06);
+        --yena-colors-whiteAlpha-200: rgba(0, 0, 0, 0.08);
+        --yena-colors-whiteAlpha-300: rgba(0, 0, 0, 0.16);
+        --yena-colors-whiteAlpha-400: rgba(0, 0, 0, 0.24);
+        --yena-colors-whiteAlpha-500: rgba(0, 0, 0, 0.36);
+        --yena-colors-whiteAlpha-600: rgba(0, 0, 0, 0.48);
+        --yena-colors-whiteAlpha-700: rgba(0, 0, 0, 0.64);
+        --yena-colors-whiteAlpha-800: rgba(0, 0, 0, 0.80);
+        --yena-colors-whiteAlpha-900: rgba(0, 0, 0, 0.92);
+        --yena-shadows-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        --yena-shadows-base: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        --yena-shadows-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        --yena-shadows-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+        --yena-shadows-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        --yena-shadows-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        --yena-shadows-dark-lg: rgba(0, 0, 0, 0.3) 0px 0px 0px 1px, rgba(0, 0, 0, 0.6) 0px 5px 10px, rgba(0, 0, 0, 0.8) 0px 15px 40px;
+}
+
+/* Ensure smooth transition between themes */
+body {
+        transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark theme specific styles */
+[data-theme="dark"] {
+        .form-input {
+                input, textarea {
+                        background: var(--yena-colors-gray-100);
+                        color: var(--yena-colors-gray-800);
+                        border-color: var(--yena-colors-gray-300);
+                        
+                        &:focus {
+                                border-color: var(--yena-colors-trueblue-500);
+                        }
+                }
+                
+                label {
+                        color: var(--yena-colors-gray-600);
+                }
+        }
+        
+        .yena-button-stack {
+                background: var(--yena-colors-gray-100);
+                color: var(--yena-colors-gray-800);
+                border-color: var(--yena-colors-gray-300);
+                
+                &:hover {
+                        background: var(--yena-colors-gray-200);
+                }
+        }
+        
+        .yena-card-button {
+                background: var(--yena-colors-gray-100);
+                color: var(--yena-colors-gray-800);
+                border-color: var(--yena-colors-gray-300);
+        }
+        
+        .details-container {
+                background: var(--yena-colors-gray-100);
+                color: var(--yena-colors-gray-800);
+                
+                &:before {
+                        background: var(--yena-colors-gray-200);
+                }
+        }
+        
+        .yena-menu-list {
+                background: var(--yena-colors-gray-100);
+                color: var(--yena-colors-gray-800);
+                border-color: var(--yena-colors-gray-300);
+        }
+}
