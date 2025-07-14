@@ -34,6 +34,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'email',
         'password',
         'role',
+        'provider_id',
+        'provider_name',
+        'provider_avatar',
+        'two_factor_enabled',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'last_login_at',
+        'last_login_ip',
     ];
 
     /**
