@@ -37,6 +37,16 @@ use App\Http\Controllers\Installation\InstallationController;
 |
 */
 
+// OAuth Routes (for web redirects)
+Route::prefix('auth')->group(function () {
+    Route::get('google', [OAuthController::class, 'redirectToProvider'])->defaults('provider', 'google');
+    Route::get('google/callback', [OAuthController::class, 'handleProviderCallback'])->defaults('provider', 'google');
+    Route::get('facebook', [OAuthController::class, 'redirectToProvider'])->defaults('provider', 'facebook');
+    Route::get('facebook/callback', [OAuthController::class, 'handleProviderCallback'])->defaults('provider', 'facebook');
+    Route::get('apple', [OAuthController::class, 'redirectToProvider'])->defaults('provider', 'apple');
+    Route::get('apple/callback', [OAuthController::class, 'handleProviderCallback'])->defaults('provider', 'apple');
+});
+
 // Landing page route
 Route::get('/', function () {
     return view('pages.landing');
