@@ -96,7 +96,7 @@ class TwoFactorController extends Controller
         }
 
         // Generate recovery codes
-        $recoveryCodes = $this->generateRecoveryCodes();
+        $recoveryCodes = $this->createRecoveryCodes();
 
         $user->update([
             'two_factor_enabled' => true,
