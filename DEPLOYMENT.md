@@ -1,6 +1,6 @@
 # Mewayz Platform - Production Deployment Guide
 
-**Enterprise-Grade Deployment Documentation for Zeph Technologies' Flagship Platform**
+**Enterprise-Grade Deployment Documentation for Mewayz Technologies Inc.'s Flagship Platform**
 
 *Seamless deployment strategies for professional production environments*
 
@@ -8,7 +8,7 @@
 
 ## 🚀 Deployment Philosophy
 
-At Zeph Technologies, we understand that exceptional software requires exceptional deployment practices. This guide embodies our commitment to seamless, reliable, and secure production deployments for the Mewayz platform.
+At Mewayz Technologies Inc., we understand that exceptional software requires exceptional deployment practices. This guide embodies our commitment to seamless, reliable, and secure production deployments for the Mewayz platform.
 
 **Our Deployment Principles:**
 - **Reliability**: Zero-downtime deployments with automated rollback capabilities
