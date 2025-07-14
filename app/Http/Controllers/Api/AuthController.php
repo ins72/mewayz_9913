@@ -192,4 +192,27 @@ class AuthController extends Controller
             'message' => 'Invalid reset token',
         ], 400);
     }
+
+    /**
+     * Verify recovery code
+     */
+    private function verifyRecoveryCode($user, $code)
+    {
+        $recoveryCodes = $user->two_factor_recovery_codes;
+
+        if (!$recoveryCodes || !in_array($code, $recoveryCodes)) {
+            return false;
+        }
+
+        // Remove used recovery code
+        $updatedCodes = array_filter($recoveryCodes, function($recoveryCode) use ($code) {
+            return $recoveryCode !== $code;
+        });
+
+        $user->update([
+            'two_factor_recovery_codes' => array_values($updatedCodes)
+        ]);
+
+        return true;
+    }
 }
