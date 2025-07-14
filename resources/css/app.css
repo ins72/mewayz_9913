@@ -8,6 +8,7 @@
 @import 'animate.css';
 @import 'swiper/css/bundle';
 @import '@simonwep/pickr/dist/themes/nano.min.css';
+@import './dark-theme.css';
 
 .loader {
     width: 48px;
