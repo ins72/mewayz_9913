@@ -52,6 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
