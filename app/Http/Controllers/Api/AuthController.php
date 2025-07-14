@@ -17,6 +17,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'two_factor_code' => 'nullable|string|min:6|max:10'
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -27,12 +28,59 @@ class AuthController extends Controller
             ]);
         }
 
+        // Check if 2FA is enabled
+        if ($user->two_factor_enabled) {
+            if (!$request->two_factor_code) {
+                return response()->json([
+                    'success' => false,
+                    'requires_2fa' => true,
+                    'message' => 'Two-factor authentication code required'
+                ], 422);
+            }
+
+            // Verify 2FA code
+            $google2fa = new \PragmaRX\Google2FA\Google2FA();
+            $secret = \Illuminate\Support\Facades\Crypt::decrypt($user->two_factor_secret);
+            $code = $request->two_factor_code;
+
+            $valid = false;
+            if (strlen($code) > 6) {
+                // Recovery code
+                $valid = $this->verifyRecoveryCode($user, $code);
+            } else {
+                // TOTP code
+                $valid = $google2fa->verifyKey($secret, $code);
+            }
+
+            if (!$valid) {
+                return response()->json([
+                    'success' => false,
+                    'requires_2fa' => true,
+                    'message' => 'Invalid two-factor authentication code'
+                ], 422);
+            }
+        }
+
+        // Update login tracking
+        $user->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip()
+        ]);
+
         $token = $user->createToken('mobile-app')->plainTextToken;
 
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar' => $user->getAvatar(),
+                'provider' => $user->provider_name,
+                'two_factor_enabled' => $user->two_factor_enabled,
+                'email_verified' => $user->email_verified_at !== null
+            ],
             'token' => $token,
         ]);
     }
