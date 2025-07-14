@@ -14,6 +14,16 @@ class ApiService {
     };
   }
 
+  static Future<Map<String, dynamic>> _handleResponse(http.Response response) async {
+    final Map<String, dynamic> data = jsonDecode(response.body);
+    
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return data;
+    } else {
+      throw Exception(data['message'] ?? 'An error occurred');
+    }
+  }
+
   // Auth endpoints
   static Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
@@ -25,7 +35,7 @@ class ApiService {
       }),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> register(String name, String email, String password) async {
@@ -40,7 +50,7 @@ class ApiService {
       }),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> logout() async {
@@ -49,7 +59,7 @@ class ApiService {
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> forgotPassword(String email) async {
@@ -59,7 +69,7 @@ class ApiService {
       body: jsonEncode({'email': email}),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>?> getUser() async {
@@ -85,7 +95,7 @@ class ApiService {
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createWorkspace(String name, String description) async {
@@ -98,7 +108,7 @@ class ApiService {
       }),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> inviteTeamMember(String workspaceId, String email, String role) async {
@@ -111,7 +121,7 @@ class ApiService {
       }),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   // Social Media endpoints
@@ -121,7 +131,20 @@ class ApiService {
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> connectSocialAccount(String platform, String accessToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/social-media/accounts/connect'),
+      headers: await _getHeaders(),
+      body: jsonEncode({
+        'platform': platform,
+        'access_token': accessToken,
+      }),
+    );
+    
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> scheduleSocialMediaPost(Map<String, dynamic> postData) async {
@@ -131,7 +154,25 @@ class ApiService {
       body: jsonEncode(postData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getSocialMediaAnalytics() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/social-media/analytics'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> searchInstagramAccounts(Map<String, dynamic> filters) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/social-media/instagram/search?${Uri(queryParameters: filters.map((k, v) => MapEntry(k, v.toString()))).query}'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
   }
 
   // Bio Link endpoints
@@ -141,7 +182,7 @@ class ApiService {
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createBioSite(Map<String, dynamic> siteData) async {
@@ -151,17 +192,36 @@ class ApiService {
       body: jsonEncode(siteData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
-  // CRM endpoints
-  static Future<Map<String, dynamic>> getLeads() async {
+  static Future<Map<String, dynamic>> updateBioSite(String siteId, Map<String, dynamic> siteData) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/bio-sites/$siteId'),
+      headers: await _getHeaders(),
+      body: jsonEncode(siteData),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getBioSiteAnalytics(String siteId) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/crm/leads'),
+      Uri.parse('$baseUrl/bio-sites/$siteId/analytics'),
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  // CRM endpoints
+  static Future<Map<String, dynamic>> getLeads({int page = 1}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/crm/leads?page=$page'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createLead(Map<String, dynamic> leadData) async {
@@ -171,17 +231,32 @@ class ApiService {
       body: jsonEncode(leadData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> updateLead(String leadId, Map<String, dynamic> leadData) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/crm/leads/$leadId'),
+      headers: await _getHeaders(),
+      body: jsonEncode(leadData),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> importContacts(String filePath) async {
+    // TODO: Implement file upload for contact import
+    return {'success': true, 'message': 'Import started'};
   }
 
   // Email Marketing endpoints
-  static Future<Map<String, dynamic>> getEmailCampaigns() async {
+  static Future<Map<String, dynamic>> getEmailCampaigns({int page = 1}) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/email-marketing/campaigns'),
+      Uri.parse('$baseUrl/email-marketing/campaigns?page=$page'),
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createEmailCampaign(Map<String, dynamic> campaignData) async {
@@ -191,17 +266,35 @@ class ApiService {
       body: jsonEncode(campaignData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
-  // E-commerce endpoints
-  static Future<Map<String, dynamic>> getProducts() async {
+  static Future<Map<String, dynamic>> getEmailTemplates() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/ecommerce/products'),
+      Uri.parse('$baseUrl/email-marketing/templates'),
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getEmailAnalytics() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/email-marketing/analytics'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  // E-commerce endpoints
+  static Future<Map<String, dynamic>> getProducts({int page = 1}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/ecommerce/products?page=$page'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createProduct(Map<String, dynamic> productData) async {
@@ -211,17 +304,55 @@ class ApiService {
       body: jsonEncode(productData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
   }
 
-  // Courses endpoints
-  static Future<Map<String, dynamic>> getCourses() async {
+  static Future<Map<String, dynamic>> updateProduct(String productId, Map<String, dynamic> productData) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/ecommerce/products/$productId'),
+      headers: await _getHeaders(),
+      body: jsonEncode(productData),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getOrders({int page = 1}) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/courses'),
+      Uri.parse('$baseUrl/ecommerce/orders?page=$page'),
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> updateOrderStatus(String orderId, String status) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/ecommerce/orders/$orderId/status'),
+      headers: await _getHeaders(),
+      body: jsonEncode({'status': status}),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getEcommerceAnalytics() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/ecommerce/analytics'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  // Courses endpoints
+  static Future<Map<String, dynamic>> getCourses({int page = 1}) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/courses?page=$page'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
   }
 
   static Future<Map<String, dynamic>> createCourse(Map<String, dynamic> courseData) async {
@@ -231,16 +362,93 @@ class ApiService {
       body: jsonEncode(courseData),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> updateCourse(String courseId, Map<String, dynamic> courseData) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/courses/$courseId'),
+      headers: await _getHeaders(),
+      body: jsonEncode(courseData),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getCourseLessons(String courseId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/courses/$courseId/lessons'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> createLesson(String courseId, Map<String, dynamic> lessonData) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/courses/$courseId/lessons'),
+      headers: await _getHeaders(),
+      body: jsonEncode(lessonData),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getCourseAnalytics() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/courses/analytics'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
   }
 
   // Analytics endpoints
-  static Future<Map<String, dynamic>> getAnalytics() async {
+  static Future<Map<String, dynamic>> getAnalyticsOverview() async {
     final response = await http.get(
       Uri.parse('$baseUrl/analytics'),
       headers: await _getHeaders(),
     );
     
-    return jsonDecode(response.body);
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getTrafficAnalytics({String? period}) async {
+    final queryParams = period != null ? '?period=$period' : '';
+    final response = await http.get(
+      Uri.parse('$baseUrl/analytics/traffic$queryParams'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getRevenueAnalytics({String? period}) async {
+    final queryParams = period != null ? '?period=$period' : '';
+    final response = await http.get(
+      Uri.parse('$baseUrl/analytics/revenue$queryParams'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> getReports() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/analytics/reports'),
+      headers: await _getHeaders(),
+    );
+    
+    return await _handleResponse(response);
+  }
+
+  static Future<Map<String, dynamic>> generateReport(Map<String, dynamic> reportData) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/analytics/reports/generate'),
+      headers: await _getHeaders(),
+      body: jsonEncode(reportData),
+    );
+    
+    return await _handleResponse(response);
   }
 }
