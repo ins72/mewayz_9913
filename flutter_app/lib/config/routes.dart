@@ -46,19 +46,19 @@ class AppRouter {
       // Main App Routes
       GoRoute(
         path: '/dashboard',
-        builder: (context, state) => const DashboardScreen(),
+        builder: (context, state) => const EnhancedDashboardScreen(),
       ),
       GoRoute(
         path: '/social-media',
-        builder: (context, state) => const SocialMediaManagerScreen(),
+        builder: (context, state) => const EnhancedSocialMediaScreen(),
       ),
       GoRoute(
-        path: '/link-in-bio',
-        builder: (context, state) => const LinkInBioBuilderScreen(),
+        path: '/bio-sites',
+        builder: (context, state) => const EnhancedBioSitesScreen(),
       ),
       GoRoute(
         path: '/crm',
-        builder: (context, state) => const CrmLeadManagementScreen(),
+        builder: (context, state) => const EnhancedCrmScreen(),
       ),
       GoRoute(
         path: '/email-marketing',
@@ -75,6 +75,10 @@ class AppRouter {
       GoRoute(
         path: '/analytics',
         builder: (context, state) => const AnalyticsDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );
