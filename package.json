@@ -41,6 +41,7 @@
         "@fullcalendar/core": "^6.1.18",
         "@fullcalendar/daygrid": "^6.1.18",
         "@fullcalendar/interaction": "^6.1.18",
+        "@fullcalendar/timegrid": "^6.1.18",
         "@phosphor-icons/web": "^2.1.2",
         "@primocms/builder": "^0.1.59",
         "@ryangjchandler/alpine-clipboard": "^2.3.0",
