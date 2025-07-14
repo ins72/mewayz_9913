@@ -42,7 +42,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('bio_sites', function (Blueprint $table) {
-            $table->dropColumn(['slug', 'theme_config', 'view_count', 'click_count']);
+            $table->dropColumn(['slug', 'title', 'description', 'theme_config', 'view_count', 'click_count', 'template_id']);
         });
     }
 };
