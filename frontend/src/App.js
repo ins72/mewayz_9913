@@ -7,7 +7,7 @@ function App() {
 
   useEffect(() => {
     // Test API connection
-    axios.get('/health')
+    axios.get('/api/health')
       .then(response => {
         setApiStatus('connected');
         setBackendData(response.data);
