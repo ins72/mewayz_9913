@@ -219,7 +219,7 @@ class TwoFactorController extends Controller
             ], 400);
         }
 
-        $recoveryCodes = $this->generateRecoveryCodes();
+        $recoveryCodes = $this->createRecoveryCodes();
 
         $user->update([
             'two_factor_recovery_codes' => $recoveryCodes
