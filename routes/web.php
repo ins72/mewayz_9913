@@ -43,12 +43,17 @@ Route::get('/', function () {
 
 // Flutter app route
 Route::get('/app', function () {
-    return redirect('http://localhost:8001');
+    return response()->file(public_path('app.html'));
 });
 
 // Mobile app route alias
 Route::get('/mobile', function () {
-    return redirect('http://localhost:8001');
+    return response()->file(public_path('app.html'));
+});
+
+// Flutter app direct route
+Route::get('/flutter.html', function () {
+    return response()->file(public_path('app.html'));
 });
 
 // Authentication routes
