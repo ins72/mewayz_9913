@@ -512,7 +512,14 @@ class BioSite extends BaseBioSite
 
         $returned = ['countries' => $countries, 'cities' => $state, 'devices' => $devices, 'browsers' => $browsers, 'getviews' => $getviews, 'thisyear' => $thisyear];
 
-
         return $returned;
-	}
+    }
+
+    /**
+     * Get the links for the bio site
+     */
+    public function links()
+    {
+        return $this->hasMany(BioSiteLink::class);
+    }
 }
