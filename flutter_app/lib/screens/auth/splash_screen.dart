@@ -35,12 +35,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(seconds: 3));
     
     if (mounted) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      if (authProvider.isAuthenticated) {
-        context.go('/workspace-selector');
-      } else {
-        context.go('/login');
-      }
+      // Skip auth check for now and go directly to login
+      context.go('/login');
     }
   }
 
