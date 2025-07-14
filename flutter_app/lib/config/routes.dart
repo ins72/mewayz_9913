@@ -20,6 +20,11 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     routes: [
+      // Landing page
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const LandingScreen(),
+      ),
       // Auth Routes
       GoRoute(
         path: '/splash',
