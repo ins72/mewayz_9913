@@ -1080,6 +1080,24 @@ class MewayzAPITester:
             
         self.test_auth_me()
         self.test_auth_profile_update()
+        self.test_enhanced_login_tracking()
+        
+        # OAuth tests
+        print("\n🔐 Testing OAuth Authentication...")
+        self.test_oauth_google_redirect()
+        self.test_oauth_facebook_redirect()
+        self.test_oauth_apple_redirect()
+        self.test_oauth_twitter_redirect()
+        self.test_oauth_invalid_provider()
+        self.test_oauth_status()
+        
+        # 2FA tests
+        print("\n🔒 Testing Two-Factor Authentication...")
+        self.test_2fa_generate_secret()
+        self.test_2fa_enable_invalid_code()
+        self.test_2fa_status()
+        self.test_2fa_disable_not_enabled()
+        self.test_2fa_recovery_codes_not_enabled()
         
         # Workspace tests
         print("\n🏢 Testing Workspace Management...")
