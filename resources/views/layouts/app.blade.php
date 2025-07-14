@@ -35,6 +35,9 @@
             </main>
         </div>
 
+        <!-- Floating Theme Toggle -->
+        @include('components.floating-theme-toggle')
+
         @livewireScriptConfig
 
         @vite([
