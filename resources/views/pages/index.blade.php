@@ -1768,7 +1768,7 @@
                     </ul>
                 </div>
                 <div class="overview-image animate-on-scroll animated">
-                    <img src="https://zeph.to/assets/image/dragdrop/7.png" alt="Security Features" loading="lazy">
+                    <img src="https://mewayz.to/assets/image/dragdrop/7.png" alt="Security Features" loading="lazy">
                 </div>
             </div>
         </div>
