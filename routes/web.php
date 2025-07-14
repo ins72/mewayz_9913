@@ -1,23 +1,30 @@
 <?php
 
-use App\Models\Invoice;
-use App\Yena\Ai\Image;
-use App\Yena\YenaMail;
-use Livewire\Volt\Volt;
-use Laravel\Folio\Folio;
-use App\Yena\Site\Generate;
-use App\Models\OrganizationPage;
-use App\Yena\aaPanel;
-use App\Yena\Ai\Purify;
-use App\Yena\Site\DefaultLanding;
-use App\Yena\YenaEmbed;
-use App\YenaOauth\Facades\YenaOauth;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
-use MarkSitko\LaravelUnsplash\Facades\Unsplash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Client\RequestException;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\General\GeneralController;
+use App\Http\Controllers\InstallController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\ConsoleController;
+use App\Http\Controllers\BioSiteController;
+use App\Http\Controllers\SocialMediaController;
+use App\Http\Controllers\CrmController;
+use App\Http\Controllers\EmailMarketingController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\EcommerceController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\Admin\{AdminController, SiteController, PlanController};
+use App\Http\Controllers\Installation\InstallationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,187 +35,142 @@ use Barryvdh\DomPDF\Facade\Pdf;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-require __DIR__.'/auth.php';
 
-
-Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
-  Route::get('run-update', 'DatabaseController@update')->name('update');
-  Route::get('run-cron', 'CronController@run')->name('cron');
+// Landing page route
+Route::get('/', function () {
+    return view('pages.landing');
 });
 
-Route::get('lol', function(){
-    //实例化对象
-    $api = new aaPanel();
-    //获取面板日志
-    $r_data = $api->RemoveDomain('jeffjola.com');
-    return;
-    $r_data = $api->AddDomain('wepsteb.com', 'jeffjola.com');
-    //输出JSON数据到浏览器
-    echo json_encode($r_data);
+// Authentication routes
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'store']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    return;
-    $invoice = Invoice::first();
-    $mail = new \App\Yena\YenaMail;
-    $mail->send([
-        'to' => 'jeffjola@gmail.com',
-        'subject' => __('You just got tipped'),
-    ], 'invoice.email', [
-        'amount' => '$2000',
-        'invoice' => $invoice
-    ]);
+// Installation routes
+Route::get('/install', [InstallationController::class, 'index'])->name('install');
+Route::post('/install', [InstallationController::class, 'store']);
 
-    return;
-
-    // return view('includes.invoicepdf');
+// Protected routes
+Route::middleware(['auth'])->group(function () {
+    // Console/Dashboard
+    Route::get('/console', [ConsoleController::class, 'index'])->name('console');
+    Route::get('/dashboard', [ConsoleController::class, 'index'])->name('dashboard');
     
-    $data = [
-        'imagePath'    => public_path('img/profile.png'),
-        'name'         => 'John Doe',
-        'address'      => 'USA',
-        'mobileNumber' => '000000000',
-        'email'        => 'john.doe@email.com'
-    ];
-    $pdf = PDF::loadView('includes.invoicepdf', $data);
-    return $pdf->stream('resume.pdf');
-    return;
-    $user_id = 1234; // Example user ID
-    $unique_string = encodeCrc($user_id);
-    $retrieved_user_id = decodeCrc($unique_string);
+    // Profile
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    echo "Retrieved User ID: " . $retrieved_user_id;
-    echo "Encoded String: " . $unique_string;
-
-    return;
-    $mail = new \App\Yena\YenaMail;
-    $mail->send([
-        'to' => 'jeffjola@gmail.com',
-        'subject' => __('You just got tipped'),
-    ], 'bio.tip', [
-        'amount' => '$2000',
-        'user' => $this
-    ]);
-
-    return;
-    $sandyembed = new YenaEmbed('https://www.tiktok.com/@andsea_miyakoisland/video/7358077798319131912');
-    $fetch = $sandyembed->fetch();
-
-
-    dd($fetch);
-    try {
-        $response = Http::post('http://gamma.test/payments/click/prepare', [
-            'key1' => 'value1',
-            'key2' => 'value2',
-            // Add more key-value pairs as needed
-        ]);
+    // Bio Sites
+    Route::get('/bio-sites', [BioSiteController::class, 'index'])->name('bio-sites');
+    Route::get('/bio-sites/create', [BioSiteController::class, 'create'])->name('bio-sites.create');
+    Route::post('/bio-sites', [BioSiteController::class, 'store'])->name('bio-sites.store');
+    Route::get('/bio-sites/{bioSite}', [BioSiteController::class, 'show'])->name('bio-sites.show');
+    Route::get('/bio-sites/{bioSite}/edit', [BioSiteController::class, 'edit'])->name('bio-sites.edit');
+    Route::patch('/bio-sites/{bioSite}', [BioSiteController::class, 'update'])->name('bio-sites.update');
+    Route::delete('/bio-sites/{bioSite}', [BioSiteController::class, 'destroy'])->name('bio-sites.destroy');
     
-        if ($response->successful()) {
-            $data = $response->json();
-            dd($data, 'data');
-            // Do something with $data
-        } else {
-            // Handle non-2xx responses
-            $error = $response->body();
-
-            dd('ee', $error, 'zzz');
-            // Log or handle the error as needed
-        }
-    } catch (RequestException $e) {
-
-        dd('rr', $e->getMessage());
-        // Handle exceptions
-        $error = $e->getMessage();
-        // Log or handle the exception as needed
-    }
-    dd('zzz');
-    dd(get_vite_site_resources());
-    $r = new DefaultLanding;
-    return $r->build();
+    // Social Media
+    Route::get('/social-media', [SocialMediaController::class, 'index'])->name('social-media');
+    Route::get('/social-media/accounts', [SocialMediaController::class, 'accounts'])->name('social-media.accounts');
+    Route::get('/social-media/posts', [SocialMediaController::class, 'posts'])->name('social-media.posts');
+    Route::post('/social-media/posts', [SocialMediaController::class, 'createPost'])->name('social-media.posts.create');
+    
+    // CRM
+    Route::get('/crm', [CrmController::class, 'index'])->name('crm');
+    Route::get('/crm/contacts', [CrmController::class, 'contacts'])->name('crm.contacts');
+    Route::get('/crm/leads', [CrmController::class, 'leads'])->name('crm.leads');
+    Route::post('/crm/contacts', [CrmController::class, 'storeContact'])->name('crm.contacts.store');
+    
+    // Email Marketing
+    Route::get('/email-marketing', [EmailMarketingController::class, 'index'])->name('email-marketing');
+    Route::get('/email-marketing/campaigns', [EmailMarketingController::class, 'campaigns'])->name('email-marketing.campaigns');
+    Route::post('/email-marketing/campaigns', [EmailMarketingController::class, 'createCampaign'])->name('email-marketing.campaigns.create');
+    
+    // E-commerce
+    Route::get('/ecommerce', [EcommerceController::class, 'index'])->name('ecommerce');
+    Route::get('/ecommerce/products', [EcommerceController::class, 'products'])->name('ecommerce.products');
+    Route::get('/ecommerce/orders', [EcommerceController::class, 'orders'])->name('ecommerce.orders');
+    
+    // Courses
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses');
+    Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
+    Route::post('/courses', [CourseController::class, 'store'])->name('courses.store');
+    
+    // Analytics
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');
+    Route::get('/analytics/reports', [AnalyticsController::class, 'reports'])->name('analytics.reports');
+    
+    // Booking
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+    Route::get('/booking/calendar', [BookingController::class, 'calendar'])->name('booking.calendar');
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    
+    // Invoices
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
+    Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+    
+    // Transactions
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions');
+    
+    // Subscriptions
+    Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions');
+    Route::post('/subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
+    
+    // Affiliate
+    Route::get('/affiliate', [AffiliateController::class, 'index'])->name('affiliate');
+    Route::get('/affiliate/dashboard', [AffiliateController::class, 'dashboard'])->name('affiliate.dashboard');
+    
+    // Partners
+    Route::get('/partners', [PartnerController::class, 'index'])->name('partners');
+    Route::get('/partners/dashboard', [PartnerController::class, 'dashboard'])->name('partners.dashboard');
+    
+    // Website Builder
+    Route::get('/website', [WebsiteController::class, 'index'])->name('website');
+    Route::get('/website/builder', [WebsiteController::class, 'builder'])->name('website.builder');
+    Route::post('/website', [WebsiteController::class, 'store'])->name('website.store');
 });
 
-YenaOauth::routes();
-
-Route::prefix('console')->name('console-')->namespace('App\Http\Controllers')->group(function() {
-  Route::get('builder/ai', 'Console\Builder\AiController@ai')->name('builder-ai');
-});
-
-// Admin
-Route::prefix('console/admin')->name('console-admin-')->namespace('App\Http\Controllers\Admin')->middleware(['isAdmin'])->group(function() {
-    Route::prefix('users')->name('users-')->namespace('Users')->group(function(){
-        Route::get('/', 'UsersController@index')->name('index');
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
-
-    Route::prefix('sites')->name('sites-')->namespace('Sites')->group(function(){
-        Route::get('/', 'SitesController@index')->name('index');
-        // Route::get('view-report/{_id}', 'PagesController@view_report')->name('view-report');
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
-
-    Route::prefix('bio')->name('bio-')->namespace('Bio')->group(function(){
-        Route::get('/', 'BioController@index')->name('index');
-        // Route::get('view-report/{_id}', 'PagesController@view_report')->name('view-report');
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-        
-        Route::prefix('templates')->name('templates-')->namespace('Templates')->group(function(){
-            Route::get('/', 'TemplatesController@index')->name('index');
-            
-            Route::post('post/{tree}', 'PostController@tree')->name('post');
-        });
-    });
-
-    // Payments
-    Route::prefix('payments')->name('payments-')->namespace('Payments')->group(function(){
-        Route::get('/', 'PaymentsController@index')->name('index');
-        // Pending Payments
-        Route::get('pending', 'PaymentsController@pending')->name('pending');
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
+// Admin routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
-    // Plans
-    Route::prefix('plans')->name('plans-')->namespace('Plans')->group(function(){
-        Route::get('/', 'PlansController@index')->name('index');
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
+    // Site management
+    Route::get('/sites', [SiteController::class, 'index'])->name('admin.sites');
+    Route::get('/sites/{site}', [SiteController::class, 'show'])->name('admin.sites.show');
+    Route::patch('/sites/{site}', [SiteController::class, 'update'])->name('admin.sites.update');
+    Route::delete('/sites/{site}', [SiteController::class, 'destroy'])->name('admin.sites.destroy');
     
-    // Translation
-    Route::prefix('languages')->name('languages-')->namespace('Languages')->group(function(){
-        Route::get('/', 'TranslationController@languages')->name('index');
-        
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
+    // Plans management
+    Route::get('/plans', [PlanController::class, 'index'])->name('admin.plans');
+    Route::get('/plans/create', [PlanController::class, 'create'])->name('admin.plans.create');
+    Route::post('/plans', [PlanController::class, 'store'])->name('admin.plans.store');
+    Route::get('/plans/{plan}', [PlanController::class, 'show'])->name('admin.plans.show');
+    Route::get('/plans/{plan}/edit', [PlanController::class, 'edit'])->name('admin.plans.edit');
+    Route::patch('/plans/{plan}', [PlanController::class, 'update'])->name('admin.plans.update');
+    Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('admin.plans.destroy');
     
-    // Template
-    Route::prefix('templates')->name('templates-')->namespace('Templates')->group(function(){
-        Route::get('/', 'TemplatesController@index')->name('index');
-        
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
+    // Users management
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('admin.users.show');
+    Route::patch('/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
     
-    // Website
-    Route::prefix('website')->name('website-')->namespace('Website')->group(function(){
-        Route::get('/', 'WebsiteController@index')->name('index');
-        
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
-
     // Settings
-    Route::prefix('settings')->name('settings-')->namespace('Settings')->group(function(){
-        Route::get('/', 'SettingsController@index')->name('index');
-        
-        Route::post('post/{tree}', 'PostController@tree')->name('post');
-    });
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::patch('/settings', [AdminController::class, 'updateSettings'])->name('admin.settings.update');
 });
-// ADD THIS ROUTE HERE FOR THE PARTNERS PAGE
-Route::get('/shuvrajit', function () {
-    return view('pages.shuvrajit');
-})->name('shuvrajit');
-// In routes/web.php
-use App\Http\Controllers\MewayzPartnershipController;
 
-// ADD THIS ROUTE HERE FOR THE PARTNERS PAGE
-Route::get('/partners', function () {
-    return view('pages.partners');
-})->name('partners');
+// Public bio site routes
+Route::get('/{username}', [BioSiteController::class, 'public'])->name('bio-site.public');
 
-Route::post('/api/send-mewayz-email', [MewayzPartnershipController::class, 'sendVettingEmail'])->name('send.mewayz.email');
-require __DIR__.'/folio.php';
+// Fallback route
+Route::fallback(function () {
+    return view('pages.landing');
+});
+
+require __DIR__.'/auth.php';
