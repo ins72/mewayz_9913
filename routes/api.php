@@ -59,6 +59,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('me', [AuthController::class, 'me']);
         Route::put('profile', [AuthController::class, 'updateProfile']);
+        
+        // OAuth Management
+        Route::post('oauth/link', [OAuthController::class, 'linkAccount']);
+        Route::post('oauth/unlink', [OAuthController::class, 'unlinkAccount']);
+        Route::get('oauth/status', [OAuthController::class, 'getOAuthStatus']);
+        
+        // 2FA Routes
+        Route::prefix('2fa')->group(function () {
+            Route::post('generate', [TwoFactorController::class, 'generate']);
+            Route::post('enable', [TwoFactorController::class, 'enable']);
+            Route::post('disable', [TwoFactorController::class, 'disable']);
+            Route::post('verify', [TwoFactorController::class, 'verify']);
+            Route::post('recovery-codes', [TwoFactorController::class, 'generateRecoveryCodes']);
+            Route::get('status', [TwoFactorController::class, 'status']);
+        });
     });
 
     // User Route
