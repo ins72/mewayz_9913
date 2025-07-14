@@ -40,7 +40,7 @@ Mewayz is a comprehensive, enterprise-grade, cloud-native all-in-one business pl
 
 **The Mewayz Ecosystem: Built for Scale, Designed for Seamless Integration**
 
-Mewayz represents the flagship product of Zeph Technologies, embodying our commitment to creating seamless business solutions that empower creators and entrepreneurs worldwide. Our architecture is built on enterprise-grade foundations while maintaining the agility needed for modern business operations.
+Mewayz represents the flagship product of Mewayz Technologies Inc., embodying our commitment to creating seamless business solutions that empower creators and entrepreneurs worldwide. Our architecture is built on enterprise-grade foundations while maintaining the agility needed for modern business operations.
 
 ### Technology Stack
 
@@ -58,7 +58,7 @@ Mewayz represents the flagship product of Zeph Technologies, embodying our commi
 - **State Management**: Provider (Flutter)
 - **Styling**: Tailwind CSS + Custom Dark Theme
 - **PWA**: Progressive Web App with offline capabilities
-- **Design Language**: Zeph Technologies' modern, professional aesthetic
+- **Design Language**: Mewayz Technologies Inc.'s modern, professional aesthetic
 
 #### Infrastructure
 - **Deployment**: Kubernetes with Supervisor
