@@ -1774,3 +1774,15 @@ if (!function_exists('hour2min')) {
         return $hours * 60 + $minutes;
     }
 }
+
+if (!function_exists('is_installed')) {
+    function is_installed() {
+        // Check if the application is installed by checking if we have any users
+        try {
+            return \App\Models\User::count() > 0;
+        } catch (\Exception $e) {
+            // If there's a database error, consider it not installed
+            return false;
+        }
+    }
+}
