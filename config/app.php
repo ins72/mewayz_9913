@@ -184,7 +184,7 @@ return [
         Darryldecode\Cart\CartServiceProvider::class,
         MarkSitko\LaravelUnsplash\UnsplashServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
-        Amirami\Localizator\ServiceProvider::class,
+        // Amirami\Localizator\ServiceProvider::class,
         'Camroncade\Timezone\TimezoneServiceProvider',
 
         /*
