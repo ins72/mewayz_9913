@@ -65,17 +65,14 @@ $register = function () {
         <div class="min-h-screen bg-[#101010] flex items-center justify-center px-4">
             <div class="w-full max-w-md">
   
-                <div class="h-screen w-full">
-            
-                    <div class="h-full !max-w-full p-12 md:p-12 lg:p-24">
-            
-                        <div class="flex flex-col gap-[var(--yena-space-6)] flex-1 h-full w-full">
-                            <img src="{{ logo() }}" class="h-16 w-16 object-contain" alt=" " width="36" class="block">
-            
-                            <div class="flex-1 place-self-stretch"></div>
-            
-                            {{-- <div>{{ __('🎉 Welcome to the party') }}</div> --}}
-                            <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl">{{ __('Sign up') }}</h2>
+                <!-- Logo Section -->
+                <div class="text-center mb-8">
+                    <div class="mx-auto w-20 h-20 bg-gradient-to-br from-[#FDFDFD] to-[#E5E5E5] rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                        <div class="text-[#141414] font-bold text-2xl">M</div>
+                    </div>
+                    <h1 class="text-3xl font-bold text-[#F1F1F1] mb-2">Create Account</h1>
+                    <p class="text-[#7B7B7B] text-lg">Join Mewayz and start growing your business</p>
+                </div>
             
                             {{-- <p class="yena-text">{{ __('Don’t worry, we will send you a reset link.') }}</p> --}}
 
