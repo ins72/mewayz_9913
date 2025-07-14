@@ -52,6 +52,7 @@
         "@vimesh/ui": "^0.12.4",
         "alpinejs": "^3.14.1",
         "alpinejs-masonry": "^1.0.16",
+        "animate.css": "^4.1.1",
         "apexcharts": "^3.54.1",
         "codemirror": "^5.65.19",
         "codemirror-spell-checker": "^1.1.2",
