@@ -466,7 +466,230 @@ class MewayzAPITester:
             self.log_result("Validation Error Handling", "FAIL", f"Request failed: {str(e)}")
             return False
 
-    def test_unauthorized_access(self):
+    def test_crm_contacts(self):
+        """Test CRM contact management"""
+        if not self.auth_token:
+            self.log_result("CRM Contacts", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting contacts
+            response = self.make_request('GET', '/crm/contacts')
+            
+            if response.status_code == 200:
+                self.log_result("CRM Contacts", "PASS", "CRM contacts retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("CRM Contacts", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM Contacts", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_crm_leads(self):
+        """Test CRM lead management"""
+        if not self.auth_token:
+            self.log_result("CRM Leads", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting leads
+            response = self.make_request('GET', '/crm/leads')
+            
+            if response.status_code == 200:
+                self.log_result("CRM Leads", "PASS", "CRM leads retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("CRM Leads", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM Leads", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_email_campaigns(self):
+        """Test email marketing campaigns"""
+        if not self.auth_token:
+            self.log_result("Email Campaigns", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting campaigns
+            response = self.make_request('GET', '/email-marketing/campaigns')
+            
+            if response.status_code == 200:
+                self.log_result("Email Campaigns", "PASS", "Email campaigns retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("Email Campaigns", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Email Campaigns", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_email_templates(self):
+        """Test email marketing templates"""
+        if not self.auth_token:
+            self.log_result("Email Templates", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting templates
+            response = self.make_request('GET', '/email-marketing/templates')
+            
+            if response.status_code == 200:
+                self.log_result("Email Templates", "PASS", "Email templates retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("Email Templates", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Email Templates", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_ecommerce_products(self):
+        """Test e-commerce product management"""
+        if not self.auth_token:
+            self.log_result("E-commerce Products", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting products
+            response = self.make_request('GET', '/ecommerce/products')
+            
+            if response.status_code == 200:
+                self.log_result("E-commerce Products", "PASS", "E-commerce products retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("E-commerce Products", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("E-commerce Products", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_ecommerce_orders(self):
+        """Test e-commerce order management"""
+        if not self.auth_token:
+            self.log_result("E-commerce Orders", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting orders
+            response = self.make_request('GET', '/ecommerce/orders')
+            
+            if response.status_code == 200:
+                self.log_result("E-commerce Orders", "PASS", "E-commerce orders retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("E-commerce Orders", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("E-commerce Orders", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_courses_management(self):
+        """Test course management"""
+        if not self.auth_token:
+            self.log_result("Course Management", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting courses
+            response = self.make_request('GET', '/courses')
+            
+            if response.status_code == 200:
+                self.log_result("Course Management", "PASS", "Courses retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("Course Management", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Course Management", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_analytics_overview(self):
+        """Test analytics overview"""
+        if not self.auth_token:
+            self.log_result("Analytics Overview", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting analytics overview
+            response = self.make_request('GET', '/analytics')
+            
+            if response.status_code == 200:
+                self.log_result("Analytics Overview", "PASS", "Analytics overview retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("Analytics Overview", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Analytics Overview", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_analytics_reports(self):
+        """Test analytics reports"""
+        if not self.auth_token:
+            self.log_result("Analytics Reports", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test getting analytics reports
+            response = self.make_request('GET', '/analytics/reports')
+            
+            if response.status_code == 200:
+                self.log_result("Analytics Reports", "PASS", "Analytics reports retrieved successfully")
+                return True
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("Analytics Reports", "FAIL", f"Request failed with status {response.status_code}", data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Analytics Reports", "FAIL", f"Request failed: {str(e)}")
+            return False
         """Test unauthorized access handling"""
         try:
             # Temporarily remove auth token
