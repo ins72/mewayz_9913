@@ -1,6 +1,6 @@
 # Mewayz - Professional All-in-One Business Platform
 
-*Built by Zeph Technologies for Seamless Business Management*
+*Built by Mewayz Technologies Inc. for Seamless Business Management*
 
 [![Production Status](https://img.shields.io/badge/Production-Ready-green)](https://github.com/mewayz/mewayz)
 [![Backend API](https://img.shields.io/badge/Backend-100%25%20Tested-brightgreen)](https://github.com/mewayz/mewayz)
@@ -10,9 +10,9 @@
 
 ## 🚀 Overview
 
-Mewayz is a comprehensive, enterprise-grade, cloud-native all-in-one business platform designed to consolidate social media management, digital commerce, education, CRM, and marketing automation into a single, powerful solution. Built with modern technologies by Zeph Technologies, it provides seamless integration across all business functions for creators, entrepreneurs, and enterprises.
+Mewayz is a comprehensive, enterprise-grade, cloud-native all-in-one business platform designed to consolidate social media management, digital commerce, education, CRM, and marketing automation into a single, powerful solution. Built with modern technologies by Mewayz Technologies Inc., it provides seamless integration across all business functions for creators, entrepreneurs, and enterprises.
 
-**Powered by Zeph Technologies**  
+**Powered by Mewayz Technologies Inc.**  
 *Creating seamless business solutions for the modern digital world*
 
 ### 🎯 Key Features
