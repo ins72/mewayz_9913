@@ -1,6 +1,6 @@
 # Mewayz Platform - Development Guide
 
-**Professional Development Documentation for Zeph Technologies' Flagship Platform**
+**Professional Development Documentation for Mewayz Technologies Inc.'s Flagship Platform**
 
 *Building seamless business solutions with modern technology stacks*
 
@@ -8,11 +8,11 @@
 
 ## 🎯 Platform Overview
 
-Mewayz represents the pinnacle of Zeph Technologies' commitment to creating seamless business management solutions. This development guide provides comprehensive technical documentation for contributing to and extending the Mewayz platform.
+Mewayz represents the pinnacle of Mewayz Technologies Inc.'s commitment to creating seamless business management solutions. This development guide provides comprehensive technical documentation for contributing to and extending the Mewayz platform.
 
 ### Brand Architecture
 - **Mewayz**: The user-facing platform brand
-- **Zeph Technologies**: The engineering and innovation brand
+- **Mewayz Technologies Inc.**: The engineering and innovation company
 - **Seamless**: Our core development philosophy
 
 ---
