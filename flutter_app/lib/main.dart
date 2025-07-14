@@ -29,9 +29,17 @@ class MewayzApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => WorkspaceProvider()),
+        ChangeNotifierProvider(create: (_) => PWAProvider()),
       ],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, _) {
+      child: Consumer2<ThemeProvider, PWAProvider>(
+        builder: (context, themeProvider, pwaProvider, _) {
+          // Initialize PWA features
+          if (!pwaProvider.isInitialized) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              pwaProvider.initialize();
+            });
+          }
+
           return MaterialApp.router(
             title: 'Mewayz',
             debugShowCheckedModeBanner: false,
