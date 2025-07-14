@@ -106,7 +106,7 @@ class BioSiteController extends Controller
                 'description' => $request->description,
                 'template_id' => $request->template_id ?? 1,
                 'theme_config' => json_encode($themeConfig),
-                'status' => 'draft',
+                'status' => 0, // 0 for draft, 1 for published
                 'view_count' => 0,
                 'click_count' => 0,
             ]);
