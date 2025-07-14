@@ -30,10 +30,10 @@ class User {
       role: json['role'] ?? 'user',
       isAdmin: json['is_admin'] == true || json['role'] == 'admin',
       emailVerifiedAt: json['email_verified_at'] != null 
-          ? DateTime.parse(json['email_verified_at']) 
+          ? DateTime.tryParse(json['email_verified_at']) 
           : null,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
     );
   }
 
