@@ -349,7 +349,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="http://localhost:3000" class="inline-block px-6 py-3 bg-mewayz-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <a href="http://localhost:8001" class="inline-block px-6 py-3 bg-mewayz-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors">
                         Try Mobile App
                     </a>
                 </div>
