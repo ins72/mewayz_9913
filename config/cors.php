@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'http://localhost:8001'],
+    'allowed_origins' => ['http://localhost:3000', 'http://localhost:8001', 'https://mewayz-hub-1.preview.emergentagent.com'],
 
     'allowed_origins_patterns' => [],
 
