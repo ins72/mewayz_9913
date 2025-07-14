@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'providers/auth_provider.dart';
 import 'providers/workspace_provider.dart';
 import 'providers/theme_provider.dart';
+import 'providers/pwa_provider.dart';
 import 'config/routes.dart';
 import 'config/theme.dart';
 import 'services/api_service.dart';
