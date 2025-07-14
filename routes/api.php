@@ -41,9 +41,9 @@ Route::prefix('auth')->group(function () {
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
     
-    // OAuth Routes
-    Route::get('oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
+    // OAuth Routes - specific routes first
     Route::get('oauth/{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
+    Route::get('oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
 });
 
 // OAuth Routes (for frontend redirects)
