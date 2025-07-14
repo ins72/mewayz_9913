@@ -758,6 +758,30 @@ class MewayzAPITester:
         if bio_site_id:
             self.test_bio_sites_show(bio_site_id)
         
+        # CRM tests
+        print("\n👥 Testing CRM Management...")
+        self.test_crm_contacts()
+        self.test_crm_leads()
+        
+        # Email Marketing tests
+        print("\n📧 Testing Email Marketing...")
+        self.test_email_campaigns()
+        self.test_email_templates()
+        
+        # E-commerce tests
+        print("\n🛒 Testing E-commerce Management...")
+        self.test_ecommerce_products()
+        self.test_ecommerce_orders()
+        
+        # Course Management tests
+        print("\n🎓 Testing Course Management...")
+        self.test_courses_management()
+        
+        # Analytics tests
+        print("\n📊 Testing Analytics...")
+        self.test_analytics_overview()
+        self.test_analytics_reports()
+        
         # Error handling tests
         print("\n⚠️ Testing Error Handling...")
         self.test_validation_errors()
