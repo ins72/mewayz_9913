@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Auth\OAuthController;
+use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\SocialMediaController;
 use App\Http\Controllers\Api\BioSiteController;
