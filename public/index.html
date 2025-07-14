@@ -3,796 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ultimate All-in-One Business Platform</title>
+    <title>Mewayz - All-in-One Business Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mewayz-bg': '#101010',
+                        'mewayz-surface': '#191919',
+                        'mewayz-border': '#2A2A2A',
+                        'mewayz-primary': '#4ECDC4',
+                        'mewayz-secondary': '#45B7D1',
+                        'mewayz-accent': '#26DE81',
+                        'mewayz-warning': '#F9CA24',
+                        'mewayz-danger': '#FF4757',
+                        'mewayz-text': '#FFFFFF',
+                        'mewayz-text-secondary': '#A0A0A0',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
+        .gradient-bg {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="%23ffffff08" points="0,1000 1000,0 1000,1000"/></svg>');
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            padding: 0 20px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: slideUp 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            animation: slideUp 1s ease-out 0.3s both;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 15px 40px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: slideUp 1s ease-out 0.6s both;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 15px 0;
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            background: rgba(255,255,255,0.98);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #667eea;
-        }
-
-        /* Features Section */
-        .features {
-            padding: 100px 0;
-            background: #f8f9fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
         .feature-card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(78, 205, 196, 0.1);
         }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            color: white;
+        .stats-counter {
+            background: linear-gradient(135deg, #26DE81 0%, #4ECDC4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.8;
-        }
-
-        /* Stats Section */
-        .stats {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 80px 0;
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            text-align: center;
-        }
-
-        .stat-item h3 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .stat-item p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Pricing Section */
-        .pricing {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .pricing-card {
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .pricing-card.featured {
-            border-color: #667eea;
-            transform: scale(1.05);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        }
-
-        .pricing-card.featured:hover {
-            transform: scale(1.05) translateY(-10px);
-        }
-
-        .pricing-badge {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 5px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .pricing-price {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .pricing-features li {
-            padding: 10px 0;
-            border-bottom: 1px solid #e9ecef;
-            color: #666;
-        }
-
-        .pricing-features li:last-child {
-            border-bottom: none;
-        }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            padding: 60px 0 20px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-
-        .footer-section p, .footer-section a {
-            color: #ccc;
-            text-decoration: none;
-            line-height: 1.8;
-        }
-
-        .footer-section a:hover {
-            color: white;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #555;
-            color: #999;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .slide-in-left {
-            transform: translateX(-50px);
-            opacity: 0;
-            animation: slideInLeft 1s ease-out forwards;
-        }
-
-        @keyframes slideInLeft {
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .slide-in-right {
-            transform: translateX(50px);
-            opacity: 0;
-            animation: slideInRight 1s ease-out forwards;
-        }
-
-        @keyframes slideInRight {
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Floating elements */
-        .floating-element {
-            position: absolute;
-            opacity: 0.1;
+        .floating-card {
             animation: float 6s ease-in-out infinite;
         }
-
-        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 2s; }
-        .floating-element:nth-child(3) { bottom: 10%; left: 20%; animation-delay: 4s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .demo-preview {
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #191919;
+        }
+        .demo-preview img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
     </style>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="nav-container">
-            <div class="logo">🚀 Ultimate Platform</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+<body class="bg-mewayz-bg text-mewayz-text">
+    <!-- Header -->
+    <header class="bg-mewayz-surface border-b border-mewayz-border">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-mewayz-primary rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">M</span>
+                    </div>
+                    <h1 class="text-2xl font-bold">Mewayz</h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">Features</a>
+                    <a href="#demo" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">Demo</a>
+                    <a href="#pricing" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">Pricing</a>
+                    <a href="#contact" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">Contact</a>
+                </nav>
+                <div class="space-x-4">
+                    <a href="/login" class="px-4 py-2 text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">Login</a>
+                    <a href="/register" class="px-6 py-2 bg-mewayz-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">Get Started</a>
+                </div>
+            </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="floating-element">💼</div>
-        <div class="floating-element">📊</div>
-        <div class="floating-element">🎯</div>
-        <div class="hero-content">
-            <h1>The Ultimate All-in-One Business Platform</h1>
-            <p>Everything you need to grow your business: Social Media Management, E-commerce, Courses, CRM, Email Marketing, and so much more - all in one powerful platform.</p>
-            <a href="#features" class="cta-button">Start Your Journey</a>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <h2 class="section-title">Powerful Features</h2>
-            <p class="section-subtitle">Everything your business needs to succeed, integrated seamlessly into one platform</p>
-            
-            <div class="features-grid">
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">📱</div>
-                    <h3>Social Media Management</h3>
-                    <p>Complete Instagram database with lead generation, multi-platform posting, content scheduling, and AI-powered analytics. Manage all your social presence from one dashboard.</p>
+    <section class="py-20 bg-mewayz-bg">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 lg:pr-12">
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                        All-in-One Business Platform for
+                        <span class="gradient-bg bg-clip-text text-transparent">Modern Creators</span>
+                    </h1>
+                    <p class="text-xl text-mewayz-text-secondary mb-8 leading-relaxed">
+                        Manage your social media, create bio sites, track leads, run email campaigns, 
+                        sell products, and create courses - all from one powerful platform.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
+                        <a href="/register" class="px-8 py-4 bg-mewayz-primary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-colors text-center">
+                            Start Free Trial
+                        </a>
+                        <a href="#demo" class="px-8 py-4 border border-mewayz-border text-mewayz-text hover:border-mewayz-primary transition-colors rounded-lg font-semibold text-center">
+                            Explore Features
+                        </a>
+                    </div>
+                    <div class="flex flex-wrap gap-8">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold stats-counter">15+</div>
+                            <div class="text-mewayz-text-secondary">Integrated Tools</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold stats-counter">99.9%</div>
+                            <div class="text-mewayz-text-secondary">Uptime</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold stats-counter">24/7</div>
+                            <div class="text-mewayz-text-secondary">Support</div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">🔗</div>
-                    <h3>Link in Bio Builder</h3>
-                    <p>Drag-and-drop bio link builder with dynamic content, e-commerce integration, analytics, and custom domains. Create stunning landing pages in minutes.</p>
-                </div>
-                
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">🎓</div>
-                    <h3>Courses & Community</h3>
-                    <p>Skool-like course creation platform with video hosting, community features, progress tracking, and gamification. Build your educational empire.</p>
-                </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">🛒</div>
-                    <h3>Marketplace & E-commerce</h3>
-                    <p>Amazon-style marketplace with individual storefronts, inventory management, payment processing, and review systems. Sell anything, anywhere.</p>
-                </div>
-                
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">👥</div>
-                    <h3>CRM & Email Marketing</h3>
-                    <p>Advanced lead management, automated email campaigns, pipeline tracking, and bulk account creation. Turn leads into loyal customers.</p>
-                </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">🏗️</div>
-                    <h3>Website Builder</h3>
-                    <p>No-code website builder with responsive templates, SEO optimization, and full e-commerce capabilities. Create stunning websites without coding.</p>
-                </div>
-                
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">📅</div>
-                    <h3>Booking System</h3>
-                    <p>Appointment scheduling with calendar integration, automated reminders, payment processing, and staff management. Streamline your bookings.</p>
-                </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">🎨</div>
-                    <h3>Template Marketplace</h3>
-                    <p>Create, share, and monetize templates for websites, emails, social media, and more. Build passive income streams with your designs.</p>
-                </div>
-                
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Escrow System</h3>
-                    <p>Secure transaction platform for digital products, services, and social media accounts. Complete with dispute resolution and milestone payments.</p>
-                </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">💰</div>
-                    <h3>Financial Management</h3>
-                    <p>Professional invoicing, multi-currency support, digital wallet, commission tracking, and comprehensive financial reporting.</p>
-                </div>
-                
-                <div class="feature-card slide-in-left">
-                    <div class="feature-icon">📊</div>
-                    <h3>Analytics & Reporting</h3>
-                    <p>Comprehensive analytics dashboard with custom reporting, data export, and AI-powered insights. Make data-driven decisions.</p>
-                </div>
-                
-                <div class="feature-card slide-in-right">
-                    <div class="feature-icon">🤖</div>
-                    <h3>AI & Automation</h3>
-                    <p>AI-powered content generation, image creation, SEO optimization, chatbots, and automated workflows. Let AI handle the heavy lifting.</p>
+                <div class="lg:w-1/2 mt-12 lg:mt-0">
+                    <div class="floating-card">
+                        <div class="demo-preview">
+                            <div class="bg-mewayz-surface p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-semibold">Dashboard Preview</h3>
+                                    <div class="flex space-x-2">
+                                        <div class="w-3 h-3 bg-mewayz-danger rounded-full"></div>
+                                        <div class="w-3 h-3 bg-mewayz-warning rounded-full"></div>
+                                        <div class="w-3 h-3 bg-mewayz-accent rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-mewayz-bg p-4 rounded-lg">
+                                        <div class="text-mewayz-primary mb-2">📊</div>
+                                        <div class="text-2xl font-bold">12.4K</div>
+                                        <div class="text-mewayz-text-secondary text-sm">Total Views</div>
+                                    </div>
+                                    <div class="bg-mewayz-bg p-4 rounded-lg">
+                                        <div class="text-mewayz-secondary mb-2">🎯</div>
+                                        <div class="text-2xl font-bold">3.2K</div>
+                                        <div class="text-mewayz-text-secondary text-sm">Link Clicks</div>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-mewayz-primary rounded-full flex items-center justify-center">
+                                            <span class="text-white text-sm">📱</span>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium">Social Media Post</div>
+                                            <div class="text-xs text-mewayz-text-secondary">2 minutes ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-mewayz-accent rounded-full flex items-center justify-center">
+                                            <span class="text-white text-sm">🔗</span>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium">Bio Site Updated</div>
+                                            <div class="text-xs text-mewayz-text-secondary">5 minutes ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item fade-in">
-                    <h3>15+</h3>
-                    <p>Integrated Platforms</p>
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-mewayz-surface">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Everything You Need to Grow Your Business</h2>
+                <p class="text-xl text-mewayz-text-secondary">Powerful tools designed for modern creators and entrepreneurs</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Social Media Management -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-primary bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">📱</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Social Media Management</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Schedule posts, manage multiple accounts, and track engagement across all major platforms.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Multi-platform posting</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Content scheduling</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Analytics & insights</li>
+                    </ul>
                 </div>
-                <div class="stat-item fade-in">
-                    <h3>99.9%</h3>
-                    <p>Uptime Guarantee</p>
+
+                <!-- Link in Bio -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-secondary bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">🔗</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Link in Bio Builder</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Create stunning bio pages with custom links, themes, and analytics tracking.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Custom themes</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Click tracking</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>QR code generation</li>
+                    </ul>
                 </div>
-                <div class="stat-item fade-in">
-                    <h3>3000+</h3>
-                    <p>App Integrations</p>
+
+                <!-- CRM -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-accent bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">👥</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">CRM & Lead Management</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Manage contacts, track leads, and nurture relationships with powerful CRM tools.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Contact management</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Lead scoring</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Pipeline tracking</li>
+                    </ul>
                 </div>
-                <div class="stat-item fade-in">
-                    <h3>24/7</h3>
-                    <p>Support Available</p>
+
+                <!-- Email Marketing -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-warning bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">📧</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Email Marketing</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Create, send, and track email campaigns with beautiful templates and automation.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Campaign builder</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Email templates</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Automation workflows</li>
+                    </ul>
+                </div>
+
+                <!-- E-commerce -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-danger bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">🛒</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">E-commerce Store</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Sell products directly through your bio pages with integrated payment processing.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Product catalog</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Payment processing</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Order management</li>
+                    </ul>
+                </div>
+
+                <!-- Course Creation -->
+                <div class="feature-card bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="w-12 h-12 bg-mewayz-primary bg-opacity-10 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-2xl">🎓</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Course Creation</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Create and sell online courses with video lessons, quizzes, and student tracking.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Video hosting</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Student progress</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Certificate generation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-20 bg-mewayz-bg">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">See Mewayz in Action</h2>
+                <p class="text-xl text-mewayz-text-secondary">Experience the power of our all-in-one platform</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Laravel Web App Preview -->
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Web Application</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Full-featured desktop experience with advanced analytics and management tools.</p>
+                    <div class="demo-preview mb-6">
+                        <div class="bg-mewayz-surface p-1">
+                            <div class="bg-mewayz-bg rounded-lg p-8">
+                                <div class="flex items-center justify-between mb-6">
+                                    <h4 class="text-lg font-semibold">Dashboard</h4>
+                                    <div class="flex space-x-2">
+                                        <div class="w-2 h-2 bg-mewayz-primary rounded-full"></div>
+                                        <div class="w-2 h-2 bg-mewayz-secondary rounded-full"></div>
+                                        <div class="w-2 h-2 bg-mewayz-accent rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="bg-mewayz-surface p-4 rounded-lg text-center">
+                                        <div class="text-lg font-bold text-mewayz-primary">12.4K</div>
+                                        <div class="text-xs text-mewayz-text-secondary">Views</div>
+                                    </div>
+                                    <div class="bg-mewayz-surface p-4 rounded-lg text-center">
+                                        <div class="text-lg font-bold text-mewayz-secondary">3.2K</div>
+                                        <div class="text-xs text-mewayz-text-secondary">Clicks</div>
+                                    </div>
+                                    <div class="bg-mewayz-surface p-4 rounded-lg text-center">
+                                        <div class="text-lg font-bold text-mewayz-accent">$2.1K</div>
+                                        <div class="text-xs text-mewayz-text-secondary">Revenue</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="http://localhost:8001/dashboard" class="inline-block px-6 py-3 bg-mewayz-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        Try Web App
+                    </a>
+                </div>
+
+                <!-- Flutter App Preview -->
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Mobile Application</h3>
+                    <p class="text-mewayz-text-secondary mb-6">Native mobile experience optimized for creators on the go.</p>
+                    <div class="demo-preview mb-6 max-w-sm mx-auto">
+                        <div class="bg-mewayz-surface p-1">
+                            <div class="bg-mewayz-bg rounded-lg p-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-8 h-8 bg-mewayz-primary rounded-lg flex items-center justify-center">
+                                        <span class="text-white font-bold">M</span>
+                                    </div>
+                                    <div class="w-6 h-6 bg-mewayz-text-secondary rounded-full"></div>
+                                </div>
+                                <div class="text-center mb-6">
+                                    <h4 class="text-lg font-semibold mb-2">Welcome back</h4>
+                                    <p class="text-mewayz-text-secondary text-sm">Sign in to your account</p>
+                                </div>
+                                <div class="space-y-4">
+                                    <div class="bg-mewayz-surface p-3 rounded-lg">
+                                        <div class="text-xs text-mewayz-text-secondary">Email</div>
+                                    </div>
+                                    <div class="bg-mewayz-surface p-3 rounded-lg">
+                                        <div class="text-xs text-mewayz-text-secondary">Password</div>
+                                    </div>
+                                    <div class="bg-mewayz-primary p-3 rounded-lg text-center">
+                                        <div class="text-white font-medium">Sign In</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="flutter.html" class="inline-block px-6 py-3 bg-mewayz-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        Try Mobile App
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Pricing Section -->
-    <section id="pricing" class="pricing">
-        <div class="container">
-            <h2 class="section-title">Choose Your Plan</h2>
-            <p class="section-subtitle">Start free and scale as you grow. No hidden fees, cancel anytime.</p>
-            
-            <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Starter</h3>
-                    <div class="pricing-price">$29<span style="font-size: 1rem; color: #666;">/month</span></div>
-                    <ul class="pricing-features">
-                        <li>✅ Social Media Management</li>
-                        <li>✅ Link in Bio Builder</li>
-                        <li>✅ Basic Website Builder</li>
-                        <li>✅ Email Marketing (1k contacts)</li>
-                        <li>✅ Basic Analytics</li>
-                        <li>✅ 1 Workspace</li>
+    <section id="pricing" class="py-20 bg-mewayz-surface">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-mewayz-text-secondary">Choose the perfect plan for your business needs</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Starter Plan -->
+                <div class="bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Starter</h3>
+                        <div class="text-4xl font-bold mb-2">$29<span class="text-lg text-mewayz-text-secondary">/month</span></div>
+                        <p class="text-mewayz-text-secondary">Perfect for individuals</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>5 Bio Sites</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>3 Social Accounts</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Basic Analytics</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Email Support</li>
                     </ul>
-                    <a href="#" class="cta-button">Get Started</a>
+                    <button class="w-full py-3 border border-mewayz-border rounded-lg hover:border-mewayz-primary transition-colors">
+                        Get Started
+                    </button>
                 </div>
-                
-                <div class="pricing-card featured">
-                    <div class="pricing-badge">Most Popular</div>
-                    <h3>Professional</h3>
-                    <div class="pricing-price">$99<span style="font-size: 1rem; color: #666;">/month</span></div>
-                    <ul class="pricing-features">
-                        <li>✅ Everything in Starter</li>
-                        <li>✅ Courses & Community</li>
-                        <li>✅ Marketplace & E-commerce</li>
-                        <li>✅ Advanced CRM</li>
-                        <li>✅ Booking System</li>
-                        <li>✅ Template Marketplace</li>
-                        <li>✅ Email Marketing (10k contacts)</li>
-                        <li>✅ 5 Workspaces</li>
-                        <li>✅ Priority Support</li>
+
+                <!-- Professional Plan -->
+                <div class="bg-mewayz-bg border-2 border-mewayz-primary rounded-xl p-8 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-mewayz-primary px-4 py-1 rounded-full text-sm font-medium">
+                        Most Popular
+                    </div>
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Professional</h3>
+                        <div class="text-4xl font-bold mb-2">$79<span class="text-lg text-mewayz-text-secondary">/month</span></div>
+                        <p class="text-mewayz-text-secondary">For growing businesses</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>25 Bio Sites</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>10 Social Accounts</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Advanced Analytics</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Email Marketing</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>CRM & Leads</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Priority Support</li>
                     </ul>
-                    <a href="#" class="cta-button">Go Pro</a>
+                    <button class="w-full py-3 bg-mewayz-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                        Get Started
+                    </button>
                 </div>
-                
-                <div class="pricing-card">
-                    <h3>Enterprise</h3>
-                    <div class="pricing-price">$299<span style="font-size: 1rem; color: #666;">/month</span></div>
-                    <ul class="pricing-features">
-                        <li>✅ Everything in Professional</li>
-                        <li>✅ Escrow System</li>
-                        <li>✅ AI & Automation</li>
-                        <li>✅ White-Label Solutions</li>
-                        <li>✅ Advanced Analytics</li>
-                        <li>✅ Unlimited Workspaces</li>
-                        <li>✅ Unlimited Contacts</li>
-                        <li>✅ Dedicated Support</li>
-                        <li>✅ Custom Integrations</li>
+
+                <!-- Enterprise Plan -->
+                <div class="bg-mewayz-bg border border-mewayz-border rounded-xl p-8">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                        <div class="text-4xl font-bold mb-2">$199<span class="text-lg text-mewayz-text-secondary">/month</span></div>
+                        <p class="text-mewayz-text-secondary">For large organizations</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Unlimited Bio Sites</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Unlimited Social Accounts</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>Custom Analytics</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>White-label Options</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>API Access</li>
+                        <li class="flex items-center"><span class="text-mewayz-accent mr-2">✓</span>24/7 Support</li>
                     </ul>
-                    <a href="#" class="cta-button">Contact Sales</a>
+                    <button class="w-full py-3 border border-mewayz-border rounded-lg hover:border-mewayz-primary transition-colors">
+                        Contact Sales
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- CTA Section -->
+    <section class="py-20 bg-mewayz-bg">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-4">Ready to Transform Your Business?</h2>
+            <p class="text-xl text-mewayz-text-secondary mb-8">Join thousands of creators who trust Mewayz to grow their online presence</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="/register" class="px-8 py-4 bg-mewayz-primary text-white rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                    Start Free Trial
+                </a>
+                <a href="#demo" class="px-8 py-4 border border-mewayz-border text-mewayz-text hover:border-mewayz-primary transition-colors rounded-lg font-semibold">
+                    Book a Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>🚀 Ultimate Platform</h3>
-                    <p>The complete business solution for creators, entrepreneurs, and businesses of all sizes. Everything you need in one powerful platform.</p>
+    <footer class="bg-mewayz-surface border-t border-mewayz-border py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-mewayz-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold">M</span>
+                        </div>
+                        <span class="text-xl font-bold">Mewayz</span>
+                    </div>
+                    <p class="text-mewayz-text-secondary">The all-in-one platform for modern creators and entrepreneurs.</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Features</h3>
-                    <p><a href="#">Social Media Management</a></p>
-                    <p><a href="#">E-commerce & Marketplace</a></p>
-                    <p><a href="#">Course Creation</a></p>
-                    <p><a href="#">CRM & Email Marketing</a></p>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-mewayz-text-secondary">
+                        <li><a href="#" class="hover:text-mewayz-primary">Features</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Pricing</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Integrations</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">API</a></li>
+                    </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <p><a href="#">Help Center</a></p>
-                    <p><a href="#">Contact Support</a></p>
-                    <p><a href="#">API Documentation</a></p>
-                    <p><a href="#">System Status</a></p>
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-mewayz-text-secondary">
+                        <li><a href="#" class="hover:text-mewayz-primary">Help Center</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Status</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Community</a></li>
+                    </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Company</h3>
-                    <p><a href="#">About Us</a></p>
-                    <p><a href="#">Careers</a></p>
-                    <p><a href="#">Privacy Policy</a></p>
-                    <p><a href="#">Terms of Service</a></p>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-mewayz-text-secondary">
+                        <li><a href="#" class="hover:text-mewayz-primary">About</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Blog</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Careers</a></li>
+                        <li><a href="#" class="hover:text-mewayz-primary">Privacy</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Ultimate Platform. All rights reserved. Built with ❤️ for creators and entrepreneurs.</p>
+            <div class="border-t border-mewayz-border mt-8 pt-8 text-center text-mewayz-text-secondary">
+                <p>&copy; 2025 Mewayz. All rights reserved.</p>
             </div>
         </div>
     </footer>
-
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animated elements
-        document.querySelectorAll('.slide-in-left, .slide-in-right, .fade-in').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
-        });
-
-        // Counter animation for stats
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current) + (target > 100 ? '+' : '');
-            }, 20);
-        }
-
-        // Animate stats when they come into view
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const statNumber = entry.target.querySelector('h3');
-                    const targetValue = parseInt(statNumber.textContent.replace(/[^\d]/g, ''));
-                    animateCounter(statNumber, targetValue);
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        });
-
-        document.querySelectorAll('.stat-item').forEach(stat => {
-            statsObserver.observe(stat);
-        });
-
-        // Add some interactive hover effects
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Pricing card interactions
-        document.querySelectorAll('.pricing-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                if (!this.classList.contains('featured')) {
-                    this.style.borderColor = '#667eea';
-                    this.style.transform = 'translateY(-10px) scale(1.02)';
-                }
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('featured')) {
-                    this.style.borderColor = '#e9ecef';
-                    this.style.transform = 'translateY(0) scale(1)';
-                }
-            });
-        });
-
-        // Add dynamic background particles
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.style.position = 'absolute';
-            particle.style.width = '4px';
-            particle.style.height = '4px';
-            particle.style.background = 'rgba(255,255,255,0.5)';
-            particle.style.borderRadius = '50%';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = '100%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '1';
-            
-            document.querySelector('.hero').appendChild(particle);
-            
-            const animation = particle.animate([
-                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                { transform: 'translateY(-100vh) rotate(360deg)', opacity: 0 }
-            ], {
-                duration: Math.random() * 3000 + 2000,
-                easing: 'linear'
-            });
-            
-            animation.onfinish = () => particle.remove();
-        }
-
-        // Create particles periodically
-        setInterval(createParticle, 300);
-    </script>
 </body>
 </html>
