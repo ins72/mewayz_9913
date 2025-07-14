@@ -69,6 +69,9 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'wallet_settings' => 'array',
         'booking_workhours' => 'array',
         'booking_gallery' => 'array',
+        'two_factor_enabled' => 'boolean',
+        'two_factor_recovery_codes' => 'array',
+        'last_login_at' => 'datetime',
     ];
 
 	protected $appends = [
