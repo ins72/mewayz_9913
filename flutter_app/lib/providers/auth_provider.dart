@@ -57,7 +57,7 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _error = e.toString();
+      _error = e.toString().replaceAll('Exception: ', '');
       _setLoading(false);
       return false;
     }
@@ -85,7 +85,7 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _error = e.toString();
+      _error = e.toString().replaceAll('Exception: ', '');
       _setLoading(false);
       return false;
     }
