@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'storage_service.dart';
 
 class ApiService {
-  static const String baseUrl = '/api'; // Use relative path for production
+  static const String baseUrl = 'https://mewayz-hub-1.preview.emergentagent.com/api'; // Production API URL
   
   static Future<Map<String, String>> _getHeaders() async {
     final token = await StorageService.getToken();
