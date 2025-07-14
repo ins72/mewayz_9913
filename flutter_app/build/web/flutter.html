@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <base href="$FLUTTER_BASE_HREF">
+  <base href="/">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Mewayz - All-in-One Business Platform">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -12,15 +13,91 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
   <title>Mewayz</title>
   <link rel="manifest" href="manifest.json">
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #101010;
+      color: #F1F1F1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    
+    .loading-container {
+      text-align: center;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid #191919;
+      border-top: 3px solid #FDFDFD;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: #7B7B7B;
+      font-size: 16px;
+    }
+  </style>
+  
   <script>
+    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        // Register our custom PWA service worker
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('PWA Service Worker registered successfully');
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+      
+      // Register Flutter service worker
       window.addEventListener('flutter-first-frame', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
+        navigator.serviceWorker.register('flutter_service_worker.js')
+          .then(function(registration) {
+            console.log('Flutter Service Worker registered successfully');
+          })
+          .catch(function(error) {
+            console.log('Flutter Service Worker registration failed:', error);
+          });
       });
     }
+
+    // Install prompt handling
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log('Install prompt available');
+    });
+
+    // App installed handler
+    window.addEventListener('appinstalled', function() {
+      console.log('Mewayz PWA installed');
+      deferredPrompt = null;
+    });
   </script>
 </head>
 <body>
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading Mewayz...</div>
+  </div>
+  
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
