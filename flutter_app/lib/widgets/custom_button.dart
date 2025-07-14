@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import '../config/theme.dart';
+import '../config/colors.dart';
 
-enum ButtonType { primary, secondary, tertiary }
+enum ButtonType { primary, secondary, tertiary, danger }
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool isLoading;
   final ButtonType type;
-  final Widget? icon;
+  final IconData? icon;
   final double? width;
-  final double? height;
+  final double height;
+  final EdgeInsetsGeometry? padding;
 
   const CustomButton({
     super.key,
@@ -20,86 +21,128 @@ class CustomButton extends StatelessWidget {
     this.type = ButtonType.primary,
     this.icon,
     this.width,
-    this.height,
+    this.height = 50,
+    this.padding,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width ?? double.infinity,
-      height: height ?? 48,
-      child: _buildButton(),
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
 
-  Widget _buildButton() {
-    switch (type) {
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Color get _backgroundColor {
+    switch (widget.type) {
       case ButtonType.primary:
-        return ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.primaryText,
-            disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: _buildButtonContent(),
-        );
-      
+        return AppColors.primary;
       case ButtonType.secondary:
-        return OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: AppColors.secondary,
-            foregroundColor: AppColors.secondaryText,
-            side: const BorderSide(color: AppColors.secondaryBorder),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: _buildButtonContent(),
-        );
-      
+        return AppColors.surface;
       case ButtonType.tertiary:
-        return TextButton(
-          onPressed: isLoading ? null : onPressed,
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.textPrimary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: _buildButtonContent(),
-        );
+        return Colors.transparent;
+      case ButtonType.danger:
+        return AppColors.error;
     }
   }
 
-  Widget _buildButtonContent() {
-    if (isLoading) {
-      return const SizedBox(
-        width: 20,
-        height: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryText),
+  Color get _textColor {
+    switch (widget.type) {
+      case ButtonType.primary:
+        return AppColors.onPrimary;
+      case ButtonType.secondary:
+        return AppColors.textPrimary;
+      case ButtonType.tertiary:
+        return AppColors.primary;
+      case ButtonType.danger:
+        return Colors.white;
+    }
+  }
+
+  BorderSide? get _borderSide {
+    switch (widget.type) {
+      case ButtonType.secondary:
+        return BorderSide(color: AppColors.secondaryBorder);
+      case ButtonType.tertiary:
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => _controller.forward(),
+      onTapUp: (_) => _controller.reverse(),
+      onTapCancel: () => _controller.reverse(),
+      child: ScaleTransition(
+        scale: _scaleAnimation,
+        child: Container(
+          width: widget.width,
+          height: widget.height,
+          padding: widget.padding,
+          child: ElevatedButton(
+            onPressed: widget.isLoading ? null : widget.onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _backgroundColor,
+              foregroundColor: _textColor,
+              elevation: widget.type == ButtonType.primary ? 2 : 0,
+              shadowColor: widget.type == ButtonType.primary ? AppColors.primary.withOpacity(0.3) : null,
+              side: _borderSide,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+            child: widget.isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(_textColor),
+                    ),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (widget.icon != null) ...[
+                        Icon(widget.icon, size: 18),
+                        const SizedBox(width: 8),
+                      ],
+                      Text(
+                        widget.text,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: _textColor,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
-      );
-    }
-
-    if (icon != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon!,
-          const SizedBox(width: 8),
-          Text(text),
-        ],
-      );
-    }
-
-    return Text(text);
+      ),
+    );
   }
 }
