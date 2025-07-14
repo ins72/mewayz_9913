@@ -41,6 +41,16 @@ Route::get('/', function () {
     return view('pages.landing');
 });
 
+// Flutter app route
+Route::get('/app', function () {
+    return redirect('http://localhost:8001');
+});
+
+// Mobile app route alias
+Route::get('/mobile', function () {
+    return redirect('http://localhost:8001');
+});
+
 // Authentication routes
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate']);
