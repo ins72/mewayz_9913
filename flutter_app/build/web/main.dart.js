@@ -93098,8 +93098,8 @@ c=j[1]
 i=j[2]
 h=[400*d/(d+27.13),400*c/(c+27.13),400*i/(i+27.13)]
 return new A.ajn(l,(40*h[0]+20*h[1]+h[2])/20*k,k,k,a1,1,q,m,A.Hv(m,0.25),1.48+e)})
-s($,"aUe","aF5",()=>{var q=null,p=A.b([A.hs(new A.a_j(),"/splash"),A.hs(new A.a_k(),"/login"),A.hs(new A.a_l(),"/register"),A.hs(new A.a_o(),"/forgot-password"),A.hs(new A.a_p(),"/workspace-selector"),A.hs(new A.a_q(),"/dashboard"),A.hs(new A.a_r(),"/social-media"),A.hs(new A.a_s(),"/link-in-bio"),A.hs(new A.a_t(),"/crm"),A.hs(new A.a_u(),"/email-marketing"),A.hs(new A.a_v(),"/ecommerce"),A.hs(new A.a_m(),"/courses"),A.hs(new A.a_n(),"/analytics")],t.yo)
-return A.aKN(!1,q,q,q,q,"/splash",q,q,q,!1,q,!0,q,!1,new A.QW(new A.aeB(p,A.aTI(),5)))})
+s($,"aUe","aF5",()=>{var q=null,p=A.b([A.hs(new A.a_j(),"/"),A.hs(new A.a_k(),"/login"),A.hs(new A.a_l(),"/register"),A.hs(new A.a_o(),"/forgot-password"),A.hs(new A.a_p(),"/workspace-selector"),A.hs(new A.a_q(),"/dashboard"),A.hs(new A.a_r(),"/social-media"),A.hs(new A.a_s(),"/link-in-bio"),A.hs(new A.a_t(),"/crm"),A.hs(new A.a_u(),"/email-marketing"),A.hs(new A.a_v(),"/ecommerce"),A.hs(new A.a_m(),"/courses"),A.hs(new A.a_n(),"/analytics")],t.yo)
+return A.aKN(!1,q,q,q,q,"/",q,q,q,!1,q,!0,q,!1,new A.QW(new A.aeB(p,A.aTI(),5)))})
 s($,"aW6","aFY",()=>new A.G())
 s($,"aZ1","ay4",()=>new A.a1f($.axQ()))
 s($,"aWH","aGe",()=>new A.acw(A.cv("/",!0,!1),A.cv("[^/]$",!0,!1),A.cv("^/",!0,!1)))
