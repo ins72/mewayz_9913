@@ -18,12 +18,12 @@ Mewayz is a comprehensive, enterprise-grade, cloud-native all-in-one business pl
 ### 🎯 Key Features
 
 - **Social Media Management**: Multi-platform content scheduling and analytics with seamless integration
-- **Bio Sites (Link-in-Bio)**: Customizable landing pages with Zeph-powered analytics
+- **Bio Sites (Link-in-Bio)**: Customizable landing pages with Mewayz-powered analytics
 - **CRM System**: Advanced lead and contact management with seamless pipeline tracking
 - **Email Marketing**: Professional campaign management and automation
 - **E-commerce**: Complete product catalog and order management system
 - **Course Management**: Educational content creation with seamless student tracking
-- **Analytics Dashboard**: Comprehensive business insights powered by Zeph intelligence
+- **Analytics Dashboard**: Comprehensive business insights powered by Mewayz intelligence
 - **Workspace Management**: Multi-tenant business operations with seamless collaboration
 - **PWA Support**: Progressive Web App capabilities for offline-first experiences
 - **Advanced Authentication**: OAuth 2.0 + Two-Factor Authentication with biometric support
@@ -31,10 +31,10 @@ Mewayz is a comprehensive, enterprise-grade, cloud-native all-in-one business pl
 ### 🏢 Brand Identity
 
 **Mewayz**: The flagship platform that empowers creators and entrepreneurs  
-**Zeph Technologies**: The innovation powerhouse behind the platform  
+**Mewayz Technologies Inc.**: The innovation company behind the platform  
 **Seamless**: Our core philosophy - everything should work together effortlessly
 
-*"At Zeph Technologies, we believe that business tools should enhance creativity, not complicate it. Mewayz embodies this philosophy by providing a seamless, integrated experience that grows with your business."*
+*"At Mewayz Technologies Inc., we believe that business tools should enhance creativity, not complicate it. Mewayz embodies this philosophy by providing a seamless, integrated experience that grows with your business."*
 
 ## 🏗️ Architecture
 
