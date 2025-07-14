@@ -1,6 +1,6 @@
 # Mewayz Platform - Troubleshooting Guide
 
-**Professional Support Documentation for Zeph Technologies' Flagship Platform**
+**Professional Support Documentation for Mewayz Technologies Inc.'s Flagship Platform**
 
 *Ensuring seamless operations through comprehensive problem resolution*
 
@@ -8,7 +8,7 @@
 
 ## 🛠️ Support Philosophy
 
-At Zeph Technologies, we believe that exceptional software requires exceptional support. This troubleshooting guide embodies our commitment to seamless operations, providing comprehensive solutions for all aspects of the Mewayz platform.
+At Mewayz Technologies Inc., we believe that exceptional software requires exceptional support. This troubleshooting guide embodies our commitment to seamless operations, providing comprehensive solutions for all aspects of the Mewayz platform.
 
 **Our Support Principles:**
 - **Proactive**: Anticipate issues before they impact users
