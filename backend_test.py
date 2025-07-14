@@ -58,7 +58,11 @@ class MewayzAPITester:
         if self.auth_token:
             headers = headers or {}
             headers['Authorization'] = f'Bearer {self.auth_token}'
-            headers['Accept'] = 'application/json'
+        
+        # Always request JSON responses
+        headers = headers or {}
+        headers['Accept'] = 'application/json'
+        headers['Content-Type'] = 'application/json'
         
         try:
             if method.upper() == 'GET':
