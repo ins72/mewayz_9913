@@ -82,6 +82,48 @@
   </div>
   
   <script>
+    // Enhanced service worker registration for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        // Register our custom service worker
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('Mewayz PWA Service Worker registered successfully');
+            
+            // Listen for updates
+            registration.addEventListener('updatefound', function() {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', function() {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    console.log('New service worker available');
+                    // You can show update notification here
+                  }
+                });
+              }
+            });
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // Install prompt handling
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log('Install prompt available');
+    });
+
+    // App installed handler
+    window.addEventListener('appinstalled', function() {
+      console.log('Mewayz PWA installed');
+      deferredPrompt = null;
+    });
+
+    // Initialize Flutter app
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
