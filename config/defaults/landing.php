@@ -320,7 +320,7 @@ return [
                     "content" => [
                         "title" => "Do we include hosting?",
                         "text" =>
-                            "Oh yes, Zeph has everything you need for website hosting. From SSL for secure connections to CDN for lightning-fast website loading, and AWS hosting for top-notch performance. Your website will be completely secure, super fast, and readily available for your visitors.",
+                            "Oh yes, Mewayz has everything you need for website hosting. From SSL for secure connections to CDN for lightning-fast website loading, and AWS hosting for top-notch performance. Your website will be completely secure, super fast, and readily available for your visitors.",
                     ],
                     "settings" => null,
                 ],
