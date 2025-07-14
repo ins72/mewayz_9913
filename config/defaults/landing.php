@@ -163,7 +163,7 @@ return [
             "image" => "assets/image/dragdrop/10.png",
             "content" => [
                 "title" => "Enjoy access to \n essential tools ⚡️",
-                "subtitle" => "Zeph provides SSL for website security, CDN for faster loading, AWS & Google Cloud hosting for reliability. Forms, CRM for email capture, privacy-focused analytics, SEO, and social sharing for online visibility. Easy website transfer or export if hosting elsewhere.",
+                "subtitle" => "Mewayz provides SSL for website security, CDN for faster loading, AWS & Google Cloud hosting for reliability. Forms, CRM for email capture, privacy-focused analytics, SEO, and social sharing for online visibility. Easy website transfer or export if hosting elsewhere.",
             ],
             "settings" => [
                 "banner_style" => "3",
