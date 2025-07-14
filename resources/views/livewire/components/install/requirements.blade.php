@@ -155,7 +155,7 @@
     
     <div class="flex-1 place-self-stretch"></div>
     <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl">
-        Get started with <b>Zeph</b>.
+        Get started with <b>Mewayz</b>.
     </h2>
     <div class="tiny-content-init">
         <ol class="!m-0">
