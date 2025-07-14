@@ -250,7 +250,7 @@ class TwoFactorController extends Controller
     /**
      * Generate recovery codes
      */
-    private function generateRecoveryCodes()
+    private function createRecoveryCodes()
     {
         $codes = [];
         for ($i = 0; $i < 10; $i++) {
