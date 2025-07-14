@@ -25,10 +25,8 @@ $login = function () {
 };
 
 ?>
-<div>
-
-    {{-- <div x-init="window.__livewirelazy($wire.__instance)"></div> --}}
-    <div>
+<div class="min-h-screen bg-[#101010] flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
         <div x-data="_login">
           <div class="flex min-h-screen flex-col md:!flex-row">
             <div class="flex items-center justify-center bg-[var(--yena-colors-white)] flex-1 md:max-w-[var(--yena-sizes-container-sm)]">
