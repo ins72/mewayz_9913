@@ -17,7 +17,7 @@ class ThemeToggle extends Component
     {
         $this->theme = $this->theme === 'light' ? 'dark' : 'light';
         session(['theme' => $this->theme]);
-        $this->dispatch('theme-changed', $this->theme);
+        $this->dispatch('theme-changed', theme: $this->theme);
     }
 
     public function render()
