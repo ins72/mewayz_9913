@@ -304,7 +304,7 @@ return [
                 [
                     "content" => [
                         "title" => "Who are we?",
-                        "text" => "Zeph makes website creation a breeze. Simply inform Zeph about your business and let it do the rest! Effortlessly craft a beautiful website without the need for coding or design expertise.",
+                        "text" => "Mewayz makes website creation a breeze. Simply inform Mewayz about your business and let it do the rest! Effortlessly craft a beautiful website without the need for coding or design expertise.",
                     ],
                     "settings" => ["animation" => "-"],
                 ],
