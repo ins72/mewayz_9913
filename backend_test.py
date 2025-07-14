@@ -97,31 +97,45 @@ class MewayzAPITester:
     def test_auth_register(self):
         """Test user registration"""
         try:
-            response = self.make_request('POST', '/auth/register', self.test_user_data)
+            # Use unique email to avoid conflicts
+            unique_email = f"test_{int(time.time())}@example.com"
+            test_data = {
+                "name": "Test User",
+                "email": unique_email,
+                "password": "password123",
+                "password_confirmation": "password123"
+            }
+            
+            response = self.make_request('POST', '/auth/register', test_data)
             
             if response.status_code == 201:
-                data = response.json()
-                if data.get('success') and data.get('token'):
-                    self.log_result("User Registration", "PASS", "User registered successfully with token")
-                    return True
-                else:
-                    self.log_result("User Registration", "FAIL", "Registration succeeded but missing token or success flag", data)
-                    return False
-            elif response.status_code == 422:
-                # User might already exist, try with different email
-                test_data = self.test_user_data.copy()
-                test_data['email'] = f"test_{int(time.time())}@example.com"
-                response = self.make_request('POST', '/auth/register', test_data)
-                
-                if response.status_code == 201:
+                try:
                     data = response.json()
                     if data.get('success') and data.get('token'):
-                        self.log_result("User Registration", "PASS", "User registered successfully with unique email")
+                        self.log_result("User Registration", "PASS", "User registered successfully with token")
                         return True
-                        
-            self.log_result("User Registration", "FAIL", f"Registration failed with status {response.status_code}", response.json())
-            return False
-            
+                    else:
+                        self.log_result("User Registration", "FAIL", "Registration succeeded but missing token or success flag", data)
+                        return False
+                except ValueError as e:
+                    self.log_result("User Registration", "FAIL", f"Invalid JSON response: {str(e)}", response.text[:200])
+                    return False
+            elif response.status_code == 422:
+                try:
+                    data = response.json()
+                    self.log_result("User Registration", "FAIL", f"Validation errors: {data.get('errors', 'Unknown validation error')}", data)
+                    return False
+                except ValueError:
+                    self.log_result("User Registration", "FAIL", f"422 status with invalid JSON response", response.text[:200])
+                    return False
+            else:
+                try:
+                    data = response.json()
+                except ValueError:
+                    data = response.text[:200]
+                self.log_result("User Registration", "FAIL", f"Registration failed with status {response.status_code}", data)
+                return False
+                
         except Exception as e:
             self.log_result("User Registration", "FAIL", f"Registration request failed: {str(e)}")
             return False
