@@ -25,6 +25,9 @@
             </div>
             @yield('content')
         </div>
+        
+        <!-- Floating Theme Toggle -->
+        @include('components.floating-theme-toggle')
 
         
         
