@@ -73,7 +73,7 @@ dependencies:
   table_calendar: ^3.0.9
   
   # Rich Text Editor
-  flutter_quill: ^9.3.1
+  flutter_quill: ^11.4.1
   
   # Animation
   animated_text_kit: ^4.2.2
