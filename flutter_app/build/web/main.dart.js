@@ -26184,7 +26184,7 @@ return A.O($async$or,r)},
 xp(a,b){return A.aIx(a,b)},
 aIx(a,b){var s=0,r=A.P(t.P),q,p,o,n,m
 var $async$xp=A.L(function(c,d){if(c===1)return A.M(d,r)
-while(true)switch(s){case 0:p=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/auth/login")
+while(true)switch(s){case 0:p=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/auth/login")
 s=3
 return A.Q(A.kr(),$async$xp)
 case 3:o=d
@@ -26202,7 +26202,7 @@ return A.O($async$xp,r)},
 xr(a,b,c){return A.aIy(a,b,c)},
 aIy(a,b,c){var s=0,r=A.P(t.P),q,p,o,n,m
 var $async$xr=A.L(function(d,e){if(d===1)return A.M(e,r)
-while(true)switch(s){case 0:p=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/auth/register")
+while(true)switch(s){case 0:p=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/auth/register")
 s=3
 return A.Q(A.kr(),$async$xr)
 case 3:o=e
@@ -26221,7 +26221,7 @@ xq(){var s=0,r=A.P(t.P),q,p,o,n
 var $async$xq=A.L(function(a,b){if(a===1)return A.M(b,r)
 while(true)switch(s){case 0:p=A
 o=A
-n=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/auth/logout")
+n=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/auth/logout")
 s=5
 return A.Q(A.kr(),$async$xq)
 case 5:s=4
@@ -26236,7 +26236,7 @@ return A.O($async$xq,r)},
 xn(a){return A.aIw(a)},
 aIw(a){var s=0,r=A.P(t.P),q,p,o,n,m
 var $async$xn=A.L(function(b,c){if(b===1)return A.M(c,r)
-while(true)switch(s){case 0:p=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/auth/forgot-password")
+while(true)switch(s){case 0:p=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/auth/forgot-password")
 s=3
 return A.Q(A.kr(),$async$xn)
 case 3:o=c
@@ -26255,7 +26255,7 @@ I9(){var s=0,r=A.P(t.nA),q,p=2,o=[],n,m,l,k,j,i
 var $async$I9=A.L(function(a,b){if(a===1){o.push(b)
 s=p}while(true)switch(s){case 0:p=4
 j=A
-i=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/user")
+i=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/user")
 s=8
 return A.Q(A.kr(),$async$I9)
 case 8:s=7
@@ -26287,7 +26287,7 @@ xo(){var s=0,r=A.P(t.P),q,p,o,n
 var $async$xo=A.L(function(a,b){if(a===1)return A.M(b,r)
 while(true)switch(s){case 0:p=A
 o=A
-n=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/workspaces")
+n=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/workspaces")
 s=5
 return A.Q(A.kr(),$async$xo)
 case 5:s=4
@@ -26302,7 +26302,7 @@ return A.O($async$xo,r)},
 xm(a,b){return A.aIv(a,b)},
 aIv(a,b){var s=0,r=A.P(t.P),q,p,o,n,m
 var $async$xm=A.L(function(c,d){if(c===1)return A.M(d,r)
-while(true)switch(s){case 0:p=A.dw("https://mewayz-hub-1.preview.emergentagent.com/api/workspaces")
+while(true)switch(s){case 0:p=A.dw("https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/api/workspaces")
 s=3
 return A.Q(A.kr(),$async$xm)
 case 3:o=d

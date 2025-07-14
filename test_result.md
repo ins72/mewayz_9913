@@ -1215,7 +1215,7 @@ The Mewayz backend is **production-ready** with all advanced business features f
 ### **🎯 COMPREHENSIVE FRONTEND TESTING COMPLETED - CRITICAL GAPS IDENTIFIED**
 
 **TESTING METHODOLOGY:**
-- Tested both production URL (https://mewayz-hub-1.preview.emergentagent.com/) and local applications
+- Tested both production URL (https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/) and local applications
 - Comprehensive authentication system testing for OAuth and 2FA features
 - Business features accessibility testing across all major platform components
 - Cross-platform responsiveness testing (Desktop, Tablet, Mobile)
@@ -1355,7 +1355,7 @@ While the backend is production-ready with excellent functionality, the frontend
 ### **🎯 COMPREHENSIVE FRONTEND TESTING COMPLETED - CRITICAL REALITY CHECK**
 
 **TESTING METHODOLOGY:**
-- Tested production URL (https://mewayz-hub-1.preview.emergentagent.com/) and local applications
+- Tested production URL (https://711958e7-bf43-44ea-87b8-7a77eb2497ad.preview.emergentagent.com/) and local applications
 - Comprehensive authentication system testing for OAuth and 2FA features as requested
 - Business features accessibility testing across all major platform components
 - Cross-platform responsiveness testing (Desktop, Tablet, Mobile)
