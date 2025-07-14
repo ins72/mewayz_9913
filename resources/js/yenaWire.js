@@ -6,7 +6,7 @@ import masonry from 'alpinejs-masonry'
 import md5 from 'crypto-js/md5';
  
 import collapse from '@alpinejs/collapse'
-import SimpleMDE from "SimpleMDE";
+import SimpleMDE from "simplemde";
 import { marked } from "marked";
 import moment from 'moment';
 import Navigo from 'navigo';
