@@ -839,7 +839,7 @@ class MewayzAPITester:
             return False
             
         try:
-            response = self.make_request('GET', '/auth/oauth/status')
+            response = self.make_request('GET', '/auth/oauth-status')
             
             if response.status_code == 200:
                 data = response.json()
