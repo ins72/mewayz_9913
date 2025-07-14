@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mewayz Bio Sites Management">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Bio Sites">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Bio Sites - Mewayz</title>
+  <link rel="manifest" href="manifest.json">
+  
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #101010;
+      color: #F1F1F1;
+      padding: 20px;
+    }
+    
+    .header {
+      background-color: #191919;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border: 1px solid #333;
+    }
+    
+    .header h1 {
+      color: #FDFDFD;
+      font-size: 2rem;
+      margin: 0;
+    }
+    
+    .header p {
+      color: #7B7B7B;
+      margin: 10px 0 0 0;
+    }
+    
+    .bio-sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .bio-site-card {
+      background-color: #191919;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      transition: transform 0.3s ease;
+    }
+    
+    .bio-site-card:hover {
+      transform: translateY(-2px);
+    }
+    
+    .bio-site-preview {
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+    
+    .bio-site-title {
+      color: #FDFDFD;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    
+    .bio-site-url {
+      color: #4ECDC4;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      text-decoration: none;
+    }
+    
+    .bio-site-url:hover {
+      text-decoration: underline;
+    }
+    
+    .bio-site-stats {
+      color: #7B7B7B;
+      font-size: 0.8rem;
+      margin-bottom: 15px;
+    }
+    
+    .bio-site-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-button {
+      background-color: #4ECDC4;
+      color: #101010;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+    
+    .action-button:hover {
+      background-color: #45B7D1;
+    }
+    
+    .action-button.secondary {
+      background-color: #333;
+      color: #FDFDFD;
+    }
+    
+    .action-button.secondary:hover {
+      background-color: #444;
+    }
+    
+    .create-new {
+      background-color: #4ECDC4;
+      color: #101010;
+      padding: 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    .create-new:hover {
+      background-color: #45B7D1;
+      transform: translateY(-2px);
+    }
+    
+    .pwa-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #191919;
+      color: #4ECDC4;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      border: 1px solid #333;
+    }
+    
+    .back-link {
+      color: #4ECDC4;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="pwa-indicator" id="pwaIndicator" style="display: none;">
+    PWA Active
+  </div>
+  
+  <a href="/" class="back-link">← Back to Home</a>
+  
+  <div class="header">
+    <h1>🔗 Bio Sites</h1>
+    <p>Manage your link-in-bio pages and track performance</p>
+  </div>
+  
+  <button class="create-new">+ Create New Bio Site</button>
+  
+  <div class="bio-sites-grid">
+    <div class="bio-site-card">
+      <div class="bio-site-preview">🌟</div>
+      <div class="bio-site-title">My Main Bio</div>
+      <a href="#" class="bio-site-url">mewayz.com/john-doe</a>
+      <div class="bio-site-stats">1,234 views • 89 clicks today</div>
+      <div class="bio-site-actions">
+        <button class="action-button">Edit</button>
+        <button class="action-button secondary">Analytics</button>
+      </div>
+    </div>
+    
+    <div class="bio-site-card">
+      <div class="bio-site-preview">🎨</div>
+      <div class="bio-site-title">Portfolio Links</div>
+      <a href="#" class="bio-site-url">mewayz.com/portfolio</a>
+      <div class="bio-site-stats">567 views • 23 clicks today</div>
+      <div class="bio-site-actions">
+        <button class="action-button">Edit</button>
+        <button class="action-button secondary">Analytics</button>
+      </div>
+    </div>
+    
+    <div class="bio-site-card">
+      <div class="bio-site-preview">🚀</div>
+      <div class="bio-site-title">Business Links</div>
+      <a href="#" class="bio-site-url">mewayz.com/business</a>
+      <div class="bio-site-stats">2,891 views • 145 clicks today</div>
+      <div class="bio-site-actions">
+        <button class="action-button">Edit</button>
+        <button class="action-button secondary">Analytics</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+            console.log('PWA Service Worker registered');
+            document.getElementById('pwaIndicator').style.display = 'block';
+          })
+          .catch(function(error) {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>
