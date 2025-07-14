@@ -29,7 +29,12 @@ class OAuthController extends Controller
         }
 
         try {
-            $redirectUrl = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+            // Handle Twitter differently as it doesn't support stateless mode
+            if ($provider === 'twitter') {
+                $redirectUrl = Socialite::driver($provider)->redirect()->getTargetUrl();
+            } else {
+                $redirectUrl = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+            }
             
             return response()->json([
                 'success' => true,
