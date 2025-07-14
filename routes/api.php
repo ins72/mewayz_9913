@@ -60,10 +60,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::put('profile', [AuthController::class, 'updateProfile']);
         
-        // OAuth Management - specific routes first
-        Route::get('oauth/status', [OAuthController::class, 'getOAuthStatus']);
-        Route::post('oauth/link', [OAuthController::class, 'linkAccount']);
-        Route::post('oauth/unlink', [OAuthController::class, 'unlinkAccount']);
+        // OAuth Management - using different prefix to avoid conflicts
+        Route::get('oauth-status', [OAuthController::class, 'getOAuthStatus']);
+        Route::post('oauth-link', [OAuthController::class, 'linkAccount']);
+        Route::post('oauth-unlink', [OAuthController::class, 'unlinkAccount']);
         
         // 2FA Routes
         Route::prefix('2fa')->group(function () {
