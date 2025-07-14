@@ -23,6 +23,15 @@ use App\Http\Controllers\Api\AnalyticsController;
 |
 */
 
+// Health check endpoint
+Route::get('health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'API is working',
+        'timestamp' => now()
+    ]);
+});
+
 // Public Auth Routes
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
