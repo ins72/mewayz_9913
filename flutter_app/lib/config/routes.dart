@@ -4,15 +4,16 @@ import '../screens/auth/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/auth/forgot_password_screen.dart';
-import '../screens/dashboard/dashboard_screen.dart';
+import '../screens/dashboard/enhanced_dashboard_screen.dart';
 import '../screens/workspace/workspace_selector_screen.dart';
-import '../screens/social_media/social_media_manager_screen.dart';
-import '../screens/bio/link_in_bio_builder_screen.dart';
-import '../screens/crm/crm_lead_management_screen.dart';
+import '../screens/social_media/enhanced_social_media_screen.dart';
+import '../screens/bio/enhanced_bio_sites_screen.dart';
+import '../screens/crm/enhanced_crm_screen.dart';
 import '../screens/email/email_marketing_campaign_screen.dart';
 import '../screens/ecommerce/ecommerce_store_manager_screen.dart';
 import '../screens/courses/course_creation_platform_screen.dart';
 import '../screens/analytics/analytics_dashboard_screen.dart';
+import '../screens/settings/settings_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
