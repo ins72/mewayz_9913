@@ -40,6 +40,16 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    
+    // OAuth Routes
+    Route::get('oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
+    Route::get('oauth/{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
+});
+
+// OAuth Routes (for frontend redirects)
+Route::prefix('oauth')->group(function () {
+    Route::get('{provider}', [OAuthController::class, 'redirectToProvider']);
+    Route::get('{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
 });
 
 // Protected Routes
