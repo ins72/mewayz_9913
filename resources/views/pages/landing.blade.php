@@ -313,7 +313,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="http://localhost:8001" class="inline-block px-6 py-3 bg-mewayz-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
+                    <a href="/dashboard" class="inline-block px-6 py-3 bg-mewayz-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">
                         Try Web App
                     </a>
                 </div>
