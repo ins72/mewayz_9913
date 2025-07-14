@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="Mewayz">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <title>Mewayz</title>
+  <title>Mewayz - Business Platform</title>
   <link rel="manifest" href="manifest.json">
   
   <style>
@@ -28,16 +28,18 @@
     
     .loading-container {
       text-align: center;
+      max-width: 500px;
+      padding: 2rem;
     }
     
     .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid #191919;
-      border-top: 3px solid #FDFDFD;
+      width: 60px;
+      height: 60px;
+      border: 4px solid #191919;
+      border-top: 4px solid #FDFDFD;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+      margin: 0 auto 30px;
     }
     
     @keyframes spin {
@@ -45,9 +47,23 @@
       100% { transform: rotate(360deg); }
     }
     
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #FDFDFD;
+      margin-bottom: 1rem;
+    }
+    
     .loading-text {
       color: #7B7B7B;
-      font-size: 16px;
+      font-size: 18px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .status-text {
+      color: #4ECDC4;
+      font-size: 14px;
+      margin-bottom: 2rem;
     }
     
     .error-container {
@@ -58,6 +74,7 @@
       border: 1px solid #333;
       max-width: 500px;
       margin: 2rem;
+      display: none;
     }
     
     .error-title {
@@ -88,34 +105,106 @@
     .retry-button:hover {
       background-color: #F1F1F1;
     }
+    
+    .features-list {
+      text-align: left;
+      color: #7B7B7B;
+      font-size: 14px;
+      margin-top: 2rem;
+    }
+    
+    .features-list li {
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+    
+    .features-list li:before {
+      content: "✓";
+      color: #4ECDC4;
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+    
+    .pwa-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #191919;
+      color: #4ECDC4;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      border: 1px solid #333;
+    }
   </style>
 </head>
 <body>
-  <div class="loading-container" id="loadingContainer">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Loading Mewayz...</div>
+  <div class="pwa-indicator" id="pwaIndicator" style="display: none;">
+    PWA Ready
   </div>
   
-  <div class="error-container" id="errorContainer" style="display: none;">
+  <div class="loading-container" id="loadingContainer">
+    <div class="logo">Mewayz</div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading Business Platform...</div>
+    <div class="status-text" id="statusText">Initializing PWA features...</div>
+    
+    <div class="features-list">
+      <ul>
+        <li>Social Media Management</li>
+        <li>Bio Sites & Link Management</li>
+        <li>CRM & Lead Management</li>
+        <li>Email Marketing</li>
+        <li>E-commerce Integration</li>
+        <li>Analytics & Reporting</li>
+        <li>Course Management</li>
+        <li>Offline Functionality</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="error-container" id="errorContainer">
     <div class="error-title">Loading Error</div>
-    <div class="error-message">
+    <div class="error-message" id="errorMessage">
       The app is taking longer than expected to load. This might be due to a slow connection or a temporary issue.
     </div>
     <button class="retry-button" onclick="retryLoad()">Retry</button>
   </div>
   
   <script>
-    // Show error after 15 seconds if app doesn't load
+    let loadingStage = 0;
+    const stages = [
+      'Initializing PWA features...',
+      'Registering service worker...',
+      'Loading application core...',
+      'Preparing offline features...',
+      'Almost ready...'
+    ];
+    
+    function updateLoadingStage() {
+      const statusText = document.getElementById('statusText');
+      if (loadingStage < stages.length) {
+        statusText.textContent = stages[loadingStage];
+        loadingStage++;
+        setTimeout(updateLoadingStage, 2000);
+      }
+    }
+    
+    // Show error after 20 seconds if app doesn't load
     setTimeout(() => {
       if (document.getElementById('loadingContainer').style.display !== 'none') {
         document.getElementById('loadingContainer').style.display = 'none';
         document.getElementById('errorContainer').style.display = 'block';
       }
-    }, 15000);
+    }, 20000);
     
     function retryLoad() {
       document.getElementById('errorContainer').style.display = 'none';
       document.getElementById('loadingContainer').style.display = 'block';
+      loadingStage = 0;
+      updateLoadingStage();
       location.reload();
     }
     
@@ -126,9 +215,12 @@
         navigator.serviceWorker.register('/sw.js')
           .then(function(registration) {
             console.log('PWA Service Worker registered successfully');
+            document.getElementById('pwaIndicator').style.display = 'block';
+            document.getElementById('statusText').textContent = 'PWA features activated';
           })
           .catch(function(error) {
             console.log('Service Worker registration failed:', error);
+            document.getElementById('statusText').textContent = 'PWA features unavailable';
           });
       });
       
@@ -152,13 +244,57 @@
       e.preventDefault();
       deferredPrompt = e;
       console.log('Install prompt available');
+      
+      // Show install hint
+      const statusText = document.getElementById('statusText');
+      statusText.innerHTML = 'PWA ready - Install available! <button style="background:#4ECDC4;color:#101010;border:none;padding:4px 8px;border-radius:4px;font-size:12px;cursor:pointer;" onclick="installApp()">Install</button>';
     });
 
     // App installed handler
     window.addEventListener('appinstalled', function() {
       console.log('Mewayz PWA installed');
+      document.getElementById('pwaIndicator').textContent = 'PWA Installed';
       deferredPrompt = null;
     });
+    
+    // Install app function
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choiceResult) {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+    
+    // Start loading stages
+    updateLoadingStage();
+    
+    // Simulate app loading progress
+    setTimeout(() => {
+      document.getElementById('statusText').textContent = 'Connecting to backend...';
+    }, 5000);
+    
+    setTimeout(() => {
+      document.getElementById('statusText').textContent = 'Loading user interface...';
+    }, 8000);
+    
+    setTimeout(() => {
+      document.getElementById('statusText').textContent = 'Preparing dashboard...';
+    }, 12000);
+    
+    // For demonstration, redirect to main app after 15 seconds
+    setTimeout(() => {
+      if (window.location.pathname === '/app' || window.location.pathname === '/mobile') {
+        // In a real implementation, this would load the actual Flutter app
+        window.location.href = '/flutter.html';
+      }
+    }, 15000);
   </script>
   
   <script src="flutter_bootstrap.js" async></script>
