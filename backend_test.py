@@ -690,6 +690,37 @@ class MewayzAPITester:
         except Exception as e:
             self.log_result("Analytics Reports", "FAIL", f"Request failed: {str(e)}")
             return False
+
+    def test_unauthorized_access(self):
+        """Test unauthorized access handling"""
+        try:
+            # Temporarily remove auth token
+            original_token = self.auth_token
+            self.auth_token = None
+            
+            response = self.make_request('GET', '/auth/me')
+            
+            # Restore auth token
+            self.auth_token = original_token
+            
+            if response.status_code == 401:
+                self.log_result("Unauthorized Access Handling", "PASS", "401 status returned for unauthorized request")
+                return True
+            elif response.status_code == 302:
+                # Laravel might redirect to login page for unauthenticated requests
+                self.log_result("Unauthorized Access Handling", "PASS", "302 redirect returned for unauthorized request (acceptable)")
+                return True
+            else:
+                try:
+                    response_data = response.json()
+                except:
+                    response_data = response.text[:200]  # First 200 chars if not JSON
+                self.log_result("Unauthorized Access Handling", "FAIL", f"Expected 401/302 but got {response.status_code}", response_data)
+                return False
+                
+        except Exception as e:
+            self.log_result("Unauthorized Access Handling", "FAIL", f"Request failed: {str(e)}")
+            return False
         """Test unauthorized access handling"""
         try:
             # Temporarily remove auth token
