@@ -500,5 +500,65 @@
             </div>
         </div>
     </footer>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('PWA Service Worker registered successfully');
+                        
+                        // Show PWA install prompt if available
+                        if ('BeforeInstallPromptEvent' in window) {
+                            console.log('PWA installation available');
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+
+        // Install prompt handling
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('PWA Install prompt available');
+        });
+
+        // App installed handler
+        window.addEventListener('appinstalled', function() {
+            console.log('Mewayz PWA installed successfully');
+            deferredPrompt = null;
+        });
+        
+        // Add PWA indicator
+        if ('serviceWorker' in navigator) {
+            const indicator = document.createElement('div');
+            indicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #191919;
+                color: #4ECDC4;
+                padding: 8px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                border: 1px solid #333;
+                z-index: 1000;
+                display: none;
+            `;
+            indicator.textContent = 'PWA Ready';
+            document.body.appendChild(indicator);
+            
+            // Show indicator when service worker is ready
+            navigator.serviceWorker.ready.then(() => {
+                indicator.style.display = 'block';
+            });
+        }
+    </script>
 </body>
 </html>
