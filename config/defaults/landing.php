@@ -7,7 +7,7 @@ return [
             "image" => "assets/image/dragdrop/5.png",
             "content" => [
                 "title" => "Create beautiful \n websites with AI",
-                "subtitle" => "Design stunning websites effortlessly with the free Zeph Ai. Our intuitive AI-powered builder allows for seamless mobile editing and automatic saving, making website creation a breeze.",
+                "subtitle" => "Design stunning websites effortlessly with the free Mewayz AI. Our intuitive AI-powered builder allows for seamless mobile editing and automatic saving, making website creation a breeze.",
             ],
             "settings" => [
                 "banner_style" => "3",
