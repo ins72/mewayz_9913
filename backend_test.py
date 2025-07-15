@@ -1866,6 +1866,31 @@ class MewayzAPITester:
         self.test_instagram_no_connected_account()
         self.test_instagram_content_type_validation()
         
+        # NEW ADVANCED FEATURES TESTING
+        print("\n🔥 Testing NEW ADVANCED FEATURES...")
+        print("=" * 50)
+        
+        # Instagram Intelligence Engine Advanced Features
+        print("\n📸 Testing Instagram Advanced Features...")
+        self.test_instagram_advanced_competitor_analysis()
+        self.test_instagram_predict_content_performance()
+        self.test_instagram_audience_intelligence()
+        
+        # Bio Site Builder Advanced Features
+        print("\n🎨 Testing Bio Site Advanced Features...")
+        if bio_site_id:
+            self.test_bio_sites_ab_test(bio_site_id)
+            ab_test_id = self.test_bio_sites_ab_test_results(bio_site_id)
+            self.test_bio_sites_monetization(bio_site_id)
+            self.test_bio_sites_advanced_analytics(bio_site_id)
+        
+        # CRM Advanced Features
+        print("\n🤖 Testing CRM Advanced Features...")
+        self.test_crm_automation_workflow()
+        self.test_crm_ai_lead_scoring()
+        self.test_crm_advanced_pipeline_management()
+        self.test_crm_predictive_analytics()
+        
         # Error handling tests
         print("\n⚠️ Testing Error Handling...")
         self.test_validation_errors()
