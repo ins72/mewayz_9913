@@ -258,9 +258,10 @@ class _CreateContactFormState extends State<CreateContactForm> {
     try {
       // Here you would call your API service
       await ApiService.createContact(contactData);
+      Logger.info('Contact created successfully', 'CreateContactForm');
     } catch (e) {
       // Handle error
-      print('Error creating contact: $e');
+      Logger.error('Error creating contact', e, null, 'CreateContactForm');
     }
   }
 }
