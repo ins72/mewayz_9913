@@ -131,12 +131,78 @@ class CrmController extends Controller
             'file' => 'required|file|mimes:csv,txt',
         ]);
 
-        // TODO: Implement CSV import logic
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Contacts import started. You will be notified when complete.',
-        ]);
+        try {
+            $file = $request->file('file');
+            $path = $file->store('imports', 'local');
+            $fullPath = storage_path('app/' . $path);
+
+            $imported = 0;
+            $failed = 0;
+            $errors = [];
+
+            if (($handle = fopen($fullPath, 'r')) !== FALSE) {
+                $header = fgetcsv($handle, 1000, ',');
+                
+                // Expected headers: name, email, phone, status, source, notes
+                while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                    try {
+                        $contactData = [
+                            'user_id' => $request->user()->id,
+                            'name' => $data[0] ?? '',
+                            'email' => $data[1] ?? '',
+                            'phone' => $data[2] ?? null,
+                            'type' => 'contact',
+                            'status' => in_array($data[3] ?? '', ['hot', 'warm', 'cold']) ? $data[3] : 'cold',
+                            'source' => $data[4] ?? 'import',
+                            'notes' => $data[5] ?? null,
+                        ];
+
+                        // Validate email
+                        if (!filter_var($contactData['email'], FILTER_VALIDATE_EMAIL)) {
+                            $failed++;
+                            $errors[] = "Invalid email: {$contactData['email']}";
+                            continue;
+                        }
+
+                        // Check if contact already exists
+                        $existing = Audience::where('user_id', $request->user()->id)
+                            ->where('email', $contactData['email'])
+                            ->first();
+
+                        if ($existing) {
+                            $existing->update($contactData);
+                        } else {
+                            Audience::create($contactData);
+                        }
+
+                        $imported++;
+                    } catch (\Exception $e) {
+                        $failed++;
+                        $errors[] = "Row error: " . $e->getMessage();
+                    }
+                }
+                fclose($handle);
+            }
+
+            // Clean up uploaded file
+            unlink($fullPath);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Import completed. {$imported} contacts imported, {$failed} failed.",
+                'data' => [
+                    'imported' => $imported,
+                    'failed' => $failed,
+                    'errors' => array_slice($errors, 0, 10), // Show first 10 errors
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Import failed: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function getPipeline(Request $request)
