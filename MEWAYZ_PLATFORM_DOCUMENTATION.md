@@ -665,12 +665,38 @@ curl -H "Authorization: Bearer <token>" \
 5. Test hashtag research
 6. View analytics dashboard
 
-### **Testing Existing Features**
-1. Visit `/console` for main dashboard
-2. Test bio site builder at `/console/bio/{slug}`
-3. Test website builder at `/console/builder/{slug}`
-4. Test course management at `/console/courses`
-5. Test e-commerce at `/console/store`
+### **Testing Partnership Form**
+1. Visit `/partners` for the partnership application form
+2. Fill out the comprehensive multi-step form
+3. Submit and verify ElasticMail integration
+4. Check server logs for form processing
+5. Verify email delivery and scoring system
+
+### **Testing Admin Dashboard**
+1. Login as admin user
+2. Visit `/console/admin/users` for user management
+3. Test `/console/admin/sites` for site administration
+4. Check `/console/admin/bio` for bio site management
+5. Verify `/console/admin/payments` for payment administration
+6. Test all admin functionality and permissions
+
+### **Testing Chat System**
+1. Create test conversations between users
+2. Test AI chat functionality on sites
+3. Verify message history and session management
+4. Test real-time messaging capabilities
+
+### **Testing Community Features**
+1. Create test communities and spaces
+2. Test community member management
+3. Verify space group functionality
+4. Test community moderation tools
+
+### **Testing Team Collaboration**
+1. Create teams and invite members
+2. Test role-based permissions
+3. Verify team workspace sharing
+4. Test team communication features
 
 ### **API Testing**
 ```bash
