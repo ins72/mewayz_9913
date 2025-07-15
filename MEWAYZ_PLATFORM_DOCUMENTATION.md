@@ -563,17 +563,24 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 ```
 
 ### **Key Models**
-- `User` - User management
+- `User` - User management with teams and conversations
 - `Organization` - Workspace/organization management
-- `Site` - Website builder sites
-- `BioSite` - Link in bio pages
-- `Course` - Course management
-- `Product` - E-commerce products
-- `Contact` - CRM contacts
-- `Campaign` - Email campaigns
+- `Site` - Website builder sites with full CMS capabilities
+- `BioSite` - Link in bio pages with advanced features
+- `Course` - Course management with lessons and enrollment
+- `Product` - E-commerce products with variants and reviews
+- `Contact` - CRM contacts with activity tracking
+- `Campaign` - Email campaigns with broadcast management
 - `InstagramAccount` - Instagram account management
-- `InstagramPost` - Instagram content
-- `PaymentTransaction` - Payment records
+- `InstagramPost` - Instagram content management
+- `PaymentTransaction` - Payment processing records
+- `UserConversation` - User messaging conversations
+- `SiteAiChatSession` - AI chat session management
+- `Community` - Community platform management
+- `YenaTeam` - Team collaboration management
+- `Wallet` - Digital wallet and financial management
+- `Plan` - Subscription plan management
+- `MediakitSite` - Creator mediakit management
 
 ---
 
