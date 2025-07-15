@@ -637,19 +637,26 @@ class BioSiteController extends Controller
                 'url' => $link->url,
                 'clicks' => rand(10, 500),
                 'click_rate' => rand(1, 15) . '%',
-                'position' => $link->position
+                'position' => $link->sort_order ?? 1
             ];
         }
 
         // Add social media links
-        foreach ($bioSite->social_links as $socialLink) {
-            $links[] = [
-                'title' => ucfirst($socialLink['platform']),
-                'url' => $socialLink['url'],
-                'clicks' => rand(5, 200),
-                'click_rate' => rand(1, 10) . '%',
-                'position' => null
-            ];
+        $socialLinks = [];
+        if ($bioSite->social) {
+            $socialLinks = is_string($bioSite->social) ? json_decode($bioSite->social, true) : $bioSite->social;
+        }
+        
+        if (is_array($socialLinks)) {
+            foreach ($socialLinks as $socialLink) {
+                $links[] = [
+                    'title' => ucfirst($socialLink['platform'] ?? 'Social'),
+                    'url' => $socialLink['url'] ?? '#',
+                    'clicks' => rand(5, 200),
+                    'click_rate' => rand(1, 10) . '%',
+                    'position' => null
+                ];
+            }
         }
 
         return $links;
