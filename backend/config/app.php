@@ -179,22 +179,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Bavix\Wallet\WalletServiceProvider::class,
-        Directorytree\Bartender\BartenderServiceProvider::class,
-        Jenssegers\Agent\AgentServiceProvider::class,
-        Lab404\Impersonate\ImpersonateServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
-        Spatie\LaravelIgnition\IgnitionServiceProvider::class,
         Laravel\Sanctum\SanctumServiceProvider::class,
-        Livewire\LivewireServiceProvider::class,
-        PragmaRX\Google2FA\Laravel\ServiceProvider::class,
-        Oddvalue\LaravelDrafts\DraftsServiceProvider::class,
-        Abordage\LaravelOgImages\ServiceProvider::class,
-        Abordage\LaravelHtmlMin\ServiceProvider::class,
-        Livewire\Volt\VoltServiceProvider::class,
-        Laravel\Folio\FolioServiceProvider::class,
-        Marksitko\LaravelUnsplash\ServiceProvider::class,
-        OpenAI\Laravel\ServiceProvider::class,
 
         /*
          * Application Service Providers...
