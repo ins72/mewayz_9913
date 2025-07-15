@@ -259,87 +259,143 @@ class SocialMediaController extends Controller
     }
 
     /**
-     * Create and schedule a post
+     * Create and schedule social media posts
      */
     public function createPost(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'content' => 'required|string|max:2200', // Instagram limit
-            'platforms' => 'required|array|min:1',
-            'platforms.*' => 'exists:social_media_accounts,id',
-            'scheduled_at' => 'nullable|date|after:now',
+        $request->validate([
+            'account_ids' => 'required|array|min:1',
+            'account_ids.*' => 'exists:social_media_accounts,id',
+            'content' => 'required|string|max:2000',
             'media' => 'nullable|array|max:10',
-            'media.*' => 'string', // Base64 encoded images or URLs
-            'hashtags' => 'nullable|array',
+            'media.*' => 'string', // Base64 encoded media or URLs
+            'hashtags' => 'nullable|array|max:30',
             'hashtags.*' => 'string|max:100',
+            'mention_users' => 'nullable|array|max:20',
+            'mention_users.*' => 'string|max:100',
+            'scheduled_at' => 'nullable|date|after:now',
+            'auto_post' => 'boolean',
+            'post_type' => 'required|string|in:text,image,video,carousel,story,reel,thread',
+            'location' => 'nullable|string|max:255',
+            'call_to_action' => 'nullable|string|in:learn_more,shop_now,sign_up,download,contact_us,watch_more,apply_now',
+            'target_audience' => 'nullable|array',
+            'target_audience.age_range' => 'nullable|array',
+            'target_audience.age_range.min' => 'nullable|integer|min:13|max:65',
+            'target_audience.age_range.max' => 'nullable|integer|min:18|max:100',
+            'target_audience.gender' => 'nullable|string|in:all,male,female,other',
+            'target_audience.interests' => 'nullable|array',
+            'target_audience.interests.*' => 'string|max:100',
+            'target_audience.countries' => 'nullable|array',
+            'target_audience.countries.*' => 'string|max:100',
+            'campaign_id' => 'nullable|string|max:100',
+            'boost_post' => 'boolean',
+            'boost_budget' => 'nullable|numeric|min:1|max:10000',
+            'boost_duration' => 'nullable|integer|min:1|max:30',
+            'analytics_tracking' => 'boolean',
+            'cross_posting_settings' => 'nullable|array',
+            'cross_posting_settings.adapt_content' => 'boolean',
+            'cross_posting_settings.optimize_hashtags' => 'boolean',
+            'cross_posting_settings.adjust_format' => 'boolean'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            // Verify all selected accounts belong to the user
-            $accounts = SocialMediaAccount::whereIn('id', $request->platforms)
-                ->where('user_id', $request->user()->id)
-                ->where('is_active', true)
+            $accounts = SocialMediaAccount::whereIn('id', $request->account_ids)
+                ->where('user_id', auth()->id())
+                ->where('is_connected', true)
                 ->get();
 
-            if ($accounts->count() !== count($request->platforms)) {
+            if ($accounts->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Some selected accounts are invalid or not connected'
-                ], 422);
+                    'message' => 'No connected social media accounts found'
+                ], 404);
             }
 
-            // Create the post
-            $post = SocialMediaPost::create([
-                'user_id' => $request->user()->id,
-                'content' => $request->content,
-                'media_urls' => $request->media ? json_encode($request->media) : null,
-                'hashtags' => $request->hashtags ? json_encode($request->hashtags) : null,
-                'scheduled_at' => $request->scheduled_at ? Carbon::parse($request->scheduled_at) : now(),
-                'status' => $request->scheduled_at ? 'scheduled' : 'draft',
-                'post_type' => $request->media ? 'media' : 'text',
-            ]);
+            $posts = [];
+            $errors = [];
 
-            // Attach the post to the selected accounts
-            $post->accounts()->attach($request->platforms);
+            foreach ($accounts as $account) {
+                try {
+                    // Adapt content for platform
+                    $adaptedContent = $this->adaptContentForPlatform($request->content, $account->platform, $request->cross_posting_settings);
+                    
+                    // Optimize hashtags for platform
+                    $optimizedHashtags = $this->optimizeHashtagsForPlatform($request->hashtags ?? [], $account->platform);
 
-            // If not scheduled, publish immediately
-            if (!$request->scheduled_at) {
-                // TODO: Implement immediate posting to social platforms
-                $post->update(['status' => 'published', 'published_at' => now()]);
+                    $post = SocialMediaPost::create([
+                        'user_id' => auth()->id(),
+                        'account_id' => $account->id,
+                        'content' => $adaptedContent,
+                        'media' => $request->media ?? [],
+                        'hashtags' => $optimizedHashtags,
+                        'mentions' => $request->mention_users ?? [],
+                        'post_type' => $request->post_type,
+                        'status' => $request->scheduled_at ? 'scheduled' : ($request->auto_post ? 'publishing' : 'draft'),
+                        'scheduled_at' => $request->scheduled_at,
+                        'location' => $request->location,
+                        'call_to_action' => $request->call_to_action,
+                        'target_audience' => $request->target_audience ?? [],
+                        'campaign_id' => $request->campaign_id,
+                        'boost_settings' => [
+                            'enabled' => $request->boost_post ?? false,
+                            'budget' => $request->boost_budget,
+                            'duration' => $request->boost_duration
+                        ],
+                        'analytics_enabled' => $request->analytics_tracking ?? true,
+                        'cross_posting_settings' => $request->cross_posting_settings ?? [],
+                        'platform_post_id' => null,
+                        'performance_metrics' => [
+                            'likes' => 0,
+                            'comments' => 0,
+                            'shares' => 0,
+                            'impressions' => 0,
+                            'reach' => 0,
+                            'engagement_rate' => 0
+                        ]
+                    ]);
+
+                    // Schedule post if needed
+                    if ($request->scheduled_at) {
+                        $this->schedulePost($post);
+                    } elseif ($request->auto_post) {
+                        $this->publishPost($post);
+                    }
+
+                    $posts[] = [
+                        'id' => $post->id,
+                        'account_id' => $account->id,
+                        'platform' => $account->platform,
+                        'username' => $account->username,
+                        'status' => $post->status,
+                        'scheduled_at' => $post->scheduled_at,
+                        'created_at' => $post->created_at
+                    ];
+
+                } catch (\Exception $e) {
+                    $errors[] = [
+                        'account_id' => $account->id,
+                        'platform' => $account->platform,
+                        'error' => $e->getMessage()
+                    ];
+                }
             }
-
-            Log::info("Social media post created", [
-                'user_id' => $request->user()->id,
-                'post_id' => $post->id,
-                'platforms' => $accounts->pluck('platform')->toArray(),
-                'scheduled_at' => $post->scheduled_at
-            ]);
 
             return response()->json([
                 'success' => true,
-                'message' => $request->scheduled_at ? 'Post scheduled successfully' : 'Post published successfully',
+                'message' => 'Posts created successfully',
                 'data' => [
-                    'id' => $post->id,
-                    'content' => $post->content,
-                    'scheduled_at' => $post->scheduled_at,
-                    'status' => $post->status,
-                    'platforms' => $accounts->pluck('platform')->toArray(),
+                    'posts' => $posts,
+                    'successful_posts' => count($posts),
+                    'failed_posts' => count($errors),
+                    'errors' => $errors
                 ]
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Failed to create social media post: ' . $e->getMessage());
+            Log::error('Failed to create social media post', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create post. Please try again.'
+                'message' => 'Failed to create post: ' . $e->getMessage()
             ], 500);
         }
     }
