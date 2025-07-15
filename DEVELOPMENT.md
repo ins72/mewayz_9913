@@ -64,3 +64,100 @@ Mewayz represents the pinnacle of Mewayz Technologies Inc.'s commitment to creat
 - **PHP CS Fixer**: Code style fixing
 - **ESLint**: JavaScript linting
 - **Prettier**: Code formatting
+
+---
+
+## 📦 Project Structure
+
+```
+mewayz/
+├── app/                    # Laravel application
+│   ├── Http/
+│   │   ├── Controllers/    # API and web controllers
+│   │   ├── Middleware/     # Custom middleware
+│   │   └── Requests/       # Form requests
+│   ├── Models/             # Eloquent models
+│   ├── Services/           # Business logic services
+│   └── Providers/          # Service providers
+├── config/                 # Configuration files
+├── database/
+│   ├── migrations/         # Database migrations
+│   ├── seeders/           # Database seeders
+│   └── factories/         # Model factories
+├── resources/
+│   ├── views/             # Blade templates
+│   ├── js/                # JavaScript assets
+│   └── sass/              # Sass stylesheets
+├── routes/
+│   ├── api.php            # API routes
+│   ├── web.php            # Web routes
+│   └── auth.php           # Authentication routes
+├── flutter_app/           # Flutter mobile application
+│   ├── lib/
+│   │   ├── screens/       # Flutter screens
+│   │   ├── widgets/       # Custom widgets
+│   │   ├── services/      # API services
+│   │   └── providers/     # State management
+│   └── pubspec.yaml       # Flutter dependencies
+├── public/                # Public web assets
+├── storage/               # Storage directories
+├── tests/                 # Test files
+└── vendor/                # Composer dependencies
+```
+
+---
+
+## 🚀 Development Setup
+
+### Prerequisites
+
+- **PHP**: 8.2.28 or higher
+- **Composer**: Latest version
+- **Node.js**: 18+ LTS
+- **MySQL/MariaDB**: 8.0+
+- **Redis**: 6.0+ (optional but recommended)
+- **Flutter**: 3.x (for mobile development)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/mewayz/mewayz.git
+   cd mewayz
+   ```
+
+2. **Install dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Environment setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Database setup**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+5. **Build assets**
+   ```bash
+   npm run dev
+   ```
+
+6. **Start development server**
+   ```bash
+   php artisan serve --host=0.0.0.0 --port=8001
+   ```
+
+### Flutter Development
+
+```bash
+cd flutter_app
+flutter pub get
+flutter run -d chrome
+```
