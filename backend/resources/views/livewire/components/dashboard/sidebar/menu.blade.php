@@ -1,4 +1,3 @@
-
 <?php
    use App\Yena\Teams;
    use function Livewire\Volt\{state, mount, placeholder, on};
@@ -89,7 +88,7 @@
       $this->initGet();
    });
 
-   placeholder('placeholders.console.sidebar-placeholder');
+   placeholder('placeholders.dashboard.sidebar-placeholder');
 ?>
 
 <div class="app-sidebar">
@@ -182,7 +181,7 @@
 
             {{-- <template x-teleport="body">
                <x-modal name="workspace-modal" :show="false" removeoverflow="true" maxWidth="max-w-[var(--yena-sizes-3xl)]" >
-                  <livewire:components.console.sidebar.workspace-modal lazy>
+                  <livewire:components.dashboard.sidebar.workspace-modal lazy>
                </x-modal>
             </template> --}}
 
@@ -249,7 +248,7 @@
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-sites-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-sites-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'browser-internet-web-network-window-app-icon') !!}
                   <p>{{ __('All Sites') }}</p>
@@ -276,42 +275,42 @@
                </div>
             </div>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-crm-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-crm-index') }}">
                <div class="--inner">
                   {!! __icon('Business, Products', 'business-customer-service') !!}
                   <p>{{ __('CRM') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-email-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-email-index') }}">
                <div class="--inner">
                   {!! __icon('emails', 'email-marketing') !!}
                   <p>{{ __('Email Marketing') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-instagram-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-instagram-index') }}">
                <div class="--inner">
                   {!! __icon('social-media', 'instagram-social-media') !!}
                   <p>{{ __('Instagram') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-social-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-social-index') }}">
                <div class="--inner">
                   {!! __icon('social-media', 'social-media-share') !!}
                   <p>{{ __('Social Media') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-analytics-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-analytics-index') }}">
                <div class="--inner">
                   {!! __icon('Business, Products', 'business-report-chart') !!}
                   <p>{{ __('Analytics') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-workspace-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-workspace-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'workspace') !!}
                   <p>{{ __('Workspace') }}</p>
@@ -324,41 +323,41 @@
                </div>
             </div>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-wallet-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-wallet-index') }}">
                <div class="--inner">
                   {!! __icon('money', 'Wallet-MAIN') !!}
                   <p>{{ __('Wallet') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-audience-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-audience-index') }}">
                <div class="--inner">
                   {!! __icon('emails', 'email-mail-letter') !!}
                   <p>{{ __('Leads') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-store-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-store-index') }}">
                <div class="--inner">
                   {!! __icon('Building, Construction', 'store') !!}
                   <p>{{ __('Store') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-courses-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-courses-index') }}">
                <div class="--inner">
                   {!! __icon('Content Edit', 'Book, Open.4') !!}
                   <p>{{ __('Courses') }}</p>
                </div>
             </x-x.href>
-            <x-x.href class="sidebar-item" href="{{ route('console-donations-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-donations-index') }}">
                <div class="--inner">
                   {!! __icon('custom', 'settings-pay-1') !!}
                   <p>{{ __('Donations') }}</p>
                </div>
             </x-x.href>
 
-            <x-x.href class="sidebar-item" href="{{ route('console-booking-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-booking-index') }}">
                <div class="--inner">
                   {!! __icon('Cleaning, Housekeeping', 'calendar-schedule') !!}
                   <p>{{ __('Booking') }}</p>
@@ -382,13 +381,13 @@
                   <p>{{ __('W-9 Generator') }}</p>
                </div>
             </x-x.href> --}}
-            <x-x.href class="sidebar-item" href="{{ route('console-invoicing-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-invoicing-index') }}">
                <div class="--inner">
                   {!! __icon('Payments Finance', 'Invoice, Accounting.1') !!}
                   <p>{{ __('Invoicing') }}</p>
                </div>
             </x-x.href>
-            <x-x.href class="sidebar-item" href="{{ route('console-shortener-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-shortener-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'attachment-link.4') !!}
                   <p>{{ __('Link Shortener') }}</p>
@@ -397,13 +396,13 @@
             <div class="w-full pt-1 pb-3 border-[var(--yena-colors-gray-200)]">
                <hr class="w-full opacity-[0.6] border-b border-solid">
             </div>
-            <x-x.href class="sidebar-item" href="{{ route('console-messages-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-messages-index') }}">
                <div class="--inner">
                   {!! __icon('Servers Databases', 'server-databases-connect') !!}
                   <p>{{ __('Messages') }}</p>
                </div>
             </x-x.href>
-            <x-x.href class="sidebar-item" href="{{ route('console-qrcode-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-qrcode-index') }}">
                <div class="--inner">
                   {!! __icon('shopping-ecommerce', 'Qr code.1') !!}
                   <p>{{ __('QrCode') }}</p>
@@ -411,13 +410,13 @@
             </x-x.href>
 
             <div class="--folders w-full">
-               <livewire:components.console.sidebar.folders lazy>
+               <livewire:components.dashboard.sidebar.folders lazy>
             </div>
             
             <div class="w-full pt-1 pb-3 border-[var(--yena-colors-gray-200)]">
                <hr class="w-full opacity-[0.6] border-b border-solid">
             </div>
-            <x-x.href class="sidebar-item" href="{{ route('console-templates-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-templates-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'thunder-lightning-notifications') !!}
                   <p>{{ __('Templates') }}</p>
@@ -429,7 +428,7 @@
                   <p>{{ __('Inspiration') }}</p>
                </div>
             </x-x.href> --}}
-            <x-x.href class="sidebar-item" href="{{ route('console-trash-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-trash-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'trash-bin-delete') !!}
                   <p>{{ __('Trash') }}</p>
@@ -441,26 +440,26 @@
             <hr class="w-full opacity-[0.6] border-b border-solid">
          </div>
 
-         <x-x.href class="sidebar-item !hidden" href="{{ route('console-settings-index') }}">
+         <x-x.href class="sidebar-item !hidden" href="{{ route('dashboard-settings-index') }}">
             <div class="--inner">
                {!! __icon('Users', 'single-user-add-plus_1') !!}
                <p>{{ __('Settings') }}</p>
             </div>
          </x-x.href>
 
-         {{-- <x-x.href class="sidebar-item" href="{{ route('console-settings-account') }}">
+         {{-- <x-x.href class="sidebar-item" href="{{ route('dashboard-settings-account') }}">
             <div class="--inner">
                {!! __icon('Users', 'single-user-add-plus_1') !!}
                <p>Invite to workspace</p>
             </div>
          </x-x.href> --}}
-         <x-x.href class="sidebar-item" href="{{ route('console-upgrade-index') }}">
+         <x-x.href class="sidebar-item" href="{{ route('dashboard-upgrade-index') }}">
             <div class="--inner">
                {!! __icon('Delivery', 'Delivery, Shipment, Packages.4') !!}
                <p>{{ __('Upgrade') }}</p>
             </div>
          </x-x.href>
-         <x-x.href class="sidebar-item" href="{{ route('console-settings-index') }}">
+         <x-x.href class="sidebar-item" href="{{ route('dashboard-settings-index') }}">
             <div class="--inner">
                {!! __icon('--ie', 'settings.12') !!}
                <p>{{ __('Settings & Workspace') }}</p>
@@ -486,61 +485,61 @@
             <hr class="w-full opacity-[0.6] border-b border-solid">
          </div>
 
-         <a class="sidebar-item" href="{{ route('console-admin-users-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-users-index') }}">
             <div class="--inner">
                {!! __icon('Users', 'single-user-add-plus_1') !!}
                <p>{{ __('Users') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-bio-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-bio-index') }}">
             <div class="--inner">
                {!! __icon('interface-essential', 'browser-web-link') !!}
                <p>{{ __('Bio Pages') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-bio-templates-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-bio-templates-index') }}">
             <div class="--inner">
                {!! __icon('interface-essential', 'thunder-lightning-notifications') !!}
                <p>{{ __('Bio Templates') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-sites-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-sites-index') }}">
             <div class="--inner">
                {!! __icon('--ie', 'browser-internet-web-network-window-app-icon') !!}
                <p>{{ __('Sites') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-templates-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-templates-index') }}">
             <div class="--inner">
                {!! __icon('interface-essential', 'thunder-lightning-notifications') !!}
                <p>{{ __('Templates') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-website-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-website-index') }}">
             <div class="--inner">
                {!! __icon('Internet, Network', 'Browser, Internet, Web, Network, Grid') !!}
                <p>{{ __('My Website') }}</p>
             </div>
          </a>
-         <a class="sidebar-item" href="{{ route('console-admin-plans-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-plans-index') }}">
             <div class="--inner">
                {!! __icon('Delivery', 'Delivery, Shipment, Packages.4') !!}
                <p>{{ __('Plans') }}</p>
             </div>
             </a>
-         <a class="sidebar-item" href="{{ route('console-admin-payments-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-payments-index') }}">
             <div class="--inner">
                {!! __icon('Payments Finance', 'Credit cards') !!}
                <p>{{ __('Payments') }}</p>
             </div>
             </a>
-         <a class="sidebar-item" href="{{ route('console-admin-languages-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-languages-index') }}">
             <div class="--inner">
                {!! __icon('--ie', 'language-translate') !!}
                <p>{{ __('Translation') }}</p>
             </div>
             </a>
-         <a class="sidebar-item" href="{{ route('console-admin-settings-index') }}">
+         <a class="sidebar-item" href="{{ route('dashboard-admin-settings-index') }}">
             <div class="--inner">
                {!! __icon('--ie', 'settings.10') !!}
                <p>{{ __('Settings') }}</p>
@@ -564,13 +563,12 @@
             <div class="--text">{{ __('Unlock unlimited possibilities with our pro plan.') }}</div>
 
             <div class="--button">
-               <x-x.href href="{{ route('console-upgrade-index') }}">{{ __('View Plans') }}</x-x.href>
+               <x-x.href href="{{ route('dashboard-upgrade-index') }}">{{ __('View Plans') }}</x-x.href>
             </div>
          </div> --}}
       
       </div>
    </div>
-
 
    
    
