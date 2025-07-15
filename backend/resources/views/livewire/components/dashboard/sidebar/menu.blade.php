@@ -238,10 +238,10 @@
             </div>
          </div>
          <div class="flex flex-col items-center mt-4 mb-2">
-            <x-x.href class="sidebar-item" href="{{ route('console-index') }}">
+            <x-x.href class="sidebar-item" href="{{ route('dashboard-index') }}">
                <div class="--inner">
                   {!! __icon('interface-essential', 'dashboard.3') !!}
-                  <p>{{ __('Console') }}</p>
+                  <p>{{ __('Dashboard') }}</p>
 
                   <span class="dot-button ml-auto !hidden">
                         <i class="fi fi-rr-plus text-[10px]"></i>
