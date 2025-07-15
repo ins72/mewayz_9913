@@ -73,6 +73,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/workspaces/{id}', [WorkspaceController::class, 'update']);
     Route::delete('/workspaces/{id}', [WorkspaceController::class, 'destroy']);
     
+    // Instagram Management routes
+    Route::prefix('instagram')->group(function () {
+        Route::get('/accounts', [InstagramManagementController::class, 'getAccounts']);
+        Route::post('/accounts', [InstagramManagementController::class, 'addAccount']);
+        Route::get('/posts', [InstagramManagementController::class, 'getPosts']);
+        Route::post('/posts', [InstagramManagementController::class, 'createPost']);
+        Route::put('/posts/{postId}', [InstagramManagementController::class, 'updatePost']);
+        Route::delete('/posts/{postId}', [InstagramManagementController::class, 'deletePost']);
+        Route::get('/hashtag-research', [InstagramManagementController::class, 'getHashtagResearch']);
+        Route::get('/analytics', [InstagramManagementController::class, 'getAnalytics']);
+    });
+    
     // Workspace Setup Wizard routes
     Route::prefix('workspace-setup')->group(function () {
         Route::get('/current-step', [WorkspaceSetupController::class, 'getCurrentStep']);
