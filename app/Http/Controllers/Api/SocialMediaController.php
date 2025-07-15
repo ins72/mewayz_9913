@@ -13,58 +13,95 @@ use Carbon\Carbon;
 class SocialMediaController extends Controller
 {
     /**
-     * Get connected social media accounts for the authenticated user
+     * Get social media accounts with enhanced filtering
      */
     public function getAccounts(Request $request)
     {
-        try {
-            $accounts = SocialMediaAccount::where('user_id', $request->user()->id)
-                ->select(['id', 'platform', 'username', 'display_name', 'followers_count', 'is_active', 'connected_at'])
-                ->orderBy('platform')
-                ->get()
-                ->map(function ($account) {
-                    return [
-                        'id' => $account->id,
-                        'platform' => $account->platform,
-                        'username' => $account->username,
-                        'display_name' => $account->display_name,
-                        'connected' => $account->is_active,
-                        'followers' => $account->followers_count ?? 0,
-                        'connected_at' => $account->connected_at,
-                        'avatar' => $account->avatar_url,
-                    ];
-                });
+        $request->validate([
+            'platform' => 'nullable|string|in:facebook,instagram,twitter,linkedin,youtube,tiktok,snapchat,discord,twitch,pinterest',
+            'status' => 'nullable|string|in:connected,disconnected,expired,pending',
+            'account_type' => 'nullable|string|in:personal,business,creator',
+            'sort_by' => 'nullable|string|in:platform,username,connected_at,last_synced_at,followers_count',
+            'sort_order' => 'nullable|string|in:asc,desc'
+        ]);
 
-            // Add disconnected platforms
-            $connectedPlatforms = $accounts->pluck('platform')->toArray();
-            $allPlatforms = ['instagram', 'facebook', 'twitter', 'linkedin', 'tiktok', 'youtube'];
-            
-            foreach ($allPlatforms as $platform) {
-                if (!in_array($platform, $connectedPlatforms)) {
-                    $accounts->push([
-                        'id' => null,
-                        'platform' => $platform,
-                        'username' => null,
-                        'display_name' => ucfirst($platform),
-                        'connected' => false,
-                        'followers' => 0,
-                        'connected_at' => null,
-                        'avatar' => null,
-                    ]);
-                }
+        try {
+            $query = SocialMediaAccount::where('user_id', auth()->id());
+
+            // Apply filters
+            if ($request->platform) {
+                $query->where('platform', $request->platform);
             }
+
+            if ($request->status) {
+                $query->where('is_connected', $request->status === 'connected');
+            }
+
+            if ($request->account_type) {
+                $query->where('account_type', $request->account_type);
+            }
+
+            // Apply sorting
+            $sortBy = $request->sort_by ?? 'connected_at';
+            $sortOrder = $request->sort_order ?? 'desc';
+            $query->orderBy($sortBy, $sortOrder);
+
+            $accounts = $query->get();
+
+            // Calculate summary statistics
+            $totalAccounts = $accounts->count();
+            $connectedAccounts = $accounts->where('is_connected', true)->count();
+            $totalFollowers = $accounts->sum('followers_count');
+            $totalPosts = $accounts->sum('media_count');
+
+            // Platform breakdown
+            $platformBreakdown = $accounts->groupBy('platform')->map(function($group) {
+                return [
+                    'count' => $group->count(),
+                    'connected' => $group->where('is_connected', true)->count(),
+                    'total_followers' => $group->sum('followers_count')
+                ];
+            });
 
             return response()->json([
                 'success' => true,
-                'data' => $accounts->values(),
-                'message' => 'Social media accounts retrieved successfully'
+                'data' => [
+                    'accounts' => $accounts->map(function($account) {
+                        return [
+                            'id' => $account->id,
+                            'platform' => $account->platform,
+                            'username' => $account->username,
+                            'display_name' => $account->display_name,
+                            'account_type' => $account->account_type,
+                            'is_connected' => $account->is_connected,
+                            'followers_count' => $account->followers_count,
+                            'following_count' => $account->following_count,
+                            'media_count' => $account->media_count,
+                            'profile_picture' => $account->profile_picture,
+                            'bio' => $account->bio,
+                            'website' => $account->website,
+                            'connected_at' => $account->created_at,
+                            'last_synced_at' => $account->last_synced_at,
+                            'token_expires_at' => $account->token_expires_at,
+                            'health_status' => $this->getAccountHealthStatus($account)
+                        ];
+                    }),
+                    'summary' => [
+                        'total_accounts' => $totalAccounts,
+                        'connected_accounts' => $connectedAccounts,
+                        'total_followers' => $totalFollowers,
+                        'total_posts' => $totalPosts,
+                        'connection_rate' => $totalAccounts > 0 ? round(($connectedAccounts / $totalAccounts) * 100, 2) : 0
+                    ],
+                    'platform_breakdown' => $platformBreakdown
+                ]
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve social media accounts: ' . $e->getMessage());
+            Log::error('Failed to retrieve social media accounts', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve social media accounts'
+                'message' => 'Failed to retrieve social media accounts: ' . $e->getMessage()
             ], 500);
         }
     }
