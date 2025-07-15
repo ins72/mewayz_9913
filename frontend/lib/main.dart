@@ -1,6 +1,20 @@
 
-import '../core/app_export.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sizer/sizer.dart';
+import 'package:provider/provider.dart';
 import './routes/app_routes.dart' as app_routes;
+import './theme/app_theme.dart';
+import './services/auth_service.dart';
+import './services/storage_service.dart';
+import './services/api_service.dart';
+import './widgets/custom_icon_widget.dart';
+import './widgets/custom_error_widget.dart';
+import './core/production_config.dart';
+import './core/error_handler.dart';
+import './core/notification_service.dart';
+import './core/analytics_service.dart';
+import './core/security_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,9 +48,8 @@ Future<void> _initializeServices() async {
     }
     
     // Initialize services in proper order
-    await _initializeSupabase();
     await _initializeStorage();
-    await _initializeApiClient();
+    await _initializeAuthService();
     await _initializeAnalytics();
     await _initializeNotifications();
     await _initializeSecurity();
@@ -49,24 +62,9 @@ Future<void> _initializeServices() async {
   }
 }
 
-Future<void> _initializeSupabase() async {
-  try {
-    SupabaseService();
-    if (ProductionConfig.enableLogging) {
-      debugPrint('✅ Supabase initialized');
-    }
-  } catch (e) {
-    if (ProductionConfig.enableLogging) {
-      debugPrint('❌ Supabase initialization failed: $e');
-    }
-    rethrow;
-  }
-}
-
 Future<void> _initializeStorage() async {
   try {
-    final storageService = StorageService();
-    await storageService.initialize();
+    await StorageService.init();
     if (ProductionConfig.enableLogging) {
       debugPrint('✅ Storage service initialized');
     }
@@ -78,16 +76,16 @@ Future<void> _initializeStorage() async {
   }
 }
 
-Future<void> _initializeApiClient() async {
+Future<void> _initializeAuthService() async {
   try {
-    final apiClient = ApiClient();
-    apiClient.initialize();
+    final authService = AuthService();
+    await authService.initialize();
     if (ProductionConfig.enableLogging) {
-      debugPrint('✅ API client initialized');
+      debugPrint('✅ Auth service initialized');
     }
   } catch (e) {
     if (ProductionConfig.enableLogging) {
-      debugPrint('❌ API client initialization failed: $e');
+      debugPrint('❌ Auth service initialization failed: $e');
     }
     rethrow;
   }
