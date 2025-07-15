@@ -35,11 +35,11 @@ export default defineConfig({
                 'resources/sass/create.scss',
                 'resources/sass/site.scss',
 
-                // Console
-                'resources/sass/console/console.scss',
-                'resources/sass/console/console.placeholder.scss',
-                'resources/sass/console/console.sidebar.scss',
-                'resources/sass/console/community.scss',
+                // Dashboard
+                'resources/sass/dashboard/dashboard.scss',
+                'resources/sass/dashboard/dashboard.placeholder.scss',
+                'resources/sass/dashboard/dashboard.sidebar.scss',
+                'resources/sass/dashboard/community.scss',
 
 
                 // Auth
