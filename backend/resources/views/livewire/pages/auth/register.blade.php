@@ -206,7 +206,7 @@ $register = function () {
                                 @endphp
                                 
                                 @if ($error)
-                                    <div class="mb-5 mt-2 bg-red-200 text-[11px] p-1 px-2 rounded-md">
+                                    <div class="mb-5 mt-2 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-[11px] p-1 px-2 rounded-md border border-red-200 dark:border-red-800">
                                         <div class="flex items-center">
                                             <div>
                                                 <i class="fi fi-rr-cross-circle flex"></i>
@@ -216,7 +216,7 @@ $register = function () {
                                     </div>
                                 @endif
                             </div>
-                            <div class="text-xs text-left color-gray mt-5 terms-o">
+                            <div class="text-xs text-left text-gray-600 dark:text-gray-400 mt-5 terms-o">
                                 @php
                                     $terms_link = settings('others.terms');
                                     $privacy_link = settings('others.privacy');
