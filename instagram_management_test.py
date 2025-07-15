@@ -90,7 +90,7 @@ class InstagramManagementTester:
         
         response, response_time = self.make_request("POST", "/workspaces", workspace_data)
         
-        if response and response.status_code == 200:
+        if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
                 if data.get("success"):
