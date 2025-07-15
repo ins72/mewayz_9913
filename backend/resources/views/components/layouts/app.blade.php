@@ -36,7 +36,7 @@
 
         @livewireStyles
     </head>
-    <body class="font-sans text-gray-900 antialiased console-body" x-data="appData">
+    <body class="font-sans text-gray-900 antialiased console-body bg-gray-50 dark:bg-gray-900 dark:text-gray-100" x-data="appData">
         
         <div id="app">
 
