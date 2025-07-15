@@ -822,7 +822,7 @@ class MewayzComprehensiveTester:
                                                     "caption": "Updated test caption #updated #instagram"
                                                 }
                                                 
-                                                update_response = self.make_request('PUT', f'/instagram/posts/{post_id}', update_data)
+                                                update_response = self.make_request('PUT', f'/instagram-management/posts/{post_id}', update_data)
                                                 update_time = update_response.elapsed.total_seconds()
                                                 
                                                 if update_response.status_code == 200:
