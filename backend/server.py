@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import requests
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 
 app = FastAPI(title="Mewayz API Proxy", version="1.0.0")
 
@@ -20,9 +22,72 @@ app.add_middleware(
 # Laravel backend URL (PHP-FPM will run on port 8002)
 LARAVEL_BACKEND_URL = "http://localhost:8002"
 
+# Mount static files
+static_dir = Path(__file__).parent.parent / "public"
+if static_dir.exists():
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
 @app.get("/")
 async def root():
+    """Serve the main landing page"""
+    try:
+        # Try to serve the landing page from Laravel backend
+        response = requests.get(f"{LARAVEL_BACKEND_URL}/", timeout=5)
+        if response.status_code == 200:
+            return response.text
+    except:
+        pass
+    
     return {"message": "Mewayz API Proxy is running", "status": "operational"}
+
+# Serve static HTML files from public directory
+@app.get("/{file_path:path}")
+async def serve_static_files(file_path: str):
+    """Serve static HTML files and assets"""
+    static_dir = Path(__file__).parent.parent / "public"
+    
+    # If no file path specified, serve landing page
+    if not file_path or file_path == "/":
+        try:
+            response = requests.get(f"{LARAVEL_BACKEND_URL}/", timeout=5)
+            if response.status_code == 200:
+                return response.text
+        except:
+            pass
+    
+    # Handle common static files
+    if file_path.endswith('.html'):
+        file_full_path = static_dir / file_path
+        if file_full_path.exists():
+            return FileResponse(file_full_path, media_type="text/html")
+    
+    # Handle other assets
+    if file_path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf')):
+        file_full_path = static_dir / file_path
+        if file_full_path.exists():
+            return FileResponse(file_full_path)
+    
+    # For HTML files without extension, try adding .html
+    if '.' not in file_path:
+        html_file_path = static_dir / f"{file_path}.html"
+        if html_file_path.exists():
+            return FileResponse(html_file_path, media_type="text/html")
+    
+    # Try to proxy to Laravel backend for other routes
+    try:
+        response = requests.get(f"{LARAVEL_BACKEND_URL}/{file_path}", timeout=5)
+        if response.status_code == 200:
+            content_type = response.headers.get('content-type', 'text/html')
+            return JSONResponse(
+                content=response.text if 'json' not in content_type else response.json(),
+                status_code=response.status_code,
+                headers={"content-type": content_type}
+            )
+    except:
+        pass
+    
+    # Return 404 if file not found
+    raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
 
 @app.get("/health")
 async def health_check():
