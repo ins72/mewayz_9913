@@ -344,6 +344,124 @@ class CrmController extends Controller
         ]);
     }
 
+    /**
+     * Create a new contact with advanced fields
+     */
+    public function createContact(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:audiences,email',
+            'phone' => 'nullable|string|max:20',
+            'company' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'contact_type' => 'required|string|in:individual,company,organization',
+            'status' => 'required|string|in:active,inactive,lead,prospect,customer,archived',
+            'source' => 'nullable|string|in:website,social_media,referral,cold_outreach,event,advertisement,organic',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:20',
+            'website' => 'nullable|url|max:255',
+            'linkedin' => 'nullable|url|max:255',
+            'twitter' => 'nullable|string|max:100',
+            'facebook' => 'nullable|url|max:255',
+            'instagram' => 'nullable|string|max:100',
+            'deal_value' => 'nullable|numeric|min:0',
+            'deal_stage' => 'nullable|string|in:prospecting,qualification,proposal,negotiation,closed_won,closed_lost',
+            'priority' => 'nullable|string|in:low,medium,high,urgent',
+            'notes' => 'nullable|string|max:2000',
+            'birthday' => 'nullable|date',
+            'anniversary' => 'nullable|date',
+            'time_zone' => 'nullable|string|max:50',
+            'preferred_contact_method' => 'nullable|string|in:email,phone,sms,whatsapp,linkedin',
+            'marketing_consent' => 'boolean',
+            'custom_fields' => 'nullable|array',
+            'custom_fields.*.key' => 'required|string|max:100',
+            'custom_fields.*.value' => 'required|string|max:500',
+            'custom_fields.*.type' => 'required|string|in:text,number,date,boolean,select'
+        ]);
+
+        try {
+            $contact = Audience::create([
+                'user_id' => $request->user()->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'job_title' => $request->job_title,
+                'type' => 'contact',
+                'contact_type' => $request->contact_type,
+                'status' => $request->status,
+                'source' => $request->source,
+                'tags' => $request->tags ?? [],
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'postal_code' => $request->postal_code,
+                'website' => $request->website,
+                'linkedin' => $request->linkedin,
+                'twitter' => $request->twitter,
+                'facebook' => $request->facebook,
+                'instagram' => $request->instagram,
+                'deal_value' => $request->deal_value ?? 0,
+                'deal_stage' => $request->deal_stage,
+                'priority' => $request->priority ?? 'medium',
+                'birthday' => $request->birthday,
+                'anniversary' => $request->anniversary,
+                'time_zone' => $request->time_zone,
+                'preferred_contact_method' => $request->preferred_contact_method ?? 'email',
+                'marketing_consent' => $request->marketing_consent ?? false,
+                'custom_fields' => $request->custom_fields ?? [],
+                'last_contact_date' => now()
+            ]);
+
+            // Create initial note if provided
+            if ($request->notes) {
+                // Assuming there's a notes relationship/model
+                $contact->notes()->create([
+                    'content' => $request->notes,
+                    'type' => 'initial_note'
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contact created successfully',
+                'data' => [
+                    'id' => $contact->id,
+                    'name' => $contact->name,
+                    'email' => $contact->email,
+                    'phone' => $contact->phone,
+                    'company' => $contact->company,
+                    'job_title' => $contact->job_title,
+                    'contact_type' => $contact->contact_type,
+                    'status' => $contact->status,
+                    'source' => $contact->source,
+                    'deal_value' => $contact->deal_value,
+                    'priority' => $contact->priority,
+                    'created_at' => $contact->created_at,
+                    'tags' => $contact->tags,
+                    'location' => [
+                        'city' => $contact->city,
+                        'country' => $contact->country
+                    ]
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create contact', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create contact: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function createBulkAccounts(Request $request)
     {
         $request->validate([
