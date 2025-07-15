@@ -286,13 +286,35 @@ class EcommerceController extends Controller
             'store_description' => 'nullable|string',
             'currency' => 'required|string|max:3',
             'tax_rate' => 'required|numeric|min:0|max:100',
+            'logo' => 'nullable|string', // Base64 encoded image
+            'shipping_settings' => 'nullable|array',
+            'payment_methods' => 'nullable|array',
         ]);
 
-        // TODO: Update store settings for the user
+        $userId = $request->user()->id;
+        
+        // Prepare settings data
+        $settingsData = [
+            'store_name' => $request->store_name,
+            'store_description' => $request->store_description,
+            'currency' => $request->currency,
+            'tax_rate' => $request->tax_rate,
+            'logo' => $request->logo,
+            'shipping_settings' => $request->shipping_settings ?? [],
+            'payment_methods' => $request->payment_methods ?? [],
+            'updated_at' => now()->toISOString(),
+        ];
+
+        // Update or create store settings
+        Setting::updateOrCreate(
+            ['user_id' => $userId, 'key' => 'store_settings'],
+            ['value' => json_encode($settingsData)]
+        );
 
         return response()->json([
             'success' => true,
             'message' => 'Store settings updated successfully',
+            'data' => $settingsData,
         ]);
     }
 }
