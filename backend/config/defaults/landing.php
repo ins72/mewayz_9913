@@ -100,7 +100,7 @@ return [
             "content" => [
                 "title" => "AI-powered \n website builder ✨",
                 "subtitle" =>
-                    "ZephAi automates website design based on your business description. Create websites without coding. Manage multiple sites with custom domains, suitable for freelancers and small businesses.",
+                    "MewayzAi automates website design based on your business description. Create websites without coding. Manage multiple sites with custom domains, suitable for freelancers and small businesses.",
             ],
             "settings" => [
                 "banner_style" => "3",
