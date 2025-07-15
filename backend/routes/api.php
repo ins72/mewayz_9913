@@ -182,7 +182,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Analytics routes
     Route::prefix('analytics')->group(function () {
-        Route::get('/', [AnalyticsController::class, 'overview']);
+        Route::get('/', [AnalyticsController::class, 'getOverview']);
         Route::get('/reports', [AnalyticsController::class, 'getReports']);
         Route::get('/social-media', [AnalyticsController::class, 'getSocialMediaAnalytics']);
         Route::get('/bio-sites', [AnalyticsController::class, 'getBioSiteAnalytics']);
