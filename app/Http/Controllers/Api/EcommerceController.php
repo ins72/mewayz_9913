@@ -244,16 +244,34 @@ class EcommerceController extends Controller
 
     public function getStoreSettings(Request $request)
     {
-        // TODO: Get store settings for the user
-        $settings = [
-            'store_name' => '',
-            'store_description' => '',
-            'logo' => null,
-            'currency' => 'USD',
-            'tax_rate' => 0,
-            'shipping_settings' => [],
-            'payment_methods' => [],
-        ];
+        $userId = $request->user()->id;
+        
+        // Get store settings from user settings or create default
+        $storeSettings = Setting::where('user_id', $userId)
+            ->where('key', 'store_settings')
+            ->first();
+        
+        if ($storeSettings) {
+            $settings = json_decode($storeSettings->value, true);
+        } else {
+            $settings = [
+                'store_name' => $request->user()->name . "'s Store",
+                'store_description' => 'Welcome to our online store',
+                'logo' => null,
+                'currency' => 'USD',
+                'tax_rate' => 0,
+                'shipping_settings' => [
+                    'free_shipping_threshold' => 50,
+                    'standard_shipping_rate' => 5.99,
+                    'express_shipping_rate' => 15.99
+                ],
+                'payment_methods' => [
+                    'stripe' => ['enabled' => false],
+                    'paypal' => ['enabled' => false],
+                    'razorpay' => ['enabled' => false]
+                ],
+            ];
+        }
 
         return response()->json([
             'success' => true,
