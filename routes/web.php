@@ -30,6 +30,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 */
 require __DIR__.'/auth.php';
 
+// Landing page route
+Route::get('/', function () {
+    return view('pages.index');
+})->name('home');
+
 // Dashboard routes - Laravel Folio will handle the dashboard pages
 Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
