@@ -490,7 +490,7 @@ class _LandingScreenState extends State<LandingScreen>
               children: [
                 _buildDemoItem('Mobile Application', 'Native mobile experience optimized for creators on the go.', '/login'),
                 const SizedBox(height: 40),
-                _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://a76c274e-bfc1-4e58-b3cd-36362339121e.preview.emergentagent.com/'),
+                _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://4b3480db-9b06-4815-a43a-ac19f3fb2ea8.preview.emergentagent.com/'),
               ],
             ),
             tablet: Row(
@@ -500,7 +500,7 @@ class _LandingScreenState extends State<LandingScreen>
                 ),
                 const SizedBox(width: 40),
                 Expanded(
-                  child: _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://a76c274e-bfc1-4e58-b3cd-36362339121e.preview.emergentagent.com/'),
+                  child: _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://4b3480db-9b06-4815-a43a-ac19f3fb2ea8.preview.emergentagent.com/'),
                 ),
               ],
             ),
@@ -511,7 +511,7 @@ class _LandingScreenState extends State<LandingScreen>
                 ),
                 const SizedBox(width: 60),
                 Expanded(
-                  child: _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://a76c274e-bfc1-4e58-b3cd-36362339121e.preview.emergentagent.com/'),
+                  child: _buildDemoItem('Web Dashboard', 'Full-featured desktop experience with advanced analytics.', 'https://4b3480db-9b06-4815-a43a-ac19f3fb2ea8.preview.emergentagent.com/'),
                 ),
               ],
             ),
