@@ -189,7 +189,7 @@
 
             <template x-teleport="body">
                <x-modal name="edit-profile-modal" :show="false" removeoverflow="true" maxWidth="xl" >
-                  <livewire:components.console.sidebar.profile-modal lazy>
+                  <livewire:components.dashboard.sidebar.profile-modal lazy>
                </x-modal>
             </template>
 
