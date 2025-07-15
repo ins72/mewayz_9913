@@ -481,13 +481,20 @@ class InstagramController extends Controller
     }
 
     /**
-     * Get content optimization suggestions
+     * Advanced AI-powered competitor intelligence with benchmarking
      */
-    public function getContentSuggestions(Request $request)
+    public function getAdvancedCompetitorAnalysis(Request $request)
     {
         $request->validate([
+            'competitors' => 'required|array|min:1|max:10',
+            'competitors.*' => 'required|string|max:255',
             'account_id' => 'required|exists:social_media_accounts,id',
-            'content_type' => 'in:hashtags,captions,timing'
+            'analysis_depth' => 'required|string|in:basic,advanced,comprehensive',
+            'metrics' => 'nullable|array',
+            'metrics.*' => 'string|in:engagement,growth,content_strategy,audience_overlap,posting_frequency,hashtag_strategy,influencer_partnerships,brand_mentions',
+            'time_period' => 'nullable|string|in:7d,30d,90d,1y',
+            'include_predictions' => 'boolean',
+            'benchmark_against' => 'nullable|string|in:industry_average,top_performers,similar_accounts'
         ]);
 
         try {
@@ -504,54 +511,259 @@ class InstagramController extends Controller
             }
 
             $accessToken = Crypt::decryptString($account->access_token);
+            $competitors = $request->competitors;
+            $analysisDepth = $request->analysis_depth;
+            $timePeriod = $request->time_period ?? '30d';
 
-            // Get recent media for analysis
-            $mediaResponse = Http::get($this->baseUrl . '/' . $account->platform_user_id . '/media', [
-                'fields' => 'id,media_type,caption,like_count,comments_count,timestamp',
-                'access_token' => $accessToken,
-                'limit' => 50
-            ]);
+            $competitorData = [];
+            $industryBenchmarks = [];
+            $aiInsights = [];
 
-            if ($mediaResponse->failed()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to fetch media for analysis'
-                ], 400);
+            foreach ($competitors as $competitorUsername) {
+                $competitorAnalysis = $this->analyzeCompetitorInDepth($competitorUsername, $accessToken, $account, $analysisDepth, $timePeriod);
+                $competitorData[] = $competitorAnalysis;
             }
 
-            $media = $mediaResponse->json()['data'] ?? [];
+            // Generate AI-powered insights and recommendations
+            $aiInsights = $this->generateAICompetitorInsights($competitorData, $account);
+            
+            // Calculate industry benchmarks
+            $industryBenchmarks = $this->calculateIndustryBenchmarks($competitorData);
+            
+            // Generate competitive positioning
+            $competitivePositioning = $this->analyzeCompetitivePositioning($account, $competitorData);
+            
+            // Content gap analysis
+            $contentGaps = $this->identifyContentGaps($account, $competitorData);
+            
+            // Opportunity identification
+            $opportunities = $this->identifyCompetitiveOpportunities($competitorData, $account);
 
-            $suggestions = [];
-
-            // Hashtag suggestions
-            if ($request->content_type === 'hashtags' || !$request->content_type) {
-                $hashtagAnalysis = $this->analyzeHashtags($media);
-                $suggestions['hashtags'] = $hashtagAnalysis;
-            }
-
-            // Caption suggestions
-            if ($request->content_type === 'captions' || !$request->content_type) {
-                $captionAnalysis = $this->analyzeCaptions($media);
-                $suggestions['captions'] = $captionAnalysis;
-            }
-
-            // Timing suggestions
-            if ($request->content_type === 'timing' || !$request->content_type) {
-                $timingAnalysis = $this->analyzePostTiming($media);
-                $suggestions['timing'] = $timingAnalysis;
+            // Predict future performance if requested
+            $predictions = [];
+            if ($request->include_predictions) {
+                $predictions = $this->generatePerformancePredictions($competitorData, $account);
             }
 
             return response()->json([
                 'success' => true,
-                'data' => $suggestions,
-                'analyzed_at' => Carbon::now()->toISOString()
+                'data' => [
+                    'analysis_summary' => [
+                        'competitors_analyzed' => count($competitorData),
+                        'analysis_depth' => $analysisDepth,
+                        'time_period' => $timePeriod,
+                        'your_ranking' => $this->calculateYourRanking($account, $competitorData),
+                        'overall_score' => $this->calculateOverallCompetitiveScore($account, $competitorData)
+                    ],
+                    'competitor_profiles' => $competitorData,
+                    'industry_benchmarks' => $industryBenchmarks,
+                    'competitive_positioning' => $competitivePositioning,
+                    'content_gap_analysis' => $contentGaps,
+                    'opportunities' => $opportunities,
+                    'ai_insights' => $aiInsights,
+                    'predictions' => $predictions,
+                    'recommendations' => $this->generateAdvancedRecommendations($competitorData, $account, $aiInsights)
+                ]
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Content suggestions error', ['error' => $e->getMessage()]);
+            Log::error('Advanced competitor analysis failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to generate suggestions: ' . $e->getMessage()
+                'message' => 'Failed to analyze competitors: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * AI-powered content performance prediction
+     */
+    public function predictContentPerformance(Request $request)
+    {
+        $request->validate([
+            'account_id' => 'required|exists:social_media_accounts,id',
+            'content_text' => 'required|string|max:2200',
+            'hashtags' => 'nullable|array|max:30',
+            'hashtags.*' => 'string|max:100',
+            'post_type' => 'required|string|in:photo,video,carousel,story,reel',
+            'scheduled_time' => 'nullable|date_format:H:i',
+            'scheduled_day' => 'nullable|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'include_media_analysis' => 'boolean',
+            'media_urls' => 'nullable|array|max:10',
+            'media_urls.*' => 'url',
+            'target_audience' => 'nullable|array',
+            'comparison_posts' => 'nullable|array|max:5',
+            'comparison_posts.*' => 'string'
+        ]);
+
+        try {
+            $account = SocialMediaAccount::where('id', $request->account_id)
+                ->where('user_id', auth()->id())
+                ->where('platform', 'instagram')
+                ->first();
+
+            if (!$account || !$account->is_connected) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Instagram account not connected'
+                ], 400);
+            }
+
+            // Analyze content sentiment and engagement factors
+            $contentAnalysis = $this->analyzeContentSentiment($request->content_text);
+            $hashtagAnalysis = $this->analyzeHashtagPotential($request->hashtags ?? [], $account);
+            $timingAnalysis = $this->analyzePostingTiming($request->scheduled_time, $request->scheduled_day, $account);
+            $audienceAlignment = $this->analyzeAudienceAlignment($request->content_text, $request->target_audience, $account);
+
+            // Historical performance analysis
+            $historicalData = $this->getHistoricalPerformanceData($account, $request->post_type);
+            
+            // AI prediction algorithms
+            $engagementPrediction = $this->predictEngagement($contentAnalysis, $hashtagAnalysis, $timingAnalysis, $historicalData);
+            $reachPrediction = $this->predictReach($contentAnalysis, $hashtagAnalysis, $account);
+            $viralPotential = $this->calculateViralPotential($contentAnalysis, $hashtagAnalysis, $timingAnalysis, $account);
+
+            // Content optimization suggestions
+            $optimizationSuggestions = $this->generateContentOptimizations($contentAnalysis, $hashtagAnalysis, $account);
+
+            // Competitive benchmarking
+            $competitiveBenchmark = $this->benchmarkAgainstCompetitors($contentAnalysis, $account);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'prediction_summary' => [
+                        'predicted_engagement_rate' => $engagementPrediction['rate'],
+                        'predicted_likes' => $engagementPrediction['likes'],
+                        'predicted_comments' => $engagementPrediction['comments'],
+                        'predicted_shares' => $engagementPrediction['shares'],
+                        'predicted_reach' => $reachPrediction,
+                        'viral_potential_score' => $viralPotential,
+                        'overall_performance_score' => $this->calculateOverallScore($engagementPrediction, $reachPrediction, $viralPotential),
+                        'confidence_level' => $this->calculatePredictionConfidence($historicalData)
+                    ],
+                    'content_analysis' => [
+                        'sentiment_score' => $contentAnalysis['sentiment'],
+                        'emotion_analysis' => $contentAnalysis['emotions'],
+                        'readability_score' => $contentAnalysis['readability'],
+                        'keyword_density' => $contentAnalysis['keywords'],
+                        'call_to_action_strength' => $contentAnalysis['cta_strength'],
+                        'audience_alignment' => $audienceAlignment
+                    ],
+                    'hashtag_analysis' => [
+                        'hashtag_performance_score' => $hashtagAnalysis['performance_score'],
+                        'trending_hashtags' => $hashtagAnalysis['trending'],
+                        'niche_hashtags' => $hashtagAnalysis['niche'],
+                        'competition_level' => $hashtagAnalysis['competition'],
+                        'reach_potential' => $hashtagAnalysis['reach_potential']
+                    ],
+                    'timing_analysis' => [
+                        'optimal_timing_score' => $timingAnalysis['score'],
+                        'audience_activity_level' => $timingAnalysis['activity'],
+                        'competition_density' => $timingAnalysis['competition'],
+                        'suggested_alternatives' => $timingAnalysis['alternatives']
+                    ],
+                    'optimization_suggestions' => $optimizationSuggestions,
+                    'competitive_benchmark' => $competitiveBenchmark,
+                    'improvement_recommendations' => $this->generateImprovementRecommendations($contentAnalysis, $hashtagAnalysis, $timingAnalysis)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Content performance prediction failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to predict content performance: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Advanced audience intelligence and segmentation
+     */
+    public function getAdvancedAudienceIntelligence(Request $request)
+    {
+        $request->validate([
+            'account_id' => 'required|exists:social_media_accounts,id',
+            'analysis_type' => 'required|string|in:demographic,psychographic,behavioral,interest_based,lookalike',
+            'segment_size' => 'nullable|integer|min:100|max:100000',
+            'time_period' => 'nullable|string|in:7d,30d,90d,1y',
+            'include_predictions' => 'boolean',
+            'export_format' => 'nullable|string|in:json,csv,pdf'
+        ]);
+
+        try {
+            $account = SocialMediaAccount::where('id', $request->account_id)
+                ->where('user_id', auth()->id())
+                ->where('platform', 'instagram')
+                ->first();
+
+            if (!$account || !$account->is_connected) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Instagram account not connected'
+                ], 400);
+            }
+
+            $accessToken = Crypt::decryptString($account->access_token);
+            $analysisType = $request->analysis_type;
+            $timePeriod = $request->time_period ?? '30d';
+
+            // Advanced audience segmentation
+            $audienceSegments = $this->performAdvancedAudienceSegmentation($account, $analysisType, $timePeriod);
+            
+            // Behavioral pattern analysis
+            $behaviorPatterns = $this->analyzeBehaviorPatterns($account, $timePeriod);
+            
+            // Interest and affinity analysis
+            $interestAnalysis = $this->analyzeAudienceInterests($account, $timePeriod);
+            
+            // Engagement pattern analysis
+            $engagementPatterns = $this->analyzeEngagementPatterns($account, $timePeriod);
+            
+            // Lookalike audience identification
+            $lookalikeSuggestions = $this->identifyLookalikeAudiences($account, $audienceSegments);
+            
+            // Audience growth predictions
+            $growthPredictions = [];
+            if ($request->include_predictions) {
+                $growthPredictions = $this->predictAudienceGrowth($account, $audienceSegments, $behaviorPatterns);
+            }
+
+            // Content preferences analysis
+            $contentPreferences = $this->analyzeContentPreferences($account, $audienceSegments);
+            
+            // Influencer alignment analysis
+            $influencerAlignment = $this->analyzeInfluencerAlignment($account, $audienceSegments);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'audience_overview' => [
+                        'total_audience_size' => $account->followers_count,
+                        'active_audience_percentage' => $this->calculateActiveAudiencePercentage($account),
+                        'audience_quality_score' => $this->calculateAudienceQualityScore($audienceSegments),
+                        'engagement_quality' => $this->calculateEngagementQuality($engagementPatterns),
+                        'growth_rate' => $this->calculateGrowthRate($account, $timePeriod)
+                    ],
+                    'audience_segments' => $audienceSegments,
+                    'behavioral_patterns' => $behaviorPatterns,
+                    'interest_analysis' => $interestAnalysis,
+                    'engagement_patterns' => $engagementPatterns,
+                    'content_preferences' => $contentPreferences,
+                    'lookalike_suggestions' => $lookalikeSuggestions,
+                    'influencer_alignment' => $influencerAlignment,
+                    'growth_predictions' => $growthPredictions,
+                    'actionable_insights' => $this->generateAudienceInsights($audienceSegments, $behaviorPatterns, $interestAnalysis),
+                    'targeting_recommendations' => $this->generateTargetingRecommendations($audienceSegments, $contentPreferences)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Advanced audience intelligence failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to analyze audience intelligence: ' . $e->getMessage()
             ], 500);
         }
     }
