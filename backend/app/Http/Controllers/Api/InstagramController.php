@@ -326,22 +326,39 @@ class InstagramController extends Controller
     public function getAnalytics(Request $request)
     {
         $request->validate([
-            'account_id' => 'required|exists:social_media_accounts,id',
+            'account_id' => 'nullable|exists:social_media_accounts,id',
             'period' => 'in:day,week,days_28',
             'since' => 'date',
             'until' => 'date'
         ]);
 
         try {
-            $account = SocialMediaAccount::where('id', $request->account_id)
-                ->where('user_id', auth()->id())
-                ->where('platform', 'instagram')
-                ->first();
+            $user = $request->user();
+            
+            // If no account_id provided, get the first Instagram account
+            if (!$request->account_id) {
+                $account = SocialMediaAccount::where('user_id', $user->id)
+                    ->where('platform', 'instagram')
+                    ->where('is_active', true)
+                    ->first();
+                    
+                if (!$account) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Instagram account connected'
+                    ], 400);
+                }
+            } else {
+                $account = SocialMediaAccount::where('id', $request->account_id)
+                    ->where('user_id', $user->id)
+                    ->where('platform', 'instagram')
+                    ->first();
+            }
 
-            if (!$account || !$account->is_connected) {
+            if (!$account) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Instagram account not connected'
+                    'message' => 'Instagram account not found or not connected'
                 ], 400);
             }
 
