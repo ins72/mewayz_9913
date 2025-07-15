@@ -609,4 +609,30 @@ class InstagramManagementController extends Controller
             ]);
         }, $sampleHashtags);
     }
+    
+    /**
+     * Format post count for display
+     */
+    private function formatPostCount($count)
+    {
+        if ($count >= 1000000) {
+            return round($count / 1000000, 1) . 'M';
+        } elseif ($count >= 1000) {
+            return round($count / 1000, 1) . 'K';
+        }
+        return $count;
+    }
+    
+    /**
+     * Get difficulty color
+     */
+    private function getDifficultyColor($difficulty)
+    {
+        return match($difficulty) {
+            'easy' => '#28a745',
+            'medium' => '#ffc107',
+            'hard' => '#dc3545',
+            default => '#6c757d'
+        };
+    }
 }
