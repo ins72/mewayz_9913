@@ -1,11 +1,8 @@
-# Mewayz Platform - Complete Installation Guide
+# 🛠️ Mewayz Platform Installation Guide
 
-**Professional Installation Documentation**  
-*By Mewayz Technologies Inc.*
+*Complete Installation Guide for Development and Production Environments*
 
----
-
-## 📋 Table of Contents
+## 📋 Overview
 
 1. [Prerequisites](#prerequisites)
 2. [System Requirements](#system-requirements)
