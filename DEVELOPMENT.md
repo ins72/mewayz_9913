@@ -352,3 +352,62 @@ CREATE TABLE audiences (
     INDEX idx_type_status (type, status)
 );
 ```
+
+---
+
+## 🔌 API Development
+
+### RESTful API Design
+
+#### Standard Response Format
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "meta": {
+    "current_page": 1,
+    "per_page": 15,
+    "total": 100
+  }
+}
+```
+
+#### Error Response Format
+```json
+{
+  "success": false,
+  "message": "Validation failed",
+  "errors": {
+    "email": ["The email field is required."],
+    "password": ["The password must be at least 8 characters."]
+  }
+}
+```
+
+### Authentication
+
+#### Laravel Sanctum
+```php
+// Protect routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+});
+
+// Issue token
+$token = $user->createToken('api-token')->plainTextToken;
+```
+
+#### API Usage
+```bash
+# With token
+curl -H "Authorization: Bearer {token}" \
+     -H "Content-Type: application/json" \
+     https://mewayz.com/api/user
+```
