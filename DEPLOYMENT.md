@@ -300,43 +300,23 @@ sudo supervisorctl restart mewayz-worker:*
 # Quick rollback to previous version
 ```
 
-### 8. Backup Strategy
+## 🚨 Troubleshooting
 
-#### Database Backup
-```bash
-# Create backup script
-sudo nano /usr/local/bin/mewayz-backup.sh
+### Common Issues
+1. **500 Error**: Check PHP-FPM and Nginx logs
+2. **Database Connection**: Verify MySQL credentials
+3. **Redis Connection**: Check Redis service
+4. **Queue Workers**: Restart supervisor processes
 
-#!/bin/bash
-BACKUP_DIR="/var/backups/mewayz"
-DATE=$(date +"%Y%m%d_%H%M%S")
+### Performance Issues
+1. **Slow Queries**: Enable MySQL slow query log
+2. **Memory Usage**: Monitor and optimize PHP settings
+3. **CPU Usage**: Check for inefficient processes
 
-mkdir -p $BACKUP_DIR
-
-# Database backup
-mysqldump -u mewayz -p mewayz > $BACKUP_DIR/mewayz_db_$DATE.sql
-
-# Application backup
-tar -czf $BACKUP_DIR/mewayz_app_$DATE.tar.gz -C /var/www mewayz
-
-# Keep only last 7 days
-find $BACKUP_DIR -name "*.sql" -mtime +7 -delete
-find $BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
-
-# Make executable
-sudo chmod +x /usr/local/bin/mewayz-backup.sh
-
-# Schedule backup
-sudo crontab -e
-# Add: 0 2 * * * /usr/local/bin/mewayz-backup.sh
-```
-
-#### File Backup
-```bash
-# Backup important files
-rsync -av /var/www/mewayz/storage/ /backup/mewayz/storage/
-rsync -av /var/www/mewayz/.env /backup/mewayz/
-```
+### Security Issues
+1. **SSL Certificate**: Verify certificate validity
+2. **Firewall**: Check UFW rules
+3. **File Permissions**: Ensure proper permissions
 
 ### 9. Security Hardening
 
