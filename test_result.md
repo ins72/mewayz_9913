@@ -144,10 +144,12 @@ test_plan:
     - "Authentication Pages"
     - "Dashboard Access"
     - "Forms"
+    - "Instagram Management System - Phase 2"
   stuck_tasks:
     - "Authentication Pages"
     - "Dashboard Access"
     - "Forms"
+    - "Instagram Management System - Phase 2"
   test_all: true
   test_priority: "high_first"
 
