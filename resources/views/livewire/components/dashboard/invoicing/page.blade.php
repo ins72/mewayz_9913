@@ -279,7 +279,7 @@
                                             </div>
                                     
                                             <hr class="--divider">
-                                            <a href="{{ route('console-invoicing-edit', ['slug' => $item->slug]) }}" class="yena-menu-list-item">
+                                            <a href="{{ route('dashboard-invoicing-edit', ['slug' => $item->slug]) }}" class="yena-menu-list-item">
                                                 <div class="--icon">
                                                     {!! __icon('Design Tools', 'Pencil.1', 'w-5 h-5') !!}
                                                 </div>
@@ -364,7 +364,7 @@
                                         </div>
                                         
                                         <div class="flex items-center gap-2">
-                                            <a class="yena-button-o !bg-white" href="{{ route('console-invoicing-edit', ['slug' => $item->slug]) }}">
+                                            <a class="yena-button-o !bg-white" href="{{ route('dashboard-invoicing-edit', ['slug' => $item->slug]) }}">
                                                 <i class="ph ph-pencil text-sm"></i>
                                             </a>
                                             <button class="yena-button-o !bg-white" type="button" @click.stop="showOptions=true">

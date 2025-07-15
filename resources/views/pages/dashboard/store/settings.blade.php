@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-store-settings');
+   name('dashboard-store-settings');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Store - Settings') }}</x-slot>

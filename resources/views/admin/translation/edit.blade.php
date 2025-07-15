@@ -1,5 +1,5 @@
 
-<form action="{{ route('console-admin-languages-post', 'edit') }}" method="POST">
+<form action="{{ route('dashboard-admin-languages-post', 'edit') }}" method="POST">
   @csrf
   <input type="hidden" name="language" value="{{ $locale }}">
   <div class="grid grid-cols-1 gap-4 mb-5">

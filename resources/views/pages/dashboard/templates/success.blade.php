@@ -1,7 +1,7 @@
 <?php
    use function Laravel\Folio\name;
     
-   name('console-templates-success');
+   name('dashboard-templates-success');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Success') }}</x-slot>
@@ -13,7 +13,7 @@
       
       <div class="flex flex-row gap-4 mt-4 lg:flex-row">
          
-         <a href="{{ route('console-sites-index') }}" @navigate class="cursor-pointer yena-button-stack">
+         <a href="{{ route('dashboard-sites-index') }}" @navigate class="cursor-pointer yena-button-stack">
             <div class="--icon">
                {!! __icon('interface-essential', 'browser-internet-web-network-window-app-icon', 'w-6 h-6') !!}
             </div>

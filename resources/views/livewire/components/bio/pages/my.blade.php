@@ -82,7 +82,7 @@
       $this->site->user->_last_edited_bio = $page->id;
       $this->site->user->save();
 
-      return redirect(route('console-bio-index', ['slug' => $page->_slug]));
+      return redirect(route('dashboard-bio-index', ['slug' => $page->_slug]));
    };
 ?>
 
@@ -155,7 +155,7 @@
 
                                     <div class="ml-2 w-[100%]">
                                        <div class="flex items-center w-[100%]">
-                                          <a class="w-24 truncate text-sm font-semibold text-blue-800 sm:w-full sm:text-base" href="{{ route('console-bio-index', ['slug' => $item->_slug]) }}">{{ $item->name }}</a>
+                                          <a class="w-24 truncate text-sm font-semibold text-blue-800 sm:w-full sm:text-base" href="{{ route('dashboard-bio-index', ['slug' => $item->_slug]) }}">{{ $item->name }}</a>
                                           
                                           @if ($layout = $item->sections()->first())
                                           <a class="flex items-center space-x-1 rounded-md bg-gray-100 px-2 py-0.5 transition-all duration-75 hover:scale-105 active:scale-100 ml-auto">

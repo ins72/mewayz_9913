@@ -19,7 +19,7 @@ $setProject = function($index){
     $user->save();
 
 
-    $this->redirect(route('console-index'), navigate: true);
+    $this->redirect(route('dashboard-index'), navigate: true);
 };
 ?>
 

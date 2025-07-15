@@ -183,7 +183,7 @@
                                     <span x-show="step=='due'">{{ __('4. Due date and details') }}</span>
                                 </div>
                             </div>
-                            <a class="yena-button-o" href="{{ route('console-invoicing-index') }}">
+                            <a class="yena-button-o" href="{{ route('dashboard-invoicing-index') }}">
                                 <i class="ph ph-x text-xl"></i>
                             </a>
                         </div>
@@ -402,7 +402,7 @@
                     </div>
                     <div class="absolute bottom-0 z-30 w-full border-0 border-t border-solid border-gray-500 bg-white py-4">
                         <div class="mx-4 max-w-[480px] lg:!m-auto">
-                            <button class="yena-black-btn !w-full !rounded-full relative" type="button" @click="step=='final' ? window.location.replace('{{ route('console-invoicing-index') }}') : nextStep">
+                            <button class="yena-black-btn !w-full !rounded-full relative" type="button" @click="step=='final' ? window.location.replace('{{ route('dashboard-invoicing-index') }}') : nextStep">
                                 <div class="flex w-full items-center justify-center gap-2 text-md-bold">
                                     <span x-show="step!=='final'" x-cloak>
                                         {{ __('Next Step') }}

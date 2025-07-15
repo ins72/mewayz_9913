@@ -32,7 +32,7 @@
       }
 
 
-      $route = route('console-builder-index', ['slug' => $build->_slug]);
+      $route = route('dashboard-builder-index', ['slug' => $build->_slug]);
 
       $this->js(
           '

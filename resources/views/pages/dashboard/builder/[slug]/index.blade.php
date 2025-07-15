@@ -3,7 +3,7 @@
 
    // use function Laravel\Folio\render;
    
-   name('console-builder-index');
+   name('dashboard-builder-index');
    // render(function (View $view, $ids) {
       
    //    $site = 

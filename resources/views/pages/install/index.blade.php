@@ -6,7 +6,7 @@
   use function Laravel\Folio\render;
   use function Laravel\Folio\name;
     
-  name('console-install');
+  name('dashboard-install');
   
   render(function (View $view) {
     if(config('app.INSTALLED')){

@@ -177,7 +177,7 @@
                                         <button @click="$event.stopPropagation(); is_delete=true;" type="button" class="bg-white w-8 h-8 flex items-center justify-center rounded-md cursor-pointer [box-shadow:var(--yena-shadows-md)] [background:var(--yena-colors-gradient-light)]">
                                             {!! __i('interface-essential', 'trash-delete-remove', 'w-4 h-4 text-red-400') !!}
                                         </button>
-                                        <a class="bg-white w-8 h-8 flex items-center justify-center rounded-md cursor-pointer [box-shadow:var(--yena-shadows-md)] [background:var(--yena-colors-gradient-light)]" href="{{ route('console-courses-editor', ['id' => $item->id]) }}" @navigate>
+                                        <a class="bg-white w-8 h-8 flex items-center justify-center rounded-md cursor-pointer [box-shadow:var(--yena-shadows-md)] [background:var(--yena-colors-gradient-light)]" href="{{ route('dashboard-courses-editor', ['id' => $item->id]) }}" @navigate>
                                             {!! __i('interface-essential', 'pen-edit.5', 'w-4 h-4') !!}
                                         </a>
                                         {{-- <a class="bg-white w-8 h-8 flex items-center justify-center rounded-md cursor-pointer [box-shadow:var(--yena-shadows-md)] [background:var(--yena-colors-gradient-light)]">

@@ -55,7 +55,7 @@
       $site->_slug = $_slug;
       $site->address = $address;
       $site->save();
-      $route = route('console-builder-index', ['slug' => $site->_slug]);
+      $route = route('dashboard-builder-index', ['slug' => $site->_slug]);
 
       $this->js(
          '

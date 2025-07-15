@@ -9,7 +9,7 @@
   <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Edit Plan') }}</header>
   <hr class="yena-divider">
 
-  <form class="px-6 pb-6" method="post" action="{{ route('console-admin-plans-post', 'edit') }}">
+  <form class="px-6 pb-6" method="post" action="{{ route('dashboard-admin-plans-post', 'edit') }}">
     @csrf
 
     <input type="hidden" name="_id" value="{{ $plan->id }}">

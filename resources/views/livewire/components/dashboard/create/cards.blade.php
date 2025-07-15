@@ -2,7 +2,7 @@
 <div>
     <div class="flex flex-row gap-3 px-4 relative z-10 w-full">
         <div class="flex flex-1">
-            <a href="{{ route('console-index') }}" @navigate class="yena-button-o !bg-white">
+            <a href="{{ route('dashboard-index') }}" @navigate class="yena-button-o !bg-white">
                 <span class="--icon">
                     {!! __i('--ie', 'home-house-line', 'h-[1em]') !!}
                 </span>

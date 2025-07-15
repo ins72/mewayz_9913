@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-invoicing-edit');
+   name('dashboard-invoicing-edit');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Invoicing') }}</x-slot>

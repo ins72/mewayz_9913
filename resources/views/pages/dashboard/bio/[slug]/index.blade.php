@@ -3,7 +3,7 @@
 
    // use function Laravel\Folio\render;
    
-   name('console-bio-index');
+   name('dashboard-bio-index');
    // render(function (View $view, $ids) {
       
    //    $site = 

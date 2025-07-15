@@ -5,7 +5,7 @@
 
    state(['site' => fn() => __s()]);
 
-   name('console-builder-pages');
+   name('dashboard-builder-pages');
 ?>
 @extends('components.layouts.builder')
 @section('content')

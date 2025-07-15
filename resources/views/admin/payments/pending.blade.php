@@ -87,12 +87,12 @@
                                 {{ __('Actions') }}
                             </div>
                             <div class="justify-between flex">
-                                <form action="{{ route('console-admin-payments-post', ['tree' => 'pendingPost', 'type' => 'accept']) }}" method="post">
+                                <form action="{{ route('dashboard-admin-payments-post', ['tree' => 'pendingPost', 'type' => 'accept']) }}" method="post">
                                     @csrf
                                     <input type="hidden" value="{{$item->id}}" name="pending">
                                     <button class="button bg-green sm shadow-none is-loader-submit loader-white">{{ __('Accept') }}</button>
                                 </form>
-                                <form action="{{ route('console-admin-payments-post', ['tree' => 'pendingPost', 'type' => 'decline']) }}" method="post">
+                                <form action="{{ route('dashboard-admin-payments-post', ['tree' => 'pendingPost', 'type' => 'decline']) }}" method="post">
                                     @csrf
                                     <input type="hidden" value="{{$item->id}}" name="pending">
                                     <button class="button sm bg-red-500 text-white shadow-none is-loader-submit loader-white">{{ __('Decline') }}</button>

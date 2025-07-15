@@ -18,7 +18,7 @@
                <ol class="flex items-center">
                   <li class="inline-flex items-center">
                      <div class="flex">
-                        <a href="{{ route('console-sites-index') }}" class="md:mr-1">
+                        <a href="{{ route('dashboard-sites-index') }}" class="md:mr-1">
                            {!! __icon('interface-essential', 'home-house-line 2', 'w-4 h-4') !!}
                         </a>
                      </div>

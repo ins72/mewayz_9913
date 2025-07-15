@@ -42,7 +42,7 @@
         $this->dispatch('close');
         $this->dispatch('updateInvoice');
 
-        redirect(route('console-invoicing-edit', ['slug' => $sh->slug]));
+        redirect(route('dashboard-invoicing-edit', ['slug' => $sh->slug]));
     };
 ?>
 <div>

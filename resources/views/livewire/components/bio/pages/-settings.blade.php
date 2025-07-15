@@ -62,7 +62,7 @@
       
       return [
          'status' => 'success',
-         'response' => route('console-builder-index', ['slug' => $site->_slug]),
+         'response' => route('dashboard-builder-index', ['slug' => $site->_slug]),
       ];
    };
 
@@ -78,7 +78,7 @@
 
       return [
          'status' => 'success',
-         'response' => route('console-index'),
+         'response' => route('dashboard-index'),
       ];
    };
 

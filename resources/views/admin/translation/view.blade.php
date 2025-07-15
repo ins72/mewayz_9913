@@ -25,7 +25,7 @@
                 <div class="z-menuc-content-temp">
                     <ul class="z-menu-ul w-40em max-w-full shadow-xl rounded-xl">
                         <div class="p-6">
-                          <form action="{{ route('console-admin-languages-post', 'auto_generate') }}" method="POST">
+                          <form action="{{ route('dashboard-admin-languages-post', 'auto_generate') }}" method="POST">
                             @csrf
                             <input type="hidden" name="language" value="{{ $locale }}">
                             <div class="flex items-center gap-4 py-4 mb-0">
@@ -50,7 +50,7 @@
                     </ul>
                 </div>
             </div>
-            <form action="{{ route('console-admin-languages-post', 'sync') }}" method="POST">
+            <form action="{{ route('dashboard-admin-languages-post', 'sync') }}" method="POST">
               @csrf
               <input type="hidden" name="language" value="{{ $locale }}">
               <button class="yena-button-stack !text-sm px-3 !w-full">
@@ -144,7 +144,7 @@
               </x-slot>
 
               <x-slot name="form">
-                <form action="{{ route('console-admin-languages-post', 'delete') }}" method="post">
+                <form action="{{ route('dashboard-admin-languages-post', 'delete') }}" method="post">
                   @csrf
                   <input type="hidden" name="language" value="{{ $locale }}">
                   <button type="submit" class="first-letter: bg-red-500  text-white disabled:opacity-75 hover:bg-red-400
@@ -159,7 +159,7 @@
           </div>
         </div>
 
-        <form action="{{ route('console-admin-languages-post', 'edit_language') }}" method="post">
+        <form action="{{ route('dashboard-admin-languages-post', 'edit_language') }}" method="post">
           @csrf
           <input type="hidden" name="language" value="{{ $locale }}">
           <div class="sticky top-24 font-heading mb-6 pr-2 text-sm font-extrabold uppercase tracking-wider text-zinc-400 flex items-center mb-2 z-[99]">

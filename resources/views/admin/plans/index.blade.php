@@ -129,7 +129,7 @@
     
       @endif
     
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 sortable-wrapper" data-delay="150" data-route="{{ route('console-admin-plans-post', 'sort') }}">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 sortable-wrapper" data-delay="150" data-route="{{ route('dashboard-admin-plans-post', 'sort') }}">
         
       @foreach ($plans as $item)
       <div class="block rounded-sm hover:bg-gray-100 bg-white sortable-item" data-id="{{ $item->id }}" style="">
@@ -186,7 +186,7 @@
                 </x-slot>
     
                 <x-slot name="form">
-                  <form action="{{ route('console-admin-plans-post', 'delete') }}" method="post">
+                  <form action="{{ route('dashboard-admin-plans-post', 'delete') }}" method="post">
                     @csrf
                     <input type="hidden" name="_id" value="{{ $item->id }}">
                     <button type="submit" class="first-letter: bg-red-500  text-white disabled:opacity-75 hover:bg-red-400

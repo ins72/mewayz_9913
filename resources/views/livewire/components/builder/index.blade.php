@@ -40,7 +40,7 @@
                  {{-- <p class="text-[color:var(--yena-colors-gray-500)] truncate text-sm">by Jeff Jola</p> --}}
               </div>
               @if (!$site->canEdit())
-              <a href="{{ route('console-index') }}" class="yena-menu-list-item">
+              <a href="{{ route('dashboard-index') }}" class="yena-menu-list-item">
                  <span>{{ __('Home') }}</span>
               </a>
               @endif

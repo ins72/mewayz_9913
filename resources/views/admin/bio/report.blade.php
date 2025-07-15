@@ -33,7 +33,7 @@
               <div class="subheading theme-text-color">{{ '@' . $page->address }}</div>
             </div>
             @if ($page->banned)
-            <form action="{{ route('console-admin-pages-post', 'unban') }}" method="post">
+            <form action="{{ route('dashboard-admin-pages-post', 'unban') }}" method="post">
               @csrf
               <input type="hidden" name="_page" value="{{ $page->id }}">
               <button class="sandy-button bg-black py-2 flex-grow rounded-none block ml-4">
@@ -43,7 +43,7 @@
               </button>
             </form>
             @else
-            <form action="{{ route('console-admin-pages-post', 'ban') }}" method="post">
+            <form action="{{ route('dashboard-admin-pages-post', 'ban') }}" method="post">
               @csrf
               <input type="hidden" name="_page" value="{{ $page->id }}">
               <button class="sandy-button bg-black py-2 flex-grow rounded-none block ml-4">

@@ -152,7 +152,7 @@ $getPlatformColor = function ($platform) {
 
 ?>
 
-<div class="console-page">
+<div class="dashboard-page">
     <div class="page-header">
         <div class="flex items-center justify-between">
             <div>
@@ -655,7 +655,7 @@ $getPlatformColor = function ($platform) {
 </div>
 
 <style>
-.console-page {
+.dashboard-page {
     @apply p-6 max-w-7xl mx-auto;
 }
 

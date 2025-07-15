@@ -6,7 +6,7 @@
    <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create Package') }}</header>
    <hr class="yena-divider">
 
-   <form class="px-6 pb-6" method="post" action="{{ route('console-admin-plans-post', 'create') }}">
+   <form class="px-6 pb-6" method="post" action="{{ route('dashboard-admin-plans-post', 'create') }}">
       @csrf
 
       <div class="mt-4">

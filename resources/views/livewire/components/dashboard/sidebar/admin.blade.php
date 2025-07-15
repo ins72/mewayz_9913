@@ -113,7 +113,7 @@
         </div>
      </div>
      <div class="flex flex-col items-center mt-4 mb-2">
-        <x-x.href class="sidebar-item" href="{{ route('console-sites-index') }}">
+        <x-x.href class="sidebar-item" href="{{ route('dashboard-sites-index') }}">
            <div class="--inner">
               {!! __icon('interface-essential', 'browser-internet-web-network-window-app-icon') !!}
               <p>{{ __('All Sites') }}</p>
@@ -152,7 +152,7 @@
               <p>{{ __('Custom fonts') }}</p>
            </div>
         </x-x.href>
-        <x-x.href class="sidebar-item" href="{{ route('console-trash-index') }}">
+        <x-x.href class="sidebar-item" href="{{ route('dashboard-trash-index') }}">
            <div class="--inner">
               {!! __icon('interface-essential', 'trash-bin-delete') !!}
               <p>{{ __('Trash') }}</p>
@@ -179,14 +179,14 @@
         <hr class="w-full opacity-[0.6] border-b border-solid">
      </div>
 
-     <x-x.href class="sidebar-item !hidden" href="{{ route('console-settings-index') }}">
+     <x-x.href class="sidebar-item !hidden" href="{{ route('dashboard-settings-index') }}">
         <div class="--inner">
            {!! __icon('Users', 'single-user-add-plus_1') !!}
            <p>{{ __('Settings') }}</p>
         </div>
      </x-x.href>
 
-     <x-x.href class="sidebar-item" href="{{ route('console-settings-account') }}">
+     <x-x.href class="sidebar-item" href="{{ route('dashboard-settings-account') }}">
         <div class="--inner">
            {!! __icon('Users', 'single-user-add-plus_1') !!}
            <p>Invite to workspace</p>

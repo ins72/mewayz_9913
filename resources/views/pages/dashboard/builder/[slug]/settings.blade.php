@@ -2,13 +2,13 @@
    use function Laravel\Folio\name;
 
 
-   name('console-builder-settings');
+   name('dashboard-builder-settings');
 ?>
 @extends('components.layouts.builder')
 @section('content')
 
 <div class="application_sidebar-content">
-   <div class="flex -align-center -justify-between"><a class="flex -align-center text -small mb-16" href="{{ __s()->toRoute('console-builder-index') }}" @navigate><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="arcs"><path d="m15 18-6-6 6-6"></path></svg>Back</a><button class="button -small" style="opacity: 0; pointer-events: none;">Save</button></div>
+   <div class="flex -align-center -justify-between"><a class="flex -align-center text -small mb-16" href="{{ __s()->toRoute('dashboard-builder-index') }}" @navigate><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="arcs"><path d="m15 18-6-6 6-6"></path></svg>Back</a><button class="button -small" style="opacity: 0; pointer-events: none;">Save</button></div>
    <form>
       <h1 class="mt-24 mb-16">Settings</h1>
       <h2>Site</h2>

@@ -47,7 +47,7 @@
             @php
                 $it = pathinfo($item);
             @endphp
-            <a href="{{ route('console-admin-languages-index', ['language' => ao($it, 'filename'), 'query' => request()->get('query')]) }}" class="relative cursor-pointer flex mb-[1px] items-center gap-3 rounded-md px-2 py-[5px] text-left text-sm font-medium text-zinc-600 duration-100 hover:bg-zinc-200/70 {{ $locale == ao($it, 'filename') ? 'bg-zinc-200/70' : '' }}">
+            <a href="{{ route('dashboard-admin-languages-index', ['language' => ao($it, 'filename'), 'query' => request()->get('query')]) }}" class="relative cursor-pointer flex mb-[1px] items-center gap-3 rounded-md px-2 py-[5px] text-left text-sm font-medium text-zinc-600 duration-100 hover:bg-zinc-200/70 {{ $locale == ao($it, 'filename') ? 'bg-zinc-200/70' : '' }}">
               <label class="text-base font-bold cursor-pointer capitalize text-theme">
                 {{ ao($info(ao($it, 'filename')), 'name') }}
               </label>
@@ -90,7 +90,7 @@
           <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create Language') }}</header>
           <hr class="yena-divider">
 
-          <form class="px-6 pb-6 mt-4" method="post" action="{{ route('console-admin-languages-post', 'create') }}">
+          <form class="px-6 pb-6 mt-4" method="post" action="{{ route('dashboard-admin-languages-post', 'create') }}">
              @csrf
        
              <div class="grid grid-cols-1 gap-4 mb-4">

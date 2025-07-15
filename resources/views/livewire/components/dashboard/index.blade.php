@@ -438,7 +438,7 @@
                </div>
 
                <div class="grid grid-cols-1 md:!grid-cols-2 gap-4 mt-4">
-                  <a class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70" href="{{ route('console-sites-index') }}" @navigate>
+                  <a class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70" href="{{ route('dashboard-sites-index') }}" @navigate>
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
                         {!! __i('--ie', 'browser-internet-web-network-window-app-icon', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
@@ -453,7 +453,7 @@
                         <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-store-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('dashboard-store-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
                         {!! __i('Building, Construction', 'store', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
@@ -468,7 +468,7 @@
                         <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-audience-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('dashboard-audience-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
                         {!! __i('emails', 'email-mail-letter', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
@@ -483,7 +483,7 @@
                         <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-courses-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('dashboard-courses-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
                         {!! __i('Content Edit', 'Book, Open.4', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
@@ -552,7 +552,7 @@
                               <div class="flex flex-col">
                                  <p class="text-color-descriptive text-center w-full text-gray-600 dark:text-gray-400">{{ __('Manage your withdrawal on your wallet page.') }}</p>
                               </div>
-                              <a class="btn btn-primary !rounded-full" href="{{ route('console-wallet-index') }}" @navigate>{{ __('Manage') }}</a>
+                              <a class="btn btn-primary !rounded-full" href="{{ route('dashboard-wallet-index') }}" @navigate>{{ __('Manage') }}</a>
                            </div>
                         </div>
                      </div>

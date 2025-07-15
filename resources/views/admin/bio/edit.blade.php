@@ -22,7 +22,7 @@
     </div>
 
 
-    <form class="px-6 pb-6 pt-4" method="POST" action="{{ route('console-admin-users-post', 'edit') }}">
+    <form class="px-6 pb-6 pt-4" method="POST" action="{{ route('dashboard-admin-users-post', 'edit') }}">
       @csrf
       <input type="hidden" value="{{ $_user->id }}" name="_id">
     
@@ -77,7 +77,7 @@
 
 <div>
   
-  <form action="{{ route('console-admin-users-post', 'login') }}" method="POST" class="popup-user-login px-6">
+  <form action="{{ route('dashboard-admin-users-post', 'login') }}" method="POST" class="popup-user-login px-6">
     @csrf
       <input type="hidden" value="{{ $_user->id }}" name="_id">
       <button class="sandy-button bg-black py-2 flex-grow">

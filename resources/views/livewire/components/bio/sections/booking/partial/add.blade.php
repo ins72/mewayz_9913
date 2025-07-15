@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </template>
-                {{-- <a href="{{ route('console-bookings-index') }}" class="yena-black-btn gap-2 mt-2">{!! __i('Building, Construction', 'store') !!}{{ __('Create Booking') }}</a> --}}
+                {{-- <a href="{{ route('dashboard-bookings-index') }}" class="yena-black-btn gap-2 mt-2">{!! __i('Building, Construction', 'store') !!}{{ __('Create Booking') }}</a> --}}
               </form>
             </div>
          </div>

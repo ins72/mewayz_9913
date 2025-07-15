@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-folders-index');
+   name('dashboard-folders-index');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Folders') }}</x-slot>

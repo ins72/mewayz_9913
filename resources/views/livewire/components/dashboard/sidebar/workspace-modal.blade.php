@@ -37,7 +37,7 @@
       $this->team = Teams::init();
       $this->teamArray = $this->team->toArray();
 
-      $this->teamRoute = route('console-team-join', ['slug' => $this->team->slug]);
+      $this->teamRoute = route('dashboard-team-join', ['slug' => $this->team->slug]);
    };
 
 

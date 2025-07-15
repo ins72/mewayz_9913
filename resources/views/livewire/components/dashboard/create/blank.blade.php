@@ -64,7 +64,7 @@
             </div>
           </div>
                      
-             <div class="w-full px-4 max-w-[var(--yena-sizes-5xl)] mx-auto [&_.console-template-header]:!hidden">
+             <div class="w-full px-4 max-w-[var(--yena-sizes-5xl)] mx-auto [&_.dashboard-template-header]:!hidden">
                 <form @submit.prevent="loading=true;
                 setTimeout(function(){
                     $wire.createBlank().then(r => { loading=false; })

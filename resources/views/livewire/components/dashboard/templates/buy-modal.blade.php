@@ -33,7 +33,7 @@
          'uref'  => md5(microtime()),
          'email' => iam()->email,
          'price' => $template->price,
-         'callback' => route('console-templates-success'),
+         'callback' => route('dashboard-templates-success'),
          'payment_type' => 'onetime',
       ];
 

@@ -29,7 +29,7 @@
 
          if($error){
             $this->sites = [];
-            $route = route('console-index');
+            $route = route('dashboard-index');
             $this->js(
                '
                   window.runToast("success", "'. __('You dont belong in this folder') .'")
@@ -74,7 +74,7 @@
       $this->getSites();
       
 
-      $route = route('console-builder-index', ['slug' => $site->_slug]);
+      $route = route('dashboard-builder-index', ['slug' => $site->_slug]);
 
       $this->js(
           '
@@ -172,7 +172,7 @@
          $folderSite->save();
       }
 
-      $route = route('console-builder-index', ['slug' => $_slug]);
+      $route = route('dashboard-builder-index', ['slug' => $_slug]);
 
       $this->js(
           '
@@ -252,7 +252,7 @@
          @endif
          <div class="flex flex-col gap-4 mt-4 lg:flex-row">
             
-            <a href="{{ route('console-create-index') }}" @navigate class="yena-button-stack --black">
+            <a href="{{ route('dashboard-create-index') }}" @navigate class="yena-button-stack --black">
                <div class="--icon">
                   {!! __icon('interface-essential', 'plus-add.3', 'w-6 h-6') !!}
                </div>
@@ -333,7 +333,7 @@
          
          <div class="flex flex-row gap-4 mt-4 lg:flex-row">
             
-            <a href="{{ route('console-create-index') }}" @navigate class="yena-button-stack --primary">
+            <a href="{{ route('dashboard-create-index') }}" @navigate class="yena-button-stack --primary">
                <div class="--icon">
                   {!! __icon('interface-essential', 'plus-add.3', 'w-6 h-6') !!}
                </div>
@@ -345,7 +345,7 @@
                </div>
             </a>
             
-            <a href="{{ route('console-templates-index') }}" @navigate class="cursor-pointer yena-button-stack">
+            <a href="{{ route('dashboard-templates-index') }}" @navigate class="cursor-pointer yena-button-stack">
                <div class="--icon">
                   {!! __icon('interface-essential', 'thunder-lightning-notifications', 'w-6 h-6') !!}
                </div>

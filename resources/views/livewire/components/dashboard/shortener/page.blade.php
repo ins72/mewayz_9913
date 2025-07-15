@@ -147,12 +147,12 @@
                              <div class="flex items-center h-full" :class="{
                                 '!hidden': is_delete
                              }">
-                                <a class="text-xs flex items-center gap-1 cursor-pointer" href="{{ route('console-shortener-edit', ['slug' => $item->slug]) }}">
+                                <a class="text-xs flex items-center gap-1 cursor-pointer" href="{{ route('dashboard-shortener-edit', ['slug' => $item->slug]) }}">
                                    {!! __i('--ie', 'eye.5', 'w-4 h-4') !!}
                                    {{ nr($item->visitors()->count()) }}
                                 </a>
                                 <div class="ml-3 mr-2 w-[1px] bg-black h-full block opacity-20"></div>
-                                <a href="{{ route('console-shortener-edit', ['slug' => $item->slug]) }}" class="w-[35px] h-[35px] flex items-center rounded-[5px] justify-center bg-[#FFFFFF] [transition:background-color_0.2s_ease-out] cursor-pointer">
+                                <a href="{{ route('dashboard-shortener-edit', ['slug' => $item->slug]) }}" class="w-[35px] h-[35px] flex items-center rounded-[5px] justify-center bg-[#FFFFFF] [transition:background-color_0.2s_ease-out] cursor-pointer">
                                  <i class="ph ph-pencil text-sm"></i>
                                 </a>
                                 <div class="w-[35px] h-[35px] flex items-center rounded-[5px] justify-center bg-[#FFFFFF] ml-2 text-black cursor-pointer" @click="$event.stopPropagation(); share=!share">

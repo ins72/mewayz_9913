@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-booking-settings');
+   name('dashboard-booking-settings');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Booking - Settings') }}</x-slot>

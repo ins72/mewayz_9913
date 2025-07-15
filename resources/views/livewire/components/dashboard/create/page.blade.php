@@ -187,7 +187,7 @@
         $this->site = $build;
         $this->getSections();
 
-        return route('console-builder-index', ['slug' => $this->site->_slug]);
+        return route('dashboard-builder-index', ['slug' => $this->site->_slug]);
     };
 
 
@@ -205,7 +205,7 @@
         $build = $generate->setOwner(iam())->setName($this->name)->build();
 
 
-        $route = route('console-builder-index', ['slug' => $build->_slug]);
+        $route = route('dashboard-builder-index', ['slug' => $build->_slug]);
 
         $this->js(
             '
@@ -249,7 +249,7 @@
         $build->ai_generate_prompt = $content;
         $build->save();
 
-        $route = route('console-builder-index', ['slug' => $build->_slug]);
+        $route = route('dashboard-builder-index', ['slug' => $build->_slug]);
 
         $this->js(
             '

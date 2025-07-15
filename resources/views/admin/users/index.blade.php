@@ -102,7 +102,7 @@
           <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create User') }}</header>
           <hr class="yena-divider">
        
-          <form action="{{ route('console-admin-users-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
+          <form action="{{ route('dashboard-admin-users-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
             @csrf
             <div class="grid grid-cols-2 gap-4 mb-5">
               <div class="form-input">
@@ -215,7 +215,7 @@
                                 <button type="button" class=" block appearance-none rounded-md border bg-white text-sm font-medium text-gray-600 shadow-sm duration-100 focus:ring-0
                                 px-3 py-1.5 block appearance-none rounded-lg text-sm font-medium duration-100 focus:outline-transparent px-3 py-1.5 z-menu-close">{{ __('Cancel') }}</button>
                                 
-                                <form action="{{ route('console-admin-users-post', 'delete') }}" method="post">
+                                <form action="{{ route('dashboard-admin-users-post', 'delete') }}" method="post">
                                   @csrf
                                   <input type="hidden" name="_user" value="{{ $_user->id }}">
                                   <button type="submit" class="first-letter: bg-red-500  text-white disabled:opacity-75 hover:bg-red-400

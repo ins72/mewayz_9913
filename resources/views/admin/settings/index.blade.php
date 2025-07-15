@@ -72,7 +72,7 @@
   $payments = $payments->getInstalledMethods();
 @endphp
 
-<form method="post" action="{{ route('console-admin-settings-post', ['tree' => 'post']) }}" class="h-full pb-16 pt-8 sm:pt-10" enctype="multipart/form-data" x-data="pine">
+<form method="post" action="{{ route('dashboard-admin-settings-post', ['tree' => 'post']) }}" class="h-full pb-16 pt-8 sm:pt-10" enctype="multipart/form-data" x-data="pine">
   @csrf
 
   <div class="mb-6 ">

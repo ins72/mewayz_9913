@@ -10,7 +10,7 @@
 
         return $view->with('plan', $plan);
     });
-    name('console-upgrade-view');
+    name('dashboard-upgrade-view');
 ?>
 <x-layouts.app>
     <x-slot:title>{{ __('Upgrade') }}</x-slot>

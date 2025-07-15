@@ -54,7 +54,7 @@ $register = function () {
 
     // Check for free plan
 
-    $this->redirect(route('console-index'), navigate: false);
+    $this->redirect(route('dashboard-index'), navigate: false);
 };
 
 ?>

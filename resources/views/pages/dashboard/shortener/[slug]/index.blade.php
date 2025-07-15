@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-shortener-edit');
+   name('dashboard-shortener-edit');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Link Shortener') }}</x-slot>

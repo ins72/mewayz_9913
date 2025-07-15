@@ -27,7 +27,7 @@
       <nav>
          <ul>
             <li>
-               <x-x.href href="{{ route('console-sites-index') }}">
+               <x-x.href href="{{ route('dashboard-sites-index') }}">
                   <span>
                      {!! __icon('interface-essential', 'browser-internet-web-network-window-app-icon') !!}
                   </span>
@@ -35,7 +35,7 @@
                </x-x.href>
             </li>
             <li>
-               <x-x.href href="{{ route('console-trash-index') }}">
+               <x-x.href href="{{ route('dashboard-trash-index') }}">
                   <span>
                      {!! __icon('interface-essential', 'trash-bin-delete') !!}
                   </span>

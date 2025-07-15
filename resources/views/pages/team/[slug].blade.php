@@ -6,7 +6,7 @@
   use function Laravel\Folio\render;
   use function Laravel\Folio\name;
     
-  name('console-team-join');
+  name('dashboard-team-join');
   
   render(function (View $view, $slug) {
       if(!$team = YenaTeam::where('slug', $slug)->first()) abort(404);

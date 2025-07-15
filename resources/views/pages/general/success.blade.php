@@ -23,7 +23,7 @@
                                  {{-- <div class="border-b border-solid border-gray-300 w-full ml-2 flex"></div> --}}
                               </div>
                               <p class="mt-2 text-sm text-gray-600">{{ __('Your last purchase was processed & successful, you would receive an update soon.') }}</p>
-                              <a class="yena-button-stack mt-2 px-10 w-32" href="{{ request()->get('redirect') ? request()->get('redirect') : route('console-index') }}">
+                              <a class="yena-button-stack mt-2 px-10 w-32" href="{{ request()->get('redirect') ? request()->get('redirect') : route('dashboard-index') }}">
                                  <span class="text-xs">{{ __('Back') }}</span>
                               </a>
                            </div>

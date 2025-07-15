@@ -95,7 +95,7 @@
          $site->_slug = $_slug;
          $site->address = $address;
          $site->save();
-         $route = route('console-bio-index', ['slug' => $site->_slug]);
+         $route = route('dashboard-bio-index', ['slug' => $site->_slug]);
 
          $this->js(
             '
@@ -113,7 +113,7 @@
       $build->address = $this->address;
       $build->save();
 
-      $route = route('console-bio-index', ['slug' => $build->_slug]);
+      $route = route('dashboard-bio-index', ['slug' => $build->_slug]);
       return redirect($route);
    };
 

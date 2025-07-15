@@ -69,7 +69,7 @@
                    <p>{{ __('Domain') }}</p>
                 </div>
              </a>
-             <a class="sidebar-item" @click="sidebarNavigate('', '{{ $site->toRoute('console-builder-settings') }}')">
+             <a class="sidebar-item" @click="sidebarNavigate('', '{{ $site->toRoute('dashboard-builder-settings') }}')">
                 <div class="--inner">
                    {!! __icon('interface-essential', 'trash-bin-delete') !!}
                    <p>{{ __('Settings') }}</p>

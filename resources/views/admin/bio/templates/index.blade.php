@@ -76,7 +76,7 @@
             <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create Template') }}</header>
             <hr class="yena-divider">
          
-            <form action="{{ route('console-admin-bio-templates-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
+            <form action="{{ route('dashboard-admin-bio-templates-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
               @csrf
               <div class="grid grid-cols-2 gap-4 mb-5">
                 <div class="form-input">
@@ -142,17 +142,17 @@
            </label>
            <div class="template-footer-button !grid grid-cols-2 !h-[initial] gap-4 !p-[20px]">
                 <a class="btn !w-full" @click="_edit={
-                    route: '{{ route('console-admin-bio-templates-post', ['tree' => 'edit']) }}',
+                    route: '{{ route('dashboard-admin-bio-templates-post', ['tree' => 'edit']) }}',
                     id: '{{ $item->id }}',
                     name: '{{ $item->name }}',
                     price: '{{ $item->price }}',
                 }" >{{ __('Edit') }}</a>
                 
-                <a class="btn !w-full !bg-black !text-white" href="{{ route('console-bio-index', ['slug' => $item->site->_slug]) }}">{{ __('Build') }}</a>
+                <a class="btn !w-full !bg-black !text-white" href="{{ route('dashboard-bio-index', ['slug' => $item->site->_slug]) }}">{{ __('Build') }}</a>
 
                 <button class="btn col-span-2 !bg-[var(--c-red)] !w-full" @click="_delete={
                     id: '{{ $item->id }}',
-                    route: '{{ route('console-admin-bio-templates-post', ['tree' => 'delete']) }}',
+                    route: '{{ route('dashboard-admin-bio-templates-post', ['tree' => 'delete']) }}',
                 }">{{ __('Delete') }}</button>
            </div>
         </div>

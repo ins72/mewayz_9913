@@ -42,7 +42,7 @@
             'uref'  => md5(microtime()),
             'email' => $this->user->email,
             'price' => $price,
-            'callback' => route('console-upgrade-success'),
+            'callback' => route('dashboard-upgrade-success'),
             'frequency' => $this->duration == 'month' ? 'monthly' : 'annually',
             'currency' => $currency,
             'payment_type' => 'recurring',
@@ -73,7 +73,7 @@
 
         session()->flash('success', __('Plan activated successfully.'));
 
-        return $this->redirect(route('console-index'))->with('success', __('Trial activated successfully.'));
+        return $this->redirect(route('dashboard-index'))->with('success', __('Trial activated successfully.'));
     };
 
     $_activate_free = function(){
@@ -88,7 +88,7 @@
         $plan_history->save();
 
         session()->flash('success', __('Plan activated successfully.'));
-        return $this->redirect(route('console-index'));
+        return $this->redirect(route('dashboard-index'));
     };
 
 ?>

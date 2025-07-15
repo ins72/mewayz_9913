@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-courses-editor');
+   name('dashboard-courses-editor');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Edit') }}</x-slot>

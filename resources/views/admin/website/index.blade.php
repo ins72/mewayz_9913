@@ -71,7 +71,7 @@
             <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create Site') }}</header>
             <hr class="yena-divider">
          
-            <form action="{{ route('console-admin-website-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
+            <form action="{{ route('dashboard-admin-website-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
               @csrf
               <div class="grid grid-cols-1 gap-4 mb-5">
                 <div class="form-input">
@@ -141,7 +141,7 @@
       
                   <div class="z-menuc-content-temp" wire:ignore.self>
                       <ul class="grid w-full gap-1 p-5 sm:w-48">
-                          <a class="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100 cursor-pointer" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">
+                          <a class="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100 cursor-pointer" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">
                               <div class="flex items-center justify-start space-x-2">
                                   <i class="fi fi-rr-paint-brush text-sm"></i>
                                  <p class="text-sm">{{ __('Edit') }}</p>
@@ -150,7 +150,7 @@
                           
                           <a class="group flex w-full items-center  justify-between rounded-md p-2 text-left text-sm font-medium  text-red-600 transition-all duration-75 hover:bg-red-600  hover:text-white --open-delete cursor-pointer" @click="_delete={
                             id: '{{ $item->id }}',
-                            route: '{{ route('console-admin-website-post', ['tree' => 'delete']) }}',
+                            route: '{{ route('dashboard-admin-website-post', ['tree' => 'delete']) }}',
                         }">
                               <div class="flex items-center justify-start space-x-2">
                                  <i class="fi fi-rr-trash text-sm"></i>
@@ -164,18 +164,18 @@
            </label>
            <div class="template-footer-button !grid grid-cols-2 !h-[initial] gap-4 !p-[20px]">
                 {{-- <a class="btn !w-full" @click="_edit={
-                    route: '{{ route('console-admin-website-post', ['tree' => 'edit']) }}',
+                    route: '{{ route('dashboard-admin-website-post', ['tree' => 'edit']) }}',
                     id: '{{ $item->id }}',
                     name: '{{ $item->name }}',
                     price: '{{ $item->price }}',
                 }" >{{ __('Edit') }}</a>
                 
-                <a class="btn !w-full !bg-black !text-white" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">{{ __('Build') }}</a> --}}
+                <a class="btn !w-full !bg-black !text-white" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">{{ __('Build') }}</a> --}}
                 @if (!$item->is_admin_selected)
-                <form action="{{ route('console-admin-website-post', ['tree' => 'activate']) }}" method="POST">
+                <form action="{{ route('dashboard-admin-website-post', ['tree' => 'activate']) }}" method="POST">
                   @csrf
                   <input type="hidden" value="{{ $item->id }}" name="_id">
-                  <button class="btn !w-full !bg-black !text-white" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">{{ __('Activate') }}</button>
+                  <button class="btn !w-full !bg-black !text-white" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">{{ __('Activate') }}</button>
                 </form>
                 @endif
            </div>

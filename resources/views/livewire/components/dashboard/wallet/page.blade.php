@@ -381,7 +381,7 @@
                                   <div class="flex flex-col">
                                      <p class="text-color-descriptive text-center w-full">{{ __('Earn money by creating & sharing your products.') }}</p>
                                   </div>
-                                  <a class="yena-button-stack !rounded-full" href="{{ route('console-store-index') }}" @navigate>{{ __('Get Started') }}</a>
+                                  <a class="yena-button-stack !rounded-full" href="{{ route('dashboard-store-index') }}" @navigate>{{ __('Get Started') }}</a>
                                </div>
                             </div>
                          </div>

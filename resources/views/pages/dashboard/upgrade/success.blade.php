@@ -1,7 +1,7 @@
 <?php
    use function Laravel\Folio\name;
     
-   name('console-upgrade-success');
+   name('dashboard-upgrade-success');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Success') }}</x-slot>
@@ -22,7 +22,7 @@
                        {{-- <div class="border-b border-solid border-gray-300 w-full ml-2 flex"></div> --}}
                     </div>
                     <p class="mt-2 text-sm text-gray-600">{{ __('Your plan has been activated successfully. ') }}</p>
-                    <a class="yena-button-stack mt-2 px-10 w-32" href="{{ route('console-index') }}">
+                    <a class="yena-button-stack mt-2 px-10 w-32" href="{{ route('dashboard-index') }}">
                         <span class="text-xs">{{ __('Home') }}</span>
                     </a>
                  </div>

@@ -8,7 +8,7 @@
   
   render(function (View $view) {
       if(!config('app.INSTALLED')){
-        return redirect()->route('console-install');
+        return redirect()->route('dashboard-install');
       }
       
       $site = false;

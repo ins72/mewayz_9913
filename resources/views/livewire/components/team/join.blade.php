@@ -41,7 +41,7 @@
 
         
         YenaTeamsInvite::where('team_id', $this->team->id)->where('email', $user->email)->delete();
-        $this->redirect(route('console-index'));
+        $this->redirect(route('dashboard-index'));
     };
 
     placeholder(function(){

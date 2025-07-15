@@ -84,7 +84,7 @@
      
 
    
-    <div class="flex flex-col mb-4 console-template-header">
+    <div class="flex flex-col mb-4 dashboard-template-header">
          
         <div class="flex items-start flex-col">
            <h2 class="text-lg font-semibold ">

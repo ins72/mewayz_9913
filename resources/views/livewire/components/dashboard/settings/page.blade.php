@@ -88,7 +88,7 @@
       $this->team = Teams::init();
       $this->teamArray = $this->team->toArray();
 
-      $this->teamRoute = route('console-team-join', ['slug' => $this->team->slug]);
+      $this->teamRoute = route('dashboard-team-join', ['slug' => $this->team->slug]);
 
       $this->get_original_user = collect(iam()->get_original_user());
       $this->ce = Teams::permission('ce');

@@ -72,7 +72,7 @@
                @foreach ($sites as $item)
                <div class="yena-linkbox !shadow-none" {!! __key($item->_slug) !!}>
                   <div class="flex flex-row h-full">
-                     <div class="w-1/4" @click="window.location.replace('{{ route('console-builder-index', ['slug' => $item->_slug]) }}')">
+                     <div class="w-1/4" @click="window.location.replace('{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}')">
                         <div class="-thumbnail">
                            <div class="--thumbnail-inner" x-intersect="$store.builder.rescaleDiv($root)">
             
@@ -98,7 +98,7 @@
                      </div>
             
                      <div class="-content">
-                        <a claas="--over-lay" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">
+                        <a claas="--over-lay" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">
                            <p class="--title !h-auto">{{ $item->name }}</p>
                         </a>
             
@@ -113,7 +113,7 @@
                                  @endif
             
                                  @foreach ($item->folderSites()->orderBy('id', 'desc')->get() as $folder)
-                                    <a href="{{ route('console-folders-index', ['slug' => $folder->folder->slug]) }}" @navigate {{ _k() }} class="[transition-property:var(--yena-transition-property-common)] cursor-pointer inline-flex align-top items-center max-w-[20ch] font-normal leading-[1.2] outline-offset-[2px] text-[color:var(--tag-color)] [box-shadow:var(--tag-shadow)] min-h-[1.25rem] min-w-[1.25rem] text-xs bg-[var(--yena-colors-gray-200)] no-underline outline-[transparent_solid_2px] rounded-md px-2 hover:bg-[var(--yena-colors-trueblue-100)] hover:text-[var(--yena-colors-blackAlpha-900)] hover:no-underline">
+                                    <a href="{{ route('dashboard-folders-index', ['slug' => $folder->folder->slug]) }}" @navigate {{ _k() }} class="[transition-property:var(--yena-transition-property-common)] cursor-pointer inline-flex align-top items-center max-w-[20ch] font-normal leading-[1.2] outline-offset-[2px] text-[color:var(--tag-color)] [box-shadow:var(--tag-shadow)] min-h-[1.25rem] min-w-[1.25rem] text-xs bg-[var(--yena-colors-gray-200)] no-underline outline-[transparent_solid_2px] rounded-md px-2 hover:bg-[var(--yena-colors-trueblue-100)] hover:text-[var(--yena-colors-blackAlpha-900)] hover:no-underline">
                                        {!! __i('Folders', 'folder-open', 'h-[12px] inline-block leading-[1em] flex-shrink-0 align-top mr-1') !!}
                                        {{ $folder->folder->name }}
                                     </a>

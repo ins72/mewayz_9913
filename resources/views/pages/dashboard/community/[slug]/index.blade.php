@@ -1,6 +1,6 @@
 <?php
    use function Laravel\Folio\name;
-   name('console-community-index');
+   name('dashboard-community-index');
 ?>
 <x-layouts.app>
    <x-slot:title>{{ __('Booking') }}</x-slot>

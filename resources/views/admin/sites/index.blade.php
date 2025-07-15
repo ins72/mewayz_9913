@@ -71,7 +71,7 @@
          <header class="flex-[0_1_0%] py-4 text-3xl px-6 font-extrabold tracking-[-1px]">{{ __('Create Site') }}</header>
          <hr class="yena-divider">
       
-         <form action="{{ route('console-admin-website-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
+         <form action="{{ route('dashboard-admin-website-post', 'create') }}" class="px-6 pb-6 pt-4" method="POST">
            @csrf
            <div class="grid grid-cols-1 gap-4 mb-5">
              <div class="form-input">
@@ -136,13 +136,13 @@
                   </div>
          
                   <div class="-content">
-                     <a claas="--over-lay" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">
+                     <a claas="--over-lay" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">
                         <p class="--title !h-auto">{{ $item->name }}</p>
                      </a>
          
                      @if ($item->createdBy())
                      <div class="flex flex-col mt-0 w-[100%]">
-                        <a href="{{ route('console-admin-users-index', ['query' => $item->user->email, 'search_by' => 'email']) }}" class="flex justify-between mt-1 w-[100%] items-start bg-gray-100 p-2 rounded-lg">
+                        <a href="{{ route('dashboard-admin-users-index', ['query' => $item->user->email, 'search_by' => 'email']) }}" class="flex justify-between mt-1 w-[100%] items-start bg-gray-100 p-2 rounded-lg">
                            <div class="flex items-center">
                               <div class="relative">
                                  <div class="--avatar">
@@ -180,7 +180,7 @@
       
                      <div class="z-menuc-content-temp" wire:ignore.self>
                         <ul class="grid w-full gap-1 p-5 sm:w-48">
-                           <a class="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100 cursor-pointer" href="{{ route('console-builder-index', ['slug' => $item->_slug]) }}">
+                           <a class="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100 cursor-pointer" href="{{ route('dashboard-builder-index', ['slug' => $item->_slug]) }}">
                                  <div class="flex items-center justify-start space-x-2">
                                     <i class="fi fi-rr-paint-brush text-sm"></i>
                                     <p class="text-sm">{{ __('Edit') }}</p>
@@ -190,7 +190,7 @@
                           
                           <a class="group flex w-full items-center  justify-between rounded-md p-2 text-left text-sm font-medium  text-red-600 transition-all duration-75 hover:bg-red-600  hover:text-white --open-delete cursor-pointer" @click="_delete={
                            id: '{{ $item->id }}',
-                           route: '{{ route('console-admin-sites-post', ['tree' => 'delete']) }}',
+                           route: '{{ route('dashboard-admin-sites-post', ['tree' => 'delete']) }}',
                        }">
                              <div class="flex items-center justify-start space-x-2">
                                 <i class="fi fi-rr-trash text-sm"></i>

@@ -19,7 +19,7 @@ $login = function () {
 
     Session::regenerate();
 
-    $this->redirect(route('console-index'),
+    $this->redirect(route('dashboard-index'),
         navigate: false
     );
 };

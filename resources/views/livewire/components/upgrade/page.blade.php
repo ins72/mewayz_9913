@@ -215,7 +215,7 @@
                                     <p class="text-[var(--yena-colors-gray-700)] font-bold">{{ __('When billed annually') }} ({{ $item->annual_price }})</p>
                                     @endif --}}
                                 </div>
-                                <a href="{{ route('console-upgrade-view', ['_id' => $item->id]) }}" x-link.prefetch class="btn mt-4 w-[100%] text-center disabled:opacity-80 bg-black text-white shadow-lg shadow-black/50 block appearance-none rounded-md text-sm font-medium duration-100 focus:outline-transparent px-4 py-2.5 mb-1">
+                                <a href="{{ route('dashboard-upgrade-view', ['_id' => $item->id]) }}" x-link.prefetch class="btn mt-4 w-[100%] text-center disabled:opacity-80 bg-black text-white shadow-lg shadow-black/50 block appearance-none rounded-md text-sm font-medium duration-100 focus:outline-transparent px-4 py-2.5 mb-1">
                                     <div class="relative flex items-center justify-center ">
                                         <div class="duration-100 undefined false">{{ iam()->activeSubscription() && iam()->activeSubscription()->plan && iam()->activeSubscription()->plan->id == $item->id ? __('Current Plan') : __('Proceed')  }}</div>
                                     </div>

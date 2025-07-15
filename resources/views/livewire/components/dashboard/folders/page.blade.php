@@ -66,7 +66,7 @@
       $page->published = 1;
       $page->save();
 
-      $route = route('console-builder-index', ['slug' => $_slug]);
+      $route = route('dashboard-builder-index', ['slug' => $_slug]);
 
       $this->js(
           '
