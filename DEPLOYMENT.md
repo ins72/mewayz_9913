@@ -273,38 +273,31 @@ sudo supervisorctl start mewayz-worker:*
 - **Health Checks**: Set up monitoring
 - **Alerts**: Configure notifications
 
-### 7. Monitoring and Logging
+## 🔄 Deployment Updates
 
-#### Setup Log Rotation
+### Zero-Downtime Deployment
 ```bash
-# /etc/logrotate.d/mewayz
-/var/www/mewayz/storage/logs/*.log {
-    daily
-    missingok
-    rotate 14
-    compress
-    delaycompress
-    notifempty
-    create 644 www-data www-data
-    postrotate
-        sudo supervisorctl restart mewayz-backend
-    endscript
-}
+#!/bin/bash
+# Update deployment script
+
+cd /var/www/mewayz
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+sudo supervisorctl restart mewayz-worker:*
 ```
 
-#### Setup Monitoring
+### Rollback Strategy
 ```bash
-# Install monitoring tools
-sudo apt install htop iotop nethogs
+#!/bin/bash
+# Rollback script
 
-# Monitor application
-sudo supervisorctl tail -f mewayz-backend
-sudo supervisorctl tail -f mewayz-frontend
-
-# Monitor system resources
-htop
-iotop
-nethogs
+# Create backup before deployment
+# Use Git tags for version control
+# Quick rollback to previous version
 ```
 
 ### 8. Backup Strategy
