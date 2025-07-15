@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mewayz Branding</title>
+    <style>
+        @font-face {
+            font-family: 'Airstrike';
+            src: url('fonts/airstrike.woff2') format('woff2'),
+                 url('fonts/airstrike.woff') format('woff'),
+                 url('fonts/airstrike.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .logo-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .logo-light {
+            font-family: 'Airstrike', 'Staatliches', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 2px;
+            text-shadow: none;
+            margin: 0;
+            padding: 8px 0;
+        }
+        
+        .logo-dark {
+            font-family: 'Airstrike', 'Staatliches', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: none;
+            margin: 0;
+            padding: 8px 0;
+        }
+        
+        .dark-bg {
+            background: #333;
+        }
+        
+        .logo-icon {
+            font-family: 'Airstrike', 'Staatliches', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 2px;
+            text-shadow: none;
+            margin: 0;
+            padding: 8px 0;
+        }
+        
+        .export-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+        
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mewayz Branding with Airstrike Font</h1>
+    
+    <div class="logo-container">
+        <h3>Light Version</h3>
+        <div class="logo-light">Mewayz</div>
+        <button onclick="generateCanvas('light')">Generate Light Logo</button>
+        <button onclick="downloadCanvas('light')">Download Light PNG</button>
+        <canvas id="lightCanvas" width="120" height="40" style="display: none;"></canvas>
+    </div>
+    
+    <div class="logo-container dark-bg">
+        <h3 style="color: white;">Dark Version</h3>
+        <div class="logo-dark">Mewayz</div>
+        <button onclick="generateCanvas('dark')">Generate Dark Logo</button>
+        <button onclick="downloadCanvas('dark')">Download Dark PNG</button>
+        <canvas id="darkCanvas" width="120" height="40" style="display: none;"></canvas>
+    </div>
+    
+    <div class="logo-container">
+        <h3>Logo Icon (M)</h3>
+        <div class="logo-icon">M</div>
+        <button onclick="generateCanvas('icon')">Generate Icon Logo</button>
+        <button onclick="downloadCanvas('icon')">Download Icon PNG</button>
+        <canvas id="iconCanvas" width="60" height="60" style="display: none;"></canvas>
+    </div>
+
+    <script>
+        function generateCanvas(type) {
+            const canvas = document.getElementById(type + 'Canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set background (transparent)
+            ctx.fillStyle = 'transparent';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set font - Note: Canvas might not have access to Airstrike font
+            // Using Arial as fallback, but in production you'd want to load the font
+            ctx.font = 'bold 24px Arial, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.letterSpacing = '2px';
+            
+            if (type === 'light') {
+                ctx.fillStyle = '#2563eb';
+                ctx.fillText('Mewayz', 5, canvas.height / 2);
+            } else if (type === 'dark') {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText('Mewayz', 5, canvas.height / 2);
+            } else if (type === 'icon') {
+                ctx.font = 'bold 32px Arial, sans-serif';
+                ctx.fillStyle = '#2563eb';
+                ctx.textAlign = 'center';
+                ctx.fillText('M', canvas.width / 2, canvas.height / 2);
+            }
+            
+            canvas.style.display = 'block';
+        }
+        
+        function downloadCanvas(type) {
+            generateCanvas(type);
+            const canvas = document.getElementById(type + 'Canvas');
+            const link = document.createElement('a');
+            link.download = 'branding-logo-' + type + '.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
