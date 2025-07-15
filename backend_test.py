@@ -785,7 +785,7 @@ class MewayzComprehensiveTester:
                                           user_type, add_time)
                             
                             # Test 3: Get Instagram posts
-                            posts_response = self.make_request('GET', '/instagram/posts')
+                            posts_response = self.make_request('GET', '/instagram-management/posts')
                             posts_time = posts_response.elapsed.total_seconds()
                             
                             if posts_response.status_code == 200:
