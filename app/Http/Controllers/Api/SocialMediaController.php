@@ -345,78 +345,86 @@ class SocialMediaController extends Controller
     }
 
     /**
-     * Get analytics for social media accounts
+     * Get comprehensive social media analytics
      */
     public function getAnalytics(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'period' => 'nullable|in:7d,30d,90d',
-            'platform' => 'nullable|in:instagram,facebook,twitter,linkedin,tiktok,youtube',
+        $request->validate([
+            'platform' => 'nullable|string|in:facebook,instagram,twitter,linkedin,youtube,tiktok,snapchat,discord,twitch,pinterest',
+            'account_id' => 'nullable|exists:social_media_accounts,id',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'metrics' => 'nullable|array',
+            'metrics.*' => 'string|in:engagement,reach,impressions,followers_growth,post_performance,audience_demographics,best_times'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $period = $request->get('period', '30d');
-            $days = (int) str_replace('d', '', $period);
-            $startDate = Carbon::now()->subDays($days);
-
-            $query = SocialMediaPost::where('user_id', $request->user()->id)
-                ->where('created_at', '>=', $startDate);
+            $query = SocialMediaAccount::where('user_id', auth()->id());
 
             if ($request->platform) {
-                $query->whereHas('accounts', function ($q) use ($request) {
-                    $q->where('platform', $request->platform);
-                });
+                $query->where('platform', $request->platform);
             }
 
-            $posts = $query->get();
+            if ($request->account_id) {
+                $query->where('id', $request->account_id);
+            }
 
-            $analytics = [
-                'total_posts' => $posts->count(),
-                'published_posts' => $posts->where('status', 'published')->count(),
-                'scheduled_posts' => $posts->where('status', 'scheduled')->count(),
-                'draft_posts' => $posts->where('status', 'draft')->count(),
-                'engagement_rate' => 0, // TODO: Calculate based on actual platform data
-                'reach' => 0, // TODO: Calculate based on actual platform data
-                'period' => $period,
-                'platforms_breakdown' => [],
-            ];
+            $accounts = $query->get();
 
-            // Get platform breakdown
-            $connectedAccounts = SocialMediaAccount::where('user_id', $request->user()->id)
-                ->where('is_active', true)
-                ->get();
+            if ($accounts->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No social media accounts found'
+                ], 404);
+            }
 
-            foreach ($connectedAccounts as $account) {
-                $platformPosts = $posts->filter(function ($post) use ($account) {
-                    return $post->accounts->contains('id', $account->id);
-                });
+            // Date range
+            $dateFrom = $request->date_from ?? now()->subDays(30);
+            $dateTo = $request->date_to ?? now();
 
-                $analytics['platforms_breakdown'][$account->platform] = [
-                    'posts' => $platformPosts->count(),
-                    'followers' => $account->followers_count ?? 0,
+            $analytics = [];
+
+            foreach ($accounts as $account) {
+                $accountAnalytics = [
+                    'account_id' => $account->id,
+                    'platform' => $account->platform,
                     'username' => $account->username,
+                    'overview' => $this->getAccountOverview($account, $dateFrom, $dateTo),
+                    'engagement' => $this->getEngagementMetrics($account, $dateFrom, $dateTo),
+                    'audience' => $this->getAudienceMetrics($account, $dateFrom, $dateTo),
+                    'content_performance' => $this->getContentPerformance($account, $dateFrom, $dateTo),
+                    'growth_trends' => $this->getGrowthTrends($account, $dateFrom, $dateTo),
+                    'optimal_posting_times' => $this->getOptimalPostingTimes($account),
+                    'hashtag_performance' => $this->getHashtagPerformance($account, $dateFrom, $dateTo),
+                    'competitor_comparison' => $this->getCompetitorComparison($account),
+                    'recommendations' => $this->getRecommendations($account)
                 ];
+
+                $analytics[] = $accountAnalytics;
             }
+
+            // Cross-platform summary
+            $crossPlatformSummary = $this->getCrossPlatformSummary($accounts, $dateFrom, $dateTo);
 
             return response()->json([
                 'success' => true,
-                'data' => $analytics,
-                'message' => 'Analytics retrieved successfully'
+                'data' => [
+                    'period' => [
+                        'from' => $dateFrom,
+                        'to' => $dateTo
+                    ],
+                    'cross_platform_summary' => $crossPlatformSummary,
+                    'accounts' => $analytics,
+                    'insights' => $this->generateInsights($analytics),
+                    'action_items' => $this->generateActionItems($analytics)
+                ]
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve social media analytics: ' . $e->getMessage());
+            Log::error('Failed to retrieve social media analytics', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve analytics'
+                'message' => 'Failed to retrieve analytics: ' . $e->getMessage()
             ], 500);
         }
     }
