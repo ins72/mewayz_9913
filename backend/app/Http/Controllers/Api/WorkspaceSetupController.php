@@ -177,9 +177,342 @@ class WorkspaceSetupController extends Controller
     }
     
     /**
-     * Step 1: Business Information
+     * Step 1: Main Goals Selection
      */
-    public function saveBusinessInfo(Request $request)
+    public function saveMainGoals(Request $request)
+    {
+        try {
+            $request->validate([
+                'selected_goals' => 'required|array|min:1|max:6',
+                'selected_goals.*' => 'required|string|in:instagram_management,link_in_bio,course_creation,ecommerce,crm,marketing_hub',
+                'primary_goal' => 'required|string|in:instagram_management,link_in_bio,course_creation,ecommerce,crm,marketing_hub',
+                'business_type' => 'required|string|max:100',
+                'target_audience' => 'required|string|max:500'
+            ]);
+            
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $selectedGoals = $request->selected_goals;
+            $primaryGoal = $request->primary_goal;
+            
+            // Validate primary goal is in selected goals
+            if (!in_array($primaryGoal, $selectedGoals)) {
+                return response()->json(['error' => 'Primary goal must be one of the selected goals'], 400);
+            }
+            
+            // Get available features for selected goals
+            $availableFeatures = [];
+            foreach ($selectedGoals as $goalId) {
+                if (isset(self::MAIN_GOALS[$goalId])) {
+                    $availableFeatures = array_merge($availableFeatures, self::MAIN_GOALS[$goalId]['features']);
+                }
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            $settings['main_goals'] = [
+                'selected_goals' => $selectedGoals,
+                'primary_goal' => $primaryGoal,
+                'business_type' => $request->business_type,
+                'target_audience' => $request->target_audience,
+                'available_features' => array_unique($availableFeatures)
+            ];
+            
+            // Update progress
+            $settings['setup_progress']['main_goals'] = true;
+            $settings['setup_step'] = 2;
+            
+            $workspace->update([
+                'settings' => json_encode($settings)
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Main goals saved successfully',
+                'next_step' => 2,
+                'available_features' => array_unique($availableFeatures)
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error saving main goals', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to save main goals'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Step 2: Feature Selection
+     */
+    public function saveFeatureSelection(Request $request)
+    {
+        try {
+            $request->validate([
+                'selected_features' => 'required|array|min:1',
+                'selected_features.*' => 'required|string|max:100',
+                'subscription_plan' => 'required|string|in:free,professional,enterprise'
+            ]);
+            
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            $selectedFeatures = $request->selected_features;
+            $subscriptionPlan = $request->subscription_plan;
+            
+            // Validate feature limits based on subscription plan
+            if ($subscriptionPlan === 'free' && count($selectedFeatures) > 10) {
+                return response()->json([
+                    'error' => 'Free plan allows maximum 10 features. Please upgrade or select fewer features.'
+                ], 400);
+            }
+            
+            // Calculate pricing
+            $pricing = $this->calculatePricing($selectedFeatures, $subscriptionPlan);
+            
+            $settings['feature_selection'] = [
+                'selected_features' => $selectedFeatures,
+                'subscription_plan' => $subscriptionPlan,
+                'pricing' => $pricing
+            ];
+            
+            // Update progress
+            $settings['setup_progress']['feature_selection'] = true;
+            $settings['setup_step'] = 3;
+            
+            $workspace->update([
+                'settings' => json_encode($settings)
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Feature selection saved successfully',
+                'next_step' => 3,
+                'pricing' => $pricing
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error saving feature selection', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to save feature selection'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Step 3: Team Setup
+     */
+    public function saveTeamSetup(Request $request)
+    {
+        try {
+            $request->validate([
+                'team_members' => 'array',
+                'team_members.*.email' => 'email',
+                'team_members.*.role' => 'required|string|max:50',
+                'team_members.*.permissions' => 'array',
+                'custom_roles' => 'array',
+                'custom_roles.*.name' => 'required|string|max:50',
+                'custom_roles.*.permissions' => 'required|array'
+            ]);
+            
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            $settings['team_setup'] = [
+                'team_members' => $request->team_members ?? [],
+                'custom_roles' => $request->custom_roles ?? [],
+                'collaboration_enabled' => $request->collaboration_enabled ?? false
+            ];
+            
+            // Update progress
+            $settings['setup_progress']['team_setup'] = true;
+            $settings['setup_step'] = 4;
+            
+            $workspace->update([
+                'settings' => json_encode($settings)
+            ]);
+            
+            // TODO: Send team invitations
+            if (!empty($request->team_members)) {
+                $this->sendTeamInvitations($request->team_members, $workspace);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Team setup saved successfully',
+                'next_step' => 4
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error saving team setup', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to save team setup'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Step 4: Subscription Selection
+     */
+    public function saveSubscriptionSelection(Request $request)
+    {
+        try {
+            $request->validate([
+                'subscription_plan' => 'required|string|in:free,professional,enterprise',
+                'billing_cycle' => 'required|string|in:monthly,yearly',
+                'payment_method' => 'string|in:stripe,paypal,bank_transfer'
+            ]);
+            
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            $selectedFeatures = $settings['feature_selection']['selected_features'] ?? [];
+            $subscriptionPlan = $request->subscription_plan;
+            $billingCycle = $request->billing_cycle;
+            
+            // Calculate final pricing
+            $pricing = $this->calculatePricing($selectedFeatures, $subscriptionPlan, $billingCycle);
+            
+            $settings['subscription_selection'] = [
+                'subscription_plan' => $subscriptionPlan,
+                'billing_cycle' => $billingCycle,
+                'payment_method' => $request->payment_method,
+                'pricing' => $pricing
+            ];
+            
+            // Update progress
+            $settings['setup_progress']['subscription_selection'] = true;
+            $settings['setup_step'] = 5;
+            
+            $workspace->update([
+                'settings' => json_encode($settings)
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Subscription selection saved successfully',
+                'next_step' => 5,
+                'pricing' => $pricing
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error saving subscription selection', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to save subscription selection'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Step 5: Branding Configuration
+     */
+    public function saveBrandingConfiguration(Request $request)
+    {
+        try {
+            $request->validate([
+                'logo' => 'nullable|string', // Base64 encoded
+                'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+                'secondary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+                'accent_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+                'company_name' => 'required|string|max:100',
+                'brand_voice' => 'required|string|in:professional,casual,friendly,authoritative,playful',
+                'white_label_enabled' => 'boolean',
+                'custom_domain' => 'nullable|string|max:255'
+            ]);
+            
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            $subscriptionPlan = $settings['subscription_selection']['subscription_plan'] ?? 'free';
+            
+            // Validate white-label capabilities
+            if ($request->white_label_enabled && $subscriptionPlan !== 'enterprise') {
+                return response()->json([
+                    'error' => 'White-label capabilities are only available with Enterprise plan'
+                ], 400);
+            }
+            
+            $settings['branding_configuration'] = [
+                'logo' => $request->logo,
+                'primary_color' => $request->primary_color,
+                'secondary_color' => $request->secondary_color,
+                'accent_color' => $request->accent_color,
+                'company_name' => $request->company_name,
+                'brand_voice' => $request->brand_voice,
+                'white_label_enabled' => $request->white_label_enabled ?? false,
+                'custom_domain' => $request->custom_domain
+            ];
+            
+            // Update progress
+            $settings['setup_progress']['branding_configuration'] = true;
+            $settings['setup_step'] = 6;
+            
+            $workspace->update([
+                'name' => $request->company_name,
+                'settings' => json_encode($settings)
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Branding configuration saved successfully',
+                'next_step' => 6
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error saving branding configuration', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to save branding configuration'
+            ], 500);
+        }
+    }
     {
         try {
             $request->validate([
