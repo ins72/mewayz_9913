@@ -513,6 +513,11 @@ class WorkspaceSetupController extends Controller
             ], 500);
         }
     }
+    
+    /**
+     * Step 1: Business Information (Legacy method)
+     */
+    public function saveBusinessInfo(Request $request)
     {
         try {
             $request->validate([
