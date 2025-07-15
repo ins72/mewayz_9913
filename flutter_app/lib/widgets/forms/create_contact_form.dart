@@ -229,14 +229,36 @@ class _CreateContactFormState extends State<CreateContactForm> {
 
   void _createContact() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement contact creation
+      // Create contact data
+      final contactData = {
+        'name': _nameController.text,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'company': _companyController.text,
+        'notes': _notesController.text,
+        'status': _selectedStatus,
+      };
+      
+      // Call API to create contact
+      _submitContact(contactData);
+      
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Contact added successfully!'),
-          backgroundColor: Color(0xFF26DE81),
+          content: Text('Contact created successfully!'),
+          backgroundColor: AppColors.success,
         ),
       );
+    }
+  }
+
+  Future<void> _submitContact(Map<String, dynamic> contactData) async {
+    try {
+      // Here you would call your API service
+      await ApiService.createContact(contactData);
+    } catch (e) {
+      // Handle error
+      print('Error creating contact: $e');
     }
   }
 }
