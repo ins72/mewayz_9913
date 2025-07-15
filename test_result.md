@@ -1954,7 +1954,7 @@ The Mewayz project now has comprehensive documentation covering all aspects of t
 ### **🎯 COMPREHENSIVE FRONTEND TESTING COMPLETED - CRITICAL GAPS IDENTIFIED**
 
 **TESTING METHODOLOGY:**
-- Tested both production URL (https://d6c7fe62-7500-44b0-b627-88f7eaeeac56.preview.emergentagent.com/) and local applications
+- Tested both production URL (https://a76c274e-bfc1-4e58-b3cd-36362339121e.preview.emergentagent.com/) and local applications
 - Comprehensive authentication system testing for OAuth and 2FA features
 - Business features accessibility testing across all major platform components
 - Cross-platform responsiveness testing (Desktop, Tablet, Mobile)
@@ -2094,7 +2094,7 @@ While the backend is production-ready with excellent functionality, the frontend
 ### **🎯 COMPREHENSIVE FRONTEND TESTING COMPLETED - CRITICAL REALITY CHECK**
 
 **TESTING METHODOLOGY:**
-- Tested production URL (https://d6c7fe62-7500-44b0-b627-88f7eaeeac56.preview.emergentagent.com/) and local applications
+- Tested production URL (https://a76c274e-bfc1-4e58-b3cd-36362339121e.preview.emergentagent.com/) and local applications
 - Comprehensive authentication system testing for OAuth and 2FA features as requested
 - Business features accessibility testing across all major platform components
 - Cross-platform responsiveness testing (Desktop, Tablet, Mobile)
