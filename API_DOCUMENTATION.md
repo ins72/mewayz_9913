@@ -407,50 +407,52 @@ GET /api/crm/leads
 }
 ```
 
----
+## 📧 Email Marketing
 
-## 🔍 Testing
-
-### API Testing
-
-```bash
-# Health check
-curl -X GET https://mewayz.com/api/health
-
-# Login
-curl -X POST https://mewayz.com/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"password"}'
-
-# Create contact with token
-curl -X POST https://mewayz.com/api/crm/contacts \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{"name":"John Doe","email":"john@example.com"}'
+### Get Email Campaigns
+```http
+GET /api/email-marketing/campaigns
 ```
 
-### Postman Collection
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Welcome Campaign",
+      "subject": "Welcome to our platform",
+      "status": "sent",
+      "recipients_count": 1500,
+      "open_rate": 28.5,
+      "click_rate": 4.2,
+      "sent_at": "2025-07-15T10:30:00Z"
+    }
+  ]
+}
+```
 
-Download our Postman collection:
-- [Mewayz API Collection](https://documenter.getpostman.com/view/mewayz-api)
+### Get Email Templates
+```http
+GET /api/email-marketing/templates
+```
 
----
-
-## 📚 Additional Resources
-
-### Documentation
-- [User Guide](USER_GUIDE.md)
-- [Development Guide](DEVELOPMENT.md)
-- [Troubleshooting](TROUBLESHOOTING.md)
-
-### Support
-- **Email**: api-support@mewayz.com
-- **Documentation**: https://docs.mewayz.com
-- **Community**: https://community.mewayz.com
-
-### Changelog
-- [API Changelog](CHANGELOG.md)
-- [Breaking Changes](BREAKING_CHANGES.md)
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Welcome Template",
+      "category": "welcome",
+      "content": "<html>Template content</html>",
+      "preview_url": "https://example.com/preview/1"
+    }
+  ]
+}
+```
 
 ---
 
