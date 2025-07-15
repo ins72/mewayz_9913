@@ -609,3 +609,76 @@ void main() {
   });
 }
 ```
+
+---
+
+## 🚀 Deployment
+
+### Production Configuration
+
+#### Environment Variables
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://mewayz.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=mewayz_production
+
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
+
+#### Optimization Commands
+```bash
+# Optimize for production
+php artisan optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Clear caches
+php artisan optimize:clear
+```
+
+### Docker Deployment
+
+#### Dockerfile
+```dockerfile
+FROM php:8.2-fpm
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy application files
+COPY . .
+
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/storage
+
+EXPOSE 8001
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8001"]
+```
