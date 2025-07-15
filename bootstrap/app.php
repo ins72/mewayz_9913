@@ -60,18 +60,20 @@ if (!defined('QR_ECLEVEL_L')) {
 }
 
 // Supported output formats
+if (!defined('QR_FORMAT_TEXT')) {
+    define('QR_FORMAT_TEXT', 0);
+    define('QR_FORMAT_PNG',  1);
+}
 
-define('QR_FORMAT_TEXT', 0);
-define('QR_FORMAT_PNG',  1);
-
- 
-define('QRSPEC_VERSION_MAX', 40);
-define('QRSPEC_WIDTH_MAX',   177);
-
-define('QRCAP_WIDTH',        0);
-define('QRCAP_WORDS',        1);
-define('QRCAP_REMINDER',     2);
-define('QRCAP_EC',           3);
+if (!defined('QRSPEC_VERSION_MAX')) {
+    define('QRSPEC_VERSION_MAX', 40);
+    define('QRSPEC_WIDTH_MAX',   177);
+    
+    define('QRCAP_WIDTH',        0);
+    define('QRCAP_WORDS',        1);
+    define('QRCAP_REMINDER',     2);
+    define('QRCAP_EC',           3);
+}
 
 define('QR_IMAGE', true);
 
