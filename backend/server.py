@@ -51,7 +51,8 @@ async def serve_static_files(file_path: str):
         try:
             response = requests.get(f"{LARAVEL_BACKEND_URL}/", timeout=5)
             if response.status_code == 200:
-                return response.text
+                from fastapi.responses import HTMLResponse
+                return HTMLResponse(content=response.text)
         except:
             pass
     
@@ -77,12 +78,8 @@ async def serve_static_files(file_path: str):
     try:
         response = requests.get(f"{LARAVEL_BACKEND_URL}/{file_path}", timeout=5)
         if response.status_code == 200:
-            content_type = response.headers.get('content-type', 'text/html')
-            return JSONResponse(
-                content=response.text if 'json' not in content_type else response.json(),
-                status_code=response.status_code,
-                headers={"content-type": content_type}
-            )
+            from fastapi.responses import HTMLResponse
+            return HTMLResponse(content=response.text)
     except:
         pass
     
