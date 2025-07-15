@@ -73,20 +73,20 @@ Route::get('/flutter.html', function () {
 // Route::post('/register', [AuthController::class, 'store']);
 // Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Installation routes
-Route::get('/install', [InstallationController::class, 'index'])->name('install');
-Route::post('/install', [InstallationController::class, 'store']);
+// Installation routes (commented out - controller missing)
+// Route::get('/install', [InstallationController::class, 'index'])->name('install');
+// Route::post('/install', [InstallationController::class, 'store']);
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    // Console/Dashboard
-    Route::get('/console', [ConsoleController::class, 'index'])->name('console');
-    Route::get('/dashboard', [ConsoleController::class, 'index'])->name('dashboard');
+    // Console/Dashboard (commented out - controller missing)
+    // Route::get('/console', [ConsoleController::class, 'index'])->name('console');
+    // Route::get('/dashboard', [ConsoleController::class, 'index'])->name('dashboard');
     
-    // Profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile (commented out - controller missing)
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     // Bio Sites
     Route::get('/bio-sites', [BioSiteController::class, 'index'])->name('bio-sites');
