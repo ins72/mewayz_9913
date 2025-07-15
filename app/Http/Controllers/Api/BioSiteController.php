@@ -111,35 +111,39 @@ class BioSiteController extends Controller
         ]);
 
         try {
-            $bioSite = BioSite::create([
+            // Prepare data for existing database schema
+            $bioSiteData = [
                 'user_id' => auth()->id(),
                 'name' => $request->name,
+                'title' => $request->name, // Use name as title
                 'slug' => $request->slug,
+                'address' => $request->slug, // Use slug as address for existing schema
+                '_slug' => $request->slug, // Use slug for _slug field
                 'description' => $request->description,
+                'bio' => $request->description, // Use description as bio
+                'status' => $request->is_active ?? true ? 'published' : 'draft',
+            ];
+
+            // Handle theme configuration
+            $themeConfig = array_merge([
                 'theme' => $request->theme,
-                'is_active' => $request->is_active ?? true,
-                'profile_image' => $request->profile_image,
-                'cover_image' => $request->cover_image,
+                'primary_color' => '#3B82F6',
+                'secondary_color' => '#1E40AF',
+                'accent_color' => '#10B981',
+                'text_color' => '#1F2937',
+                'background_color' => '#FFFFFF',
+                'font_family' => 'Inter',
+                'font_size' => 16
+            ], $request->branding ?? []);
+
+            $bioSiteData['theme_config'] = json_encode($themeConfig);
+
+            // Handle settings (advanced features, SEO, etc.)
+            $settings = [
                 'custom_css' => $request->custom_css,
                 'custom_js' => $request->custom_js,
-                'seo_title' => $request->seo_title ?? $request->name,
-                'seo_description' => $request->seo_description ?? $request->description,
-                'seo_keywords' => $request->seo_keywords,
-                'google_analytics_id' => $request->google_analytics_id,
-                'facebook_pixel_id' => $request->facebook_pixel_id,
-                'custom_domain' => $request->custom_domain,
                 'password_protection' => $request->password_protection ?? false,
                 'password' => $request->password_protection ? Hash::make($request->password) : null,
-                'social_links' => $request->social_links ?? [],
-                'branding' => array_merge([
-                    'primary_color' => '#3B82F6',
-                    'secondary_color' => '#1E40AF',
-                    'accent_color' => '#10B981',
-                    'text_color' => '#1F2937',
-                    'background_color' => '#FFFFFF',
-                    'font_family' => 'Inter',
-                    'font_size' => 16
-                ], $request->branding ?? []),
                 'advanced_features' => array_merge([
                     'email_capture' => false,
                     'email_capture_text' => 'Stay updated with my latest content',
@@ -153,11 +157,30 @@ class BioSiteController extends Controller
                     'cookie_consent' => false,
                     'gdpr_compliant' => false
                 ], $request->advanced_features ?? [])
-            ]);
+            ];
+
+            $bioSiteData['settings'] = json_encode($settings);
+
+            // Handle SEO data
+            $seoData = [
+                'title' => $request->seo_title ?? $request->name,
+                'description' => $request->seo_description ?? $request->description,
+                'keywords' => $request->seo_keywords,
+                'google_analytics_id' => $request->google_analytics_id,
+                'facebook_pixel_id' => $request->facebook_pixel_id,
+            ];
+
+            $bioSiteData['seo'] = json_encode($seoData);
+
+            // Handle social links
+            $socialData = $request->social_links ?? [];
+            $bioSiteData['social'] = json_encode($socialData);
+
+            $bioSite = BioSite::create($bioSiteData);
 
             // Generate QR code for the bio site
             $qrCodeUrl = $this->generateQRCode($bioSite->slug);
-            $bioSite->update(['qr_code_url' => $qrCodeUrl]);
+            $bioSite->update(['qr' => $qrCodeUrl]);
 
             return response()->json([
                 'success' => true,
@@ -167,13 +190,13 @@ class BioSiteController extends Controller
                     'name' => $bioSite->name,
                     'slug' => $bioSite->slug,
                     'url' => url('/bio/' . $bioSite->slug),
-                    'custom_domain_url' => $bioSite->custom_domain ? 'https://' . $bioSite->custom_domain : null,
-                    'qr_code_url' => $bioSite->qr_code_url,
-                    'theme' => $bioSite->theme,
-                    'is_active' => $bioSite->is_active,
-                    'password_protected' => $bioSite->password_protection,
-                    'social_links_count' => count($bioSite->social_links),
-                    'advanced_features_enabled' => array_filter($bioSite->advanced_features, function($value) {
+                    'custom_domain_url' => $request->custom_domain ? 'https://' . $request->custom_domain : null,
+                    'qr_code_url' => $bioSite->qr,
+                    'theme' => $request->theme,
+                    'is_active' => $bioSite->status === 'published',
+                    'password_protected' => $request->password_protection ?? false,
+                    'social_links_count' => count($request->social_links ?? []),
+                    'advanced_features_enabled' => array_filter($request->advanced_features ?? [], function($value) {
                         return $value === true;
                     }),
                     'created_at' => $bioSite->created_at,
