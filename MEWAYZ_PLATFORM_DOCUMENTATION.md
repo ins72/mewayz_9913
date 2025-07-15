@@ -713,6 +713,17 @@ curl -H "Authorization: Bearer <token>" \
 - Email marketing requires SMTP configuration
 - Social media posting requires platform API keys
 - Payment processing requires Stripe live keys for production
+- ElasticMail API key required for partnership form functionality
+- OpenAI API key required for AI content generation
+- Some admin features may require additional authentication setup
+
+### **Third-Party Integrations Required**
+- **Stripe** - Payment processing and subscription management
+- **ElasticMail** - Email delivery for partnership forms
+- **OpenAI** - AI content generation and chat responses
+- **Instagram Basic Display API** - Instagram account integration
+- **Various Social Media APIs** - For social media posting
+- **Domain Registration APIs** - For custom domain management
 
 ### **Performance Considerations**
 - Database queries optimized for multi-tenant architecture
