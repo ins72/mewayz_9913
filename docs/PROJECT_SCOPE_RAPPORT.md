@@ -46,8 +46,7 @@ The Mewayz Platform is a comprehensive, enterprise-grade, cloud-native all-in-on
 ```
 
 ### Architecture Simplification:
-- **Previous**: FastAPI + Laravel (dual backend)
-- **Current**: Laravel-only backend (simplified)
+- **Current**: Laravel-only backend (simplified, clean architecture)
 - **Benefits**: Reduced complexity, better maintainability, single technology stack
 
 ---
