@@ -83,7 +83,7 @@
                          <span x-show="currentPage.seo && !currentPage.seo.block" x-text="currentPage.seo ? currentPage.seo.description : ''"></span>
                       </p>
                        <!---->
-                       {{-- <p class="text-[10px] leading-[var(--l-body)] text-[color:var(--c-mix-3)] mt-[10px]">jeffrey266.zeph.io/page2</p> --}}
+                       {{-- <p class="text-[10px] leading-[var(--l-body)] text-[color:var(--c-mix-3)] mt-[10px]">jeffrey266.mewayz.io/page2</p> --}}
                     </div>
                  </div>
               </template>
