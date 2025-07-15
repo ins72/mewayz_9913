@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth', [InstagramController::class, 'initiateAuth']);
         Route::post('/auth/callback', [InstagramController::class, 'handleCallback']);
         Route::get('/competitor-analysis', [InstagramController::class, 'getCompetitorAnalysis']);
-        Route::get('/advanced-competitor-analysis', [InstagramController::class, 'getAdvancedCompetitorAnalysis']);
+        Route::post('/advanced-competitor-analysis', [InstagramController::class, 'getAdvancedCompetitorAnalysis']);
         Route::get('/hashtag-analysis', [InstagramController::class, 'getHashtagAnalysis']);
         Route::get('/analytics', [InstagramController::class, 'getAnalytics']);
         Route::post('/predict-content-performance', [InstagramController::class, 'predictContentPerformance']);
