@@ -272,10 +272,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Breaking Changes
 
 ### Version 1.0.0
-- **Architecture**: Removed FastAPI proxy layer
+- **Architecture**: Simplified Laravel-only architecture
 - **Ports**: Changed main application port to 8001
 - **Environment**: Updated APP_URL configuration
-- **Dependencies**: Removed Python/FastAPI dependencies
 
 ### Compatibility
 - **Database**: Fully compatible with previous versions
