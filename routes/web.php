@@ -35,6 +35,27 @@ Route::get('/console', function () {
     return view('pages.dashboard.index');
 })->middleware(['auth'])->name('console-index');
 
+// Console sub-routes for dashboard navigation
+Route::get('/console/sites', function () {
+    return view('pages.dashboard.sites.index');
+})->middleware(['auth'])->name('console-sites-index');
+
+Route::get('/console/store', function () {
+    return view('pages.dashboard.store.index');
+})->middleware(['auth'])->name('console-store-index');
+
+Route::get('/console/audience', function () {
+    return view('pages.dashboard.audience.index');
+})->middleware(['auth'])->name('console-audience-index');
+
+Route::get('/console/courses', function () {
+    return view('pages.dashboard.courses.index');
+})->middleware(['auth'])->name('console-courses-index');
+
+Route::get('/console/wallet', function () {
+    return view('pages.dashboard.wallet.index');
+})->middleware(['auth'])->name('console-wallet-index');
+
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
   Route::get('run-update', 'DatabaseController@update')->name('update');
