@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\AnalyticsController;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Api\InstagramController;
+use App\Http\Controllers\Api\StripePaymentController;
 
 /*
 |--------------------------------------------------------------------------
