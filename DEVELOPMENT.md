@@ -15,6 +15,13 @@ Mewayz represents the pinnacle of Mewayz Technologies Inc.'s commitment to creat
 - **Mewayz Technologies Inc.**: The engineering and innovation company
 - **Seamless**: Our core development philosophy
 
+### Domain Configuration
+- **Production Domain**: mewayz.com
+- **Development**: Local environment configurations
+- **API Routes**: All backend routes must use `/api` prefix
+
+**Important**: Do not modify environment URLs or domain configurations without proper testing to avoid breaking functionality.
+
 ---
 
 ## Database Schema
