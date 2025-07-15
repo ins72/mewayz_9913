@@ -187,7 +187,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Database**: Initial database schema
 
 ### Changed
-- **Architecture**: Multi-port architecture with FastAPI proxy
+- **Architecture**: Simplified Laravel-only architecture
 - **Performance**: Initial performance optimizations
 - **Security**: Basic security measures
 
