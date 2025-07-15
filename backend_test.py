@@ -860,7 +860,7 @@ class MewayzComprehensiveTester:
                                                                   user_type, update_time)
                                             
                                             # Test 7: Hashtag research
-                                            hashtag_response = self.make_request('GET', '/instagram/hashtag-research', {'keyword': 'marketing'})
+                                            hashtag_response = self.make_request('GET', '/instagram-management/hashtag-research', {'keyword': 'marketing'})
                                             hashtag_time = hashtag_response.elapsed.total_seconds()
                                             
                                             if hashtag_response.status_code == 200:
