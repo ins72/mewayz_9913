@@ -59,7 +59,7 @@
                          </tr>
                          <tr>
                             <td align="center" style="font-family:&quot;Inter&quot;,Helvetica,Arial,sans-serif;font-size:16px">
-                               <a href="{{ route('console-team-join', ['slug' => $team->slug]) }}" style="color:#ffffff;background-color:#2208cc;border-top:10px solid #2208cc;border-right:18px solid #2208cc;border-bottom:10px solid #2208cc;border-left:18px solid #2208cc;display:inline-block;text-decoration:none;border-radius:6px;box-sizing:border-box;font-weight:bold" target="_blank">{{ __('Join workspace') }}</a>
+                               <a href="{{ route('dashboard-team-join', ['slug' => $team->slug]) }}" style="color:#ffffff;background-color:#2208cc;border-top:10px solid #2208cc;border-right:18px solid #2208cc;border-bottom:10px solid #2208cc;border-left:18px solid #2208cc;display:inline-block;text-decoration:none;border-radius:6px;box-sizing:border-box;font-weight:bold" target="_blank">{{ __('Join workspace') }}</a>
                             </td>
                          </tr>
                       </tbody>
