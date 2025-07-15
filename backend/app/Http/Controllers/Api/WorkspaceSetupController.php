@@ -1131,13 +1131,20 @@ class WorkspaceSetupController extends Controller
             $settings = json_decode($workspace->settings, true) ?? [];
             
             $summary = [
+                'main_goals' => $settings['main_goals'] ?? [],
+                'feature_selection' => $settings['feature_selection'] ?? [],
+                'team_setup' => $settings['team_setup'] ?? [],
+                'subscription_selection' => $settings['subscription_selection'] ?? [],
+                'branding_configuration' => $settings['branding_configuration'] ?? [],
+                'setup_progress' => $settings['setup_progress'] ?? [],
+                'setup_completed' => $settings['setup_completed'] ?? false,
+                
+                // Legacy fields for backward compatibility
                 'business_info' => $settings['business_info'] ?? [],
                 'social_media' => $settings['social_media'] ?? [],
                 'branding' => $settings['branding'] ?? [],
                 'content_categories' => $settings['content_categories'] ?? [],
-                'goals_objectives' => $settings['goals_objectives'] ?? [],
-                'setup_progress' => $settings['setup_progress'] ?? [],
-                'setup_completed' => $settings['setup_completed'] ?? false
+                'goals_objectives' => $settings['goals_objectives'] ?? []
             ];
             
             return response()->json([
