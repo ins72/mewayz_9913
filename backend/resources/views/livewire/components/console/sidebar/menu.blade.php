@@ -272,7 +272,55 @@
 
             <div class="w-full --divider-wrapper">
                <div class="flex items-center justify-between">
-                  <p class="text-[color:var(--yena-colors-gray-500)] text-sm text-left mb-3 mt-4">{{ __('Monitize') }}</p>
+                  <p class="text-[color:var(--yena-colors-gray-500)] text-sm text-left mb-3 mt-4">{{ __('Business Growth') }}</p>
+               </div>
+            </div>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-crm-index') }}">
+               <div class="--inner">
+                  {!! __icon('Business, Products', 'business-customer-service') !!}
+                  <p>{{ __('CRM') }}</p>
+               </div>
+            </x-x.href>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-email-index') }}">
+               <div class="--inner">
+                  {!! __icon('emails', 'email-marketing') !!}
+                  <p>{{ __('Email Marketing') }}</p>
+               </div>
+            </x-x.href>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-instagram-index') }}">
+               <div class="--inner">
+                  {!! __icon('social-media', 'instagram-social-media') !!}
+                  <p>{{ __('Instagram') }}</p>
+               </div>
+            </x-x.href>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-social-index') }}">
+               <div class="--inner">
+                  {!! __icon('social-media', 'social-media-share') !!}
+                  <p>{{ __('Social Media') }}</p>
+               </div>
+            </x-x.href>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-analytics-index') }}">
+               <div class="--inner">
+                  {!! __icon('Business, Products', 'business-report-chart') !!}
+                  <p>{{ __('Analytics') }}</p>
+               </div>
+            </x-x.href>
+
+            <x-x.href class="sidebar-item" href="{{ route('console-workspace-index') }}">
+               <div class="--inner">
+                  {!! __icon('interface-essential', 'workspace') !!}
+                  <p>{{ __('Workspace') }}</p>
+               </div>
+            </x-x.href>
+
+            <div class="w-full --divider-wrapper">
+               <div class="flex items-center justify-between">
+                  <p class="text-[color:var(--yena-colors-gray-500)] text-sm text-left mb-3 mt-4">{{ __('Monetize') }}</p>
                </div>
             </div>
 
