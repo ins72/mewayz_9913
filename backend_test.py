@@ -774,7 +774,7 @@ class MewayzComprehensiveTester:
                         "is_primary": True
                     }
                     
-                    add_response = self.make_request('POST', '/instagram/accounts', account_data)
+                    add_response = self.make_request('POST', '/instagram-management/accounts', account_data)
                     add_time = add_response.elapsed.total_seconds()
                     
                     if add_response.status_code in [200, 201]:
