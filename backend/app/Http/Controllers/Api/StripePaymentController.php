@@ -85,7 +85,8 @@ class StripePaymentController extends Controller
             $inputData = json_encode($checkoutData);
             
             // Execute Python script
-            $command = "cd " . base_path() . " && python3 {$pythonScript} create_session '{$webhookUrl}' <<< '{$inputData}'";
+            $escapedInput = escapeshellarg($inputData);
+            $command = "cd " . base_path() . " && echo {$escapedInput} | python3 {$pythonScript} create_session '{$webhookUrl}'";
             $output = shell_exec($command);
             
             if (!$output) {
