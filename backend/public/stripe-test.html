@@ -224,7 +224,7 @@
             Object.entries(packages).forEach(([packageId, packageData]) => {
                 const card = document.createElement('div');
                 card.className = 'package-card';
-                card.onclick = () => selectPackage(packageId);
+                card.onclick = (e) => selectPackage(packageId, e.target);
                 
                 card.innerHTML = `
                     <h4>${packageData.name}</h4>
