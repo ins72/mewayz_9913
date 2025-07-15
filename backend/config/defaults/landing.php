@@ -132,7 +132,7 @@ return [
             "content" => [
                 "title" => "Easy customization \n on any browser 😍",
                 "subtitle" =>
-                    "Zeph website builder is user-friendly and mobile-friendly, allowing you to easily update your website while on the go. With a simple click, you can personalize your entire site with cohesive fonts, colors, and shapes that align with your brand\'s aesthetic.",
+                    "Mewayz website builder is user-friendly and mobile-friendly, allowing you to easily update your website while on the go. With a simple click, you can personalize your entire site with cohesive fonts, colors, and shapes that align with your brand\'s aesthetic.",
             ],
             "settings" => [
                 "banner_style" => "4",
