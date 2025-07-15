@@ -35,7 +35,7 @@ class PostController extends Controller
         \Auth::login($user);
 
 
-        return redirect()->route('console-index')->with('success', __('Logged in successfully'));
+        return redirect()->route('dashboard-index')->with('success', __('Logged in successfully'));
     }
 
     public function edit($request){

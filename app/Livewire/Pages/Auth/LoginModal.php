@@ -41,7 +41,7 @@ class LoginModal extends Component
         // Success - regenerate session and redirect
         Session::regenerate();
 
-        return redirect()->intended(route('console-index'));
+        return redirect()->intended(route('dashboard-index'));
     }
 
     public function render()

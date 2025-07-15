@@ -66,7 +66,7 @@ class RegisterModal extends Component
             $plan_history->save();
         }
         
-        return redirect()->intended(route('console-index'));
+        return redirect()->intended(route('dashboard-index'));
     }
 
     public function render()

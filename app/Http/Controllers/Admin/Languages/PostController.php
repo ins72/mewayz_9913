@@ -244,7 +244,7 @@ class PostController extends Controller
         File::move($path, $newLocation);
 
         // Return to new location with success
-        return redirect()->route('console-admin-languages-index', ['language' => $newName])->with('success', __('Saved Successfully'));
+        return redirect()->route('dashboard-admin-languages-index', ['language' => $newName])->with('success', __('Saved Successfully'));
     }
 
 

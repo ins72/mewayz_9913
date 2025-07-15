@@ -185,7 +185,7 @@ if(!function_exists('mediakit_in_bio_route')){
             $page = $generate->setOwner($user)->setName('My new Page')->build();
         }
 
-        return route('console-mediakit-index', ['slug' => $page->_slug]);
+        return route('dashboard-mediakit-index', ['slug' => $page->_slug]);
     }
 }
 if(!function_exists('isPreviousMonthPast')){
@@ -218,7 +218,7 @@ if(!function_exists('link_in_bio_route')){
             $page = $generate->setOwner($user)->setName('My new Page')->build();
         }
 
-        return route('console-bio-index', ['slug' => $page->_slug]);
+        return route('dashboard-bio-index', ['slug' => $page->_slug]);
     }
 }
 
