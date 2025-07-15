@@ -188,6 +188,21 @@ backend:
         agent: "testing"
         comment: "✅ Enhanced workspace setup test page fully functional at /enhanced-workspace-setup.html. Modern UI with 6-step progress indicator, goal selection cards, feature grid, pricing summary, team setup, subscription selection, and branding configuration. JavaScript integration working with all 10 API endpoints. Progressive workflow implemented with proper validation and error handling. Responsive design with professional styling. Authentication flow working. Ready for user testing and demonstration."
 
+  - task: "Instagram Management System - Phase 2"
+    implemented: true
+    working: false
+    file: "/app/backend/app/Http/Controllers/Api/InstagramManagementController.php"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Initial testing required for Instagram Management system with 8 API endpoints: accounts management, posts management, hashtag research, and analytics dashboard"
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL DATA MODEL MISMATCH: Instagram Management system completely non-functional due to fundamental architecture issue. Root cause: InstagramManagementController expects Workspace model with is_primary field, but actual system uses Organization model without this field. All 8 Instagram API endpoints fail with 'Workspace not found' error. Specific issues: 1) User->workspaces() relationship returns Workspace model, 2) WorkspaceController uses Organization model, 3) Instagram controller queries $user->workspaces()->where('is_primary', true) but Organization model has no is_primary field, 4) Database contains organizations table but Instagram system expects workspaces table. This is a fundamental design inconsistency that prevents the entire Instagram Management system from functioning. Requires: 1) Align data models (use either Workspace or Organization consistently), 2) Add is_primary field to chosen model, 3) Update all controllers to use same model, 4) Ensure proper workspace/organization creation flow. Authentication works (✅), but workspace resolution fails completely (❌). All 8 endpoints affected: GET /accounts, POST /accounts, GET /posts, POST /posts, PUT /posts/{id}, DELETE /posts/{id}, GET /hashtag-research, GET /analytics."
+
 agent_communication:
   - agent: "testing"
     message: "Starting comprehensive frontend testing of Laravel web interface on port 8001. Will test homepage, authentication, dashboard, assets, API integration, responsive design, navigation, forms, and error handling."
