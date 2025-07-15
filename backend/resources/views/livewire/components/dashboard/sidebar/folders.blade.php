@@ -62,7 +62,7 @@
       @endif
 
       @foreach ($folders as $item)
-      <a class="sidebar-item" href="{{ route('console-folders-index', ['slug' => $item->slug]) }}" @navigate {{ _k() }}>
+      <a class="sidebar-item" href="{{ route('dashboard-folders-index', ['slug' => $item->slug]) }}" @navigate {{ _k() }}>
          <div class="--inner">
             {!! __icon('Folders', 'folder-bookmark') !!}
             <p>{{ $item->name }}</p>
