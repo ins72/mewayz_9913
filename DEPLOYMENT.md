@@ -18,9 +18,15 @@ At Mewayz Technologies Inc., we understand that exceptional software requires ex
 - **Monitoring**: Comprehensive observability for proactive issue resolution
 
 **Target Environments:**
-- **Production**: Live customer-facing deployments
+- **Production**: Live customer-facing deployments at https://mewayz.com
 - **Staging**: Pre-production testing and validation
 - **Development**: Local and team development environments
+
+**Domain Configuration:**
+- **Production Domain**: mewayz.com
+- **Platform URL**: https://mewayz.com
+- **API Endpoint**: https://mewayz.com/api
+- **Admin Panel**: https://mewayz.com/admin
 
 ---
 
