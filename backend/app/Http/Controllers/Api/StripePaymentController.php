@@ -4,13 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentTransaction;
+use App\Services\StripeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class StripePaymentController extends Controller
 {
+    protected $stripeService;
+
+    public function __construct(StripeService $stripeService)
+    {
+        $this->stripeService = $stripeService;
+    }
+
     /**
      * Define fixed payment packages - NEVER allow frontend to set prices
      */
@@ -77,24 +84,8 @@ class StripePaymentController extends Controller
                 $currency = 'USD';
             }
             
-            // Create Python process to handle Stripe integration
-            $webhookUrl = url('/api/webhook/stripe');
-            $pythonScript = base_path('stripe_integration.py');
-            
-            // Convert checkout data to JSON
-            $inputData = json_encode($checkoutData);
-            
-            // Execute Python script
-            $escapedInput = escapeshellarg($inputData);
-            $stripeApiKey = env('STRIPE_API_KEY');
-            $command = "cd " . base_path() . " && STRIPE_API_KEY={$stripeApiKey} echo {$escapedInput} | /root/.venv/bin/python3 {$pythonScript} create_session '{$webhookUrl}'";
-            $output = shell_exec($command);
-            
-            if (!$output) {
-                return response()->json(['error' => 'Failed to create checkout session'], 500);
-            }
-            
-            $result = json_decode($output, true);
+            // Create checkout session using Laravel service
+            $result = $this->stripeService->createCheckoutSession($checkoutData);
             
             if (!$result['success']) {
                 return response()->json(['error' => $result['error']], 500);
@@ -149,17 +140,8 @@ class StripePaymentController extends Controller
                 return response()->json(['error' => 'Transaction not found'], 404);
             }
             
-            // Get status from Stripe
-            $pythonScript = base_path('stripe_integration.py');
-            $stripeApiKey = env('STRIPE_API_KEY');
-            $command = "cd " . base_path() . " && STRIPE_API_KEY={$stripeApiKey} /root/.venv/bin/python3 {$pythonScript} get_status '{$sessionId}'";
-            $output = shell_exec($command);
-            
-            if (!$output) {
-                return response()->json(['error' => 'Failed to get checkout status'], 500);
-            }
-            
-            $result = json_decode($output, true);
+            // Get status from Stripe using Laravel service
+            $result = $this->stripeService->getCheckoutStatus($sessionId);
             
             if (!$result['success']) {
                 return response()->json(['error' => $result['error']], 500);
@@ -205,30 +187,14 @@ class StripePaymentController extends Controller
     {
         try {
             $signature = $request->header('Stripe-Signature');
-            $body = $request->getContent();
+            $payload = $request->getContent();
             
             if (!$signature) {
                 return response()->json(['error' => 'Missing stripe signature'], 400);
             }
             
-            // Prepare webhook data
-            $webhookData = json_encode([
-                'body' => $body,
-                'signature' => $signature
-            ]);
-            
-            // Execute Python script
-            $pythonScript = base_path('stripe_integration.py');
-            $escapedWebhookData = escapeshellarg($webhookData);
-            $stripeApiKey = env('STRIPE_API_KEY');
-            $command = "cd " . base_path() . " && STRIPE_API_KEY={$stripeApiKey} echo {$escapedWebhookData} | /root/.venv/bin/python3 {$pythonScript} handle_webhook";
-            $output = shell_exec($command);
-            
-            if (!$output) {
-                return response()->json(['error' => 'Failed to process webhook'], 500);
-            }
-            
-            $result = json_decode($output, true);
+            // Process webhook using Laravel service
+            $result = $this->stripeService->handleWebhook($payload, $signature);
             
             if (!$result['success']) {
                 return response()->json(['error' => $result['error']], 500);
@@ -248,6 +214,22 @@ class StripePaymentController extends Controller
             }
             
             Log::info('Stripe webhook processed', [
+                'event_type' => $result['event_type'],
+                'session_id' => $result['session_id'],
+                'payment_status' => $result['payment_status']
+            ]);
+            
+            return response()->json(['success' => true]);
+            
+        } catch (\Exception $e) {
+            Log::error('Stripe webhook processing failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['error' => 'Failed to process webhook'], 500);
+        }
+    }
                 'event_type' => $result['event_type'],
                 'session_id' => $result['session_id'],
                 'payment_status' => $result['payment_status']
