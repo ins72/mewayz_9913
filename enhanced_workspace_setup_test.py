@@ -263,6 +263,17 @@ class EnhancedWorkspaceSetupTester:
         """Test POST /api/workspace-setup/main-goals"""
         print("🎯 Testing Main Goals Step...")
         
+        # First, call current step to ensure workspace is created
+        try:
+            current_step_response = self.make_request('GET', '/workspace-setup/current-step')
+            if current_step_response.status_code != 200:
+                self.log_result("Save Main Goals", "FAIL", 
+                              f"Failed to initialize workspace: {current_step_response.text}")
+                return None
+        except Exception as e:
+            self.log_result("Save Main Goals", "FAIL", f"Failed to initialize workspace: {str(e)}")
+            return None
+        
         main_goals_data = {
             "selected_goals": ["instagram_management", "link_in_bio", "crm"],
             "primary_goal": "instagram_management",
