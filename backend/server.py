@@ -34,57 +34,11 @@ async def root():
         # Try to serve the landing page from Laravel backend
         response = requests.get(f"{LARAVEL_BACKEND_URL}/", timeout=5)
         if response.status_code == 200:
-            return response.text
-    except:
-        pass
-    
-    return {"message": "Mewayz API Proxy is running", "status": "operational"}
-
-# Serve static HTML files from public directory
-@app.get("/{file_path:path}")
-async def serve_static_files(file_path: str):
-    """Serve static HTML files and assets"""
-    static_dir = Path(__file__).parent.parent / "public"
-    
-    # If no file path specified, serve landing page
-    if not file_path or file_path == "/":
-        try:
-            response = requests.get(f"{LARAVEL_BACKEND_URL}/", timeout=5)
-            if response.status_code == 200:
-                from fastapi.responses import HTMLResponse
-                return HTMLResponse(content=response.text)
-        except:
-            pass
-    
-    # Handle common static files
-    if file_path.endswith('.html'):
-        file_full_path = static_dir / file_path
-        if file_full_path.exists():
-            return FileResponse(file_full_path, media_type="text/html")
-    
-    # Handle other assets
-    if file_path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf')):
-        file_full_path = static_dir / file_path
-        if file_full_path.exists():
-            return FileResponse(file_full_path)
-    
-    # For HTML files without extension, try adding .html
-    if '.' not in file_path:
-        html_file_path = static_dir / f"{file_path}.html"
-        if html_file_path.exists():
-            return FileResponse(html_file_path, media_type="text/html")
-    
-    # Try to proxy to Laravel backend for other routes
-    try:
-        response = requests.get(f"{LARAVEL_BACKEND_URL}/{file_path}", timeout=5)
-        if response.status_code == 200:
-            from fastapi.responses import HTMLResponse
             return HTMLResponse(content=response.text)
     except:
         pass
     
-    # Return 404 if file not found
-    raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
+    return {"message": "Mewayz API Proxy is running", "status": "operational"}
 
 @app.get("/health")
 async def health_check():
@@ -141,6 +95,41 @@ async def proxy_to_laravel(path: str, request: Request):
         raise HTTPException(status_code=503, detail=f"Laravel backend unavailable: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Proxy error: {str(e)}")
+
+# Serve static HTML files from public directory - THIS MUST BE LAST
+@app.get("/{file_path:path}")
+async def serve_static_files(file_path: str):
+    """Serve static HTML files and assets"""
+    static_dir = Path(__file__).parent.parent / "public"
+    
+    # Handle common static files
+    if file_path.endswith('.html'):
+        file_full_path = static_dir / file_path
+        if file_full_path.exists():
+            return FileResponse(file_full_path, media_type="text/html")
+    
+    # Handle other assets
+    if file_path.endswith(('.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf')):
+        file_full_path = static_dir / file_path
+        if file_full_path.exists():
+            return FileResponse(file_full_path)
+    
+    # For HTML files without extension, try adding .html
+    if '.' not in file_path:
+        html_file_path = static_dir / f"{file_path}.html"
+        if html_file_path.exists():
+            return FileResponse(html_file_path, media_type="text/html")
+    
+    # Try to proxy to Laravel backend for other routes
+    try:
+        response = requests.get(f"{LARAVEL_BACKEND_URL}/{file_path}", timeout=5)
+        if response.status_code == 200:
+            return HTMLResponse(content=response.text)
+    except:
+        pass
+    
+    # Return 404 if file not found
+    raise HTTPException(status_code=404, detail=f"File not found: {file_path}")
 
 if __name__ == "__main__":
     import uvicorn
