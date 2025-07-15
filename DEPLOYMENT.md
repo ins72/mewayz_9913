@@ -64,37 +64,44 @@ cd platform
 ### Manual Deployment
 Follow the detailed steps below for complete control.
 
-#### Configure MySQL
-```bash
-# Secure MySQL installation
-sudo mysql_secure_installation
+## 🚀 Step-by-Step Deployment
 
-# Create database
-sudo mysql -u root -p
-CREATE DATABASE mewayz;
-CREATE USER 'mewayz'@'localhost' IDENTIFIED BY 'secure_password';
-GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
+### Step 1: Server Setup
+
+#### 1.1 Update System
+```bash
+sudo apt update && sudo apt upgrade -y
 ```
 
-### 2. Application Deployment
-
-#### Clone and Setup
+#### 1.2 Install PHP and Extensions
 ```bash
-# Clone repository
-git clone https://github.com/mewayz/mewayz.git /var/www/mewayz
-cd /var/www/mewayz
+sudo apt install -y php8.1 php8.1-fpm php8.1-mysql php8.1-xml php8.1-curl \
+php8.1-mbstring php8.1-zip php8.1-gd php8.1-bcmath php8.1-redis \
+php8.1-intl php8.1-soap
+```
 
-# Install PHP dependencies
-composer install --optimize-autoloader --no-dev
+#### 1.3 Install Database
+```bash
+sudo apt install -y mysql-server
+sudo mysql_secure_installation
+```
 
-# Install Node.js dependencies
-npm install --production
+#### 1.4 Install Redis
+```bash
+sudo apt install -y redis-server
+sudo systemctl enable redis-server
+```
 
-# Set permissions
-sudo chown -R www-data:www-data storage bootstrap/cache
-sudo chmod -R 755 storage bootstrap/cache
+#### 1.5 Install Web Server
+```bash
+sudo apt install -y nginx
+sudo systemctl enable nginx
+```
+
+#### 1.6 Install Supervisor
+```bash
+sudo apt install -y supervisor
+sudo systemctl enable supervisor
 ```
 
 #### Environment Configuration
