@@ -21,6 +21,22 @@ The Mewayz Platform is a comprehensive, enterprise-grade, cloud-native all-in-on
 
 ---
 
+## 🏗️ Current Architecture Overview
+
+### Technology Stack Confirmed:
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Laravel       │    │   Database      │
+│   (Port 3000)   │◄──►│   (Port 8001)   │◄──►│   MySQL/MariaDB │
+│   Flutter/React │    │   PHP 8.2.28    │    │   Data Storage  │
+│   + Laravel Web │    │   Complete API  │    │   21 Migrations │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+### Architecture Simplification:
+- **Previous**: FastAPI + Laravel (dual backend)
+- **Current**: Laravel-only backend (simplified)
+- **Benefits**: Reduced complexity, better maintainability, single technology stack
 ## 1. Technical Architecture Overview
 
 ### 1.1 System Architecture
