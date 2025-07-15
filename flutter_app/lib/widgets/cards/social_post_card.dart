@@ -74,7 +74,7 @@ class SocialPostCard extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.more_vert, color: AppColors.textSecondary),
                 onPressed: () {
-                  // TODO: Show post options
+                  _showPostOptions(context);
                 },
               ),
             ],
