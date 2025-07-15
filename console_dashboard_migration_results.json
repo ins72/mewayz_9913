@@ -41,11 +41,11 @@
     },
     "protected_endpoints": {},
     "stripe_endpoints": {
-      "/payments/packages": false,
+      "/payments/packages": true,
       "/payments/checkout/session": false
     },
     "total_endpoints_tested": 6,
-    "successful_endpoints": 4
+    "successful_endpoints": 5
   },
   "authentication_flow": {
     "login_endpoint_working": true,
@@ -81,16 +81,16 @@
     ]
   },
   "test_summary": {
-    "overall_score": 94.44444444444444,
+    "overall_score": 97.22222222222223,
     "route_migration_score": 100.0,
     "dashboard_accessibility_score": 100.0,
-    "api_functionality_score": 66.66666666666666,
+    "api_functionality_score": 83.33333333333334,
     "authentication_flow_score": 100.0,
     "database_connectivity_score": 100.0,
     "route_references_score": 100,
     "dashboard_routes_found": 5,
     "console_references_remaining": 0,
     "api_endpoints_tested": 6,
-    "api_endpoints_working": 4
+    "api_endpoints_working": 5
   }
 }
