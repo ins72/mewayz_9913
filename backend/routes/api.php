@@ -29,14 +29,31 @@ use App\Http\Controllers\Api\StripePaymentController;
 |
 */
 
-// Health check
-Route::get('/health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'message' => 'API is working',
-        'timestamp' => now()
-    ]);
-});
+// Health and System Routes
+Route::get('/health', [HealthController::class, 'index']);
+Route::get('/system/info', [SystemController::class, 'info']);
+Route::get('/system/maintenance', [SystemController::class, 'maintenance']);
+Route::post('/system/cache/clear', [SystemController::class, 'clearCache']);
+Route::post('/system/optimize', [SystemController::class, 'optimize']);
+
+// Platform Information Routes
+Route::get('/platform/overview', [PlatformController::class, 'overview']);
+Route::get('/platform/statistics', [PlatformController::class, 'statistics']);
+Route::get('/platform/features', [PlatformController::class, 'features']);
+Route::get('/platform/roadmap', [PlatformController::class, 'roadmap']);
+
+// Branding Routes
+Route::get('/branding/info', [BrandingController::class, 'info']);
+Route::get('/branding/assets', [BrandingController::class, 'assets']);
+Route::get('/branding/consistency-report', [BrandingController::class, 'consistencyReport']);
+Route::post('/branding/update', [BrandingController::class, 'update']);
+
+// Optimization Routes
+Route::get('/optimization/performance', [OptimizationController::class, 'performance']);
+Route::get('/optimization/recommendations', [OptimizationController::class, 'recommendations']);
+Route::post('/optimization/database', [OptimizationController::class, 'optimizeDatabase']);
+Route::post('/optimization/cache', [OptimizationController::class, 'optimizeCache']);
+Route::post('/optimization/system', [OptimizationController::class, 'optimizeSystem']);
 
 // Public routes (no authentication required)
 Route::prefix('auth')->group(function () {
