@@ -242,7 +242,7 @@ class BrandingController extends Controller
             'consistency_score' => 85.5,
             'issues' => $inconsistencies,
             'recommendations' => [
-                'Update all references from "ZEPH" to "Mewayz"',
+                'Update all references from "LEGACY_ZEPH" to "Mewayz"',
                 'Replace old logo assets with new branding',
                 'Update color scheme throughout the platform',
                 'Ensure consistent typography usage',
