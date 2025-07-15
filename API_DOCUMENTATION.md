@@ -6,33 +6,18 @@
 
 The Mewayz Platform provides a comprehensive RESTful API that powers all business functions. This documentation covers all 40+ API endpoints across authentication, social media, bio sites, CRM, e-commerce, courses, email marketing, and analytics.
 
-### Base URL
+### API Base URL
 ```
-Production: https://mewayz.com/api
-Development: http://localhost:8001/api
-```
-
-### API Version
-Current version: `v1`
-
-### Content Type
-All requests should include:
-```
-Content-Type: application/json
-Accept: application/json
+http://localhost:8001/api
 ```
 
----
+### Authentication
+All API endpoints (except public endpoints) require authentication using Laravel Sanctum tokens.
 
-## 🔐 Authentication
-
-### Laravel Sanctum
-
-Mewayz uses Laravel Sanctum for API authentication. You can authenticate using:
-
-1. **Personal Access Tokens** - For API access
-2. **Session-based** - For web applications
-3. **OAuth 2.0** - For third-party integrations
+**Authorization Header:**
+```
+Authorization: Bearer {token}
+```
 
 ### Getting Access Tokens
 
