@@ -17,7 +17,7 @@
    state([
        'user' => fn() => iam()->toArray(),
    ]);
-   placeholder('placeholders.console.sites.page-placeholder');
+   placeholder('placeholders.dashboard.sites.page-placeholder');
 
    mount(function(){
       //  dd($this->queryLeadsMetric());
