@@ -241,9 +241,10 @@ class _CreateBioSiteFormState extends State<CreateBioSiteForm> {
     try {
       // Call API service to create bio site
       await ApiService.createBioSite(bioSiteData);
+      Logger.info('Bio site created successfully', 'CreateBioSiteForm');
     } catch (e) {
       // Handle error
-      print('Error creating bio site: $e');
+      Logger.error('Error creating bio site', e, null, 'CreateBioSiteForm');
     }
   }
 }
