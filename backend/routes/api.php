@@ -74,7 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/workspaces/{id}', [WorkspaceController::class, 'destroy']);
     
     // Instagram Management routes
-    Route::prefix('instagram')->group(function () {
+    Route::prefix('instagram-management')->group(function () {
         Route::get('/accounts', [InstagramManagementController::class, 'getAccounts']);
         Route::post('/accounts', [InstagramManagementController::class, 'addAccount']);
         Route::get('/posts', [InstagramManagementController::class, 'getPosts']);
