@@ -45,8 +45,8 @@ class StripePaymentController extends Controller
                 'success_url' => $request->input('success_url'),
                 'cancel_url' => $request->input('cancel_url'),
                 'metadata' => array_merge($request->input('metadata', []), [
-                    'user_id' => $user ? $user->id : null,
-                    'email' => $userEmail,
+                    'user_id' => $user ? (string)$user->id : '',
+                    'email' => $userEmail ?: '',
                     'source' => 'laravel_api'
                 ])
             ];
