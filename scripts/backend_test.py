@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List
 
 class MewayzAPITester:
-    def __init__(self, base_url: str = "http://localhost:8001"):
+    def __init__(self, base_url: str = "https://demobackend.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.session = requests.Session()
