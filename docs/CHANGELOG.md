@@ -263,7 +263,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 5. **Configuration**: Update configuration files
 
 ### Migration Notes
-- **FastAPI Removal**: FastAPI proxy has been removed
 - **Laravel Direct**: Laravel now serves all content directly
 - **Port Changes**: Main application now runs on port 8001
 - **API Changes**: All API endpoints remain the same
