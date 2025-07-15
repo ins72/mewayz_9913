@@ -682,3 +682,67 @@ EXPOSE 8001
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8001"]
 ```
+
+---
+
+## 🔍 Performance Optimization
+
+### Database Optimization
+
+#### Query Optimization
+```php
+// Eager loading
+$users = User::with(['posts', 'comments'])->get();
+
+// Selective fields
+$users = User::select(['id', 'name', 'email'])->get();
+
+// Indexing
+Schema::table('users', function (Blueprint $table) {
+    $table->index(['email', 'created_at']);
+});
+```
+
+#### Caching
+```php
+// Cache frequently accessed data
+$users = Cache::remember('users.all', 3600, function () {
+    return User::all();
+});
+
+// Cache database queries
+$user = User::where('email', $email)->remember(3600)->first();
+```
+
+### Frontend Optimization
+
+#### Asset Optimization
+```javascript
+// Vite configuration
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'axios'],
+          utils: ['lodash', 'moment']
+        }
+      }
+    }
+  }
+});
+```
+
+#### Code Splitting
+```javascript
+// Dynamic imports
+const UserComponent = () => import('./components/UserComponent.vue');
+
+// Route-based splitting
+const routes = [
+  {
+    path: '/users',
+    component: () => import('./pages/Users.vue')
+  }
+];
+```
