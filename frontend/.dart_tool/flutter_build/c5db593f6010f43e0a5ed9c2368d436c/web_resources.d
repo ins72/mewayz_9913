@@ -1,1 +1,0 @@
- /app/flutter_app/build/web/manifest.json:  /app/flutter_app/web/manifest.json /app/flutter_app/web/index.html
