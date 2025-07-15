@@ -1243,6 +1243,48 @@ class MewayzComprehensiveTester:
                     self.log_result("Optimization Recommendations", "PASS", 
                                   f"Database Recommendations: {len(database.get('high_priority', []))}, Application: {len(application.get('high_priority', []))}", 
                                   user_type, recommendations_time)
+                else:
+                    self.log_result("Optimization Recommendations", "FAIL", 
+                                  "Recommendations succeeded but missing success flag", 
+                                  user_type, recommendations_time)
+                    return False
+            else:
+                self.log_result("Optimization Recommendations", "FAIL", 
+                              f"Recommendations failed with status {recommendations_response.status_code}", 
+                              user_type, recommendations_time)
+                return False
+                
+            # Test 13: System Cache Clear (POST endpoint)
+            cache_clear_response = self.make_request('POST', '/system/cache/clear')
+            cache_clear_time = cache_clear_response.elapsed.total_seconds()
+            
+            if cache_clear_response.status_code == 200:
+                cache_clear_data = cache_clear_response.json()
+                if cache_clear_data.get('success'):
+                    self.log_result("System Cache Clear", "PASS", 
+                                  "System cache cleared successfully", 
+                                  user_type, cache_clear_time)
+                else:
+                    self.log_result("System Cache Clear", "FAIL", 
+                                  "Cache clear succeeded but missing success flag", 
+                                  user_type, cache_clear_time)
+                    return False
+            else:
+                self.log_result("System Cache Clear", "FAIL", 
+                              f"Cache clear failed with status {cache_clear_response.status_code}", 
+                              user_type, cache_clear_time)
+                return False
+                
+            # Test 14: System Optimize (POST endpoint)
+            system_optimize_response = self.make_request('POST', '/system/optimize')
+            system_optimize_time = system_optimize_response.elapsed.total_seconds()
+            
+            if system_optimize_response.status_code == 200:
+                system_optimize_data = system_optimize_response.json()
+                if system_optimize_data.get('success'):
+                    self.log_result("System Optimize", "PASS", 
+                                  "System optimization completed successfully", 
+                                  user_type, system_optimize_time)
                     
                     # Add to user journey
                     self.user_journey_maps[user_type].append({
@@ -1253,18 +1295,20 @@ class MewayzComprehensiveTester:
                         "system_info": True,
                         "platform_overview": True,
                         "branding_info": True,
-                        "optimization_metrics": True
+                        "optimization_metrics": True,
+                        "cache_clear": True,
+                        "system_optimize": True
                     })
                     return True
                 else:
-                    self.log_result("Optimization Recommendations", "FAIL", 
-                                  "Recommendations succeeded but missing success flag", 
-                                  user_type, recommendations_time)
+                    self.log_result("System Optimize", "FAIL", 
+                                  "System optimization succeeded but missing success flag", 
+                                  user_type, system_optimize_time)
                     return False
             else:
-                self.log_result("Optimization Recommendations", "FAIL", 
-                              f"Recommendations failed with status {recommendations_response.status_code}", 
-                              user_type, recommendations_time)
+                self.log_result("System Optimize", "FAIL", 
+                              f"System optimization failed with status {system_optimize_response.status_code}", 
+                              user_type, system_optimize_time)
                 return False
                 
         except Exception as e:
