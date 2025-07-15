@@ -37,42 +37,33 @@ Follow the detailed steps below for complete control over the installation proce
 - **Node.js**: 16.0 or higher
 - **Flutter**: 3.0 or higher (for mobile development)
 
----
+## 🏠 Local Development Setup
 
-## 🖥️ System Requirements
+### Step 1: Install Dependencies
 
-### Minimum Requirements
-- **CPU**: 2 cores
-- **RAM**: 4GB
-- **Storage**: 10GB
-- **Network**: 10 Mbps
-
-### Recommended Requirements
-- **CPU**: 4+ cores
-- **RAM**: 8GB+
-- **Storage**: 50GB+ SSD
-- **Network**: 100 Mbps+
-
-### Production Requirements
-- **CPU**: 8+ cores
-- **RAM**: 16GB+
-- **Storage**: 100GB+ SSD
-- **Network**: 1 Gbps+
-- **Load Balancer**: For high availability
-
----
-
-## 🚀 Installation Steps
-
-### 1. Clone the Repository
-
+#### Ubuntu/Debian
 ```bash
-# Clone the repository
-git clone https://github.com/mewayz/mewayz.git
-cd mewayz
+# Update package manager
+sudo apt update && sudo apt upgrade -y
 
-# Verify the structure
-ls -la
+# Install PHP and extensions
+sudo apt install -y php8.1 php8.1-cli php8.1-fpm php8.1-mysql php8.1-xml \
+php8.1-curl php8.1-mbstring php8.1-zip php8.1-gd php8.1-bcmath \
+php8.1-redis php8.1-intl php8.1-soap php8.1-sqlite3
+
+# Install MySQL
+sudo apt install -y mysql-server mysql-client
+
+# Install Redis
+sudo apt install -y redis-server
+
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
 ```
 
 ### 2. PHP Dependencies Installation
