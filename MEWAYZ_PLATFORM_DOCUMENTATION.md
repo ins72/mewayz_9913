@@ -479,6 +479,15 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - `/enhanced-workspace-setup.html` - Enhanced workspace setup wizard
 - `/stripe-test.html` - Stripe payment integration test
 - `/instagram-management.html` - Instagram management interface
+- `/partners` - Partnership application and vetting form
+- `/shuvrajit` - Special partner page
+
+### **Main Application Pages**
+- `/` - Main platform landing page (dynamic, admin-configurable)
+- `/login` - User authentication page
+- `/register` - User registration page
+- `/console` - Main dashboard and workspace
+- `/console/admin/*` - Comprehensive admin dashboard with multiple sections
 
 ### **Console Pages (Laravel Folio)**
 - `/console` - Main dashboard
@@ -488,6 +497,13 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - `/console/store` - E-commerce management
 - `/console/audience` - CRM interface
 - `/console/settings` - Platform settings
+
+### **Dynamic Content Pages**
+- `/courses/*` - Course catalog and individual course pages
+- `/products/*` - Product catalog and individual product pages
+- `/booking/*` - Booking and appointment pages
+- `/s/*` - URL shortener redirect pages
+- `/invoice/*` - Invoice generation and management pages
 
 ---
 
