@@ -73,7 +73,7 @@
 
    <template x-teleport="body">
      <x-modal name="folders-modal" :show="false" removeoverflow="true" maxWidth="2xl" focusable>
-         <livewire:components.console.sidebar.folders-modal>
+         <livewire:components.dashboard.sidebar.folders-modal>
          
          {{-- <footer class="flex flex-row gap-2 px-6 py-4 justify-end">
             
