@@ -103,6 +103,7 @@ class InstagramManagementTester:
         if response and response.status_code == 200:
             try:
                 data = response.json()
+                print(f"Login response: {data}")  # Debug output
                 if "access_token" in data:
                     self.test_user["token"] = data["access_token"]
                     self.test_user["id"] = data.get("user", {}).get("id")
@@ -113,7 +114,7 @@ class InstagramManagementTester:
                 pass
         
         self.log_result("User Authentication", "FAIL", 
-                       f"Failed to authenticate user. Status: {response.status_code if response else 'No response'}", response_time)
+                       f"Failed to authenticate user. Status: {response.status_code if response else 'No response'}. Response: {response.text if response else 'No response'}", response_time)
         return False
 
     def test_instagram_accounts_get(self) -> bool:
