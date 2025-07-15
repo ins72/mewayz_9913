@@ -54,25 +54,25 @@ Route::get('/', function () {
 
 // Flutter app route
 Route::get('/app', function () {
-    return response()->file(public_path('app.html'));
+    return response()->file(public_path('flutter.html'));
 });
 
 // Mobile app route alias
 Route::get('/mobile', function () {
-    return response()->file(public_path('app.html'));
+    return response()->file(public_path('flutter.html'));
 });
 
 // Flutter app direct route
 Route::get('/flutter.html', function () {
-    return response()->file(public_path('app.html'));
+    return response()->file(public_path('flutter.html'));
 });
 
-// Authentication routes
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticate']);
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'store']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+// Authentication routes are handled by auth.php using Livewire Volt
+// Route::get('/login', [AuthController::class, 'login'])->name('login');
+// Route::post('/login', [AuthController::class, 'authenticate']);
+// Route::get('/register', [AuthController::class, 'register'])->name('register');
+// Route::post('/register', [AuthController::class, 'store']);
+// Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Installation routes
 Route::get('/install', [InstallationController::class, 'index'])->name('install');
