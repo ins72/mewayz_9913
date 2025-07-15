@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('instagram_hashtags', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('workspace_id');
+            $table->string('hashtag');
+            $table->integer('post_count')->default(0);
+            $table->decimal('engagement_rate', 5, 2)->default(0.00);
+            $table->enum('difficulty', ['easy', 'medium', 'hard'])->default('medium');
+            $table->boolean('is_trending')->default(false);
+            $table->json('related_hashtags')->nullable();
+            $table->json('analytics')->nullable();
             $table->timestamps();
+            
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+            $table->unique(['workspace_id', 'hashtag']);
+            $table->index(['workspace_id', 'is_trending']);
         });
     }
 
