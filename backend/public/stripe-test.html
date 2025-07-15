@@ -241,7 +241,7 @@
             }
         }
         
-        function selectPackage(packageId) {
+        function selectPackage(packageId, element) {
             selectedPackage = packageId;
             
             // Update UI
@@ -249,7 +249,17 @@
                 card.classList.remove('selected');
             });
             
-            event.target.closest('.package-card').classList.add('selected');
+            if (element) {
+                element.closest('.package-card').classList.add('selected');
+            } else {
+                // If no element provided, find the card by package ID
+                const cards = document.querySelectorAll('.package-card');
+                cards.forEach(card => {
+                    if (card.textContent.includes(packages[packageId].name)) {
+                        card.classList.add('selected');
+                    }
+                });
+            }
         }
         
         function togglePaymentMethod() {
