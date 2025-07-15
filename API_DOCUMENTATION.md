@@ -242,60 +242,61 @@ GET /api/instagram/competitor-analysis
 }
 ```
 
-### Bio Sites
-
-#### List Bio Sites
+### Get Hashtag Analysis
 ```http
-GET /api/bio-sites
-Authorization: Bearer {token}
+GET /api/instagram/hashtag-analysis
 ```
 
-#### Create Bio Site
-```http
-POST /api/bio-sites
-Authorization: Bearer {token}
-Content-Type: application/json
+**Query Parameters:**
+- `hashtags[]`: Array of hashtags to analyze
+- `period`: Analysis period
 
+**Response:**
+```json
 {
-  "name": "My Bio Site",
-  "url": "my-bio-site",
-  "description": "Personal bio site",
-  "theme": "dark"
+  "success": true,
+  "data": {
+    "hashtags": [
+      {
+        "hashtag": "#business",
+        "posts_count": 1500000,
+        "engagement_rate": 2.8,
+        "difficulty": "medium",
+        "trending_score": 85
+      }
+    ],
+    "recommendations": [
+      "#businesstips",
+      "#entrepreneur",
+      "#marketing"
+    ]
+  }
 }
 ```
 
-#### Get Bio Site Analytics
+## 🔗 Bio Sites Management
+
+### Get Bio Sites
 ```http
-GET /api/bio-sites/{id}/analytics
-Authorization: Bearer {token}
+GET /api/bio-sites
 ```
 
----
-
-## 🔗 Webhooks
-
-### Webhook Events
-
-Mewayz can send webhook notifications for various events:
-
-- `user.created`
-- `workspace.created`
-- `contact.created`
-- `order.created`
-- `post.published`
-
-### Webhook Payload
-
+**Response:**
 ```json
 {
-  "event": "contact.created",
-  "data": {
-    "id": 123,
-    "name": "John Doe",
-    "email": "john@example.com",
-    "created_at": "2024-12-15T10:30:00Z"
-  },
-  "timestamp": "2024-12-15T10:30:00Z"
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "My Bio Site",
+      "subdomain": "mysite",
+      "theme": "minimal",
+      "is_active": true,
+      "views_count": 1250,
+      "clicks_count": 85,
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
 }
 ```
 
