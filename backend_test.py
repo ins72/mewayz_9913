@@ -1002,7 +1002,7 @@ class MewayzComprehensiveTester:
             self.test_ecommerce_system,
             self.test_course_management,
             self.test_analytics_dashboard,
-            self.test_instagram_intelligence
+            self.test_instagram_management_system
         ]
         
         for user_type in user_types:
