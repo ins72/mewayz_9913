@@ -26,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Complete Platform Launch**: Full-featured all-in-one business platform
 - **Laravel Backend**: Complete Laravel 10+ backend with PHP 8.2.28
-- **Flutter Frontend**: Cross-platform Flutter 3.x mobile application
 - **Authentication System**: Complete auth with OAuth 2.0 and 2FA
 - **Social Media Management**: Multi-platform social media management
 - **CRM System**: Complete customer relationship management
