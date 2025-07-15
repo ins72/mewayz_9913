@@ -3,12 +3,12 @@
    use Carbon\Carbon;
    use function Laravel\Folio\name;
     
-   name('console-index');
+   name('dashboard-index');
 ?>
 <x-layouts.app>
-   <x-slot:title>{{ __('Console') }}</x-slot>
+   <x-slot:title>{{ __('Dashboard') }}</x-slot>
    
    <div>
-      <livewire:components.console.index  :key="uukey('sites', 'components.console.index')"/>
+      <livewire:components.dashboard.index  :key="uukey('sites', 'components.dashboard.index')"/>
    </div>
 </x-layouts.app>
