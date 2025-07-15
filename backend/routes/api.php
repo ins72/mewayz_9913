@@ -17,6 +17,11 @@ use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Api\InstagramController;
 use App\Http\Controllers\Api\StripePaymentController;
+use App\Http\Controllers\Api\HealthController;
+use App\Http\Controllers\Api\SystemController;
+use App\Http\Controllers\Api\PlatformController;
+use App\Http\Controllers\Api\BrandingController;
+use App\Http\Controllers\Api\OptimizationController;
 
 /*
 |--------------------------------------------------------------------------
