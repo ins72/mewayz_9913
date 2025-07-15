@@ -121,7 +121,7 @@ class BioSiteController extends Controller
                 '_slug' => $request->slug, // Use slug for _slug field
                 'description' => $request->description,
                 'bio' => $request->description, // Use description as bio
-                'status' => $request->is_active ?? true ? 'published' : 'draft',
+                'status' => $request->is_active ?? true ? 1 : 0,
             ];
 
             // Handle theme configuration
