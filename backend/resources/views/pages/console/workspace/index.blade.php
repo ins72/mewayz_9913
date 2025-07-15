@@ -1,19 +1,12 @@
 <?php
-/**
- * Workspace Management Console Page
- * Professional workspace and team management interface
- */
+use function Laravel\Folio\name;
 
-use function Laravel\Folio\render;
-use function Laravel\Folio\middleware;
-
-middleware(['auth', 'verified']);
-
-$pageData = [
-    'title' => 'Workspace Management - Mewayz',
-    'description' => 'Advanced workspace and team collaboration tools',
-    'keywords' => 'workspace, team, collaboration, management, organization'
-];
-
-render('livewire.components.console.workspace.page', $pageData);
+name('console-workspace-index');
 ?>
+<x-layouts.app>
+   <x-slot:title>{{ __('Workspace Management') }}</x-slot>
+   
+   <div>
+      <livewire:components.console.workspace.page lazy :key="uukey('workspace', 'workspace-page')"/>
+   </div>
+</x-layouts.app>

@@ -1,19 +1,12 @@
 <?php
-/**
- * Instagram Management Console Page
- * Professional interface for Instagram marketing automation
- */
+use function Laravel\Folio\name;
 
-use function Laravel\Folio\render;
-use function Laravel\Folio\middleware;
-
-middleware(['auth', 'verified']);
-
-$pageData = [
-    'title' => 'Instagram Management - Mewayz',
-    'description' => 'Comprehensive Instagram marketing automation and analytics platform',
-    'keywords' => 'instagram, marketing, automation, analytics, social media'
-];
-
-render('livewire.components.console.instagram.page', $pageData);
+name('console-instagram-index');
 ?>
+<x-layouts.app>
+   <x-slot:title>{{ __('Instagram Management') }}</x-slot>
+   
+   <div>
+      <livewire:components.console.instagram.page lazy :key="uukey('instagram', 'instagram-page')"/>
+   </div>
+</x-layouts.app>
