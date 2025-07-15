@@ -230,19 +230,6 @@ class StripePaymentController extends Controller
             return response()->json(['error' => 'Failed to process webhook'], 500);
         }
     }
-                'event_type' => $result['event_type'],
-                'session_id' => $result['session_id'],
-                'payment_status' => $result['payment_status']
-            ]);
-            
-            return response()->json(['success' => true]);
-            
-        } catch (\Exception $e) {
-            Log::error('Stripe webhook processing failed', [
-                'error' => $e->getMessage()
-            ]);
-            
-            return response()->json(['error' => 'Webhook processing failed'], 500);
         }
     }
     
