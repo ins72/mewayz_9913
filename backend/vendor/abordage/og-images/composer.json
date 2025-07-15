@@ -1,0 +1,68 @@
+{
+    "name": "abordage/og-images",
+    "description": "Generate Open Graph images (og:image, twitter:image, vk:image) for each site pages",
+    "license": "MIT",
+    "keywords": [
+        "og-image",
+        "open graph",
+        "opengraph",
+        "twitter image",
+        "vk image"
+    ],
+    "authors": [
+        {
+            "name": "Pavel Bychko",
+            "email": "abordage.dev@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/abordage/og-images",
+    "require": {
+        "php": ">=7.4",
+        "ext-imagick": "*"
+    },
+    "require-dev": {
+        "ext-fileinfo": "*",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "mikey179/vfsstream": "^1.6",
+        "phpstan/phpstan": "^1.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Abordage\\OpenGraphImages\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Abordage\\OpenGraphImages\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "phpcsf": "vendor/bin/php-cs-fixer fix --diff",
+        "phpstan:generate-baseline": "vendor/bin/phpstan --generate-baseline",
+        "test:all": [
+            "@test:phpcsf",
+            "@test:phpstan",
+            "@test:phpunit"
+        ],
+        "test:phpcsf": "vendor/bin/php-cs-fixer fix --dry-run",
+        "test:phpstan": "vendor/bin/phpstan analyse",
+        "test:phpunit": "vendor/bin/phpunit --colors=always",
+        "test:phpunit-coverage": "vendor/bin/phpunit --coverage-clover build/coverage.xml"
+    },
+    "scripts-descriptions": {
+        "phpcsf": "Run PHP-CS-Fixer fix",
+        "phpstan:generate-baseline": "Generate baseline for PHPStan",
+        "test:all": "Run all code analysis and tests",
+        "test:phpcsf": "Run PHP-CS-Fixer test",
+        "test:phpstan": "Run PHPStan",
+        "test:phpunit": "Run PHPUnit",
+        "test:phpunit-coverage": "Run PHPUnit with coverage"
+    }
+}
