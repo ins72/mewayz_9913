@@ -1045,6 +1045,11 @@ class WorkspaceSetupController extends Controller
             ]);
         }
     }
+    
+    /**
+     * Step 6: Complete Setup (Legacy method)
+     */
+    public function completeSetupLegacy(Request $request)
     {
         try {
             $user = Auth::user();
