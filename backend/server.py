@@ -97,7 +97,7 @@ async def proxy_to_laravel(path: str, request: Request):
         raise HTTPException(status_code=500, detail=f"Proxy error: {str(e)}")
 
 # Serve static HTML files from public directory - THIS MUST BE LAST
-@app.get("/{file_path:path}")
+@app.api_route("/{file_path:path}", methods=["GET", "HEAD"])
 async def serve_static_files(file_path: str):
     """Serve static HTML files and assets"""
     static_dir = Path(__file__).parent.parent / "public"
