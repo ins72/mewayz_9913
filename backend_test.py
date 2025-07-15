@@ -756,7 +756,7 @@ class MewayzComprehensiveTester:
         
         # Test 1: Get Instagram accounts
         try:
-            response = self.make_request('GET', '/instagram/accounts')
+            response = self.make_request('GET', '/instagram-management/accounts')
             response_time = response.elapsed.total_seconds()
             
             if response.status_code == 200:
