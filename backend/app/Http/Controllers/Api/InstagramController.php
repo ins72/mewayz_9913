@@ -927,5 +927,69 @@ class InstagramController extends Controller
                 'Consider time zones of your target audience'
             ]
         ];
+    /**
+     * Get AI-powered content suggestions for Instagram
+     */
+    public function getContentSuggestions(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            // Get connected Instagram account
+            $account = SocialMediaAccount::where('user_id', $user->id)
+                ->where('platform', 'instagram')
+                ->where('is_active', true)
+                ->first();
+
+            if (!$account) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Instagram account connected'
+                ], 400);
+            }
+
+            // Mock content suggestions (in production, this would use AI)
+            $suggestions = [
+                [
+                    'type' => 'post',
+                    'content' => 'Share behind-the-scenes content from your workspace',
+                    'hashtags' => ['#behindthescenes', '#workspace', '#productivity'],
+                    'best_time' => '18:00',
+                    'engagement_prediction' => 'High',
+                    'confidence' => 85
+                ],
+                [
+                    'type' => 'story',
+                    'content' => 'Quick tip or tutorial related to your niche',
+                    'hashtags' => ['#tips', '#tutorial', '#learn'],
+                    'best_time' => '12:00',
+                    'engagement_prediction' => 'Medium',
+                    'confidence' => 72
+                ],
+                [
+                    'type' => 'reel',
+                    'content' => 'Trending audio with your product/service showcase',
+                    'hashtags' => ['#trending', '#reel', '#viral'],
+                    'best_time' => '20:00',
+                    'engagement_prediction' => 'Very High',
+                    'confidence' => 92
+                ]
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'suggestions' => $suggestions,
+                    'generated_at' => now(),
+                    'account' => $account->username
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Instagram content suggestions error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get content suggestions'
+            ], 500);
+        }
     }
 }
