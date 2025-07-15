@@ -193,7 +193,7 @@ class BioSiteController extends Controller
                     'custom_domain_url' => $request->custom_domain ? 'https://' . $request->custom_domain : null,
                     'qr_code_url' => $bioSite->qr,
                     'theme' => $request->theme,
-                    'is_active' => $bioSite->status === 'published',
+                    'is_active' => $bioSite->status === 1,
                     'password_protected' => $request->password_protection ?? false,
                     'social_links_count' => count($request->social_links ?? []),
                     'advanced_features_enabled' => array_filter($request->advanced_features ?? [], function($value) {
