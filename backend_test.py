@@ -768,8 +768,10 @@ class MewayzComprehensiveTester:
                                   user_type, response_time)
                     
                     # Test 2: Add Instagram account
+                    import time
+                    unique_username = f"testaccount_{int(time.time())}"
                     account_data = {
-                        "username": "testaccount",
+                        "username": unique_username,
                         "bio": "Test Instagram account",
                         "is_primary": True
                     }
