@@ -404,6 +404,66 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - `POST /api/social-media/posts` - Create social post
 - `GET /api/social-media/analytics` - Get social analytics
 
+### **Partnership & Admin APIs (EXISTING)**
+- `GET /partners` - Partnership application page
+- `POST /api/send-mewayz-email` - Partnership form submission with ElasticMail
+- `GET /shuvrajit` - Special partner page
+
+### **Admin Management APIs (EXISTING)**
+- `GET /console/admin/users` - User management dashboard
+- `GET /console/admin/sites` - Site management dashboard
+- `GET /console/admin/bio` - Bio site management
+- `GET /console/admin/bio/templates` - Bio template management
+- `GET /console/admin/payments` - Payment administration
+- `GET /console/admin/plans` - Plan management
+- `GET /console/admin/languages` - Language management
+- `GET /console/admin/templates` - Template management
+- `GET /console/admin/website` - Website management
+- `GET /console/admin/settings` - Platform settings
+
+### **Chat & Communication APIs (EXISTING)**
+- `GET /api/chat/conversations` - Get user conversations
+- `POST /api/chat/conversations` - Create new conversation
+- `GET /api/chat/messages/{conversationId}` - Get conversation messages
+- `POST /api/chat/messages` - Send message
+- `GET /api/ai-chat/sessions` - Get AI chat sessions
+- `POST /api/ai-chat/sessions` - Create AI chat session
+- `POST /api/ai-chat/message` - Send AI chat message
+
+### **Community APIs (EXISTING)**
+- `GET /api/community` - Get communities
+- `POST /api/community` - Create community
+- `GET /api/community/{id}/spaces` - Get community spaces
+- `POST /api/community/{id}/spaces` - Create community space
+- `GET /api/community/space-groups` - Get space groups
+
+### **Team Collaboration APIs (EXISTING)**
+- `GET /api/teams` - Get user teams
+- `POST /api/teams` - Create team
+- `GET /api/teams/{id}/members` - Get team members
+- `POST /api/teams/{id}/invite` - Invite team member
+- `PUT /api/teams/{id}/permissions` - Update member permissions
+
+### **Wallet & Financial APIs (EXISTING)**
+- `GET /api/wallet` - Get wallet balance
+- `POST /api/wallet/transfer` - Transfer funds
+- `GET /api/wallet/transactions` - Get transaction history
+- `POST /api/wallet/withdraw` - Request withdrawal
+- `GET /api/wallet/settlements` - Get settlements
+
+### **Booking & Scheduling APIs (EXISTING)**
+- `GET /api/booking/slots` - Get available slots
+- `POST /api/booking/book` - Book appointment
+- `GET /api/booking/appointments` - Get bookings
+- `PUT /api/booking/{id}/status` - Update booking status
+
+### **Mediakit APIs (EXISTING)**
+- `GET /api/mediakit` - Get mediakits
+- `POST /api/mediakit` - Create mediakit
+- `GET /api/mediakit/{id}` - Get specific mediakit
+- `PUT /api/mediakit/{id}` - Update mediakit
+- `GET /api/mediakit/{id}/analytics` - Get mediakit analytics
+
 ### **Analytics APIs (EXISTING)**
 - `GET /api/analytics` - Get overview analytics
 - `GET /api/analytics/reports` - Get detailed reports
