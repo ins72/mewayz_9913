@@ -15,13 +15,26 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-define('QR_CACHEABLE', false);
-define('QR_CACHE_DIR', false);
-define('QR_LOG_DIR', false);
+// Define QR constants only if not already defined
+if (!defined('QR_CACHEABLE')) {
+    define('QR_CACHEABLE', false);
+}
+if (!defined('QR_CACHE_DIR')) {
+    define('QR_CACHE_DIR', false);
+}
+if (!defined('QR_LOG_DIR')) {
+    define('QR_LOG_DIR', false);
+}
 
-define('QR_FIND_BEST_MASK', false);
-define('QR_FIND_FROM_RANDOM', 2);
-define('QR_DEFAULT_MASK', 2);
+if (!defined('QR_FIND_BEST_MASK')) {
+    define('QR_FIND_BEST_MASK', false);
+}
+if (!defined('QR_FIND_FROM_RANDOM')) {
+    define('QR_FIND_FROM_RANDOM', 2);
+}
+if (!defined('QR_DEFAULT_MASK')) {
+    define('QR_DEFAULT_MASK', 2);
+}
                                               
 define('QR_PNG_MAXIMUM_SIZE',  1024);   
  
