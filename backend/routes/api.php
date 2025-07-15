@@ -72,6 +72,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/workspaces/{id}', [WorkspaceController::class, 'update']);
     Route::delete('/workspaces/{id}', [WorkspaceController::class, 'destroy']);
     
+    // Workspace Setup Wizard routes
+    Route::prefix('workspace-setup')->group(function () {
+        Route::get('/current-step', [WorkspaceSetupController::class, 'getCurrentStep']);
+        Route::post('/business-info', [WorkspaceSetupController::class, 'saveBusinessInfo']);
+        Route::post('/social-media', [WorkspaceSetupController::class, 'saveSocialMedia']);
+        Route::post('/branding', [WorkspaceSetupController::class, 'saveBranding']);
+        Route::post('/content-categories', [WorkspaceSetupController::class, 'saveContentCategories']);
+        Route::post('/goals-objectives', [WorkspaceSetupController::class, 'saveGoalsObjectives']);
+        Route::post('/complete', [WorkspaceSetupController::class, 'completeSetup']);
+        Route::get('/summary', [WorkspaceSetupController::class, 'getSetupSummary']);
+        Route::post('/reset', [WorkspaceSetupController::class, 'resetSetup']);
+    });
+    
     // Social Media routes
     Route::prefix('social-media')->group(function () {
         Route::get('/accounts', [SocialMediaController::class, 'getAccounts']);
