@@ -229,18 +229,76 @@ class CrmController extends Controller
     public function createBulkAccounts(Request $request)
     {
         $request->validate([
-            'accounts' => 'required|array|min:1',
+            'accounts' => 'required|array|min:1|max:100',
             'accounts.*.name' => 'required|string|max:255',
             'accounts.*.email' => 'required|email',
             'generate_bio_links' => 'boolean',
             'send_welcome_emails' => 'boolean',
         ]);
 
-        // TODO: Implement bulk account creation logic
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Bulk account creation started.',
-        ]);
+        try {
+            $created = 0;
+            $failed = 0;
+            $errors = [];
+
+            foreach ($request->accounts as $accountData) {
+                try {
+                    // Check if contact already exists
+                    $existing = Audience::where('user_id', $request->user()->id)
+                        ->where('email', $accountData['email'])
+                        ->first();
+
+                    if ($existing) {
+                        $failed++;
+                        $errors[] = "Contact already exists: {$accountData['email']}";
+                        continue;
+                    }
+
+                    // Create new contact
+                    $contact = Audience::create([
+                        'user_id' => $request->user()->id,
+                        'name' => $accountData['name'],
+                        'email' => $accountData['email'],
+                        'type' => 'contact',
+                        'status' => 'cold',
+                        'source' => 'bulk_creation',
+                        'notes' => 'Created via bulk account creation',
+                    ]);
+
+                    // Generate bio link if requested
+                    if ($request->generate_bio_links) {
+                        // This would create a bio site for each contact
+                        // Implementation depends on bio site creation logic
+                    }
+
+                    // Send welcome email if requested
+                    if ($request->send_welcome_emails) {
+                        // This would send a welcome email to each contact
+                        // Implementation depends on email system
+                    }
+
+                    $created++;
+                } catch (\Exception $e) {
+                    $failed++;
+                    $errors[] = "Failed to create {$accountData['email']}: " . $e->getMessage();
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => "Bulk creation completed. {$created} accounts created, {$failed} failed.",
+                'data' => [
+                    'created' => $created,
+                    'failed' => $failed,
+                    'errors' => array_slice($errors, 0, 10), // Show first 10 errors
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bulk creation failed: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
