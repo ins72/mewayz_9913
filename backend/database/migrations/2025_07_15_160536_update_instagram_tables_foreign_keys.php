@@ -11,7 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('instagram_accounts', function (Blueprint $table) {
+            // Drop existing foreign key and add new one pointing to organizations table
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('organizations')->onDelete('cascade');
+        });
+        
+        Schema::table('instagram_posts', function (Blueprint $table) {
+            // Drop existing foreign key and add new one pointing to organizations table
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('organizations')->onDelete('cascade');
+        });
+        
+        Schema::table('instagram_hashtags', function (Blueprint $table) {
+            // Drop existing foreign key and add new one pointing to organizations table
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('organizations')->onDelete('cascade');
+        });
     }
 
     /**
@@ -19,6 +35,22 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('instagram_accounts', function (Blueprint $table) {
+            // Restore original foreign key
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+        });
+        
+        Schema::table('instagram_posts', function (Blueprint $table) {
+            // Restore original foreign key
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+        });
+        
+        Schema::table('instagram_hashtags', function (Blueprint $table) {
+            // Restore original foreign key
+            $table->dropForeign(['workspace_id']);
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+        });
     }
 };
