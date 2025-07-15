@@ -3,16 +3,17 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Auth\OAuthController;
-use App\Http\Controllers\Auth\TwoFactorController;
-use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\SocialMediaController;
 use App\Http\Controllers\Api\BioSiteController;
+use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\CrmController;
-use App\Http\Controllers\Api\EmailMarketingController;
 use App\Http\Controllers\Api\EcommerceController;
+use App\Http\Controllers\Api\EmailMarketingController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\AnalyticsController;
+use App\Http\Controllers\Auth\OAuthController;
+use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\Api\InstagramController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,8 +26,8 @@ use App\Http\Controllers\Api\AnalyticsController;
 |
 */
 
-// Health check endpoint
-Route::get('health', function () {
+// Health check
+Route::get('/health', function () {
     return response()->json([
         'status' => 'ok',
         'message' => 'API is working',
@@ -34,149 +35,144 @@ Route::get('health', function () {
     ]);
 });
 
-// Public Auth Routes
+// Public routes (no authentication required)
 Route::prefix('auth')->group(function () {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
     
-    // OAuth Routes - specific routes first
-    Route::get('oauth/{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
-    Route::get('oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
+    // OAuth routes
+    Route::get('/oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
+    Route::get('/oauth/{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
+    Route::get('/oauth-status', [OAuthController::class, 'getOAuthStatus']);
+    
+    // Two-Factor Authentication routes
+    Route::post('/2fa/generate', [TwoFactorController::class, 'generate']);
+    Route::post('/2fa/enable', [TwoFactorController::class, 'enable']);
+    Route::post('/2fa/disable', [TwoFactorController::class, 'disable']);
+    Route::get('/2fa/status', [TwoFactorController::class, 'status']);
+    Route::post('/2fa/recovery-codes', [TwoFactorController::class, 'recoveryCodes']);
+    Route::post('/2fa/verify', [TwoFactorController::class, 'verify']);
 });
 
-// OAuth Routes (for frontend redirects)
-Route::prefix('oauth')->group(function () {
-    Route::get('{provider}', [OAuthController::class, 'redirectToProvider']);
-    Route::get('{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
-});
-
-// Protected Routes
+// Protected routes (require authentication)
 Route::middleware('auth:sanctum')->group(function () {
-    // Auth Routes
-    Route::prefix('auth')->group(function () {
-        Route::post('logout', [AuthController::class, 'logout']);
-        Route::get('me', [AuthController::class, 'me']);
-        Route::put('profile', [AuthController::class, 'updateProfile']);
-        
-        // OAuth Management - using different prefix to avoid conflicts
-        Route::get('oauth-status', [OAuthController::class, 'getOAuthStatus']);
-        Route::post('oauth-link', [OAuthController::class, 'linkAccount']);
-        Route::post('oauth-unlink', [OAuthController::class, 'unlinkAccount']);
-        
-        // 2FA Routes
-        Route::prefix('2fa')->group(function () {
-            Route::post('generate', [TwoFactorController::class, 'generate']);
-            Route::post('enable', [TwoFactorController::class, 'enable']);
-            Route::post('disable', [TwoFactorController::class, 'disable']);
-            Route::post('verify', [TwoFactorController::class, 'verify']);
-            Route::post('recovery-codes', [TwoFactorController::class, 'generateRecoveryCodes']);
-            Route::get('status', [TwoFactorController::class, 'status']);
-        });
-    });
-
-    // User Route
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    // Workspace Routes
-    Route::prefix('workspaces')->group(function () {
-        Route::get('/', [WorkspaceController::class, 'index']);
-        Route::post('/', [WorkspaceController::class, 'store']);
-        Route::get('/{workspace}', [WorkspaceController::class, 'show']);
-        Route::put('/{workspace}', [WorkspaceController::class, 'update']);
-        Route::delete('/{workspace}', [WorkspaceController::class, 'destroy']);
-        Route::post('/{workspace}/invite', [WorkspaceController::class, 'inviteTeamMember']);
-        Route::get('/{workspace}/members', [WorkspaceController::class, 'getMembers']);
-    });
-
-    // Social Media Routes
+    
+    // User profile routes
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
+    
+    // Workspace routes
+    Route::get('/workspaces', [WorkspaceController::class, 'index']);
+    Route::post('/workspaces', [WorkspaceController::class, 'store']);
+    Route::get('/workspaces/{id}', [WorkspaceController::class, 'show']);
+    Route::put('/workspaces/{id}', [WorkspaceController::class, 'update']);
+    Route::delete('/workspaces/{id}', [WorkspaceController::class, 'destroy']);
+    
+    // Social Media routes
     Route::prefix('social-media')->group(function () {
-        Route::get('accounts', [SocialMediaController::class, 'getAccounts']);
-        Route::post('accounts/connect', [SocialMediaController::class, 'connectAccount']);
-        Route::delete('accounts/{account}', [SocialMediaController::class, 'disconnectAccount']);
-        Route::post('schedule', [SocialMediaController::class, 'schedulePost']);
-        Route::get('scheduled-posts', [SocialMediaController::class, 'getScheduledPosts']);
-        Route::get('analytics', [SocialMediaController::class, 'getAnalytics']);
-        Route::get('instagram/search', [SocialMediaController::class, 'searchInstagramAccounts']);
-        Route::post('instagram/export', [SocialMediaController::class, 'exportInstagramData']);
+        Route::get('/accounts', [SocialMediaController::class, 'getAccounts']);
+        Route::post('/accounts/connect', [SocialMediaController::class, 'connectAccount']);
+        Route::delete('/accounts/{id}', [SocialMediaController::class, 'disconnectAccount']);
+        Route::get('/analytics', [SocialMediaController::class, 'getAnalytics']);
+        Route::post('/posts', [SocialMediaController::class, 'createPost']);
+        Route::get('/posts', [SocialMediaController::class, 'getPosts']);
+        Route::put('/posts/{id}', [SocialMediaController::class, 'updatePost']);
+        Route::delete('/posts/{id}', [SocialMediaController::class, 'deletePost']);
     });
-
-    // Bio Sites Routes
+    
+    // Instagram Intelligence Engine routes
+    Route::prefix('instagram')->group(function () {
+        Route::get('/auth', [InstagramController::class, 'initiateAuth']);
+        Route::post('/auth/callback', [InstagramController::class, 'handleCallback']);
+        Route::get('/competitor-analysis', [InstagramController::class, 'getCompetitorAnalysis']);
+        Route::get('/hashtag-analysis', [InstagramController::class, 'getHashtagAnalysis']);
+        Route::get('/analytics', [InstagramController::class, 'getAnalytics']);
+        Route::post('/refresh-token', [InstagramController::class, 'refreshToken']);
+        Route::get('/content-suggestions', [InstagramController::class, 'getContentSuggestions']);
+    });
+    
+    // Bio Site routes
     Route::prefix('bio-sites')->group(function () {
         Route::get('/', [BioSiteController::class, 'index']);
         Route::post('/', [BioSiteController::class, 'store']);
-        Route::get('/{bioSite}', [BioSiteController::class, 'show']);
-        Route::put('/{bioSite}', [BioSiteController::class, 'update']);
-        Route::delete('/{bioSite}', [BioSiteController::class, 'destroy']);
-        Route::get('/{bioSite}/analytics', [BioSiteController::class, 'getAnalytics']);
-        Route::get('/templates', [BioSiteController::class, 'getTemplates']);
+        Route::get('/{id}', [BioSiteController::class, 'show']);
+        Route::put('/{id}', [BioSiteController::class, 'update']);
+        Route::delete('/{id}', [BioSiteController::class, 'destroy']);
+        Route::get('/{id}/analytics', [BioSiteController::class, 'getAnalytics']);
     });
-
-    // CRM Routes
+    
+    // CRM routes
     Route::prefix('crm')->group(function () {
-        Route::get('leads', [CrmController::class, 'getLeads']);
-        Route::post('leads', [CrmController::class, 'createLead']);
-        Route::get('leads/{lead}', [CrmController::class, 'showLead']);
-        Route::put('leads/{lead}', [CrmController::class, 'updateLead']);
-        Route::delete('leads/{lead}', [CrmController::class, 'deleteLead']);
-        Route::get('contacts', [CrmController::class, 'getContacts']);
-        Route::post('contacts/import', [CrmController::class, 'importContacts']);
-        Route::get('pipeline', [CrmController::class, 'getPipeline']);
-        Route::post('bulk-accounts', [CrmController::class, 'createBulkAccounts']);
+        Route::get('/contacts', [CrmController::class, 'getContacts']);
+        Route::post('/contacts', [CrmController::class, 'createContact']);
+        Route::get('/contacts/{id}', [CrmController::class, 'getContact']);
+        Route::put('/contacts/{id}', [CrmController::class, 'updateContact']);
+        Route::delete('/contacts/{id}', [CrmController::class, 'deleteContact']);
+        Route::get('/leads', [CrmController::class, 'getLeads']);
+        Route::post('/leads', [CrmController::class, 'createLead']);
+        Route::put('/leads/{id}', [CrmController::class, 'updateLead']);
+        Route::delete('/leads/{id}', [CrmController::class, 'deleteLead']);
     });
-
-    // Email Marketing Routes
-    Route::prefix('email-marketing')->group(function () {
-        Route::get('campaigns', [EmailMarketingController::class, 'getCampaigns']);
-        Route::post('campaigns', [EmailMarketingController::class, 'createCampaign']);
-        Route::get('campaigns/{campaign}', [EmailMarketingController::class, 'showCampaign']);
-        Route::put('campaigns/{campaign}', [EmailMarketingController::class, 'updateCampaign']);
-        Route::delete('campaigns/{campaign}', [EmailMarketingController::class, 'deleteCampaign']);
-        Route::post('campaigns/{campaign}/send', [EmailMarketingController::class, 'sendCampaign']);
-        Route::get('templates', [EmailMarketingController::class, 'getTemplates']);
-        Route::post('templates', [EmailMarketingController::class, 'createTemplate']);
-        Route::get('analytics', [EmailMarketingController::class, 'getAnalytics']);
-        Route::get('audience', [EmailMarketingController::class, 'getAudience']);
-    });
-
-    // E-commerce Routes
+    
+    // E-commerce routes
     Route::prefix('ecommerce')->group(function () {
-        Route::get('products', [EcommerceController::class, 'getProducts']);
-        Route::post('products', [EcommerceController::class, 'createProduct']);
-        Route::get('products/{product}', [EcommerceController::class, 'showProduct']);
-        Route::put('products/{product}', [EcommerceController::class, 'updateProduct']);
-        Route::delete('products/{product}', [EcommerceController::class, 'deleteProduct']);
-        Route::get('orders', [EcommerceController::class, 'getOrders']);
-        Route::get('orders/{order}', [EcommerceController::class, 'showOrder']);
-        Route::put('orders/{order}/status', [EcommerceController::class, 'updateOrderStatus']);
-        Route::get('analytics', [EcommerceController::class, 'getAnalytics']);
-        Route::get('store/settings', [EcommerceController::class, 'getStoreSettings']);
-        Route::put('store/settings', [EcommerceController::class, 'updateStoreSettings']);
+        Route::get('/products', [EcommerceController::class, 'getProducts']);
+        Route::post('/products', [EcommerceController::class, 'createProduct']);
+        Route::get('/products/{id}', [EcommerceController::class, 'getProduct']);
+        Route::put('/products/{id}', [EcommerceController::class, 'updateProduct']);
+        Route::delete('/products/{id}', [EcommerceController::class, 'deleteProduct']);
+        Route::get('/orders', [EcommerceController::class, 'getOrders']);
+        Route::post('/orders', [EcommerceController::class, 'createOrder']);
+        Route::get('/orders/{id}', [EcommerceController::class, 'getOrder']);
+        Route::put('/orders/{id}', [EcommerceController::class, 'updateOrder']);
     });
-
-    // Course Routes
+    
+    // Email Marketing routes
+    Route::prefix('email-marketing')->group(function () {
+        Route::get('/campaigns', [EmailMarketingController::class, 'getCampaigns']);
+        Route::post('/campaigns', [EmailMarketingController::class, 'createCampaign']);
+        Route::get('/campaigns/{id}', [EmailMarketingController::class, 'getCampaign']);
+        Route::put('/campaigns/{id}', [EmailMarketingController::class, 'updateCampaign']);
+        Route::delete('/campaigns/{id}', [EmailMarketingController::class, 'deleteCampaign']);
+        Route::post('/campaigns/{id}/send', [EmailMarketingController::class, 'sendCampaign']);
+        Route::get('/templates', [EmailMarketingController::class, 'getTemplates']);
+        Route::post('/templates', [EmailMarketingController::class, 'createTemplate']);
+        Route::get('/templates/{id}', [EmailMarketingController::class, 'getTemplate']);
+        Route::put('/templates/{id}', [EmailMarketingController::class, 'updateTemplate']);
+        Route::delete('/templates/{id}', [EmailMarketingController::class, 'deleteTemplate']);
+    });
+    
+    // Course routes
     Route::prefix('courses')->group(function () {
         Route::get('/', [CourseController::class, 'index']);
         Route::post('/', [CourseController::class, 'store']);
-        Route::get('/{course}', [CourseController::class, 'show']);
-        Route::put('/{course}', [CourseController::class, 'update']);
-        Route::delete('/{course}', [CourseController::class, 'destroy']);
-        Route::get('/{course}/students', [CourseController::class, 'getStudents']);
-        Route::get('/{course}/lessons', [CourseController::class, 'getLessons']);
-        Route::post('/{course}/lessons', [CourseController::class, 'createLesson']);
-        Route::get('/analytics', [CourseController::class, 'getAnalytics']);
-        Route::get('/community/groups', [CourseController::class, 'getCommunityGroups']);
+        Route::get('/{id}', [CourseController::class, 'show']);
+        Route::put('/{id}', [CourseController::class, 'update']);
+        Route::delete('/{id}', [CourseController::class, 'destroy']);
+        Route::get('/{id}/lessons', [CourseController::class, 'getLessons']);
+        Route::post('/{id}/lessons', [CourseController::class, 'createLesson']);
+        Route::get('/{id}/students', [CourseController::class, 'getStudents']);
+        Route::post('/{id}/enroll', [CourseController::class, 'enrollStudent']);
     });
-
-    // Analytics Routes
+    
+    // Analytics routes
     Route::prefix('analytics')->group(function () {
-        Route::get('/', [AnalyticsController::class, 'getOverview']);
-        Route::get('traffic', [AnalyticsController::class, 'getTrafficAnalytics']);
-        Route::get('revenue', [AnalyticsController::class, 'getRevenueAnalytics']);
-        Route::get('reports', [AnalyticsController::class, 'getReports']);
-        Route::post('reports/generate', [AnalyticsController::class, 'generateReport']);
+        Route::get('/', [AnalyticsController::class, 'overview']);
+        Route::get('/reports', [AnalyticsController::class, 'getReports']);
+        Route::get('/social-media', [AnalyticsController::class, 'getSocialMediaAnalytics']);
+        Route::get('/bio-sites', [AnalyticsController::class, 'getBioSiteAnalytics']);
+        Route::get('/ecommerce', [AnalyticsController::class, 'getEcommerceAnalytics']);
+        Route::get('/email-marketing', [AnalyticsController::class, 'getEmailMarketingAnalytics']);
     });
+    
+});
+
+// Fallback route for 404 errors
+Route::fallback(function () {
+    return response()->json([
+        'success' => false,
+        'message' => 'API endpoint not found'
+    ], 404);
 });
