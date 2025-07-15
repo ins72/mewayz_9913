@@ -77,6 +77,14 @@ $register = function () {
             
                             {{-- <div>{{ __('🎉 Welcome to the party') }}</div> --}}
                             <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl text-gray-900 dark:text-white">{{ __('Create Account ✨') }}</h2>
+                            
+                            <div inline="true" class="inline-flex items-center text-[14px] text-gray-600 dark:text-gray-400">
+                                <div class="m-0">
+                                  <i class="fi fi-rr-info flex"></i>
+                                </div>
+                                <div class="ml-1">{{ __('Already have an account?') }}
+                                  <a href="{{ route('login') }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"><b>{{ __('Sign in here.') }}</b></a></div>
+                             </div>
             
                             {{-- <p class="yena-text">{{ __('Don’t worry, we will send you a reset link.') }}</p> --}}
 
