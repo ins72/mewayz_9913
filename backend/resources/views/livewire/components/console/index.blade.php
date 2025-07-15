@@ -501,26 +501,26 @@
                </div>
             </div>
             <div class="min-w-[310px] w-full lg:!w-max mt-4 lg:![margin-top:0]">
-               <div class="short-cal flex flex-[1] flex-col gap-[12px] p-[12px] mt-0 border-l border-solid border-gray-50">
+               <div class="short-cal flex flex-[1] flex-col gap-[12px] p-[12px] mt-0 border-l border-solid border-gray-200 dark:border-gray-700">
                   <div class="flex items-center justify-between">
-                     <p class="text-color-headline font-bold">{{ __('My wallet') }}</p>
+                     <p class="text-color-headline font-bold text-gray-900 dark:text-white">{{ __('My wallet') }}</p>
                      <div class="p-[4px] flex items-center">
                         <span class="default-tooltip relative top-[1px]">
                               <a class="cursor-pointer">
-                                 {!! __i('custom', 'settings-pay-1', 'w-4 h-4') !!}
+                                 {!! __i('custom', 'settings-pay-1', 'w-4 h-4 text-gray-600 dark:text-gray-400') !!}
                               </a>
                         </span>
                      </div>
                   </div>
                   <div class="flex flex-col h-full gap-2">
                      <div class="calendar-day-view h-full flex items-center justify-center">
-                        <div class="h-full w-full flex flex-col items-center bg-[var(--yena-colors-gray-100)] rounded-[10px]">
-                           <div class="widget widget_stat widget_shadow widget_after !w-full !rounded-[10px]">
+                        <div class="h-full w-full flex flex-col items-center bg-gray-100 dark:bg-gray-800 rounded-[10px]">
+                           <div class="widget widget_stat widget_shadow widget_after !w-full !rounded-[10px] card">
                               <div class="widget__chart widget__chart_items" wire:ignore>
                                  <template x-if="chartLoading">
                                      <div class="flex gap-2 p-5 w-full mx-auto">
                                        <div class="--placeholder-skeleton w-28 h-28 p-4 rounded-full mx-auto">
-                                          <div class="bg-white h-full w-full rounded-full"></div>
+                                          <div class="bg-white dark:bg-gray-700 h-full w-full rounded-full"></div>
                                        </div>
                                      </div>
                                  </template>
@@ -530,16 +530,16 @@
                                  </div>
                               </div>
                               {{-- <div class="widget__title">Earnings By Item</div> --}}
-                              <div class="text-7xl leading-[1.2] font-semibold tracking-[-1px] text-center mx-auto mt-4" x-html="donationsYear"></div>
-                              <div class="max-w-[185px] mb-[18px] text-[#808191] text-center mx-auto">{{ __("This is the total received in your wallet this year") }}</div>
+                              <div class="text-7xl leading-[1.2] font-semibold tracking-[-1px] text-center mx-auto mt-4 text-gray-900 dark:text-white" x-html="donationsYear"></div>
+                              <div class="max-w-[185px] mb-[18px] text-gray-600 dark:text-gray-400 text-center mx-auto">{{ __("This is the total received in your wallet this year") }}</div>
                               <div class="widget__legend">
                                  <div class="widget__color">
                                     <div class="widget__bg !bg-[#FFCE73]"></div>
-                                    <div class="widget__text">{{ __('This Year') }}</div>
+                                    <div class="widget__text text-gray-700 dark:text-gray-300">{{ __('This Year') }}</div>
                                  </div>
                                  <div class="widget__color">
                                     <div class="widget__bg !bg-[#A0D7E7]"></div>
-                                    <div class="widget__text">{{ __('Last Year') }}</div>
+                                    <div class="widget__text text-gray-700 dark:text-gray-300">{{ __('Last Year') }}</div>
                                  </div>
                               </div>
                            </div>
@@ -548,11 +548,11 @@
                               <p class="text-xl font-semibold pt-[16px] pb-[24px]">We have big update for you!</p>
                            </div> --}}
                            <div class="flex flex-col items-center gap-2 py-20 px-5">
-                              {!! __i('money', 'Wallet-MAIN', 'w-12 h-12') !!}
+                              {!! __i('money', 'Wallet-MAIN', 'w-12 h-12 text-gray-600 dark:text-gray-400') !!}
                               <div class="flex flex-col">
-                                 <p class="text-color-descriptive text-center w-full">{{ __('Manage your withdrawal on your wallet page.') }}</p>
+                                 <p class="text-color-descriptive text-center w-full text-gray-600 dark:text-gray-400">{{ __('Manage your withdrawal on your wallet page.') }}</p>
                               </div>
-                              <a class="yena-button-stack !rounded-full" href="{{ route('console-wallet-index') }}" @navigate>{{ __('Manage') }}</a>
+                              <a class="btn btn-primary !rounded-full" href="{{ route('console-wallet-index') }}" @navigate>{{ __('Manage') }}</a>
                            </div>
                         </div>
                      </div>
