@@ -1077,6 +1077,294 @@ class MewayzAPITester:
             self.log_result("Enhanced Login Tracking", "FAIL", f"Request failed: {str(e)}")
             return False
 
+    # Instagram Intelligence Engine Tests
+    def test_instagram_auth_initiate(self):
+        """Test Instagram OAuth initialization"""
+        if not self.auth_token:
+            self.log_result("Instagram Auth Initiate", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            response = self.make_request('GET', '/instagram/auth')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('auth_url'):
+                    if 'instagram.com/oauth/authorize' in data['auth_url']:
+                        self.log_result("Instagram Auth Initiate", "PASS", "Instagram OAuth URL generated successfully")
+                        return True
+                    else:
+                        self.log_result("Instagram Auth Initiate", "FAIL", "Invalid Instagram OAuth URL format", data)
+                        return False
+                else:
+                    self.log_result("Instagram Auth Initiate", "FAIL", "Response missing auth_url", data)
+                    return False
+            else:
+                self.log_result("Instagram Auth Initiate", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Auth Initiate", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_auth_callback_validation(self):
+        """Test Instagram OAuth callback validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Auth Callback Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing code parameter
+            response = self.make_request('POST', '/instagram/auth/callback', {})
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'code' in data['errors']:
+                    self.log_result("Instagram Auth Callback Validation", "PASS", "Validation correctly requires code parameter")
+                    return True
+                else:
+                    self.log_result("Instagram Auth Callback Validation", "FAIL", "Expected validation error for missing code", data)
+                    return False
+            else:
+                self.log_result("Instagram Auth Callback Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Auth Callback Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_competitor_analysis_validation(self):
+        """Test Instagram competitor analysis validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Competitor Analysis Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing required parameters
+            response = self.make_request('GET', '/instagram/competitor-analysis')
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    required_fields = ['username', 'account_id']
+                    has_required_errors = any(field in data['errors'] for field in required_fields)
+                    if has_required_errors:
+                        self.log_result("Instagram Competitor Analysis Validation", "PASS", "Validation correctly requires username and account_id")
+                        return True
+                    else:
+                        self.log_result("Instagram Competitor Analysis Validation", "FAIL", "Missing expected validation errors", data)
+                        return False
+                else:
+                    self.log_result("Instagram Competitor Analysis Validation", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Instagram Competitor Analysis Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Competitor Analysis Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_competitor_analysis_no_account(self):
+        """Test Instagram competitor analysis with invalid account"""
+        if not self.auth_token:
+            self.log_result("Instagram Competitor Analysis No Account", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with non-existent account ID
+            params = {
+                'username': 'test_competitor',
+                'account_id': '999999'
+            }
+            response = self.make_request('GET', '/instagram/competitor-analysis', params)
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'account_id' in data['errors']:
+                    self.log_result("Instagram Competitor Analysis No Account", "PASS", "Validation correctly rejects non-existent account_id")
+                    return True
+                else:
+                    self.log_result("Instagram Competitor Analysis No Account", "FAIL", "Expected account_id validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram Competitor Analysis No Account", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Competitor Analysis No Account", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_hashtag_analysis_validation(self):
+        """Test Instagram hashtag analysis validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Hashtag Analysis Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing required parameters
+            response = self.make_request('GET', '/instagram/hashtag-analysis')
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    required_fields = ['hashtag', 'account_id']
+                    has_required_errors = any(field in data['errors'] for field in required_fields)
+                    if has_required_errors:
+                        self.log_result("Instagram Hashtag Analysis Validation", "PASS", "Validation correctly requires hashtag and account_id")
+                        return True
+                    else:
+                        self.log_result("Instagram Hashtag Analysis Validation", "FAIL", "Missing expected validation errors", data)
+                        return False
+                else:
+                    self.log_result("Instagram Hashtag Analysis Validation", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Instagram Hashtag Analysis Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Hashtag Analysis Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_analytics_validation(self):
+        """Test Instagram analytics validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Analytics Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing required parameters
+            response = self.make_request('GET', '/instagram/analytics')
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'account_id' in data['errors']:
+                    self.log_result("Instagram Analytics Validation", "PASS", "Validation correctly requires account_id")
+                    return True
+                else:
+                    self.log_result("Instagram Analytics Validation", "FAIL", "Expected account_id validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram Analytics Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Analytics Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_refresh_token_validation(self):
+        """Test Instagram token refresh validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Refresh Token Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing required parameters
+            response = self.make_request('POST', '/instagram/refresh-token', {})
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'account_id' in data['errors']:
+                    self.log_result("Instagram Refresh Token Validation", "PASS", "Validation correctly requires account_id")
+                    return True
+                else:
+                    self.log_result("Instagram Refresh Token Validation", "FAIL", "Expected account_id validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram Refresh Token Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Refresh Token Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_content_suggestions_validation(self):
+        """Test Instagram content suggestions validation"""
+        if not self.auth_token:
+            self.log_result("Instagram Content Suggestions Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with missing required parameters
+            response = self.make_request('GET', '/instagram/content-suggestions')
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'account_id' in data['errors']:
+                    self.log_result("Instagram Content Suggestions Validation", "PASS", "Validation correctly requires account_id")
+                    return True
+                else:
+                    self.log_result("Instagram Content Suggestions Validation", "FAIL", "Expected account_id validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram Content Suggestions Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Content Suggestions Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_no_connected_account(self):
+        """Test Instagram endpoints with no connected account"""
+        if not self.auth_token:
+            self.log_result("Instagram No Connected Account", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Create a fake social media account ID that doesn't exist for this user
+            params = {
+                'account_id': '999999',
+                'username': 'test_user'
+            }
+            response = self.make_request('GET', '/instagram/competitor-analysis', params)
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'account_id' in data['errors']:
+                    self.log_result("Instagram No Connected Account", "PASS", "Correctly validates account ownership")
+                    return True
+                else:
+                    self.log_result("Instagram No Connected Account", "FAIL", "Expected account_id validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram No Connected Account", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram No Connected Account", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_content_type_validation(self):
+        """Test Instagram content suggestions with invalid content type"""
+        if not self.auth_token:
+            self.log_result("Instagram Content Type Validation", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            # Test with invalid content_type
+            params = {
+                'account_id': '1',
+                'content_type': 'invalid_type'
+            }
+            response = self.make_request('GET', '/instagram/content-suggestions', params)
+            
+            if response.status_code == 422:
+                data = response.json()
+                if 'errors' in data and 'content_type' in data['errors']:
+                    self.log_result("Instagram Content Type Validation", "PASS", "Validation correctly rejects invalid content_type")
+                    return True
+                else:
+                    self.log_result("Instagram Content Type Validation", "FAIL", "Expected content_type validation error", data)
+                    return False
+            else:
+                self.log_result("Instagram Content Type Validation", "FAIL", f"Expected 422 but got {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Content Type Validation", "FAIL", f"Request failed: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting Mewayz Laravel Backend API Tests")
