@@ -504,3 +504,183 @@ GET /api/ecommerce/orders
   ]
 }
 ```
+
+## 📚 Course Management
+
+### Get Courses
+```http
+GET /api/courses
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "title": "Complete Web Development",
+      "description": "Learn web development from scratch",
+      "price": 199.99,
+      "students_count": 250,
+      "lessons_count": 45,
+      "duration": "20 hours",
+      "status": "published",
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+### Get Course Lessons
+```http
+GET /api/courses/{id}/lessons
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "title": "Introduction to Web Development",
+      "type": "video",
+      "content_url": "https://example.com/video.mp4",
+      "duration": "15 minutes",
+      "order": 1,
+      "is_free": true,
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+## 📊 Analytics & Reporting
+
+### Get Analytics Overview
+```http
+GET /api/analytics
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "bio_sites": {
+      "total_views": 15000,
+      "total_clicks": 1200,
+      "conversion_rate": 8.0
+    },
+    "social_media": {
+      "total_posts": 45,
+      "total_engagement": 2500,
+      "reach": 50000
+    },
+    "ecommerce": {
+      "total_revenue": 15000,
+      "total_orders": 150
+    },
+    "courses": {
+      "total_enrollments": 500,
+      "total_revenue": 25000
+    }
+  }
+}
+```
+
+### Get Traffic Analytics
+```http
+GET /api/analytics/traffic
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "total_visitors": 5000,
+    "unique_visitors": 3200,
+    "page_views": 15000,
+    "bounce_rate": 35.2,
+    "traffic_sources": {
+      "direct": 2000,
+      "social": 1500,
+      "search": 1000,
+      "referral": 500
+    }
+  }
+}
+```
+
+## 🏥 Health Check
+
+### API Health Check
+```http
+GET /api/health
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "API is healthy",
+  "data": {
+    "status": "healthy",
+    "timestamp": "2025-07-15T10:30:00Z",
+    "version": "1.0.0",
+    "database": "connected"
+  }
+}
+```
+
+## 🚫 Error Responses
+
+### Standard Error Format
+```json
+{
+  "success": false,
+  "message": "Error message",
+  "errors": {
+    "field_name": ["Field error message"]
+  }
+}
+```
+
+### Common HTTP Status Codes
+- `200`: Success
+- `201`: Created
+- `400`: Bad Request
+- `401`: Unauthorized
+- `403`: Forbidden
+- `404`: Not Found
+- `422`: Validation Error
+- `500`: Internal Server Error
+
+## 📝 Rate Limiting
+
+- **General endpoints**: 100 requests per minute
+- **Authentication endpoints**: 10 requests per minute
+- **Upload endpoints**: 50 requests per minute
+
+## 🔐 Security
+
+- All API endpoints use HTTPS in production
+- Authentication tokens expire after 24 hours
+- Rate limiting is enforced on all endpoints
+- Input validation and sanitization
+- CORS protection enabled
+
+## 📞 Support
+
+For API support and questions:
+- **Documentation**: Complete API reference
+- **Support Email**: api-support@mewayz.com
+- **GitHub Issues**: Report API bugs
+
+---
+
+**Last Updated**: July 15, 2025  
+**API Version**: 1.0.0  
+**Platform**: Mewayz All-in-One Business Solution
