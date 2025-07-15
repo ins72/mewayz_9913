@@ -115,7 +115,7 @@ class MewayzAPITester:
         
         response, response_time = self.make_request('POST', '/auth/register', register_data, auth_required=False)
         
-        if response and response.status_code == 200:
+        if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
                 if data.get('success') and data.get('token'):
@@ -126,7 +126,7 @@ class MewayzAPITester:
                     return True
                 else:
                     self.log_result("User Registration", "FAIL", 
-                                  "Registration response missing success or token", 
+                                  f"Registration response missing success or token: {data}", 
                                   response_time)
                     return False
             except json.JSONDecodeError:
