@@ -22,7 +22,7 @@
             'resources/css/app.css',
             'resources/sass/app.scss',
             'resources/sass/dashboard/dashboard.sidebar.scss',
-            'resources/sass/console/console.placeholder.scss',
+            'resources/sass/dashboard/dashboard.placeholder.scss',
             'resources/sass/site.scss',
             'resources/sass/create.scss',
             'resources/sass/builder/builder.scss',
