@@ -225,15 +225,15 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 ### **Core Tables**
 - `users` - User accounts and authentication
 - `organizations` - Workspace/organization management
-- `sites` - Website builder sites
-- `bio_sites` - Link in bio pages
-- `courses` - Course creation and management
-- `products` - E-commerce products
-- `orders` - E-commerce orders
-- `contacts` - CRM contacts
-- `leads` - CRM leads
-- `campaigns` - Email marketing campaigns
-- `templates` - Email templates
+- `sites` - Website builder sites with pages, sections, and domains
+- `bio_sites` - Link in bio pages with links, analytics, and tracking
+- `courses` - Course creation, lessons, and enrollment management
+- `products` - E-commerce products with options, shipping, and reviews
+- `orders` - E-commerce orders (product_order) and course orders
+- `contacts` - CRM contacts (audience table)
+- `leads` - CRM leads and pipeline management
+- `campaigns` - Email marketing campaigns (audience_broadcast)
+- `templates` - Email templates and site templates
 - `social_media_accounts` - Connected social accounts
 - `social_media_posts` - Social media content
 - `payment_transactions` - Stripe payment records
@@ -241,6 +241,77 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - `instagram_accounts` - Instagram account management
 - `instagram_posts` - Instagram content
 - `instagram_hashtags` - Hashtag research data
+
+### **Communication & Chat Tables**
+- `user_conversations` - User-to-user messaging conversations
+- `user_messages` - Individual messages within conversations
+- `site_ai_chat_session` - AI chat sessions for websites
+- `site_ai_chat_history` - AI chat conversation history
+
+### **Community & Collaboration Tables**
+- `community` - Community platform management
+- `community_space_group` - Community space groups
+- `community_space` - Individual community spaces
+- `yena_teams` - Team management and collaboration
+- `yena_teams_user_table` - Team member management
+- `yena_teams_invite` - Team invitation system
+- `site_access` - Site access control and permissions
+
+### **Analytics & Tracking Tables**
+- `sites_visitors` - Website visitor tracking
+- `bio_sites_visitors` - Bio site visitor tracking
+- `mediakit_sites_visitors` - Mediakit visitor tracking
+- `sites_linker_track` - Website link tracking
+- `bio_sites_linker_track` - Bio site link tracking
+- `audience_activity` - User activity tracking
+- `site_pixels` - Pixel tracking management
+
+### **Financial & E-commerce Tables**
+- `wallets` - Digital wallet system
+- `transactions` - Wallet transactions
+- `transfers` - User transfers
+- `wallet_settlements` - Payment settlements
+- `wallet_withdrawals` - User withdrawals
+- `wallet_transactions` - Wallet transaction history
+- `plans` - Subscription plans
+- `plans_features` - Plan features and limits
+- `plans_subscriptions` - User subscriptions
+- `plans_usages` - Plan usage tracking
+- `checkout_go` - Checkout processing
+
+### **Content Management Tables**
+- `pages` - Website pages
+- `sections` - Page sections and components
+- `section_items` - Section items and elements
+- `site_forms` - Contact forms and submissions
+- `site_header_links` - Header navigation
+- `site_footer_groups` - Footer organization
+- `uploads` - File and media management
+- `yena_embed_store` - Embedded content storage
+
+### **Template & Design Tables**
+- `yena_templates` - Website templates
+- `yena_template_access` - Template access control
+- `yena_bio_templates` - Bio site templates
+- `yena_bio_template_access` - Bio template access
+- `sites_static_thumbnail` - Static thumbnail generation
+
+### **Mediakit Tables**
+- `mediakit_sites` - Creator mediakit sites
+- `mediakit_sections` - Mediakit sections
+- `mediakit_site_domains` - Mediakit custom domains
+- `mediakit_sites_uploads` - Mediakit file management
+- `mediakit_site_socials` - Mediakit social links
+
+### **Additional System Tables**
+- `settings` - Platform settings
+- `folders` - Content organization
+- `folder_members` - Folder access control
+- `folder_sites` - Folder site management
+- `yena_favorites` - User favorites
+- `audience_folders` - Audience organization
+- `audience_broadcast_users` - Broadcast recipients
+- `audience_broadcast_sent` - Broadcast delivery tracking
 
 ---
 
