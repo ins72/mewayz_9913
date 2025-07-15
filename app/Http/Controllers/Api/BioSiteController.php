@@ -689,77 +689,367 @@ class BioSiteController extends Controller
     }
 
     /**
-     * Get themes available for bio sites
+     * Create A/B test for bio site optimization
      */
-    public function getThemes()
+    public function createABTest(Request $request, $id)
     {
-        $themes = [
-            'minimal' => [
-                'name' => 'Minimal',
-                'description' => 'Clean and simple design with focus on content',
-                'preview_url' => '/themes/minimal.jpg',
-                'features' => ['Clean layout', 'Typography focused', 'Fast loading']
-            ],
-            'modern' => [
-                'name' => 'Modern',
-                'description' => 'Contemporary design with smooth animations',
-                'preview_url' => '/themes/modern.jpg',
-                'features' => ['Smooth animations', 'Modern UI', 'Responsive']
-            ],
-            'gradient' => [
-                'name' => 'Gradient',
-                'description' => 'Vibrant gradient backgrounds with modern styling',
-                'preview_url' => '/themes/gradient.jpg',
-                'features' => ['Gradient backgrounds', 'Modern styling', 'Eye-catching']
-            ],
-            'neon' => [
-                'name' => 'Neon',
-                'description' => 'Dark theme with neon accents and glow effects',
-                'preview_url' => '/themes/neon.jpg',
-                'features' => ['Dark theme', 'Neon effects', 'Glow animations']
-            ],
-            'elegant' => [
-                'name' => 'Elegant',
-                'description' => 'Sophisticated design with refined typography',
-                'preview_url' => '/themes/elegant.jpg',
-                'features' => ['Sophisticated', 'Refined typography', 'Professional']
-            ],
-            'creative' => [
-                'name' => 'Creative',
-                'description' => 'Artistic layout with creative elements',
-                'preview_url' => '/themes/creative.jpg',
-                'features' => ['Artistic layout', 'Creative elements', 'Unique design']
-            ],
-            'professional' => [
-                'name' => 'Professional',
-                'description' => 'Business-oriented design for professionals',
-                'preview_url' => '/themes/professional.jpg',
-                'features' => ['Business-oriented', 'Professional look', 'Clean structure']
-            ],
-            'dark' => [
-                'name' => 'Dark',
-                'description' => 'Dark theme with high contrast',
-                'preview_url' => '/themes/dark.jpg',
-                'features' => ['Dark theme', 'High contrast', 'Eye-friendly']
-            ],
-            'light' => [
-                'name' => 'Light',
-                'description' => 'Bright and airy design with light colors',
-                'preview_url' => '/themes/light.jpg',
-                'features' => ['Bright design', 'Light colors', 'Airy feel']
-            ],
-            'colorful' => [
-                'name' => 'Colorful',
-                'description' => 'Vibrant and playful design with multiple colors',
-                'preview_url' => '/themes/colorful.jpg',
-                'features' => ['Vibrant colors', 'Playful design', 'Multiple colors']
-            ]
-        ];
-
-        return response()->json([
-            'success' => true,
-            'data' => $themes
+        $request->validate([
+            'test_name' => 'required|string|max:255',
+            'test_type' => 'required|string|in:theme,layout,content,cta,colors,fonts,images,button_placement,headline,description',
+            'variants' => 'required|array|min:2|max:5',
+            'variants.*.name' => 'required|string|max:100',
+            'variants.*.changes' => 'required|array',
+            'variants.*.traffic_allocation' => 'required|integer|min:1|max:100',
+            'success_metrics' => 'required|array',
+            'success_metrics.*' => 'string|in:clicks,conversions,time_on_page,bounce_rate,email_signups,purchases,downloads',
+            'test_duration' => 'required|integer|min:1|max:90',
+            'minimum_sample_size' => 'nullable|integer|min:100|max:100000',
+            'confidence_level' => 'nullable|numeric|min:80|max:99',
+            'auto_winner_selection' => 'boolean',
+            'winner_selection_criteria' => 'nullable|string|in:conversion_rate,total_conversions,revenue,engagement_rate'
         ]);
+
+        try {
+            $bioSite = BioSite::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$bioSite) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bio site not found'
+                ], 404);
+            }
+
+            // Validate traffic allocation totals 100%
+            $totalAllocation = array_sum(array_column($request->variants, 'traffic_allocation'));
+            if ($totalAllocation !== 100) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Traffic allocation must total 100%'
+                ], 422);
+            }
+
+            // Create A/B test record
+            $abTest = [
+                'id' => uniqid(),
+                'bio_site_id' => $bioSite->id,
+                'test_name' => $request->test_name,
+                'test_type' => $request->test_type,
+                'variants' => $request->variants,
+                'success_metrics' => $request->success_metrics,
+                'status' => 'active',
+                'start_date' => now(),
+                'end_date' => now()->addDays($request->test_duration),
+                'minimum_sample_size' => $request->minimum_sample_size ?? 1000,
+                'confidence_level' => $request->confidence_level ?? 95,
+                'auto_winner_selection' => $request->auto_winner_selection ?? false,
+                'winner_selection_criteria' => $request->winner_selection_criteria ?? 'conversion_rate',
+                'results' => [
+                    'total_visitors' => 0,
+                    'statistical_significance' => false,
+                    'winning_variant' => null,
+                    'performance_data' => []
+                ],
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            // Store A/B test data (in a real app, this would be in a separate table)
+            $currentTests = json_decode($bioSite->ab_tests ?? '[]', true);
+            $currentTests[] = $abTest;
+            $bioSite->update(['ab_tests' => json_encode($currentTests)]);
+
+            // Initialize variant performance tracking
+            $this->initializeVariantTracking($abTest, $bioSite);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'A/B test created successfully',
+                'data' => [
+                    'test_id' => $abTest['id'],
+                    'test_name' => $abTest['test_name'],
+                    'test_type' => $abTest['test_type'],
+                    'variants_count' => count($abTest['variants']),
+                    'status' => $abTest['status'],
+                    'start_date' => $abTest['start_date'],
+                    'end_date' => $abTest['end_date'],
+                    'tracking_url' => url('/bio/' . $bioSite->slug . '?ab_test=' . $abTest['id']),
+                    'estimated_duration' => $this->estimateTestDuration($abTest, $bioSite),
+                    'success_metrics' => $abTest['success_metrics']
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('A/B test creation failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create A/B test: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get A/B test results and insights
+     */
+    public function getABTestResults(Request $request, $bioSiteId, $testId)
+    {
+        try {
+            $bioSite = BioSite::where('id', $bioSiteId)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$bioSite) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bio site not found'
+                ], 404);
+            }
+
+            $tests = json_decode($bioSite->ab_tests ?? '[]', true);
+            $test = collect($tests)->firstWhere('id', $testId);
+
+            if (!$test) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'A/B test not found'
+                ], 404);
+            }
+
+            // Generate comprehensive results
+            $results = $this->generateABTestResults($test, $bioSite);
+            
+            // Calculate statistical significance
+            $significance = $this->calculateStatisticalSignificance($results);
+            
+            // Generate insights and recommendations
+            $insights = $this->generateABTestInsights($results, $test);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'test_overview' => [
+                        'test_id' => $test['id'],
+                        'test_name' => $test['test_name'],
+                        'test_type' => $test['test_type'],
+                        'status' => $test['status'],
+                        'duration' => $this->calculateTestDuration($test),
+                        'total_visitors' => $results['total_visitors'],
+                        'statistical_significance' => $significance['is_significant'],
+                        'confidence_level' => $significance['confidence_level'],
+                        'winning_variant' => $results['winning_variant']
+                    ],
+                    'variant_performance' => $results['variants'],
+                    'metrics_breakdown' => $results['metrics'],
+                    'statistical_analysis' => $significance,
+                    'insights' => $insights,
+                    'recommendations' => $this->generateABTestRecommendations($results, $insights),
+                    'next_steps' => $this->suggestNextSteps($results, $test)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('A/B test results retrieval failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve A/B test results: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Add monetization features to bio site
+     */
+    public function addMonetizationFeatures(Request $request, $id)
+    {
+        $request->validate([
+            'monetization_type' => 'required|string|in:donations,subscriptions,products,services,affiliates,sponsored_content,premium_content,consultations,events,courses',
+            'payment_processor' => 'required|string|in:stripe,paypal,square,razorpay,mollie',
+            'pricing_model' => 'required|string|in:one_time,subscription,tiered,freemium,pay_what_you_want',
+            'products' => 'nullable|array',
+            'products.*.name' => 'required|string|max:255',
+            'products.*.description' => 'required|string|max:1000',
+            'products.*.price' => 'required|numeric|min:0',
+            'products.*.currency' => 'required|string|size:3',
+            'products.*.type' => 'required|string|in:physical,digital,service,subscription',
+            'products.*.category' => 'nullable|string|max:100',
+            'products.*.inventory' => 'nullable|integer|min:0',
+            'products.*.images' => 'nullable|array|max:5',
+            'subscription_plans' => 'nullable|array',
+            'subscription_plans.*.name' => 'required|string|max:255',
+            'subscription_plans.*.price' => 'required|numeric|min:0',
+            'subscription_plans.*.interval' => 'required|string|in:monthly,yearly,weekly',
+            'subscription_plans.*.features' => 'required|array',
+            'affiliate_programs' => 'nullable|array',
+            'affiliate_programs.*.name' => 'required|string|max:255',
+            'affiliate_programs.*.commission_rate' => 'required|numeric|min:0|max:100',
+            'affiliate_programs.*.tracking_url' => 'required|url',
+            'donation_settings' => 'nullable|array',
+            'donation_settings.goal_amount' => 'nullable|numeric|min:0',
+            'donation_settings.suggested_amounts' => 'nullable|array',
+            'donation_settings.allow_custom_amount' => 'boolean',
+            'donation_settings.recurring_options' => 'boolean',
+            'tax_settings' => 'nullable|array',
+            'tax_settings.tax_inclusive' => 'boolean',
+            'tax_settings.tax_rate' => 'nullable|numeric|min:0|max:100',
+            'tax_settings.tax_region' => 'nullable|string|max:100',
+            'shipping_settings' => 'nullable|array',
+            'shipping_settings.shipping_required' => 'boolean',
+            'shipping_settings.shipping_rates' => 'nullable|array',
+            'analytics_tracking' => 'boolean',
+            'conversion_optimization' => 'boolean'
+        ]);
+
+        try {
+            $bioSite = BioSite::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$bioSite) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bio site not found'
+                ], 404);
+            }
+
+            // Create monetization configuration
+            $monetizationConfig = [
+                'enabled' => true,
+                'type' => $request->monetization_type,
+                'payment_processor' => $request->payment_processor,
+                'pricing_model' => $request->pricing_model,
+                'products' => $this->processProducts($request->products ?? []),
+                'subscription_plans' => $this->processSubscriptionPlans($request->subscription_plans ?? []),
+                'affiliate_programs' => $this->processAffiliatePrograms($request->affiliate_programs ?? []),
+                'donation_settings' => $this->processDonationSettings($request->donation_settings ?? []),
+                'tax_settings' => $request->tax_settings ?? [],
+                'shipping_settings' => $request->shipping_settings ?? [],
+                'analytics_tracking' => $request->analytics_tracking ?? true,
+                'conversion_optimization' => $request->conversion_optimization ?? true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            // Update bio site with monetization features
+            $bioSite->update(['monetization' => json_encode($monetizationConfig)]);
+
+            // Initialize payment processor integration
+            $paymentIntegration = $this->initializePaymentProcessor($request->payment_processor, $bioSite);
+
+            // Create conversion tracking
+            $conversionTracking = $this->setupConversionTracking($bioSite, $monetizationConfig);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Monetization features added successfully',
+                'data' => [
+                    'monetization_type' => $monetizationConfig['type'],
+                    'payment_processor' => $monetizationConfig['payment_processor'],
+                    'products_count' => count($monetizationConfig['products']),
+                    'subscription_plans_count' => count($monetizationConfig['subscription_plans']),
+                    'affiliate_programs_count' => count($monetizationConfig['affiliate_programs']),
+                    'payment_integration_status' => $paymentIntegration['status'],
+                    'conversion_tracking_enabled' => $conversionTracking['enabled'],
+                    'estimated_revenue_potential' => $this->estimateRevenuePotential($bioSite, $monetizationConfig),
+                    'optimization_suggestions' => $this->generateMonetizationOptimizations($bioSite, $monetizationConfig),
+                    'checkout_urls' => $this->generateCheckoutUrls($bioSite, $monetizationConfig)
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Monetization setup failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add monetization features: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Advanced bio site analytics with conversion tracking
+     */
+    public function getAdvancedAnalytics(Request $request, $id)
+    {
+        $request->validate([
+            'date_range' => 'nullable|string|in:today,yesterday,last_7_days,last_30_days,last_90_days,last_year,custom',
+            'start_date' => 'nullable|date|required_if:date_range,custom',
+            'end_date' => 'nullable|date|after_or_equal:start_date|required_if:date_range,custom',
+            'metrics' => 'nullable|array',
+            'metrics.*' => 'string|in:traffic,conversions,revenue,engagement,demographics,devices,sources,content_performance,ab_tests,monetization',
+            'granularity' => 'nullable|string|in:hour,day,week,month',
+            'compare_to' => 'nullable|string|in:previous_period,previous_year,custom',
+            'segments' => 'nullable|array',
+            'segments.*' => 'string|in:new_visitors,returning_visitors,mobile,desktop,social_traffic,direct_traffic,search_traffic',
+            'export_format' => 'nullable|string|in:json,csv,pdf'
+        ]);
+
+        try {
+            $bioSite = BioSite::where('id', $id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$bioSite) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bio site not found'
+                ], 404);
+            }
+
+            // Set date range
+            $dateRange = $this->parseDateRange($request->date_range ?? 'last_30_days', $request->start_date, $request->end_date);
+            
+            // Get comprehensive analytics
+            $analytics = [
+                'overview' => $this->getAnalyticsOverview($bioSite, $dateRange),
+                'traffic_analytics' => $this->getTrafficAnalytics($bioSite, $dateRange),
+                'conversion_analytics' => $this->getConversionAnalytics($bioSite, $dateRange),
+                'revenue_analytics' => $this->getRevenueAnalytics($bioSite, $dateRange),
+                'engagement_analytics' => $this->getEngagementAnalytics($bioSite, $dateRange),
+                'demographic_analytics' => $this->getDemographicAnalytics($bioSite, $dateRange),
+                'device_analytics' => $this->getDeviceAnalytics($bioSite, $dateRange),
+                'source_analytics' => $this->getSourceAnalytics($bioSite, $dateRange),
+                'content_performance' => $this->getContentPerformanceAnalytics($bioSite, $dateRange),
+                'ab_test_performance' => $this->getABTestPerformanceAnalytics($bioSite, $dateRange),
+                'monetization_analytics' => $this->getMonetizationAnalytics($bioSite, $dateRange),
+                'predictive_analytics' => $this->getPredictiveAnalytics($bioSite, $dateRange),
+                'competitive_insights' => $this->getCompetitiveInsights($bioSite, $dateRange),
+                'optimization_opportunities' => $this->getOptimizationOpportunities($bioSite, $dateRange)
+            ];
+
+            // Add comparison data if requested
+            if ($request->compare_to) {
+                $analytics['comparison'] = $this->getComparisonData($bioSite, $dateRange, $request->compare_to);
+            }
+
+            // Add segment analysis if requested
+            if ($request->segments) {
+                $analytics['segment_analysis'] = $this->getSegmentAnalysis($bioSite, $dateRange, $request->segments);
+            }
+
+            // Generate insights and recommendations
+            $insights = $this->generateAdvancedInsights($analytics, $bioSite);
+            $recommendations = $this->generateAdvancedRecommendations($analytics, $insights, $bioSite);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'date_range' => $dateRange,
+                    'analytics' => $analytics,
+                    'insights' => $insights,
+                    'recommendations' => $recommendations,
+                    'export_options' => $this->generateExportOptions($bioSite, $analytics),
+                    'alert_settings' => $this->getAlertSettings($bioSite),
+                    'benchmark_comparison' => $this->getBenchmarkComparison($bioSite, $analytics)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Advanced analytics retrieval failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve advanced analytics: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
