@@ -215,11 +215,11 @@ class MewayzLaravelArchitectureTest:
             results["health_endpoint"] = health_present
             print(f"✅ Health endpoint: {'CONFIGURED' if health_present else 'MISSING'}")
             
-            auth_present = "/auth/login" in content and "/auth/me" in content
+            auth_present = ("'/login'" in content or "'/auth/login'" in content) and ("'/auth/me'" in content)
             results["auth_endpoints"] = auth_present
             print(f"✅ Auth endpoints: {'CONFIGURED' if auth_present else 'MISSING'}")
             
-            stripe_present = "/payments" in content and "StripePaymentController" in content
+            stripe_present = "'/payments'" in content and "StripePaymentController" in content
             results["stripe_endpoints"] = stripe_present
             print(f"✅ Stripe endpoints: {'CONFIGURED' if stripe_present else 'MISSING'}")
             
