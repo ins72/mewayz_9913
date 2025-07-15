@@ -823,4 +823,214 @@ class BioSiteController extends Controller
             'data' => $exportData
         ]);
     }
+
+    /**
+     * Get links for a bio site
+     */
+    public function getLinks($bioSiteId)
+    {
+        try {
+            $bioSite = BioSite::where('id', $bioSiteId)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+
+            $links = BioSiteLink::where('bio_site_id', $bioSiteId)
+                ->orderBy('sort_order')
+                ->get()
+                ->map(function ($link) {
+                    return [
+                        'id' => $link->id,
+                        'title' => $link->title,
+                        'url' => $link->url,
+                        'description' => $link->description,
+                        'type' => $link->type,
+                        'icon' => $link->icon,
+                        'sort_order' => $link->sort_order,
+                        'is_active' => $link->is_active,
+                        'click_count' => $link->click_count ?? 0,
+                        'created_at' => $link->created_at,
+                        'updated_at' => $link->updated_at,
+                    ];
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => $links,
+                'message' => 'Bio site links retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve bio site links: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve bio site links'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create a new link for a bio site
+     */
+    public function createLink(Request $request, $bioSiteId)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'url' => 'required|url|max:2048',
+            'description' => 'nullable|string|max:300',
+            'type' => 'nullable|in:link,email,phone,social,custom',
+            'icon' => 'nullable|string|max:100',
+            'is_active' => 'boolean'
+        ]);
+
+        try {
+            $bioSite = BioSite::where('id', $bioSiteId)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+
+            // Get the next sort order
+            $nextSortOrder = BioSiteLink::where('bio_site_id', $bioSiteId)->max('sort_order') + 1;
+
+            $link = BioSiteLink::create([
+                'bio_site_id' => $bioSiteId,
+                'title' => $request->title,
+                'url' => $request->url,
+                'description' => $request->description,
+                'type' => $request->type ?? 'link',
+                'icon' => $request->icon,
+                'sort_order' => $nextSortOrder,
+                'is_active' => $request->is_active ?? true,
+                'click_count' => 0,
+            ]);
+
+            Log::info("Bio site link created", [
+                'user_id' => auth()->id(),
+                'bio_site_id' => $bioSiteId,
+                'link_id' => $link->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Link created successfully',
+                'data' => [
+                    'id' => $link->id,
+                    'title' => $link->title,
+                    'url' => $link->url,
+                    'description' => $link->description,
+                    'type' => $link->type,
+                    'icon' => $link->icon,
+                    'sort_order' => $link->sort_order,
+                    'is_active' => $link->is_active,
+                    'click_count' => $link->click_count,
+                    'created_at' => $link->created_at,
+                ]
+            ], 201);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to create bio site link: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create link'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update a bio site link
+     */
+    public function updateLink(Request $request, $bioSiteId, $linkId)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'url' => 'required|url|max:2048',
+            'description' => 'nullable|string|max:300',
+            'type' => 'nullable|in:link,email,phone,social,custom',
+            'icon' => 'nullable|string|max:100',
+            'is_active' => 'boolean'
+        ]);
+
+        try {
+            $bioSite = BioSite::where('id', $bioSiteId)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+
+            $link = BioSiteLink::where('id', $linkId)
+                ->where('bio_site_id', $bioSiteId)
+                ->firstOrFail();
+
+            $link->update([
+                'title' => $request->title,
+                'url' => $request->url,
+                'description' => $request->description,
+                'type' => $request->type ?? $link->type,
+                'icon' => $request->icon,
+                'is_active' => $request->is_active ?? $link->is_active,
+            ]);
+
+            Log::info("Bio site link updated", [
+                'user_id' => auth()->id(),
+                'bio_site_id' => $bioSiteId,
+                'link_id' => $linkId
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Link updated successfully',
+                'data' => [
+                    'id' => $link->id,
+                    'title' => $link->title,
+                    'url' => $link->url,
+                    'description' => $link->description,
+                    'type' => $link->type,
+                    'icon' => $link->icon,
+                    'sort_order' => $link->sort_order,
+                    'is_active' => $link->is_active,
+                    'click_count' => $link->click_count,
+                    'updated_at' => $link->updated_at,
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to update bio site link: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update link'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a bio site link
+     */
+    public function deleteLink($bioSiteId, $linkId)
+    {
+        try {
+            $bioSite = BioSite::where('id', $bioSiteId)
+                ->where('user_id', auth()->id())
+                ->firstOrFail();
+
+            $link = BioSiteLink::where('id', $linkId)
+                ->where('bio_site_id', $bioSiteId)
+                ->firstOrFail();
+
+            $link->delete();
+
+            Log::info("Bio site link deleted", [
+                'user_id' => auth()->id(),
+                'bio_site_id' => $bioSiteId,
+                'link_id' => $linkId
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Link deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to delete bio site link: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete link'
+            ], 500);
+        }
+    }
 }
