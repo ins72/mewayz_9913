@@ -804,7 +804,7 @@ class MewayzComprehensiveTester:
                                         "post_type": "feed"
                                     }
                                     
-                                    create_response = self.make_request('POST', '/instagram/posts', post_data)
+                                    create_response = self.make_request('POST', '/instagram-management/posts', post_data)
                                     create_time = create_response.elapsed.total_seconds()
                                     
                                     if create_response.status_code in [200, 201]:
