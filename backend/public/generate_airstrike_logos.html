@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @font-face {
+            font-family: 'Airstrike';
+            src: url('fonts/airstrike.woff2') format('woff2'),
+                 url('fonts/airstrike.woff') format('woff'),
+                 url('fonts/airstrike.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        
+        .logo-light {
+            font-family: 'Airstrike', 'Staatliches', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 2px;
+            text-shadow: none;
+            margin: 0;
+            padding: 8px 5px;
+            display: inline-block;
+        }
+        
+        .logo-dark {
+            font-family: 'Airstrike', 'Staatliches', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: none;
+            margin: 0;
+            padding: 8px 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-light">Mewayz</div>
+    <div class="logo-dark">Mewayz</div>
+    
+    <script>
+        // Auto-generate canvases on load
+        window.onload = function() {
+            generateLogo('light');
+            generateLogo('dark');
+        }
+        
+        function generateLogo(type) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 120;
+            canvas.height = 40;
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Set font properties
+            ctx.font = 'bold 24px Arial, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            
+            if (type === 'light') {
+                ctx.fillStyle = '#2563eb';
+            } else {
+                ctx.fillStyle = '#ffffff';
+            }
+            
+            ctx.fillText('Mewayz', 5, canvas.height / 2);
+            
+            // Download the image
+            const link = document.createElement('a');
+            link.download = 'branding-logo-' + type + '.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>
