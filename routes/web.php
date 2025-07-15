@@ -30,31 +30,31 @@ use Barryvdh\DomPDF\Facade\Pdf;
 */
 require __DIR__.'/auth.php';
 
-// Console/Dashboard route - Laravel Folio will handle the dashboard pages
-Route::get('/console', function () {
+// Dashboard routes - Laravel Folio will handle the dashboard pages
+Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
-})->middleware(['auth'])->name('console-index');
+})->middleware(['auth'])->name('dashboard-index');
 
-// Console sub-routes for dashboard navigation
-Route::get('/console/sites', function () {
+// Dashboard sub-routes for dashboard navigation
+Route::get('/dashboard/sites', function () {
     return view('pages.dashboard.sites.index');
-})->middleware(['auth'])->name('console-sites-index');
+})->middleware(['auth'])->name('dashboard-sites-index');
 
-Route::get('/console/store', function () {
+Route::get('/dashboard/store', function () {
     return view('pages.dashboard.store.index');
-})->middleware(['auth'])->name('console-store-index');
+})->middleware(['auth'])->name('dashboard-store-index');
 
-Route::get('/console/audience', function () {
+Route::get('/dashboard/audience', function () {
     return view('pages.dashboard.audience.index');
-})->middleware(['auth'])->name('console-audience-index');
+})->middleware(['auth'])->name('dashboard-audience-index');
 
-Route::get('/console/courses', function () {
+Route::get('/dashboard/courses', function () {
     return view('pages.dashboard.courses.index');
-})->middleware(['auth'])->name('console-courses-index');
+})->middleware(['auth'])->name('dashboard-courses-index');
 
-Route::get('/console/wallet', function () {
+Route::get('/dashboard/wallet', function () {
     return view('pages.dashboard.wallet.index');
-})->middleware(['auth'])->name('console-wallet-index');
+})->middleware(['auth'])->name('dashboard-wallet-index');
 
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
