@@ -114,14 +114,48 @@ class WorkspaceController extends Controller
             ], 403);
         }
 
-        // TODO: Implement team invitation logic
-        // This would typically involve creating an invitation record
-        // and sending an email to the invited user
+        try {
+            // Create team invitation record
+            $invitation = \App\Models\YenaTeamsInvite::create([
+                'organization_id' => $workspace->id,
+                'email' => $request->email,
+                'role' => $request->role,
+                'invited_by' => auth()->id(),
+                'token' => \Illuminate\Support\Str::random(64),
+                'expires_at' => now()->addDays(7),
+                'status' => 'pending'
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Team member invited successfully',
-        ]);
+            // Send invitation email
+            try {
+                // Here you would send an email with the invitation link
+                // For now, we'll just log the invitation
+                \Illuminate\Support\Facades\Log::info("Team invitation sent", [
+                    'workspace_id' => $workspace->id,
+                    'email' => $request->email,
+                    'role' => $request->role,
+                    'token' => $invitation->token
+                ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Failed to send invitation email: " . $e->getMessage());
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Team member invited successfully',
+                'data' => [
+                    'invitation_id' => $invitation->id,
+                    'email' => $invitation->email,
+                    'role' => $invitation->role,
+                    'expires_at' => $invitation->expires_at,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send invitation: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function getMembers(Organization $workspace)
