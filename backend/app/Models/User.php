@@ -297,4 +297,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->hasMany(Workspace::class);
     }
+    
+    /**
+     * Get the organizations for the user (used as workspaces)
+     */
+    public function organizations()
+    {
+        return $this->hasMany(Organization::class);
+    }
 }
