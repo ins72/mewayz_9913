@@ -20,10 +20,10 @@
 
         {!! isset($meta) ? $meta : '' !!}
         @vite([
-            'resources/css/app.css',
-            'resources/sass/app.scss',
-            'resources/sass/auth/auth.scss',
-            'resources/js/app.js'
+            'backend/resources/css/app.css',
+            'backend/resources/sass/app.scss',
+            'backend/resources/sass/auth/auth.scss',
+            'backend/resources/js/app.js'
         ])
 
         <script type="text/javascript" src="{{ gs('assets/js/navigate.turbo.js') }}" defer></script>
