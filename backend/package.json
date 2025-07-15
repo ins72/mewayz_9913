@@ -53,6 +53,7 @@
         "quill": "^2.0.3",
         "simplemde": "^1.11.2",
         "sortablejs": "^1.15.2",
+        "swiper": "^11.2.10",
         "tippy.js": "^6.3.7",
         "underscore": "^1.13.6",
         "uuid": "^9.0.0",
