@@ -345,119 +345,300 @@ class CrmController extends Controller
     }
 
     /**
-     * Create a new contact with advanced fields
+     * Create advanced automation workflow for CRM
      */
-    public function createContact(Request $request)
+    public function createAutomationWorkflow(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:audiences,email',
-            'phone' => 'nullable|string|max:20',
-            'company' => 'nullable|string|max:255',
-            'job_title' => 'nullable|string|max:255',
-            'contact_type' => 'required|string|in:individual,company,organization',
-            'status' => 'required|string|in:active,inactive,lead,prospect,customer,archived',
-            'source' => 'nullable|string|in:website,social_media,referral,cold_outreach,event,advertisement,organic',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
-            'address' => 'nullable|string|max:500',
-            'city' => 'nullable|string|max:100',
-            'state' => 'nullable|string|max:100',
-            'country' => 'nullable|string|max:100',
-            'postal_code' => 'nullable|string|max:20',
-            'website' => 'nullable|url|max:255',
-            'linkedin' => 'nullable|url|max:255',
-            'twitter' => 'nullable|string|max:100',
-            'facebook' => 'nullable|url|max:255',
-            'instagram' => 'nullable|string|max:100',
-            'deal_value' => 'nullable|numeric|min:0',
-            'deal_stage' => 'nullable|string|in:prospecting,qualification,proposal,negotiation,closed_won,closed_lost',
-            'priority' => 'nullable|string|in:low,medium,high,urgent',
-            'notes' => 'nullable|string|max:2000',
-            'birthday' => 'nullable|date',
-            'anniversary' => 'nullable|date',
-            'time_zone' => 'nullable|string|max:50',
-            'preferred_contact_method' => 'nullable|string|in:email,phone,sms,whatsapp,linkedin',
-            'marketing_consent' => 'boolean',
-            'custom_fields' => 'nullable|array',
-            'custom_fields.*.key' => 'required|string|max:100',
-            'custom_fields.*.value' => 'required|string|max:500',
-            'custom_fields.*.type' => 'required|string|in:text,number,date,boolean,select'
+            'workflow_name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'trigger_type' => 'required|string|in:contact_created,lead_stage_changed,email_opened,email_clicked,form_submitted,deal_value_changed,last_contact_date,custom_field_updated,tag_added,birthday,anniversary,inactivity_period',
+            'trigger_conditions' => 'required|array',
+            'trigger_conditions.*.field' => 'required|string',
+            'trigger_conditions.*.operator' => 'required|string|in:equals,not_equals,contains,not_contains,greater_than,less_than,is_empty,is_not_empty,starts_with,ends_with,in_list,not_in_list',
+            'trigger_conditions.*.value' => 'required',
+            'actions' => 'required|array|min:1',
+            'actions.*.type' => 'required|string|in:send_email,send_sms,create_task,update_field,add_tag,remove_tag,change_status,assign_to_user,create_deal,update_deal,send_webhook,wait_delay,condition_branch,ai_scoring,lead_qualification',
+            'actions.*.parameters' => 'required|array',
+            'actions.*.delay' => 'nullable|integer|min:0',
+            'actions.*.conditions' => 'nullable|array',
+            'schedule_settings' => 'nullable|array',
+            'schedule_settings.timezone' => 'nullable|string',
+            'schedule_settings.business_hours_only' => 'boolean',
+            'schedule_settings.exclude_weekends' => 'boolean',
+            'schedule_settings.exclude_holidays' => 'boolean',
+            'ai_optimization' => 'boolean',
+            'performance_tracking' => 'boolean',
+            'is_active' => 'boolean'
         ]);
 
         try {
-            $contact = Audience::create([
-                'user_id' => $request->user()->id,
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'company' => $request->company,
-                'job_title' => $request->job_title,
-                'type' => 'contact',
-                'contact_type' => $request->contact_type,
-                'status' => $request->status,
-                'source' => $request->source,
-                'tags' => $request->tags ?? [],
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
-                'postal_code' => $request->postal_code,
-                'website' => $request->website,
-                'linkedin' => $request->linkedin,
-                'twitter' => $request->twitter,
-                'facebook' => $request->facebook,
-                'instagram' => $request->instagram,
-                'deal_value' => $request->deal_value ?? 0,
-                'deal_stage' => $request->deal_stage,
-                'priority' => $request->priority ?? 'medium',
-                'birthday' => $request->birthday,
-                'anniversary' => $request->anniversary,
-                'time_zone' => $request->time_zone,
-                'preferred_contact_method' => $request->preferred_contact_method ?? 'email',
-                'marketing_consent' => $request->marketing_consent ?? false,
-                'custom_fields' => $request->custom_fields ?? [],
-                'last_contact_date' => now()
-            ]);
+            $workflow = [
+                'id' => uniqid('workflow_'),
+                'user_id' => auth()->id(),
+                'workflow_name' => $request->workflow_name,
+                'description' => $request->description,
+                'trigger_type' => $request->trigger_type,
+                'trigger_conditions' => $request->trigger_conditions,
+                'actions' => $this->processWorkflowActions($request->actions),
+                'schedule_settings' => array_merge([
+                    'timezone' => 'UTC',
+                    'business_hours_only' => false,
+                    'exclude_weekends' => false,
+                    'exclude_holidays' => false
+                ], $request->schedule_settings ?? []),
+                'ai_optimization' => $request->ai_optimization ?? false,
+                'performance_tracking' => $request->performance_tracking ?? true,
+                'is_active' => $request->is_active ?? true,
+                'statistics' => [
+                    'total_triggered' => 0,
+                    'total_completed' => 0,
+                    'total_failed' => 0,
+                    'success_rate' => 0,
+                    'avg_completion_time' => 0,
+                    'last_triggered' => null
+                ],
+                'ai_insights' => [],
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
 
-            // Create initial note if provided
-            if ($request->notes) {
-                // Assuming there's a notes relationship/model
-                $contact->notes()->create([
-                    'content' => $request->notes,
-                    'type' => 'initial_note'
-                ]);
+            // Store workflow (in a real app, this would be in a separate table)
+            $this->storeWorkflow($workflow);
+
+            // Initialize AI optimization if enabled
+            if ($request->ai_optimization) {
+                $this->initializeAIOptimization($workflow);
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Contact created successfully',
+                'message' => 'Automation workflow created successfully',
                 'data' => [
-                    'id' => $contact->id,
-                    'name' => $contact->name,
-                    'email' => $contact->email,
-                    'phone' => $contact->phone,
-                    'company' => $contact->company,
-                    'job_title' => $contact->job_title,
-                    'contact_type' => $contact->contact_type,
-                    'status' => $contact->status,
-                    'source' => $contact->source,
-                    'deal_value' => $contact->deal_value,
-                    'priority' => $contact->priority,
-                    'created_at' => $contact->created_at,
-                    'tags' => $contact->tags,
-                    'location' => [
-                        'city' => $contact->city,
-                        'country' => $contact->country
-                    ]
+                    'workflow_id' => $workflow['id'],
+                    'workflow_name' => $workflow['workflow_name'],
+                    'trigger_type' => $workflow['trigger_type'],
+                    'actions_count' => count($workflow['actions']),
+                    'is_active' => $workflow['is_active'],
+                    'ai_optimization_enabled' => $workflow['ai_optimization'],
+                    'estimated_impact' => $this->estimateWorkflowImpact($workflow),
+                    'testing_recommendations' => $this->generateTestingRecommendations($workflow)
                 ]
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Failed to create contact', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
+            Log::error('Automation workflow creation failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create contact: ' . $e->getMessage()
+                'message' => 'Failed to create automation workflow: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * AI-powered lead scoring and qualification
+     */
+    public function getAILeadScoring(Request $request)
+    {
+        $request->validate([
+            'contact_ids' => 'nullable|array|max:100',
+            'contact_ids.*' => 'exists:audiences,id',
+            'scoring_model' => 'required|string|in:standard,advanced,custom,industry_specific',
+            'scoring_factors' => 'nullable|array',
+            'scoring_factors.*' => 'string|in:demographic,behavioral,engagement,firmographic,technographic,intent,social_signals,email_behavior,website_behavior,purchase_history,support_interactions',
+            'minimum_score' => 'nullable|integer|min:0|max:100',
+            'include_predictions' => 'boolean',
+            'include_recommendations' => 'boolean',
+            'batch_size' => 'nullable|integer|min:1|max:1000'
+        ]);
+
+        try {
+            $query = Audience::where('user_id', auth()->id())->where('type', 'contact');
+
+            if ($request->contact_ids) {
+                $query->whereIn('id', $request->contact_ids);
+            }
+
+            $contacts = $query->get();
+
+            if ($contacts->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No contacts found for scoring'
+                ], 404);
+            }
+
+            $scoringModel = $request->scoring_model;
+            $scoringFactors = $request->scoring_factors ?? ['demographic', 'behavioral', 'engagement'];
+            $minScore = $request->minimum_score ?? 0;
+
+            $scoredContacts = [];
+            $scoringInsights = [];
+
+            foreach ($contacts as $contact) {
+                $score = $this->calculateAILeadScore($contact, $scoringModel, $scoringFactors);
+                
+                if ($score['total_score'] >= $minScore) {
+                    $scoredContact = [
+                        'contact_id' => $contact->id,
+                        'name' => $contact->name,
+                        'email' => $contact->email,
+                        'company' => $contact->company,
+                        'scoring_results' => $score,
+                        'qualification_status' => $this->determineQualificationStatus($score),
+                        'priority_level' => $this->determinePriorityLevel($score),
+                        'recommended_actions' => $this->generateRecommendedActions($contact, $score),
+                        'conversion_probability' => $this->calculateConversionProbability($contact, $score),
+                        'ideal_customer_profile_match' => $this->calculateICPMatch($contact, $score),
+                        'engagement_propensity' => $this->calculateEngagementPropensity($contact, $score),
+                        'churn_risk' => $this->calculateChurnRisk($contact, $score),
+                        'lifetime_value_prediction' => $this->predictLifetimeValue($contact, $score),
+                        'next_best_action' => $this->determineNextBestAction($contact, $score),
+                        'scored_at' => now()
+                    ];
+
+                    if ($request->include_predictions) {
+                        $scoredContact['predictions'] = $this->generateAIPredictions($contact, $score);
+                    }
+
+                    if ($request->include_recommendations) {
+                        $scoredContact['ai_recommendations'] = $this->generateAIRecommendations($contact, $score);
+                    }
+
+                    $scoredContacts[] = $scoredContact;
+                }
+            }
+
+            // Generate overall insights
+            $scoringInsights = $this->generateScoringInsights($scoredContacts, $scoringModel);
+
+            // Calculate ROI and performance metrics
+            $performanceMetrics = $this->calculateScoringPerformanceMetrics($scoredContacts);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'scoring_summary' => [
+                        'total_contacts_analyzed' => count($contacts),
+                        'qualified_contacts' => count($scoredContacts),
+                        'average_score' => $this->calculateAverageScore($scoredContacts),
+                        'scoring_model' => $scoringModel,
+                        'scoring_factors' => $scoringFactors,
+                        'high_priority_contacts' => $this->countHighPriorityContacts($scoredContacts),
+                        'conversion_ready_contacts' => $this->countConversionReadyContacts($scoredContacts)
+                    ],
+                    'scored_contacts' => $scoredContacts,
+                    'scoring_insights' => $scoringInsights,
+                    'performance_metrics' => $performanceMetrics,
+                    'model_accuracy' => $this->calculateModelAccuracy($scoringModel),
+                    'optimization_suggestions' => $this->generateOptimizationSuggestions($scoredContacts, $scoringInsights),
+                    'segment_recommendations' => $this->generateSegmentRecommendations($scoredContacts)
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('AI lead scoring failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to perform AI lead scoring: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Advanced pipeline management with AI insights
+     */
+    public function getAdvancedPipelineManagement(Request $request)
+    {
+        $request->validate([
+            'pipeline_id' => 'nullable|string',
+            'date_range' => 'nullable|string|in:last_7_days,last_30_days,last_90_days,last_year,custom',
+            'start_date' => 'nullable|date|required_if:date_range,custom',
+            'end_date' => 'nullable|date|after_or_equal:start_date|required_if:date_range,custom',
+            'include_forecasting' => 'boolean',
+            'include_bottleneck_analysis' => 'boolean',
+            'include_win_loss_analysis' => 'boolean',
+            'include_team_performance' => 'boolean',
+            'include_ai_insights' => 'boolean',
+            'segment_by' => 'nullable|string|in:source,size,industry,geography,product,team_member'
+        ]);
+
+        try {
+            $dateRange = $this->parseDateRange($request->date_range ?? 'last_30_days', $request->start_date, $request->end_date);
+            
+            // Get pipeline data
+            $pipelineData = $this->getPipelineData(auth()->id(), $request->pipeline_id, $dateRange);
+            
+            // Calculate advanced metrics
+            $pipelineMetrics = $this->calculateAdvancedPipelineMetrics($pipelineData, $dateRange);
+            
+            // Analyze pipeline health
+            $pipelineHealth = $this->analyzePipelineHealth($pipelineData, $pipelineMetrics);
+            
+            // Generate velocity analysis
+            $velocityAnalysis = $this->analyzeVelocity($pipelineData, $dateRange);
+            
+            // Conversion rate analysis
+            $conversionAnalysis = $this->analyzeConversionRates($pipelineData, $dateRange);
+
+            $result = [
+                'pipeline_overview' => [
+                    'total_opportunities' => $pipelineMetrics['total_opportunities'],
+                    'total_value' => $pipelineMetrics['total_value'],
+                    'weighted_value' => $pipelineMetrics['weighted_value'],
+                    'average_deal_size' => $pipelineMetrics['average_deal_size'],
+                    'win_rate' => $pipelineMetrics['win_rate'],
+                    'average_sales_cycle' => $pipelineMetrics['average_sales_cycle'],
+                    'pipeline_health_score' => $pipelineHealth['score'],
+                    'pipeline_coverage' => $pipelineMetrics['pipeline_coverage']
+                ],
+                'stage_analysis' => $this->analyzeStagePerformance($pipelineData),
+                'velocity_analysis' => $velocityAnalysis,
+                'conversion_analysis' => $conversionAnalysis,
+                'pipeline_health' => $pipelineHealth,
+                'performance_trends' => $this->analyzePerformanceTrends($pipelineData, $dateRange),
+                'leakage_analysis' => $this->analyzeLeakage($pipelineData, $dateRange)
+            ];
+
+            // Add optional analyses
+            if ($request->include_forecasting) {
+                $result['forecasting'] = $this->generateSalesForecasting($pipelineData, $pipelineMetrics);
+            }
+
+            if ($request->include_bottleneck_analysis) {
+                $result['bottleneck_analysis'] = $this->analyzeBottlenecks($pipelineData, $velocityAnalysis);
+            }
+
+            if ($request->include_win_loss_analysis) {
+                $result['win_loss_analysis'] = $this->analyzeWinLoss($pipelineData, $dateRange);
+            }
+
+            if ($request->include_team_performance) {
+                $result['team_performance'] = $this->analyzeTeamPerformance($pipelineData, $dateRange);
+            }
+
+            if ($request->include_ai_insights) {
+                $result['ai_insights'] = $this->generateAIPipelineInsights($pipelineData, $pipelineMetrics);
+            }
+
+            // Add segmentation if requested
+            if ($request->segment_by) {
+                $result['segmentation'] = $this->segmentPipelineData($pipelineData, $request->segment_by);
+            }
+
+            // Generate recommendations
+            $result['recommendations'] = $this->generatePipelineRecommendations($pipelineData, $pipelineMetrics, $pipelineHealth);
+
+            return response()->json([
+                'success' => true,
+                'data' => $result
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Advanced pipeline management failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve advanced pipeline management data: ' . $e->getMessage()
             ], 500);
         }
     }
