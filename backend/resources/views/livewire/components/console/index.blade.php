@@ -278,7 +278,7 @@
                            </div>
                         </div>
                         <div class="details__col">
-                           <div class="details__box !bg-[#f7f3f2]">
+                           <div class="details__box !bg-gray-50 dark:!bg-gray-700">
                               <div class="details__chart details__chart_counter relative" wire:ignore>
                                  <template x-if="chartLoading">
                                      <div class="flex flex-col gap-2 p-5 w-full mt-auto">
@@ -296,12 +296,12 @@
                      <div class="details__list details__list_four">
                         <div class="details__item">
                            <div class="details__head">
-                              <div class="details__preview bg-purple">
+                              <div class="details__preview bg-purple-600">
                                  {!! __i('emails', 'email-mail-letter', 'w-[10px] text-white') !!}
                               </div>
-                              <div class="details__text caption-sm">{{ __('Audience') }}</div>
+                              <div class="details__text caption-sm text-gray-600 dark:text-gray-400">{{ __('Audience') }}</div>
                            </div>
-                           <div class="details__counter h3">
+                           <div class="details__counter h3 text-gray-900 dark:text-white">
                               <template x-if="analyticsLoading">
                                   <div class="--placeholder-skeleton w-full h-[20px] rounded-sm mb-2"></div>
                               </template>
@@ -310,17 +310,17 @@
                               </template>
                            </div>
                            <div class="details__indicator">
-                              <div class="details__progress bg-purple w-[55%]"></div>
+                              <div class="details__progress bg-purple-600 w-[55%]"></div>
                            </div>
                         </div>
                         <div class="details__item">
                            <div class="details__head">
-                              <div class="details__preview bg-pink">
-                                 {!! __i('Building, Construction', 'store', 'w-[10px] text-black') !!}
+                              <div class="details__preview bg-pink-600">
+                                 {!! __i('Building, Construction', 'store', 'w-[10px] text-white') !!}
                               </div>
-                              <div class="details__text caption-sm">{{ __('Products') }}</div>
+                              <div class="details__text caption-sm text-gray-600 dark:text-gray-400">{{ __('Products') }}</div>
                            </div>
-                           <div class="details__counter h3">
+                           <div class="details__counter h3 text-gray-900 dark:text-white">
                               <template x-if="analyticsLoading">
                                   <div class="--placeholder-skeleton w-full h-[20px] rounded-sm mb-2"></div>
                               </template>
@@ -329,17 +329,17 @@
                               </template>
                            </div>
                            <div class="details__indicator">
-                              <div class="details__progress bg-pink" style="width: 52%;"></div>
+                              <div class="details__progress bg-pink-600" style="width: 52%;"></div>
                            </div>
                         </div>
                         <div class="details__item">
                            <div class="details__head">
-                              <div class="details__preview bg-blue">
+                              <div class="details__preview bg-blue-600">
                                  {!! __i('Content Edit', 'Book, Open.4', 'w-[10px] text-white') !!}
                               </div>
-                              <div class="details__text caption-sm">{{ __('Courses') }}</div>
+                              <div class="details__text caption-sm text-gray-600 dark:text-gray-400">{{ __('Courses') }}</div>
                            </div>
-                           <div class="details__counter h3">
+                           <div class="details__counter h3 text-gray-900 dark:text-white">
                               <template x-if="analyticsLoading">
                                  <div class="--placeholder-skeleton w-full h-[20px] rounded-sm mb-2"></div>
                              </template>
@@ -348,17 +348,17 @@
                              </template>
                            </div>
                            <div class="details__indicator">
-                              <div class="details__progress bg-blue" style="width: 55%;"></div>
+                              <div class="details__progress bg-blue-600" style="width: 55%;"></div>
                            </div>
                         </div>
                         <div class="details__item">
                            <div class="details__head">
-                              <div class="details__preview bg-red">
+                              <div class="details__preview bg-red-600">
                                  {!! __i('custom', 'settings-pay-1', 'w-[10px] text-white') !!}
                               </div>
-                              <div class="details__text caption-sm">{{ __('Total Donations') }}</div>
+                              <div class="details__text caption-sm text-gray-600 dark:text-gray-400">{{ __('Total Donations') }}</div>
                            </div>
-                           <div class="details__counter h3">
+                           <div class="details__counter h3 text-gray-900 dark:text-white">
                               <template x-if="analyticsLoading">
                                   <div class="--placeholder-skeleton w-full h-[20px] rounded-sm mb-2"></div>
                               </template>
@@ -367,7 +367,7 @@
                               </template>
                            </div>
                            <div class="details__indicator">
-                              <div class="details__progress bg-red" style="width: 68%;"></div>
+                              <div class="details__progress bg-red-600" style="width: 68%;"></div>
                            </div>
                         </div>
                      </div>
