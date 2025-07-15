@@ -104,51 +104,27 @@ sudo apt install -y supervisor
 sudo systemctl enable supervisor
 ```
 
-#### Environment Configuration
-```bash
-# Create environment file
-cp .env.example .env
+### Step 2: Database Configuration
 
-# Generate application key
-php artisan key:generate
-
-# Configure environment
-nano .env
+#### 2.1 Create Database
+```sql
+CREATE DATABASE mewayz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'mewayz'@'localhost' IDENTIFIED BY 'secure_password';
+GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
-**Production .env Configuration:**
-```env
-APP_NAME=Mewayz
-APP_ENV=production
-APP_KEY=base64:generated-key-here
-APP_DEBUG=false
-APP_URL=https://your-domain.com
-APP_INSTALLED=true
+#### 2.2 Optimize MySQL
+```bash
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+```
 
-# Database
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=mewayz
-DB_USERNAME=mewayz
-DB_PASSWORD=secure_password
-
-# Mail Configuration
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.example.com
-MAIL_PORT=587
-MAIL_USERNAME=your-email@example.com
-MAIL_PASSWORD=your-password
-MAIL_ENCRYPTION=tls
-
-# OAuth Configuration
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-APPLE_CLIENT_ID=your-apple-client-id
-APPLE_CLIENT_SECRET=your-apple-client-secret
-
-# Sanctum Configuration
-SANCTUM_STATEFUL_DOMAINS=your-domain.com
+Add:
+```ini
+[mysqld]
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+max_connections = 200
 ```
 
 #### Database Setup
