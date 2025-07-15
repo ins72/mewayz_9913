@@ -214,7 +214,17 @@ class _CreateBioSiteFormState extends State<CreateBioSiteForm> {
 
   void _createBioSite() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement bio site creation
+      // Create bio site data
+      final bioSiteData = {
+        'name': _titleController.text,
+        'url': _urlController.text,
+        'description': _descriptionController.text,
+        'theme': _selectedTheme,
+      };
+      
+      // Call API to create bio site
+      _submitBioSite(bioSiteData);
+      
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -222,6 +232,16 @@ class _CreateBioSiteFormState extends State<CreateBioSiteForm> {
           backgroundColor: Color(0xFF26DE81),
         ),
       );
+    }
+  }
+
+  Future<void> _submitBioSite(Map<String, dynamic> bioSiteData) async {
+    try {
+      // Call API service to create bio site
+      await ApiService.createBioSite(bioSiteData);
+    } catch (e) {
+      // Handle error
+      print('Error creating bio site: $e');
     }
   }
 }
