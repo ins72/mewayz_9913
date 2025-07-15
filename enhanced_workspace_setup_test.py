@@ -173,8 +173,11 @@ class EnhancedWorkspaceSetupTester:
         print("🔧 Testing Available Features API...")
         
         try:
-            data = {'selected_goals': selected_goals}
-            response = self.make_request('GET', '/workspace-setup/available-features', data)
+            # For GET request with array parameters, we need to send as JSON in POST
+            # or format the array properly for GET
+            response = self.make_request('POST', '/workspace-setup/available-features', {
+                'selected_goals': selected_goals
+            })
             response_time = response.elapsed.total_seconds()
             
             if response.status_code == 200:
