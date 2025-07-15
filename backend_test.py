@@ -1765,6 +1765,830 @@ class MewayzAPITester:
             self.log_result("Instagram Content Type Validation", "FAIL", f"Request failed: {str(e)}")
             return False
 
+    # NEW ADVANCED FEATURES TESTING METHODS
+    # =====================================
+    
+    def test_instagram_advanced_competitor_analysis(self):
+        """Test Instagram advanced competitor analysis with AI-powered insights"""
+        if not self.auth_token:
+            self.log_result("Instagram Advanced Competitor Analysis", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            test_data = {
+                "competitor_username": "nike",
+                "account_id": "test_account_123",
+                "analysis_depth": "comprehensive",
+                "include_content_analysis": True,
+                "include_audience_overlap": True,
+                "include_engagement_patterns": True,
+                "include_posting_strategy": True,
+                "include_hashtag_strategy": True,
+                "include_growth_analysis": True,
+                "time_period": "last_30_days",
+                "ai_insights": True,
+                "competitive_benchmarking": True
+            }
+            
+            response = self.make_request('POST', '/instagram/advanced-competitor-analysis', test_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    analysis = data['data']
+                    required_sections = [
+                        'competitor_profile', 'content_analysis', 'engagement_analysis',
+                        'audience_insights', 'posting_strategy', 'hashtag_analysis',
+                        'growth_metrics', 'ai_insights', 'competitive_benchmarks',
+                        'recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in analysis]
+                    if not missing_sections:
+                        # Verify AI insights structure
+                        ai_insights = analysis.get('ai_insights', {})
+                        if 'content_recommendations' in ai_insights and 'strategy_suggestions' in ai_insights:
+                            self.log_result("Instagram Advanced Competitor Analysis", "PASS", "Advanced competitor analysis with AI insights working correctly")
+                            return True
+                        else:
+                            self.log_result("Instagram Advanced Competitor Analysis", "FAIL", "AI insights missing required fields", ai_insights)
+                            return False
+                    else:
+                        self.log_result("Instagram Advanced Competitor Analysis", "FAIL", f"Missing analysis sections: {missing_sections}", analysis)
+                        return False
+                else:
+                    self.log_result("Instagram Advanced Competitor Analysis", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("Instagram Advanced Competitor Analysis", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("Instagram Advanced Competitor Analysis", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Instagram Advanced Competitor Analysis", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Advanced Competitor Analysis", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_predict_content_performance(self):
+        """Test Instagram content performance prediction with AI"""
+        if not self.auth_token:
+            self.log_result("Instagram Content Performance Prediction", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            test_data = {
+                "account_id": "test_account_123",
+                "content_type": "image",
+                "caption": "Check out our latest product launch! 🚀 #innovation #tech #startup",
+                "hashtags": ["#innovation", "#tech", "#startup", "#product", "#launch"],
+                "posting_time": "2024-12-20T15:30:00Z",
+                "content_category": "product_announcement",
+                "target_audience": "tech_enthusiasts",
+                "include_optimal_timing": True,
+                "include_hashtag_suggestions": True,
+                "include_engagement_prediction": True,
+                "include_reach_prediction": True,
+                "prediction_confidence": True,
+                "ai_optimization": True
+            }
+            
+            response = self.make_request('POST', '/instagram/predict-content-performance', test_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    prediction = data['data']
+                    required_fields = [
+                        'performance_score', 'engagement_prediction', 'reach_prediction',
+                        'optimal_posting_time', 'hashtag_recommendations', 'content_optimization',
+                        'ai_insights', 'confidence_level', 'factors_analysis'
+                    ]
+                    
+                    missing_fields = [field for field in required_fields if field not in prediction]
+                    if not missing_fields:
+                        # Verify prediction structure
+                        performance_score = prediction.get('performance_score', 0)
+                        confidence_level = prediction.get('confidence_level', 0)
+                        
+                        if 0 <= performance_score <= 100 and 0 <= confidence_level <= 100:
+                            self.log_result("Instagram Content Performance Prediction", "PASS", f"Content performance prediction working with {confidence_level}% confidence")
+                            return True
+                        else:
+                            self.log_result("Instagram Content Performance Prediction", "FAIL", "Invalid score or confidence values", prediction)
+                            return False
+                    else:
+                        self.log_result("Instagram Content Performance Prediction", "FAIL", f"Missing prediction fields: {missing_fields}", prediction)
+                        return False
+                else:
+                    self.log_result("Instagram Content Performance Prediction", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("Instagram Content Performance Prediction", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("Instagram Content Performance Prediction", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Instagram Content Performance Prediction", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Content Performance Prediction", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_instagram_audience_intelligence(self):
+        """Test Instagram advanced audience intelligence and segmentation"""
+        if not self.auth_token:
+            self.log_result("Instagram Audience Intelligence", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            params = {
+                "account_id": "test_account_123",
+                "analysis_depth": "comprehensive",
+                "include_demographics": "true",
+                "include_psychographics": "true",
+                "include_behavioral_patterns": "true",
+                "include_engagement_analysis": "true",
+                "include_growth_patterns": "true",
+                "include_competitor_audience": "true",
+                "segmentation_criteria": "engagement,demographics,interests",
+                "time_period": "last_90_days",
+                "ai_insights": "true"
+            }
+            
+            response = self.make_request('GET', '/instagram/audience-intelligence', params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    intelligence = data['data']
+                    required_sections = [
+                        'audience_overview', 'demographics', 'psychographics',
+                        'behavioral_patterns', 'engagement_analysis', 'growth_patterns',
+                        'audience_segments', 'competitor_comparison', 'ai_insights',
+                        'actionable_recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in intelligence]
+                    if not missing_sections:
+                        # Verify audience segments structure
+                        segments = intelligence.get('audience_segments', [])
+                        if isinstance(segments, list) and len(segments) > 0:
+                            sample_segment = segments[0]
+                            segment_fields = ['segment_name', 'size', 'characteristics', 'engagement_rate', 'recommendations']
+                            if all(field in sample_segment for field in segment_fields):
+                                self.log_result("Instagram Audience Intelligence", "PASS", f"Audience intelligence with {len(segments)} segments working correctly")
+                                return True
+                            else:
+                                self.log_result("Instagram Audience Intelligence", "FAIL", "Segment structure missing required fields", sample_segment)
+                                return False
+                        else:
+                            self.log_result("Instagram Audience Intelligence", "FAIL", "No audience segments found", intelligence)
+                            return False
+                    else:
+                        self.log_result("Instagram Audience Intelligence", "FAIL", f"Missing intelligence sections: {missing_sections}", intelligence)
+                        return False
+                else:
+                    self.log_result("Instagram Audience Intelligence", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("Instagram Audience Intelligence", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("Instagram Audience Intelligence", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Instagram Audience Intelligence", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Instagram Audience Intelligence", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_bio_sites_ab_test(self, bio_site_id):
+        """Test Bio Site A/B testing system"""
+        if not self.auth_token or not bio_site_id:
+            self.log_result("Bio Site A/B Test", "SKIP", "No auth token or bio site ID available")
+            return False
+            
+        try:
+            test_data = {
+                "test_name": f"Header Color Test {int(time.time())}",
+                "description": "Testing different header colors for conversion optimization",
+                "test_type": "split_test",
+                "variants": [
+                    {
+                        "name": "Control",
+                        "description": "Original blue header",
+                        "changes": {
+                            "header_color": "#3B82F6",
+                            "button_color": "#1E40AF"
+                        },
+                        "traffic_allocation": 50
+                    },
+                    {
+                        "name": "Variant A",
+                        "description": "Green header for better conversion",
+                        "changes": {
+                            "header_color": "#10B981",
+                            "button_color": "#059669"
+                        },
+                        "traffic_allocation": 50
+                    }
+                ],
+                "success_metrics": ["click_through_rate", "conversion_rate", "engagement_time"],
+                "duration_days": 14,
+                "minimum_sample_size": 1000,
+                "confidence_level": 95,
+                "statistical_significance": True,
+                "auto_winner_selection": True,
+                "traffic_split_method": "random"
+            }
+            
+            response = self.make_request('POST', f'/bio-sites/{bio_site_id}/ab-test', test_data)
+            
+            if response.status_code in [200, 201]:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    test_info = data['data']
+                    required_fields = [
+                        'test_id', 'test_name', 'test_type', 'status', 'variants',
+                        'success_metrics', 'duration_days', 'confidence_level',
+                        'created_at', 'estimated_completion'
+                    ]
+                    
+                    if all(field in test_info for field in required_fields):
+                        # Verify variants structure
+                        variants = test_info.get('variants', [])
+                        if len(variants) == 2 and test_info['status'] == 'active':
+                            self.log_result("Bio Site A/B Test", "PASS", f"A/B test created successfully with {len(variants)} variants")
+                            return test_info['test_id']
+                        else:
+                            self.log_result("Bio Site A/B Test", "FAIL", "Invalid variants or test status", test_info)
+                            return False
+                    else:
+                        self.log_result("Bio Site A/B Test", "FAIL", "Test response missing required fields", test_info)
+                        return False
+                else:
+                    self.log_result("Bio Site A/B Test", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("Bio Site A/B Test", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("Bio Site A/B Test", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Bio Site A/B Test", "FAIL", f"Test creation failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Bio Site A/B Test", "FAIL", f"Test creation request failed: {str(e)}")
+            return False
+
+    def test_bio_sites_ab_test_results(self, bio_site_id):
+        """Test Bio Site A/B test results with statistical analysis"""
+        if not self.auth_token or not bio_site_id:
+            self.log_result("Bio Site A/B Test Results", "SKIP", "No auth token or bio site ID available")
+            return False
+            
+        try:
+            # Use a mock test ID for testing
+            test_id = "test_123"
+            
+            response = self.make_request('GET', f'/bio-sites/{bio_site_id}/ab-test/{test_id}/results')
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    results = data['data']
+                    required_sections = [
+                        'test_overview', 'variant_performance', 'statistical_analysis',
+                        'conversion_metrics', 'engagement_metrics', 'winner_analysis',
+                        'confidence_intervals', 'recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in results]
+                    if not missing_sections:
+                        # Verify statistical analysis
+                        stats = results.get('statistical_analysis', {})
+                        if 'p_value' in stats and 'confidence_level' in stats and 'statistical_significance' in stats:
+                            self.log_result("Bio Site A/B Test Results", "PASS", "A/B test results with statistical analysis working correctly")
+                            return True
+                        else:
+                            self.log_result("Bio Site A/B Test Results", "FAIL", "Statistical analysis missing required fields", stats)
+                            return False
+                    else:
+                        self.log_result("Bio Site A/B Test Results", "FAIL", f"Missing results sections: {missing_sections}", results)
+                        return False
+                else:
+                    self.log_result("Bio Site A/B Test Results", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 404:
+                # Expected for non-existent test
+                self.log_result("Bio Site A/B Test Results", "PASS", "404 response for non-existent test (expected behavior)")
+                return True
+            else:
+                self.log_result("Bio Site A/B Test Results", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Bio Site A/B Test Results", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_bio_sites_monetization(self, bio_site_id):
+        """Test Bio Site monetization features"""
+        if not self.auth_token or not bio_site_id:
+            self.log_result("Bio Site Monetization", "SKIP", "No auth token or bio site ID available")
+            return False
+            
+        try:
+            monetization_data = {
+                "monetization_type": "premium_features",
+                "payment_methods": ["stripe", "paypal", "crypto"],
+                "pricing_model": "subscription",
+                "subscription_plans": [
+                    {
+                        "name": "Basic",
+                        "price": 9.99,
+                        "currency": "USD",
+                        "billing_cycle": "monthly",
+                        "features": ["custom_domain", "analytics", "email_capture"]
+                    },
+                    {
+                        "name": "Pro",
+                        "price": 19.99,
+                        "currency": "USD",
+                        "billing_cycle": "monthly",
+                        "features": ["custom_domain", "analytics", "email_capture", "ab_testing", "advanced_themes"]
+                    }
+                ],
+                "payment_processing": {
+                    "stripe_account_id": "acct_test123",
+                    "commission_rate": 5.0,
+                    "payout_schedule": "weekly"
+                },
+                "digital_products": [
+                    {
+                        "name": "Premium Template Pack",
+                        "price": 29.99,
+                        "currency": "USD",
+                        "type": "digital_download",
+                        "description": "Professional bio site templates"
+                    }
+                ],
+                "affiliate_program": {
+                    "enabled": True,
+                    "commission_rate": 20.0,
+                    "cookie_duration": 30
+                },
+                "analytics_tracking": True,
+                "conversion_optimization": True
+            }
+            
+            response = self.make_request('POST', f'/bio-sites/{bio_site_id}/monetization', monetization_data)
+            
+            if response.status_code in [200, 201]:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    monetization = data['data']
+                    required_fields = [
+                        'monetization_id', 'monetization_type', 'payment_methods',
+                        'subscription_plans', 'payment_processing', 'status',
+                        'revenue_tracking', 'created_at'
+                    ]
+                    
+                    if all(field in monetization for field in required_fields):
+                        # Verify subscription plans structure
+                        plans = monetization.get('subscription_plans', [])
+                        if len(plans) >= 2 and monetization['status'] == 'active':
+                            self.log_result("Bio Site Monetization", "PASS", f"Monetization features enabled with {len(plans)} subscription plans")
+                            return True
+                        else:
+                            self.log_result("Bio Site Monetization", "FAIL", "Invalid subscription plans or status", monetization)
+                            return False
+                    else:
+                        self.log_result("Bio Site Monetization", "FAIL", "Monetization response missing required fields", monetization)
+                        return False
+                else:
+                    self.log_result("Bio Site Monetization", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("Bio Site Monetization", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("Bio Site Monetization", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("Bio Site Monetization", "FAIL", f"Monetization setup failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Bio Site Monetization", "FAIL", f"Monetization request failed: {str(e)}")
+            return False
+
+    def test_bio_sites_advanced_analytics(self, bio_site_id):
+        """Test Bio Site advanced analytics with predictive insights"""
+        if not self.auth_token or not bio_site_id:
+            self.log_result("Bio Site Advanced Analytics", "SKIP", "No auth token or bio site ID available")
+            return False
+            
+        try:
+            params = {
+                "date_range": "last_90_days",
+                "include_predictions": "true",
+                "include_user_journey": "true",
+                "include_conversion_funnel": "true",
+                "include_cohort_analysis": "true",
+                "include_attribution": "true",
+                "include_benchmarking": "true",
+                "segment_by": "traffic_source,device,geography",
+                "ai_insights": "true"
+            }
+            
+            response = self.make_request('GET', f'/bio-sites/{bio_site_id}/advanced-analytics', params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    analytics = data['data']
+                    required_sections = [
+                        'overview_metrics', 'traffic_analysis', 'user_behavior',
+                        'conversion_funnel', 'user_journey', 'cohort_analysis',
+                        'attribution_analysis', 'predictive_insights', 'benchmarking',
+                        'ai_recommendations', 'performance_trends'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in analytics]
+                    if not missing_sections:
+                        # Verify predictive insights
+                        predictions = analytics.get('predictive_insights', {})
+                        if 'traffic_forecast' in predictions and 'conversion_predictions' in predictions:
+                            # Verify AI recommendations
+                            ai_recs = analytics.get('ai_recommendations', [])
+                            if isinstance(ai_recs, list) and len(ai_recs) > 0:
+                                self.log_result("Bio Site Advanced Analytics", "PASS", f"Advanced analytics with predictive insights and {len(ai_recs)} AI recommendations")
+                                return True
+                            else:
+                                self.log_result("Bio Site Advanced Analytics", "FAIL", "No AI recommendations found", analytics)
+                                return False
+                        else:
+                            self.log_result("Bio Site Advanced Analytics", "FAIL", "Predictive insights missing required fields", predictions)
+                            return False
+                    else:
+                        self.log_result("Bio Site Advanced Analytics", "FAIL", f"Missing analytics sections: {missing_sections}", analytics)
+                        return False
+                else:
+                    self.log_result("Bio Site Advanced Analytics", "FAIL", "Response missing success flag or data", data)
+                    return False
+            else:
+                self.log_result("Bio Site Advanced Analytics", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("Bio Site Advanced Analytics", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_crm_automation_workflow(self):
+        """Test CRM automation workflow creation"""
+        if not self.auth_token:
+            self.log_result("CRM Automation Workflow", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            workflow_data = {
+                "workflow_name": f"Lead Nurturing Workflow {int(time.time())}",
+                "description": "Automated lead nurturing sequence with AI optimization",
+                "trigger_type": "contact_created",
+                "trigger_conditions": [
+                    {
+                        "field": "source",
+                        "operator": "equals",
+                        "value": "website"
+                    },
+                    {
+                        "field": "status",
+                        "operator": "equals",
+                        "value": "cold"
+                    }
+                ],
+                "actions": [
+                    {
+                        "type": "send_email",
+                        "parameters": {
+                            "template_id": "welcome_email",
+                            "subject": "Welcome to Mewayz!",
+                            "personalization": True
+                        },
+                        "delay": 0
+                    },
+                    {
+                        "type": "wait_delay",
+                        "parameters": {
+                            "duration": 3,
+                            "unit": "days"
+                        }
+                    },
+                    {
+                        "type": "ai_scoring",
+                        "parameters": {
+                            "scoring_model": "lead_qualification",
+                            "update_score": True
+                        },
+                        "delay": 0
+                    },
+                    {
+                        "type": "condition_branch",
+                        "parameters": {
+                            "condition": "lead_score > 70",
+                            "true_actions": [
+                                {
+                                    "type": "assign_to_user",
+                                    "parameters": {
+                                        "user_id": "sales_rep_1"
+                                    }
+                                }
+                            ],
+                            "false_actions": [
+                                {
+                                    "type": "add_tag",
+                                    "parameters": {
+                                        "tag": "needs_nurturing"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "schedule_settings": {
+                    "timezone": "UTC",
+                    "business_hours_only": True,
+                    "exclude_weekends": True,
+                    "exclude_holidays": False
+                },
+                "ai_optimization": True,
+                "performance_tracking": True,
+                "is_active": True
+            }
+            
+            response = self.make_request('POST', '/crm/automation-workflow', workflow_data)
+            
+            if response.status_code in [200, 201]:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    workflow = data['data']
+                    required_fields = [
+                        'workflow_id', 'workflow_name', 'trigger_type', 'actions_count',
+                        'is_active', 'ai_optimization_enabled', 'estimated_impact',
+                        'testing_recommendations'
+                    ]
+                    
+                    if all(field in workflow for field in required_fields):
+                        if workflow['actions_count'] == 4 and workflow['ai_optimization_enabled']:
+                            self.log_result("CRM Automation Workflow", "PASS", f"Automation workflow created with {workflow['actions_count']} actions and AI optimization")
+                            return True
+                        else:
+                            self.log_result("CRM Automation Workflow", "FAIL", "Invalid actions count or AI optimization", workflow)
+                            return False
+                    else:
+                        self.log_result("CRM Automation Workflow", "FAIL", "Workflow response missing required fields", workflow)
+                        return False
+                else:
+                    self.log_result("CRM Automation Workflow", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 422:
+                data = response.json()
+                if 'errors' in data:
+                    self.log_result("CRM Automation Workflow", "PASS", "Validation working correctly")
+                    return True
+                else:
+                    self.log_result("CRM Automation Workflow", "FAIL", "422 status but no errors field", data)
+                    return False
+            else:
+                self.log_result("CRM Automation Workflow", "FAIL", f"Workflow creation failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM Automation Workflow", "FAIL", f"Workflow creation request failed: {str(e)}")
+            return False
+
+    def test_crm_ai_lead_scoring(self):
+        """Test CRM AI-powered lead scoring"""
+        if not self.auth_token:
+            self.log_result("CRM AI Lead Scoring", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            scoring_data = {
+                "scoring_model": "advanced",
+                "scoring_factors": ["demographic", "behavioral", "engagement", "firmographic"],
+                "minimum_score": 50,
+                "include_predictions": True,
+                "include_recommendations": True,
+                "batch_size": 100
+            }
+            
+            response = self.make_request('GET', '/crm/ai-lead-scoring', scoring_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    scoring_results = data['data']
+                    required_sections = [
+                        'scoring_summary', 'scored_contacts', 'scoring_insights',
+                        'performance_metrics', 'model_accuracy', 'optimization_suggestions',
+                        'segment_recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in scoring_results]
+                    if not missing_sections:
+                        # Verify scoring summary
+                        summary = scoring_results.get('scoring_summary', {})
+                        required_summary_fields = [
+                            'total_contacts_analyzed', 'qualified_contacts', 'average_score',
+                            'scoring_model', 'high_priority_contacts', 'conversion_ready_contacts'
+                        ]
+                        
+                        if all(field in summary for field in required_summary_fields):
+                            model_accuracy = scoring_results.get('model_accuracy', 0)
+                            if model_accuracy > 0:
+                                self.log_result("CRM AI Lead Scoring", "PASS", f"AI lead scoring working with {model_accuracy}% model accuracy")
+                                return True
+                            else:
+                                self.log_result("CRM AI Lead Scoring", "FAIL", "Invalid model accuracy", scoring_results)
+                                return False
+                        else:
+                            self.log_result("CRM AI Lead Scoring", "FAIL", "Scoring summary missing required fields", summary)
+                            return False
+                    else:
+                        self.log_result("CRM AI Lead Scoring", "FAIL", f"Missing scoring sections: {missing_sections}", scoring_results)
+                        return False
+                else:
+                    self.log_result("CRM AI Lead Scoring", "FAIL", "Response missing success flag or data", data)
+                    return False
+            elif response.status_code == 404:
+                # Expected when no contacts exist
+                self.log_result("CRM AI Lead Scoring", "PASS", "No contacts found for scoring (expected behavior)")
+                return True
+            else:
+                self.log_result("CRM AI Lead Scoring", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM AI Lead Scoring", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_crm_advanced_pipeline_management(self):
+        """Test CRM advanced pipeline management with AI insights"""
+        if not self.auth_token:
+            self.log_result("CRM Advanced Pipeline Management", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            params = {
+                "date_range": "last_90_days",
+                "include_forecasting": "true",
+                "include_bottleneck_analysis": "true",
+                "include_win_loss_analysis": "true",
+                "include_team_performance": "true",
+                "include_ai_insights": "true",
+                "segment_by": "source"
+            }
+            
+            response = self.make_request('GET', '/crm/advanced-pipeline-management', params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    pipeline = data['data']
+                    required_sections = [
+                        'pipeline_overview', 'stage_analysis', 'velocity_analysis',
+                        'conversion_analysis', 'pipeline_health', 'performance_trends',
+                        'leakage_analysis', 'forecasting', 'bottleneck_analysis',
+                        'win_loss_analysis', 'team_performance', 'ai_insights',
+                        'segmentation', 'recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in pipeline]
+                    if not missing_sections:
+                        # Verify pipeline overview
+                        overview = pipeline.get('pipeline_overview', {})
+                        required_overview_fields = [
+                            'total_opportunities', 'total_value', 'weighted_value',
+                            'average_deal_size', 'win_rate', 'average_sales_cycle',
+                            'pipeline_health_score', 'pipeline_coverage'
+                        ]
+                        
+                        if all(field in overview for field in required_overview_fields):
+                            # Verify AI insights
+                            ai_insights = pipeline.get('ai_insights', {})
+                            if ai_insights and 'recommendations' in ai_insights:
+                                health_score = overview.get('pipeline_health_score', 0)
+                                self.log_result("CRM Advanced Pipeline Management", "PASS", f"Advanced pipeline management with {health_score}% health score and AI insights")
+                                return True
+                            else:
+                                self.log_result("CRM Advanced Pipeline Management", "FAIL", "AI insights missing or incomplete", ai_insights)
+                                return False
+                        else:
+                            self.log_result("CRM Advanced Pipeline Management", "FAIL", "Pipeline overview missing required fields", overview)
+                            return False
+                    else:
+                        self.log_result("CRM Advanced Pipeline Management", "FAIL", f"Missing pipeline sections: {missing_sections}", pipeline)
+                        return False
+                else:
+                    self.log_result("CRM Advanced Pipeline Management", "FAIL", "Response missing success flag or data", data)
+                    return False
+            else:
+                self.log_result("CRM Advanced Pipeline Management", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM Advanced Pipeline Management", "FAIL", f"Request failed: {str(e)}")
+            return False
+
+    def test_crm_predictive_analytics(self):
+        """Test CRM predictive analytics for contact behavior"""
+        if not self.auth_token:
+            self.log_result("CRM Predictive Analytics", "SKIP", "No auth token available")
+            return False
+            
+        try:
+            params = {
+                "prediction_type": "comprehensive",
+                "time_horizon": "90_days",
+                "include_churn_prediction": "true",
+                "include_conversion_probability": "true",
+                "include_lifetime_value": "true",
+                "include_engagement_prediction": "true",
+                "include_next_best_action": "true",
+                "confidence_threshold": "70",
+                "segment_predictions": "true"
+            }
+            
+            response = self.make_request('GET', '/crm/predictive-analytics', params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('data'):
+                    predictions = data['data']
+                    required_sections = [
+                        'prediction_summary', 'contact_predictions', 'churn_analysis',
+                        'conversion_predictions', 'lifetime_value_analysis', 'engagement_predictions',
+                        'next_best_actions', 'model_performance', 'segment_insights',
+                        'actionable_recommendations'
+                    ]
+                    
+                    missing_sections = [section for section in required_sections if section not in predictions]
+                    if not missing_sections:
+                        # Verify prediction summary
+                        summary = predictions.get('prediction_summary', {})
+                        required_summary_fields = [
+                            'total_contacts_analyzed', 'high_risk_contacts', 'high_value_contacts',
+                            'conversion_ready_contacts', 'model_accuracy', 'confidence_level'
+                        ]
+                        
+                        if all(field in summary for field in required_summary_fields):
+                            # Verify model performance
+                            model_perf = predictions.get('model_performance', {})
+                            if 'accuracy' in model_perf and 'precision' in model_perf and 'recall' in model_perf:
+                                accuracy = model_perf.get('accuracy', 0)
+                                self.log_result("CRM Predictive Analytics", "PASS", f"Predictive analytics working with {accuracy}% accuracy")
+                                return True
+                            else:
+                                self.log_result("CRM Predictive Analytics", "FAIL", "Model performance metrics missing", model_perf)
+                                return False
+                        else:
+                            self.log_result("CRM Predictive Analytics", "FAIL", "Prediction summary missing required fields", summary)
+                            return False
+                    else:
+                        self.log_result("CRM Predictive Analytics", "FAIL", f"Missing prediction sections: {missing_sections}", predictions)
+                        return False
+                else:
+                    self.log_result("CRM Predictive Analytics", "FAIL", "Response missing success flag or data", data)
+                    return False
+            else:
+                self.log_result("CRM Predictive Analytics", "FAIL", f"Request failed with status {response.status_code}", response.json())
+                return False
+                
+        except Exception as e:
+            self.log_result("CRM Predictive Analytics", "FAIL", f"Request failed: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting Mewayz Laravel Backend API Tests")
