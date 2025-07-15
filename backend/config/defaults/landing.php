@@ -86,7 +86,7 @@ return [
                         "title" => "Dylan Cooper",
                         "bio" => "Product Development Coordinator",
                         "text" =>
-                            "I was able to design a professional-looking site in no time thanks Zeph\'s user-friendly design tools. ",
+                            "I was able to design a professional-looking site in no time thanks Mewayz\'s user-friendly design tools. ",
                         "rating" => "5",
                         "image" => null,
                     ],
