@@ -97,7 +97,7 @@ $register = function () {
                                 <div class="grid grid-cols-2 gap-2">
                                     @if (config('app.GOOGLE_ENABLE'))
                                     <a href="{{ route('auth.driver.redirect', 'google') }}">
-                                        <button type="button" class="yena-button-stack w-full">
+                                        <button type="button" class="btn btn-secondary w-full">
                                             <div class="flex items-center justify-center">
                                                 <div>
                                                     {!! __i('others', 'google-icon', 'w-6 h-6') !!}
@@ -108,7 +108,7 @@ $register = function () {
                                     @endif
                                     @if (config('app.FACEBOOK_ENABLE'))
                                     <a href="{{ route('auth.driver.redirect', 'facebook') }}">
-                                        <button type="button" class="yena-button-stack w-full">
+                                        <button type="button" class="btn btn-secondary w-full">
     
                                             <div class="flex items-center justify-center">
                                                 <div>
@@ -120,11 +120,11 @@ $register = function () {
                                     @endif
                                 </div>
                                 <div class="flex items-center flex-row gap-2 mt-6">
-                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full">
+                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full border-gray-300 dark:border-gray-600">
     
-                                    <p class="text-sm whitespace-nowrap">{{ __('or') }}</p>
+                                    <p class="text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('or') }}</p>
     
-                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full">
+                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full border-gray-300 dark:border-gray-600">
                                 </div>
                             </div>
                             @endif
