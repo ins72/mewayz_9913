@@ -174,8 +174,19 @@ class MewayzComprehensiveTester:
         """Test authentication system for user type"""
         print(f"🔐 Testing Authentication System for {user_type.upper()} user...")
         
+        # First login to get fresh token
+        if not self.login_user(user_type):
+            self.log_result("User Login", "FAIL", 
+                          f"Failed to login {user_type} user", 
+                          user_type)
+            return False
+        
         self.set_user(user_type)
         user_email = self.current_user["email"]
+        
+        self.log_result("User Login", "PASS", 
+                      f"Successfully logged in {user_type} user", 
+                      user_type)
         
         # Test getting current user info
         try:
