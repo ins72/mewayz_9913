@@ -1,26 +1,10 @@
-# Mewayz Platform - API Documentation
+# 📡 Mewayz Platform API Documentation
 
-**Comprehensive API Reference**  
-*By Mewayz Technologies Inc.*
+*Complete API Reference for Mewayz Platform*
 
----
+## 📋 Overview
 
-## 📋 Table of Contents
-
-1. [Overview](#overview)
-2. [Authentication](#authentication)
-3. [Rate Limiting](#rate-limiting)
-4. [Error Handling](#error-handling)
-5. [Core Endpoints](#core-endpoints)
-6. [Business Feature APIs](#business-feature-apis)
-7. [Webhooks](#webhooks)
-8. [SDKs](#sdks)
-
----
-
-## 🎯 Overview
-
-The Mewayz API provides programmatic access to all platform features. It's built on RESTful principles and returns JSON responses. All API endpoints are prefixed with `/api` and served from the main Laravel backend.
+The Mewayz Platform provides a comprehensive RESTful API that powers all business functions. This documentation covers all 40+ API endpoints across authentication, social media, bio sites, CRM, e-commerce, courses, email marketing, and analytics.
 
 ### Base URL
 ```
