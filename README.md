@@ -67,7 +67,13 @@ Mewayz represents the flagship product of Mewayz Technologies Inc., embodying ou
 - **File Storage**: Local storage with S3 compatibility
 - **Philosophy**: *"Scalable infrastructure for seamless growth"*
 
-### Service Architecture
+## 🌐 Production Environment
+
+**Production Domain:** https://mewayz.com  
+**Platform URL:** https://mewayz.com  
+**API Base URL:** https://mewayz.com/api  
+
+*Note: The production domain mewayz.com will be the official platform URL for all users.*
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
