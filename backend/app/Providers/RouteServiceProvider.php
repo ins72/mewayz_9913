@@ -37,5 +37,15 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
+
+        // Configure Folio routes for authenticated console pages
+        Folio::path(resource_path('views/pages/console'))->uri('/console')->middleware([
+            '*' => ['web', 'auth'],
+        ]);
+        
+        // Configure Folio routes for public pages
+        Folio::path(resource_path('views/pages'))->middleware([
+            '*' => ['web'],
+        ]);
     }
 }
