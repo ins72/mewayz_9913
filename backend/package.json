@@ -53,6 +53,7 @@
         "nprogress": "^0.2.0",
         "openai": "^4.24.1",
         "quill": "^2.0.3",
+        "rateyo": "^3.0.0-alpha.2",
         "simplemde": "^1.11.2",
         "sortablejs": "^1.15.2",
         "swiper": "^11.2.10",
