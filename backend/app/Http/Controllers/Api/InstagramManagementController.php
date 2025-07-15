@@ -441,14 +441,23 @@ class InstagramManagementController extends Controller
             return response()->json([
                 'success' => true,
                 'hashtags' => $hashtags->map(function($hashtag) {
+                    // Handle both model instances and sample objects
+                    $formattedCount = method_exists($hashtag, 'getFormattedPostCount') 
+                        ? $hashtag->getFormattedPostCount() 
+                        : $this->formatPostCount($hashtag->post_count);
+                    
+                    $difficultyColor = method_exists($hashtag, 'getDifficultyColor') 
+                        ? $hashtag->getDifficultyColor() 
+                        : $this->getDifficultyColor($hashtag->difficulty);
+                    
                     return [
                         'id' => $hashtag->id ?? null,
                         'hashtag' => $hashtag->hashtag,
                         'post_count' => $hashtag->post_count,
-                        'formatted_count' => $hashtag->getFormattedPostCount(),
+                        'formatted_count' => $formattedCount,
                         'engagement_rate' => $hashtag->engagement_rate,
                         'difficulty' => $hashtag->difficulty,
-                        'difficulty_color' => $hashtag->getDifficultyColor(),
+                        'difficulty_color' => $difficultyColor,
                         'is_trending' => $hashtag->is_trending,
                         'related_hashtags' => $hashtag->related_hashtags ?? []
                     ];
