@@ -41,22 +41,32 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - **Performance Tracking** - Top posts and hashtag analytics
 
 #### **5. Link in Bio Builder (EXISTING)**
-- **Drag & Drop Builder** - Visual page creation interface
+- **Drag & Drop Builder** - Visual page creation interface with sections and section items
 - **Template Library** - Pre-designed templates for various industries
 - **Custom Components** - Buttons, images, videos, contact forms
-- **Analytics Tracking** - Click tracking and conversion metrics
+- **Analytics Tracking** - Click tracking and conversion metrics with bio_sites_visitors
 - **A/B Testing** - Multiple page version testing
 - **Mobile Optimization** - Responsive design for all devices
 - **Theme System** - Multiple themes and customization options
+- **Link Shortener** - Custom short links with bio_sites_linker
+- **QR Code Generation** - Dynamic QR codes for bio sites
+- **Custom Domains** - Domain mapping with bio_site_domains
+- **Upload Management** - File and media management with bio_sites_uploads
+- **AI-Powered Content** - AI content generation and image creation
 
 #### **6. Website Builder (EXISTING)**
-- **Full Website Builder** - Complete website creation platform
-- **Page Management** - Multiple pages per site
-- **SEO Optimization** - Meta tags, descriptions, optimization
-- **Custom Domains** - Domain mapping and management
+- **Full Website Builder** - Complete website creation platform with pages and sections
+- **Page Management** - Multiple pages per site with drag-and-drop interface
+- **SEO Optimization** - Meta tags, descriptions, optimization per page
+- **Custom Domains** - Domain mapping and management with site_domains
 - **PWA Support** - Progressive web app functionality
-- **AI Integration** - AI-powered content generation
-- **Template System** - Professional website templates
+- **AI Integration** - AI-powered content generation and image creation
+- **Template System** - Professional website templates with yena_templates
+- **Header/Footer Management** - Custom header and footer management
+- **Form Builder** - Custom forms with site_forms
+- **Social Media Integration** - Social media links management
+- **Analytics & Tracking** - Comprehensive visitor tracking and analytics
+- **Upload Management** - Advanced file and media management
 
 #### **7. Course Creation Platform (EXISTING)**
 - **Course Builder** - Comprehensive course creation tools
