@@ -1,27 +1,23 @@
 <?php
-   use function Laravel\Folio\name;
-    
-   name('console-create-index');
+use function Laravel\Folio\name;
+
+name('dashboard-create-index');
 ?>
 <x-layouts.app>
-   <x-slot:title>{{ __('Create') }}</x-slot>
+   <x-slot:title>{{ __('Create New') }}</x-slot>
    
-   <style>
-      .yena-topbar, .yena-sidebar, .mobile-header-toolbar{
-         display: none !important;
-      }
-
-      .yena-root-main, .yena-container{
-         padding: 0 !important;
-         margin: 0 !important;
-         max-width: 100% !important;
-      }
-   </style>
-   
-   <div class="ai-create-wrapper !block">
-      <div class="fixed z-0 pointer-events-none top-0 w-screen min-h-screen [background:var(--bg-img)_center_center_repeat] animate-[180s_linear_0s_infinite_normal_none_running_animation-1w9onv1] [mask-image:linear-gradient(to_left,_rgba(0,_0,_0,_0.75),_transparent,_rgba(0,_0,_0,_0.75))] [mask-repeat:repeat] [mask-size:140px]" style="--bg-img:url({{ gs('assets/image/others/Stars-2.svg') }})"></div>
-
-      
-      <livewire:components.console.create.page  :key="uukey('sites', 'site-console-create')"/>
+   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+         <div class="px-4 py-6 sm:px-0">
+            <div class="mb-8">
+               <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Create New</h1>
+               <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  Create new websites, pages, and content for your business
+               </p>
+            </div>
+            
+            <livewire:components.dashboard.create.page lazy :key="uukey('create', 'create-page')"/>
+         </div>
+      </div>
    </div>
 </x-layouts.app>
