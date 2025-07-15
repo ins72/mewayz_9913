@@ -271,3 +271,84 @@ npm run lint:fix
 # Format code
 npm run format
 ```
+
+---
+
+## 🗄️ Database Schema
+
+### Core Tables
+
+#### Users Table
+```sql
+CREATE TABLE users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    email_verified_at TIMESTAMP NULL,
+    password VARCHAR(255) NOT NULL,
+    google_id VARCHAR(255) NULL,
+    apple_id VARCHAR(255) NULL,
+    two_factor_secret TEXT NULL,
+    two_factor_recovery_codes TEXT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    INDEX idx_email (email),
+    INDEX idx_created_at (created_at)
+);
+```
+
+#### Organizations Table
+```sql
+CREATE TABLE organizations (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT NULL,
+    settings JSON NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_slug (slug)
+);
+```
+
+### Business Feature Tables
+
+#### Social Media
+```sql
+CREATE TABLE social_media_accounts (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    platform VARCHAR(50) NOT NULL,
+    account_id VARCHAR(255) NOT NULL,
+    access_token TEXT NOT NULL,
+    refresh_token TEXT NULL,
+    expires_at TIMESTAMP NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+#### CRM
+```sql
+CREATE TABLE audiences (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NULL,
+    company VARCHAR(255) NULL,
+    type ENUM('contact', 'lead') DEFAULT 'contact',
+    status ENUM('hot', 'warm', 'cold') DEFAULT 'cold',
+    source VARCHAR(100) NULL,
+    notes TEXT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_user_email (user_id, email),
+    INDEX idx_type_status (type, status)
+);
+```
