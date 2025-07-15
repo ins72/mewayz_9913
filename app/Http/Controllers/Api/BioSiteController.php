@@ -662,12 +662,20 @@ class BioSiteController extends Controller
     {
         $socialClicks = [];
         
-        foreach ($bioSite->social_links as $socialLink) {
-            $socialClicks[] = [
-                'platform' => $socialLink['platform'],
-                'clicks' => rand(5, 200),
-                'percentage' => rand(5, 30) . '%'
-            ];
+        // Get social links from the social field (JSON)
+        $socialLinks = [];
+        if ($bioSite->social) {
+            $socialLinks = is_string($bioSite->social) ? json_decode($bioSite->social, true) : $bioSite->social;
+        }
+        
+        if (is_array($socialLinks)) {
+            foreach ($socialLinks as $socialLink) {
+                $socialClicks[] = [
+                    'platform' => $socialLink['platform'] ?? 'unknown',
+                    'clicks' => rand(5, 200),
+                    'percentage' => rand(5, 30) . '%'
+                ];
+            }
         }
 
         return $socialClicks;
