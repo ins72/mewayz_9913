@@ -584,6 +584,10 @@ class MewayzAPITester:
             self.test_workspace_endpoints,
             self.test_social_media_endpoints,
             self.test_bio_site_endpoints,
+            self.test_crm_endpoints,
+            self.test_ecommerce_endpoints,
+            self.test_email_marketing_endpoints,
+            self.test_course_endpoints,
             self.test_analytics_endpoints
         ]
         
