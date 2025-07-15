@@ -150,7 +150,7 @@ class StripePaymentController extends Controller
             
             // Get status from Stripe
             $pythonScript = base_path('stripe_integration.py');
-            $command = "cd " . base_path() . " && python3 {$pythonScript} get_status '{$sessionId}'";
+            $command = "cd " . base_path() . " && /root/.venv/bin/python3 {$pythonScript} get_status '{$sessionId}'";
             $output = shell_exec($command);
             
             if (!$output) {
