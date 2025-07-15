@@ -97,10 +97,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('bio-sites')->group(function () {
         Route::get('/', [BioSiteController::class, 'index']);
         Route::post('/', [BioSiteController::class, 'store']);
+        Route::get('/themes', [BioSiteController::class, 'getThemes']);
         Route::get('/{id}', [BioSiteController::class, 'show']);
         Route::put('/{id}', [BioSiteController::class, 'update']);
         Route::delete('/{id}', [BioSiteController::class, 'destroy']);
         Route::get('/{id}/analytics', [BioSiteController::class, 'getAnalytics']);
+        Route::post('/{id}/duplicate', [BioSiteController::class, 'duplicate']);
+        Route::get('/{id}/export', [BioSiteController::class, 'export']);
+        
+        // Bio Site Links management
+        Route::get('/{bioSiteId}/links', [BioSiteController::class, 'getLinks']);
+        Route::post('/{bioSiteId}/links', [BioSiteController::class, 'createLink']);
+        Route::put('/{bioSiteId}/links/{linkId}', [BioSiteController::class, 'updateLink']);
+        Route::delete('/{bioSiteId}/links/{linkId}', [BioSiteController::class, 'deleteLink']);
+        Route::post('/{bioSiteId}/links/reorder', [BioSiteController::class, 'updateLinkOrder']);
     });
     
     // CRM routes
