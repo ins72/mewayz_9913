@@ -38,8 +38,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        // Configure Folio routes for authenticated console pages
-        Folio::path(resource_path('views/pages/console'))->uri('/console')->middleware([
+        // Configure Folio routes for authenticated dashboard pages
+        Folio::path(resource_path('views/pages/dashboard'))->uri('/console')->middleware([
             '*' => ['web', 'auth'],
         ]);
         
