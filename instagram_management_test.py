@@ -84,6 +84,38 @@ class InstagramManagementTester:
             print(f"Request failed with exception: {e}")
             return None, response_time
 
+    def create_workspace(self) -> bool:
+        """Create a test workspace"""
+        print("🏢 Creating test workspace...")
+        
+        workspace_data = {
+            "name": "Test Workspace",
+            "description": "Test workspace for Instagram management testing",
+            "is_primary": True
+        }
+        
+        response, response_time = self.make_request("POST", "/workspaces", workspace_data)
+        
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                if data.get("success"):
+                    self.log_result("Workspace Creation", "PASS", 
+                                  f"Created workspace: {workspace_data['name']}", response_time)
+                    return True
+                else:
+                    self.log_result("Workspace Creation", "FAIL", 
+                                  f"Invalid response structure: {data}", response_time)
+                    return False
+            except json.JSONDecodeError:
+                self.log_result("Workspace Creation", "FAIL", 
+                              "Invalid JSON response", response_time)
+                return False
+        else:
+            self.log_result("Workspace Creation", "FAIL", 
+                          f"HTTP {response.status_code if response else 'No response'}: {response.text if response else 'Connection failed'}", response_time)
+            return False
+
     def authenticate_user(self) -> bool:
         """Authenticate test user and get token"""
         print("🔐 Authenticating test user...")
