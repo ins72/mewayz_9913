@@ -21,7 +21,7 @@ class InstagramManagementController extends Controller
     {
         try {
             $user = Auth::user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $workspace = $user->workspaces()->first();
             
             if (!$workspace) {
                 return response()->json(['error' => 'Workspace not found'], 404);
