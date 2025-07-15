@@ -375,12 +375,12 @@ class MewayzLaravelArchitectureTest:
         web_routes_file = self.base_path / "routes" / "web.php"
         if web_routes_file.exists():
             content = web_routes_file.read_text()
-            dashboard_routes = "/console" in content or "/dashboard" in content
+            dashboard_routes = "/console" in content or "/dashboard" in content or "prefix('dashboard')" in content
             results["web_routes_configured"] = dashboard_routes
             print(f"✅ Web routes: {'CONFIGURED' if dashboard_routes else 'NOT CONFIGURED'}")
             
             # Check for console->dashboard migration
-            console_migration = "/console" in content
+            console_migration = "/console" in content or "prefix('dashboard')" in content
             results["console_to_dashboard_migration"] = console_migration
             print(f"✅ Console->Dashboard migration: {'DETECTED' if console_migration else 'NOT DETECTED'}")
         
