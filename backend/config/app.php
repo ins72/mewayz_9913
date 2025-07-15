@@ -179,13 +179,25 @@ return [
         /*
          * Package Service Providers...
          */
-        browner12\helpers\HelperServiceProvider::class,
+        Bavix\Wallet\WalletServiceProvider::class,
+        Directorytree\Bartender\BartenderServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
-        Darryldecode\Cart\CartServiceProvider::class,
-        MarkSitko\LaravelUnsplash\UnsplashServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
-        Amirami\Localizator\ServiceProvider::class,
-        'Camroncade\Timezone\TimezoneServiceProvider',
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        Spatie\LaravelIgnition\IgnitionServiceProvider::class,
+        Bavix\Wallet\WalletServiceProvider::class,
+        Laravel\Sanctum\SanctumServiceProvider::class,
+        Livewire\LivewireServiceProvider::class,
+        Sakanjo\LaravelEasyMetrics\EasyMetricsServiceProvider::class,
+        Bavix\Wallet\WalletServiceProvider::class,
+        PragmaRX\Google2FA\Laravel\ServiceProvider::class,
+        Oddvalue\LaravelDrafts\DraftsServiceProvider::class,
+        Abordage\LaravelOgImages\ServiceProvider::class,
+        Abordage\LaravelHtmlMin\ServiceProvider::class,
+        Livewire\Volt\VoltServiceProvider::class,
+        Laravel\Folio\FolioServiceProvider::class,
+        Marksitko\LaravelUnsplash\ServiceProvider::class,
+        OpenAI\Laravel\ServiceProvider::class,
 
         /*
          * Application Service Providers...
