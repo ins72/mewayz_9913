@@ -59,9 +59,6 @@ class InstagramManagementTester:
             headers["Accept"] = "application/json"
             headers["Content-Type"] = "application/json"
         
-        print(f"Making {method} request to: {url}")
-        print(f"Headers: {headers}")
-        
         start_time = time.time()
         try:
             if method.upper() == "GET":
@@ -76,12 +73,9 @@ class InstagramManagementTester:
                 raise ValueError(f"Unsupported method: {method}")
                 
             response_time = time.time() - start_time
-            print(f"Response status: {response.status_code}")
-            print(f"Response text: {response.text[:200]}...")
             return response, response_time
         except Exception as e:
             response_time = time.time() - start_time
-            print(f"Request failed with exception: {e}")
             return None, response_time
 
     def create_workspace(self) -> bool:
