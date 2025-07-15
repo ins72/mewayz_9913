@@ -525,13 +525,18 @@ Mewayz is a comprehensive all-in-one business platform that unifies multiple bus
 - **Process Management**: Supervisor for service management
 
 ### **Key Dependencies**
-- Laravel Framework 10.x
+- Laravel Framework 10.x (Core framework)
 - Laravel Sanctum (API authentication)
 - Laravel Livewire (frontend components)
+- Laravel Folio (page-based routing)
 - Alpine.js (reactive components)
 - Stripe PHP SDK (payment processing)
-- MariaDB (database)
+- ElasticMail API (email sending)
+- OpenAI API (AI content generation)
+- MariaDB/MySQL (database)
 - Vite (asset building)
+- Tailwind CSS (styling framework)
+- Various Laravel packages for extended functionality
 
 ---
 
