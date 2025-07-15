@@ -183,10 +183,12 @@ test_plan:
     - "Authentication Pages"
     - "Dashboard Access"
     - "Forms"
+    - "Stripe Payment Integration Frontend"
   stuck_tasks:
     - "Authentication Pages"
     - "Dashboard Access"
     - "Forms"
+    - "Stripe Payment Integration Frontend"
   test_all: true
   test_priority: "high_first"
 
