@@ -87,8 +87,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/auth', [InstagramController::class, 'initiateAuth']);
         Route::post('/auth/callback', [InstagramController::class, 'handleCallback']);
         Route::get('/competitor-analysis', [InstagramController::class, 'getCompetitorAnalysis']);
+        Route::get('/advanced-competitor-analysis', [InstagramController::class, 'getAdvancedCompetitorAnalysis']);
         Route::get('/hashtag-analysis', [InstagramController::class, 'getHashtagAnalysis']);
         Route::get('/analytics', [InstagramController::class, 'getAnalytics']);
+        Route::post('/predict-content-performance', [InstagramController::class, 'predictContentPerformance']);
+        Route::get('/audience-intelligence', [InstagramController::class, 'getAdvancedAudienceIntelligence']);
         Route::post('/refresh-token', [InstagramController::class, 'refreshToken']);
         Route::get('/content-suggestions', [InstagramController::class, 'getContentSuggestions']);
     });
@@ -102,8 +105,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{id}', [BioSiteController::class, 'update']);
         Route::delete('/{id}', [BioSiteController::class, 'destroy']);
         Route::get('/{id}/analytics', [BioSiteController::class, 'getAnalytics']);
+        Route::get('/{id}/advanced-analytics', [BioSiteController::class, 'getAdvancedAnalytics']);
         Route::post('/{id}/duplicate', [BioSiteController::class, 'duplicate']);
         Route::get('/{id}/export', [BioSiteController::class, 'export']);
+        Route::post('/{id}/ab-test', [BioSiteController::class, 'createABTest']);
+        Route::get('/{bioSiteId}/ab-test/{testId}/results', [BioSiteController::class, 'getABTestResults']);
+        Route::post('/{id}/monetization', [BioSiteController::class, 'addMonetizationFeatures']);
         
         // Bio Site Links management
         Route::get('/{bioSiteId}/links', [BioSiteController::class, 'getLinks']);
