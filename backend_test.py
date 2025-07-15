@@ -1815,11 +1815,19 @@ class MewayzAPITester:
         self.test_social_media_analytics()
         
         # Bio Sites tests
-        print("\n🔗 Testing Bio Site Management...")
+        print("\n🔗 Testing Enhanced Bio Site Builder...")
         self.test_bio_sites_list()
-        bio_site_id = self.test_bio_sites_create()
+        bio_site_id = self.test_bio_sites_create_enhanced()
+        self.test_bio_sites_themes()
         if bio_site_id:
             self.test_bio_sites_show(bio_site_id)
+            self.test_bio_sites_analytics_enhanced(bio_site_id)
+            duplicate_id = self.test_bio_sites_duplicate(bio_site_id)
+            self.test_bio_sites_export(bio_site_id)
+            self.test_bio_sites_get_links(bio_site_id)
+            link_id = self.test_bio_sites_create_link(bio_site_id)
+            self.test_bio_sites_reorder_links(bio_site_id)
+        self.test_bio_sites_validation_enhanced()
         
         # CRM tests
         print("\n👥 Testing CRM Management...")
