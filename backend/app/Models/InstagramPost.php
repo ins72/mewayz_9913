@@ -36,7 +36,7 @@ class InstagramPost extends Model
     
     public function workspace()
     {
-        return $this->belongsTo(Workspace::class);
+        return $this->belongsTo(Organization::class, 'workspace_id');
     }
     
     public function user()
