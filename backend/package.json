@@ -37,6 +37,7 @@
         "@simonwep/pickr": "^1.9.1",
         "@vimesh/ui": "^0.12.4",
         "alpinejs": "^3.14.1",
+        "alpinejs-masonry": "^1.0.16",
         "apexcharts": "^3.45.1",
         "codemirror": "^5.65.16",
         "codemirror-spell-checker": "^1.1.2",
