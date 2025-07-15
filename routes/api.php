@@ -131,6 +131,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/leads', [CrmController::class, 'createLead']);
         Route::put('/leads/{id}', [CrmController::class, 'updateLead']);
         Route::delete('/leads/{id}', [CrmController::class, 'deleteLead']);
+        
+        // NEW ADVANCED CRM FEATURES
+        Route::post('/automation-workflow', [CrmController::class, 'createAutomationWorkflow']);
+        Route::get('/ai-lead-scoring', [CrmController::class, 'getAILeadScoring']);
+        Route::get('/advanced-pipeline-management', [CrmController::class, 'getAdvancedPipelineManagement']);
+        Route::get('/predictive-analytics', [CrmController::class, 'getPredictiveAnalytics']);
     });
     
     // E-commerce routes
