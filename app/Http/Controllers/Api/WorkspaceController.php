@@ -168,12 +168,64 @@ class WorkspaceController extends Controller
             ], 403);
         }
 
-        // TODO: Implement team members retrieval
-        // This would return workspace members with their roles
+        try {
+            // Get workspace members from teams table
+            $members = \App\Models\YenaTeamsUserTable::where('organization_id', $workspace->id)
+                ->with('user:id,name,email')
+                ->get()
+                ->map(function ($member) {
+                    return [
+                        'id' => $member->user->id,
+                        'name' => $member->user->name,
+                        'email' => $member->user->email,
+                        'role' => $member->role ?? 'member',
+                        'joined_at' => $member->created_at,
+                        'status' => 'active'
+                    ];
+                });
 
-        return response()->json([
-            'success' => true,
-            'data' => [],
-        ]);
+            // Add workspace owner
+            $owner = [
+                'id' => $workspace->user_id,
+                'name' => $workspace->user->name ?? 'Owner',
+                'email' => $workspace->user->email ?? '',
+                'role' => 'owner',
+                'joined_at' => $workspace->created_at,
+                'status' => 'active'
+            ];
+
+            $members->prepend($owner);
+
+            // Get pending invitations
+            $pendingInvitations = \App\Models\YenaTeamsInvite::where('organization_id', $workspace->id)
+                ->where('status', 'pending')
+                ->where('expires_at', '>', now())
+                ->get()
+                ->map(function ($invite) {
+                    return [
+                        'id' => $invite->id,
+                        'email' => $invite->email,
+                        'role' => $invite->role,
+                        'status' => 'pending',
+                        'invited_at' => $invite->created_at,
+                        'expires_at' => $invite->expires_at,
+                    ];
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'members' => $members,
+                    'pending_invitations' => $pendingInvitations,
+                    'total_members' => $members->count(),
+                    'total_pending' => $pendingInvitations->count(),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve team members: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
