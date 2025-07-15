@@ -401,51 +401,6 @@ class InstagramController extends Controller
                     'platform' => $account->platform
                 ]
             ]);
-                $insightsParams['until'] = Carbon::parse($request->until)->timestamp;
-            }
-
-            $insightsResponse = Http::get($this->baseUrl . '/' . $account->platform_user_id . '/insights', $insightsParams);
-
-            $insights = $insightsResponse->failed() ? ['data' => []] : $insightsResponse->json();
-
-            // Get recent media
-            $mediaResponse = Http::get($this->baseUrl . '/' . $account->platform_user_id . '/media', [
-                'fields' => 'id,media_type,media_url,permalink,timestamp,like_count,comments_count,caption',
-                'access_token' => $accessToken,
-                'limit' => 20
-            ]);
-
-            $media = $mediaResponse->failed() ? ['data' => []] : $mediaResponse->json();
-
-            // Calculate basic stats
-            $totalLikes = collect($media['data'] ?? [])->sum('like_count');
-            $totalComments = collect($media['data'] ?? [])->sum('comments_count');
-            $totalPosts = count($media['data'] ?? []);
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'account' => [
-                        'username' => $account->username,
-                        'account_type' => $account->account_type,
-                        'followers_count' => $account->followers_count,
-                        'following_count' => $account->following_count,
-                        'media_count' => $account->media_count
-                    ],
-                    'insights' => $insights['data'] ?? [],
-                    'recent_media' => $media['data'] ?? [],
-                    'summary' => [
-                        'total_posts' => $totalPosts,
-                        'total_likes' => $totalLikes,
-                        'total_comments' => $totalComments,
-                        'avg_likes_per_post' => $totalPosts > 0 ? round($totalLikes / $totalPosts) : 0,
-                        'avg_comments_per_post' => $totalPosts > 0 ? round($totalComments / $totalPosts) : 0,
-                        'engagement_rate' => $account->followers_count > 0 ? round((($totalLikes + $totalComments) / $account->followers_count) * 100, 2) : 0
-                    ],
-                    'analyzed_at' => Carbon::now()->toISOString()
-                ]
-            ]);
-
         } catch (\Exception $e) {
             Log::error('Instagram analytics error', ['error' => $e->getMessage()]);
             return response()->json([
