@@ -30,6 +30,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 */
 require __DIR__.'/auth.php';
 
+// Console/Dashboard route - Laravel Folio will handle the dashboard pages
+Route::get('/console', function () {
+    return view('pages.dashboard.index');
+})->middleware(['auth'])->name('console-index');
+
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
   Route::get('run-update', 'DatabaseController@update')->name('update');
