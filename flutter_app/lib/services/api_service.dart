@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'storage_service.dart';
 
 class ApiService {
-  static const String baseUrl = '/api'; // Use relative URL for production
+  static const String baseUrl = 'http://localhost:8001/api'; // Laravel backend directly
   
   static Future<Map<String, String>> _getHeaders() async {
     final token = await StorageService.getToken();
