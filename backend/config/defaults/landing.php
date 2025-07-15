@@ -312,7 +312,7 @@ return [
                     "content" => [
                         "title" => "What can we do?",
                         "text" =>
-                            "Creating a website is a breeze with Zeph. Simply provide us with details about your business, and our AI will take care of the rest by incorporating content, design, images, forms, and SEO. You have the flexibility to edit and launch your website from your mobile device or desktop browser.",
+                            "Creating a website is a breeze with Mewayz. Simply provide us with details about your business, and our AI will take care of the rest by incorporating content, design, images, forms, and SEO. You have the flexibility to edit and launch your website from your mobile device or desktop browser.",
                     ],
                     "settings" => null,
                 ],
