@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\General\GeneralController;
 use App\Http\Controllers\InstallController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\BookingController;
