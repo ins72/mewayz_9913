@@ -15,6 +15,80 @@ use Carbon\Carbon;
 class BioSiteController extends Controller
 {
     /**
+     * Get available themes for bio sites
+     */
+    public function getThemes()
+    {
+        try {
+            $themes = [
+                [
+                    'id' => 1,
+                    'name' => 'Modern',
+                    'description' => 'Clean and modern design with dark theme support',
+                    'preview_url' => '/themes/modern-preview.jpg',
+                    'is_premium' => false,
+                    'customizable_colors' => true,
+                    'customizable_fonts' => true,
+                    'features' => ['Social icons', 'Custom background', 'Animation effects']
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Minimalist',
+                    'description' => 'Simple and elegant design focused on content',
+                    'preview_url' => '/themes/minimalist-preview.jpg',
+                    'is_premium' => false,
+                    'customizable_colors' => true,
+                    'customizable_fonts' => false,
+                    'features' => ['Clean layout', 'Fast loading', 'Mobile optimized']
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Creative',
+                    'description' => 'Colorful and creative design for artists and creators',
+                    'preview_url' => '/themes/creative-preview.jpg',
+                    'is_premium' => true,
+                    'customizable_colors' => true,
+                    'customizable_fonts' => true,
+                    'features' => ['Custom animations', 'Portfolio showcase', 'Video background']
+                ],
+                [
+                    'id' => 4,
+                    'name' => 'Business',
+                    'description' => 'Professional theme for business and corporate use',
+                    'preview_url' => '/themes/business-preview.jpg',
+                    'is_premium' => true,
+                    'customizable_colors' => true,
+                    'customizable_fonts' => true,
+                    'features' => ['Contact forms', 'Team showcase', 'Service listings']
+                ],
+                [
+                    'id' => 5,
+                    'name' => 'Influencer',
+                    'description' => 'Perfect for social media influencers and content creators',
+                    'preview_url' => '/themes/influencer-preview.jpg',
+                    'is_premium' => true,
+                    'customizable_colors' => true,
+                    'customizable_fonts' => true,
+                    'features' => ['Instagram feed', 'Brand partnerships', 'Engagement metrics']
+                ]
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $themes,
+                'message' => 'Themes retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve themes: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve themes'
+            ], 500);
+        }
+    }
+
+    /**
      * Get all bio sites for the authenticated user
      */
     public function index(Request $request)
