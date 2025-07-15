@@ -1,12 +1,12 @@
-# Mewayz Platform - Professional All-in-One Business Solution
+# 🚀 Mewayz Platform - All-in-One Business Solution
 
-*Built by Mewayz Technologies Inc. for Seamless Business Management*
+*Professional business platform for social media management, link-in-bio, e-commerce, courses, CRM, and analytics*
 
-[![Production Status](https://img.shields.io/badge/Production-Ready-green)](https://github.com/mewayz/mewayz)
-[![Backend API](https://img.shields.io/badge/Backend-100%25%20Tested-brightgreen)](https://github.com/mewayz/mewayz)
-[![Frontend](https://img.shields.io/badge/Frontend-Professional-brightgreen)](https://github.com/mewayz/mewayz)
-[![Architecture](https://img.shields.io/badge/Architecture-Simplified-orange)](https://github.com/mewayz/mewayz)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Laravel](https://img.shields.io/badge/Laravel-10+-FF2D20?style=flat&logo=laravel&logoColor=white)](https://laravel.com)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?style=flat&logo=flutter&logoColor=white)](https://flutter.dev)
+[![PHP](https://img.shields.io/badge/PHP-8.1+-777BB4?style=flat&logo=php&logoColor=white)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=flat&logo=mysql&logoColor=white)](https://mysql.com)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ## 🚀 Overview
 
