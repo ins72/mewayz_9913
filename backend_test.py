@@ -880,7 +880,7 @@ class MewayzComprehensiveTester:
                                                               user_type, hashtag_time)
                                             
                                             # Test 8: Instagram analytics
-                                            analytics_response = self.make_request('GET', '/instagram/analytics', {'date_range': '30'})
+                                            analytics_response = self.make_request('GET', '/instagram-management/analytics', {'date_range': '30'})
                                             analytics_time = analytics_response.elapsed.total_seconds()
                                             
                                             if analytics_response.status_code == 200:
