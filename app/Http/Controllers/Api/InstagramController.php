@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Crypt;
 
 class InstagramController extends Controller
 {
+    use InstagramAdvancedHelpers;
+    
     private $baseUrl = 'https://graph.facebook.com/v18.0';
     private $instagramUrl = 'https://api.instagram.com';
 
