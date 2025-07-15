@@ -101,6 +101,43 @@ class MewayzComprehensiveTester:
             print(f"Request failed: {e}")
             raise
 
+    def login_user(self, user_type: str):
+        """Login user and get fresh token"""
+        user = self.regular_user if user_type == "regular" else self.admin_user
+        
+        # First try to register the user (in case they don't exist)
+        register_data = {
+            "name": f"{user_type.title()} User",
+            "email": user["email"],
+            "password": user["password"],
+            "password_confirmation": user["password"]
+        }
+        
+        try:
+            register_response = self.make_request('POST', '/auth/register', register_data)
+            # Registration might fail if user exists, that's okay
+        except:
+            pass
+        
+        # Now login to get token
+        login_data = {
+            "email": user["email"],
+            "password": user["password"]
+        }
+        
+        try:
+            response = self.make_request('POST', '/auth/login', login_data)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('token'):
+                    user['token'] = data['token']
+                    user['id'] = data.get('user', {}).get('id')
+                    return True
+            return False
+        except Exception as e:
+            print(f"Login failed for {user_type}: {str(e)}")
+            return False
+
     def set_user(self, user_type: str):
         """Set current user for testing"""
         if user_type == "regular":
