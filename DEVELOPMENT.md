@@ -808,3 +808,106 @@ Route::middleware('throttle:60,1')->group(function () {
 'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
 'allowed_headers' => ['Content-Type', 'Authorization'],
 ```
+
+---
+
+## 📊 Monitoring & Logging
+
+### Application Logging
+
+#### Laravel Logging
+```php
+// Log levels
+Log::emergency($message);
+Log::alert($message);
+Log::critical($message);
+Log::error($message);
+Log::warning($message);
+Log::notice($message);
+Log::info($message);
+Log::debug($message);
+
+// Contextual logging
+Log::info('User logged in', ['user_id' => $user->id]);
+```
+
+#### Flutter Logging
+```dart
+import 'dart:developer' as developer;
+
+class Logger {
+  static void info(String message, [String? tag]) {
+    developer.log(message, name: tag ?? 'INFO');
+  }
+  
+  static void error(String message, [dynamic error]) {
+    developer.log(message, name: 'ERROR', error: error);
+  }
+}
+```
+
+### Performance Monitoring
+
+#### Database Query Monitoring
+```php
+// Monitor slow queries
+DB::listen(function ($query) {
+    if ($query->time > 100) {
+        Log::warning('Slow query detected', [
+            'sql' => $query->sql,
+            'time' => $query->time,
+            'bindings' => $query->bindings,
+        ]);
+    }
+});
+```
+
+#### API Response Time Monitoring
+```php
+// Middleware for API monitoring
+public function handle($request, Closure $next)
+{
+    $start = microtime(true);
+    $response = $next($request);
+    $duration = microtime(true) - $start;
+    
+    Log::info('API Request', [
+        'method' => $request->method(),
+        'url' => $request->url(),
+        'duration' => $duration,
+        'status' => $response->status(),
+    ]);
+    
+    return $response;
+}
+```
+
+---
+
+## 📚 Additional Resources
+
+### Documentation
+- [Laravel Documentation](https://laravel.com/docs)
+- [Flutter Documentation](https://flutter.dev/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Vite Documentation](https://vitejs.dev/guide/)
+
+### Tools
+- **IDE**: VS Code, PHPStorm
+- **Database**: MySQL Workbench, phpMyAdmin
+- **API Testing**: Postman, Insomnia
+- **Version Control**: Git, GitHub
+
+### Community
+- [Laravel Community](https://laravel.com/community)
+- [Flutter Community](https://flutter.dev/community)
+- [Mewayz Discord](https://discord.gg/mewayz)
+
+---
+
+*Mewayz Platform - Development Guide*  
+*Built by Mewayz Technologies Inc.*  
+*Creating seamless business solutions for the modern digital world*
+
+**Version**: 1.0.0  
+**Last Updated**: December 2024
