@@ -30,8 +30,8 @@ $login = function () {
     {{-- <div x-init="window.__livewirelazy($wire.__instance)"></div> --}}
     <div>
         <div x-data="_login">
-          <div class="flex min-h-screen flex-col md:!flex-row">
-            <div class="flex items-center justify-center bg-[var(--yena-colors-white)] flex-1 md:max-w-[var(--yena-sizes-container-sm)]">
+          <div class="flex min-h-screen flex-col md:!flex-row bg-gray-50 dark:bg-gray-900">
+            <div class="flex items-center justify-center bg-white dark:bg-gray-800 flex-1 md:max-w-[var(--yena-sizes-container-sm)] border-r border-gray-200 dark:border-gray-700">
   
                 <div class="h-screen w-full">
             
@@ -43,14 +43,14 @@ $login = function () {
                             <div class="flex-1 place-self-stretch"></div>
             
                             {{-- <div>{{ __('🎉 Welcome to the party') }}</div> --}}
-                            <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl">{{ __('Welcome back ✨') }}</h2>
+                            <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl text-gray-900 dark:text-white">{{ __('Welcome back ✨') }}</h2>
             
-                            <div inline="true" class="inline-flex items-center text-[14px]">
+                            <div inline="true" class="inline-flex items-center text-[14px] text-gray-600 dark:text-gray-400">
                                 <div class="m-0">
                                   <i class="fi fi-rr-info flex"></i>
                                 </div>
                                 <div class="ml-1">{{ __('You\'re new here?') }}
-                                  <a href="{{ route('register') }}" x-link.prefetch><b>{{ __('Create an account.') }}</b></a></div>
+                                  <a href="{{ route('register') }}" x-link.prefetch class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"><b>{{ __('Create an account.') }}</b></a></div>
                              </div>
                             {{-- <p class="yena-text">{{ __('Don’t worry, we will send you a reset link.') }}</p> --}}
                             
