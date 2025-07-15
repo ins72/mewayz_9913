@@ -454,11 +454,53 @@ GET /api/email-marketing/templates
 }
 ```
 
----
+## 🛍️ E-commerce Management
 
-*Mewayz Platform - API Documentation*  
-*Built by Mewayz Technologies Inc.*  
-*Creating seamless business solutions for the modern digital world*
+### Get Products
+```http
+GET /api/ecommerce/products
+```
 
-**Version**: 1.0.0  
-**Last Updated**: December 2024
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Premium Course",
+      "description": "Learn advanced techniques",
+      "price": 99.99,
+      "currency": "USD",
+      "stock": 100,
+      "category": "courses",
+      "images": ["https://example.com/image1.jpg"],
+      "status": "active",
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
+}
+```
+
+### Get Orders
+```http
+GET /api/ecommerce/orders
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "order_number": "ORD-001",
+      "customer_name": "John Doe",
+      "customer_email": "john@example.com",
+      "total": 99.99,
+      "status": "completed",
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
+}
+```
