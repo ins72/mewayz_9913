@@ -67,7 +67,7 @@
       $this->dispatch('set-team-name', $t->team->name);
       $this->dispatch('updated-workspace-logo', $t->team->getLogo());
       $this->dispatch('refreshFolders');
-      $this->redirect(route('console-index'), true);
+      $this->redirect(route('dashboard-index'), true);
    };
 
    $removeTeam = function(){
