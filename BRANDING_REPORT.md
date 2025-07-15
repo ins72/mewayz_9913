@@ -46,6 +46,13 @@ This comprehensive report details the complete branding alignment across the ent
 2. **Company Name**: Mewayz Technologies Inc.
 3. **Brand Philosophy**: Seamless
 4. **Logo**: Chain link symbol (representing seamless connections)
+5. **Production Domain**: mewayz.com
+
+### Domain Strategy:
+- **Production URL**: https://mewayz.com
+- **Platform Access**: https://mewayz.com
+- **API Endpoint**: https://mewayz.com/api
+- **Admin Panel**: https://mewayz.com/admin
 
 ### Brand Voice & Messaging:
 - **Professional**: Enterprise-grade solutions
