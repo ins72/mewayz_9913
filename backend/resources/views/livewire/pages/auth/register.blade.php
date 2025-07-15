@@ -76,7 +76,7 @@ $register = function () {
                             <div class="flex-1 place-self-stretch"></div>
             
                             {{-- <div>{{ __('🎉 Welcome to the party') }}</div> --}}
-                            <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl">{{ __('Sign up') }}</h2>
+                            <h2 class="text-4xl relative font-medium leading-[1.2em] tracking-[-0.03em] md:text-4xl text-gray-900 dark:text-white">{{ __('Create Account ✨') }}</h2>
             
                             {{-- <p class="yena-text">{{ __('Don’t worry, we will send you a reset link.') }}</p> --}}
 
