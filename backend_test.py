@@ -230,6 +230,14 @@ class MewayzComprehensiveTester:
         """Test profile management features"""
         print(f"👤 Testing Profile Management for {user_type.upper()} user...")
         
+        # Ensure user is logged in
+        if not self.current_user or not self.current_user.get('token'):
+            if not self.login_user(user_type):
+                self.log_result("Profile Update", "FAIL", 
+                              "Failed to login before profile test", 
+                              user_type)
+                return False
+        
         self.set_user(user_type)
         
         # Test profile update
