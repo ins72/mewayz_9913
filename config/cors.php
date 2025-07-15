@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3000', 'http://localhost:8001', 'https://c4c7d68b-2eee-41b3-a4bf-950a861ee229.preview.emergentagent.com'],
+    'allowed_origins' => ['http://localhost:3000', 'http://localhost:8001', 'https://d6c7fe62-7500-44b0-b627-88f7eaeeac56.preview.emergentagent.com'],
 
     'allowed_origins_patterns' => [],
 
