@@ -216,54 +216,16 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### 4. Supervisor Configuration
+### Step 5: SSL Certificate
 
-#### Backend Service
-```ini
-# /etc/supervisor/conf.d/mewayz-backend.conf
-[program:mewayz-backend]
-process_name=%(program_name)s_%(process_num)02d
-command=php -S 0.0.0.0:8001 -t /var/www/mewayz/public
-directory=/var/www/mewayz
-autostart=true
-autorestart=true
-stopasgroup=true
-killasgroup=true
-user=www-data
-numprocs=1
-redirect_stderr=true
-stdout_logfile=/var/log/supervisor/mewayz-backend.log
-```
-
-#### Frontend Service
-```ini
-# /etc/supervisor/conf.d/mewayz-frontend.conf
-[program:mewayz-frontend]
-process_name=%(program_name)s_%(process_num)02d
-command=python3 -m http.server 3000
-directory=/var/www/mewayz/public
-autostart=true
-autorestart=true
-stopasgroup=true
-killasgroup=true
-user=www-data
-numprocs=1
-redirect_stderr=true
-stdout_logfile=/var/log/supervisor/mewayz-frontend.log
-```
-
-#### Start Services
+#### 5.1 Install Certbot
 ```bash
-# Update supervisor
-sudo supervisorctl reread
-sudo supervisorctl update
+sudo apt install -y certbot python3-certbot-nginx
+```
 
-# Start services
-sudo supervisorctl start mewayz-backend
-sudo supervisorctl start mewayz-frontend
-
-# Check status
-sudo supervisorctl status
+#### 5.2 Obtain Certificate
+```bash
+sudo certbot --nginx -d yourdomain.com
 ```
 
 ### 5. SSL Certificate Setup
