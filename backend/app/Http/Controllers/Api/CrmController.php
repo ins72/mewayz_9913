@@ -209,9 +209,8 @@ class CrmController extends Controller
                 ->where('created_at', '>=', now()->startOfMonth())
                 ->count();
 
-            $totalDealValue = Audience::where('user_id', $request->user()->id)
-                ->where('type', 'contact')
-                ->sum('deal_value');
+            // For now, we'll set total deal value to 0 since the column doesn't exist yet
+            $totalDealValue = 0; // TODO: Add deal_value column to audience table or calculate from related tables
 
             return response()->json([
                 'success' => true,
