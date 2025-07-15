@@ -53,48 +53,56 @@ POST /api/auth/register
 }
 ```
 
----
-
-## 🚦 Rate Limiting
-
-### Limits
-- **Authenticated requests**: 60 requests per minute
-- **Unauthenticated requests**: 60 requests per minute
-- **Authentication endpoints**: 5 requests per minute
-
-### Headers
-Rate limit information is included in response headers:
-```
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 59
-X-RateLimit-Reset: 1640995200
+### Login User
+```http
+POST /api/auth/login
 ```
 
----
-
-## ❌ Error Handling
-
-### Standard Error Response
+**Request Body:**
 ```json
 {
-  "success": false,
-  "message": "Error description",
-  "errors": {
-    "field": ["Validation error message"]
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    },
+    "token": "1|abc123..."
   }
 }
 ```
 
-### HTTP Status Codes
-- **200**: Success
-- **201**: Created
-- **400**: Bad Request
-- **401**: Unauthorized
-- **403**: Forbidden
-- **404**: Not Found
-- **422**: Validation Error
-- **429**: Rate Limit Exceeded
-- **500**: Internal Server Error
+### Enable Two-Factor Authentication
+```http
+POST /api/auth/2fa/enable
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Two-factor authentication enabled",
+  "data": {
+    "qr_code": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0i...",
+    "secret": "JBSWY3DPEHPK3PXP",
+    "recovery_codes": [
+      "8f4e1c1b",
+      "2a9d7e3f",
+      "5c1b8f4e"
+    ]
+  }
+}
+```
 
 ---
 
