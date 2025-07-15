@@ -132,7 +132,7 @@ Route::prefix('dashboard')->name('dashboard-')->namespace('App\Http\Controllers'
 });
 
 // Admin
-Route::prefix('console/admin')->name('console-admin-')->namespace('App\Http\Controllers\Admin')->middleware(['isAdmin'])->group(function() {
+Route::prefix('dashboard/admin')->name('dashboard-admin-')->namespace('App\Http\Controllers\Admin')->middleware(['isAdmin'])->group(function() {
     Route::prefix('users')->name('users-')->namespace('Users')->group(function(){
         Route::get('/', 'UsersController@index')->name('index');
         Route::post('post/{tree}', 'PostController@tree')->name('post');
