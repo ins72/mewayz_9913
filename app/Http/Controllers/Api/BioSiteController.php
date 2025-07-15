@@ -777,13 +777,24 @@ class BioSiteController extends Controller
         ]);
 
         try {
-            $duplicatedSite = $originalSite->replicate();
+            // Create new bio site with existing schema
+            $duplicatedSite = new BioSite();
+            $duplicatedSite->user_id = auth()->id();
             $duplicatedSite->name = $request->name;
+            $duplicatedSite->title = $request->name;
             $duplicatedSite->slug = $request->slug;
-            $duplicatedSite->is_active = false; // Start as inactive
-            $duplicatedSite->custom_domain = null; // Clear custom domain
-            $duplicatedSite->password = null; // Clear password
-            $duplicatedSite->password_protection = false; // Disable password protection
+            $duplicatedSite->address = $request->slug;
+            $duplicatedSite->_slug = $request->slug;
+            $duplicatedSite->description = $originalSite->description;
+            $duplicatedSite->bio = $originalSite->bio;
+            $duplicatedSite->status = 0; // Start as inactive
+            $duplicatedSite->theme_config = $originalSite->theme_config;
+            $duplicatedSite->settings = $originalSite->settings;
+            $duplicatedSite->seo = $originalSite->seo;
+            $duplicatedSite->social = $originalSite->social;
+            $duplicatedSite->background = $originalSite->background;
+            $duplicatedSite->colors = $originalSite->colors;
+            $duplicatedSite->template_id = $originalSite->template_id;
             $duplicatedSite->save();
 
             // Duplicate bio site links
@@ -796,7 +807,7 @@ class BioSiteController extends Controller
 
             // Generate QR code for the duplicated bio site
             $qrCodeUrl = $this->generateQRCode($duplicatedSite->slug);
-            $duplicatedSite->update(['qr_code_url' => $qrCodeUrl]);
+            $duplicatedSite->update(['qr' => $qrCodeUrl]);
 
             return response()->json([
                 'success' => true,
@@ -806,7 +817,7 @@ class BioSiteController extends Controller
                     'name' => $duplicatedSite->name,
                     'slug' => $duplicatedSite->slug,
                     'url' => url('/bio/' . $duplicatedSite->slug),
-                    'is_active' => $duplicatedSite->is_active,
+                    'is_active' => $duplicatedSite->status === 1,
                     'created_at' => $duplicatedSite->created_at
                 ]
             ], 201);
