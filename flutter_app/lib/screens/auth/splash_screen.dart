@@ -35,8 +35,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(seconds: 3));
     
     if (mounted) {
-      // Skip auth check for now and go directly to login
-      context.go('/login');
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      
+      // Wait for auth status check to complete
+      while (authProvider.isLoading) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      
+      if (authProvider.isAuthenticated) {
+        context.go('/dashboard');
+      } else {
+        context.go('/login');
+      }
     }
   }
 
