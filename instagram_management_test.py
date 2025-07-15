@@ -135,7 +135,6 @@ class InstagramManagementTester:
         if response and response.status_code == 200:
             try:
                 data = response.json()
-                print(f"Login response: {data}")  # Debug output
                 if "token" in data:
                     self.test_user["token"] = data["token"]
                     self.test_user["id"] = data.get("user", {}).get("id")
