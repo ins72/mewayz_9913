@@ -127,38 +127,56 @@ innodb_log_file_size = 256M
 max_connections = 200
 ```
 
-#### Database Setup
+### Step 3: Application Setup
+
+#### 3.1 Clone and Install
 ```bash
-# Run migrations
-php artisan migrate --force
-
-# Seed database (optional)
-php artisan db:seed
-
-# Create admin user
-php artisan tinker
->>> App\Models\User::create([
-...     'name' => 'Admin User',
-...     'email' => 'admin@mewayz.com',
-...     'password' => Hash::make('secure_password'),
-... ]);
+cd /var/www
+sudo git clone https://github.com/mewayz/platform.git mewayz
+cd mewayz
+sudo composer install --no-dev --optimize-autoloader
 ```
 
-#### Build Assets
+#### 3.2 Environment Configuration
 ```bash
-# Build frontend assets
-npm run build
-
-# Build Flutter web app
-cd flutter_app
-flutter build web --release
-cd ..
-
-# Copy Flutter build to public
-cp -r flutter_app/build/web/* public/
+sudo cp .env.example .env
+sudo nano .env
 ```
 
-### 3. Web Server Configuration
+Configure:
+```env
+APP_NAME=Mewayz
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://yourdomain.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_DATABASE=mewayz
+DB_USERNAME=mewayz
+DB_PASSWORD=secure_password
+
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
+
+#### 3.3 Application Setup
+```bash
+sudo php artisan key:generate
+sudo php artisan migrate --force
+sudo php artisan storage:link
+sudo php artisan config:cache
+sudo php artisan route:cache
+sudo php artisan view:cache
+```
+
+#### 3.4 Set Permissions
+```bash
+sudo chown -R www-data:www-data /var/www/mewayz
+sudo chmod -R 755 /var/www/mewayz
+sudo chmod -R 775 /var/www/mewayz/storage
+```
 
 #### Nginx Configuration
 ```nginx
