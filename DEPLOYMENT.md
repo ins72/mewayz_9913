@@ -228,30 +228,30 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d yourdomain.com
 ```
 
-### 5. SSL Certificate Setup
+### Step 6: Process Management
 
-#### Using Let's Encrypt
+#### 6.1 Supervisor Configuration
 ```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx
-
-# Get SSL certificate
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
-
-# Auto-renewal
-sudo crontab -e
-# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+sudo nano /etc/supervisor/conf.d/mewayz.conf
 ```
 
-#### Using Custom Certificate
-```bash
-# Copy certificate files
-sudo cp your-certificate.crt /etc/ssl/certs/
-sudo cp your-private.key /etc/ssl/private/
+```ini
+[program:mewayz-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/mewayz/artisan queue:work --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/mewayz/storage/logs/worker.log
+```
 
-# Set permissions
-sudo chmod 600 /etc/ssl/private/your-private.key
-sudo chown root:root /etc/ssl/private/your-private.key
+#### 6.2 Start Workers
+```bash
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start mewayz-worker:*
 ```
 
 ### 6. Performance Optimization
