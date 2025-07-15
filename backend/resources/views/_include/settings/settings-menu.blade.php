@@ -11,7 +11,7 @@
    </a>
    <div class="mt-8 flex w-full flex-col">
       <ul class="flex w-full flex-col">
-         <a href="{{ route('console-index') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'console' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Console') }}</span></a>
+         <a href="{{ route('dashboard-index') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'dashboard' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Dashboard') }}</span></a>
 
          <a href="{{ route('console-settings-index') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'org' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Organization') }}</span></a>
          
