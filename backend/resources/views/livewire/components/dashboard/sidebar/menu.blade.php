@@ -82,7 +82,7 @@
       $this->dispatch('set-team-name', ao($this->team, 'name'));
       $this->dispatch('updated-workspace-logo', Teams::get_team()->getLogo());
       $this->dispatch('refreshFolders');
-      $this->redirect(route('console-index'), true);
+      $this->redirect(route('dashboard-index'), true);
    };
 
    mount(function(){
