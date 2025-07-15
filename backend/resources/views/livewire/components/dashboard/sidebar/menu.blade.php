@@ -139,7 +139,7 @@
                   </div>
 
                   
-                  <div class="yena-menu-list-item border border-transparent hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" @click="is_set_team ? $wire.removeTeam() : Livewire.navigate('{{ route('console-settings-index') }}');">
+                  <div class="yena-menu-list-item border border-transparent hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" @click="is_set_team ? $wire.removeTeam() : Livewire.navigate('{{ route('dashboard-settings-index') }}');">
                      <span class="yena-avatar !h-[32px] !w-[32px] !bg-purple-500 !text-white !flex items-center justify-center">
                         <img src="{{ iam()->get_original_user()->team()->getLogo() }}" class="w-full h-full rounded-full !object-cover" alt="">
                      </span>
