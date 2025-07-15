@@ -96,7 +96,7 @@
 
 
    <div x-data="sidebar__menu">
-      <div class="yena-sidebar-inner bg-white">
+      <div class="yena-sidebar-inner bg-white dark:bg-gray-800 sidebar">
          <div class="-header-sidebar" x-data="{ sidebarTippy: {
             content: () => $refs.template.innerHTML,
             allowHTML: true,
@@ -118,33 +118,33 @@
             <template x-ref="template" class="hidden">
                <div class="yena-menu-list !w-[415px]">
             
-                  <a class="yena-menu-list-item border border-transparent hover:border-[color:var(--yena-colors-gray-200)!important] hover:bg-[var(--yena-colors-gray-100)!important] cursor-pointer" @click="$dispatch('open-modal', 'edit-profile-modal');">
+                  <a class="yena-menu-list-item border border-transparent hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" @click="$dispatch('open-modal', 'edit-profile-modal');">
                      <span class="yena-avatar !h-8 !w-8">
                         <img src="{{ $avatar }}" class="yena-update-avatar w-full h-full object-cover" alt=" " class="">
                      </span>
                      <div class="flex flex-col ml-2">
-                        <p class=" text-sm">{{ iam()->get_original_user()->name }}</p>
-                        <p class="text-[color:var(--yena-colors-gray-500)] text-xs">{{ iam()->email }}</p>
+                        <p class=" text-sm text-gray-900 dark:text-white">{{ iam()->get_original_user()->name }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs">{{ iam()->email }}</p>
                      </div>
                      <div class="--icon ml-auto !mr-0">
                         {!! __icon('interface-essential', 'setting4', 'w-5 h-5') !!}
                      </div>
                   </a>
-                  <hr class="--divider">
+                  <hr class="--divider border-gray-200 dark:border-gray-700">
 
                   <div class="-menu-group">
-                     <div class="mx-4 my-2 font-semibold text-sm text-[color:var(--yena-colors-gray-500)]">
+                     <div class="mx-4 my-2 font-semibold text-sm text-gray-500 dark:text-gray-400">
                         {{ __('Workspaces') }}
                      </div>
                   </div>
 
                   
-                  <div class="yena-menu-list-item border border-transparent hover:border-[color:var(--yena-colors-gray-200)!important] hover:bg-[var(--yena-colors-gray-100)!important] cursor-pointer" @click="is_set_team ? $wire.removeTeam() : Livewire.navigate('{{ route('console-settings-index') }}');">
-                     <span class="yena-avatar !h-[32px] !w-[32px] !bg-[var(--yena-colors-orchid-300)] !text-white !flex items-center justify-center">
+                  <div class="yena-menu-list-item border border-transparent hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" @click="is_set_team ? $wire.removeTeam() : Livewire.navigate('{{ route('console-settings-index') }}');">
+                     <span class="yena-avatar !h-[32px] !w-[32px] !bg-purple-500 !text-white !flex items-center justify-center">
                         <img src="{{ iam()->get_original_user()->team()->getLogo() }}" class="w-full h-full rounded-full !object-cover" alt="">
                      </span>
                      <div class="flex flex-col ml-2">
-                        <p class="text-sm">{{ iam()->get_original_user()->team()->name }}</p>
+                        <p class="text-sm text-gray-900 dark:text-white">{{ iam()->get_original_user()->team()->name }}</p>
                      </div>
                      <template x-if="team.id == userTeam.id">
                         <div class="--icon ml-auto !mr-0">
