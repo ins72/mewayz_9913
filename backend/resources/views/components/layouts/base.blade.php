@@ -29,7 +29,7 @@
         <script type="text/javascript" src="{{ gs('assets/js/navigate.turbo.js') }}" defer></script>
         @livewireStyles
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans text-gray-900 antialiased bg-gray-50 dark:bg-gray-900 dark:text-gray-100">
         
         <div>
             
