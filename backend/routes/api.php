@@ -193,6 +193,16 @@ Route::middleware('auth:sanctum')->group(function () {
     
 });
 
+// Stripe Payment routes - public access for webhooks
+Route::prefix('payments')->group(function () {
+    Route::get('/packages', [StripePaymentController::class, 'getPackages']);
+    Route::post('/checkout/session', [StripePaymentController::class, 'createCheckoutSession']);
+    Route::get('/checkout/status/{sessionId}', [StripePaymentController::class, 'getCheckoutStatus']);
+});
+
+// Stripe webhook - must be outside auth middleware
+Route::post('/webhook/stripe', [StripePaymentController::class, 'handleWebhook']);
+
 // Legacy route for compatibility
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
