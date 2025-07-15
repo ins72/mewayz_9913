@@ -245,8 +245,27 @@ class ApiService {
   }
 
   static Future<Map<String, dynamic>> importContacts(String filePath) async {
-    // TODO: Implement file upload for contact import
-    return {'success': true, 'message': 'Import started'};
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/crm/contacts/import'));
+      
+      // Add headers
+      final headers = await _getHeaders();
+      request.headers.addAll(headers);
+      
+      // Add file
+      request.files.add(await http.MultipartFile.fromPath('file', filePath));
+      
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return jsonDecode(responseBody);
+      } else {
+        throw Exception(jsonDecode(responseBody)['message'] ?? 'Import failed');
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Import failed: ${e.toString()}'};
+    }
   }
 
   // Email Marketing endpoints
