@@ -219,7 +219,7 @@ class MewayzLaravelArchitectureTest:
             results["auth_endpoints"] = auth_present
             print(f"✅ Auth endpoints: {'CONFIGURED' if auth_present else 'MISSING'}")
             
-            stripe_present = "'/payments'" in content and "StripePaymentController" in content
+            stripe_present = ("prefix('payments')" in content or "'/payments'" in content) and "StripePaymentController" in content
             results["stripe_endpoints"] = stripe_present
             print(f"✅ Stripe endpoints: {'CONFIGURED' if stripe_present else 'MISSING'}")
             
