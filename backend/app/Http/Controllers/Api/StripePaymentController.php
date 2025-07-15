@@ -31,8 +31,8 @@ class StripePaymentController extends Controller
                 'package_id' => 'required_without:stripe_price_id|string',
                 'stripe_price_id' => 'required_without:package_id|string',
                 'quantity' => 'integer|min:1|max:10',
-                'success_url' => 'required|url',
-                'cancel_url' => 'required|url',
+                'success_url' => 'required|string',
+                'cancel_url' => 'required|string',
                 'metadata' => 'array'
             ]);
             
