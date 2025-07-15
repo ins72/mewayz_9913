@@ -921,7 +921,13 @@ if (!function_exists('logo_icon')) {
      */
     function logo_icon(){
       $logo = settings('logo_icon');
-      $default = gs('assets/image/others/default-logo-icon.png');
+      // Use text-based Mewayz icon logo instead of default image
+      $default = 'data:image/svg+xml;base64,' . base64_encode('
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="28" fill="#2563eb"/>
+          <text x="30" y="38" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="1px">M</text>
+        </svg>
+      ');
 
       if (empty($logo) || !mediaExists('media/site/logo', $logo)) {
           return $default;
