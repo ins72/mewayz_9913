@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g id="Group_1869" data-name="Group 1869" transform="translate(-1511.5 -503.609)">
+    <g id="Group_1868" data-name="Group 1868">
+      <rect id="Rectangle_904" data-name="Rectangle 904" width="6.248" height="4" rx="1" transform="translate(1516.376 508.609)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6656" data-name="Path 6656" d="M1528.5,509.935h0a1.876,1.876,0,0,1,0,2.652h0" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6657" data-name="Path 6657" d="M1531.594,508.609a3.75,3.75,0,0,1,0,5.3" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <rect id="Rectangle_905" data-name="Rectangle 905" width="11" height="7" rx="1" transform="translate(1519.5 518.609)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6658" data-name="Path 6658" d="M1525.5,518.609v-11a2,2,0,0,0-2-2h-8a2,2,0,0,0-2,2v12a2,2,0,0,0,2,2h4" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_304" data-name="Line 304" x2="11" transform="translate(1519.5 521.609)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Shape_3077" data-name="Shape 3077" d="M1516.5,515.6l-.005.005.005.005.005-.005-.005-.005" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Shape_3077-2" data-name="Shape 3077" d="M1519.5,515.609l-.005.005.005.005.005-.005-.005-.005" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Shape_3077-3" data-name="Shape 3077" d="M1522.505,515.6l-.005.005.005.005.005-.005-.005-.005" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+    <rect id="Rectangle_906" data-name="Rectangle 906" width="24" height="24" transform="translate(1511.5 503.609)" fill="none"/>
+  </g>
+</svg>

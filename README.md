@@ -1,138 +1,66 @@
-# Mewayz Platform
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-**All-in-One Business Platform for Modern Creators**
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## 🏗️ Project Structure
+## About Laravel
 
-This project follows a clean, professional structure with separate backend and frontend directories:
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-```
-/app/
-├── backend/                # Laravel Backend
-│   ├── app/               # Laravel application core
-│   ├── resources/         # Views, assets, language files
-│   ├── routes/            # API and web routes
-│   ├── database/          # Migrations, seeders, factories
-│   ├── config/            # Configuration files
-│   ├── storage/           # Storage for logs, cache, sessions
-│   ├── tests/             # Backend tests
-│   ├── vendor/            # PHP dependencies
-│   ├── composer.json      # PHP dependencies
-│   ├── artisan           # Laravel CLI
-│   └── .env              # Backend environment variables
-├── frontend/              # Flutter Frontend
-│   ├── lib/              # Flutter source code
-│   ├── web/              # Flutter web assets
-│   ├── build/            # Built Flutter app
-│   └── pubspec.yaml      # Flutter dependencies
-├── public/                # Shared public assets
-│   ├── flutter.html      # Flutter app entry point
-│   ├── assets/           # Static assets
-│   └── index.php         # Laravel entry point
-├── docs/                  # Documentation
-│   ├── README.md         # Main documentation
-│   ├── API_DOCUMENTATION.md
-│   ├── DEPLOYMENT.md
-│   └── [other docs]
-├── scripts/               # Utility scripts
-│   ├── backend_test.py
-│   └── test_bio_site_enhanced.py
-├── .env                   # Root environment variables
-├── package.json          # Node.js dependencies (for asset compilation)
-├── tailwind.config.js    # Tailwind CSS configuration
-├── vite.config.js        # Vite configuration
-└── test_result.md        # Testing results
-```
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## 🚀 Tech Stack
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-### Backend
-- **Laravel 10.48.29** (PHP 8.2) - API backend + web interface
-- **MongoDB** - Primary database
-- **Sanctum** - API authentication
-- **Livewire** - Dynamic frontend components
+## Learning Laravel
 
-### Frontend
-- **Flutter** (Dart) - Cross-platform mobile application
-- **Vue.js** - Additional web components
-- **Tailwind CSS** - Styling framework
-- **Vite** - Asset bundling
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## 🔧 Development
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-### Backend Development
-```bash
-cd backend
-php artisan serve --port=8001
-```
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-### Frontend Development
-```bash
-cd frontend
-flutter run -d web-server --web-port=3000
-```
+## Laravel Sponsors
 
-### Asset Compilation
-```bash
-npm run dev    # Development
-npm run build  # Production
-```
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-## 📚 Documentation
+### Premium Partners
 
-All documentation is located in the `docs/` directory:
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
 
-- **[API Documentation](docs/API_DOCUMENTATION.md)** - Complete API reference
-- **[Deployment Guide](docs/DEPLOYMENT.md)** - Production deployment instructions
-- **[Architecture](docs/ARCHITECTURE.md)** - Technical architecture details
-- **[Installation](docs/INSTALLATION.md)** - Setup instructions
-- **[User Guide](docs/USER_GUIDE.md)** - End-user documentation
+## Contributing
 
-## 🏃‍♂️ Quick Start
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-1. **Install Dependencies**
-   ```bash
-   cd backend && composer install
-   npm install
-   ```
+## Code of Conduct
 
-2. **Configure Environment**
-   ```bash
-   cp .env.example .env
-   cd backend && php artisan key:generate
-   ```
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-3. **Start Services**
-   ```bash
-   sudo supervisorctl restart all
-   ```
+## Security Vulnerabilities
 
-4. **Access Application**
-   - Backend API: http://localhost:8001
-   - Flutter App: http://localhost:8001/app
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## 📊 Features
+## License
 
-- **Social Media Management** - Multi-platform posting and analytics
-- **Bio Site Builder** - Link-in-bio pages with themes
-- **CRM System** - Contact and lead management
-- **Email Marketing** - Campaign management and automation
-- **E-commerce** - Product catalog and order management
-- **Course Management** - Online course creation and delivery
-- **Analytics Dashboard** - Comprehensive business metrics
-- **Workspace Management** - Multi-tenant organization
-
-## 🎯 Production Ready
-
-This project has been thoroughly tested and is production-ready with:
-
-- **Backend Success Rate**: 72.3% (core features 100% functional)
-- **Frontend Success Rate**: 95% (excellent user experience)
-- **Professional UI/UX**: Consistent Mewayz branding
-- **Performance**: Optimized loading times (81ms page load)
-- **Security**: Token-based authentication and authorization
-- **Scalability**: Multi-workspace architecture
-
----
-
-*Creating seamless business solutions for the modern digital world*
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

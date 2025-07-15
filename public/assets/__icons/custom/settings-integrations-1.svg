@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <g id="Group_1878" data-name="Group 1878" transform="translate(-2075.5 -10586.608)">
+    <g id="Group_1877" data-name="Group 1877">
+      <rect id="Rectangle_908" data-name="Rectangle 908" width="4" height="4" rx="2" transform="translate(2078 10603.607)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <rect id="Rectangle_909" data-name="Rectangle 909" width="4" height="4" rx="2" transform="translate(2093 10603.607)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6673" data-name="Path 6673" d="M2083.5,10598.608H2082a2,2,0,0,0-2,2v3" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6674" data-name="Path 6674" d="M2091.5,10598.608h1.5a2,2,0,0,1,2,2v3" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_6675" data-name="Path 6675" d="M2086.35,10598.357l1,1,1.5-1.5" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <g id="Group_1876" data-name="Group 1876">
+        <circle id="Ellipse_188" data-name="Ellipse 188" cx="2" cy="2" r="2" transform="translate(2085.5 10603.607)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <circle id="Ellipse_189" data-name="Ellipse 189" cx="2" cy="2" r="2" transform="translate(2085.5 10589.607)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <line id="Line_307" data-name="Line 307" y2="1.5" transform="translate(2087.5 10593.607)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <line id="Line_308" data-name="Line 308" y1="1.5" transform="translate(2087.5 10602.107)" fill="none" stroke="#323232" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      </g>
+    </g>
+    <path id="Path_6676" data-name="Path 6676" d="M2075.5,10586.608h24v24h-24Z" fill="none"/>
+  </g>
+</svg>
