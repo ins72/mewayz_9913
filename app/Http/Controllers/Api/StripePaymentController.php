@@ -230,8 +230,6 @@ class StripePaymentController extends Controller
             return response()->json(['error' => 'Failed to process webhook'], 500);
         }
     }
-        }
-    }
     
     /**
      * Handle successful payment
