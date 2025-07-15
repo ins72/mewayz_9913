@@ -75,13 +75,15 @@ class SiteServiceProvider extends ServiceProvider{
     
         // Process for bio
         $path = resource_path('views/build/bio/directory');
-        $folio = Folio::middleware([]);
-        
-        if (!$customDomain) {
-            $folio->uri("/$bio_prefix");
+        if (is_dir($path)) {
+            $folio = Folio::middleware([]);
+            
+            if (!$customDomain) {
+                $folio->uri("/$bio_prefix");
+            }
+            
+            $folio->path($path);
         }
-        
-        $folio->path($path);
     
         // Process for main directory
         $path = resource_path('views/build/directory');
