@@ -4,39 +4,38 @@
 
 ## 📋 Overview
 
-1. [Prerequisites](#prerequisites)
-2. [System Requirements](#system-requirements)
-3. [Installation Steps](#installation-steps)
-4. [Configuration](#configuration)
-5. [Database Setup](#database-setup)
-6. [Frontend Setup](#frontend-setup)
-7. [Service Configuration](#service-configuration)
-8. [Verification](#verification)
-9. [Troubleshooting](#troubleshooting)
+This guide provides comprehensive installation instructions for the Mewayz Platform across different environments. Whether you're setting up a development environment or deploying to production, this guide covers all necessary steps.
 
----
+## 🎯 Quick Start
 
-## 🔧 Prerequisites
+### Option 1: Automated Installation
+```bash
+# Download and run installer
+curl -fsSL https://raw.githubusercontent.com/mewayz/platform/main/install.sh | bash
 
-### Required Software
+# Or with specific environment
+curl -fsSL https://raw.githubusercontent.com/mewayz/platform/main/install.sh | bash -s -- --env=production
+```
 
-#### Backend Requirements
-- **PHP**: 8.2.28 or higher
-- **Composer**: Latest version (2.0+)
-- **MySQL/MariaDB**: 8.0+ 
-- **Redis**: 6.0+ (recommended for caching)
-- **Git**: Latest version
+### Option 2: Manual Installation
+Follow the detailed steps below for complete control over the installation process.
 
-#### Frontend Requirements
-- **Node.js**: 18+ LTS
-- **npm/yarn**: Latest version
-- **Flutter**: 3.x (for mobile development)
+## 🔧 System Requirements
 
-#### System Requirements
-- **Operating System**: Linux (Ubuntu 20.04+), macOS, or Windows 10+
-- **Memory**: 4GB RAM minimum, 8GB recommended
-- **Storage**: 10GB free space minimum
-- **Network**: Internet connection for dependencies
+### Minimum Requirements
+- **Operating System**: Ubuntu 20.04 LTS, CentOS 8, or macOS 11+
+- **RAM**: 2GB minimum, 4GB recommended
+- **CPU**: 2 cores minimum, 4 cores recommended
+- **Storage**: 10GB minimum, 20GB recommended
+- **Network**: Stable internet connection
+
+### Software Requirements
+- **PHP**: 8.1 or higher
+- **MySQL**: 8.0 or higher (or MariaDB 10.6+)
+- **Redis**: 6.0 or higher
+- **Composer**: 2.0 or higher
+- **Node.js**: 16.0 or higher
+- **Flutter**: 3.0 or higher (for mobile development)
 
 ---
 
