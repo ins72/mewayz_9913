@@ -786,9 +786,260 @@ class WorkspaceSetupController extends Controller
     }
     
     /**
-     * Step 6: Review & Complete Setup
+     * Step 6: Final Review & Launch
      */
     public function completeSetup(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+            
+            $settings = json_decode($workspace->settings, true) ?? [];
+            
+            // Verify all steps are completed
+            $requiredSteps = ['main_goals', 'feature_selection', 'team_setup', 'subscription_selection', 'branding_configuration'];
+            $missingSteps = [];
+            
+            foreach ($requiredSteps as $step) {
+                if (!isset($settings['setup_progress'][$step]) || !$settings['setup_progress'][$step]) {
+                    $missingSteps[] = $step;
+                }
+            }
+            
+            if (!empty($missingSteps)) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Please complete all setup steps',
+                    'missing_steps' => $missingSteps
+                ], 400);
+            }
+            
+            // Mark setup as completed
+            $settings['setup_completed'] = true;
+            $settings['setup_completed_at'] = now()->toISOString();
+            $settings['setup_step'] = 6;
+            
+            $workspace->update(['settings' => json_encode($settings)]);
+            
+            // Initialize workspace features based on selection
+            $this->initializeWorkspaceFeatures($workspace);
+            
+            Log::info('Enhanced workspace setup completed', [
+                'user_id' => $user->id,
+                'workspace_id' => $workspace->id,
+                'selected_goals' => $settings['main_goals']['selected_goals'] ?? [],
+                'selected_features' => $settings['feature_selection']['selected_features'] ?? [],
+                'subscription_plan' => $settings['subscription_selection']['subscription_plan'] ?? 'free'
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Workspace setup completed successfully! Welcome to Mewayz!',
+                'workspace' => [
+                    'id' => $workspace->id,
+                    'name' => $workspace->name,
+                    'description' => $workspace->description,
+                    'setup_completed' => true,
+                    'dashboard_url' => '/console'
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error completing enhanced setup', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to complete setup'
+            ], 500);
+        }
+    }
+    
+    /**
+     * Get available main goals
+     */
+    public function getMainGoals(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'goals' => self::MAIN_GOALS
+        ]);
+    }
+    
+    /**
+     * Get available features for selected goals
+     */
+    public function getAvailableFeatures(Request $request)
+    {
+        $request->validate([
+            'selected_goals' => 'required|array',
+            'selected_goals.*' => 'string|in:instagram_management,link_in_bio,course_creation,ecommerce,crm,marketing_hub'
+        ]);
+        
+        $availableFeatures = [];
+        foreach ($request->selected_goals as $goalId) {
+            if (isset(self::MAIN_GOALS[$goalId])) {
+                $goalFeatures = self::MAIN_GOALS[$goalId]['features'];
+                foreach ($goalFeatures as $feature) {
+                    $availableFeatures[$feature] = [
+                        'name' => ucwords(str_replace('_', ' ', $feature)),
+                        'goal' => $goalId,
+                        'description' => $this->getFeatureDescription($feature)
+                    ];
+                }
+            }
+        }
+        
+        return response()->json([
+            'success' => true,
+            'features' => $availableFeatures
+        ]);
+    }
+    
+    /**
+     * Get subscription plans
+     */
+    public function getSubscriptionPlans(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'plans' => self::SUBSCRIPTION_PLANS
+        ]);
+    }
+    
+    /**
+     * Calculate pricing based on features and subscription plan
+     */
+    private function calculatePricing($selectedFeatures, $subscriptionPlan, $billingCycle = 'monthly')
+    {
+        $featureCount = count($selectedFeatures);
+        
+        if ($subscriptionPlan === 'free') {
+            return [
+                'total_monthly' => 0,
+                'total_yearly' => 0,
+                'feature_count' => $featureCount,
+                'price_per_feature' => 0,
+                'billing_cycle' => $billingCycle
+            ];
+        }
+        
+        $planConfig = self::SUBSCRIPTION_PLANS[$subscriptionPlan];
+        
+        if ($billingCycle === 'yearly') {
+            $pricePerFeature = $planConfig['price_yearly'];
+            $totalPrice = $featureCount * $pricePerFeature;
+            
+            return [
+                'total_monthly' => $totalPrice / 12,
+                'total_yearly' => $totalPrice,
+                'feature_count' => $featureCount,
+                'price_per_feature' => $pricePerFeature,
+                'billing_cycle' => $billingCycle,
+                'savings' => ($featureCount * $planConfig['price_monthly'] * 12) - $totalPrice
+            ];
+        } else {
+            $pricePerFeature = $planConfig['price_monthly'];
+            $totalPrice = $featureCount * $pricePerFeature;
+            
+            return [
+                'total_monthly' => $totalPrice,
+                'total_yearly' => $totalPrice * 12,
+                'feature_count' => $featureCount,
+                'price_per_feature' => $pricePerFeature,
+                'billing_cycle' => $billingCycle
+            ];
+        }
+    }
+    
+    /**
+     * Get feature description
+     */
+    private function getFeatureDescription($feature)
+    {
+        $descriptions = [
+            'content_scheduling' => 'Schedule posts across multiple platforms',
+            'content_calendar' => 'Visual calendar for content planning',
+            'hashtag_research' => 'Discover trending hashtags',
+            'story_management' => 'Manage Instagram stories and highlights',
+            'analytics_dashboard' => 'Comprehensive analytics and insights',
+            'dm_management' => 'Direct message management',
+            'competitor_analysis' => 'Track competitor performance',
+            'page_builder' => 'Drag-and-drop page builder',
+            'template_library' => 'Professional templates',
+            'custom_components' => 'Custom page components',
+            'analytics_tracking' => 'Click and conversion tracking',
+            'ab_testing' => 'A/B test different pages',
+            'mobile_optimization' => 'Mobile-responsive design',
+            'course_builder' => 'Create and manage courses',
+            'content_management' => 'Organize course content',
+            'student_management' => 'Track student progress',
+            'community_features' => 'Discussion forums',
+            'certification_system' => 'Automated certificates',
+            'payment_integration' => 'Course monetization',
+            'live_sessions' => 'Live streaming capabilities',
+            'product_catalog' => 'Manage product inventory',
+            'inventory_tracking' => 'Real-time stock tracking',
+            'order_processing' => 'Automated order management',
+            'payment_gateway' => 'Multiple payment options',
+            'shipping_management' => 'Shipping integration',
+            'customer_portal' => 'Customer self-service',
+            'marketing_tools' => 'Promotional campaigns',
+            'contact_management' => 'Customer database',
+            'lead_tracking' => 'Sales pipeline management',
+            'communication_history' => 'Interaction tracking',
+            'task_management' => 'Follow-up reminders',
+            'deal_management' => 'Sales opportunity tracking',
+            'custom_fields' => 'Flexible data structure',
+            'automation_rules' => 'Workflow automation',
+            'email_campaigns' => 'Email marketing campaigns',
+            'automation_workflows' => 'Automated email sequences',
+            'list_management' => 'Subscriber management',
+            'campaign_analytics' => 'Email performance metrics',
+            'social_integration' => 'Social media integration',
+            'performance_tracking' => 'ROI measurement'
+        ];
+        
+        return $descriptions[$feature] ?? ucwords(str_replace('_', ' ', $feature));
+    }
+    
+    /**
+     * Send team invitations
+     */
+    private function sendTeamInvitations($teamMembers, $workspace)
+    {
+        foreach ($teamMembers as $member) {
+            // TODO: Implement team invitation logic
+            Log::info('Team invitation sent', [
+                'email' => $member['email'],
+                'workspace_id' => $workspace->id,
+                'role' => $member['role']
+            ]);
+        }
+    }
+    
+    /**
+     * Initialize workspace features
+     */
+    private function initializeWorkspaceFeatures($workspace)
+    {
+        $settings = json_decode($workspace->settings, true) ?? [];
+        $selectedFeatures = $settings['feature_selection']['selected_features'] ?? [];
+        
+        // TODO: Initialize selected features in the workspace
+        foreach ($selectedFeatures as $feature) {
+            Log::info('Initializing feature', [
+                'feature' => $feature,
+                'workspace_id' => $workspace->id
+            ]);
+        }
+    }
     {
         try {
             $user = Auth::user();
