@@ -39,6 +39,7 @@ export default defineConfig({
                 'resources/sass/console/console.scss',
                 'resources/sass/console/console.placeholder.scss',
                 'resources/sass/console/console.sidebar.scss',
+                'resources/sass/console/community.scss',
 
 
                 // Auth
