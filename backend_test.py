@@ -962,6 +962,317 @@ class MewayzComprehensiveTester:
                           user_type)
             return False
 
+    def test_final_5_percent_implementation(self, user_type: str):
+        """Test Final 5% Implementation - New System Controllers"""
+        print(f"🚀 Testing Final 5% Implementation for {user_type.upper()} user...")
+        
+        self.set_user(user_type)
+        
+        # Test 1: Health Controller
+        try:
+            response = self.make_request('GET', '/health')
+            response_time = response.elapsed.total_seconds()
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    health_data = data.get('data', {})
+                    services = health_data.get('services', {})
+                    features = health_data.get('features', {})
+                    self.log_result("System Health Check", "PASS", 
+                                  f"System healthy - DB: {services.get('database', 'unknown')}, Cache: {services.get('cache', 'unknown')}, Features: {len(features)}", 
+                                  user_type, response_time)
+                else:
+                    self.log_result("System Health Check", "FAIL", 
+                                  "Health check succeeded but missing success flag", 
+                                  user_type, response_time)
+                    return False
+            else:
+                self.log_result("System Health Check", "FAIL", 
+                              f"Health check failed with status {response.status_code}", 
+                              user_type, response_time)
+                return False
+                
+            # Test 2: System Information
+            system_response = self.make_request('GET', '/system/info')
+            system_time = system_response.elapsed.total_seconds()
+            
+            if system_response.status_code == 200:
+                system_data = system_response.json()
+                if system_data.get('success'):
+                    info = system_data.get('data', {})
+                    platform = info.get('platform', {})
+                    features = info.get('features', {})
+                    self.log_result("System Information", "PASS", 
+                                  f"Platform: {platform.get('name', 'Unknown')} v{platform.get('version', 'Unknown')}, Features: {features.get('total_features', 0)}, APIs: {features.get('api_endpoints', 0)}", 
+                                  user_type, system_time)
+                else:
+                    self.log_result("System Information", "FAIL", 
+                                  "System info succeeded but missing success flag", 
+                                  user_type, system_time)
+                    return False
+            else:
+                self.log_result("System Information", "FAIL", 
+                              f"System info failed with status {system_response.status_code}", 
+                              user_type, system_time)
+                return False
+                
+            # Test 3: System Maintenance Status
+            maintenance_response = self.make_request('GET', '/system/maintenance')
+            maintenance_time = maintenance_response.elapsed.total_seconds()
+            
+            if maintenance_response.status_code == 200:
+                maintenance_data = maintenance_response.json()
+                if maintenance_data.get('success'):
+                    status = maintenance_data.get('data', {})
+                    self.log_result("System Maintenance Status", "PASS", 
+                                  f"Maintenance mode: {status.get('maintenance_mode', 'unknown')}, Status: {status.get('status', 'unknown')}", 
+                                  user_type, maintenance_time)
+                else:
+                    self.log_result("System Maintenance Status", "FAIL", 
+                                  "Maintenance status succeeded but missing success flag", 
+                                  user_type, maintenance_time)
+                    return False
+            else:
+                self.log_result("System Maintenance Status", "FAIL", 
+                              f"Maintenance status failed with status {maintenance_response.status_code}", 
+                              user_type, maintenance_time)
+                return False
+                
+            # Test 4: Platform Overview
+            platform_response = self.make_request('GET', '/platform/overview')
+            platform_time = platform_response.elapsed.total_seconds()
+            
+            if platform_response.status_code == 200:
+                platform_data = platform_response.json()
+                if platform_data.get('success'):
+                    overview = platform_data.get('data', {})
+                    platform_info = overview.get('platform_info', {})
+                    core_features = overview.get('core_features', {})
+                    self.log_result("Platform Overview", "PASS", 
+                                  f"Platform: {platform_info.get('name', 'Unknown')}, Completion: {platform_info.get('completion', 'Unknown')}, Core Features: {len(core_features)}", 
+                                  user_type, platform_time)
+                else:
+                    self.log_result("Platform Overview", "FAIL", 
+                                  "Platform overview succeeded but missing success flag", 
+                                  user_type, platform_time)
+                    return False
+            else:
+                self.log_result("Platform Overview", "FAIL", 
+                              f"Platform overview failed with status {platform_response.status_code}", 
+                              user_type, platform_time)
+                return False
+                
+            # Test 5: Platform Statistics
+            stats_response = self.make_request('GET', '/platform/statistics')
+            stats_time = stats_response.elapsed.total_seconds()
+            
+            if stats_response.status_code == 200:
+                stats_data = stats_response.json()
+                if stats_data.get('success'):
+                    statistics = stats_data.get('data', {})
+                    users = statistics.get('users', {})
+                    content = statistics.get('content', {})
+                    self.log_result("Platform Statistics", "PASS", 
+                                  f"Total Users: {users.get('total', 0)}, Bio Sites: {content.get('bio_sites', 0)}, Courses: {content.get('courses', 0)}", 
+                                  user_type, stats_time)
+                else:
+                    self.log_result("Platform Statistics", "FAIL", 
+                                  "Platform statistics succeeded but missing success flag", 
+                                  user_type, stats_time)
+                    return False
+            else:
+                self.log_result("Platform Statistics", "FAIL", 
+                              f"Platform statistics failed with status {stats_response.status_code}", 
+                              user_type, stats_time)
+                return False
+                
+            # Test 6: Platform Features
+            features_response = self.make_request('GET', '/platform/features')
+            features_time = features_response.elapsed.total_seconds()
+            
+            if features_response.status_code == 200:
+                features_data = features_response.json()
+                if features_data.get('success'):
+                    features = features_data.get('data', {})
+                    core_business = features.get('core_business', [])
+                    advanced_features = features.get('advanced_features', [])
+                    integrations = features.get('integrations', [])
+                    self.log_result("Platform Features", "PASS", 
+                                  f"Core Business: {len(core_business)}, Advanced: {len(advanced_features)}, Integrations: {len(integrations)}", 
+                                  user_type, features_time)
+                else:
+                    self.log_result("Platform Features", "FAIL", 
+                                  "Platform features succeeded but missing success flag", 
+                                  user_type, features_time)
+                    return False
+            else:
+                self.log_result("Platform Features", "FAIL", 
+                              f"Platform features failed with status {features_response.status_code}", 
+                              user_type, features_time)
+                return False
+                
+            # Test 7: Platform Roadmap
+            roadmap_response = self.make_request('GET', '/platform/roadmap')
+            roadmap_time = roadmap_response.elapsed.total_seconds()
+            
+            if roadmap_response.status_code == 200:
+                roadmap_data = roadmap_response.json()
+                if roadmap_data.get('success'):
+                    roadmap = roadmap_data.get('data', {})
+                    completed = roadmap.get('completed', {})
+                    upcoming = roadmap.get('upcoming', {})
+                    self.log_result("Platform Roadmap", "PASS", 
+                                  f"Completed Phases: {len(completed)}, Upcoming Phases: {len(upcoming)}", 
+                                  user_type, roadmap_time)
+                else:
+                    self.log_result("Platform Roadmap", "FAIL", 
+                                  "Platform roadmap succeeded but missing success flag", 
+                                  user_type, roadmap_time)
+                    return False
+            else:
+                self.log_result("Platform Roadmap", "FAIL", 
+                              f"Platform roadmap failed with status {roadmap_response.status_code}", 
+                              user_type, roadmap_time)
+                return False
+                
+            # Test 8: Branding Information
+            branding_response = self.make_request('GET', '/branding/info')
+            branding_time = branding_response.elapsed.total_seconds()
+            
+            if branding_response.status_code == 200:
+                branding_data = branding_response.json()
+                if branding_data.get('success'):
+                    branding = branding_data.get('data', {})
+                    platform = branding.get('platform', {})
+                    visual = branding.get('visual_identity', {})
+                    self.log_result("Branding Information", "PASS", 
+                                  f"Platform: {platform.get('name', 'Unknown')}, Primary Color: {visual.get('primary_color', 'Unknown')}", 
+                                  user_type, branding_time)
+                else:
+                    self.log_result("Branding Information", "FAIL", 
+                                  "Branding info succeeded but missing success flag", 
+                                  user_type, branding_time)
+                    return False
+            else:
+                self.log_result("Branding Information", "FAIL", 
+                              f"Branding info failed with status {branding_response.status_code}", 
+                              user_type, branding_time)
+                return False
+                
+            # Test 9: Branding Assets
+            assets_response = self.make_request('GET', '/branding/assets')
+            assets_time = assets_response.elapsed.total_seconds()
+            
+            if assets_response.status_code == 200:
+                assets_data = assets_response.json()
+                if assets_data.get('success'):
+                    assets = assets_data.get('data', {})
+                    logos = assets.get('logos', {})
+                    colors = assets.get('colors', {})
+                    self.log_result("Branding Assets", "PASS", 
+                                  f"Logos: {len(logos)}, Colors: {len(colors)}", 
+                                  user_type, assets_time)
+                else:
+                    self.log_result("Branding Assets", "FAIL", 
+                                  "Branding assets succeeded but missing success flag", 
+                                  user_type, assets_time)
+                    return False
+            else:
+                self.log_result("Branding Assets", "FAIL", 
+                              f"Branding assets failed with status {assets_response.status_code}", 
+                              user_type, assets_time)
+                return False
+                
+            # Test 10: Branding Consistency Report
+            consistency_response = self.make_request('GET', '/branding/consistency-report')
+            consistency_time = consistency_response.elapsed.total_seconds()
+            
+            if consistency_response.status_code == 200:
+                consistency_data = consistency_response.json()
+                if consistency_data.get('success'):
+                    report = consistency_data.get('data', {})
+                    self.log_result("Branding Consistency Report", "PASS", 
+                                  f"Consistency Score: {report.get('consistency_score', 'Unknown')}%, Issues Found: {report.get('inconsistencies_found', 0)}", 
+                                  user_type, consistency_time)
+                else:
+                    self.log_result("Branding Consistency Report", "FAIL", 
+                                  "Consistency report succeeded but missing success flag", 
+                                  user_type, consistency_time)
+                    return False
+            else:
+                self.log_result("Branding Consistency Report", "FAIL", 
+                              f"Consistency report failed with status {consistency_response.status_code}", 
+                              user_type, consistency_time)
+                return False
+                
+            # Test 11: Optimization Performance
+            performance_response = self.make_request('GET', '/optimization/performance')
+            performance_time = performance_response.elapsed.total_seconds()
+            
+            if performance_response.status_code == 200:
+                performance_data = performance_response.json()
+                if performance_data.get('success'):
+                    metrics = performance_data.get('data', {})
+                    api_perf = metrics.get('api_performance', {})
+                    db_perf = metrics.get('database_performance', {})
+                    self.log_result("Optimization Performance", "PASS", 
+                                  f"API Response: {api_perf.get('average_response_time', 'Unknown')}, DB Query: {db_perf.get('average_query_time', 'Unknown')}", 
+                                  user_type, performance_time)
+                else:
+                    self.log_result("Optimization Performance", "FAIL", 
+                                  "Performance metrics succeeded but missing success flag", 
+                                  user_type, performance_time)
+                    return False
+            else:
+                self.log_result("Optimization Performance", "FAIL", 
+                              f"Performance metrics failed with status {performance_response.status_code}", 
+                              user_type, performance_time)
+                return False
+                
+            # Test 12: Optimization Recommendations
+            recommendations_response = self.make_request('GET', '/optimization/recommendations')
+            recommendations_time = recommendations_response.elapsed.total_seconds()
+            
+            if recommendations_response.status_code == 200:
+                recommendations_data = recommendations_response.json()
+                if recommendations_data.get('success'):
+                    recommendations = recommendations_data.get('data', {})
+                    database = recommendations.get('database', {})
+                    application = recommendations.get('application', {})
+                    self.log_result("Optimization Recommendations", "PASS", 
+                                  f"Database Recommendations: {len(database.get('high_priority', []))}, Application: {len(application.get('high_priority', []))}", 
+                                  user_type, recommendations_time)
+                    
+                    # Add to user journey
+                    self.user_journey_maps[user_type].append({
+                        "step": "Final 5% Implementation",
+                        "action": "Complete system health, platform info, branding, and optimization testing",
+                        "result": "Success",
+                        "health_check": True,
+                        "system_info": True,
+                        "platform_overview": True,
+                        "branding_info": True,
+                        "optimization_metrics": True
+                    })
+                    return True
+                else:
+                    self.log_result("Optimization Recommendations", "FAIL", 
+                                  "Recommendations succeeded but missing success flag", 
+                                  user_type, recommendations_time)
+                    return False
+            else:
+                self.log_result("Optimization Recommendations", "FAIL", 
+                              f"Recommendations failed with status {recommendations_response.status_code}", 
+                              user_type, recommendations_time)
+                return False
+                
+        except Exception as e:
+            self.log_result("Final 5% Implementation", "FAIL", 
+                          f"Final 5% implementation test failed: {str(e)}", 
+                          user_type)
+            return False
+
     def test_role_based_access_control(self):
         """Test role-based access control differences"""
         print("🔒 Testing Role-Based Access Control...")
