@@ -220,7 +220,8 @@ class StripePaymentController extends Controller
             // Execute Python script
             $pythonScript = base_path('stripe_integration.py');
             $escapedWebhookData = escapeshellarg($webhookData);
-            $command = "cd " . base_path() . " && echo {$escapedWebhookData} | /root/.venv/bin/python3 {$pythonScript} handle_webhook";
+            $stripeApiKey = env('STRIPE_API_KEY');
+            $command = "cd " . base_path() . " && STRIPE_API_KEY={$stripeApiKey} echo {$escapedWebhookData} | /root/.venv/bin/python3 {$pythonScript} handle_webhook";
             $output = shell_exec($command);
             
             if (!$output) {
