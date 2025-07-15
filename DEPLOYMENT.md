@@ -31,23 +31,23 @@ This guide provides step-by-step instructions for deploying the Mewayz Platform 
 - **Supervisor**: Process management
 - **SSL/TLS**: HTTPS encryption
 
-## Production Deployment
+## 🔧 Prerequisites
 
-### Prerequisites
+### Server Requirements
+- **Operating System**: Ubuntu 20.04 LTS or later
+- **RAM**: Minimum 2GB, Recommended 4GB+
+- **CPU**: Minimum 2 cores, Recommended 4 cores+
+- **Storage**: Minimum 20GB SSD
+- **Network**: Public IP address and domain name
 
-- **Server Requirements**:
-  - PHP 8.2+
-  - Node.js 18+
-  - MySQL 8.0+ or MariaDB
-  - Nginx or Apache
-  - SSL Certificate
-  - Minimum 2GB RAM, 20GB Storage
-
-- **Development Tools**:
-  - Composer
-  - npm/yarn
-  - Flutter SDK (for mobile builds)
-  - Git
+### Software Requirements
+- **PHP**: 8.1 or higher
+- **MySQL**: 8.0 or higher
+- **Redis**: 6.0 or higher
+- **Nginx**: 1.18 or higher
+- **Supervisor**: 4.0 or higher
+- **Composer**: 2.0 or higher
+- **Node.js**: 16.0 or higher (for asset compilation)
 
 ### 1. Server Setup
 
