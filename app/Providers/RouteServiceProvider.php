@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         // Configure Folio routes for authenticated dashboard pages
-        Folio::path(resource_path('views/pages/dashboard'))->uri('/console')->middleware([
+        Folio::path(resource_path('views/pages/dashboard'))->uri('/dashboard')->middleware([
             '*' => ['web', 'auth'],
         ]);
         
