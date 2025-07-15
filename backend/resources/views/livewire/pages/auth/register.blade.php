@@ -64,7 +64,7 @@ $register = function () {
     <div x-data="_register">
         <div>
           <div class="flex min-h-screen flex-col md:!flex-row bg-gray-50 dark:bg-gray-900">
-            <div class="flex items-center justify-center bg-[var(--yena-colors-white)] flex-1 md:max-w-[var(--yena-sizes-container-sm)]">
+            <div class="flex items-center justify-center bg-white dark:bg-gray-800 flex-1 md:max-w-[var(--yena-sizes-container-sm)] border-r border-gray-200 dark:border-gray-700">
   
                 <div class="h-screen w-full">
             
