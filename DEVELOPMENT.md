@@ -411,3 +411,102 @@ curl -H "Authorization: Bearer {token}" \
      -H "Content-Type: application/json" \
      https://mewayz.com/api/user
 ```
+
+---
+
+## 📱 Frontend Development
+
+### Laravel Blade
+
+#### Layout Structure
+```blade
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@yield('title', 'Mewayz Platform')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
+    @yield('content')
+</body>
+</html>
+```
+
+#### Component Usage
+```blade
+@extends('layouts.app')
+
+@section('content')
+<div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+    
+    @include('components.stats-cards')
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach($items as $item)
+            @include('components.item-card', ['item' => $item])
+        @endforeach
+    </div>
+</div>
+@endsection
+```
+
+### Flutter Development
+
+#### State Management
+```dart
+class AuthProvider extends ChangeNotifier {
+  User? _user;
+  bool _isLoading = false;
+  
+  User? get user => _user;
+  bool get isLoading => _isLoading;
+  bool get isAuthenticated => _user != null;
+  
+  Future<void> login(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
+    
+    try {
+      final response = await ApiService.login(email, password);
+      if (response['success']) {
+        _user = User.fromJson(response['data']['user']);
+        await _saveToken(response['data']['token']);
+      }
+    } catch (e) {
+      throw Exception('Login failed: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+}
+```
+
+#### Widget Structure
+```dart
+class UserCard extends StatelessWidget {
+  final User user;
+  
+  const UserCard({Key? key, required this.user}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(user.avatar),
+        ),
+        title: Text(user.name),
+        subtitle: Text(user.email),
+        trailing: IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () => _showOptions(context),
+        ),
+      ),
+    );
+  }
+}
+```
