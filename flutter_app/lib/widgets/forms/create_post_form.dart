@@ -234,6 +234,25 @@ class _CreatePostFormState extends State<CreatePostForm> {
       );
     }
   }
+  void _attachImage() async {
+    try {
+      // Here you would implement image picker functionality
+      // For now, show a placeholder message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Image attachment feature coming soon!'),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error attaching image: $e'),
+          backgroundColor: AppColors.danger,
+        ),
+      );
+    }
+  }
 }
 
 class _PlatformOption {
