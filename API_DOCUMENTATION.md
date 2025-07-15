@@ -180,73 +180,66 @@ POST /api/social-media/schedule
 }
 ```
 
-### CRM System
-
-#### List Contacts
+### Get Social Media Analytics
 ```http
-GET /api/crm/contacts
-Authorization: Bearer {token}
+GET /api/social-media/analytics
 ```
 
 **Query Parameters:**
-- `page`: Page number (default: 1)
-- `per_page`: Items per page (default: 15)
-- `search`: Search term
-- `type`: Contact type (contact, lead)
-- `status`: Contact status (hot, warm, cold)
+- `platform` (optional): Filter by platform
+- `period` (optional): Time period (7d, 30d, 90d)
 
-#### Create Contact
-```http
-POST /api/crm/contacts
-Authorization: Bearer {token}
-Content-Type: application/json
-
+**Response:**
+```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "phone": "+1234567890",
-  "company": "Example Corp",
-  "type": "contact",
-  "status": "warm"
+  "success": true,
+  "data": {
+    "total_posts": 45,
+    "total_likes": 2500,
+    "total_comments": 180,
+    "engagement_rate": 4.2,
+    "platforms": {
+      "instagram": {
+        "posts": 25,
+        "likes": 1500,
+        "comments": 120
+      }
+    }
+  }
 }
 ```
 
-#### Import Contacts
-```http
-POST /api/crm/contacts/import
-Authorization: Bearer {token}
-Content-Type: multipart/form-data
+## 📈 Instagram Intelligence
 
-file: contacts.csv
+### Get Instagram Competitor Analysis
+```http
+GET /api/instagram/competitor-analysis
 ```
 
-### E-commerce
+**Query Parameters:**
+- `competitors[]`: Array of competitor usernames
+- `period`: Analysis period (7d, 30d, 90d)
 
-#### List Products
-```http
-GET /api/ecommerce/products
-Authorization: Bearer {token}
-```
-
-#### Create Product
-```http
-POST /api/ecommerce/products
-Authorization: Bearer {token}
-Content-Type: application/json
-
+**Response:**
+```json
 {
-  "name": "Product Name",
-  "description": "Product description",
-  "price": 29.99,
-  "stock": 100,
-  "category": "electronics"
+  "success": true,
+  "data": {
+    "competitors": [
+      {
+        "username": "competitor1",
+        "followers_count": 5000,
+        "engagement_rate": 3.5,
+        "post_frequency": 1.2,
+        "top_hashtags": ["#business", "#marketing"]
+      }
+    ],
+    "insights": {
+      "opportunities": ["Post more frequently", "Use trending hashtags"],
+      "threats": ["Competitor growing faster"]
+    }
+  }
 }
-```
-
-#### Get Store Analytics
-```http
-GET /api/ecommerce/analytics
-Authorization: Bearer {token}
 ```
 
 ### Bio Sites
