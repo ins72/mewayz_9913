@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('workspaces', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->boolean('is_primary')->default(false);
+            $table->json('settings')->nullable();
             $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['user_id', 'is_primary']);
         });
     }
 
