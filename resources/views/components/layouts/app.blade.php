@@ -27,7 +27,7 @@
             'resources/js/moreUtils.js',
         ])
         @vite([
-            'resources/sass/console/community.scss',
+            'resources/sass/dashboard/community.scss',
         ])
 
         {!! isset($meta) ? $meta : '' !!}
