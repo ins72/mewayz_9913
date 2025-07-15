@@ -154,7 +154,7 @@
                   </div>
 
                   <template x-for="(item, index) in teams" :key="item.uuid">
-                     <div class="yena-menu-list-item border border-transparent hover:border-[color:var(--yena-colors-gray-200)!important] hover:bg-[var(--yena-colors-gray-100)!important] cursor-pointer" @click="is_set_team && team.id == item.team.id ? Livewire.navigate('{{ route('console-settings-index') }}') : $wire.setTeam(item)">
+                     <div class="yena-menu-list-item border border-transparent hover:border-[color:var(--yena-colors-gray-200)!important] hover:bg-[var(--yena-colors-gray-100)!important] cursor-pointer" @click="is_set_team && team.id == item.team.id ? Livewire.navigate('{{ route('dashboard-settings-index') }}') : $wire.setTeam(item)">
                         <span class="yena-avatar !h-[32px] !w-[32px] !bg-[var(--yena-colors-orchid-300)] !text-white !flex items-center justify-center">
                            <img :src="item.team.logo_json" class="w-full h-full rounded-full !object-cover" alt="">
                         </span>
