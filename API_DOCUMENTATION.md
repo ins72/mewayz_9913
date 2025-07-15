@@ -300,70 +300,53 @@ GET /api/bio-sites
 }
 ```
 
-### Webhook Configuration
-
+### Create Bio Site
 ```http
-POST /api/webhooks
-Authorization: Bearer {token}
-Content-Type: application/json
+POST /api/bio-sites
+```
 
+**Request Body:**
+```json
 {
-  "url": "https://your-app.com/webhooks",
-  "events": ["contact.created", "order.created"],
-  "secret": "your_webhook_secret"
+  "name": "My New Bio Site",
+  "subdomain": "mynewsite",
+  "theme": "minimal",
+  "bio": "Welcome to my bio site",
+  "profile_image": "https://example.com/profile.jpg"
 }
 ```
 
----
-
-## 🛠️ SDKs
-
-### JavaScript SDK
-
-```javascript
-// Installation
-npm install mewayz-sdk
-
-// Usage
-import MewayzSDK from 'mewayz-sdk';
-
-const client = new MewayzSDK({
-  baseURL: 'https://mewayz.com/api',
-  token: 'your_token_here'
-});
-
-// Get user profile
-const user = await client.auth.me();
-
-// Create contact
-const contact = await client.crm.createContact({
-  name: 'John Doe',
-  email: 'john@example.com'
-});
+### Get Bio Site Analytics
+```http
+GET /api/bio-sites/{id}/analytics
 ```
 
-### PHP SDK
+**Query Parameters:**
+- `period`: Time period (7d, 30d, 90d)
 
-```php
-// Installation
-composer require mewayz/php-sdk
-
-// Usage
-use Mewayz\SDK\Client;
-
-$client = new Client([
-    'base_url' => 'https://mewayz.com/api',
-    'token' => 'your_token_here'
-]);
-
-// Get user profile
-$user = $client->auth->me();
-
-// Create contact
-$contact = $client->crm->createContact([
-    'name' => 'John Doe',
-    'email' => 'john@example.com'
-]);
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "views": {
+      "total": 1250,
+      "today": 45,
+      "chart_data": [
+        {"date": "2025-07-15", "views": 45},
+        {"date": "2025-07-14", "views": 52}
+      ]
+    },
+    "clicks": {
+      "total": 85,
+      "today": 8,
+      "links": [
+        {"url": "https://example.com", "clicks": 25},
+        {"url": "https://shop.example.com", "clicks": 15}
+      ]
+    }
+  }
+}
 ```
 
 ### Python SDK
