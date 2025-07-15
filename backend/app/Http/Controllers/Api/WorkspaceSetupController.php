@@ -13,23 +13,115 @@ use Illuminate\Support\Facades\Log;
 class WorkspaceSetupController extends Controller
 {
     /**
-     * 6-Step Workspace Setup Wizard
+     * Enhanced 6-Step Workspace Setup Wizard
+     * Based on comprehensive platform documentation
      * 
-     * Step 1: Business Information
-     * Step 2: Social Media Accounts
-     * Step 3: Brand Colors & Logo
-     * Step 4: Content Categories
-     * Step 5: Goals & Objectives
-     * Step 6: Review & Complete
+     * Step 1: Main Goals Selection (6 primary business goals)
+     * Step 2: Feature Selection (40+ features organized by goals)
+     * Step 3: Team Setup (roles, invitations, permissions)
+     * Step 4: Subscription Selection (Free, Professional, Enterprise)
+     * Step 5: Branding Configuration (logo, colors, white-label)
+     * Step 6: Final Review & Launch
      */
     
     const SETUP_STEPS = [
-        1 => 'business_info',
-        2 => 'social_media',
-        3 => 'branding',
-        4 => 'content_categories',
-        5 => 'goals_objectives', 
-        6 => 'review_complete'
+        1 => 'main_goals',
+        2 => 'feature_selection',
+        3 => 'team_setup',
+        4 => 'subscription_selection',
+        5 => 'branding_configuration',
+        6 => 'final_review'
+    ];
+    
+    const MAIN_GOALS = [
+        'instagram_management' => [
+            'name' => 'Instagram Management',
+            'description' => 'Social media posting, scheduling, and analytics',
+            'icon' => '📱',
+            'features' => [
+                'content_scheduling', 'content_calendar', 'hashtag_research',
+                'story_management', 'analytics_dashboard', 'dm_management',
+                'competitor_analysis'
+            ]
+        ],
+        'link_in_bio' => [
+            'name' => 'Link in Bio',
+            'description' => 'Custom landing pages with link management',
+            'icon' => '🔗',
+            'features' => [
+                'page_builder', 'template_library', 'custom_components',
+                'analytics_tracking', 'ab_testing', 'mobile_optimization'
+            ]
+        ],
+        'course_creation' => [
+            'name' => 'Course Creation',
+            'description' => 'Educational content and community building',
+            'icon' => '🎓',
+            'features' => [
+                'course_builder', 'content_management', 'student_management',
+                'community_features', 'certification_system', 'payment_integration',
+                'live_sessions'
+            ]
+        ],
+        'ecommerce' => [
+            'name' => 'E-commerce',
+            'description' => 'Online store management and sales',
+            'icon' => '🛍️',
+            'features' => [
+                'product_catalog', 'inventory_tracking', 'order_processing',
+                'payment_gateway', 'shipping_management', 'customer_portal',
+                'marketing_tools'
+            ]
+        ],
+        'crm' => [
+            'name' => 'CRM',
+            'description' => 'Customer relationship and lead management',
+            'icon' => '👥',
+            'features' => [
+                'contact_management', 'lead_tracking', 'communication_history',
+                'task_management', 'deal_management', 'custom_fields',
+                'automation_rules'
+            ]
+        ],
+        'marketing_hub' => [
+            'name' => 'Marketing Hub',
+            'description' => 'Email campaigns and automation',
+            'icon' => '📧',
+            'features' => [
+                'email_campaigns', 'automation_workflows', 'list_management',
+                'campaign_analytics', 'social_integration', 'content_calendar',
+                'performance_tracking'
+            ]
+        ]
+    ];
+    
+    const SUBSCRIPTION_PLANS = [
+        'free' => [
+            'name' => 'Free Plan',
+            'price' => 0,
+            'max_features' => 10,
+            'branding' => 'Mewayz branding on external content',
+            'support' => 'Community support',
+            'features' => ['basic_functionality', 'limited_features', 'community_support']
+        ],
+        'professional' => [
+            'name' => 'Professional Plan',
+            'price_monthly' => 1, // per feature per month
+            'price_yearly' => 10, // per feature per year
+            'max_features' => 'unlimited',
+            'branding' => 'Mewayz branding on external content',
+            'support' => 'Priority support',
+            'features' => ['advanced_features', 'priority_support', 'mewayz_branding']
+        ],
+        'enterprise' => [
+            'name' => 'Enterprise Plan',
+            'price_monthly' => 1.5, // per feature per month
+            'price_yearly' => 15, // per feature per year
+            'max_features' => 'unlimited',
+            'branding' => 'White-label capabilities',
+            'support' => 'Dedicated account management',
+            'features' => ['white_label', 'custom_branding', 'dedicated_support', 'advanced_analytics']
+        ]
     ];
     
     /**
