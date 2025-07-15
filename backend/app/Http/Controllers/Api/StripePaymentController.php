@@ -217,7 +217,8 @@ class StripePaymentController extends Controller
             
             // Execute Python script
             $pythonScript = base_path('stripe_integration.py');
-            $command = "cd " . base_path() . " && python3 {$pythonScript} handle_webhook <<< '{$webhookData}'";
+            $escapedWebhookData = escapeshellarg($webhookData);
+            $command = "cd " . base_path() . " && echo {$escapedWebhookData} | python3 {$pythonScript} handle_webhook";
             $output = shell_exec($command);
             
             if (!$output) {
