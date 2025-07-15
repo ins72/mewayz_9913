@@ -104,72 +104,40 @@ POST /api/auth/2fa/enable
 }
 ```
 
----
+## 🏢 Workspace Management
 
-## 🔧 Core Endpoints
-
-### Health Check
-
+### Get Workspaces
 ```http
-GET /api/health
-```
-
-**Response:**
-```json
-{
-  "status": "ok",
-  "message": "API is working",
-  "timestamp": "2024-12-15T10:30:00Z"
-}
-```
-
-### User Profile
-
-#### Get Current User
-```http
-GET /api/auth/me
-Authorization: Bearer {token}
-```
-
-#### Update Profile
-```http
-PUT /api/auth/profile
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "name": "Updated Name",
-  "email": "updated@example.com"
-}
-```
-
-### Two-Factor Authentication
-
-#### Enable 2FA
-```http
-POST /api/auth/2fa/enable
-Authorization: Bearer {token}
+GET /api/workspaces
 ```
 
 **Response:**
 ```json
 {
   "success": true,
-  "data": {
-    "secret": "ABC123DEF456",
-    "qr_code": "data:image/png;base64,..."
-  }
+  "data": [
+    {
+      "id": 1,
+      "name": "My Workspace",
+      "description": "Primary workspace",
+      "logo": "https://example.com/logo.png",
+      "members_count": 5,
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
 }
 ```
 
-#### Verify 2FA
+### Create Workspace
 ```http
-POST /api/auth/2fa/verify
-Authorization: Bearer {token}
-Content-Type: application/json
+POST /api/workspaces
+```
 
+**Request Body:**
+```json
 {
-  "code": "123456"
+  "name": "New Workspace",
+  "description": "Description of the workspace"
 }
 ```
 
