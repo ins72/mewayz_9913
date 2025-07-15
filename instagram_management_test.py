@@ -483,6 +483,11 @@ class InstagramManagementTester:
             print("❌ Authentication failed. Cannot proceed with Instagram Management tests.")
             return False
         
+        # Step 1.5: Create workspace
+        if not self.create_workspace():
+            print("❌ Workspace creation failed. Cannot proceed with Instagram Management tests.")
+            return False
+        
         print("📱 INSTAGRAM MANAGEMENT SYSTEM TESTING")
         print("-" * 50)
         
