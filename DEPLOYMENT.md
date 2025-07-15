@@ -318,160 +318,25 @@ sudo supervisorctl restart mewayz-worker:*
 2. **Firewall**: Check UFW rules
 3. **File Permissions**: Ensure proper permissions
 
-### 9. Security Hardening
+## 📞 Support
 
-#### Firewall Configuration
-```bash
-# Install UFW
-sudo apt install ufw
+### Getting Help
+- **Documentation**: Complete deployment guide
+- **Support Email**: support@mewayz.com
+- **GitHub Issues**: Report deployment issues
+- **Community**: Join our Discord server
 
-# Configure firewall
-sudo ufw allow ssh
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw enable
+### Professional Services
+- **Managed Hosting**: Available through Mewayz Technologies
+- **Custom Deployment**: Professional deployment services
+- **24/7 Support**: Enterprise support packages
 
-# Check status
-sudo ufw status
-```
+---
 
-#### File Permissions
-```bash
-# Set proper permissions
-sudo chown -R www-data:www-data /var/www/mewayz
-sudo chmod -R 755 /var/www/mewayz
-sudo chmod -R 777 /var/www/mewayz/storage
-sudo chmod -R 777 /var/www/mewayz/bootstrap/cache
-```
+**Last Updated**: July 15, 2025  
+**Version**: 1.0.0  
+**Platform**: Mewayz All-in-One Business Solution
 
-#### Security Headers
-```nginx
-# Add to Nginx configuration
-add_header X-Frame-Options "SAMEORIGIN" always;
-add_header X-Content-Type-Options "nosniff" always;
-add_header X-XSS-Protection "1; mode=block" always;
-add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" always;
-```
+---
 
-### 10. Testing Deployment
-
-#### Functionality Tests
-```bash
-# Test health endpoint
-curl -I https://your-domain.com/api/health
-
-# Test authentication
-curl -X POST https://your-domain.com/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@mewayz.com","password":"secure_password"}'
-
-# Test OAuth redirects
-curl -I https://your-domain.com/api/auth/oauth/google
-
-# Test PWA manifest
-curl -I https://your-domain.com/manifest.json
-
-# Test service worker
-curl -I https://your-domain.com/sw.js
-```
-
-#### Performance Tests
-```bash
-# Test response times
-curl -w "@curl-format.txt" -o /dev/null -s https://your-domain.com
-
-# Test concurrent users
-ab -n 100 -c 10 https://your-domain.com/api/health
-
-# Test database performance
-mysql -u mewayz -p -e "SHOW PROCESSLIST;"
-```
-
-### 11. Post-Deployment Checklist
-
-- [ ] All services running correctly
-- [ ] SSL certificate installed and working
-- [ ] Database migrations completed
-- [ ] Admin user created
-- [ ] OAuth providers configured
-- [ ] Email sending configured
-- [ ] Backup system active
-- [ ] Monitoring in place
-- [ ] Performance optimized
-- [ ] Security headers configured
-- [ ] Firewall rules applied
-- [ ] Log rotation configured
-- [ ] Error tracking setup
-
-### 12. Troubleshooting Common Issues
-
-#### Service Not Starting
-```bash
-# Check supervisor logs
-sudo supervisorctl tail -f mewayz-backend
-
-# Check PHP errors
-tail -f /var/log/php8.2-fpm.log
-
-# Check Nginx errors
-tail -f /var/log/nginx/error.log
-```
-
-#### Database Connection Issues
-```bash
-# Test database connection
-mysql -u mewayz -p -h localhost mewayz
-
-# Check Laravel configuration
-php artisan config:show database
-
-# Test with artisan
-php artisan migrate:status
-```
-
-#### SSL Issues
-```bash
-# Check SSL certificate
-openssl s_client -connect your-domain.com:443
-
-# Renew Let's Encrypt certificate
-sudo certbot renew --dry-run
-
-# Check certificate expiry
-sudo certbot certificates
-```
-
-### 13. Maintenance
-
-#### Regular Updates
-```bash
-# Update system packages
-sudo apt update && sudo apt upgrade
-
-# Update Composer packages
-composer update
-
-# Update npm packages
-npm update
-
-# Update Flutter
-flutter upgrade
-```
-
-#### Health Checks
-```bash
-# Check application health
-curl https://your-domain.com/api/health
-
-# Check database health
-php artisan db:show
-
-# Check queue health (if using queues)
-php artisan queue:work --once
-
-# Check storage space
-df -h
-```
-
-This deployment guide provides a comprehensive setup for production deployment of the Mewayz application. Follow each step carefully and test thoroughly before going live.
+*This deployment guide ensures a secure, scalable, and maintainable production environment for the Mewayz Platform.*
