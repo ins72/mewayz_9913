@@ -234,26 +234,26 @@
          <div class="lg:!flex p-0 lg:!h-full justify-between gap-4">
             <div class="w-full min-w-0">
                
-               <div class="details relative !bg-white overflow-hidden rounded-3xl mb-4">
+               <div class="details card relative !bg-white dark:bg-gray-800 overflow-hidden rounded-3xl mb-4">
                   <div class="details__container z-10 relative !bg-transparent remove-before">
                      <div class="max-w-[400px] mb-5">
-                        {!! __icon('interface-essential', 'dashboard.3', 'w-12 h-12 mb-2') !!}
-                        <div class="banner__title h3 !text-black" x-text="greetings"></div>
+                        {!! __icon('interface-essential', 'dashboard.3', 'w-12 h-12 mb-2 text-gray-700 dark:text-gray-300') !!}
+                        <div class="banner__title h3 !text-black dark:!text-white" x-text="greetings"></div>
                         {{-- <div class="banner__text !text-black">{{ __('Catch up with what\'s going on and keep your audience engaged.') }}</div> --}}
                      </div>
-                     <hr class="my-4">
+                     <hr class="my-4 border-gray-200 dark:border-gray-700">
                      {{-- <div class="details__title h6">Active Users right now 💡</div> --}}
                      <div class="details__row">
                         <div class="details__col">
                            <div class="details__top">
-                              <div class="details__number h1" x-text="average_views_per_day_this_year"></div>
+                              <div class="details__number h1 text-gray-900 dark:text-white" x-text="average_views_per_day_this_year"></div>
                               <div class="details__line">
                                  <div>
-                                    <div class="w-[38px] h-[38px] rounded-xl [box-shadow:var(--yena-shadows-md)] [background:var(--yena-colors-gradient-light)] flex items-center justify-center mr-2">
-                                       {!! __i('Business, Products', 'blackboard-business-chart', 'w-5 h-5 text-black') !!}
+                                    <div class="w-[38px] h-[38px] rounded-xl [box-shadow:var(--yena-shadows-md)] bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-2">
+                                       {!! __i('Business, Products', 'blackboard-business-chart', 'w-5 h-5 text-white') !!}
                                     </div>
                                  </div>
-                                 <div class="details__info caption-sm">{{ __('Average site visitors') }}</div>
+                                 <div class="details__info caption-sm text-gray-600 dark:text-gray-400">{{ __('Average site visitors') }}</div>
                               </div>
                            </div>
                            <div class="details__bottom">
