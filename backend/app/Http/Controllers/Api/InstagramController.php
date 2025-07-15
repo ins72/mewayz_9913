@@ -927,6 +927,8 @@ class InstagramController extends Controller
                 'Consider time zones of your target audience'
             ]
         ];
+    }
+
     /**
      * Get AI-powered content suggestions for Instagram
      */
