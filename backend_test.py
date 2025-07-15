@@ -1445,6 +1445,19 @@ class MewayzAPITester:
         self.test_analytics_overview()
         self.test_analytics_reports()
         
+        # Instagram Intelligence Engine tests
+        print("\n📸 Testing Instagram Intelligence Engine...")
+        self.test_instagram_auth_initiate()
+        self.test_instagram_auth_callback_validation()
+        self.test_instagram_competitor_analysis_validation()
+        self.test_instagram_competitor_analysis_no_account()
+        self.test_instagram_hashtag_analysis_validation()
+        self.test_instagram_analytics_validation()
+        self.test_instagram_refresh_token_validation()
+        self.test_instagram_content_suggestions_validation()
+        self.test_instagram_no_connected_account()
+        self.test_instagram_content_type_validation()
+        
         # Error handling tests
         print("\n⚠️ Testing Error Handling...")
         self.test_validation_errors()
