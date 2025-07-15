@@ -6,31 +6,30 @@
 
 This guide provides step-by-step instructions for deploying the Mewayz Platform to production environments. The platform uses a single Laravel backend with multiple frontend options and requires specific infrastructure setup.
 
----
+## 🏗️ Architecture Overview
 
-## 🚀 Deployment Philosophy
+### Production Architecture
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Load Balancer │    │   Web Server    │    │   Database      │
+│   (Nginx/HAProxy)│◄─►│   (Nginx/Apache)│◄─►│   MySQL/MariaDB │
+│   SSL/TLS       │    │   PHP-FPM       │    │   Redis Cache   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │              ┌─────────────────┐              │
+         │              │   Laravel       │              │
+         └──────────────│   Application   │──────────────┘
+                        │   (Port 8001)   │
+                        └─────────────────┘
+```
 
-At Mewayz Technologies Inc., we understand that exceptional software requires exceptional deployment practices. This guide embodies our commitment to seamless, reliable, and secure production deployments for the Mewayz platform.
-
-**Our Deployment Principles:**
-- **Reliability**: Zero-downtime deployments with automated rollback capabilities
-- **Security**: Enterprise-grade security from development to production
-- **Scalability**: Infrastructure that grows seamlessly with your business
-- **Performance**: Optimized configurations for maximum efficiency
-- **Monitoring**: Comprehensive observability for proactive issue resolution
-
-**Target Environments:**
-- **Production**: Live customer-facing deployments at https://mewayz.com
-- **Staging**: Pre-production testing and validation
-- **Development**: Local and team development environments
-
-**Domain Configuration:**
-- **Production Domain**: mewayz.com
-- **Platform URL**: https://mewayz.com
-- **API Endpoint**: https://mewayz.com/api
-- **Admin Panel**: https://mewayz.com/admin
-
----
+### Components
+- **Laravel Backend**: Core application (PHP 8.1+)
+- **MySQL Database**: Primary data storage
+- **Redis**: Caching and session storage
+- **Nginx**: Web server and reverse proxy
+- **Supervisor**: Process management
+- **SSL/TLS**: HTTPS encryption
 
 ## Production Deployment
 
