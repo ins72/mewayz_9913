@@ -510,3 +510,102 @@ class UserCard extends StatelessWidget {
   }
 }
 ```
+
+---
+
+## 🧪 Testing Strategy
+
+### Backend Testing
+
+#### Unit Tests
+```php
+<?php
+
+namespace Tests\Unit;
+
+use Tests\TestCase;
+use App\Models\User;
+use App\Services\UserService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class UserServiceTest extends TestCase
+{
+    use RefreshDatabase;
+    
+    public function test_can_create_user(): void
+    {
+        $userData = [
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => 'password123',
+        ];
+        
+        $userService = new UserService();
+        $user = $userService->create($userData);
+        
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('John Doe', $user->name);
+        $this->assertEquals('john@example.com', $user->email);
+    }
+}
+```
+
+#### Feature Tests
+```php
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class UserApiTest extends TestCase
+{
+    use RefreshDatabase;
+    
+    public function test_can_get_users(): void
+    {
+        $user = User::factory()->create();
+        
+        $response = $this->actingAs($user, 'sanctum')
+                         ->getJson('/api/users');
+        
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'success',
+                     'data' => [
+                         'data' => [
+                             '*' => ['id', 'name', 'email']
+                         ]
+                     ]
+                 ]);
+    }
+}
+```
+
+### Frontend Testing
+
+#### Flutter Tests
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mewayz_app/services/auth_service.dart';
+
+void main() {
+  group('AuthService', () {
+    late AuthService authService;
+    
+    setUp(() {
+      authService = AuthService();
+    });
+    
+    test('should login successfully with valid credentials', () async {
+      final result = await authService.login('test@example.com', 'password');
+      
+      expect(result, isNotNull);
+      expect(result['success'], isTrue);
+      expect(result['data']['user']['email'], equals('test@example.com'));
+    });
+  });
+}
+```
