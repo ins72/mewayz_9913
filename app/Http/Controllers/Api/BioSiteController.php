@@ -65,78 +65,126 @@ class BioSiteController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:bio_sites|regex:/^[a-zA-Z0-9\-_]+$/',
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:bio_sites,slug|regex:/^[a-zA-Z0-9-_]+$/',
             'description' => 'nullable|string|max:500',
-            'template_id' => 'nullable|integer',
-            'theme_config' => 'nullable|array',
-            'theme_config.primary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
-            'theme_config.background_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
-            'theme_config.text_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
-            'theme_config.font_family' => 'nullable|string|max:100',
+            'theme' => 'required|string|in:minimal,modern,gradient,neon,elegant,creative,professional,dark,light,colorful',
+            'is_active' => 'boolean',
+            'profile_image' => 'nullable|string',
+            'cover_image' => 'nullable|string',
+            'custom_css' => 'nullable|string|max:10000',
+            'custom_js' => 'nullable|string|max:5000',
+            'seo_title' => 'nullable|string|max:255',
+            'seo_description' => 'nullable|string|max:500',
+            'seo_keywords' => 'nullable|string|max:500',
+            'google_analytics_id' => 'nullable|string|max:50',
+            'facebook_pixel_id' => 'nullable|string|max:50',
+            'custom_domain' => 'nullable|string|max:255|unique:bio_sites,custom_domain',
+            'password_protection' => 'boolean',
+            'password' => 'nullable|string|min:6|required_if:password_protection,true',
+            'social_links' => 'nullable|array',
+            'social_links.*.platform' => 'required|string|in:instagram,facebook,twitter,linkedin,youtube,tiktok,snapchat,discord,twitch,github,behance,dribbble,pinterest,whatsapp,telegram,email',
+            'social_links.*.url' => 'required|url',
+            'social_links.*.display_name' => 'nullable|string|max:50',
+            'branding' => 'nullable|array',
+            'branding.primary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'branding.secondary_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'branding.accent_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'branding.text_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'branding.background_color' => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'branding.font_family' => 'nullable|string|in:Inter,Roboto,Open Sans,Lato,Montserrat,Poppins,Nunito,Source Sans Pro,Raleway,Ubuntu',
+            'branding.font_size' => 'nullable|integer|min:12|max:24',
+            'advanced_features' => 'nullable|array',
+            'advanced_features.email_capture' => 'boolean',
+            'advanced_features.email_capture_text' => 'nullable|string|max:255',
+            'advanced_features.contact_form' => 'boolean',
+            'advanced_features.appointment_booking' => 'boolean',
+            'advanced_features.music_player' => 'boolean',
+            'advanced_features.countdown_timer' => 'boolean',
+            'advanced_features.countdown_end_date' => 'nullable|date|after:now',
+            'advanced_features.age_gate' => 'boolean',
+            'advanced_features.age_gate_message' => 'nullable|string|max:255',
+            'advanced_features.cookie_consent' => 'boolean',
+            'advanced_features.gdpr_compliant' => 'boolean'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            // Create default theme config if not provided
-            $defaultTheme = [
-                'primary_color' => '#FDFDFD',
-                'background_color' => '#101010',
-                'text_color' => '#F1F1F1',
-                'button_style' => 'rounded',
-                'font_family' => 'Inter',
-                'layout' => 'center',
-            ];
-
-            $themeConfig = array_merge($defaultTheme, $request->theme_config ?? []);
-
             $bioSite = BioSite::create([
-                'user_id' => $request->user()->id,
-                'title' => $request->title,
-                'slug' => Str::lower($request->slug),
-                'address' => Str::lower($request->slug), // Use slug as address for compatibility
+                'user_id' => auth()->id(),
+                'name' => $request->name,
+                'slug' => $request->slug,
                 'description' => $request->description,
-                'template_id' => $request->template_id ?? 1,
-                'theme_config' => json_encode($themeConfig),
-                'status' => 0, // 0 for draft, 1 for published
-                'view_count' => 0,
-                'click_count' => 0,
+                'theme' => $request->theme,
+                'is_active' => $request->is_active ?? true,
+                'profile_image' => $request->profile_image,
+                'cover_image' => $request->cover_image,
+                'custom_css' => $request->custom_css,
+                'custom_js' => $request->custom_js,
+                'seo_title' => $request->seo_title ?? $request->name,
+                'seo_description' => $request->seo_description ?? $request->description,
+                'seo_keywords' => $request->seo_keywords,
+                'google_analytics_id' => $request->google_analytics_id,
+                'facebook_pixel_id' => $request->facebook_pixel_id,
+                'custom_domain' => $request->custom_domain,
+                'password_protection' => $request->password_protection ?? false,
+                'password' => $request->password_protection ? Hash::make($request->password) : null,
+                'social_links' => $request->social_links ?? [],
+                'branding' => array_merge([
+                    'primary_color' => '#3B82F6',
+                    'secondary_color' => '#1E40AF',
+                    'accent_color' => '#10B981',
+                    'text_color' => '#1F2937',
+                    'background_color' => '#FFFFFF',
+                    'font_family' => 'Inter',
+                    'font_size' => 16
+                ], $request->branding ?? []),
+                'advanced_features' => array_merge([
+                    'email_capture' => false,
+                    'email_capture_text' => 'Stay updated with my latest content',
+                    'contact_form' => false,
+                    'appointment_booking' => false,
+                    'music_player' => false,
+                    'countdown_timer' => false,
+                    'countdown_end_date' => null,
+                    'age_gate' => false,
+                    'age_gate_message' => 'You must be 18 or older to view this content',
+                    'cookie_consent' => false,
+                    'gdpr_compliant' => false
+                ], $request->advanced_features ?? [])
             ]);
 
-            Log::info("Bio site created", [
-                'user_id' => $request->user()->id,
-                'bio_site_id' => $bioSite->id,
-                'slug' => $bioSite->slug
-            ]);
+            // Generate QR code for the bio site
+            $qrCodeUrl = $this->generateQRCode($bioSite->slug);
+            $bioSite->update(['qr_code_url' => $qrCodeUrl]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Bio site created successfully',
+                'message' => 'Bio site created successfully with advanced features',
                 'data' => [
                     'id' => $bioSite->id,
-                    'title' => $bioSite->title,
+                    'name' => $bioSite->name,
                     'slug' => $bioSite->slug,
-                    'description' => $bioSite->description,
-                    'status' => $bioSite->status,
-                    'url' => url("/bio/{$bioSite->slug}"),
-                    'theme_config' => json_decode($bioSite->theme_config, true),
+                    'url' => url('/bio/' . $bioSite->slug),
+                    'custom_domain_url' => $bioSite->custom_domain ? 'https://' . $bioSite->custom_domain : null,
+                    'qr_code_url' => $bioSite->qr_code_url,
+                    'theme' => $bioSite->theme,
+                    'is_active' => $bioSite->is_active,
+                    'password_protected' => $bioSite->password_protection,
+                    'social_links_count' => count($bioSite->social_links),
+                    'advanced_features_enabled' => array_filter($bioSite->advanced_features, function($value) {
+                        return $value === true;
+                    }),
                     'created_at' => $bioSite->created_at,
+                    'updated_at' => $bioSite->updated_at
                 ]
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Failed to create bio site: ' . $e->getMessage());
+            Log::error('Bio site creation failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create bio site. Please try again.'
+                'message' => 'Failed to create bio site: ' . $e->getMessage()
             ], 500);
         }
     }
