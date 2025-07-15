@@ -427,7 +427,7 @@ class MewayzAPITester:
                     "appointment_booking": False,
                     "music_player": True,
                     "countdown_timer": True,
-                    "countdown_end_date": "2024-12-31T23:59:59Z",
+                    "countdown_end_date": "2025-12-31T23:59:59Z",
                     "age_gate": False,
                     "cookie_consent": True,
                     "gdpr_compliant": True
