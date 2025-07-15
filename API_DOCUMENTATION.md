@@ -349,69 +349,61 @@ GET /api/bio-sites/{id}/analytics
 }
 ```
 
-### Python SDK
+## 👥 CRM Management
 
-```python
-# Installation
-pip install mewayz-sdk
-
-# Usage
-from mewayz_sdk import Client
-
-client = Client(
-    base_url='https://mewayz.com/api',
-    token='your_token_here'
-)
-
-# Get user profile
-user = client.auth.me()
-
-# Create contact
-contact = client.crm.create_contact({
-    'name': 'John Doe',
-    'email': 'john@example.com'
-})
+### Get Contacts
+```http
+GET /api/crm/contacts
 ```
 
----
+**Query Parameters:**
+- `page`: Page number
+- `search`: Search query
+- `tags[]`: Filter by tags
 
-## 📱 Mobile API Usage
-
-### Flutter Integration
-
-```dart
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-class MewayzAPI {
-  static const String baseUrl = 'https://mewayz.com/api';
-  static String? token;
-
-  static Future<Map<String, dynamic>> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/auth/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
-    );
-
-    return jsonDecode(response.body);
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "contacts": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "+1234567890",
+        "tags": ["customer", "premium"],
+        "created_at": "2025-07-15T10:30:00Z"
+      }
+    ]
   }
+}
+```
 
-  static Future<Map<String, dynamic>> createContact(Map<String, dynamic> data) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/crm/contacts'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(data),
-    );
+### Get Leads
+```http
+GET /api/crm/leads
+```
 
-    return jsonDecode(response.body);
-  }
+**Query Parameters:**
+- `status`: Filter by status (new, contacted, qualified, converted)
+- `score_min`: Minimum lead score
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "score": 85,
+      "status": "qualified",
+      "source": "website",
+      "created_at": "2025-07-15T10:30:00Z"
+    }
+  ]
 }
 ```
 
