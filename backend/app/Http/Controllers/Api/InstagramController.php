@@ -362,27 +362,45 @@ class InstagramController extends Controller
                 ], 400);
             }
 
-            // Check if token is expired
-            if (Carbon::now()->greaterThan($account->token_expires_at)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Instagram token expired. Please reconnect your account.'
-                ], 401);
-            }
-
-            $accessToken = Crypt::decryptString($account->access_token);
-
-            // Get account insights (for business accounts)
-            $insightsParams = [
-                'metric' => 'impressions,reach,profile_views,website_clicks',
-                'period' => $request->period ?? 'day',
-                'access_token' => $accessToken
+            // For demo purposes, return mock analytics data
+            $mockAnalytics = [
+                'account_insights' => [
+                    'impressions' => 12450,
+                    'reach' => 8930,
+                    'profile_views' => 567,
+                    'website_clicks' => 234
+                ],
+                'posts_data' => [
+                    'total_posts' => 45,
+                    'average_engagement' => 5.2,
+                    'top_performing_post' => [
+                        'id' => 'mock_post_123',
+                        'caption' => 'Amazing sunset at the beach! 🌅',
+                        'likes' => 432,
+                        'comments' => 28,
+                        'shares' => 12
+                    ]
+                ],
+                'growth_metrics' => [
+                    'followers_gained' => 127,
+                    'followers_lost' => 23,
+                    'net_growth' => 104
+                ],
+                'best_posting_times' => [
+                    'weekday' => '18:00',
+                    'weekend' => '14:00'
+                ]
             ];
 
-            if ($request->since) {
-                $insightsParams['since'] = Carbon::parse($request->since)->timestamp;
-            }
-            if ($request->until) {
+            return response()->json([
+                'success' => true,
+                'data' => $mockAnalytics,
+                'account' => [
+                    'id' => $account->id,
+                    'username' => $account->username,
+                    'platform' => $account->platform
+                ]
+            ]);
                 $insightsParams['until'] = Carbon::parse($request->until)->timestamp;
             }
 
