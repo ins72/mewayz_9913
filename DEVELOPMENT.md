@@ -161,3 +161,113 @@ cd flutter_app
 flutter pub get
 flutter run -d chrome
 ```
+
+---
+
+## 🔧 Development Workflow
+
+### Code Standards
+
+#### PHP (PSR-12)
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class UserController extends Controller
+{
+    public function index(Request $request): JsonResponse
+    {
+        $users = User::paginate(15);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $users,
+        ]);
+    }
+}
+```
+
+#### Flutter (Dart)
+```dart
+class UserService {
+  static const String _baseUrl = 'http://localhost:8001/api';
+  
+  static Future<List<User>> getUsers() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/users'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return (data['data'] as List)
+            .map((user) => User.fromJson(user))
+            .toList();
+      }
+      
+      throw Exception('Failed to load users');
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+}
+```
+
+### Testing
+
+#### Backend Testing
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test
+php artisan test --filter=UserTest
+
+# Run with coverage
+php artisan test --coverage
+```
+
+#### Frontend Testing
+```bash
+# Flutter tests
+cd flutter_app
+flutter test
+
+# JavaScript tests
+npm test
+```
+
+### Code Quality
+
+#### PHP
+```bash
+# Fix code style
+composer run fix-style
+
+# Run static analysis
+composer run analyse
+
+# Check code quality
+composer run quality
+```
+
+#### JavaScript
+```bash
+# Run linting
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+
+# Format code
+npm run format
+```
