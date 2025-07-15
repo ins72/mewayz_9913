@@ -746,3 +746,65 @@ const routes = [
   }
 ];
 ```
+
+---
+
+## 🔒 Security Best Practices
+
+### Input Validation
+
+#### Laravel Validation
+```php
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+    
+    return User::create($validated);
+}
+```
+
+#### Frontend Validation
+```dart
+String? validateEmail(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Email is required';
+  }
+  
+  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+  if (!emailRegex.hasMatch(value)) {
+    return 'Please enter a valid email';
+  }
+  
+  return null;
+}
+```
+
+### Authentication Security
+
+#### Password Hashing
+```php
+// Hash password
+$hashedPassword = Hash::make($password);
+
+// Verify password
+if (Hash::check($password, $hashedPassword)) {
+    // Password is correct
+}
+```
+
+#### API Security
+```php
+// Rate limiting
+Route::middleware('throttle:60,1')->group(function () {
+    // Protected routes
+});
+
+// CORS configuration
+'allowed_origins' => ['https://mewayz.com'],
+'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
+'allowed_headers' => ['Content-Type', 'Authorization'],
+```
