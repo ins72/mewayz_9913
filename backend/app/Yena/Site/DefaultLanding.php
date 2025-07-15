@@ -20,7 +20,7 @@ class DefaultLanding {
 		$randomSlug = str()->random(15);
 		$addressSlug = str()->random(7);
 
-		$name = 'Zeph';
+		$name = 'Mewayz';
 
 		$slug_name = slugify($name, '-');
 		$_slug = "$slug_name-$randomSlug";
