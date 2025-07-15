@@ -376,15 +376,15 @@
                
                <div wire:ignore>
                   <div class="grid grid-cols-1 md:!grid-cols-2 gap-4">
-                     <div class="widget widget_chart">
-                        <div class="p-4 bg-[#f7f3f2] !bg-white mb-0 rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                     <div class="widget widget_chart card">
+                        <div class="p-4 bg-white dark:bg-gray-800 mb-0 rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                            <div class="flex flex-col lg:flex-row items-center gap-3 ">
                               
-                              {!! __i('emails', 'email-hand', 'w-12 h-12 self-start') !!}
+                              {!! __i('emails', 'email-hand', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
       
       
                               <div class="flex flex-col">
-                                 <div class="text-gray-800 font-bold text-2xl">{{ __('Leads') }}</div>
+                                 <div class="text-gray-800 dark:text-white font-bold text-2xl">{{ __('Leads') }}</div>
                               </div>
                            </div>
                         </div>
@@ -403,15 +403,15 @@
                           </div>
                         </div>
                       </div>
-                     <div class="widget widget_chart">
-                        <div class="p-4 bg-[#f7f3f2] !bg-white mb-0 rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                     <div class="widget widget_chart card">
+                        <div class="p-4 bg-white dark:bg-gray-800 mb-0 rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                            <div class="flex flex-col lg:flex-row items-center gap-3 ">
                               
-                              {!! __i('shopping-ecommerce', 'store-chart-graph', 'w-12 h-12 self-start') !!}
+                              {!! __i('shopping-ecommerce', 'store-chart-graph', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
       
       
                               <div class="flex flex-col">
-                                 <div class="text-gray-800 font-bold text-2xl">{{ __('Store Earnings') }}</div>
+                                 <div class="text-gray-800 dark:text-white font-bold text-2xl">{{ __('Store Earnings') }}</div>
                                  {{-- <div class="text-gray-600"></div> --}}
                               </div>
                            </div>
@@ -438,64 +438,64 @@
                </div>
 
                <div class="grid grid-cols-1 md:!grid-cols-2 gap-4 mt-4">
-                  <a class="p-4 bg-white rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70" href="{{ route('console-sites-index') }}" @navigate>
+                  <a class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70" href="{{ route('console-sites-index') }}" @navigate>
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
-                        {!! __i('--ie', 'browser-internet-web-network-window-app-icon', 'w-12 h-12 self-start') !!}
+                        {!! __i('--ie', 'browser-internet-web-network-window-app-icon', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
 
 
                         <div class="flex flex-col">
-                           <div class="text-gray-800 font-bold">{{ __('My sites') }}</div>
-                           <div class="text-gray-600">{{ __('Create & manage sites with AI') }}</div>
+                           <div class="text-gray-800 dark:text-white font-bold">{{ __('My sites') }}</div>
+                           <div class="text-gray-600 dark:text-gray-400">{{ __('Create & manage sites with AI') }}</div>
                         </div>
                      </div>
                      <div>
-                        <i class="ph ph-caret-right"></i>
+                        <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-store-index') }}" @navigate class="p-4 bg-white rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('console-store-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
-                        {!! __i('Building, Construction', 'store', 'w-12 h-12 self-start') !!}
+                        {!! __i('Building, Construction', 'store', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
 
 
                         <div class="flex flex-col">
-                           <div class="text-gray-800 font-bold">{{ __('Products') }}</div>
-                           <div class="text-gray-600">{{ __('Let your audience purchase your product') }}</div>
+                           <div class="text-gray-800 dark:text-white font-bold">{{ __('Products') }}</div>
+                           <div class="text-gray-600 dark:text-gray-400">{{ __('Let your audience purchase your product') }}</div>
                         </div>
                      </div>
                      <div>
-                        <i class="ph ph-caret-right"></i>
+                        <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-audience-index') }}" @navigate class="p-4 bg-white rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('console-audience-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
-                        {!! __i('emails', 'email-mail-letter', 'w-12 h-12 self-start') !!}
+                        {!! __i('emails', 'email-mail-letter', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
 
 
                         <div class="flex flex-col">
-                           <div class="text-gray-800 font-bold">{{ __('Leads') }}</div>
-                           <div class="text-gray-600">{{ __('Create & broadcast to your audience') }}</div>
+                           <div class="text-gray-800 dark:text-white font-bold">{{ __('Leads') }}</div>
+                           <div class="text-gray-600 dark:text-gray-400">{{ __('Create & broadcast to your audience') }}</div>
                         </div>
                      </div>
                      <div>
-                        <i class="ph ph-caret-right"></i>
+                        <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
-                  <a href="{{ route('console-courses-index') }}" @navigate class="p-4 bg-white rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
+                  <a href="{{ route('console-courses-index') }}" @navigate class="p-4 bg-white dark:bg-gray-800 card rounded-8 cursor-pointer lg:flex lg:justify-between lg:items-center hover:opacity-70">
                      <div class="flex flex-col lg:flex-row items-center gap-3 ">
                         
-                        {!! __i('Content Edit', 'Book, Open.4', 'w-12 h-12 self-start') !!}
+                        {!! __i('Content Edit', 'Book, Open.4', 'w-12 h-12 self-start text-gray-600 dark:text-gray-400') !!}
 
 
                         <div class="flex flex-col">
-                           <div class="text-gray-800 font-bold">{{ __('Courses') }}</div>
-                           <div class="text-gray-600">{{ __('Share knowledge with courses') }}</div>
+                           <div class="text-gray-800 dark:text-white font-bold">{{ __('Courses') }}</div>
+                           <div class="text-gray-600 dark:text-gray-400">{{ __('Share knowledge with courses') }}</div>
                         </div>
                      </div>
                      <div>
-                        <i class="ph ph-caret-right"></i>
+                        <i class="ph ph-caret-right text-gray-400 dark:text-gray-500"></i>
                      </div>
                   </a>
                </div>
