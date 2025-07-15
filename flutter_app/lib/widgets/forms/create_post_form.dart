@@ -88,7 +88,7 @@ class _CreatePostFormState extends State<CreatePostForm> {
                 const SizedBox(width: 16),
                 OutlinedButton.icon(
                   onPressed: () {
-                    // TODO: Attach image
+                    _attachImage();
                   },
                   icon: const Icon(Icons.image),
                   label: const Text('Add Image'),
