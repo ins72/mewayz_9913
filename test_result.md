@@ -195,15 +195,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Authentication Pages"
     - "Dashboard Access"
-    - "Forms"
     - "Stripe Payment Integration Frontend"
+    - "Main Landing Page"
   stuck_tasks:
-    - "Authentication Pages"
     - "Dashboard Access"
-    - "Forms"
     - "Stripe Payment Integration Frontend"
+    - "Main Landing Page"
   test_all: true
   test_priority: "high_first"
 
