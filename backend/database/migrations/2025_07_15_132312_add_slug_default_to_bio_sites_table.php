@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('bio_sites', function (Blueprint $table) {
-            //
+            $table->string('slug')->default('default-slug')->change();
         });
     }
 
