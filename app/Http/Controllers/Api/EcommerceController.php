@@ -174,20 +174,66 @@ class EcommerceController extends Controller
 
     public function getAnalytics(Request $request)
     {
+        $userId = $request->user()->id;
+        
+        // Get orders data
+        $orders = ProductOrder::where('user_id', $userId)->get();
+        $totalRevenue = $orders->where('status', 'delivered')->sum('total_amount');
+        $totalOrders = $orders->count();
+        $avgOrderValue = $totalOrders > 0 ? $totalRevenue / $totalOrders : 0;
+        
+        // Get products data
+        $products = Product::where('user_id', $userId)->get();
+        $totalProducts = $products->count();
+        $totalViews = $products->sum('view_count') ?? 0;
+        $conversionRate = $totalViews > 0 ? (($totalOrders / $totalViews) * 100) : 0;
+        
+        // Top products
+        $topProducts = Product::where('user_id', $userId)
+            ->withCount('orders')
+            ->orderBy('orders_count', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'name' => $product->name,
+                    'orders' => $product->orders_count,
+                    'revenue' => $product->orders()->sum('total_amount') ?? 0
+                ];
+            });
+        
+        // Orders by status
+        $ordersByStatus = [
+            'pending' => $orders->where('status', 'pending')->count(),
+            'processing' => $orders->where('status', 'processing')->count(),
+            'shipped' => $orders->where('status', 'shipped')->count(),
+            'delivered' => $orders->where('status', 'delivered')->count(),
+            'cancelled' => $orders->where('status', 'cancelled')->count(),
+        ];
+        
+        // Revenue chart data (last 30 days)
+        $revenueChart = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $dayRevenue = $orders->where('status', 'delivered')
+                ->whereBetween('created_at', [
+                    now()->subDays($i)->startOfDay(),
+                    now()->subDays($i)->endOfDay()
+                ])->sum('total_amount');
+            $revenueChart[] = [
+                'date' => $date,
+                'revenue' => $dayRevenue
+            ];
+        }
+
         $analytics = [
-            'total_revenue' => 0,
-            'total_orders' => 0,
-            'avg_order_value' => 0,
-            'conversion_rate' => '0%',
-            'top_products' => [],
-            'revenue_chart' => [],
-            'orders_by_status' => [
-                'pending' => 0,
-                'processing' => 0,
-                'shipped' => 0,
-                'delivered' => 0,
-                'cancelled' => 0,
-            ],
+            'total_revenue' => $totalRevenue,
+            'total_orders' => $totalOrders,
+            'avg_order_value' => round($avgOrderValue, 2),
+            'conversion_rate' => round($conversionRate, 2) . '%',
+            'top_products' => $topProducts,
+            'revenue_chart' => $revenueChart,
+            'orders_by_status' => $ordersByStatus,
         ];
 
         return response()->json([
