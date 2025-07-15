@@ -141,79 +141,43 @@ POST /api/workspaces
 }
 ```
 
----
+## 📱 Social Media Management
 
-## 🏢 Business Feature APIs
-
-### Workspace Management
-
-#### List Workspaces
-```http
-GET /api/workspaces
-Authorization: Bearer {token}
-```
-
-#### Create Workspace
-```http
-POST /api/workspaces
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "name": "My Workspace",
-  "description": "Workspace description"
-}
-```
-
-#### Invite Team Member
-```http
-POST /api/workspaces/{id}/invite
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "email": "member@example.com",
-  "role": "member"
-}
-```
-
-### Social Media Management
-
-#### List Connected Accounts
+### Get Social Media Accounts
 ```http
 GET /api/social-media/accounts
-Authorization: Bearer {token}
 ```
 
-#### Connect Social Account
-```http
-POST /api/social-media/accounts/connect
-Authorization: Bearer {token}
-Content-Type: application/json
-
+**Response:**
+```json
 {
-  "platform": "facebook",
-  "access_token": "token_here"
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "platform": "instagram",
+      "username": "myaccount",
+      "is_connected": true,
+      "followers_count": 1500,
+      "last_sync": "2025-07-15T10:30:00Z"
+    }
+  ]
 }
 ```
 
-#### Create Post
+### Schedule Social Media Post
 ```http
-POST /api/social-media/posts
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "content": "Post content",
-  "platforms": ["facebook", "twitter"],
-  "scheduled_at": "2024-12-15T15:00:00Z"
-}
+POST /api/social-media/schedule
 ```
 
-#### Get Analytics
-```http
-GET /api/social-media/analytics
-Authorization: Bearer {token}
+**Request Body:**
+```json
+{
+  "platform": "instagram",
+  "content": "Post content here",
+  "media_urls": ["https://example.com/image.jpg"],
+  "scheduled_at": "2025-07-15T12:00:00Z"
+}
 ```
 
 ### CRM System
