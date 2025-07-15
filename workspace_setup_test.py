@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Mewayz Platform - Workspace Setup Wizard Testing Suite
-Tests the 6-step workspace setup wizard functionality
+Workspace Setup Wizard Testing Suite
+Tests the complete 6-step workspace setup wizard with all 9 API endpoints
 """
 
 import requests
@@ -9,7 +9,7 @@ import json
 import sys
 import time
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
 class WorkspaceSetupTester:
     def __init__(self, base_url: str = "http://localhost:8001"):
@@ -17,16 +17,15 @@ class WorkspaceSetupTester:
         self.api_url = f"{base_url}/api"
         self.session = requests.Session()
         
-        # Admin user credentials for testing
-        self.admin_user = {
-            "email": "admin@example.com", 
-            "password": "admin123",
+        # Test user credentials
+        self.test_user = {
+            "name": "Workspace Test User",
+            "email": "workspace.test@mewayz.com",
+            "password": "WorkspaceTest123!",
             "token": None,
-            "role": 1,
             "id": None
         }
         
-        self.current_user = None
         self.test_results = []
         
     def log_result(self, test_name: str, status: str, details: str = "", response_time: float = 0):
