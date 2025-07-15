@@ -60,7 +60,7 @@ $login = function () {
                                 <div class="grid grid-cols-2 gap-2">
                                     @if (config('app.GOOGLE_ENABLE'))
                                     <a href="{{ route('auth.driver.redirect', 'google') }}">
-                                        <button type="button" class="yena-button-stack w-full">
+                                        <button type="button" class="btn btn-secondary w-full">
                                             <div class="flex items-center justify-center">
                                                 <div>
                                                     {!! __i('others', 'google-icon', 'w-6 h-6') !!}
@@ -71,7 +71,7 @@ $login = function () {
                                     @endif
                                     @if (config('app.FACEBOOK_ENABLE'))
                                     <a href="{{ route('auth.driver.redirect', 'facebook') }}">
-                                        <button type="button" class="yena-button-stack w-full">
+                                        <button type="button" class="btn btn-secondary w-full">
     
                                             <div class="flex items-center justify-center">
                                                 <div>
@@ -83,26 +83,26 @@ $login = function () {
                                     @endif
                                 </div>
                                 <div class="flex items-center flex-row gap-2 mt-6">
-                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full">
+                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full border-gray-300 dark:border-gray-600">
     
-                                    <p class="text-sm whitespace-nowrap">{{ __('or') }}</p>
+                                    <p class="text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{{ __('or') }}</p>
     
-                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full">
+                                    <hr class="opacity-60 [border-image:none] [border-color:inherit] border-solid w-full border-gray-300 dark:border-gray-600">
                                 </div>
                             </div>
                             @endif
                             <form wire:submit="login">
 
                                 <div class="form-input">
-                                    <label>{{ __('Your Email') }}</label>
-                                    <input type="email" name="email" x-model="email" placeholder="{{ __('e.g: email@gmail.com') }}">
+                                    <label class="text-gray-700 dark:text-gray-300">{{ __('Your Email') }}</label>
+                                    <input type="email" name="email" x-model="email" placeholder="{{ __('e.g: email@gmail.com') }}" class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400">
                                 </div>
                                 <div class="form-input mt-4">
-                                    <label>{{ __('Your Password') }}</label>
+                                    <label class="text-gray-700 dark:text-gray-300">{{ __('Your Password') }}</label>
                                     <div class="relative">
-                                        <input type="password" name="password" x-model="password" placeholder="*******" class="transition-all" :class="{'pb-[2.4rem!important]' : shown()}">
+                                        <input type="password" name="password" x-model="password" placeholder="*******" class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400 transition-all" :class="{'pb-[2.4rem!important]' : shown()}">
         
-                                        <div class="p-2 absolute right-1 cursor-pointer" :class="{'top-2/4 transform -translate-y-1/2': !shown(), 'top-1': shown()}" @click="showPassword =! showPassword">
+                                        <div class="p-2 absolute right-1 cursor-pointer text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" :class="{'top-2/4 transform -translate-y-1/2': !shown(), 'top-1': shown()}" @click="showPassword =! showPassword">
                                             <span x-cloak :class="{'hidden': !shown()}">
                                                 {!! __icon('interface-essential', 'eye-show-visible', 'w-4 h-4') !!}
                                             </span>
@@ -113,10 +113,10 @@ $login = function () {
                                     </div>
         
                                     <div class="w-full px-[10px] pb-[6px] absolute bottom-0" :class="{'hidden': !shown()}">
-                                        <span class="text-xs" x-text="shown() ? password : ''"></span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400" x-text="shown() ? password : ''"></span>
                                     </div>
                                 </div>
-                                <button type="submit" class="yena-button-stack w-full mt-5" :class="{'opacity-40 cursor-not-allowed [box-shadow:var(--yena-shadows-none)] pointer-events-none': email == '' || email == null || password == '' || password == null}">
+                                <button type="submit" class="btn btn-primary w-full mt-5" :class="{'opacity-40 cursor-not-allowed [box-shadow:var(--yena-shadows-none)] pointer-events-none': email == '' || email == null || password == '' || password == null}">
                                     <div wire:loading wire:target="login"> 
                                         <div class="loader-animation-container flex items-center justify-center"><div class="inner-circles-loader !w-5 !h-5"></div></div>
                                     </div>
@@ -129,8 +129,8 @@ $login = function () {
                                 </button>
                                 
                                 
-                                <div class="mt-4 text-[11px] text-left">{{ __('Forgot your password?') }}
-                                    <a href="{{ route('password.request') }}" x-link.prefetch class=""><b>{{ __('Reset it here.') }}</b></a>
+                                <div class="mt-4 text-[11px] text-left text-gray-600 dark:text-gray-400">{{ __('Forgot your password?') }}
+                                    <a href="{{ route('password.request') }}" x-link.prefetch class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"><b>{{ __('Reset it here.') }}</b></a>
                                 </div>
                             </form>
                             <div>
@@ -145,7 +145,7 @@ $login = function () {
                                 @endphp
                                 
                                 @if ($error)
-                                    <div class="mb-5 mt-2 bg-red-200 text-[11px] p-1 px-2 rounded-md">
+                                    <div class="mb-5 mt-2 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-[11px] p-1 px-2 rounded-md border border-red-200 dark:border-red-800">
                                         <div class="flex items-center">
                                             <div>
                                                 <i class="fi fi-rr-cross-circle flex"></i>
