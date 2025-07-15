@@ -254,55 +254,24 @@ sudo supervisorctl update
 sudo supervisorctl start mewayz-worker:*
 ```
 
-### 6. Performance Optimization
+## 🔧 Configuration Options
 
-#### Laravel Optimizations
-```bash
-# Cache configuration
-php artisan config:cache
+### Performance Optimization
+- **PHP-FPM**: Configure process management
+- **Redis**: Optimize memory usage
+- **MySQL**: Tune for performance
+- **Nginx**: Enable gzip compression
 
-# Cache routes
-php artisan route:cache
+### Security Configuration
+- **Firewall**: Configure UFW
+- **Fail2Ban**: Protect against brute force
+- **SSL/TLS**: Enable HTTPS
+- **Security Headers**: Add security headers
 
-# Cache views
-php artisan view:cache
-
-# Optimize autoloader
-composer dump-autoload --optimize
-
-# Enable OPcache
-sudo nano /etc/php/8.2/fpm/php.ini
-# Uncomment and set:
-# opcache.enable=1
-# opcache.memory_consumption=128
-# opcache.interned_strings_buffer=8
-# opcache.max_accelerated_files=4000
-# opcache.revalidate_freq=60
-# opcache.fast_shutdown=1
-```
-
-#### Database Optimization
-```sql
--- Add database indexes
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_bio_sites_slug ON bio_sites(slug);
-CREATE INDEX idx_workspaces_slug ON workspaces(slug);
-CREATE INDEX idx_social_media_accounts_user_id ON social_media_accounts(user_id);
-```
-
-#### Web Server Optimization
-```bash
-# Increase PHP-FPM workers
-sudo nano /etc/php/8.2/fpm/pool.d/www.conf
-# Adjust:
-# pm.max_children = 50
-# pm.start_servers = 20
-# pm.min_spare_servers = 5
-# pm.max_spare_servers = 35
-
-# Restart PHP-FPM
-sudo systemctl restart php8.2-fpm
-```
+### Monitoring Setup
+- **Log Rotation**: Configure logrotate
+- **Health Checks**: Set up monitoring
+- **Alerts**: Configure notifications
 
 ### 7. Monitoring and Logging
 
