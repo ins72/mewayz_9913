@@ -104,7 +104,13 @@ class InstagramManagementTester:
             try:
                 data = response.json()
                 print(f"Login response: {data}")  # Debug output
-                if "access_token" in data:
+                if "token" in data:
+                    self.test_user["token"] = data["token"]
+                    self.test_user["id"] = data.get("user", {}).get("id")
+                    self.log_result("User Authentication", "PASS", 
+                                  f"Successfully authenticated user: {self.test_user['email']}", response_time)
+                    return True
+                elif "access_token" in data:
                     self.test_user["token"] = data["access_token"]
                     self.test_user["id"] = data.get("user", {}).get("id")
                     self.log_result("User Authentication", "PASS", 
