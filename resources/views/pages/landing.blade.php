@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mewayz - All-in-One Business Platform</title>
+    <title>Mewayz - All-in-One Business Platform | Access All Instances</title>
+    <meta name="description" content="Access all Mewayz platform instances - Laravel Web App, Flutter Mobile App, Admin Dashboard, and Development Tools">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -32,22 +33,423 @@
         .gradient-bg {
             background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
         }
-        .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .instance-card {
+            transition: all 0.3s ease;
+            border: 1px solid #2A2A2A;
         }
-        .feature-card:hover {
+        .instance-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(78, 205, 196, 0.1);
+            border-color: #4ECDC4;
         }
-        .stats-counter {
-            background: linear-gradient(135deg, #26DE81 0%, #4ECDC4 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        .status-online {
+            background-color: #26DE81;
+        }
+        .status-offline {
+            background-color: #FF4757;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         .floating-card {
             animation: float 6s ease-in-out infinite;
         }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .tech-badge {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="bg-mewayz-bg text-mewayz-text">
+    <!-- Navigation -->
+    <nav class="bg-mewayz-surface border-b border-mewayz-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="w-8 h-8 bg-mewayz-primary rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-mewayz-bg font-bold text-lg">M</span>
+                        </div>
+                        <h1 class="text-xl font-bold text-mewayz-text">Mewayz</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-mewayz-text-secondary">By Mewayz Technologies Inc.</span>
+                    <div class="flex items-center space-x-2">
+                        <div class="status-indicator status-online"></div>
+                        <span class="text-sm text-mewayz-accent">All Systems Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-20 bg-mewayz-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="floating-card">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                    <span class="gradient-bg bg-clip-text text-transparent">Mewayz Platform</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-mewayz-text-secondary mb-8 max-w-3xl mx-auto">
+                    Your All-in-One Business Platform - Choose Your Instance
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <span class="tech-badge">Laravel + Flutter</span>
+                    <span class="tech-badge">PWA Ready</span>
+                    <span class="tech-badge">Multi-Platform</span>
+                    <span class="tech-badge">Production Ready</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Instances Grid -->
+    <section class="py-16 bg-mewayz-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Platform Instances</h2>
+                <p class="text-mewayz-text-secondary">Access all available instances of the Mewayz platform</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Flutter Mobile App -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mewayz-primary rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-mewayz-bg font-bold text-xl">📱</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Flutter Mobile App</h3>
+                                <p class="text-sm text-mewayz-text-secondary">Cross-platform mobile experience</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Full-featured mobile application with native performance</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Flutter 3.x</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Dart</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">PWA</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/flutter.html" class="block w-full bg-mewayz-primary text-mewayz-bg text-center py-2 rounded-md hover:bg-opacity-90 transition-colors">
+                                Launch Flutter App
+                            </a>
+                            <a href="/app.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Alternative Access
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laravel Web Application -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mewayz-secondary rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-xl">🌐</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Laravel Web App</h3>
+                                <p class="text-sm text-mewayz-text-secondary">Full-featured web application</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Complete web-based business management platform</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Laravel 10+</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">PHP 8.2</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">MySQL</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/index.html" class="block w-full bg-mewayz-secondary text-white text-center py-2 rounded-md hover:bg-opacity-90 transition-colors">
+                                Launch Web App
+                            </a>
+                            <a href="/dashboard.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Direct Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Authentication Pages -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mewayz-accent rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-xl">🔐</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Authentication</h3>
+                                <p class="text-sm text-mewayz-text-secondary">Login & Registration</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Secure authentication with 2FA and OAuth support</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">OAuth 2.0</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">2FA</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Sanctum</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/login.html" class="block w-full bg-mewayz-accent text-white text-center py-2 rounded-md hover:bg-opacity-90 transition-colors">
+                                Login Page
+                            </a>
+                            <a href="/register.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Register Page
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature-Specific Pages -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mewayz-warning rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-xl">📊</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Feature Pages</h3>
+                                <p class="text-sm text-mewayz-text-secondary">Specialized interfaces</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Direct access to specific platform features</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Analytics</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Social Media</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Bio Sites</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/analytics.html" class="block w-full bg-mewayz-warning text-white text-center py-2 rounded-md hover:bg-opacity-90 transition-colors">
+                                Analytics Dashboard
+                            </a>
+                            <a href="/social-media.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Social Media
+                            </a>
+                            <a href="/bio-sites.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Bio Sites
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development Tools -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-mewayz-danger rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-xl">🔧</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Development Tools</h3>
+                                <p class="text-sm text-mewayz-text-secondary">Testing & demos</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Development utilities and theme demonstrations</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Dark Theme</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Mobile UI</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">PWA</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/dark-theme-demo.html" class="block w-full bg-mewayz-danger text-white text-center py-2 rounded-md hover:bg-opacity-90 transition-colors">
+                                Dark Theme Demo
+                            </a>
+                            <a href="/mobile.html" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                Mobile Interface
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API & Backend -->
+                <div class="instance-card bg-mewayz-surface rounded-lg p-6 hover:bg-opacity-80">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gradient-to-r from-mewayz-primary to-mewayz-secondary rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-xl">⚡</span>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">API & Backend</h3>
+                                <p class="text-sm text-mewayz-text-secondary">System status & health</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator status-online"></div>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-mewayz-text-secondary mb-3">Backend API health and system monitoring</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">FastAPI</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Port 8001</span>
+                            <span class="text-xs bg-mewayz-border text-mewayz-text px-2 py-1 rounded">Production</span>
+                        </div>
+                        <div class="space-y-2">
+                            <a href="/api/health" class="block w-full bg-gradient-to-r from-mewayz-primary to-mewayz-secondary text-white text-center py-2 rounded-md hover:opacity-90 transition-opacity">
+                                API Health Check
+                            </a>
+                            <a href="/api" class="block w-full bg-mewayz-border text-mewayz-text text-center py-2 rounded-md hover:bg-opacity-80 transition-colors">
+                                API Documentation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Status -->
+    <section class="py-12 bg-mewayz-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold mb-4">System Status</h2>
+                <p class="text-mewayz-text-secondary">Real-time platform health monitoring</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-mewayz-bg rounded-lg p-6 text-center">
+                    <div class="status-indicator status-online mx-auto mb-3"></div>
+                    <h3 class="text-lg font-semibold mb-2">Backend API</h3>
+                    <p class="text-mewayz-text-secondary text-sm">Port 8001 - Operational</p>
+                </div>
+
+                <div class="bg-mewayz-bg rounded-lg p-6 text-center">
+                    <div class="status-indicator status-online mx-auto mb-3"></div>
+                    <h3 class="text-lg font-semibold mb-2">Frontend Services</h3>
+                    <p class="text-mewayz-text-secondary text-sm">Port 3000 - Operational</p>
+                </div>
+
+                <div class="bg-mewayz-bg rounded-lg p-6 text-center">
+                    <div class="status-indicator status-online mx-auto mb-3"></div>
+                    <h3 class="text-lg font-semibold mb-2">Database</h3>
+                    <p class="text-mewayz-text-secondary text-sm">MySQL - Connected</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="py-12 bg-mewayz-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold mb-4">Quick Actions</h2>
+                <p class="text-mewayz-text-secondary">Jump directly to common tasks</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="/flutter.html" class="bg-mewayz-surface rounded-lg p-4 text-center hover:bg-opacity-80 transition-colors">
+                    <div class="text-2xl mb-2">🚀</div>
+                    <p class="text-sm font-medium">Launch App</p>
+                </a>
+
+                <a href="/login.html" class="bg-mewayz-surface rounded-lg p-4 text-center hover:bg-opacity-80 transition-colors">
+                    <div class="text-2xl mb-2">🔐</div>
+                    <p class="text-sm font-medium">Login</p>
+                </a>
+
+                <a href="/dashboard.html" class="bg-mewayz-surface rounded-lg p-4 text-center hover:bg-opacity-80 transition-colors">
+                    <div class="text-2xl mb-2">📊</div>
+                    <p class="text-sm font-medium">Dashboard</p>
+                </a>
+
+                <a href="/api/health" class="bg-mewayz-surface rounded-lg p-4 text-center hover:bg-opacity-80 transition-colors">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <p class="text-sm font-medium">API Status</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-mewayz-surface border-t border-mewayz-border py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-8 h-8 bg-mewayz-primary rounded-lg flex items-center justify-center mr-3">
+                        <span class="text-mewayz-bg font-bold text-lg">M</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Mewayz</h3>
+                        <p class="text-sm text-mewayz-text-secondary">By Mewayz Technologies Inc.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <a href="https://mewayz.com" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">
+                        Production Site
+                    </a>
+                    <a href="/api" class="text-mewayz-text-secondary hover:text-mewayz-primary transition-colors">
+                        API Docs
+                    </a>
+                    <div class="flex items-center space-x-2">
+                        <div class="status-indicator status-online"></div>
+                        <span class="text-sm text-mewayz-accent">Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-mewayz-border text-center">
+                <p class="text-mewayz-text-secondary text-sm">
+                    © 2024 Mewayz Technologies Inc. All rights reserved. | 
+                    <span class="text-mewayz-primary">Creating seamless business solutions for the modern digital world</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-refresh page every 30 seconds to check system status
+        setTimeout(() => {
+            // Check API health
+            fetch('/api/health')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API Health:', data);
+                })
+                .catch(error => {
+                    console.error('API Health Check Failed:', error);
+                });
+        }, 5000);
+
+        // Add click tracking for analytics
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.href) {
+                console.log('Navigation to:', e.target.href);
+            }
+        });
+    </script>
+</body>
+</html>
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-20px); }
