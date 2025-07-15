@@ -748,53 +748,215 @@ class MewayzComprehensiveTester:
                           user_type)
             return False
 
-    def test_instagram_intelligence(self, user_type: str):
-        """Test Instagram Intelligence features"""
-        print(f"📸 Testing Instagram Intelligence for {user_type.upper()} user...")
+    def test_instagram_management_system(self, user_type: str):
+        """Test Instagram Management System - Phase 2 (Fixed Implementation)"""
+        print(f"📸 Testing Instagram Management System for {user_type.upper()} user...")
         
         self.set_user(user_type)
         
-        # Test Instagram analytics
+        # Test 1: Get Instagram accounts
         try:
-            response = self.make_request('GET', '/instagram/analytics')
+            response = self.make_request('GET', '/instagram/accounts')
             response_time = response.elapsed.total_seconds()
             
             if response.status_code == 200:
                 data = response.json()
-                self.log_result("Instagram Analytics", "PASS", 
-                              "Instagram analytics retrieved successfully", 
-                              user_type, response_time)
-                
-                # Test content suggestions
-                suggestions_response = self.make_request('GET', '/instagram/content-suggestions')
-                suggestions_time = suggestions_response.elapsed.total_seconds()
-                
-                if suggestions_response.status_code == 200:
-                    suggestions_data = suggestions_response.json()
-                    self.log_result("Instagram Content Suggestions", "PASS", 
-                                  "Content suggestions retrieved successfully", 
-                                  user_type, suggestions_time)
+                if data.get('success'):
+                    accounts = data.get('accounts', [])
+                    self.log_result("Instagram Get Accounts", "PASS", 
+                                  f"Retrieved {len(accounts)} Instagram accounts", 
+                                  user_type, response_time)
                     
-                    self.user_journey_maps[user_type].append({
-                        "step": "Instagram Intelligence",
-                        "action": "View analytics and content suggestions",
-                        "result": "Success"
-                    })
-                    return True
+                    # Test 2: Add Instagram account
+                    account_data = {
+                        "username": "testaccount",
+                        "bio": "Test Instagram account",
+                        "is_primary": True
+                    }
+                    
+                    add_response = self.make_request('POST', '/instagram/accounts', account_data)
+                    add_time = add_response.elapsed.total_seconds()
+                    
+                    if add_response.status_code in [200, 201]:
+                        add_data = add_response.json()
+                        if add_data.get('success'):
+                            self.log_result("Instagram Add Account", "PASS", 
+                                          "Instagram account added successfully", 
+                                          user_type, add_time)
+                            
+                            # Test 3: Get Instagram posts
+                            posts_response = self.make_request('GET', '/instagram/posts')
+                            posts_time = posts_response.elapsed.total_seconds()
+                            
+                            if posts_response.status_code == 200:
+                                posts_data = posts_response.json()
+                                if posts_data.get('success'):
+                                    posts = posts_data.get('posts', [])
+                                    self.log_result("Instagram Get Posts", "PASS", 
+                                                  f"Retrieved {len(posts)} Instagram posts", 
+                                                  user_type, posts_time)
+                                    
+                                    # Test 4: Create Instagram post
+                                    post_data = {
+                                        "title": "Test Post",
+                                        "caption": "Test caption #test #instagram",
+                                        "media_urls": ["https://example.com/image.jpg"],
+                                        "post_type": "feed"
+                                    }
+                                    
+                                    create_response = self.make_request('POST', '/instagram/posts', post_data)
+                                    create_time = create_response.elapsed.total_seconds()
+                                    
+                                    if create_response.status_code in [200, 201]:
+                                        create_data = create_response.json()
+                                        if create_data.get('success'):
+                                            post_id = create_data.get('post', {}).get('id')
+                                            self.log_result("Instagram Create Post", "PASS", 
+                                                          "Instagram post created successfully", 
+                                                          user_type, create_time)
+                                            
+                                            # Test 5: Update Instagram post
+                                            if post_id:
+                                                update_data = {
+                                                    "title": "Updated Test Post",
+                                                    "caption": "Updated test caption #updated #instagram"
+                                                }
+                                                
+                                                update_response = self.make_request('PUT', f'/instagram/posts/{post_id}', update_data)
+                                                update_time = update_response.elapsed.total_seconds()
+                                                
+                                                if update_response.status_code == 200:
+                                                    update_result = update_response.json()
+                                                    if update_result.get('success'):
+                                                        self.log_result("Instagram Update Post", "PASS", 
+                                                                      "Instagram post updated successfully", 
+                                                                      user_type, update_time)
+                                                        
+                                                        # Test 6: Delete Instagram post
+                                                        delete_response = self.make_request('DELETE', f'/instagram/posts/{post_id}')
+                                                        delete_time = delete_response.elapsed.total_seconds()
+                                                        
+                                                        if delete_response.status_code == 200:
+                                                            delete_result = delete_response.json()
+                                                            if delete_result.get('success'):
+                                                                self.log_result("Instagram Delete Post", "PASS", 
+                                                                              "Instagram post deleted successfully", 
+                                                                              user_type, delete_time)
+                                                            else:
+                                                                self.log_result("Instagram Delete Post", "FAIL", 
+                                                                              "Delete succeeded but missing success flag", 
+                                                                              user_type, delete_time)
+                                                        else:
+                                                            self.log_result("Instagram Delete Post", "FAIL", 
+                                                                          f"Delete failed with status {delete_response.status_code}", 
+                                                                          user_type, delete_time)
+                                                    else:
+                                                        self.log_result("Instagram Update Post", "FAIL", 
+                                                                      "Update succeeded but missing success flag", 
+                                                                      user_type, update_time)
+                                                else:
+                                                    self.log_result("Instagram Update Post", "FAIL", 
+                                                                  f"Update failed with status {update_response.status_code}", 
+                                                                  user_type, update_time)
+                                            
+                                            # Test 7: Hashtag research
+                                            hashtag_response = self.make_request('GET', '/instagram/hashtag-research', {'keyword': 'marketing'})
+                                            hashtag_time = hashtag_response.elapsed.total_seconds()
+                                            
+                                            if hashtag_response.status_code == 200:
+                                                hashtag_data = hashtag_response.json()
+                                                if hashtag_data.get('success'):
+                                                    hashtags = hashtag_data.get('hashtags', [])
+                                                    self.log_result("Instagram Hashtag Research", "PASS", 
+                                                                  f"Retrieved {len(hashtags)} hashtag suggestions", 
+                                                                  user_type, hashtag_time)
+                                                else:
+                                                    self.log_result("Instagram Hashtag Research", "FAIL", 
+                                                                  "Hashtag research succeeded but missing success flag", 
+                                                                  user_type, hashtag_time)
+                                            else:
+                                                self.log_result("Instagram Hashtag Research", "FAIL", 
+                                                              f"Hashtag research failed with status {hashtag_response.status_code}", 
+                                                              user_type, hashtag_time)
+                                            
+                                            # Test 8: Instagram analytics
+                                            analytics_response = self.make_request('GET', '/instagram/analytics', {'date_range': '30'})
+                                            analytics_time = analytics_response.elapsed.total_seconds()
+                                            
+                                            if analytics_response.status_code == 200:
+                                                analytics_data = analytics_response.json()
+                                                if analytics_data.get('success'):
+                                                    analytics = analytics_data.get('analytics', {})
+                                                    overview = analytics.get('overview', {})
+                                                    self.log_result("Instagram Analytics", "PASS", 
+                                                                  f"Analytics retrieved: {overview.get('total_posts', 0)} posts, {overview.get('total_followers', 0)} followers", 
+                                                                  user_type, analytics_time)
+                                                    
+                                                    # Add to user journey
+                                                    self.user_journey_maps[user_type].append({
+                                                        "step": "Instagram Management System",
+                                                        "action": "Complete Instagram workflow: accounts, posts, hashtags, analytics",
+                                                        "result": "Success",
+                                                        "accounts_count": len(accounts) + 1,  # +1 for the added account
+                                                        "posts_tested": True,
+                                                        "hashtag_research": True,
+                                                        "analytics": True
+                                                    })
+                                                    return True
+                                                else:
+                                                    self.log_result("Instagram Analytics", "FAIL", 
+                                                                  "Analytics succeeded but missing success flag", 
+                                                                  user_type, analytics_time)
+                                                    return False
+                                            else:
+                                                self.log_result("Instagram Analytics", "FAIL", 
+                                                              f"Analytics failed with status {analytics_response.status_code}", 
+                                                              user_type, analytics_time)
+                                                return False
+                                        else:
+                                            self.log_result("Instagram Create Post", "FAIL", 
+                                                          "Post creation succeeded but missing success flag", 
+                                                          user_type, create_time)
+                                            return False
+                                    else:
+                                        self.log_result("Instagram Create Post", "FAIL", 
+                                                      f"Post creation failed with status {create_response.status_code}", 
+                                                      user_type, create_time)
+                                        return False
+                                else:
+                                    self.log_result("Instagram Get Posts", "FAIL", 
+                                                  "Posts request succeeded but missing success flag", 
+                                                  user_type, posts_time)
+                                    return False
+                            else:
+                                self.log_result("Instagram Get Posts", "FAIL", 
+                                              f"Posts request failed with status {posts_response.status_code}", 
+                                              user_type, posts_time)
+                                return False
+                        else:
+                            self.log_result("Instagram Add Account", "FAIL", 
+                                          "Account addition succeeded but missing success flag", 
+                                          user_type, add_time)
+                            return False
+                    else:
+                        self.log_result("Instagram Add Account", "FAIL", 
+                                      f"Account addition failed with status {add_response.status_code}", 
+                                      user_type, add_time)
+                        return False
                 else:
-                    self.log_result("Instagram Content Suggestions", "FAIL", 
-                                  f"Suggestions request failed with status {suggestions_response.status_code}", 
-                                  user_type, suggestions_time)
+                    self.log_result("Instagram Get Accounts", "FAIL", 
+                                  "Accounts request succeeded but missing success flag", 
+                                  user_type, response_time)
                     return False
             else:
-                self.log_result("Instagram Analytics", "FAIL", 
-                              f"Analytics request failed with status {response.status_code}", 
+                self.log_result("Instagram Get Accounts", "FAIL", 
+                              f"Accounts request failed with status {response.status_code}", 
                               user_type, response_time)
                 return False
                 
         except Exception as e:
-            self.log_result("Instagram Intelligence", "FAIL", 
-                          f"Instagram intelligence test failed: {str(e)}", 
+            self.log_result("Instagram Management System", "FAIL", 
+                          f"Instagram management test failed: {str(e)}", 
                           user_type)
             return False
 
