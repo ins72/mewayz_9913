@@ -19,16 +19,20 @@ All API endpoints (except public endpoints) require authentication using Laravel
 Authorization: Bearer {token}
 ```
 
-### Getting Access Tokens
+## 🔐 Authentication Endpoints
 
-#### Login Endpoint
+### Register User
 ```http
-POST /api/auth/login
-Content-Type: application/json
+POST /api/auth/register
+```
 
+**Request Body:**
+```json
 {
-  "email": "user@example.com",
-  "password": "password"
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
 }
 ```
 
@@ -36,36 +40,16 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "message": "Login successful",
+  "message": "User registered successfully",
   "data": {
     "user": {
       "id": 1,
       "name": "John Doe",
-      "email": "user@example.com"
+      "email": "john@example.com",
+      "created_at": "2025-07-15T10:30:00Z"
     },
-    "token": "1|abcdef123456789..."
+    "token": "1|abc123..."
   }
-}
-```
-
-#### Using Tokens
-
-Include the token in the Authorization header:
-```http
-Authorization: Bearer 1|abcdef123456789...
-```
-
-### Registration
-
-```http
-POST /api/auth/register
-Content-Type: application/json
-
-{
-  "name": "John Doe",
-  "email": "user@example.com",
-  "password": "password",
-  "password_confirmation": "password"
 }
 ```
 
