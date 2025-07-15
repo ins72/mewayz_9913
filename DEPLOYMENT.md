@@ -49,33 +49,20 @@ This guide provides step-by-step instructions for deploying the Mewayz Platform 
 - **Composer**: 2.0 or higher
 - **Node.js**: 16.0 or higher (for asset compilation)
 
-### 1. Server Setup
+## 📦 Quick Deployment
 
-#### Install Required Packages
+### Automated Deployment
 ```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
+# Clone repository
+git clone https://github.com/mewayz/platform.git
+cd platform
 
-# Install PHP and extensions
-sudo apt install php8.2 php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xml php8.2-zip php8.2-curl php8.2-gd php8.2-bcmath
-
-# Install MySQL
-sudo apt install mysql-server
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install nodejs
-
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-
-# Install Supervisor
-sudo apt install supervisor
-
-# Install Nginx
-sudo apt install nginx
+# Run deployment script
+./deploy.sh production
 ```
+
+### Manual Deployment
+Follow the detailed steps below for complete control.
 
 #### Configure MySQL
 ```bash
