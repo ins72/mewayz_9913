@@ -228,7 +228,7 @@
                 </div>
             </div>
             <div class="text-[11px] text-center color-gray mt-5">
-              Zeph, a product of <a href="mailto:contact@barbercita.com" class="text-link">Barbercita.</a>
+              Mewayz, a product of <a href="mailto:contact@barbercita.com" class="text-link">Barbercita.</a>
             </div>
         </div>
     </div>
