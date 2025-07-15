@@ -17,7 +17,7 @@
          
          <a href="{{ route('dashboard-settings-billings') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'billing' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Billing') }}</span></a>
          
-         <a href="{{ route('console-settings-account') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'account' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Account') }}</span></a>         
+         <a href="{{ route('dashboard-settings-account') }}" wire:navigate class="text-content-secondary hover:bg-action-hover-ghost flex w-full cursor-pointer flex-row items-center rounded-lg px-3 py-2 text-sm {{ $current == 'account' ? '!text-content-brand-onSurface !bg-background-brand-subtle !font-semibold' : '' }}"><span>{{ __('Account') }}</span></a>         
       </ul>
    </div>
 </div>
