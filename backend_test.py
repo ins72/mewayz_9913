@@ -17,19 +17,21 @@ class MewayzComprehensiveTester:
         self.api_url = f"{base_url}/api"
         self.session = requests.Session()
         
-        # User credentials from review request
+        # User credentials - will be obtained through login
         self.regular_user = {
-            "email": "john@example.com",
-            "token": "12|0j3uEX2j5vknGkKIq5cD3iF0ktQ8RtZjtNxcEEEH8ebdd95a",
+            "email": "testuser@example.com",
+            "password": "password123",
+            "token": None,
             "role": 0,
-            "id": 7
+            "id": None
         }
         
         self.admin_user = {
             "email": "admin@example.com", 
-            "token": "13|EBPF6zxpkBrlQcDflIMGQ64L5qGLp2GRMYiAQYlA0b53fd8b",
+            "password": "admin123",
+            "token": None,
             "role": 1,
-            "id": 8
+            "id": None
         }
         
         self.current_user = None
