@@ -86,7 +86,7 @@ class StripePaymentController extends Controller
             
             // Execute Python script
             $escapedInput = escapeshellarg($inputData);
-            $command = "cd " . base_path() . " && echo {$escapedInput} | python3 {$pythonScript} create_session '{$webhookUrl}'";
+            $command = "cd " . base_path() . " && echo {$escapedInput} | /root/.venv/bin/python3 {$pythonScript} create_session '{$webhookUrl}'";
             $output = shell_exec($command);
             
             if (!$output) {
