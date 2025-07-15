@@ -292,7 +292,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Special Thanks
 - **Laravel Community**: For the excellent framework
-- **Flutter Team**: For the cross-platform framework
 - **Open Source Community**: For the amazing tools and libraries
 
 ---
