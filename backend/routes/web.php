@@ -127,8 +127,8 @@ Route::get('lol', function(){
 
 YenaOauth::routes();
 
-Route::prefix('console')->name('console-')->namespace('App\Http\Controllers')->group(function() {
-  Route::get('builder/ai', 'Console\Builder\AiController@ai')->name('builder-ai');
+Route::prefix('dashboard')->name('dashboard-')->namespace('App\Http\Controllers')->group(function() {
+  Route::get('builder/ai', 'Dashboard\Builder\AiController@ai')->name('builder-ai');
 });
 
 // Admin
