@@ -373,6 +373,162 @@ class MewayzAPITester:
                           response_time)
             return False
 
+    def test_crm_endpoints(self):
+        """Test CRM endpoints"""
+        print("👥 Testing CRM Endpoints...")
+        
+        # Test CRM contacts
+        response, response_time = self.make_request('GET', '/crm/contacts')
+        
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                contacts = data.get('data', []) if isinstance(data.get('data'), list) else []
+                self.log_result("CRM Contacts", "PASS", 
+                              f"Retrieved {len(contacts)} contacts", 
+                              response_time)
+                
+                # Test CRM leads
+                leads_response, leads_time = self.make_request('GET', '/crm/leads')
+                
+                if leads_response and leads_response.status_code == 200:
+                    leads_data = leads_response.json()
+                    leads = leads_data.get('data', []) if isinstance(leads_data.get('data'), list) else []
+                    self.log_result("CRM Leads", "PASS", 
+                                  f"Retrieved {len(leads)} leads", 
+                                  leads_time)
+                    return True
+                else:
+                    status_code = leads_response.status_code if leads_response else "No response"
+                    self.log_result("CRM Leads", "FAIL", 
+                                  f"Leads request failed with status {status_code}", 
+                                  leads_time)
+                    return False
+            except json.JSONDecodeError:
+                self.log_result("CRM Contacts", "FAIL", 
+                              "Invalid JSON response", 
+                              response_time)
+                return False
+        else:
+            status_code = response.status_code if response else "No response"
+            self.log_result("CRM Contacts", "FAIL", 
+                          f"Contacts request failed with status {status_code}", 
+                          response_time)
+            return False
+
+    def test_ecommerce_endpoints(self):
+        """Test e-commerce endpoints"""
+        print("🛒 Testing E-commerce Endpoints...")
+        
+        # Test e-commerce products
+        response, response_time = self.make_request('GET', '/ecommerce/products')
+        
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                products = data.get('data', []) if isinstance(data.get('data'), list) else []
+                self.log_result("E-commerce Products", "PASS", 
+                              f"Retrieved {len(products)} products", 
+                              response_time)
+                
+                # Test e-commerce orders
+                orders_response, orders_time = self.make_request('GET', '/ecommerce/orders')
+                
+                if orders_response and orders_response.status_code == 200:
+                    orders_data = orders_response.json()
+                    orders = orders_data.get('data', []) if isinstance(orders_data.get('data'), list) else []
+                    self.log_result("E-commerce Orders", "PASS", 
+                                  f"Retrieved {len(orders)} orders", 
+                                  orders_time)
+                    return True
+                else:
+                    status_code = orders_response.status_code if orders_response else "No response"
+                    self.log_result("E-commerce Orders", "FAIL", 
+                                  f"Orders request failed with status {status_code}", 
+                                  orders_time)
+                    return False
+            except json.JSONDecodeError:
+                self.log_result("E-commerce Products", "FAIL", 
+                              "Invalid JSON response", 
+                              response_time)
+                return False
+        else:
+            status_code = response.status_code if response else "No response"
+            self.log_result("E-commerce Products", "FAIL", 
+                          f"Products request failed with status {status_code}", 
+                          response_time)
+            return False
+
+    def test_email_marketing_endpoints(self):
+        """Test email marketing endpoints"""
+        print("📧 Testing Email Marketing Endpoints...")
+        
+        # Test email campaigns
+        response, response_time = self.make_request('GET', '/email-marketing/campaigns')
+        
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                campaigns = data.get('data', []) if isinstance(data.get('data'), list) else []
+                self.log_result("Email Campaigns", "PASS", 
+                              f"Retrieved {len(campaigns)} campaigns", 
+                              response_time)
+                
+                # Test email templates
+                templates_response, templates_time = self.make_request('GET', '/email-marketing/templates')
+                
+                if templates_response and templates_response.status_code == 200:
+                    templates_data = templates_response.json()
+                    templates = templates_data.get('data', []) if isinstance(templates_data.get('data'), list) else []
+                    self.log_result("Email Templates", "PASS", 
+                                  f"Retrieved {len(templates)} templates", 
+                                  templates_time)
+                    return True
+                else:
+                    status_code = templates_response.status_code if templates_response else "No response"
+                    self.log_result("Email Templates", "FAIL", 
+                                  f"Templates request failed with status {status_code}", 
+                                  templates_time)
+                    return False
+            except json.JSONDecodeError:
+                self.log_result("Email Campaigns", "FAIL", 
+                              "Invalid JSON response", 
+                              response_time)
+                return False
+        else:
+            status_code = response.status_code if response else "No response"
+            self.log_result("Email Campaigns", "FAIL", 
+                          f"Campaigns request failed with status {status_code}", 
+                          response_time)
+            return False
+
+    def test_course_endpoints(self):
+        """Test course management endpoints"""
+        print("🎓 Testing Course Management Endpoints...")
+        
+        # Test courses
+        response, response_time = self.make_request('GET', '/courses')
+        
+        if response and response.status_code == 200:
+            try:
+                data = response.json()
+                courses = data.get('data', []) if isinstance(data.get('data'), list) else []
+                self.log_result("Course Management", "PASS", 
+                              f"Retrieved {len(courses)} courses", 
+                              response_time)
+                return True
+            except json.JSONDecodeError:
+                self.log_result("Course Management", "FAIL", 
+                              "Invalid JSON response", 
+                              response_time)
+                return False
+        else:
+            status_code = response.status_code if response else "No response"
+            self.log_result("Course Management", "FAIL", 
+                          f"Courses request failed with status {status_code}", 
+                          response_time)
+            return False
+
     def test_analytics_endpoints(self):
         """Test analytics endpoints"""
         print("📊 Testing Analytics Endpoints...")
