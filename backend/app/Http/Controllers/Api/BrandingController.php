@@ -218,7 +218,7 @@ class BrandingController extends Controller
         
         // This would typically scan files for old branding references
         $old_references = [
-            'ZEPH' => 'Should be "Mewayz"',
+            'LEGACY_ZEPH' => 'Should be "Mewayz"',
             'yena' => 'Should be "mewayz"',
             'old-logo.png' => 'Should use new logo assets',
             '#old-color' => 'Should use new color scheme'
