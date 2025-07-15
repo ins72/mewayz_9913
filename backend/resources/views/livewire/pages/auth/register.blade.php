@@ -132,21 +132,21 @@ $register = function () {
                             <form @submit.prevent="!proceedShow ? proceedShow=true : $wire.register()">
                                 <div>
                                     <div class="form-input">
-                                        <label>{{ __('Your Email') }}</label>
-                                        <input x-model="email" id="email" class="block mt-1 w-full" type="email" name="email" @input="checkValidEmail" required autocomplete="username">
+                                        <label class="text-gray-700 dark:text-gray-300">{{ __('Your Email') }}</label>
+                                        <input x-model="email" id="email" class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400 block mt-1 w-full" type="email" name="email" @input="checkValidEmail" required autocomplete="username">
                                     </div>
 
                                     <div x-show="proceedShow && email" x-cloak x-transition>
                                         <div class="form-input mt-4">
-                                            <label>{{ __('Your Name') }}</label>
-                                            <input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name">
+                                            <label class="text-gray-700 dark:text-gray-300">{{ __('Your Name') }}</label>
+                                            <input wire:model="name" id="name" class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400 block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name">
                                         </div>
                                         <div class="form-input mt-4">
-                                            <label>{{ __('Your Password') }}</label>
+                                            <label class="text-gray-700 dark:text-gray-300">{{ __('Your Password') }}</label>
                                             <div class="relative">
-                                                <input class="transition-all block mt-1 w-full" :class="{'pb-[2.4rem!important]' : shown()}" x-model="password" id="password" type="password" name="password" required autocomplete="new-password" placeholder="*******" >
+                                                <input class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400 transition-all block mt-1 w-full" :class="{'pb-[2.4rem!important]' : shown()}" x-model="password" id="password" type="password" name="password" required autocomplete="new-password" placeholder="*******" >
                 
-                                                <div class="p-2 absolute right-1 cursor-pointer" :class="{'top-2/4 transform -translate-y-1/2': !shown(), 'top-1': shown()}" @click="showPassword =! showPassword">
+                                                <div class="p-2 absolute right-1 cursor-pointer text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" :class="{'top-2/4 transform -translate-y-1/2': !shown(), 'top-1': shown()}" @click="showPassword =! showPassword">
                                                     <span x-cloak :class="{'hidden': !shown()}">
                                                         {!! __icon('interface-essential', 'eye-show-visible', 'w-4 h-4') !!}
                                                     </span>
@@ -157,12 +157,12 @@ $register = function () {
                                             </div>
                 
                                             <div class="w-full px-[10px] pb-[6px] absolute bottom-0" :class="{'hidden': !shown()}">
-                                                <span class="text-xs" x-text="shown() ? password : ''"></span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400" x-text="shown() ? password : ''"></span>
                                             </div>
                                         </div>
                                         <div class="form-input mt-4">
-                                            <label>{{ __('Confirm Password') }}</label>
-                                            <input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password">
+                                            <label class="text-gray-700 dark:text-gray-300">{{ __('Confirm Password') }}</label>
+                                            <input wire:model="password_confirmation" id="password_confirmation" class="form-input bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:border-primary-500 dark:focus:border-primary-400 block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password">
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@ $register = function () {
                                 }">
                                     <button type="button" @click="proceedShow=true;" x-cloak x-show="email" x-transition :class="{
                                         '!opacity-40 cursor-not-allowed [box-shadow:var(--yena-shadows-none)] pointer-events-none': !isValidEmail
-                                     }" class="yena-button-stack w-full">{{ __('Continue with email') }}</button>
+                                     }" class="btn btn-primary w-full">{{ __('Continue with email') }}</button>
                                 </div>
 
                                 <div class="flex items-center justify-end mt-4" :class="{
@@ -180,18 +180,18 @@ $register = function () {
                                 }">
                                     <button type="submit" x-cloak x-show="email" x-transition :class="{
                                         '!opacity-40 cursor-not-allowed [box-shadow:var(--yena-shadows-none)] pointer-events-none': !isValidEmail
-                                     }" class="yena-button-stack w-full">
+                                     }" class="btn btn-primary w-full">
                                         <div wire:loading wire:target="register"> 
                                             <div class="loader-animation-container flex items-center justify-center"><div class="inner-circles-loader !w-5 !h-5"></div></div>
                                         </div>
                                         <div wire:loading.class="hidden" wire:target="register">
-                                            {{ __('Continue with email') }}
+                                            {{ __('Create Account') }}
                                         </div>
                                     </button>
                                 </div>
 
-                                <div class="mt-4 text-[11px] text-left">{{ __('Have an account?') }}
-                                    <a href="{{ route('login') }}" wire:navigate><b>{{ __('Login.') }}</b></a>
+                                <div class="mt-4 text-[11px] text-left text-gray-600 dark:text-gray-400">{{ __('Have an account?') }}
+                                    <a href="{{ route('login') }}" wire:navigate class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"><b>{{ __('Login.') }}</b></a>
                                 </div>
                             </form>
                             <div>
