@@ -178,81 +178,42 @@ sudo chmod -R 755 /var/www/mewayz
 sudo chmod -R 775 /var/www/mewayz/storage
 ```
 
-#### Nginx Configuration
+### Step 4: Web Server Configuration
+
+#### 4.1 Nginx Configuration
+```bash
+sudo nano /etc/nginx/sites-available/mewayz
+```
+
 ```nginx
-# /etc/nginx/sites-available/mewayz
 server {
     listen 80;
-    server_name your-domain.com www.your-domain.com;
-    return 301 https://$server_name$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com www.your-domain.com;
-    
+    server_name yourdomain.com;
     root /var/www/mewayz/public;
-    index index.php index.html index.htm;
-    
-    # SSL Configuration
-    ssl_certificate /path/to/ssl/certificate.crt;
-    ssl_certificate_key /path/to/ssl/private.key;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
-    
-    # Security Headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    
-    # Gzip Compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
-    
-    # API Routes
-    location /api {
+    index index.php;
+
+    location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
-    
-    # Flutter App Routes
-    location /app {
-        try_files $uri $uri/ /app.html;
-    }
-    
-    # Static Files
-    location ~* \.(jpg|jpeg|png|gif|ico|css|js|woff|woff2|ttf|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-    
-    # PHP Processing
+
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
-    
-    # Deny access to hidden files
-    location ~ /\. {
+
+    location ~ /\.ht {
         deny all;
     }
 }
 ```
 
-#### Enable Site
+#### 4.2 Enable Site
 ```bash
-# Link configuration
 sudo ln -s /etc/nginx/sites-available/mewayz /etc/nginx/sites-enabled/
-
-# Test configuration
 sudo nginx -t
-
-# Restart Nginx
-sudo systemctl restart nginx
+sudo systemctl reload nginx
 ```
 
 ### 4. Supervisor Configuration
