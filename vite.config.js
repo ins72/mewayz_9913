@@ -28,26 +28,26 @@ export default defineConfig({
         svgLoader(),
         laravel({
             input: [
-                'resources/css/app.css',
-                'resources/sass/app.scss',
+                'backend/resources/css/app.css',
+                'backend/resources/sass/app.scss',
 
-                'resources/sass/builder.scss',
-                'resources/sass/create.scss',
-                'resources/sass/site.scss',
+                'backend/resources/sass/builder.scss',
+                'backend/resources/sass/create.scss',
+                'backend/resources/sass/site.scss',
 
                 // Console
-                'resources/sass/console/console.scss',
-                'resources/sass/console/console.placeholder.scss',
-                'resources/sass/console/console.sidebar.scss',
+                'backend/resources/sass/console/console.scss',
+                'backend/resources/sass/console/console.placeholder.scss',
+                'backend/resources/sass/console/console.sidebar.scss',
 
 
                 // Auth
-                'resources/sass/auth/auth.scss',
+                'backend/resources/sass/auth/auth.scss',
 
-                'resources/js/app.js',
-                'resources/js/moreUtils.js',
-                'resources/js/exportUtils.js',
-                'resources/js/yenaWire.js',
+                'backend/resources/js/app.js',
+                'backend/resources/js/moreUtils.js',
+                'backend/resources/js/exportUtils.js',
+                'backend/resources/js/yenaWire.js',
             ],
             refresh: [
                 'database/**'
