@@ -833,7 +833,7 @@ class MewayzComprehensiveTester:
                                                                       user_type, update_time)
                                                         
                                                         # Test 6: Delete Instagram post
-                                                        delete_response = self.make_request('DELETE', f'/instagram/posts/{post_id}')
+                                                        delete_response = self.make_request('DELETE', f'/instagram-management/posts/{post_id}')
                                                         delete_time = delete_response.elapsed.total_seconds()
                                                         
                                                         if delete_response.status_code == 200:
