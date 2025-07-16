@@ -1,0 +1,369 @@
+{
+  "summary": {
+    "total_tests": 39,
+    "passed": 39,
+    "failed": 0,
+    "errors": 0,
+    "success_rate": 100.0,
+    "test_timestamp": "2025-07-16T17:32:05.812811"
+  },
+  "results": [
+    {
+      "timestamp": "2025-07-16T17:32:04.799215",
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 311.28,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.821136",
+      "endpoint": "/stripe/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.8,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.842200",
+      "endpoint": "/payments/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.01,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.866240",
+      "endpoint": "/stripe/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 23.91,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.892069",
+      "endpoint": "/stripe/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 25.77,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.916418",
+      "endpoint": "/payments/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 24.28,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.939210",
+      "endpoint": "/payments/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 22.72,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.959494",
+      "endpoint": "/stripe/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 20.2,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:04.995605",
+      "endpoint": "/instagram-management/accounts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 35.96,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.028494",
+      "endpoint": "/instagram-management/accounts",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 32.83,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.054313",
+      "endpoint": "/instagram-management/posts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.73,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.080915",
+      "endpoint": "/instagram-management/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.55,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.111551",
+      "endpoint": "/crm/contacts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 30.51,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.138076",
+      "endpoint": "/crm/leads",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.47,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.164187",
+      "endpoint": "/crm/advanced-pipeline-management",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.03,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.192124",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.85,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.218113",
+      "endpoint": "/email-marketing/templates",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.91,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.243894",
+      "endpoint": "/email-marketing/lists",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.7,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.269344",
+      "endpoint": "/email-marketing/subscribers",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.38,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.314558",
+      "endpoint": "/email-marketing/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 45.12,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.344979",
+      "endpoint": "/team",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 30.34,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.383817",
+      "endpoint": "/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 38.76,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.410316",
+      "endpoint": "/ecommerce/products",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.41,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.439603",
+      "endpoint": "/bio-sites",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 29.2,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.464289",
+      "endpoint": "/auth/me",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.59,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.485424",
+      "endpoint": "/stripe/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.08,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.505973",
+      "endpoint": "/payments/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 20.48,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.531883",
+      "endpoint": "/instagram-management/accounts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.84,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.556737",
+      "endpoint": "/instagram-management/posts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.78,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.582228",
+      "endpoint": "/instagram-management/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.42,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.606720",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.42,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.630932",
+      "endpoint": "/email-marketing/templates",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.14,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.657122",
+      "endpoint": "/crm/contacts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.12,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.685362",
+      "endpoint": "/crm/leads",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 28.17,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.713051",
+      "endpoint": "/team",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.59,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.737513",
+      "endpoint": "/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.39,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.761474",
+      "endpoint": "/ecommerce/products",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 23.89,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.787319",
+      "endpoint": "/bio-sites",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.77,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T17:32:05.812481",
+      "endpoint": "/courses",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.06,
+      "status_code": 200,
+      "details": "Status: 200"
+    }
+  ],
+  "fix_areas": {
+    "stripe_payment": 9,
+    "instagram_management": 7,
+    "crm_system": 5,
+    "email_marketing": 7
+  }
+}
