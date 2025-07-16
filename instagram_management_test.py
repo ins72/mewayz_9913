@@ -507,7 +507,7 @@ class InstagramManagementTest:
                             post = data['post']
                             self.created_post_id = post.get('id')
                             
-                            print(f"✅ Post created successfully: {post.get('title')}")
+                            print(f"✅ Post created successfully: {post.get('caption', 'N/A')[:50]}...")
                             print(f"   Post ID: {self.created_post_id}")
                             print(f"   Status: {post.get('status')}")
                             
