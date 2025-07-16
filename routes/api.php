@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\SocialMediaController;
 use App\Http\Controllers\Api\BioSiteController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\WorkspaceSetupController;
+use App\Http\Controllers\Api\WorkspaceSetupWizardController;
 use App\Http\Controllers\Api\InstagramManagementController;
 use App\Http\Controllers\Api\CrmController;
 use App\Http\Controllers\Api\EcommerceController;
