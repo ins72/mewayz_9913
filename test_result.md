@@ -470,8 +470,8 @@ backend:
     implemented: true
     working: false
     file: "app/Http/Controllers/Api/WorkspaceSetupController.php"
-    stuck_count: 1
-    priority: "high"
+    stuck_count: 2
+    priority: "critical"
     needs_retesting: false
     status_history:
       - working: false
@@ -480,6 +480,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "🔍 DETAILED ANALYSIS: Workspace Setup Wizard maintains 50.0% success rate (6/12 tests passed). Working endpoints: All GET endpoints function properly (initial-data, main-goals, subscription-plans, summary, status, team-setup POST). Critical failures: All main POST endpoints return 500 errors - main-goals, feature-selection, subscription-selection, branding-configuration. These are core setup steps preventing workspace completion. Controller exists but POST method implementations have issues."
+      - working: false
+        agent: "testing"
+        comment: "🚨 WORKSPACE SETUP STILL CRITICAL: Latest testing confirms 50.0% success rate (6/12 tests passed). All POST endpoints continue to fail with 500 errors: main-goals, feature-selection, subscription-selection, branding-configuration. Error messages show 'Failed to save' errors indicating database or validation issues. This is a STUCK TASK requiring main agent intervention with database schema fixes and controller logic debugging."
 
   - task: "Google OAuth Integration"
     implemented: true
