@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Skip foreign key updates for SQLite
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+        
         Schema::table('instagram_accounts', function (Blueprint $table) {
             // Drop existing foreign key and add new one pointing to organizations table
             $table->dropForeign(['workspace_id']);
