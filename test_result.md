@@ -261,10 +261,10 @@ frontend:
 
   - task: "Instagram Management"
     implemented: true
-    working: true
-    file: "/app/public/instagram-management.html"
-    stuck_count: 0
-    priority: "medium"
+    working: false
+    file: "/app/resources/views/pages/dashboard/instagram/index-dynamic.blade.php"
+    stuck_count: 1
+    priority: "high"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -273,6 +273,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "✅ INSTAGRAM MANAGEMENT PAGE ACCESSIBLE: Instagram management page loads successfully at /instagram-management.html with proper Mewayz branding. Page displays Instagram management interface and features. However, cannot test full functionality due to static HTML implementation rather than dynamic Laravel integration. Core page structure and UI working correctly."
+      - working: false
+        agent: "testing"
+        comment: "❌ INSTAGRAM MANAGEMENT SYSTEM FRONTEND INTEGRATION FAILING: Comprehensive testing reveals critical issues preventing proper functionality. 1) ROUTE ISSUE: /dashboard/instagram redirects to /dashboard instead of loading Instagram management page. 2) API AUTHENTICATION: All Instagram Management API endpoints return 401 Unauthorized despite valid session authentication. 3) DATABASE SCHEMA ISSUES: Missing instagram_account_id field and post_count column causing SQL errors. 4) VALIDATION ERRORS: Required fields not being passed correctly in API requests. 5) FRONTEND INTEGRATION: Instagram dashboard view not loading properly - shows main dashboard instead. Backend API is 77.7% functional but frontend integration completely broken. CRITICAL: Users cannot access Instagram management functionality despite implementation existing."
 
   - task: "CRM Contact Management"
     implemented: true
