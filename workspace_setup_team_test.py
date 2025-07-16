@@ -114,7 +114,7 @@ class WorkspaceSetupTeamTest:
                 "name": "Professional Plan (4 features)",
                 "data": {
                     "plan_id": 2,
-                    "features": [1, 2, 3, 4],
+                    "features": [2, 3, 4, 5],  # Features not included in free plan
                     "billing_interval": "monthly"
                 },
                 "expected_monthly": 4.0,  # $1 per feature per month
@@ -126,7 +126,7 @@ class WorkspaceSetupTeamTest:
                 "name": "Enterprise Plan (6 features)",
                 "data": {
                     "plan_id": 3,
-                    "features": [1, 2, 3, 4, 5, 6],
+                    "features": [2, 3, 4, 5, 6, 8],  # Features not included in free plan
                     "billing_interval": "monthly"
                 },
                 "expected_monthly": 9.0,  # $1.50 per feature per month
@@ -135,14 +135,14 @@ class WorkspaceSetupTeamTest:
                 "pricing_key": "correct_enterprise_pricing"
             },
             {
-                "name": "Free Plan (3 features)",
+                "name": "Free Plan (3 features - 2 paid)",
                 "data": {
                     "plan_id": 1,
-                    "features": [1, 2, 3],
+                    "features": [1, 2, 7],  # 1 and 7 are free, 2 is paid
                     "billing_interval": "monthly"
                 },
-                "expected_monthly": 0.0,  # Free plan
-                "expected_yearly": 0.0,   # Free plan
+                "expected_monthly": 0.0,  # Free plan - no charge even for paid features
+                "expected_yearly": 0.0,   # Free plan - no charge even for paid features
                 "test_key": "free_plan_test",
                 "pricing_key": "correct_free_pricing"
             }
