@@ -695,13 +695,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Critical Backend System Failures"
-    - "Workspace Setup Wizard POST Endpoints"
-    - "Instagram Management System Recovery"
-    - "Payment Processing API Key Configuration"
+    - "Workspace Setup Wizard POST Endpoints (main-goals, feature-selection)"
+    - "Instagram Management Post Creation and Hashtag Research"
+    - "Payment Processing Stripe API Key Configuration"
+    - "Database Schema Issues (status column, custom_domain column)"
   stuck_tasks:
     - "Workspace Setup Wizard POST Endpoints"
-    - "Instagram Management Account/Post Creation"
+    - "Instagram Management Post Creation"
+    - "Payment Processing Status Verification"
   test_all: false
   test_priority: "critical_failures_first"
 
