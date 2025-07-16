@@ -654,7 +654,7 @@ class InstagramManagementTest:
                         
                         if 'post' in data:
                             post = data['post']
-                            print(f"✅ Post updated successfully: {post.get('title')}")
+                            print(f"✅ Post updated successfully: {post.get('caption', 'N/A')[:50]}...")
                             print(f"   Updated hashtags: {len(post.get('hashtags', []))} hashtags")
                         else:
                             print("❌ No post data in response")
