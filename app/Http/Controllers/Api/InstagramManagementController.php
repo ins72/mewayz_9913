@@ -88,14 +88,20 @@ class InstagramManagementController extends Controller
             ]);
             
             $user = Auth::user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            // Get the user's organization (workspace)
+            $organization = $user->organizations()->first();
+            if (!$organization) {
+                // Create a default organization if none exists
+                $organization = $user->organizations()->create([
+                    'name' => $user->name . "'s Workspace",
+                    'slug' => strtolower(str_replace(' ', '-', $user->name)) . '-workspace',
+                    'is_active' => true
+                ]);
             }
             
             // Check if account already exists
-            $existingAccount = InstagramAccount::where('workspace_id', $workspace->id)
+            $existingAccount = InstagramAccount::where('workspace_id', $organization->id)
                 ->where('username', $request->username)
                 ->first();
             
@@ -106,7 +112,7 @@ class InstagramManagementController extends Controller
             }
             
             $account = InstagramAccount::create([
-                'workspace_id' => $workspace->id,
+                'workspace_id' => $organization->id,
                 'user_id' => $user->id,
                 'instagram_user_id' => 'demo_' . $request->username, // Demo ID
                 'username' => $request->username,
