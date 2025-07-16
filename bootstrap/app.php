@@ -75,7 +75,9 @@ if (!defined('QRSPEC_VERSION_MAX')) {
     define('QRCAP_EC',           3);
 }
 
-define('QR_IMAGE', true);
+if (!defined('QR_IMAGE')) {
+    define('QR_IMAGE', true);
+}
 
 define('STRUCTURE_HEADER_BITS',  20);
 define('MAX_STRUCTURED_SYMBOLS', 16);
