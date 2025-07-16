@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_campaign_analytics', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('campaign_id');
-            $table->uuid('subscriber_id');
+            $table->id();
+            $table->unsignedBigInteger('campaign_id');
+            $table->unsignedBigInteger('subscriber_id');
             $table->string('event_type'); // sent, delivered, opened, clicked, unsubscribed, bounced, complained
             $table->timestamp('event_timestamp');
             $table->string('user_agent')->nullable();
