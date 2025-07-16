@@ -251,23 +251,20 @@ class MewayzPhase1Test:
         test_scenarios = [
             {
                 "name": "Free Plan Test",
-                "features": ["bio_sites", "basic_analytics"],
-                "expected_plan": "free",
-                "expected_cost": 0,
+                "plan_id": 1,
+                "billing_interval": "monthly",
                 "result_key": "free_plan_test"
             },
             {
                 "name": "Professional Plan Test", 
-                "features": ["bio_sites", "social_media", "analytics", "email_marketing", "crm"],
-                "expected_plan": "professional",
-                "billing_cycle": "monthly",
+                "plan_id": 2,
+                "billing_interval": "monthly",
                 "result_key": "professional_plan_test"
             },
             {
                 "name": "Enterprise Plan Test",
-                "features": ["bio_sites", "social_media", "analytics", "email_marketing", "crm", "ecommerce", "courses", "advanced_analytics"],
-                "expected_plan": "enterprise", 
-                "billing_cycle": "yearly",
+                "plan_id": 3,
+                "billing_interval": "yearly",
                 "result_key": "enterprise_plan_test"
             }
         ]
