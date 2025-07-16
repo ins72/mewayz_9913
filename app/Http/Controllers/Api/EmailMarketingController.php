@@ -544,4 +544,107 @@ class EmailMarketingController extends Controller
             ];
         });
     }
+
+    /**
+     * Test ElasticEmail integration
+     */
+    public function testElasticEmail()
+    {
+        try {
+            $elasticEmailService = new ElasticEmailService();
+            
+            // Test connection
+            $result = $elasticEmailService->testConnection();
+            
+            if ($result['success']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'ElasticEmail connection successful',
+                    'account_info' => $result['account'] ?? null,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error'],
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('ElasticEmail test error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to test ElasticEmail connection',
+            ], 500);
+        }
+    }
+
+    /**
+     * Send campaign using ElasticEmail
+     */
+    public function sendCampaignWithElasticEmail($campaignId)
+    {
+        try {
+            $user = Auth::user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $campaign = EmailCampaign::where('id', $campaignId)
+                ->where('workspace_id', $workspace->id)
+                ->first();
+
+            if (!$campaign) {
+                return response()->json(['error' => 'Campaign not found'], 404);
+            }
+
+            // Get subscribers
+            $subscribers = EmailSubscriber::where('workspace_id', $workspace->id)
+                ->where('status', 'subscribed')
+                ->get();
+
+            if ($subscribers->isEmpty()) {
+                return response()->json(['error' => 'No subscribers found'], 400);
+            }
+
+            $elasticEmailService = new ElasticEmailService();
+            
+            // Send bulk email
+            $emails = $subscribers->pluck('email')->toArray();
+            $result = $elasticEmailService->sendBulkEmails(
+                $emails,
+                $campaign->subject,
+                $campaign->content,
+                $campaign->from_email,
+                $campaign->from_name
+            );
+
+            if ($result['success']) {
+                // Update campaign status
+                $campaign->update([
+                    'status' => 'sent',
+                    'sent_at' => now(),
+                    'total_recipients' => count($emails),
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Campaign sent successfully',
+                    'recipients' => count($emails),
+                    'message_id' => $result['message_id'],
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result['error'],
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('ElasticEmail send campaign error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to send campaign',
+            ], 500);
+        }
+    }
 }
