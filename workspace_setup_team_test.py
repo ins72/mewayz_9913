@@ -562,7 +562,7 @@ class WorkspaceSetupTeamTest:
             pricing_data = {
                 "plan_id": 2,  # Professional plan
                 "features": [1, 2, 3, 4],
-                "billing_cycle": "monthly"
+                "billing_interval": "monthly"
             }
             
             response = requests.post(
