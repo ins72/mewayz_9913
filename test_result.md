@@ -408,9 +408,9 @@ backend:
 
   - task: "Course Management System"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/app/Http/Controllers/Api/CourseController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -423,6 +423,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ REVIEW REQUEST TESTING COMPLETED: Course CREATE operations working successfully. POST /api/courses returns 200 status code (no 500 errors). However, user_id assignment verification unclear from response format - responses return HTML instead of JSON, indicating potential routing or middleware issues. Core functionality operational but response format needs investigation."
+      - working: false
+        agent: "testing"
+        comment: "❌ FOCUSED REVIEW TESTING COMPLETED: Course user_id assignment fix NOT WORKING. POST /api/courses fails with SQLSTATE[22007] error - 'Incorrect integer value: 'draft' for column courses.status'. Same issue as e-commerce products - database expects integer for status field but controller sends string 'draft'. Additionally, course creation returns HTML error page instead of JSON, indicating routing/middleware issues. CRITICAL: Course status field needs integer fix similar to e-commerce products."
 
   - task: "Email Marketing System"
     implemented: true
