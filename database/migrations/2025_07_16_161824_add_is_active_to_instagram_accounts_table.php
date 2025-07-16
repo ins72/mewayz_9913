@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('instagram_accounts', function (Blueprint $table) {
-            $table->boolean('is_active')->default(true)->after('account_type');
+            $table->boolean('is_active')->default(true)->after('is_connected');
         });
     }
 
