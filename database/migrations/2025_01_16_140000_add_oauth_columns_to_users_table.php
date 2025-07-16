@@ -12,10 +12,26 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('oauth_provider')->nullable()->after('email_verified_at');
-            $table->string('oauth_id')->nullable()->after('oauth_provider');
-            $table->string('avatar')->nullable()->after('oauth_id');
-            $table->index(['oauth_provider', 'oauth_id']);
+            if (!Schema::hasColumn('users', 'oauth_provider')) {
+                $table->string('oauth_provider')->nullable()->after('email_verified_at');
+            }
+            if (!Schema::hasColumn('users', 'oauth_id')) {
+                $table->string('oauth_id')->nullable()->after('oauth_provider');
+            }
+            // Avatar column already exists, skip adding it
+            
+            // Add index if it doesn't exist
+            $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes('users');
+            $indexExists = false;
+            foreach ($indexes as $index) {
+                if ($index->getColumns() === ['oauth_provider', 'oauth_id']) {
+                    $indexExists = true;
+                    break;
+                }
+            }
+            if (!$indexExists) {
+                $table->index(['oauth_provider', 'oauth_id']);
+            }
         });
     }
 
