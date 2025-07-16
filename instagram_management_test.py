@@ -564,10 +564,9 @@ class InstagramManagementTest:
                 print("\n🧪 Testing post scheduling...")
                 future_date = (datetime.now() + timedelta(hours=2)).isoformat()
                 scheduled_data = {
-                    "title": "Scheduled Post Test",
                     "caption": "This is a scheduled post test",
                     "media_urls": ["https://example.com/scheduled.jpg"],
-                    "post_type": "feed",
+                    "post_type": "photo",
                     "scheduled_at": future_date
                 }
                 
