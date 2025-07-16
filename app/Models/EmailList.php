@@ -70,8 +70,7 @@ class EmailList extends Model
     {
         if (!$this->subscribers()->where('subscriber_id', $subscriber->id)->exists()) {
             $this->subscribers()->attach($subscriber->id, [
-                'subscribed_at' => now(),
-                'id' => (string) Str::uuid()
+                'subscribed_at' => now()
             ]);
             $this->updateSubscriberCount();
         }
