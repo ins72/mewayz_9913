@@ -338,8 +338,8 @@ class MewayzPhase1Test:
                 monthly_data = monthly_response.json()
                 yearly_data = yearly_response.json()
                 
-                monthly_cost = monthly_data.get('total_cost', 0)
-                yearly_cost = yearly_data.get('total_cost', 0)
+                monthly_cost = monthly_data.get('data', {}).get('pricing', {}).get('total_price', 0)
+                yearly_cost = yearly_data.get('data', {}).get('pricing', {}).get('total_price', 0)
                 
                 print(f"   ✅ Monthly cost: ${monthly_cost}")
                 print(f"   ✅ Yearly cost: ${yearly_cost}")
