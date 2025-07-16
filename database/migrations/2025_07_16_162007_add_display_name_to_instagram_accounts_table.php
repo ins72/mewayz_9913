@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('instagram_accounts', function (Blueprint $table) {
-            //
+            $table->string('display_name')->nullable()->after('username');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('instagram_accounts', function (Blueprint $table) {
-            //
+            $table->dropColumn('display_name');
         });
     }
 };
