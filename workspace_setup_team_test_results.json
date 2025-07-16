@@ -9,26 +9,26 @@
     "correct_enterprise_pricing": true,
     "correct_free_pricing": true,
     "features_array_accepted": true,
-    "response_time": 0.0285799503326416
+    "response_time": 0.027363061904907227
   },
   "team_invitation_test": {
     "endpoint_accessible": true,
     "response_status": 200,
     "invitation_created": true,
-    "uuid_generated": false,
-    "token_generated": false,
-    "email_validation": false,
-    "role_assignment": false,
-    "response_time": 0.027037858963012695
+    "uuid_generated": true,
+    "token_generated": true,
+    "email_validation": true,
+    "role_assignment": true,
+    "response_time": 0.025715351104736328
   },
   "invitation_details_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "invitation_found": false,
-    "uuid_validation": false,
-    "details_complete": false,
-    "status_tracking": false,
-    "response_time": 0.019401073455810547
+    "response_status": 200,
+    "invitation_found": true,
+    "uuid_validation": true,
+    "details_complete": true,
+    "status_tracking": true,
+    "response_time": 0.023891448974609375
   },
   "workspace_setup_flow_test": {
     "initial_data_loaded": false,
@@ -39,15 +39,15 @@
     "pricing_calculated": false,
     "subscription_saved": true,
     "setup_status_retrieved": true,
-    "response_time": 0.02203679084777832
+    "response_time": 0.024126768112182617
   },
   "test_summary": {
-    "overall_score": 50.83333333333333,
+    "overall_score": 87.5,
     "pricing_score": 100.0,
-    "team_invite_score": 33.33333333333333,
-    "invite_details_score": 20.0,
+    "team_invite_score": 100.0,
+    "invite_details_score": 100.0,
     "setup_flow_score": 50.0,
-    "test_timestamp": "2025-07-16 11:57:02",
-    "total_response_time": 0.09705567359924316
+    "test_timestamp": "2025-07-16 11:57:55",
+    "total_response_time": 0.10109663009643555
   }
 }
