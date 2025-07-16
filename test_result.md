@@ -262,15 +262,18 @@ backend:
 
   - task: "Team Management System"
     implemented: true
-    working: "NA"
+    working: true
     file: "app/Http/Controllers/Api/TeamManagementController.php"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Cannot test - server not running. Previous audit shows 100% functional with invitations, role management, permissions."
+      - working: true
+        agent: "testing"
+        comment: "✅ MOSTLY WORKING: Team Management functional - 2/3 tests passed (66.7%). Team listing working. Minor: Team invitation fails due to user already invited validation. Core functionality operational."
 
   - task: "CRM System"
     implemented: true
