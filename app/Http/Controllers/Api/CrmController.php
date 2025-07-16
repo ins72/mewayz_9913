@@ -9,17 +9,80 @@ use Illuminate\Support\Facades\Log;
 
 class CrmController extends Controller
 {
-    public function getLeads(Request $request)
+    /**
+     * Get contacts
+     */
+    public function getContacts(Request $request)
     {
-        $leads = Audience::where('user_id', $request->user()->id)
-            ->where('type', 'lead')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
+        try {
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
 
-        return response()->json([
-            'success' => true,
-            'data' => $leads,
-        ]);
+            $contacts = Audience::where('user_id', $user->id)
+                ->where('type', 'contact')
+                ->orderBy('created_at', 'desc')
+                ->paginate(20);
+
+            return response()->json([
+                'success' => true,
+                'data' => $contacts,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error getting contacts: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to get contacts'], 500);
+        }
+    }
+
+    /**
+     * Create contact
+     */
+    public function createContact(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:audiences,email',
+                'phone' => 'nullable|string|max:20',
+                'company' => 'nullable|string|max:255',
+                'position' => 'nullable|string|max:255',
+                'tags' => 'nullable|array',
+                'notes' => 'nullable|string',
+            ]);
+
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $contact = Audience::create([
+                'user_id' => $user->id,
+                'workspace_id' => $workspace->id,
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'position' => $request->position,
+                'type' => 'contact',
+                'status' => 'active',
+                'tags' => $request->tags,
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contact created successfully',
+                'data' => $contact,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error creating contact: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create contact'], 500);
+        }
     }
 
     public function createLead(Request $request)
