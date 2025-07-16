@@ -1,0 +1,703 @@
+{
+  "summary": {
+    "total_tests": 75,
+    "passed": 36,
+    "failed": 39,
+    "errors": 0,
+    "success_rate": 48.0,
+    "avg_response_time_ms": 44.253066666666676,
+    "test_timestamp": "2025-07-16T15:13:57.307402"
+  },
+  "results": [
+    {
+      "timestamp": "2025-07-16T15:13:54.081671",
+      "endpoint": "/",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 100.0,
+      "status_code": 0,
+      "details": "Laravel server is running"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.105530",
+      "endpoint": "/health",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 23.72,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.130173",
+      "endpoint": "/system/info",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.55,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.152159",
+      "endpoint": "/system/maintenance",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.91,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.174989",
+      "endpoint": "/platform/overview",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 22.75,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.203910",
+      "endpoint": "/platform/statistics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 28.83,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'WHERE' (Connec"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.225286",
+      "endpoint": "/platform/features",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.3,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.246979",
+      "endpoint": "/branding/info",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.61,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.268244",
+      "endpoint": "/optimization/performance",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.19,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.294428",
+      "endpoint": "/auth/register",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.09,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The email has already been taken.\",\"errors\":{\"email\":[\"The email has already been taken."
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.572219",
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 277.73,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.614463",
+      "endpoint": "/auth/me",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 42.12,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.639461",
+      "endpoint": "/auth/profile",
+      "method": "PUT",
+      "status": "FAIL",
+      "response_time_ms": 24.92,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The email field is required.\",\"errors\":{\"email\":[\"The email field is required.\"]}}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.661715",
+      "endpoint": "/auth/oauth-status",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.18,
+      "status_code": 404,
+      "details": "Status: 404 - {\n    \"message\": \"\",\n    \"exception\": \"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpExcept"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.684344",
+      "endpoint": "/auth/2fa/status",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.51,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Attempt to read property \\\"two_factor_enabled\\\" on null\",\n    \"exception\": \"ErrorE"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.722782",
+      "endpoint": "/workspace-setup/initial-data",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 38.34,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.751183",
+      "endpoint": "/workspace-setup/main-goals",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 28.33,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.778689",
+      "endpoint": "/workspace-setup/main-goals",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 27.42,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save main goals\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.804062",
+      "endpoint": "/workspace-setup/available-features",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.3,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The selected goals field is required.\",\"errors\":{\"selected_goals\":[\"The selected goals f"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.829815",
+      "endpoint": "/workspace-setup/feature-selection",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.67,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save feature selection\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.858732",
+      "endpoint": "/workspace-setup/team-setup",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 28.84,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.883637",
+      "endpoint": "/workspace-setup/subscription-plans",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.83,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.909263",
+      "endpoint": "/workspace-setup/subscription-selection",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.55,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save subscription selection\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.935931",
+      "endpoint": "/workspace-setup/branding-configuration",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.58,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save branding configuration\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.961333",
+      "endpoint": "/workspace-setup/complete",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.32,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"error\":\"Please complete all setup steps\",\"missing_steps\":[\"main_goals\",\"feature_se"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:54.986984",
+      "endpoint": "/workspace-setup/summary",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.58,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.014606",
+      "endpoint": "/workspace-setup/status",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.53,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.043158",
+      "endpoint": "/instagram-management/accounts",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 28.47,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to fetch Instagram accounts\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.068682",
+      "endpoint": "/instagram-management/accounts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.44,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to add Instagram account\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.101494",
+      "endpoint": "/instagram-management/posts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 32.76,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.132775",
+      "endpoint": "/instagram-management/posts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 31.19,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to create Instagram post\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.158300",
+      "endpoint": "/instagram-management/hashtag-research",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.45,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to fetch hashtag research\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.185675",
+      "endpoint": "/instagram-management/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.29,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.217502",
+      "endpoint": "/instagram/competitor-analysis",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 31.76,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The username field is required. (and 1 more error)\",\"errors\":{\"username\":[\"The username "
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.244081",
+      "endpoint": "/instagram/hashtag-analysis",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.49,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The hashtag field is required. (and 1 more error)\",\"errors\":{\"hashtag\":[\"The hashtag fie"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.271961",
+      "endpoint": "/instagram/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 27.81,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"message\":\"No Instagram account connected\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.298091",
+      "endpoint": "/instagram/audience-intelligence",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.06,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The account id field is required. (and 1 more error)\",\"errors\":{\"account_id\":[\"The accou"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.324004",
+      "endpoint": "/instagram/content-suggestions",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.83,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"message\":\"No Instagram account connected\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.354815",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 30.7,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.381694",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.8,
+      "status_code": 400,
+      "details": "Status: 400 - {\"error\":\"Validation failed\",\"details\":{\"template_id\":[\"The selected template id is invalid.\"],\"reci"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.408851",
+      "endpoint": "/email-marketing/templates",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.1,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.438062",
+      "endpoint": "/email-marketing/lists",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 29.13,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.466048",
+      "endpoint": "/email-marketing/subscribers",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.92,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.508785",
+      "endpoint": "/email-marketing/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 42.67,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:55.530659",
+      "endpoint": "/payments/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.76,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.222747",
+      "endpoint": "/payments/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 692.02,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.488032",
+      "endpoint": "/payments/checkout/status/cs_test_a1sL5EozZRe878SW8AvIHHlWnYuNokbawSfy79t1ndpgSnz3ianThtwMpE",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 265.19,
+      "status_code": 500,
+      "details": "Status: 500 - {\"error\":\"Failed to get checkout status\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.524620",
+      "endpoint": "/team",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 36.49,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.568520",
+      "endpoint": "/team/invite",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 43.83,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.603967",
+      "endpoint": "/crm/contacts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 35.35,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.631152",
+      "endpoint": "/crm/contacts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 27.1,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Method App\\\\Http\\\\Controllers\\\\Api\\\\CrmController::createContact does not exist.\","
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.661519",
+      "endpoint": "/crm/leads",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 30.31,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.690025",
+      "endpoint": "/crm/leads",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 28.39,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"SQLSTATE[42S02]: Base table or view not found: 1146 Table 'mewayz_db.audiences' do"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.716948",
+      "endpoint": "/crm/ai-lead-scoring",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.86,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The scoring model field is required.\",\"errors\":{\"scoring_model\":[\"The scoring model fiel"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.746198",
+      "endpoint": "/crm/advanced-pipeline-management",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 29.18,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"message\":\"Failed to retrieve advanced pipeline management data: Method App\\\\Http\\\\"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.772820",
+      "endpoint": "/crm/predictive-analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.54,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The prediction type field is required. (and 1 more error)\",\"errors\":{\"prediction_type\":["
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.808390",
+      "endpoint": "/ecommerce/products",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 35.43,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.837971",
+      "endpoint": "/ecommerce/products",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 29.51,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The stock quantity field is required.\",\"errors\":{\"stock_quantity\":[\"The stock quantity f"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.867433",
+      "endpoint": "/ecommerce/orders",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 29.41,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.899373",
+      "endpoint": "/courses",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 31.82,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.926291",
+      "endpoint": "/courses",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.84,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The name field is required. (and 1 more error)\",\"errors\":{\"name\":[\"The name field is req"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.948846",
+      "endpoint": "/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.44,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.970714",
+      "endpoint": "/analytics/reports",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 21.8,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:56.993077",
+      "endpoint": "/analytics/social-media",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.29,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.016657",
+      "endpoint": "/analytics/bio-sites",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.5,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.044769",
+      "endpoint": "/analytics/ecommerce",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 28.03,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.067360",
+      "endpoint": "/analytics/email-marketing",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.51,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Unmatched '}'\",\n    \"exception\": \"ParseError\",\n    \"file\": \"/app/app/Http/Controll"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.111398",
+      "endpoint": "/bio-sites",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 43.96,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.136784",
+      "endpoint": "/bio-sites/themes",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.31,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.164910",
+      "endpoint": "/bio-sites",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 28.04,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'custom_domain' in 'WHERE' "
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.195786",
+      "endpoint": "/social-media/accounts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 30.77,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.223368",
+      "endpoint": "/social-media/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 27.51,
+      "status_code": 404,
+      "details": "Status: 404 - {\"success\":false,\"message\":\"No social media accounts found\"}"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.252348",
+      "endpoint": "/social-media/posts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 28.91,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.279365",
+      "endpoint": "/social-media/posts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.94,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The account ids field is required. (and 2 more errors)\",\"errors\":{\"account_ids\":[\"The ac"
+    },
+    {
+      "timestamp": "2025-07-16T15:13:57.306790",
+      "endpoint": "/social-media/accounts/connect",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 27.37,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The access token field is required. (and 2 more errors)\",\"errors\":{\"access_token\":[\"The "
+    }
+  ],
+  "categories": {
+    "Health & System": 9,
+    "Authentication": 6,
+    "Workspace Setup": 12,
+    "Instagram Management": 11,
+    "Email Marketing": 7,
+    "Payment Processing": 3,
+    "Team Management": 3,
+    "CRM System": 7,
+    "E-commerce": 4,
+    "Course Management": 2,
+    "Analytics": 10,
+    "Bio Sites": 4,
+    "Social Media": 6
+  }
+}
