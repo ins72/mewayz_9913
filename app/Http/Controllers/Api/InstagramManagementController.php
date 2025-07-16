@@ -209,13 +209,12 @@ class InstagramManagementController extends Controller
     {
         try {
             $request->validate([
-                'title' => 'required|string|max:255',
                 'caption' => 'required|string|max:2200',
                 'media_urls' => 'required|array|min:1|max:10',
                 'media_urls.*' => 'url',
                 'hashtags' => 'nullable|array|max:30',
                 'hashtags.*' => 'string|max:100',
-                'post_type' => 'required|string|in:feed,story,reel',
+                'post_type' => 'required|string|in:photo,video,carousel,reel',
                 'scheduled_at' => 'nullable|date|after:now'
             ]);
             
