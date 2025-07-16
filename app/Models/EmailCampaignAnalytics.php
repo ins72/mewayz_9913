@@ -11,9 +11,6 @@ class EmailCampaignAnalytics extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
     protected $fillable = [
         'campaign_id',
         'subscriber_id',
@@ -28,17 +25,6 @@ class EmailCampaignAnalytics extends Model
         'event_data' => 'array',
         'event_timestamp' => 'datetime'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 
     /**
      * Get the campaign this analytics belongs to
