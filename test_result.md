@@ -647,13 +647,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Payment Processing (Stripe)" 
-    - "Instagram Management System"
     - "JavaScript Assets Verification"
-  stuck_tasks:
-    - "Workspace Setup Wizard"
+  stuck_tasks: []
   test_all: false
-  test_priority: "fixes_verification_complete"
+  test_priority: "comprehensive_fixes_verification_complete"
 
 agent_communication:
   - agent: "testing"
