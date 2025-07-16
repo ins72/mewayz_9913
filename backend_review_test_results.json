@@ -1,0 +1,64 @@
+{
+  "course_management_create": {
+    "courses_list_access": true,
+    "course_creation_success": true,
+    "user_id_properly_assigned": false,
+    "database_record_created": false,
+    "course_details_accessible": false,
+    "no_500_errors": true,
+    "response_time": 0.05319809913635254
+  },
+  "bio_site_builder_create": {
+    "bio_sites_list_access": true,
+    "themes_access": true,
+    "bio_site_creation_success": true,
+    "user_id_properly_assigned": false,
+    "database_record_created": false,
+    "no_500_errors": true,
+    "response_time": 0.07116174697875977
+  },
+  "ecommerce_product_create": {
+    "products_list_access": true,
+    "product_creation_success": false,
+    "user_id_properly_assigned": false,
+    "database_record_created": false,
+    "product_details_accessible": false,
+    "no_500_errors": false,
+    "response_time": 0.25286388397216797
+  },
+  "payment_integration": {
+    "packages_endpoint": true,
+    "checkout_session_creation": false,
+    "session_id_returned": false,
+    "checkout_url_returned": false,
+    "webhook_endpoint_accessible": true,
+    "no_500_errors": false,
+    "response_time": 0.22520971298217773
+  },
+  "analytics_dashboard": {
+    "overview_analytics": true,
+    "reports_access": true,
+    "social_media_analytics": false,
+    "bio_site_analytics": false,
+    "ecommerce_analytics": false,
+    "course_analytics": true,
+    "no_500_errors": true,
+    "response_time": 0.22103309631347656
+  },
+  "test_summary": {
+    "overall_score": 44.76190476190475,
+    "area_scores": {
+      "course_management_create": 50.0,
+      "bio_site_builder_create": 66.66666666666666,
+      "ecommerce_product_create": 16.666666666666664,
+      "payment_integration": 33.33333333333333,
+      "analytics_dashboard": 57.14285714285714
+    },
+    "test_timestamp": "2025-07-16T09:05:47.260829",
+    "user_id_assignment_issues": 3,
+    "error_500_issues": 2,
+    "working_features": 0,
+    "critical_issues": 2,
+    "review_request_focus": true
+  }
+}
