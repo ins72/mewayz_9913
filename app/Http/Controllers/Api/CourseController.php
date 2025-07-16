@@ -40,7 +40,7 @@ class CourseController extends Controller
             'category' => $request->category,
             'thumbnail' => $request->thumbnail,
             'level' => $request->level,
-            'status' => 'draft',
+            'status' => 0, // 0 = draft, 1 = published/active
         ]);
 
         return response()->json([
