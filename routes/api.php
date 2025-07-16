@@ -134,6 +134,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/lists', [EmailMarketingController::class, 'getEmailLists']);
         Route::get('/subscribers', [EmailMarketingController::class, 'getSubscribers']);
         Route::get('/analytics', [EmailMarketingController::class, 'getAnalytics']);
+        
+        // ElasticEmail integration routes
+        Route::get('/test-elastic-email', [EmailMarketingController::class, 'testElasticEmail']);
+        Route::post('/campaigns/{campaignId}/send-elastic-email', [EmailMarketingController::class, 'sendCampaignWithElasticEmail']);
     });
     
     // Workspace Setup Wizard routes
