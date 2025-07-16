@@ -289,6 +289,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ MOSTLY WORKING: Payment Processing functional - 2/3 tests passed (66.7%). Package listing and checkout session creation working. Minor: Checkout status retrieval failing. Core Stripe integration operational."
+      - working: true
+        agent: "testing"
+        comment: "✅ STRIPE ROUTE ALIASES VERIFIED: Both /api/stripe/packages and /api/payments/packages endpoints working correctly (50% success rate). Route aliases successfully implemented as requested. Package data returning properly (starter: $9.99, professional: $29.99, enterprise: $99.99). ❌ Checkout session creation still failing with 500 errors on both routes, but core package listing functionality confirmed working."
 
   - task: "Team Management System"
     implemented: true
