@@ -1,20 +1,20 @@
 {
-  "success_rate": 35.483870967741936,
+  "success_rate": 6.451612903225806,
   "total_tests": 31,
-  "passed": 11,
-  "failed": 20,
-  "critical_failures": 10,
+  "passed": 2,
+  "failed": 29,
+  "critical_failures": 0,
   "systems": {
     "CRM System": {
-      "passed": 2,
+      "passed": 1,
       "total": 7
     },
     "Instagram Management": {
-      "passed": 2,
+      "passed": 0,
       "total": 11
     },
     "Workspace Setup": {
-      "passed": 6,
+      "passed": 0,
       "total": 12
     },
     "Authentication": {
