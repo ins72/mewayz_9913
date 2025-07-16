@@ -104,7 +104,7 @@ async def fill_stripe_form(page):
 
 async def test_mewayz_frontend():
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=True)
         context = await browser.new_context()
         page = await context.new_page()
         
