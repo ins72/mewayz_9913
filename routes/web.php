@@ -86,8 +86,12 @@ Route::get('/dashboard/store', function () {
 })->middleware(['auth'])->name('dashboard-store-index');
 
 Route::get('/dashboard/courses', function () {
-    return view('pages.dashboard.courses.index');
-})->middleware(['auth'])->name('dashboard-courses-index');
+    return view('pages.dashboard.courses.index-dynamic');
+})->middleware(['auth'])->name('dashboard.courses.index');
+
+Route::get('/dashboard/courses/create', function () {
+    return view('pages.dashboard.courses.create');
+})->middleware(['auth'])->name('dashboard.courses.create');
 
 Route::get('/dashboard/booking', function () {
     return view('pages.dashboard.booking.index');
