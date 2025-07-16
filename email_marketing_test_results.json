@@ -1,0 +1,99 @@
+{
+  "campaigns_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "campaigns_returned": true,
+    "pagination_present": true,
+    "workspace_isolation": true,
+    "response_time": 0.04205632209777832
+  },
+  "campaigns_create_test": {
+    "endpoint_accessible": true,
+    "response_status": 201,
+    "campaign_created": true,
+    "validation_working": true,
+    "required_fields_validated": true,
+    "response_time": 0.037964582443237305
+  },
+  "campaign_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "campaign_found": true,
+    "campaign_details": true,
+    "metrics_included": true,
+    "response_time": 0.03810310363769531
+  },
+  "campaign_update_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "campaign_updated": true,
+    "validation_working": false,
+    "edit_restrictions": false,
+    "response_time": 0.0341646671295166
+  },
+  "campaign_delete_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "campaign_deleted": true,
+    "proper_cleanup": true,
+    "response_time": 0.02598738670349121
+  },
+  "campaign_send_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "campaign_sent": true,
+    "status_updated": true,
+    "analytics_generated": true,
+    "response_time": 0.06655097007751465
+  },
+  "templates_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "templates_returned": true,
+    "default_templates": true,
+    "template_categories": true,
+    "response_time": 0.02758932113647461
+  },
+  "lists_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "lists_returned": true,
+    "subscriber_counts": true,
+    "growth_metrics": true,
+    "response_time": 0.034893035888671875
+  },
+  "subscribers_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "subscribers_returned": true,
+    "pagination_working": true,
+    "filters_working": true,
+    "response_time": 0.02513718605041504
+  },
+  "analytics_get_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "analytics_returned": true,
+    "overview_metrics": true,
+    "campaign_performance": true,
+    "subscriber_growth": true,
+    "response_time": 0.04067802429199219
+  },
+  "test_summary": {
+    "overall_score": 95.0,
+    "individual_scores": {
+      "Campaign Retrieval": 100.0,
+      "Campaign Creation": 100.0,
+      "Individual Campaign": 100.0,
+      "Campaign Updates": 50.0,
+      "Campaign Sending": 100.0,
+      "Template Retrieval": 100.0,
+      "Email Lists": 100.0,
+      "Subscriber Management": 100.0,
+      "Analytics Data": 100.0,
+      "Campaign Deletion": 100.0
+    },
+    "test_timestamp": "2025-07-16 13:29:32",
+    "total_response_time": 0.3731245994567871
+  }
+}
