@@ -296,11 +296,7 @@ class FocusedCriticalTester:
         
         # Test hashtag research (previously failing with 500 errors)
         print("\n🏷️ Testing Hashtag Research:")
-        hashtag_data = {
-            "keyword": "business",
-            "limit": 20
-        }
-        self.make_request("GET", "/instagram-management/hashtag-research", data=hashtag_data)
+        self.make_request("GET", "/instagram-management/hashtag-research?keyword=business&limit=20")
         
         # Test analytics
         print("\n📊 Testing Analytics:")
