@@ -312,9 +312,9 @@ backend:
 
   - task: "Payment Processing (Stripe)"
     implemented: true
-    working: true
+    working: false
     file: "app/Http/Controllers/Api/StripePaymentController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -330,6 +330,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ STRIPE PAYMENT INTEGRATION FULLY WORKING: 100% success rate (9/9 tests passed). MAJOR IMPROVEMENTS VERIFIED: 1) Route aliases working perfectly - both /api/stripe/ and /api/payments/ prefixes return identical data, 2) Checkout session validation fixed - accepts both 'package' and 'package_id' parameters on both route aliases, 3) Test mode working for local development when API keys not configured. All endpoints responding correctly: packages listing, checkout session creation with flexible parameter validation. Complete Stripe integration operational and ready for production."
+      - working: false
+        agent: "testing"
+        comment: "🚨 STRIPE PAYMENT ISSUES: Current testing shows 66.7% success rate (2/3 tests passed). Working: GET /payments/packages, POST /payments/checkout/session. CRITICAL FAILURE: GET /payments/checkout/status failing with 500 error 'Invalid API Key provided' - indicates Stripe API key configuration issues. This prevents payment status verification and completion of payment flow."
 
   - task: "Team Management System"
     implemented: true
