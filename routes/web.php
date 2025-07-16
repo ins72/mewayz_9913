@@ -83,7 +83,7 @@ Route::get('/dashboard/community', function () {
 // Monetization
 Route::get('/dashboard/store', function () {
     return view('pages.dashboard.store.index-dynamic');
-})->middleware(['auth'])->name('dashboard.store.index');
+})->middleware(['auth'])->name('dashboard-store-index');
 
 Route::get('/dashboard/store/create', function () {
     return view('pages.dashboard.store.create');
