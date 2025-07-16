@@ -605,14 +605,14 @@ class InstagramManagementController extends Controller
     private function generateSampleHashtags($keyword, $workspaceId)
     {
         $sampleHashtags = [
-            ['hashtag' => "#{$keyword}", 'post_count' => rand(100000, 5000000), 'engagement_rate' => rand(50, 300) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}life", 'post_count' => rand(50000, 1000000), 'engagement_rate' => rand(100, 400) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}love", 'post_count' => rand(200000, 2000000), 'engagement_rate' => rand(80, 250) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}daily", 'post_count' => rand(30000, 500000), 'engagement_rate' => rand(150, 350) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}inspiration", 'post_count' => rand(100000, 800000), 'engagement_rate' => rand(120, 280) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}tips", 'post_count' => rand(80000, 600000), 'engagement_rate' => rand(100, 300) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}community", 'post_count' => rand(150000, 1200000), 'engagement_rate' => rand(90, 220) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
-            ['hashtag' => "#{$keyword}goals", 'post_count' => rand(40000, 400000), 'engagement_rate' => rand(140, 320) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}", 'posts_count' => rand(100000, 5000000), 'engagement_rate' => rand(50, 300) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}life", 'posts_count' => rand(50000, 1000000), 'engagement_rate' => rand(100, 400) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}love", 'posts_count' => rand(200000, 2000000), 'engagement_rate' => rand(80, 250) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}daily", 'posts_count' => rand(30000, 500000), 'engagement_rate' => rand(150, 350) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}inspiration", 'posts_count' => rand(100000, 800000), 'engagement_rate' => rand(120, 280) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}tips", 'posts_count' => rand(80000, 600000), 'engagement_rate' => rand(100, 300) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}community", 'posts_count' => rand(150000, 1200000), 'engagement_rate' => rand(90, 220) / 100, 'difficulty' => 'medium', 'is_trending' => rand(0, 1)],
+            ['hashtag' => "#{$keyword}goals", 'posts_count' => rand(40000, 400000), 'engagement_rate' => rand(140, 320) / 100, 'difficulty' => 'easy', 'is_trending' => rand(0, 1)],
         ];
         
         return array_map(function($hashtag) use ($workspaceId) {
