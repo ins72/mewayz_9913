@@ -39,13 +39,13 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         // Configure Folio routes for authenticated dashboard pages
-        Folio::path(resource_path('views/pages/dashboard'))->uri('/dashboard')->middleware([
-            '*' => ['web', 'auth'],
-        ]);
+        // Folio::path(resource_path('views/pages/dashboard'))->uri('/dashboard')->middleware([
+        //     '*' => ['web', 'auth'],
+        // ]);
         
         // Configure Folio routes for public pages
-        Folio::path(resource_path('views/pages'))->middleware([
-            '*' => ['web'],
-        ]);
+        // Folio::path(resource_path('views/pages'))->middleware([
+        //     '*' => ['web'],
+        // ]);
     }
 }
