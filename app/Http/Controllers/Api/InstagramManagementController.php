@@ -21,14 +21,14 @@ class InstagramManagementController extends Controller
     {
         try {
             $user = Auth::user();
-            $workspace = $user->organizations()->first();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
                 return response()->json(['error' => 'Workspace not found'], 404);
             }
             
             $accounts = InstagramAccount::where('workspace_id', $workspace->id)
-                ->orderBy('is_primary', 'desc')
+                ->orderBy('is_active', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->get();
             
@@ -38,15 +38,18 @@ class InstagramManagementController extends Controller
                     return [
                         'id' => $account->id,
                         'username' => $account->username,
+                        'display_name' => $account->display_name,
                         'profile_picture_url' => $account->profile_picture_url,
                         'bio' => $account->bio,
                         'followers_count' => $account->followers_count,
                         'following_count' => $account->following_count,
                         'media_count' => $account->media_count,
-                        'is_connected' => $account->is_connected,
-                        'is_primary' => $account->is_primary,
+                        'is_active' => $account->is_active,
+                        'is_verified' => $account->is_verified,
+                        'account_type' => $account->account_type,
                         'engagement_rate' => $account->getEngagementRate(),
-                        'token_valid' => $account->isTokenValid()
+                        'formatted_followers' => $account->getFormattedFollowersCount(),
+                        'token_expired' => $account->isTokenExpired()
                     ];
                 })
             ]);
