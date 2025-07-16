@@ -1,8 +1,8 @@
 {
   "workspace_setup_wizard": {
     "initial_data_endpoint": true,
-    "goals_save_endpoint": false,
-    "features_get_endpoint": false,
+    "goals_save_endpoint": true,
+    "features_get_endpoint": true,
     "features_save_endpoint": true,
     "team_setup_endpoint": true,
     "pricing_calculate_endpoint": true,
@@ -10,20 +10,20 @@
     "branding_save_endpoint": true,
     "status_get_endpoint": true,
     "reset_endpoint": true,
-    "total_endpoints_working": 8,
+    "total_endpoints_working": 10,
     "response_times": [
-      0.026358604431152344,
-      0.02156376838684082,
-      0.019370317459106445,
-      0.032772064208984375,
-      0.02929830551147461,
-      0.023485660552978516,
-      0.02453136444091797,
-      0.023494243621826172,
-      0.02227330207824707,
-      0.024492740631103516
+      0.025473594665527344,
+      0.02500629425048828,
+      0.027529239654541016,
+      0.03484296798706055,
+      0.028336524963378906,
+      0.023461103439331055,
+      0.025891780853271484,
+      0.023746252059936523,
+      0.023988008499145508,
+      0.028937339782714844
     ],
-    "average_response_time": 0.024764037132263182
+    "average_response_time": 0.02672131061553955
   },
   "feature_based_pricing": {
     "free_plan_test": false,
@@ -70,15 +70,15 @@
     "workspace_creation_oauth": true
   },
   "test_summary": {
-    "overall_score": 40.416666666666664,
-    "workspace_score": 80.0,
+    "overall_score": 43.75,
+    "workspace_score": 100.0,
     "pricing_score": 0.0,
     "team_score": 12.5,
     "template_score": 0.0,
     "database_score": 100.0,
     "oauth_score": 50.0,
-    "test_timestamp": "2025-07-16 11:45:25",
-    "endpoints_tested": 9,
+    "test_timestamp": "2025-07-16 11:45:57",
+    "endpoints_tested": 11,
     "phase1_ready": false
   }
 }
