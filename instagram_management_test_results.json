@@ -3,47 +3,47 @@
     "login_successful": true,
     "token_received": true,
     "response_status": 200,
-    "response_time": 0.39450955390930176
+    "response_time": 0.32375240325927734
   },
   "accounts_retrieval_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "accounts_returned": false,
-    "workspace_isolation": false,
-    "proper_json_format": false,
-    "account_fields_present": false,
-    "response_time": 0.03949880599975586
+    "response_status": 200,
+    "accounts_returned": true,
+    "workspace_isolation": true,
+    "proper_json_format": true,
+    "account_fields_present": true,
+    "response_time": 0.027324914932250977
   },
   "account_creation_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "account_created": false,
+    "response_status": 200,
+    "account_created": true,
     "validation_working": false,
-    "proper_json_format": false,
-    "workspace_assignment": false,
-    "duplicate_prevention": false,
-    "response_time": 0.0340423583984375
+    "proper_json_format": true,
+    "workspace_assignment": true,
+    "duplicate_prevention": true,
+    "response_time": 0.026607275009155273
   },
   "posts_retrieval_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "posts_returned": false,
-    "pagination_working": false,
-    "filters_working": false,
-    "proper_json_format": false,
-    "workspace_isolation": false,
-    "response_time": 0.023424148559570312
+    "response_status": 200,
+    "posts_returned": true,
+    "pagination_working": true,
+    "filters_working": true,
+    "proper_json_format": true,
+    "workspace_isolation": true,
+    "response_time": 0.026275157928466797
   },
   "post_creation_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
+    "response_status": 500,
     "post_created": false,
     "validation_working": false,
     "proper_json_format": false,
     "hashtag_processing": false,
     "media_urls_handling": false,
     "scheduling_working": false,
-    "response_time": 0.02524399757385254
+    "response_time": 0.0288999080657959
   },
   "post_update_test": {
     "endpoint_accessible": false,
@@ -64,26 +64,26 @@
   },
   "hashtag_research_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
+    "response_status": 500,
     "hashtags_returned": false,
     "validation_working": false,
     "proper_json_format": false,
     "keyword_filtering": false,
     "hashtag_data_complete": false,
     "dynamic_generation": false,
-    "response_time": 0.02792978286743164
+    "response_time": 0.030057907104492188
   },
   "analytics_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "analytics_returned": false,
-    "proper_json_format": false,
-    "overview_metrics": false,
-    "top_posts_data": false,
-    "top_hashtags_data": false,
-    "engagement_calculations": false,
-    "date_range_filtering": false,
-    "response_time": 0.022171735763549805
+    "response_status": 200,
+    "analytics_returned": true,
+    "proper_json_format": true,
+    "overview_metrics": true,
+    "top_posts_data": true,
+    "top_hashtags_data": true,
+    "engagement_calculations": true,
+    "date_range_filtering": true,
+    "response_time": 0.028296470642089844
   },
   "workspace_isolation_test": {
     "accounts_isolated": true,
@@ -93,15 +93,15 @@
     "proper_workspace_filtering": true
   },
   "test_summary": {
-    "overall_score": 29.440476190476186,
-    "endpoints_working": 0,
+    "overall_score": 61.19047619047619,
+    "endpoints_working": 4,
     "total_endpoints": 8,
     "authentication_working": true,
     "workspace_isolation": true,
     "validation_working": false,
     "dynamic_generation": false,
-    "business_logic": false,
-    "test_timestamp": "2025-07-16 12:35:36",
-    "total_response_time": 0.5668203830718994
+    "business_logic": true,
+    "test_timestamp": "2025-07-16 12:36:28",
+    "total_response_time": 0.4912140369415283
   }
 }
