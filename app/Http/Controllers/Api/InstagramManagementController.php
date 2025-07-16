@@ -221,6 +221,7 @@ class InstagramManagementController extends Controller
     {
         try {
             $request->validate([
+                'title' => 'required|string|max:191',
                 'caption' => 'required|string|max:2200',
                 'media_urls' => 'required|array|min:1|max:10',
                 'media_urls.*' => 'url',
