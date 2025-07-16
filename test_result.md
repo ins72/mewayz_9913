@@ -641,14 +641,13 @@ metadata:
 
 test_plan:
   current_focus:
-    - "CRM System" 
+    - "Payment Processing (Stripe)" 
     - "Instagram Management System"
-    - "Workspace Setup Wizard"
+    - "JavaScript Assets Verification"
   stuck_tasks:
-    - "CRM System"
-    - "Instagram Management System"
+    - "Workspace Setup Wizard"
   test_all: false
-  test_priority: "backend_complete"
+  test_priority: "fixes_verification_complete"
 
 agent_communication:
   - agent: "testing"
