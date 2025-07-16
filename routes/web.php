@@ -35,6 +35,21 @@ Route::get('/', function () {
     return view('pages.index');
 })->name('home');
 
+// PWA offline route
+Route::get('/offline', function () {
+    return view('offline');
+})->name('offline');
+
+// PWA manifest route
+Route::get('/manifest.json', function () {
+    return response()->file(public_path('manifest.json'));
+})->name('manifest');
+
+// Service Worker route
+Route::get('/sw.js', function () {
+    return response()->file(public_path('sw.js'));
+})->name('service-worker');
+
 // Dashboard routes - Laravel Folio will handle the dashboard pages
 Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
