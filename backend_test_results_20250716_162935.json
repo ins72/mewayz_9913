@@ -1,0 +1,703 @@
+{
+  "summary": {
+    "total_tests": 75,
+    "passed": 24,
+    "failed": 51,
+    "errors": 0,
+    "success_rate": 32.0,
+    "avg_response_time_ms": 39.23733333333334,
+    "test_timestamp": "2025-07-16T16:29:35.152026"
+  },
+  "results": [
+    {
+      "timestamp": "2025-07-16T16:29:32.302568",
+      "endpoint": "/",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 100.0,
+      "status_code": 0,
+      "details": "Laravel server is running"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.325857",
+      "endpoint": "/health",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 23.15,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.349101",
+      "endpoint": "/system/info",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 23.17,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.369615",
+      "endpoint": "/system/maintenance",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 20.44,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.389579",
+      "endpoint": "/platform/overview",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 19.9,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.419078",
+      "endpoint": "/platform/statistics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 29.42,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status' in 'WHERE' (Connec"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.439931",
+      "endpoint": "/platform/features",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 20.79,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.460926",
+      "endpoint": "/branding/info",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 20.93,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.483052",
+      "endpoint": "/optimization/performance",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 22.06,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.509694",
+      "endpoint": "/auth/register",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.56,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The email has already been taken.\",\"errors\":{\"email\":[\"The email has already been taken."
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.791657",
+      "endpoint": "/auth/login",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 281.9,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.820023",
+      "endpoint": "/auth/me",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 28.23,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.844736",
+      "endpoint": "/auth/profile",
+      "method": "PUT",
+      "status": "FAIL",
+      "response_time_ms": 24.62,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The email field is required.\",\"errors\":{\"email\":[\"The email field is required.\"]}}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.866924",
+      "endpoint": "/auth/oauth-status",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 22.12,
+      "status_code": 404,
+      "details": "Status: 404 - {\n    \"message\": \"\",\n    \"exception\": \"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\NotFoundHttpExcept"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.888252",
+      "endpoint": "/auth/2fa/status",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 21.26,
+      "status_code": 500,
+      "details": "Status: 500 - {\n    \"message\": \"Attempt to read property \\\"two_factor_enabled\\\" on null\",\n    \"exception\": \"ErrorE"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.916079",
+      "endpoint": "/workspace-setup/initial-data",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 27.73,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.940319",
+      "endpoint": "/workspace-setup/main-goals",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 24.18,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.965655",
+      "endpoint": "/workspace-setup/main-goals",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.26,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save main goals\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:32.990076",
+      "endpoint": "/workspace-setup/available-features",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 24.34,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The selected goals field is required.\",\"errors\":{\"selected_goals\":[\"The selected goals f"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.022245",
+      "endpoint": "/workspace-setup/feature-selection",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 32.1,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save feature selection\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.047775",
+      "endpoint": "/workspace-setup/team-setup",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 25.46,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.071799",
+      "endpoint": "/workspace-setup/subscription-plans",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 23.96,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.102077",
+      "endpoint": "/workspace-setup/subscription-selection",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 30.21,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save subscription selection\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.128138",
+      "endpoint": "/workspace-setup/branding-configuration",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.99,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to save branding configuration\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.153497",
+      "endpoint": "/workspace-setup/complete",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.28,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"error\":\"Please complete all setup steps\",\"missing_steps\":[\"main_goals\",\"feature_se"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.180147",
+      "endpoint": "/workspace-setup/summary",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.58,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.206524",
+      "endpoint": "/workspace-setup/status",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.31,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.233137",
+      "endpoint": "/instagram-management/accounts",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.52,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to fetch Instagram accounts\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.258249",
+      "endpoint": "/instagram-management/accounts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.04,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to add Instagram account\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.284330",
+      "endpoint": "/instagram-management/posts",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.03,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.310162",
+      "endpoint": "/instagram-management/posts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.74,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to create Instagram post\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.335421",
+      "endpoint": "/instagram-management/hashtag-research",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.15,
+      "status_code": 500,
+      "details": "Status: 500 - {\"success\":false,\"error\":\"Failed to fetch hashtag research\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.361917",
+      "endpoint": "/instagram-management/analytics",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 26.43,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.387167",
+      "endpoint": "/instagram/competitor-analysis",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.18,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The username field is required. (and 1 more error)\",\"errors\":{\"username\":[\"The username "
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.415309",
+      "endpoint": "/instagram/hashtag-analysis",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 28.07,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The hashtag field is required. (and 1 more error)\",\"errors\":{\"hashtag\":[\"The hashtag fie"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.440792",
+      "endpoint": "/instagram/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.41,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"message\":\"No Instagram account connected\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.466257",
+      "endpoint": "/instagram/audience-intelligence",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.39,
+      "status_code": 422,
+      "details": "Status: 422 - {\"message\":\"The account id field is required. (and 1 more error)\",\"errors\":{\"account_id\":[\"The accou"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.491628",
+      "endpoint": "/instagram/content-suggestions",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.3,
+      "status_code": 400,
+      "details": "Status: 400 - {\"success\":false,\"message\":\"No Instagram account connected\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.520263",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 28.51,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.545897",
+      "endpoint": "/email-marketing/campaigns",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.56,
+      "status_code": 400,
+      "details": "Status: 400 - {\"error\":\"Validation failed\",\"details\":{\"template_id\":[\"The selected template id is invalid.\"],\"reci"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.571829",
+      "endpoint": "/email-marketing/templates",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.88,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.609623",
+      "endpoint": "/email-marketing/lists",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 37.72,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.635238",
+      "endpoint": "/email-marketing/subscribers",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 25.53,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.661015",
+      "endpoint": "/email-marketing/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.7,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:33.682435",
+      "endpoint": "/payments/packages",
+      "method": "GET",
+      "status": "PASS",
+      "response_time_ms": 21.3,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.147340",
+      "endpoint": "/payments/checkout/session",
+      "method": "POST",
+      "status": "PASS",
+      "response_time_ms": 464.84,
+      "status_code": 200,
+      "details": "Status: 200"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.433308",
+      "endpoint": "/payments/checkout/status/cs_test_a1PozZ27dcR8BQjqGtkHpysOwZK7N6PLpqQDTrQlnd1nmFqbGjgnd4CBcg",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 285.85,
+      "status_code": 500,
+      "details": "Status: 500 - {\"error\":\"Failed to get checkout status\"}"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.459672",
+      "endpoint": "/team",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 26.21,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.484093",
+      "endpoint": "/team/invite",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 24.33,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.516516",
+      "endpoint": "/crm/contacts",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 32.34,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.540346",
+      "endpoint": "/crm/contacts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 23.76,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.564121",
+      "endpoint": "/crm/leads",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.68,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.594540",
+      "endpoint": "/crm/leads",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 30.35,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.618199",
+      "endpoint": "/crm/ai-lead-scoring",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.6,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.642495",
+      "endpoint": "/crm/advanced-pipeline-management",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 24.23,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.666318",
+      "endpoint": "/crm/predictive-analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.75,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.693676",
+      "endpoint": "/ecommerce/products",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 27.19,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.717232",
+      "endpoint": "/ecommerce/products",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 23.48,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.741261",
+      "endpoint": "/ecommerce/orders",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.97,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.765273",
+      "endpoint": "/courses",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.89,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.791595",
+      "endpoint": "/courses",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.25,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.815691",
+      "endpoint": "/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.98,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.839554",
+      "endpoint": "/analytics/reports",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.79,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.863865",
+      "endpoint": "/analytics/social-media",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 24.24,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.888104",
+      "endpoint": "/analytics/bio-sites",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 24.17,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.911957",
+      "endpoint": "/analytics/ecommerce",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.78,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.936007",
+      "endpoint": "/analytics/email-marketing",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.98,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.959639",
+      "endpoint": "/bio-sites",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.54,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:34.985352",
+      "endpoint": "/bio-sites/themes",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 25.63,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.011823",
+      "endpoint": "/bio-sites",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 26.38,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.040878",
+      "endpoint": "/social-media/accounts",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 28.95,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.064870",
+      "endpoint": "/social-media/analytics",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 23.93,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.100682",
+      "endpoint": "/social-media/posts",
+      "method": "GET",
+      "status": "FAIL",
+      "response_time_ms": 35.74,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.126313",
+      "endpoint": "/social-media/posts",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.55,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    },
+    {
+      "timestamp": "2025-07-16T16:29:35.151416",
+      "endpoint": "/social-media/accounts/connect",
+      "method": "POST",
+      "status": "FAIL",
+      "response_time_ms": 25.01,
+      "status_code": 429,
+      "details": "Status: 429 - {\n    \"message\": \"Too Many Attempts.\",\n    \"exception\": \"Illuminate\\\\Http\\\\Exceptions\\\\ThrottleReque"
+    }
+  ],
+  "categories": {
+    "Health & System": 9,
+    "Authentication": 6,
+    "Workspace Setup": 12,
+    "Instagram Management": 11,
+    "Email Marketing": 7,
+    "Payment Processing": 3,
+    "Team Management": 3,
+    "CRM System": 7,
+    "E-commerce": 4,
+    "Course Management": 2,
+    "Analytics": 10,
+    "Bio Sites": 4,
+    "Social Media": 6
+  }
+}
