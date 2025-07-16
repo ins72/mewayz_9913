@@ -10,9 +10,18 @@ class Audience extends BaseAudience
 	use AudienceTraitTwo;
 
 	protected $fillable = [
-		'user',
+		'user_id',
+		'workspace_id',
 		'page_id',
 		'name',
+		'email',
+		'phone',
+		'company',
+		'position',
+		'type',
+		'status',
+		'source',
+		'notes',
 		'tags',
 		'contact',
 		'extra'
