@@ -258,6 +258,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/reset', [WorkspaceSetupWizardController::class, 'resetSetup']);
     });
     
+    // Team Management routes
+    Route::prefix('team')->group(function () {
+        Route::get('/', [TeamManagementController::class, 'getTeam']);
+        Route::post('/invite', [TeamManagementController::class, 'sendInvitation']);
+        Route::post('/invitation/{uuid}/accept', [TeamManagementController::class, 'acceptInvitation']);
+        Route::post('/invitation/{uuid}/reject', [TeamManagementController::class, 'rejectInvitation']);
+        Route::get('/invitation/{uuid}', [TeamManagementController::class, 'getInvitationDetails']);
+        Route::post('/invitation/{id}/resend', [TeamManagementController::class, 'resendInvitation']);
+        Route::delete('/invitation/{id}', [TeamManagementController::class, 'cancelInvitation']);
+        Route::put('/member/{id}/role', [TeamManagementController::class, 'updateMemberRole']);
+        Route::delete('/member/{id}', [TeamManagementController::class, 'removeMember']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
