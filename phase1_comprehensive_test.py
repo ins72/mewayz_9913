@@ -136,7 +136,7 @@ class MewayzPhase1Test:
         endpoints_to_test = [
             ("GET", "/workspace-setup/initial-data", "initial_data_endpoint", None),
             ("POST", "/workspace-setup/goals", "goals_save_endpoint", {
-                "goals": ["content_creation", "audience_growth", "monetization"]
+                "goals": ["instagram-management", "link-in-bio", "course-creation"]
             }),
             ("GET", "/workspace-setup/features", "features_get_endpoint", None),
             ("POST", "/workspace-setup/features", "features_save_endpoint", {
