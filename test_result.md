@@ -497,13 +497,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Server Connectivity Test"
-    - "PHP Runtime Installation"
-    - "Laravel Server Startup"
+    - "Team Management Interface" 
+    - "Payment Integration Interface"
+    - "AI Features Interface"
+    - "PWA Manifest Registration"
   stuck_tasks:
-    - "Server Connectivity Test"
+    - "Team Management Interface"
   test_all: false
-  test_priority: "infrastructure_first"
+  test_priority: "frontend_complete"
 
 agent_communication:
   - agent: "testing"
