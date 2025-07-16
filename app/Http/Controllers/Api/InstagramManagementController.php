@@ -271,7 +271,6 @@ class InstagramManagementController extends Controller
                 'message' => 'Instagram post created successfully',
                 'post' => [
                     'id' => $post->id,
-                    'title' => $post->title,
                     'caption' => $post->caption,
                     'media_urls' => $post->media_urls,
                     'hashtags' => $post->hashtags,
