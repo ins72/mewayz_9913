@@ -1150,6 +1150,152 @@ class CrmController extends Controller
     }
 
     /**
+     * Get single contact
+     */
+    public function getContact(Request $request, $contactId)
+    {
+        try {
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $contact = Audience::where('user_id', $user->id)
+                ->where('type', 'contact')
+                ->where('id', $contactId)
+                ->first();
+
+            if (!$contact) {
+                return response()->json(['error' => 'Contact not found'], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $contact,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error getting contact: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to get contact'], 500);
+        }
+    }
+
+    /**
+     * Update contact
+     */
+    public function updateContact(Request $request, $contactId)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:audiences,email,' . $contactId,
+                'phone' => 'nullable|string|max:20',
+                'company' => 'nullable|string|max:255',
+                'position' => 'nullable|string|max:255',
+                'tags' => 'nullable|array',
+                'notes' => 'nullable|string',
+            ]);
+
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $contact = Audience::where('user_id', $user->id)
+                ->where('type', 'contact')
+                ->where('id', $contactId)
+                ->first();
+
+            if (!$contact) {
+                return response()->json(['error' => 'Contact not found'], 404);
+            }
+
+            $contact->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'company' => $request->company,
+                'position' => $request->position,
+                'tags' => $request->tags,
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contact updated successfully',
+                'data' => $contact,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating contact: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update contact'], 500);
+        }
+    }
+
+    /**
+     * Delete contact
+     */
+    public function deleteContact(Request $request, $contactId)
+    {
+        try {
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $contact = Audience::where('user_id', $user->id)
+                ->where('type', 'contact')
+                ->where('id', $contactId)
+                ->first();
+
+            if (!$contact) {
+                return response()->json(['error' => 'Contact not found'], 404);
+            }
+
+            $contact->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Contact deleted successfully',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting contact: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete contact'], 500);
+        }
+    }
+
+    /**
+     * Parse date range from request
+     */
+    private function parseDateRange($dateRange, $startDate = null, $endDate = null)
+    {
+        if ($dateRange === 'custom' && $startDate && $endDate) {
+            return [$startDate, $endDate];
+        }
+
+        $ranges = [
+            'last_7_days' => [now()->subDays(7), now()],
+            'last_30_days' => [now()->subDays(30), now()],
+            'last_90_days' => [now()->subDays(90), now()],
+            'last_year' => [now()->subYear(), now()],
+            'today' => [now()->startOfDay(), now()->endOfDay()],
+            'yesterday' => [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()],
+            'this_week' => [now()->startOfWeek(), now()->endOfWeek()],
+            'last_week' => [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()],
+            'this_month' => [now()->startOfMonth(), now()->endOfMonth()],
+            'last_month' => [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()],
+            'this_year' => [now()->startOfYear(), now()->endOfYear()],
+            'last_year' => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
+        ];
+
+        return $ranges[$dateRange] ?? [now()->subDays(30), now()];
+    }
+
+    /**
      * Parse date range from request
      */
     private function parseDateRange($dateRange)
