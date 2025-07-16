@@ -316,12 +316,12 @@ class MewayzPhase1Test:
         try:
             print(f"\n🧪 Testing Yearly vs Monthly Billing...")
             
-            test_features = ["bio_sites", "social_media", "analytics", "email_marketing"]
+            test_features = [1, 2, 3, 4]  # Use feature IDs
             
             # Monthly billing
             monthly_response = requests.post(
                 f"{self.api_base}/workspace-setup/pricing/calculate",
-                json={"selected_features": test_features, "billing_cycle": "monthly"},
+                json={"plan_id": 2, "billing_interval": "monthly"},
                 headers=self.get_auth_headers(),
                 timeout=10
             )
@@ -329,7 +329,7 @@ class MewayzPhase1Test:
             # Yearly billing
             yearly_response = requests.post(
                 f"{self.api_base}/workspace-setup/pricing/calculate",
-                json={"selected_features": test_features, "billing_cycle": "yearly"},
+                json={"plan_id": 2, "billing_interval": "yearly"},
                 headers=self.get_auth_headers(),
                 timeout=10
             )
