@@ -269,7 +269,7 @@ backend:
     implemented: true
     working: false
     file: "app/Http/Controllers/Api/InstagramManagementController.php"
-    stuck_count: 1
+    stuck_count: 2
     priority: "critical"
     needs_retesting: false
     status_history:
@@ -294,6 +294,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "🚨 INSTAGRAM MANAGEMENT REGRESSED: Current testing shows 27.3% success rate (3/11 tests passed). CRITICAL FAILURES: POST /instagram-management/accounts failing with 500 error 'Failed to add Instagram account', POST /instagram-management/posts failing with 500 error 'Failed to create Instagram post', GET /instagram-management/hashtag-research failing with 500 error. Working endpoints: GET accounts, GET posts, GET analytics. This is a STUCK TASK - previous fixes appear to have been lost or reverted."
+      - working: false
+        agent: "testing"
+        comment: "🎯 FINAL VERIFICATION RESULTS: Instagram Management achieved 66.7% success rate (4/6 tests passed) - BELOW target 100%. MIXED RESULTS: Account creation now working (POST /instagram-management/accounts successful), but CRITICAL FAILURES PERSIST: POST /instagram-management/posts still failing with 500 error 'Failed to create Instagram post', GET /instagram-management/hashtag-research still failing with 500 error 'Failed to fetch hashtag research'. Working endpoints: GET accounts, POST accounts, GET posts, GET analytics. STUCK TASK: Core post creation and hashtag research remain broken despite account management improvements."
 
   - task: "Email Marketing Hub"
     implemented: true
