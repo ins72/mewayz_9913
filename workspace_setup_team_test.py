@@ -180,9 +180,26 @@ class WorkspaceSetupTeamTest:
                         results["features_array_accepted"] = True
                         
                         # Check pricing calculation
-                        pricing = data.get('pricing', {})
-                        monthly_price = pricing.get('monthly_price', 0)
-                        yearly_price = pricing.get('yearly_price', 0)
+                        pricing = data.get('data', {}).get('pricing', {})
+                        monthly_price = pricing.get('total_price', 0)
+                        
+                        # For yearly pricing, we need to make a separate call
+                        yearly_data = test_case['data'].copy()
+                        yearly_data['billing_interval'] = 'yearly'
+                        
+                        yearly_response = requests.post(
+                            f"{self.api_base}/workspace-setup/pricing/calculate",
+                            json=yearly_data,
+                            headers=headers,
+                            timeout=10
+                        )
+                        
+                        yearly_price = 0
+                        if yearly_response.status_code == 200:
+                            yearly_data_resp = yearly_response.json()
+                            if yearly_data_resp.get('success'):
+                                yearly_pricing = yearly_data_resp.get('data', {}).get('pricing', {})
+                                yearly_price = yearly_pricing.get('total_price', 0)
                         
                         print(f"   ✅ Monthly price: ${monthly_price}")
                         print(f"   ✅ Yearly price: ${yearly_price}")
