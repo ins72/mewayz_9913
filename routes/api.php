@@ -71,9 +71,10 @@ Route::prefix('auth')->group(function () {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     
     // OAuth routes
-    Route::get('/oauth/{provider}', [OAuthController::class, 'redirectToProvider']);
-    Route::get('/oauth/{provider}/callback', [OAuthController::class, 'handleProviderCallback']);
-    Route::get('/oauth-status', [OAuthController::class, 'getOAuthStatus']);
+    Route::get('/oauth/providers', [ApiOAuthController::class, 'getProviders']);
+    Route::get('/oauth/{provider}', [ApiOAuthController::class, 'redirectToProvider']);
+    Route::get('/oauth/{provider}/callback', [ApiOAuthController::class, 'handleProviderCallback']);
+    Route::post('/oauth/{provider}/test', [ApiOAuthController::class, 'handleProviderCallback']); // For test mode
     
     // Two-Factor Authentication routes
     Route::post('/2fa/generate', [TwoFactorController::class, 'generate']);
@@ -90,6 +91,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // User profile routes
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
+    
+    // OAuth management (protected routes)
+    Route::get('/oauth/status', [ApiOAuthController::class, 'getOAuthStatus']);
+    Route::post('/oauth/{provider}/link', [ApiOAuthController::class, 'linkAccount']);
+    Route::delete('/oauth/{provider}/unlink', [ApiOAuthController::class, 'unlinkAccount']);
     
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
