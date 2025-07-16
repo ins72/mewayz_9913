@@ -143,11 +143,9 @@ class MewayzPhase1Test:
                 "features": [1, 2, 3, 4]  # Use feature IDs instead of slugs
             }),
             ("POST", "/workspace-setup/team", "team_setup_endpoint", {
-                "team_name": "Test Team",
-                "team_size": "small",
-                "invitations": [
+                "team_members": [
                     {"email": "team1@example.com", "role": "editor"},
-                    {"email": "team2@example.com", "role": "viewer"}
+                    {"email": "team2@example.com", "role": "member"}
                 ]
             }),
             ("POST", "/workspace-setup/pricing/calculate", "pricing_calculate_endpoint", {
