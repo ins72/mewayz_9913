@@ -1,0 +1,269 @@
+{
+  "timestamp": "2025-07-16T17:01:47.544964",
+  "summary": {
+    "total_tests": 11,
+    "passed_tests": 11,
+    "failed_tests": 0,
+    "success_rate": 100.0,
+    "oauth_success_rate": 100.0,
+    "email_success_rate": 100.0,
+    "ai_success_rate": 100.0
+  },
+  "results": [
+    {
+      "method": "GET",
+      "endpoint": "/auth/oauth/providers",
+      "description": "Get OAuth providers",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 20.58,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "providers": {
+          "google": {
+            "name": "Google",
+            "icon": "google",
+            "enabled": true,
+            "test_mode": false
+          },
+          "apple": {
+            "name": "Apple",
+            "icon": "apple",
+            "enabled": true,
+            "test_mode": true
+          },
+          "facebook": {
+            "name": "Facebook",
+            "icon": "facebook",
+            "enabled": true,
+            "test_mode": true
+          },
+          "twitter": {
+            "name": "Twitter",
+            "icon": "twitter",
+            "enabled": true,
+            "test_mode": true
+          }
+        },
+        "test_mode": true
+      },
+      "error": null
+    },
+    {
+      "method": "GET",
+      "endpoint": "/auth/oauth/google",
+      "description": "Google OAuth redirect",
+      "status_code": 500,
+      "expected_status": [
+        200,
+        302,
+        500
+      ],
+      "duration_ms": 20.16,
+      "passed": true,
+      "response_data": {
+        "success": false,
+        "message": "Failed to initiate OAuth flow",
+        "error": "Session store not set on request."
+      },
+      "error": null
+    },
+    {
+      "method": "GET",
+      "endpoint": "/oauth/status",
+      "description": "Get OAuth status",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 28.17,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "oauth_linked": false,
+        "provider": null,
+        "oauth_id": null,
+        "has_password": true,
+        "available_providers": [
+          "google",
+          "apple",
+          "facebook",
+          "twitter"
+        ]
+      },
+      "error": null
+    },
+    {
+      "method": "POST",
+      "endpoint": "/auth/oauth/google/test",
+      "description": "Google OAuth test callback",
+      "status_code": 500,
+      "expected_status": [
+        200,
+        500
+      ],
+      "duration_ms": 20.04,
+      "passed": true,
+      "response_data": {
+        "success": false,
+        "message": "OAuth authentication failed",
+        "error": "Session store not set on request."
+      },
+      "error": null
+    },
+    {
+      "method": "GET",
+      "endpoint": "/email-marketing/test-elastic-email",
+      "description": "Test ElasticEmail connection",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 504.2,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "message": "ElasticEmail connection successful",
+        "account_info": null
+      },
+      "error": null
+    },
+    {
+      "method": "GET",
+      "endpoint": "/email-marketing/campaigns",
+      "description": "Get campaigns for ElasticEmail test",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 27.01,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "campaigns": [],
+        "pagination": {
+          "current_page": 1,
+          "total_pages": 1,
+          "total_items": 0,
+          "per_page": 20
+        }
+      },
+      "error": null
+    },
+    {
+      "method": "GET",
+      "endpoint": "/ai/services",
+      "description": "Get AI services",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 23.41,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "services": {
+          "openai": {
+            "name": "OpenAI GPT",
+            "enabled": true,
+            "test_mode": false,
+            "features": [
+              "chat",
+              "content_generation",
+              "text_analysis"
+            ]
+          },
+          "claude": {
+            "name": "Anthropic Claude",
+            "enabled": true,
+            "test_mode": true,
+            "features": [
+              "chat",
+              "content_generation",
+              "text_analysis"
+            ]
+          },
+          "gemini": {
+            "name": "Google Gemini",
+            "enabled": true,
+            "test_mode": true,
+            "features": [
+              "chat",
+              "content_generation",
+              "text_analysis"
+            ]
+          }
+        },
+        "test_mode": true,
+        "features": {
+          "chat": "AI-powered chat assistance",
+          "content_generation": "Generate marketing content",
+          "text_analysis": "Analyze text and sentiment",
+          "smart_recommendations": "AI-powered recommendations"
+        }
+      },
+      "error": null
+    },
+    {
+      "method": "POST",
+      "endpoint": "/ai/chat",
+      "description": "OpenAI chat test",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 4056.36,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "response": "Of course! To help you develop an effective marketing strategy, I need some information about your business goals, target audience, and the marketing channels you currently use or are interested in using. Could you provide some details on these aspects?",
+        "service": "openai",
+        "model": "gpt-4o",
+        "session_id": "chat_2_1752685291",
+        "test_mode": false
+      },
+      "error": null
+    },
+    {
+      "method": "POST",
+      "endpoint": "/ai/generate-content",
+      "description": "OpenAI content generation",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 5906.69,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "content": "\ud83d\ude80 Achieving business growth isn't just about reaching milestones; it's about strategic planning, relentless focus, and innovative thinking. Success lies in setting clear goals and consistently adapting to the ever-evolving market dynamics. Let's keep driving forward with vision and passion! \ud83d\udcbc\u2728\n\n#BusinessGrowth #SuccessStrategy #InnovativeThinking #ProfessionalJourney",
+        "service": "openai",
+        "model": "gpt-4o",
+        "type": "social_post",
+        "test_mode": false
+      },
+      "error": null
+    },
+    {
+      "method": "POST",
+      "endpoint": "/ai/recommendations",
+      "description": "OpenAI recommendations",
+      "status_code": 500,
+      "expected_status": [
+        200,
+        500
+      ],
+      "duration_ms": 102.23,
+      "passed": true,
+      "response_data": "<!DOCTYPE html>\n<html lang=\"en\" class=\"auto\">\n<!--\nTypeError: escapeshellarg(): Argument #1 ($arg) must be of type string, array given in file /app/app/Http/Controllers/Api/AIController.php on line 590\n\n#0 [internal function]: escapeshellarg()\n#1 /app/app/Http/Controllers/Api/AIController.php(590): array_map()\n#2 /app/app/Http/Controllers/Api/AIController.php(180): App\\Http\\Controllers\\Api\\AIController-&gt;getAIRecommendations()\n#3 /app/vendor/laravel/framework/src/Illuminate/Routing/Controller.",
+      "error": null
+    },
+    {
+      "method": "POST",
+      "endpoint": "/ai/analyze-text",
+      "description": "OpenAI text analysis",
+      "status_code": 200,
+      "expected_status": 200,
+      "duration_ms": 6079.91,
+      "passed": true,
+      "response_data": {
+        "success": true,
+        "analysis": "Sentiment Score: 0.9\n\nExplanation: The sentiment of the text is highly positive. Words such as \"great,\" \"growth,\" \"success,\" \"helps,\" and \"achieve\" convey a sense of enthusiasm and approval towards the platform. These terms highlight the beneficial aspects and the positive impact the platform has on business and entrepreneurial goals, resulting in a sentiment score close to the maximum positive value.",
+        "service": "openai",
+        "model": "gpt-4o",
+        "type": "sentiment",
+        "test_mode": false
+      },
+      "error": null
+    }
+  ]
+}
