@@ -126,10 +126,7 @@ class TeamInvitation extends Model
      */
     public function getInvitationUrl(): string
     {
-        return route('team.invitation.accept', [
-            'uuid' => $this->uuid,
-            'token' => $this->token,
-        ]);
+        return url('/team/invitation/' . $this->uuid . '?token=' . $this->token);
     }
 
     /**
