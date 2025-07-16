@@ -32,6 +32,11 @@ class StripePaymentController extends Controller
      */
     public function createCheckoutSession(Request $request)
     {
+        // Check if in test mode
+        if (env('APP_ENV') === 'local' || !env('STRIPE_SECRET')) {
+            return $this->createTestCheckoutSession($request);
+        }
+        
         try {
             // Basic validation - either package or stripe_price_id is required
             if (!$request->has('package') && !$request->has('package_id') && !$request->has('stripe_price_id')) {
