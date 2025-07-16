@@ -335,7 +335,6 @@ class InstagramManagementController extends Controller
             
             // Update only provided fields
             $updateData = [];
-            if ($request->has('title')) $updateData['title'] = $request->title;
             if ($request->has('caption')) $updateData['caption'] = $request->caption;
             if ($request->has('media_urls')) $updateData['media_urls'] = $request->media_urls;
             if ($request->has('post_type')) $updateData['post_type'] = $request->post_type;
