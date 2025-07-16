@@ -1147,4 +1147,27 @@ class CrmController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Parse date range from request
+     */
+    private function parseDateRange($dateRange)
+    {
+        if (!$dateRange) {
+            return [null, null];
+        }
+
+        $ranges = [
+            'today' => [now()->startOfDay(), now()->endOfDay()],
+            'yesterday' => [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()],
+            'this_week' => [now()->startOfWeek(), now()->endOfWeek()],
+            'last_week' => [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()],
+            'this_month' => [now()->startOfMonth(), now()->endOfMonth()],
+            'last_month' => [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()],
+            'this_year' => [now()->startOfYear(), now()->endOfYear()],
+            'last_year' => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
+        ];
+
+        return $ranges[$dateRange] ?? [null, null];
+    }
 }
