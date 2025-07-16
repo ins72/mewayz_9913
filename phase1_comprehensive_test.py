@@ -508,6 +508,7 @@ class MewayzPhase1Test:
                 
                 response = requests.post(
                     f"{self.api_base}/team/invitation/{results['invitation_uuid']}/reject",
+                    json={"token": "test_token"},  # Add required token
                     headers=self.get_auth_headers(),
                     timeout=10
                 )
