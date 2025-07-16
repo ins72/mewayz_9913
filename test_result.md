@@ -239,6 +239,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ CRITICAL FAILURES: Instagram Management severely broken - 2/11 tests passed (18.2%). Account creation/fetching failing with 500 errors, post creation failing, hashtag research failing. Only basic posts GET and analytics GET working. Requires immediate attention."
+      - working: false
+        agent: "testing"
+        comment: "🔍 DETAILED ANALYSIS: Instagram Management remains at 18.2% success rate (2/11 tests passed). Working endpoints: GET /instagram-management/posts, GET /instagram-management/analytics. Critical failures: Account management (GET/POST /instagram-management/accounts), post creation (POST /instagram-management/posts), hashtag research (GET /instagram-management/hashtag-research) all returning 500 errors. Instagram Intelligence Engine endpoints require parameters (username, hashtag, account_id). Database tables exist but controller logic has issues."
 
   - task: "Email Marketing Hub"
     implemented: true
