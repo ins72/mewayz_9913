@@ -1,0 +1,53 @@
+{
+  "pricing_calculation_test": {
+    "endpoint_accessible": true,
+    "response_status": 500,
+    "professional_plan_test": false,
+    "enterprise_plan_test": false,
+    "free_plan_test": false,
+    "correct_professional_pricing": false,
+    "correct_enterprise_pricing": false,
+    "correct_free_pricing": false,
+    "features_array_accepted": false,
+    "response_time": 0.02587580680847168
+  },
+  "team_invitation_test": {
+    "endpoint_accessible": true,
+    "response_status": 200,
+    "invitation_created": true,
+    "uuid_generated": false,
+    "token_generated": false,
+    "email_validation": false,
+    "role_assignment": false,
+    "response_time": 0.030528783798217773
+  },
+  "invitation_details_test": {
+    "endpoint_accessible": true,
+    "response_status": 404,
+    "invitation_found": false,
+    "uuid_validation": false,
+    "details_complete": false,
+    "status_tracking": false,
+    "response_time": 0.0205690860748291
+  },
+  "workspace_setup_flow_test": {
+    "initial_data_loaded": false,
+    "goals_saved": false,
+    "features_loaded": false,
+    "features_saved": true,
+    "team_setup_saved": true,
+    "pricing_calculated": false,
+    "subscription_saved": false,
+    "setup_status_retrieved": true,
+    "response_time": 0.02357935905456543
+  },
+  "test_summary": {
+    "overall_score": 25.833333333333332,
+    "pricing_score": 12.5,
+    "team_invite_score": 33.33333333333333,
+    "invite_details_score": 20.0,
+    "setup_flow_score": 37.5,
+    "test_timestamp": "2025-07-16 11:54:37",
+    "total_response_time": 0.10055303573608398
+  }
+}
