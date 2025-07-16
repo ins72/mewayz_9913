@@ -33,16 +33,10 @@ class StripePaymentController extends Controller
     public function createCheckoutSession(Request $request)
     {
         try {
-            // Validate request
-            $request->validate([
-                'package' => 'required_without:stripe_price_id|string',
-                'package_id' => 'required_without:stripe_price_id|string',
-                'stripe_price_id' => 'required_without_all:package,package_id|string',
-                'quantity' => 'integer|min:1|max:10',
-                'success_url' => 'string',
-                'cancel_url' => 'string',
-                'metadata' => 'array'
-            ]);
+            // Basic validation - either package or stripe_price_id is required
+            if (!$request->has('package') && !$request->has('package_id') && !$request->has('stripe_price_id')) {
+                return response()->json(['error' => 'Package or price ID is required'], 400);
+            }
             
             // Get user info
             $user = Auth::user();
