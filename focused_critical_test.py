@@ -306,25 +306,13 @@ class FocusedCriticalTester:
         print("\n🧠 Testing Instagram Intelligence Engine:")
         
         # Test competitor analysis with parameters
-        competitor_data = {
-            "username": "competitor_account",
-            "analysis_type": "engagement"
-        }
-        self.make_request("GET", "/instagram/competitor-analysis", data=competitor_data)
+        self.make_request("GET", "/instagram/competitor-analysis?username=competitor_account&analysis_type=engagement")
         
         # Test hashtag analysis with parameters
-        hashtag_analysis_data = {
-            "hashtag": "businessgrowth",
-            "analysis_depth": "detailed"
-        }
-        self.make_request("GET", "/instagram/hashtag-analysis", data=hashtag_analysis_data)
+        self.make_request("GET", "/instagram/hashtag-analysis?hashtag=businessgrowth&analysis_depth=detailed")
         
         # Test audience intelligence with parameters
-        audience_data = {
-            "account_id": "test_account_id",
-            "analysis_type": "demographics"
-        }
-        self.make_request("GET", "/instagram/audience-intelligence", data=audience_data)
+        self.make_request("GET", "/instagram/audience-intelligence?account_id=test_account_id&analysis_type=demographics")
         
         # Test post operations if post was created
         if post_response and post_response.status_code in [200, 201]:
