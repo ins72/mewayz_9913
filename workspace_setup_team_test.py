@@ -139,7 +139,7 @@ class WorkspaceSetupTeamTest:
                 "data": {
                     "plan_id": 1,
                     "features": [1, 2, 3],
-                    "billing_cycle": "monthly"
+                    "billing_interval": "monthly"
                 },
                 "expected_monthly": 0.0,  # Free plan
                 "expected_yearly": 0.0,   # Free plan
