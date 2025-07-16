@@ -491,9 +491,11 @@ frontend:
 
 metadata:
   created_by: "testing_agent"
-  version: "1.0"
-  test_sequence: 1
-  run_ui: false
+  version: "2.0"
+  test_sequence: 2
+  run_ui: true
+  frontend_testing_completed: true
+  last_updated: "2025-01-16"
 
 test_plan:
   current_focus:
