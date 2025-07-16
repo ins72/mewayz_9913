@@ -245,7 +245,7 @@ class WorkspaceSetupTeamTest:
         
         # Test invitation data
         invitation_data = {
-            "email": "newteammember@example.com",
+            "email": f"newteammember{int(time.time())}@example.com",  # Use timestamp to avoid duplicates
             "role": "member",
             "message": "Welcome to our team! Please join our workspace."
         }
