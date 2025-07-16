@@ -179,7 +179,7 @@ class CrmController extends Controller
     /**
      * Get all contacts with advanced filtering and pagination
      */
-    public function getContacts(Request $request)
+    public function getAdvancedContacts(Request $request)
     {
         $request->validate([
             'search' => 'nullable|string|max:255',
@@ -199,8 +199,7 @@ class CrmController extends Controller
 
         try {
             $query = Audience::where('user_id', $request->user()->id)
-                ->where('type', 'contact')
-                ->with(['notes', 'activities', 'deals']);
+                ->where('type', 'contact');
 
             // Apply search filter
             if ($request->search) {
