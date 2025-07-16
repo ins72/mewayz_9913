@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_campaigns', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('workspace_id');
-            $table->uuid('user_id');
+            $table->id();
+            $table->unsignedBigInteger('workspace_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('subject');
             $table->longText('content');
-            $table->string('template_id')->nullable();
+            $table->unsignedBigInteger('template_id')->nullable();
             $table->json('recipient_lists'); // Array of email list IDs
             $table->enum('status', ['draft', 'scheduled', 'sending', 'sent', 'paused', 'cancelled'])->default('draft');
             $table->timestamp('scheduled_at')->nullable();
