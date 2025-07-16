@@ -1,0 +1,54 @@
+{
+  "ecommerce_status_fix": {
+    "fix_working": true,
+    "status_integer_accepted": true,
+    "product_created": true,
+    "no_500_errors": true,
+    "json_response": true,
+    "user_id_assigned": true,
+    "response_status": 201,
+    "error_details": null
+  },
+  "stripe_api_keys_fix": {
+    "fix_working": false,
+    "new_keys_working": false,
+    "checkout_session_created": false,
+    "no_500_errors": false,
+    "session_id_returned": false,
+    "checkout_url_returned": false,
+    "response_status": 500,
+    "error_details": {
+      "error": "Invalid API Key provided: sk_test_****gent"
+    }
+  },
+  "course_user_id_fix": {
+    "fix_working": false,
+    "user_id_assigned": false,
+    "course_created": true,
+    "no_500_errors": true,
+    "json_response": false,
+    "correct_user_id": false,
+    "response_status": 200,
+    "error_details": null
+  },
+  "bio_site_user_id_fix": {
+    "fix_working": false,
+    "user_id_assigned": false,
+    "bio_site_created": true,
+    "no_500_errors": true,
+    "json_response": false,
+    "correct_user_id": false,
+    "response_status": 200,
+    "error_details": null
+  },
+  "test_summary": {
+    "fixes_working": 1,
+    "total_fixes": 4,
+    "success_rate": 25.0,
+    "ecommerce_status_fix": true,
+    "stripe_api_keys_fix": false,
+    "course_user_id_fix": false,
+    "bio_site_user_id_fix": false,
+    "test_timestamp": "2025-07-16T09:30:08.932151"
+  }
+}
