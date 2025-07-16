@@ -1277,6 +1277,10 @@ class CrmController extends Controller
             return [$startDate, $endDate];
         }
 
+        if (!$dateRange) {
+            return [now()->subDays(30), now()];
+        }
+
         $ranges = [
             'last_7_days' => [now()->subDays(7), now()],
             'last_30_days' => [now()->subDays(30), now()],
@@ -1289,32 +1293,8 @@ class CrmController extends Controller
             'this_month' => [now()->startOfMonth(), now()->endOfMonth()],
             'last_month' => [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()],
             'this_year' => [now()->startOfYear(), now()->endOfYear()],
-            'last_year' => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
         ];
 
         return $ranges[$dateRange] ?? [now()->subDays(30), now()];
-    }
-
-    /**
-     * Parse date range from request
-     */
-    private function parseDateRange($dateRange)
-    {
-        if (!$dateRange) {
-            return [null, null];
-        }
-
-        $ranges = [
-            'today' => [now()->startOfDay(), now()->endOfDay()],
-            'yesterday' => [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()],
-            'this_week' => [now()->startOfWeek(), now()->endOfWeek()],
-            'last_week' => [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()],
-            'this_month' => [now()->startOfMonth(), now()->endOfMonth()],
-            'last_month' => [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()],
-            'this_year' => [now()->startOfYear(), now()->endOfYear()],
-            'last_year' => [now()->subYear()->startOfYear(), now()->subYear()->endOfYear()],
-        ];
-
-        return $ranges[$dateRange] ?? [null, null];
     }
 }
