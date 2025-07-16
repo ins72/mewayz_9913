@@ -1,256 +1,94 @@
 {
-  "infrastructure": {
-    "laravel_structure": true,
-    "environment_config": true,
-    "database_config": true,
-    "php_runtime": false,
-    "server_status": "Not Running"
+  "authentication_test": {
+    "health_check": true,
+    "login_endpoint": false,
+    "auth_token_received": false,
+    "user_profile_access": false,
+    "protected_endpoint_access": false,
+    "response_time": 0.43210506439208984
   },
-  "api_endpoints": {
-    "total_routes": 161,
-    "categories_covered": 1,
-    "endpoint_coverage": {
-      "Health & System": {
-        "covered": 3,
-        "total": 3,
-        "percentage": 100.0
-      },
-      "Authentication": {
-        "covered": 1,
-        "total": 3,
-        "percentage": 33.33333333333333
-      },
-      "Workspace Setup": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "Instagram Management": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "CRM System": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "E-commerce": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "Email Marketing": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "Course Management": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "Analytics": {
-        "covered": 1,
-        "total": 2,
-        "percentage": 50.0
-      },
-      "Bio Sites": {
-        "covered": 1,
-        "total": 2,
-        "percentage": 50.0
-      },
-      "Social Media": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      },
-      "Payment Processing": {
-        "covered": 0,
-        "total": 2,
-        "percentage": 0.0
-      }
-    }
+  "course_management_test": {
+    "courses_list": false,
+    "course_creation": false,
+    "course_details": false,
+    "lessons_management": false,
+    "student_enrollment": false,
+    "response_time": 0
   },
-  "authentication": {
-    "auth_controller": true,
-    "sanctum_configured": true,
-    "user_model": true,
-    "methods_implemented": [
-      "login",
-      "register",
-      "logout",
-      "me",
-      "updateProfile"
-    ],
-    "security_features": [
-      "Password Hashing",
-      "Input Validation"
-    ]
+  "bio_site_builder_test": {
+    "bio_sites_list": false,
+    "bio_site_creation": false,
+    "themes_access": false,
+    "analytics_access": false,
+    "ab_testing": false,
+    "monetization": false,
+    "response_time": 0
   },
-  "core_features": {
-    "features_implemented": 10,
-    "total_features": 10,
-    "feature_status": {
-      "CRM System": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Instagram Management": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Email Marketing": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Social Media Management": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Analytics Dashboard": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": false,
-          "Read": true,
-          "Update": false,
-          "Delete": false
-        },
-        "crud_score": 1
-      },
-      "E-commerce Platform": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Course Management": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Bio Sites Management": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": true
-        },
-        "crud_score": 4
-      },
-      "Workspace Management": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": false
-        },
-        "crud_score": 3
-      },
-      "Payment Processing": {
-        "implemented": true,
-        "crud_operations": {
-          "Create": true,
-          "Read": true,
-          "Update": true,
-          "Delete": false
-        },
-        "crud_score": 3
-      }
-    }
+  "ecommerce_platform_test": {
+    "products_list": false,
+    "product_creation": false,
+    "product_details": false,
+    "orders_management": false,
+    "inventory_tracking": false,
+    "response_time": 0
   },
-  "database_operations": {
-    "models_count": 148,
-    "migrations_count": 31,
-    "key_models": {
-      "User.php": true,
-      "Organization.php": true,
-      "BioSite.php": true,
-      "Course.php": true,
-      "Product.php": true,
-      "PaymentTransaction.php": true,
-      "SocialMediaAccount.php": true
+  "crm_system_test": {
+    "contacts_list": false,
+    "contact_creation": false,
+    "leads_management": false,
+    "lead_scoring": false,
+    "automation_workflows": false,
+    "response_time": 0
+  },
+  "instagram_management_test": {
+    "accounts_access": false,
+    "posts_management": false,
+    "hashtag_research": false,
+    "analytics_access": false,
+    "scheduling_system": false,
+    "response_time": 0
+  },
+  "workspace_setup_test": {
+    "current_step": false,
+    "main_goals": false,
+    "available_features": false,
+    "subscription_plans": false,
+    "setup_completion": false,
+    "response_time": 0
+  },
+  "analytics_dashboard_test": {
+    "overview_analytics": false,
+    "reports_access": false,
+    "social_media_analytics": false,
+    "bio_site_analytics": false,
+    "ecommerce_analytics": false,
+    "response_time": 0
+  },
+  "payment_integration_test": {
+    "packages_endpoint": true,
+    "checkout_session": false,
+    "webhook_endpoint": true,
+    "payment_status": false,
+    "stripe_integration": false,
+    "response_time": 0.3155694007873535
+  },
+  "user_management_test": {},
+  "test_summary": {
+    "overall_score": 6.666666666666667,
+    "area_scores": {
+      "authentication_test": 20.0,
+      "course_management_test": 0.0,
+      "bio_site_builder_test": 0.0,
+      "ecommerce_platform_test": 0.0,
+      "crm_system_test": 0.0,
+      "instagram_management_test": 0.0,
+      "workspace_setup_test": 0.0,
+      "analytics_dashboard_test": 0.0,
+      "payment_integration_test": 40.0
     },
-    "database_configured": true
-  },
-  "security": {
-    "sanctum_auth": true,
-    "input_validation": false,
-    "csrf_protection": false,
-    "rate_limiting": false,
-    "secure_headers": false
-  },
-  "integrations": {
-    "integrations_configured": 5,
-    "total_integrations": 5,
-    "integration_status": {
-      "Stripe Payment": {
-        "configured": true,
-        "details": {
-          "config": true,
-          "controller": true,
-          "service": true
-        }
-      },
-      "OpenAI": {
-        "configured": true,
-        "details": {
-          "config": true
-        }
-      },
-      "Google OAuth": {
-        "configured": true,
-        "details": {
-          "config": true
-        }
-      },
-      "Instagram API": {
-        "configured": true,
-        "details": {
-          "config": true
-        }
-      },
-      "Email Services": {
-        "configured": true,
-        "details": {
-          "config": true
-        }
-      }
-    }
+    "test_timestamp": "2025-07-16T08:43:31.700173",
+    "total_tests": 9,
+    "working_features": 0,
+    "critical_issues": 9
   }
 }
