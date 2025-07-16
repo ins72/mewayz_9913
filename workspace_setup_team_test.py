@@ -115,7 +115,7 @@ class WorkspaceSetupTeamTest:
                 "data": {
                     "plan_id": 2,
                     "features": [1, 2, 3, 4],
-                    "billing_cycle": "monthly"
+                    "billing_interval": "monthly"
                 },
                 "expected_monthly": 4.0,  # $1 per feature per month
                 "expected_yearly": 40.0,  # $10 per feature per year
