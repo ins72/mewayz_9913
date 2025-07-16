@@ -567,7 +567,7 @@ class InstagramManagementController extends Controller
                     'top_posts' => $topPosts->map(function($post) {
                         return [
                             'id' => $post->id,
-                            'title' => $post->title,
+                            'caption' => $post->caption,
                             'engagement_rate' => $post->getEngagementRate(),
                             'published_at' => $post->published_at,
                             'post_type' => $post->post_type
