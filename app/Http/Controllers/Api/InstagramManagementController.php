@@ -467,7 +467,7 @@ class InstagramManagementController extends Controller
                     return [
                         'id' => $hashtag->id ?? null,
                         'hashtag' => $hashtag->hashtag,
-                        'post_count' => $hashtag->post_count,
+                        'post_count' => $hashtag->posts_count,
                         'formatted_count' => $formattedCount,
                         'engagement_rate' => $hashtag->engagement_rate,
                         'difficulty' => $hashtag->difficulty,
