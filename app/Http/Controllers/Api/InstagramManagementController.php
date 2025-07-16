@@ -242,11 +242,10 @@ class InstagramManagementController extends Controller
                 $instagramAccount = InstagramAccount::create([
                     'workspace_id' => $workspace->id,
                     'user_id' => $user->id,
-                    'instagram_id' => 'default_account',
+                    'instagram_user_id' => 'default_account',
                     'username' => 'default_account',
                     'display_name' => 'Default Account',
                     'is_active' => true,
-                    'account_type' => 'personal',
                     'followers_count' => 0,
                     'following_count' => 0,
                     'media_count' => 0
