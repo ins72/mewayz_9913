@@ -625,10 +625,7 @@
             }, 3000);
         }
 
-        // Handle authentication
-        if (!localStorage.getItem('auth_token')) {
-            // Redirect to login if no token
-            window.location.href = '/login';
-        }
+        // Handle authentication - remove token check as we're using session-based auth
+        // Session authentication is handled by Laravel middleware
     </script>
 </x-layouts.dashboard>
