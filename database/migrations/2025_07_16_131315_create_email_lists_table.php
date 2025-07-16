@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_lists', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('workspace_id');
-            $table->uuid('user_id');
+            $table->id();
+            $table->unsignedBigInteger('workspace_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('subscriber_count')->default(0);
@@ -32,9 +32,9 @@ return new class extends Migration
         
         // Pivot table for subscriber-list relationships
         Schema::create('email_list_subscribers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('list_id');
-            $table->uuid('subscriber_id');
+            $table->id();
+            $table->unsignedBigInteger('list_id');
+            $table->unsignedBigInteger('subscriber_id');
             $table->timestamp('subscribed_at');
             $table->timestamp('unsubscribed_at')->nullable();
             $table->timestamps();
