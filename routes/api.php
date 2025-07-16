@@ -294,6 +294,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/member/{id}', [TeamManagementController::class, 'removeMember']);
     });
     
+    // AI Integration routes
+    Route::prefix('ai')->group(function () {
+        Route::get('/services', [AIController::class, 'getServices']);
+        Route::post('/chat', [AIController::class, 'chat']);
+        Route::post('/generate-content', [AIController::class, 'generateContent']);
+        Route::post('/recommendations', [AIController::class, 'getRecommendations']);
+        Route::post('/analyze-text', [AIController::class, 'analyzeText']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
