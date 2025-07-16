@@ -40,26 +40,111 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
 })->middleware(['auth'])->name('dashboard-index');
 
-// Dashboard sub-routes for dashboard navigation
+// Workspace Setup
+Route::get('/dashboard/workspace', function () {
+    return view('pages.dashboard.workspace.index');
+})->middleware(['auth'])->name('dashboard-workspace-index');
+
+// Content & Sites
 Route::get('/dashboard/sites', function () {
     return view('pages.dashboard.sites.index');
 })->middleware(['auth'])->name('dashboard-sites-index');
 
-Route::get('/dashboard/store', function () {
-    return view('pages.dashboard.store.index');
-})->middleware(['auth'])->name('dashboard-store-index');
+Route::get('/dashboard/linkinbio', function () {
+    return view('pages.dashboard.linkinbio.index');
+})->middleware(['auth'])->name('dashboard-linkinbio-index');
 
+Route::get('/dashboard/templates', function () {
+    return view('pages.dashboard.templates.index');
+})->middleware(['auth'])->name('dashboard-templates-index');
+
+// Social Media
+Route::get('/dashboard/instagram', function () {
+    return view('pages.dashboard.instagram.index');
+})->middleware(['auth'])->name('dashboard-instagram-index');
+
+Route::get('/dashboard/social', function () {
+    return view('pages.dashboard.social.index');
+})->middleware(['auth'])->name('dashboard-social-index');
+
+// Business Growth
 Route::get('/dashboard/audience', function () {
     return view('pages.dashboard.audience.index');
 })->middleware(['auth'])->name('dashboard-audience-index');
+
+Route::get('/dashboard/crm', function () {
+    return view('pages.dashboard.crm.index');
+})->middleware(['auth'])->name('dashboard-crm-index');
+
+Route::get('/dashboard/community', function () {
+    return view('pages.dashboard.community.index');
+})->middleware(['auth'])->name('dashboard-community-index');
+
+// Monetization
+Route::get('/dashboard/store', function () {
+    return view('pages.dashboard.store.index');
+})->middleware(['auth'])->name('dashboard-store-index');
 
 Route::get('/dashboard/courses', function () {
     return view('pages.dashboard.courses.index');
 })->middleware(['auth'])->name('dashboard-courses-index');
 
+Route::get('/dashboard/booking', function () {
+    return view('pages.dashboard.booking.index');
+})->middleware(['auth'])->name('dashboard-booking-index');
+
+// Marketing
+Route::get('/dashboard/email', function () {
+    return view('pages.dashboard.email.index');
+})->middleware(['auth'])->name('dashboard-email-index');
+
+Route::get('/dashboard/automation', function () {
+    return view('pages.dashboard.automation.index');
+})->middleware(['auth'])->name('dashboard-automation-index');
+
+// Analytics
+Route::get('/dashboard/analytics', function () {
+    return view('pages.dashboard.analytics.index');
+})->middleware(['auth'])->name('dashboard-analytics-index');
+
+Route::get('/dashboard/reports', function () {
+    return view('pages.dashboard.reports.index');
+})->middleware(['auth'])->name('dashboard-reports-index');
+
+// Business Management
 Route::get('/dashboard/wallet', function () {
     return view('pages.dashboard.wallet.index');
 })->middleware(['auth'])->name('dashboard-wallet-index');
+
+Route::get('/dashboard/invoices', function () {
+    return view('pages.dashboard.invoices.index');
+})->middleware(['auth'])->name('dashboard-invoices-index');
+
+Route::get('/dashboard/team', function () {
+    return view('pages.dashboard.team.index');
+})->middleware(['auth'])->name('dashboard-team-index');
+
+// AI & Tools
+Route::get('/dashboard/ai', function () {
+    return view('pages.dashboard.ai.index');
+})->middleware(['auth'])->name('dashboard-ai-index');
+
+Route::get('/dashboard/media', function () {
+    return view('pages.dashboard.media.index');
+})->middleware(['auth'])->name('dashboard-media-index');
+
+Route::get('/dashboard/integrations', function () {
+    return view('pages.dashboard.integrations.index');
+})->middleware(['auth'])->name('dashboard-integrations-index');
+
+// Settings
+Route::get('/dashboard/settings', function () {
+    return view('pages.dashboard.settings.index');
+})->middleware(['auth'])->name('dashboard-settings-index');
+
+Route::get('/dashboard/help', function () {
+    return view('pages.dashboard.help.index');
+})->middleware(['auth'])->name('dashboard-help-index');
 
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
