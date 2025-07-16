@@ -592,7 +592,7 @@ class WorkspaceSetupTeamTest:
             
             subscription_data = {
                 "plan_id": 2,
-                "billing_cycle": "monthly",
+                "billing_interval": "monthly",
                 "features": [1, 2, 3, 4]
             }
             
