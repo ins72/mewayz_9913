@@ -7,7 +7,7 @@ use App\Models\Base\Course as BaseCourse;
 class Course extends BaseCourse
 {
 	protected $fillable = [
-		'user',
+		'user_id',
 		'name',
 		'status',
 		'price_type',
