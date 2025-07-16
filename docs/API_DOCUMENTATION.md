@@ -1,622 +1,50 @@
-# 📡 Mewayz Platform API Documentation
+# Mewayz Platform - API Documentation
 
-*Complete API Reference for Mewayz Platform*
+Complete API reference for the Mewayz platform, including authentication, endpoints, and integration examples.
 
-## 📋 Overview
+## 🔗 Base URL
 
-The Mewayz Platform provides a comprehensive RESTful API that powers all business functions. This documentation covers all 40+ API endpoints across authentication, social media, bio sites, CRM, e-commerce, courses, email marketing, and analytics.
-
-### API Base URL
 ```
-http://localhost:8001/api
+Production: https://api.mewayz.com
+Development: http://localhost:8001
 ```
 
-### Authentication
-All API endpoints (except public endpoints) require authentication using Laravel Sanctum tokens.
+## 🔐 Authentication
 
-**Authorization Header:**
+### API Authentication Methods
+
+#### 1. Session Authentication (Web)
+```javascript
+// Login via web form
+POST /login
+{
+  "email": "user@example.com",
+  "password": "password"
+}
 ```
+
+#### 2. Laravel Sanctum (API)
+```bash
+# Get API token
+POST /api/auth/token
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+
+# Use token in headers
 Authorization: Bearer {token}
 ```
 
-## 🔐 Authentication Endpoints
-
-### Register User
-```http
-POST /api/auth/register
-```
-
-**Request Body:**
-```json
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123",
-  "password_confirmation": "password123"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "User registered successfully",
-  "data": {
-    "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com",
-      "created_at": "2025-07-15T10:30:00Z"
-    },
-    "token": "1|abc123..."
-  }
-}
-```
-
-### Login User
-```http
-POST /api/auth/login
-```
-
-**Request Body:**
-```json
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Login successful",
-  "data": {
-    "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com"
-    },
-    "token": "1|abc123..."
-  }
-}
-```
-
-### Enable Two-Factor Authentication
-```http
-POST /api/auth/2fa/enable
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Two-factor authentication enabled",
-  "data": {
-    "qr_code": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0i...",
-    "secret": "JBSWY3DPEHPK3PXP",
-    "recovery_codes": [
-      "8f4e1c1b",
-      "2a9d7e3f",
-      "5c1b8f4e"
-    ]
-  }
-}
-```
-
-## 🏢 Workspace Management
-
-### Get Workspaces
-```http
-GET /api/workspaces
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "My Workspace",
-      "description": "Primary workspace",
-      "logo": "https://example.com/logo.png",
-      "members_count": 5,
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Create Workspace
-```http
-POST /api/workspaces
-```
-
-**Request Body:**
-```json
-{
-  "name": "New Workspace",
-  "description": "Description of the workspace"
-}
-```
-
-## 📱 Social Media Management
-
-### Get Social Media Accounts
-```http
-GET /api/social-media/accounts
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "platform": "instagram",
-      "username": "myaccount",
-      "is_connected": true,
-      "followers_count": 1500,
-      "last_sync": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Schedule Social Media Post
-```http
-POST /api/social-media/schedule
-```
-
-**Request Body:**
-```json
-{
-  "platform": "instagram",
-  "content": "Post content here",
-  "media_urls": ["https://example.com/image.jpg"],
-  "scheduled_at": "2025-07-15T12:00:00Z"
-}
-```
-
-### Get Social Media Analytics
-```http
-GET /api/social-media/analytics
-```
-
-**Query Parameters:**
-- `platform` (optional): Filter by platform
-- `period` (optional): Time period (7d, 30d, 90d)
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "total_posts": 45,
-    "total_likes": 2500,
-    "total_comments": 180,
-    "engagement_rate": 4.2,
-    "platforms": {
-      "instagram": {
-        "posts": 25,
-        "likes": 1500,
-        "comments": 120
-      }
-    }
-  }
-}
-```
-
-## 📈 Instagram Intelligence
-
-### Get Instagram Competitor Analysis
-```http
-GET /api/instagram/competitor-analysis
-```
-
-**Query Parameters:**
-- `competitors[]`: Array of competitor usernames
-- `period`: Analysis period (7d, 30d, 90d)
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "competitors": [
-      {
-        "username": "competitor1",
-        "followers_count": 5000,
-        "engagement_rate": 3.5,
-        "post_frequency": 1.2,
-        "top_hashtags": ["#business", "#marketing"]
-      }
-    ],
-    "insights": {
-      "opportunities": ["Post more frequently", "Use trending hashtags"],
-      "threats": ["Competitor growing faster"]
-    }
-  }
-}
-```
-
-### Get Hashtag Analysis
-```http
-GET /api/instagram/hashtag-analysis
-```
-
-**Query Parameters:**
-- `hashtags[]`: Array of hashtags to analyze
-- `period`: Analysis period
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "hashtags": [
-      {
-        "hashtag": "#business",
-        "posts_count": 1500000,
-        "engagement_rate": 2.8,
-        "difficulty": "medium",
-        "trending_score": 85
-      }
-    ],
-    "recommendations": [
-      "#businesstips",
-      "#entrepreneur",
-      "#marketing"
-    ]
-  }
-}
-```
-
-## 🔗 Bio Sites Management
-
-### Get Bio Sites
-```http
-GET /api/bio-sites
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "My Bio Site",
-      "subdomain": "mysite",
-      "theme": "minimal",
-      "is_active": true,
-      "views_count": 1250,
-      "clicks_count": 85,
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Create Bio Site
-```http
-POST /api/bio-sites
-```
-
-**Request Body:**
-```json
-{
-  "name": "My New Bio Site",
-  "subdomain": "mynewsite",
-  "theme": "minimal",
-  "bio": "Welcome to my bio site",
-  "profile_image": "https://example.com/profile.jpg"
-}
-```
-
-### Get Bio Site Analytics
-```http
-GET /api/bio-sites/{id}/analytics
-```
-
-**Query Parameters:**
-- `period`: Time period (7d, 30d, 90d)
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "views": {
-      "total": 1250,
-      "today": 45,
-      "chart_data": [
-        {"date": "2025-07-15", "views": 45},
-        {"date": "2025-07-14", "views": 52}
-      ]
-    },
-    "clicks": {
-      "total": 85,
-      "today": 8,
-      "links": [
-        {"url": "https://example.com", "clicks": 25},
-        {"url": "https://shop.example.com", "clicks": 15}
-      ]
-    }
-  }
-}
-```
-
-## 👥 CRM Management
-
-### Get Contacts
-```http
-GET /api/crm/contacts
-```
-
-**Query Parameters:**
-- `page`: Page number
-- `search`: Search query
-- `tags[]`: Filter by tags
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "contacts": [
-      {
-        "id": 1,
-        "name": "John Doe",
-        "email": "john@example.com",
-        "phone": "+1234567890",
-        "tags": ["customer", "premium"],
-        "created_at": "2025-07-15T10:30:00Z"
-      }
-    ]
-  }
-}
-```
-
-### Get Leads
-```http
-GET /api/crm/leads
-```
-
-**Query Parameters:**
-- `status`: Filter by status (new, contacted, qualified, converted)
-- `score_min`: Minimum lead score
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com",
-      "score": 85,
-      "status": "qualified",
-      "source": "website",
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-## 📧 Email Marketing
-
-### Get Email Campaigns
-```http
-GET /api/email-marketing/campaigns
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "Welcome Campaign",
-      "subject": "Welcome to our platform",
-      "status": "sent",
-      "recipients_count": 1500,
-      "open_rate": 28.5,
-      "click_rate": 4.2,
-      "sent_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Get Email Templates
-```http
-GET /api/email-marketing/templates
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "Welcome Template",
-      "category": "welcome",
-      "content": "<html>Template content</html>",
-      "preview_url": "https://example.com/preview/1"
-    }
-  ]
-}
-```
-
-## 🛍️ E-commerce Management
-
-### Get Products
-```http
-GET /api/ecommerce/products
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "name": "Premium Course",
-      "description": "Learn advanced techniques",
-      "price": 99.99,
-      "currency": "USD",
-      "stock": 100,
-      "category": "courses",
-      "images": ["https://example.com/image1.jpg"],
-      "status": "active",
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Get Orders
-```http
-GET /api/ecommerce/orders
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "order_number": "ORD-001",
-      "customer_name": "John Doe",
-      "customer_email": "john@example.com",
-      "total": 99.99,
-      "status": "completed",
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-## 📚 Course Management
-
-### Get Courses
-```http
-GET /api/courses
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "title": "Complete Web Development",
-      "description": "Learn web development from scratch",
-      "price": 199.99,
-      "students_count": 250,
-      "lessons_count": 45,
-      "duration": "20 hours",
-      "status": "published",
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-### Get Course Lessons
-```http
-GET /api/courses/{id}/lessons
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": 1,
-      "title": "Introduction to Web Development",
-      "type": "video",
-      "content_url": "https://example.com/video.mp4",
-      "duration": "15 minutes",
-      "order": 1,
-      "is_free": true,
-      "created_at": "2025-07-15T10:30:00Z"
-    }
-  ]
-}
-```
-
-## 📊 Analytics & Reporting
-
-### Get Analytics Overview
-```http
-GET /api/analytics
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "bio_sites": {
-      "total_views": 15000,
-      "total_clicks": 1200,
-      "conversion_rate": 8.0
-    },
-    "social_media": {
-      "total_posts": 45,
-      "total_engagement": 2500,
-      "reach": 50000
-    },
-    "ecommerce": {
-      "total_revenue": 15000,
-      "total_orders": 150
-    },
-    "courses": {
-      "total_enrollments": 500,
-      "total_revenue": 25000
-    }
-  }
-}
-```
-
-### Get Traffic Analytics
-```http
-GET /api/analytics/traffic
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "total_visitors": 5000,
-    "unique_visitors": 3200,
-    "page_views": 15000,
-    "bounce_rate": 35.2,
-    "traffic_sources": {
-      "direct": 2000,
-      "social": 1500,
-      "search": 1000,
-      "referral": 500
-    }
-  }
-}
+#### 3. CSRF Protection
+```javascript
+// Include CSRF token in headers
+X-CSRF-TOKEN: {csrf_token}
 ```
 
 ## 🏥 Health Check
 
-### API Health Check
+### System Health
 ```http
 GET /api/health
 ```
@@ -625,62 +53,709 @@ GET /api/health
 ```json
 {
   "success": true,
-  "message": "API is healthy",
+  "message": "System health check completed",
   "data": {
     "status": "healthy",
-    "timestamp": "2025-07-15T10:30:00Z",
-    "version": "1.0.0",
-    "database": "connected"
+    "timestamp": "2025-01-16T12:00:00Z",
+    "version": "2.0",
+    "features": {
+      "dashboard": true,
+      "payment_processing": true,
+      "instagram_management": true,
+      "link_in_bio": true,
+      "site_builder": true,
+      "crm_system": true,
+      "email_marketing": true,
+      "analytics": true
+    }
   }
 }
 ```
 
-## 🚫 Error Responses
+## 💳 Payment API
 
-### Standard Error Format
+### Get Payment Packages
+```http
+GET /api/payments/packages
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "packages": {
+    "starter": {
+      "amount": 9.99,
+      "currency": "USD",
+      "name": "Starter Package",
+      "features": [
+        "Up to 5 sites",
+        "Basic analytics",
+        "Email support",
+        "1GB storage"
+      ]
+    },
+    "professional": {
+      "amount": 29.99,
+      "currency": "USD",
+      "name": "Professional Package",
+      "features": [
+        "Up to 25 sites",
+        "Advanced analytics",
+        "Priority support",
+        "10GB storage",
+        "Custom domains"
+      ]
+    },
+    "enterprise": {
+      "amount": 99.99,
+      "currency": "USD",
+      "name": "Enterprise Package",
+      "features": [
+        "Unlimited sites",
+        "Enterprise analytics",
+        "24/7 phone support",
+        "100GB storage",
+        "White-label solution"
+      ]
+    }
+  }
+}
+```
+
+### Create Checkout Session
+```http
+POST /api/payments/checkout/session
+```
+
+**Request:**
+```json
+{
+  "package_id": "professional",
+  "success_url": "https://your-domain.com/success?session_id={CHECKOUT_SESSION_ID}",
+  "cancel_url": "https://your-domain.com/cancel",
+  "metadata": {
+    "source": "dashboard",
+    "user_id": "123"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "session_id": "cs_test_abc123",
+  "url": "https://checkout.stripe.com/pay/cs_test_abc123",
+  "expires_at": "2025-01-16T13:00:00Z"
+}
+```
+
+### Check Payment Status
+```http
+GET /api/payments/checkout/status/{session_id}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "session_id": "cs_test_abc123",
+  "status": "complete",
+  "payment_status": "paid",
+  "amount_total": 2999,
+  "currency": "usd",
+  "created": "2025-01-16T12:00:00Z",
+  "expires_at": "2025-01-16T13:00:00Z"
+}
+```
+
+### Stripe Webhook
+```http
+POST /api/webhook/stripe
+```
+
+**Headers:**
+```
+Stripe-Signature: t=1234567890,v1=signature
+```
+
+**Supported Events:**
+- `checkout.session.completed`
+- `payment_intent.succeeded`
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+## 👥 User Management
+
+### Get Current User
+```http
+GET /api/user
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "email_verified_at": "2025-01-16T12:00:00Z",
+    "created_at": "2025-01-16T12:00:00Z",
+    "updated_at": "2025-01-16T12:00:00Z"
+  }
+}
+```
+
+### Update User Profile
+```http
+PUT /api/user
+```
+
+**Request:**
+```json
+{
+  "name": "John Smith",
+  "email": "johnsmith@example.com"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Profile updated successfully",
+  "user": {
+    "id": 1,
+    "name": "John Smith",
+    "email": "johnsmith@example.com",
+    "updated_at": "2025-01-16T12:00:00Z"
+  }
+}
+```
+
+## 🌐 Site Management
+
+### List Sites
+```http
+GET /api/sites
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "My Portfolio",
+      "domain": "myportfolio.mewayz.com",
+      "status": "active",
+      "created_at": "2025-01-16T12:00:00Z",
+      "updated_at": "2025-01-16T12:00:00Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 1
+  }
+}
+```
+
+### Create Site
+```http
+POST /api/sites
+```
+
+**Request:**
+```json
+{
+  "name": "My New Site",
+  "domain": "mynewsite",
+  "template": "professional",
+  "settings": {
+    "theme": "dark",
+    "layout": "modern"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Site created successfully",
+  "site": {
+    "id": 2,
+    "name": "My New Site",
+    "domain": "mynewsite.mewayz.com",
+    "status": "active",
+    "template": "professional",
+    "created_at": "2025-01-16T12:00:00Z"
+  }
+}
+```
+
+### Get Site Details
+```http
+GET /api/sites/{id}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "site": {
+    "id": 1,
+    "name": "My Portfolio",
+    "domain": "myportfolio.mewayz.com",
+    "status": "active",
+    "template": "professional",
+    "settings": {
+      "theme": "dark",
+      "layout": "modern",
+      "custom_css": "",
+      "analytics_enabled": true
+    },
+    "stats": {
+      "total_visits": 1250,
+      "unique_visitors": 890,
+      "page_views": 3400,
+      "bounce_rate": 0.35
+    },
+    "created_at": "2025-01-16T12:00:00Z",
+    "updated_at": "2025-01-16T12:00:00Z"
+  }
+}
+```
+
+### Update Site
+```http
+PUT /api/sites/{id}
+```
+
+**Request:**
+```json
+{
+  "name": "Updated Portfolio",
+  "settings": {
+    "theme": "light",
+    "layout": "classic"
+  }
+}
+```
+
+### Delete Site
+```http
+DELETE /api/sites/{id}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Site deleted successfully"
+}
+```
+
+## 📸 Instagram Management
+
+### Get Instagram Accounts
+```http
+GET /api/instagram/accounts
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "accounts": [
+    {
+      "id": 1,
+      "username": "myaccount",
+      "followers": 15000,
+      "following": 500,
+      "posts": 250,
+      "engagement_rate": 0.045,
+      "status": "active",
+      "connected_at": "2025-01-16T12:00:00Z"
+    }
+  ]
+}
+```
+
+### Schedule Instagram Post
+```http
+POST /api/instagram/schedule
+```
+
+**Request:**
+```json
+{
+  "account_id": 1,
+  "content": "Check out our new product! #newproduct #launch",
+  "media_urls": [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg"
+  ],
+  "scheduled_at": "2025-01-17T10:00:00Z",
+  "hashtags": ["#newproduct", "#launch", "#business"]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Post scheduled successfully",
+  "post": {
+    "id": 123,
+    "account_id": 1,
+    "content": "Check out our new product! #newproduct #launch",
+    "scheduled_at": "2025-01-17T10:00:00Z",
+    "status": "scheduled"
+  }
+}
+```
+
+### Get Instagram Analytics
+```http
+GET /api/instagram/analytics
+```
+
+**Query Parameters:**
+- `account_id` (optional): Filter by account
+- `period` (optional): `7d`, `30d`, `90d` (default: `30d`)
+- `metrics` (optional): `engagement`, `reach`, `impressions`
+
+**Response:**
+```json
+{
+  "success": true,
+  "analytics": {
+    "account_id": 1,
+    "period": "30d",
+    "metrics": {
+      "posts": 15,
+      "likes": 2500,
+      "comments": 180,
+      "shares": 45,
+      "saves": 320,
+      "reach": 12000,
+      "impressions": 18000,
+      "engagement_rate": 0.048
+    },
+    "top_posts": [
+      {
+        "id": "post_123",
+        "content": "Our best performing post",
+        "likes": 450,
+        "comments": 32,
+        "engagement_rate": 0.085
+      }
+    ]
+  }
+}
+```
+
+## 📊 Analytics
+
+### Get Dashboard Analytics
+```http
+GET /api/analytics/dashboard
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "analytics": {
+    "overview": {
+      "total_sites": 5,
+      "total_visits": 15000,
+      "total_revenue": 1250.00,
+      "active_subscriptions": 3
+    },
+    "traffic": {
+      "today": 150,
+      "yesterday": 180,
+      "this_week": 1200,
+      "this_month": 4500
+    },
+    "top_sites": [
+      {
+        "site_id": 1,
+        "name": "My Portfolio",
+        "visits": 8000,
+        "revenue": 650.00
+      }
+    ],
+    "recent_activity": [
+      {
+        "type": "site_created",
+        "description": "New site created: My Blog",
+        "timestamp": "2025-01-16T12:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+### Get Site Analytics
+```http
+GET /api/analytics/sites/{id}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "analytics": {
+    "site_id": 1,
+    "period": "30d",
+    "metrics": {
+      "visits": 8000,
+      "unique_visitors": 6200,
+      "page_views": 15000,
+      "bounce_rate": 0.32,
+      "average_session_duration": 185,
+      "conversion_rate": 0.025
+    },
+    "traffic_sources": {
+      "direct": 45,
+      "social": 35,
+      "search": 15,
+      "referral": 5
+    },
+    "top_pages": [
+      {
+        "path": "/",
+        "visits": 3000,
+        "unique_visitors": 2800
+      }
+    ]
+  }
+}
+```
+
+## 📧 Email Marketing
+
+### Get Email Campaigns
+```http
+GET /api/email/campaigns
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "campaigns": [
+    {
+      "id": 1,
+      "name": "Monthly Newsletter",
+      "subject": "Our Latest Updates",
+      "status": "sent",
+      "sent_at": "2025-01-16T12:00:00Z",
+      "recipients": 1500,
+      "open_rate": 0.28,
+      "click_rate": 0.045
+    }
+  ]
+}
+```
+
+### Create Email Campaign
+```http
+POST /api/email/campaigns
+```
+
+**Request:**
+```json
+{
+  "name": "Product Launch",
+  "subject": "Exciting New Product Launch!",
+  "content": "<html>...</html>",
+  "recipients": "all_subscribers",
+  "schedule_at": "2025-01-17T10:00:00Z"
+}
+```
+
+## 🔍 Error Handling
+
+### Standard Error Response
 ```json
 {
   "success": false,
-  "message": "Error message",
+  "error": "Validation failed",
+  "message": "The given data was invalid.",
   "errors": {
-    "field_name": ["Field error message"]
+    "email": ["The email field is required."],
+    "password": ["The password must be at least 8 characters."]
   }
 }
 ```
 
-### Common HTTP Status Codes
-- `200`: Success
-- `201`: Created
-- `400`: Bad Request
-- `401`: Unauthorized
-- `403`: Forbidden
-- `404`: Not Found
-- `422`: Validation Error
-- `500`: Internal Server Error
+### HTTP Status Codes
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Validation Error
+- `429` - Too Many Requests
+- `500` - Internal Server Error
 
-## 📝 Rate Limiting
+## 📚 Rate Limiting
 
-- **General endpoints**: 100 requests per minute
-- **Authentication endpoints**: 10 requests per minute
-- **Upload endpoints**: 50 requests per minute
+### Rate Limits
+- **API Endpoints**: 60 requests per minute
+- **Payment Endpoints**: 10 requests per minute
+- **Webhook Endpoints**: 1000 requests per minute
 
-## 🔐 Security
+### Rate Limit Headers
+```http
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+X-RateLimit-Reset: 1642339200
+```
 
-- All API endpoints use HTTPS in production
-- Authentication tokens expire after 24 hours
-- Rate limiting is enforced on all endpoints
-- Input validation and sanitization
-- CORS protection enabled
+## 🔧 SDK Examples
+
+### PHP SDK
+```php
+<?php
+use GuzzleHttp\Client;
+
+$client = new Client([
+    'base_uri' => 'https://api.mewayz.com',
+    'headers' => [
+        'Authorization' => 'Bearer ' . $token,
+        'Content-Type' => 'application/json',
+    ]
+]);
+
+// Create checkout session
+$response = $client->post('/api/payments/checkout/session', [
+    'json' => [
+        'package_id' => 'professional',
+        'success_url' => 'https://example.com/success',
+        'cancel_url' => 'https://example.com/cancel'
+    ]
+]);
+```
+
+### JavaScript SDK
+```javascript
+const MewayzAPI = {
+    baseURL: 'https://api.mewayz.com',
+    token: 'your-api-token',
+    
+    async request(endpoint, options = {}) {
+        const response = await fetch(`${this.baseURL}${endpoint}`, {
+            ...options,
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+        return response.json();
+    },
+    
+    async createCheckoutSession(packageId, successUrl, cancelUrl) {
+        return this.request('/api/payments/checkout/session', {
+            method: 'POST',
+            body: JSON.stringify({
+                package_id: packageId,
+                success_url: successUrl,
+                cancel_url: cancelUrl
+            })
+        });
+    }
+};
+```
+
+### Python SDK
+```python
+import requests
+
+class MewayzAPI:
+    def __init__(self, token, base_url='https://api.mewayz.com'):
+        self.token = token
+        self.base_url = base_url
+        self.headers = {
+            'Authorization': f'Bearer {token}',
+            'Content-Type': 'application/json'
+        }
+    
+    def create_checkout_session(self, package_id, success_url, cancel_url):
+        url = f'{self.base_url}/api/payments/checkout/session'
+        data = {
+            'package_id': package_id,
+            'success_url': success_url,
+            'cancel_url': cancel_url
+        }
+        response = requests.post(url, json=data, headers=self.headers)
+        return response.json()
+```
+
+## 🧪 Testing
+
+### Test Endpoints
+```bash
+# Health check
+curl -X GET https://api.mewayz.com/api/health
+
+# Get packages
+curl -X GET https://api.mewayz.com/api/payments/packages
+
+# Create checkout session
+curl -X POST https://api.mewayz.com/api/payments/checkout/session \
+  -H "Content-Type: application/json" \
+  -d '{
+    "package_id": "starter",
+    "success_url": "https://example.com/success",
+    "cancel_url": "https://example.com/cancel"
+  }'
+```
+
+### Test Stripe Integration
+```bash
+# Test Stripe webhook
+curl -X POST https://api.mewayz.com/api/webhook/stripe \
+  -H "Stripe-Signature: t=1234567890,v1=test_signature" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "checkout.session.completed",
+    "data": {
+      "object": {
+        "id": "cs_test_123",
+        "payment_status": "paid"
+      }
+    }
+  }'
+```
 
 ## 📞 Support
 
-For API support and questions:
-- **Documentation**: Complete API reference
+### API Support
+- **Documentation**: This document
+- **Status Page**: https://status.mewayz.com
 - **Support Email**: api-support@mewayz.com
-- **GitHub Issues**: Report API bugs
+- **GitHub Issues**: https://github.com/your-org/mewayz/issues
+
+### API Version
+- **Current Version**: v1
+- **Versioning**: Semantic versioning
+- **Deprecation Policy**: 6 months notice
 
 ---
 
-**Last Updated**: July 15, 2025  
-**API Version**: 1.0.0  
-**Platform**: Mewayz All-in-One Business Solution
+**Last Updated**: January 16, 2025  
+**API Version**: v1  
+**Status**: Production Ready

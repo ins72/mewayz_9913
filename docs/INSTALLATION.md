@@ -1,361 +1,250 @@
-# 🛠️ Mewayz Platform Installation Guide
+# Mewayz Platform - Installation Guide
 
-*Complete Installation Guide for Development and Production Environments*
+This guide provides step-by-step instructions for installing and setting up the Mewayz platform in various environments.
 
-## 📋 Overview
+## 🎯 Prerequisites
 
-This guide provides comprehensive installation instructions for the Mewayz Platform across different environments. Whether you're setting up a development environment or deploying to production, this guide covers all necessary steps.
-
-## 🎯 Quick Start
-
-### Option 1: Automated Installation
-```bash
-# Download and run installer
-curl -fsSL https://raw.githubusercontent.com/mewayz/platform/main/install.sh | bash
-
-# Or with specific environment
-curl -fsSL https://raw.githubusercontent.com/mewayz/platform/main/install.sh | bash -s -- --env=production
-```
-
-### Option 2: Manual Installation
-Follow the detailed steps below for complete control over the installation process.
-
-## 🔧 System Requirements
-
-### Minimum Requirements
-- **Operating System**: Ubuntu 20.04 LTS, CentOS 8, or macOS 11+
-- **RAM**: 2GB minimum, 4GB recommended
-- **CPU**: 2 cores minimum, 4 cores recommended
-- **Storage**: 10GB minimum, 20GB recommended
-- **Network**: Stable internet connection
-
-### Software Requirements
-- **PHP**: 8.1 or higher
-- **MySQL**: 8.0 or higher (or MariaDB 10.6+)
-- **Redis**: 6.0 or higher
+### System Requirements
+- **PHP**: 8.2 or higher
+- **Node.js**: 18.0 or higher
 - **Composer**: 2.0 or higher
-- **Node.js**: 16.0 or higher
-- **Flutter**: 3.0 or higher (for mobile development)
+- **Database**: MariaDB 10.6+ or MySQL 8.0+
+- **Memory**: 512MB minimum, 2GB recommended
+- **Storage**: 1GB free space
 
-## 🏠 Local Development Setup
-
-### Step 1: Install Dependencies
-
-#### Ubuntu/Debian
+### Required PHP Extensions
 ```bash
-# Update package manager
-sudo apt update && sudo apt upgrade -y
-
-# Install PHP and extensions
-sudo apt install -y php8.1 php8.1-cli php8.1-fpm php8.1-mysql php8.1-xml \
-php8.1-curl php8.1-mbstring php8.1-zip php8.1-gd php8.1-bcmath \
-php8.1-redis php8.1-intl php8.1-soap php8.1-sqlite3
-
-# Install MySQL
-sudo apt install -y mysql-server mysql-client
-
-# Install Redis
-sudo apt install -y redis-server
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install -y nodejs
-
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
+# Core extensions
+php8.2-cli
+php8.2-fpm
+php8.2-mysql
+php8.2-xml
+php8.2-mbstring
+php8.2-curl
+php8.2-zip
+php8.2-bcmath
+php8.2-gd
+php8.2-json
+php8.2-intl
 ```
 
-### 2. PHP Dependencies Installation
+### Third-Party Services
+- **Stripe Account** - For payment processing
+- **Email Service** - For notifications (optional)
+- **CDN** - For asset delivery (optional)
 
+## 🚀 Installation Methods
+
+### Method 1: Standard Installation
+
+#### Step 1: Clone Repository
 ```bash
-# Install PHP dependencies via Composer
-composer install
+git clone https://github.com/your-org/mewayz.git
+cd mewayz
+```
 
-# If you encounter memory issues
+#### Step 2: Install Dependencies
+```bash
+# Install PHP dependencies
 composer install --no-dev --optimize-autoloader
 
-# For production
-composer install --no-dev --optimize-autoloader --no-scripts
-```
-
-### 3. Node.js Dependencies Installation
-
-```bash
 # Install Node.js dependencies
 npm install
-
-# Alternative with Yarn
-yarn install
-
-# For production
-npm ci --only=production
 ```
 
-### 4. Environment Configuration
-
+#### Step 3: Environment Configuration
 ```bash
 # Copy environment file
 cp .env.example .env
 
 # Generate application key
 php artisan key:generate
-
-# Set proper permissions
-chmod 644 .env
 ```
 
-### 5. Database Setup
-
+#### Step 4: Database Setup
 ```bash
-# Create database (MySQL/MariaDB)
+# Create database
 mysql -u root -p -e "CREATE DATABASE mewayz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# Create database user (optional but recommended)
-mysql -u root -p -e "CREATE USER 'mewayz'@'localhost' IDENTIFIED BY 'your_secure_password';"
-mysql -u root -p -e "GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz'@'localhost';"
-mysql -u root -p -e "FLUSH PRIVILEGES;"
-```
-
-### 6. Run Database Migrations
-
-```bash
-# Run database migrations
-php artisan migrate
-
-# Seed the database (optional)
-php artisan db:seed
-
-# For production (skip seeding)
+# Run migrations
 php artisan migrate --force
+
+# Seed database
+php artisan db:seed --class=AdminSeeder
 ```
 
-### 7. Build Frontend Assets
-
+#### Step 5: Build Assets
 ```bash
-# Build development assets
-npm run dev
-
-# Build production assets
+# Build for production
 npm run build
 
-# Watch for changes (development)
-npm run watch
+# Or for development
+npm run dev
 ```
 
-### 8. Set Directory Permissions
-
+#### Step 6: Set Permissions
 ```bash
 # Set storage permissions
 chmod -R 755 storage
 chmod -R 755 bootstrap/cache
 
-# Set proper ownership (Linux/macOS)
-chown -R www-data:www-data storage
-chown -R www-data:www-data bootstrap/cache
+# Set ownership (if running as different user)
+chown -R www-data:www-data storage bootstrap/cache
 ```
 
----
+### Method 2: Docker Installation (Recommended)
+
+#### Step 1: Docker Setup
+```bash
+# Clone repository
+git clone https://github.com/your-org/mewayz.git
+cd mewayz
+
+# Build Docker image
+docker-compose build
+
+# Start services
+docker-compose up -d
+```
+
+#### Step 2: Container Setup
+```bash
+# Install dependencies inside container
+docker-compose exec app composer install
+docker-compose exec app npm install
+
+# Run migrations
+docker-compose exec app php artisan migrate --seed
+```
+
+### Method 3: Kubernetes Deployment
+
+#### Step 1: Prepare Kubernetes Manifests
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mewayz-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mewayz
+  template:
+    metadata:
+      labels:
+        app: mewayz
+    spec:
+      containers:
+      - name: mewayz
+        image: mewayz:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DB_HOST
+          value: "mysql-service"
+        - name: APP_ENV
+          value: "production"
+```
+
+#### Step 2: Deploy to Kubernetes
+```bash
+# Apply manifests
+kubectl apply -f k8s/
+
+# Check deployment status
+kubectl get pods -l app=mewayz
+```
 
 ## ⚙️ Configuration
 
 ### Environment Variables
 
-Edit your `.env` file with the following configuration:
-
+#### Core Application Settings
 ```env
-# Application Configuration
+# Application
 APP_NAME=Mewayz
 APP_ENV=production
-APP_KEY=your_generated_key_here
+APP_KEY=base64:your-generated-key
 APP_DEBUG=false
-APP_URL=https://mewayz.com
+APP_URL=https://your-domain.com
 
-# Database Configuration
+# Database
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=mewayz
-DB_USERNAME=mewayz
-DB_PASSWORD=your_secure_password
+DB_USERNAME=mewayz_user
+DB_PASSWORD=secure_password
 
-# Cache Configuration
+# Cache & Session
 CACHE_DRIVER=redis
 SESSION_DRIVER=redis
 QUEUE_CONNECTION=redis
-
-# Redis Configuration
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
+```
 
-# Mail Configuration
+#### Payment Configuration
+```env
+# Stripe Configuration
+STRIPE_KEY=pk_live_your_publishable_key
+STRIPE_SECRET=sk_live_your_secret_key
+STRIPE_API_KEY=sk_live_your_secret_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+```
+
+#### Email Configuration
+```env
+# Mail Settings
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your_email@gmail.com
-MAIL_PASSWORD=your_app_password
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_username
+MAIL_PASSWORD=your_password
 MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@mewayz.com
+MAIL_FROM_NAME=Mewayz
+```
 
-# OAuth Configuration
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-FACEBOOK_CLIENT_ID=your_facebook_client_id
-FACEBOOK_CLIENT_SECRET=your_facebook_client_secret
-
+#### Storage Configuration
+```env
 # File Storage
 FILESYSTEM_DISK=local
-
-# Broadcasting
-BROADCAST_DRIVER=log
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
 ```
 
-### OAuth Setup
+### Web Server Configuration
 
-#### Google OAuth Setup
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select existing
-3. Enable Google+ API
-4. Create OAuth 2.0 credentials
-5. Add your domain to authorized domains
-6. Set redirect URI: `https://yourdomain.com/auth/google/callback`
-
-#### Facebook OAuth Setup
-1. Go to [Facebook Developers](https://developers.facebook.com/)
-2. Create a new app
-3. Add Facebook Login product
-4. Set valid OAuth redirect URIs
-5. Add your domain to App Domains
-
----
-
-## 🗄️ Database Setup
-
-### MySQL Configuration
-
-```sql
--- Create database
-CREATE DATABASE mewayz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Create user
-CREATE USER 'mewayz'@'localhost' IDENTIFIED BY 'secure_password';
-GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz'@'localhost';
-FLUSH PRIVILEGES;
-
--- Verify setup
-SHOW DATABASES;
-SELECT User, Host FROM mysql.user WHERE User = 'mewayz';
+#### Apache Configuration
+```apache
+<VirtualHost *:80>
+    ServerName your-domain.com
+    DocumentRoot /var/www/mewayz/public
+    
+    <Directory /var/www/mewayz/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    ErrorLog ${APACHE_LOG_DIR}/mewayz_error.log
+    CustomLog ${APACHE_LOG_DIR}/mewayz_access.log combined
+</VirtualHost>
 ```
 
-### Database Optimization
-
-```sql
--- Optimize for performance
-SET innodb_buffer_pool_size = 1G;
-SET query_cache_size = 128M;
-SET max_connections = 1000;
-
--- Create indexes for better performance
-USE mewayz;
-ALTER TABLE users ADD INDEX idx_email (email);
-ALTER TABLE sessions ADD INDEX idx_last_activity (last_activity);
-```
-
----
-
-## 🎨 Frontend Setup
-
-### Laravel Frontend
-
-```bash
-# Install Laravel frontend dependencies
-npm install
-
-# Build assets for development
-npm run dev
-
-# Build assets for production
-npm run build
-
-# Watch for changes
-npm run watch
-```
-
-### Flutter Setup
-
-```bash
-# Navigate to Flutter app
-cd flutter_app
-
-# Get Flutter dependencies
-flutter pub get
-
-# Build for web
-flutter build web
-
-# Build for mobile
-flutter build apk
-flutter build ios
-```
-
-### PWA Configuration
-
-```bash
-# Generate PWA manifest
-php artisan make:manifest
-
-# Create service worker
-php artisan make:sw
-
-# Build PWA assets
-npm run build:pwa
-```
-
----
-
-## 🔧 Service Configuration
-
-### Laravel Configuration
-
-```bash
-# Optimize Laravel for production
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Clear caches (if needed)
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
-```
-
-### Supervisor Configuration
-
-Create `/etc/supervisor/conf.d/mewayz.conf`:
-
-```ini
-[program:mewayz]
-command=php artisan serve --host=0.0.0.0 --port=8001
-directory=/path/to/mewayz
-autostart=true
-autorestart=true
-user=www-data
-stderr_logfile=/var/log/supervisor/mewayz.err.log
-stdout_logfile=/var/log/supervisor/mewayz.out.log
-```
-
-### Nginx Configuration
-
-Create `/etc/nginx/sites-available/mewayz`:
-
+#### Nginx Configuration
 ```nginx
 server {
     listen 80;
-    server_name mewayz.com www.mewayz.com;
-    root /path/to/mewayz/public;
-    index index.php index.html;
+    server_name your-domain.com;
+    root /var/www/mewayz/public;
+    index index.php;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
@@ -368,177 +257,247 @@ server {
         include fastcgi_params;
     }
 
-    location ~ /\.ht {
+    location ~ /\.(?!well-known).* {
         deny all;
     }
 }
 ```
 
-### SSL Configuration
+### Database Configuration
 
-```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx
+#### MySQL/MariaDB Setup
+```sql
+-- Create database
+CREATE DATABASE mewayz CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-# Generate SSL certificate
-sudo certbot --nginx -d mewayz.com -d www.mewayz.com
-
-# Auto-renew
-sudo crontab -e
-# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+-- Create user
+CREATE USER 'mewayz_user'@'localhost' IDENTIFIED BY 'secure_password';
+GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz_user'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
----
+#### Database Optimization
+```sql
+-- Optimize for Laravel
+SET GLOBAL innodb_buffer_pool_size = 1G;
+SET GLOBAL query_cache_size = 256M;
+SET GLOBAL max_connections = 1000;
+```
 
-## ✅ Verification
+## 🔧 Post-Installation Setup
 
-### Health Checks
-
+### Step 1: Admin User Creation
 ```bash
-# Check application health
-curl http://localhost:8001/api/health
+# Create admin user
+php artisan tinker
+>>> App\Models\User::create([
+...     'name' => 'Admin User',
+...     'email' => 'admin@mewayz.com',
+...     'password' => bcrypt('secure_password'),
+...     'email_verified_at' => now(),
+... ]);
+```
+
+### Step 2: Storage Setup
+```bash
+# Create storage link
+php artisan storage:link
+
+# Set up file permissions
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
+```
+
+### Step 3: Cache Configuration
+```bash
+# Clear all caches
+php artisan optimize:clear
+
+# Optimize for production
+php artisan optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Step 4: Queue Setup
+```bash
+# Install supervisor
+apt-get install supervisor
+
+# Create queue worker configuration
+sudo nano /etc/supervisor/conf.d/mewayz-worker.conf
+```
+
+#### Supervisor Configuration
+```ini
+[program:mewayz-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/mewayz/artisan queue:work --sleep=3 --tries=3
+autostart=true
+autorestart=true
+user=www-data
+numprocs=8
+redirect_stderr=true
+stdout_logfile=/var/log/mewayz-worker.log
+stopwaitsecs=3600
+```
+
+### Step 5: SSL Configuration
+```bash
+# Install Certbot
+apt-get install certbot python3-certbot-apache
+
+# Get SSL certificate
+certbot --apache -d your-domain.com
+```
+
+## 🧪 Verification
+
+### Step 1: Basic Health Check
+```bash
+# Test application
+curl -I https://your-domain.com
 
 # Check database connection
 php artisan tinker
 >>> DB::connection()->getPdo();
-
-# Check cache
-php artisan cache:clear
-redis-cli ping
 ```
 
-### Service Status
-
+### Step 2: Payment Integration Test
 ```bash
-# Check services
-sudo systemctl status nginx
-sudo systemctl status mysql
-sudo systemctl status redis
-sudo supervisorctl status
-
-# Check logs
-tail -f /var/log/nginx/access.log
-tail -f /var/log/supervisor/mewayz.out.log
+# Test Stripe configuration
+php artisan tinker
+>>> \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+>>> \Stripe\Account::retrieve();
 ```
 
-### Performance Testing
-
+### Step 3: Run Test Suite
 ```bash
-# Run performance tests
-php artisan test --filter=Performance
+# Run all tests
+php artisan test
 
-# Load testing (optional)
-ab -n 1000 -c 10 http://localhost:8001/
+# Run specific test suites
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
 ```
-
----
 
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
-#### Database Connection Issues
-```bash
-# Check database status
-sudo systemctl status mysql
-
-# Check connection
-mysql -u mewayz -p mewayz
-
-# Reset password
-sudo mysql -u root -p
-ALTER USER 'mewayz'@'localhost' IDENTIFIED BY 'new_password';
-FLUSH PRIVILEGES;
-```
-
-#### Permission Issues
+#### Permission Errors
 ```bash
 # Fix storage permissions
-sudo chown -R www-data:www-data storage
-sudo chown -R www-data:www-data bootstrap/cache
-sudo chmod -R 755 storage
-sudo chmod -R 755 bootstrap/cache
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 755 storage bootstrap/cache
 ```
 
-#### Composer Issues
+#### Database Connection Issues
 ```bash
-# Clear composer cache
-composer clear-cache
+# Check database connection
+php artisan tinker
+>>> DB::connection()->getPdo();
 
-# Update dependencies
-composer update
-
-# Install with no scripts
-composer install --no-scripts
+# Test with different credentials
+mysql -u mewayz_user -p mewayz
 ```
 
-#### NPM Issues
+#### Asset Compilation Issues
 ```bash
-# Clear npm cache
-npm cache clean --force
-
-# Delete node_modules and reinstall
+# Clear node modules
 rm -rf node_modules package-lock.json
 npm install
+
+# Rebuild assets
+npm run build
 ```
 
-### Log Locations
-
+#### Cache Issues
 ```bash
-# Laravel logs
-tail -f storage/logs/laravel.log
-
-# Nginx logs
-tail -f /var/log/nginx/access.log
-tail -f /var/log/nginx/error.log
-
-# MySQL logs
-tail -f /var/log/mysql/error.log
-
-# Supervisor logs
-tail -f /var/log/supervisor/mewayz.out.log
+# Clear all caches
+php artisan optimize:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 ```
 
-### Performance Issues
+### Performance Optimization
 
+#### PHP Configuration
+```ini
+# php.ini optimizations
+memory_limit = 256M
+max_execution_time = 300
+upload_max_filesize = 64M
+post_max_size = 64M
+max_input_vars = 3000
+```
+
+#### Database Optimization
+```sql
+-- Index optimization
+ANALYZE TABLE users, payment_transactions, sites;
+OPTIMIZE TABLE users, payment_transactions, sites;
+```
+
+## 📈 Production Deployment
+
+### Step 1: Environment Preparation
 ```bash
-# Check memory usage
-free -h
+# Set production environment
+APP_ENV=production
+APP_DEBUG=false
 
-# Check disk usage
-df -h
-
-# Check CPU usage
-top
-
-# Optimize Laravel
-php artisan optimize
+# Configure caching
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
 ```
 
----
+### Step 2: Security Hardening
+```bash
+# Set strict file permissions
+find /var/www/mewayz -type f -exec chmod 644 {} \;
+find /var/www/mewayz -type d -exec chmod 755 {} \;
+chmod -R 755 storage bootstrap/cache
+```
 
-## 📚 Next Steps
+### Step 3: Monitoring Setup
+```bash
+# Install monitoring tools
+apt-get install htop iotop nethogs
 
-After successful installation:
+# Set up log rotation
+sudo nano /etc/logrotate.d/mewayz
+```
 
-1. **Configure OAuth**: Set up Google, Facebook, and other OAuth providers
-2. **Set up monitoring**: Configure application monitoring
-3. **Backup setup**: Set up automated backups
-4. **Security hardening**: Follow security best practices
-5. **Performance tuning**: Optimize for your specific use case
+### Step 4: Backup Configuration
+```bash
+# Create backup script
+sudo nano /usr/local/bin/mewayz-backup.sh
+chmod +x /usr/local/bin/mewayz-backup.sh
 
----
+# Add to crontab
+crontab -e
+0 2 * * * /usr/local/bin/mewayz-backup.sh
+```
 
 ## 📞 Support
 
-If you encounter issues during installation:
+### Getting Help
+- **Documentation**: Check [docs/](../README.md)
+- **Troubleshooting**: See [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+- **Issues**: Report via GitHub Issues
+- **Email**: support@mewayz.com
 
-- **Documentation**: Check our [Troubleshooting Guide](TROUBLESHOOTING.md)
-- **Community**: Join our community discussions
-- **Professional Support**: Contact support@mewayz.com
+### Version Information
+- **Current Version**: 2.0
+- **Laravel Version**: 10.48
+- **PHP Version**: 8.2+
+- **Database**: MariaDB 10.6+
 
 ---
 
-*Mewayz Platform - Professional Installation Guide*  
-*Built by Mewayz Technologies Inc.*  
-*Creating seamless business solutions for the modern digital world*
+**Last Updated**: January 16, 2025  
+**Installation Support**: Available 24/7
