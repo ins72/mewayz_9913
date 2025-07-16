@@ -619,37 +619,6 @@ class AnalyticsController extends Controller
     }
 }
 
-        $analytics = [
-            'total_sessions' => 0,
-            'unique_visitors' => 0,
-            'page_views' => 0,
-            'pages_per_session' => 0,
-            'avg_session_duration' => '0s',
-            'bounce_rate' => '0%',
-            'new_vs_returning' => [
-                'new_visitors' => 0,
-                'returning_visitors' => 0,
-            ],
-            'top_pages' => [],
-            'device_breakdown' => [
-                'desktop' => 0,
-                'mobile' => 0,
-                'tablet' => 0,
-            ],
-            'browser_breakdown' => [],
-            'location_breakdown' => [],
-            'charts' => [
-                'sessions_over_time' => [],
-                'page_views_over_time' => [],
-            ],
-        ];
-
-        return response()->json([
-            'success' => true,
-            'data' => $analytics,
-        ]);
-    }
-
     public function getRevenueAnalytics(Request $request)
     {
         $request->validate([
