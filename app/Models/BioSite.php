@@ -103,6 +103,21 @@ class BioSite extends BaseBioSite
         $this->forceDelete();
     }
 
+    protected static function boot(){
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Auto-assign user_id if not set
+            if (empty($model->user_id) && auth()->check()) {
+                $model->user_id = auth()->id();
+            }
+            // Auto-assign slug if not set
+            if (empty($model->_slug)) {
+                $model->_slug = (string) str()->random(17);
+            }
+        });
+    }
+
     public function duplicateSite($surfix = '_copy'){
 		$site = $this->replicate();
         $site->name = $this->name.str()->random(3).$surfix;
