@@ -425,29 +425,273 @@ class AIController extends Controller
      */
     private function callAIService($service, $message, $context)
     {
-        // This would contain actual API calls to OpenAI, Claude, or Gemini
-        // For now, fall back to simulation
-        return $this->simulateAIResponse($service, $message, $context);
+        try {
+            // Use real AI service for OpenAI
+            if ($service === 'openai' && !$this->aiServices[$service]['test_mode']) {
+                $apiKey = env('OPENAI_API_KEY');
+                if (!$apiKey) {
+                    return response()->json(['error' => 'OpenAI API key not configured'], 500);
+                }
+                
+                $sessionId = 'chat_' . auth()->id() . '_' . time();
+                $command = [
+                    'python3',
+                    base_path('ai_service.py'),
+                    $apiKey,
+                    'chat',
+                    $message,
+                    $sessionId
+                ];
+                
+                $process = proc_open(
+                    implode(' ', array_map('escapeshellarg', $command)),
+                    [
+                        0 => ['pipe', 'r'],
+                        1 => ['pipe', 'w'],
+                        2 => ['pipe', 'w']
+                    ],
+                    $pipes
+                );
+                
+                if (is_resource($process)) {
+                    fclose($pipes[0]);
+                    $output = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    proc_close($process);
+                    
+                    $result = json_decode($output, true);
+                    if ($result && $result['success']) {
+                        return response()->json([
+                            'success' => true,
+                            'response' => $result['response'],
+                            'service' => $service,
+                            'model' => $result['model'] ?? 'gpt-4o',
+                            'session_id' => $sessionId,
+                            'test_mode' => false,
+                        ]);
+                    } else {
+                        Log::error('OpenAI API Error: ' . ($result['error'] ?? 'Unknown error'));
+                        return response()->json(['error' => 'AI service error'], 500);
+                    }
+                } else {
+                    return response()->json(['error' => 'Failed to execute AI service'], 500);
+                }
+            }
+            
+            // Fall back to simulation for other services or test mode
+            return $this->simulateAIResponse($service, $message, $context);
+        } catch (\Exception $e) {
+            Log::error('callAIService error: ' . $e->getMessage());
+            return response()->json(['error' => 'AI service error'], 500);
+        }
     }
 
     private function generateWithAI($service, $type, $prompt, $tone, $length, $keywords)
     {
-        // This would contain actual API calls to AI services
-        // For now, fall back to simulation
-        return $this->simulateContentGeneration($type, $prompt, $tone, $length, $keywords);
+        try {
+            // Use real AI service for OpenAI
+            if ($service === 'openai' && !$this->aiServices[$service]['test_mode']) {
+                $apiKey = env('OPENAI_API_KEY');
+                if (!$apiKey) {
+                    return response()->json(['error' => 'OpenAI API key not configured'], 500);
+                }
+                
+                $sessionId = 'content_' . auth()->id() . '_' . time();
+                $enhancedPrompt = $prompt;
+                
+                // Add tone and length to prompt
+                if ($tone) {
+                    $enhancedPrompt .= " (Tone: $tone)";
+                }
+                if ($length) {
+                    $enhancedPrompt .= " (Length: $length)";
+                }
+                if ($keywords) {
+                    $enhancedPrompt .= " (Keywords: " . implode(', ', $keywords) . ")";
+                }
+                
+                $command = [
+                    'python3',
+                    base_path('ai_service.py'),
+                    $apiKey,
+                    'generate_content',
+                    $type,
+                    $enhancedPrompt,
+                    $sessionId
+                ];
+                
+                $process = proc_open(
+                    implode(' ', array_map('escapeshellarg', $command)),
+                    [
+                        0 => ['pipe', 'r'],
+                        1 => ['pipe', 'w'],
+                        2 => ['pipe', 'w']
+                    ],
+                    $pipes
+                );
+                
+                if (is_resource($process)) {
+                    fclose($pipes[0]);
+                    $output = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    proc_close($process);
+                    
+                    $result = json_decode($output, true);
+                    if ($result && $result['success']) {
+                        return [
+                            'success' => true,
+                            'content' => $result['content'],
+                            'service' => $service,
+                            'model' => $result['model'] ?? 'gpt-4o',
+                            'type' => $type,
+                            'test_mode' => false,
+                        ];
+                    } else {
+                        Log::error('OpenAI Content Generation Error: ' . ($result['error'] ?? 'Unknown error'));
+                        return ['error' => 'AI content generation error'];
+                    }
+                } else {
+                    return ['error' => 'Failed to execute AI service'];
+                }
+            }
+            
+            // Fall back to simulation for other services or test mode
+            return $this->simulateContentGeneration($type, $prompt, $tone, $length, $keywords);
+        } catch (\Exception $e) {
+            Log::error('generateWithAI error: ' . $e->getMessage());
+            return ['error' => 'AI service error'];
+        }
     }
 
     private function getAIRecommendations($service, $type, $data)
     {
-        // This would contain actual API calls to AI services
-        // For now, fall back to simulation
-        return $this->simulateRecommendations($type, $data);
+        try {
+            // Use real AI service for OpenAI
+            if ($service === 'openai' && !$this->aiServices[$service]['test_mode']) {
+                $apiKey = env('OPENAI_API_KEY');
+                if (!$apiKey) {
+                    return ['error' => 'OpenAI API key not configured'];
+                }
+                
+                $sessionId = 'recommendations_' . auth()->id() . '_' . time();
+                $command = [
+                    'python3',
+                    base_path('ai_service.py'),
+                    $apiKey,
+                    'get_recommendations',
+                    $type,
+                    $data,
+                    $sessionId
+                ];
+                
+                $process = proc_open(
+                    implode(' ', array_map('escapeshellarg', $command)),
+                    [
+                        0 => ['pipe', 'r'],
+                        1 => ['pipe', 'w'],
+                        2 => ['pipe', 'w']
+                    ],
+                    $pipes
+                );
+                
+                if (is_resource($process)) {
+                    fclose($pipes[0]);
+                    $output = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    proc_close($process);
+                    
+                    $result = json_decode($output, true);
+                    if ($result && $result['success']) {
+                        return [
+                            'success' => true,
+                            'recommendations' => $result['recommendations'],
+                            'service' => $service,
+                            'model' => $result['model'] ?? 'gpt-4o',
+                            'type' => $type,
+                            'test_mode' => false,
+                        ];
+                    } else {
+                        Log::error('OpenAI Recommendations Error: ' . ($result['error'] ?? 'Unknown error'));
+                        return ['error' => 'AI recommendations error'];
+                    }
+                } else {
+                    return ['error' => 'Failed to execute AI service'];
+                }
+            }
+            
+            // Fall back to simulation for other services or test mode
+            return $this->simulateRecommendations($type, $data);
+        } catch (\Exception $e) {
+            Log::error('getAIRecommendations error: ' . $e->getMessage());
+            return ['error' => 'AI service error'];
+        }
     }
 
     private function analyzeWithAI($service, $text, $analysisType)
     {
-        // This would contain actual API calls to AI services
-        // For now, fall back to simulation
-        return $this->simulateTextAnalysis($text, $analysisType);
+        try {
+            // Use real AI service for OpenAI
+            if ($service === 'openai' && !$this->aiServices[$service]['test_mode']) {
+                $apiKey = env('OPENAI_API_KEY');
+                if (!$apiKey) {
+                    return ['error' => 'OpenAI API key not configured'];
+                }
+                
+                $sessionId = 'analysis_' . auth()->id() . '_' . time();
+                $command = [
+                    'python3',
+                    base_path('ai_service.py'),
+                    $apiKey,
+                    'analyze_text',
+                    $text,
+                    $analysisType,
+                    $sessionId
+                ];
+                
+                $process = proc_open(
+                    implode(' ', array_map('escapeshellarg', $command)),
+                    [
+                        0 => ['pipe', 'r'],
+                        1 => ['pipe', 'w'],
+                        2 => ['pipe', 'w']
+                    ],
+                    $pipes
+                );
+                
+                if (is_resource($process)) {
+                    fclose($pipes[0]);
+                    $output = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    proc_close($process);
+                    
+                    $result = json_decode($output, true);
+                    if ($result && $result['success']) {
+                        return [
+                            'success' => true,
+                            'analysis' => $result['analysis'],
+                            'service' => $service,
+                            'model' => $result['model'] ?? 'gpt-4o',
+                            'type' => $analysisType,
+                            'test_mode' => false,
+                        ];
+                    } else {
+                        Log::error('OpenAI Text Analysis Error: ' . ($result['error'] ?? 'Unknown error'));
+                        return ['error' => 'AI text analysis error'];
+                    }
+                } else {
+                    return ['error' => 'Failed to execute AI service'];
+                }
+            }
+            
+            // Fall back to simulation for other services or test mode
+            return $this->simulateTextAnalysis($text, $analysisType);
+        } catch (\Exception $e) {
+            Log::error('analyzeWithAI error: ' . $e->getMessage());
+            return ['error' => 'AI service error'];
+        }
     }
 }
