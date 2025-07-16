@@ -1,331 +1,223 @@
 # Contributing to Mewayz Platform
 
-**Developer Contribution Guide**  
-*By Mewayz Technologies Inc.*
-
----
-
-## 👋 Welcome Contributors!
-
-Thank you for your interest in contributing to Mewayz! This guide will help you understand how to contribute to our all-in-one business platform effectively.
-
-## 📋 Table of Contents
-
-1. [Code of Conduct](#code-of-conduct)
-2. [Getting Started](#getting-started)
-3. [Development Setup](#development-setup)
-4. [Contribution Process](#contribution-process)
-5. [Code Standards](#code-standards)
-6. [Testing Requirements](#testing-requirements)
-7. [Documentation](#documentation)
-8. [Community](#community)
-
----
+Thank you for your interest in contributing to the Mewayz platform! This document provides guidelines and information for contributors.
 
 ## 🤝 Code of Conduct
 
-### Our Commitment
-
-We are committed to providing a welcoming and inclusive environment for all contributors, regardless of:
-- Experience level
-- Gender identity and expression
-- Sexual orientation
-- Disability
-- Personal appearance
-- Body size
-- Race
-- Ethnicity
-- Age
-- Religion
-- Nationality
-
-### Expected Behavior
-
-- **Be respectful**: Treat all community members with respect and kindness
-- **Be collaborative**: Work together to solve problems and improve the platform
-- **Be constructive**: Provide constructive feedback and suggestions
-- **Be patient**: Help newcomers learn and grow
-- **Be inclusive**: Welcome people from all backgrounds and perspectives
-
-### Unacceptable Behavior
-
-- Harassment or discriminatory behavior
-- Trolling, insulting, or derogatory comments
-- Personal or political attacks
-- Public or private harassment
-- Publishing others' private information
-- Any other conduct that could reasonably be considered inappropriate
-
----
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it to understand the expected behavior when interacting with the community.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+- PHP 8.2 or higher
+- Composer
+- Node.js 18+ and npm
+- Git
+- MariaDB/MySQL
+- Basic knowledge of Laravel and modern web development
 
-Before contributing, ensure you have:
-- **PHP 8.2.28+** installed
-- **Composer** for dependency management
-- **Node.js 18+** for frontend assets
-- **MySQL/MariaDB** for database
-- **Git** for version control
-- **Flutter** (for mobile development)
+### Development Setup
 
-### Understanding the Codebase
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/your-username/mewayz.git
+   cd mewayz
+   ```
 
-#### Architecture Overview
-- **Backend**: Laravel 10+ (PHP)
-- **Frontend**: Laravel Blade + Flutter
-- **Database**: MySQL/MariaDB
-- **API**: RESTful with Laravel Sanctum
-- **Queue**: Redis-based job processing
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-#### Key Directories
-```
-/app                 # Laravel application
-/flutter_app         # Flutter mobile app
-/public              # Public web assets
-/resources           # Frontend resources
-/database            # Database migrations
-/tests               # Test files
-/docs                # Documentation
-```
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
----
+4. **Database Setup**
+   ```bash
+   php artisan migrate
+   php artisan db:seed
+   ```
 
-## 🛠️ Development Setup
+5. **Build Assets**
+   ```bash
+   npm run dev
+   ```
 
-### 1. Fork and Clone
+## 📋 How to Contribute
 
-```bash
-# Fork the repository on GitHub
-# Then clone your fork
-git clone https://github.com/yourusername/mewayz.git
-cd mewayz
+### Types of Contributions
+- **Bug Reports**: Help us identify and fix issues
+- **Feature Requests**: Suggest new functionality
+- **Code Contributions**: Submit bug fixes or new features
+- **Documentation**: Improve or add documentation
+- **Testing**: Write tests and improve test coverage
+- **UI/UX**: Enhance user interface and experience
 
-# Add upstream remote
-git remote add upstream https://github.com/mewayz/mewayz.git
-```
+### Before You Start
+1. Check existing issues to avoid duplicates
+2. Discuss major changes in an issue first
+3. Ensure your development environment is set up
+4. Read the relevant documentation
 
-### 2. Install Dependencies
+## 🐛 Reporting Bugs
 
-```bash
-# Install PHP dependencies
-composer install
+### Bug Report Template
+```markdown
+## Bug Description
+A clear and concise description of the bug.
 
-# Install Node.js dependencies
-npm install
+## Steps to Reproduce
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-# Install Flutter dependencies
-cd flutter_app
-flutter pub get
-cd ..
-```
+## Expected Behavior
+What you expected to happen.
 
-### 3. Environment Setup
+## Actual Behavior
+What actually happened.
 
-```bash
-# Copy environment file
-cp .env.example .env
+## Environment
+- OS: [e.g., Ubuntu 20.04]
+- PHP Version: [e.g., 8.2]
+- Laravel Version: [e.g., 10.48]
+- Browser: [e.g., Chrome 120]
 
-# Generate application key
-php artisan key:generate
+## Screenshots
+If applicable, add screenshots to help explain the problem.
 
-# Configure database in .env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=mewayz_dev
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-### 4. Database Setup
-
-```bash
-# Create database
-mysql -u root -p -e "CREATE DATABASE mewayz_dev;"
-
-# Run migrations
-php artisan migrate
-
-# Seed database (optional)
-php artisan db:seed
+## Additional Context
+Any other context about the problem.
 ```
 
-### 5. Start Development Server
+### Security Issues
+For security vulnerabilities, please email security@mewayz.com instead of creating a public issue.
 
-```bash
-# Start Laravel server
-php artisan serve --host=0.0.0.0 --port=8001
+## 💡 Feature Requests
 
-# In another terminal, build assets
-npm run dev
+### Feature Request Template
+```markdown
+## Feature Description
+A clear and concise description of the feature.
+
+## Problem Statement
+What problem does this feature solve?
+
+## Proposed Solution
+How would you like this feature to work?
+
+## Alternatives Considered
+What other approaches did you consider?
+
+## Additional Context
+Any other context, mockups, or examples.
 ```
 
----
+## 🔧 Development Guidelines
 
-## 🔄 Contribution Process
+### Code Style
+We follow PSR-12 coding standards and Laravel conventions.
 
-### 1. Choose an Issue
-
-- Browse [open issues](https://github.com/mewayz/mewayz/issues)
-- Look for issues labeled `good first issue` for beginners
-- Check `help wanted` issues for priority items
-- Comment on the issue to express interest
-
-### 2. Create a Branch
-
-```bash
-# Sync with upstream
-git fetch upstream
-git checkout main
-git merge upstream/main
-
-# Create feature branch
-git checkout -b feature/issue-description
-```
-
-### 3. Make Changes
-
-- Follow our [code standards](#code-standards)
-- Write comprehensive tests
-- Update documentation as needed
-- Ensure all tests pass
-
-### 4. Test Your Changes
-
-```bash
-# Run PHP tests
-php artisan test
-
-# Run Flutter tests
-cd flutter_app
-flutter test
-
-# Run linting
-composer run lint
-npm run lint
-```
-
-### 5. Submit Pull Request
-
-```bash
-# Commit changes
-git add .
-git commit -m "feat: add new feature for issue #123"
-
-# Push to your fork
-git push origin feature/issue-description
-
-# Create pull request on GitHub
-```
-
-### 6. Code Review Process
-
-- Automated checks will run
-- Core team will review your code
-- Address any feedback
-- Once approved, changes will be merged
-
----
-
-## 📝 Code Standards
-
-### PHP Standards
-
-#### PSR-12 Compliance
-Follow PSR-12 coding standards:
-
+#### PHP Code Style
 ```php
 <?php
 
-declare(strict_types=1);
-
-namespace App\Http\Controllers;
+namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
-class UserController extends Controller
+class ExampleService
 {
-    public function index(Request $request): JsonResponse
+    public function processUser(User $user): bool
     {
-        $users = User::paginate(15);
+        // Use descriptive variable names
+        $isValidUser = $this->validateUser($user);
         
-        return response()->json([
-            'success' => true,
-            'data' => $users,
-        ]);
+        if (!$isValidUser) {
+            Log::warning('Invalid user processed', ['user_id' => $user->id]);
+            return false;
+        }
+        
+        // Process user
+        return true;
+    }
+    
+    private function validateUser(User $user): bool
+    {
+        return $user->email_verified_at !== null;
     }
 }
 ```
 
-#### Laravel Best Practices
-- Use Laravel's built-in features
-- Follow Laravel naming conventions
-- Implement proper validation
-- Use Eloquent ORM efficiently
-- Handle exceptions gracefully
-
-### JavaScript Standards
-
-#### ES6+ Features
-Use modern JavaScript features:
-
+#### JavaScript Code Style
 ```javascript
-// Use arrow functions
-const fetchUsers = async () => {
+// Use modern ES6+ syntax
+const handlePayment = async (packageId) => {
     try {
-        const response = await fetch('/api/users');
+        const response = await fetch('/api/payments/checkout/session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify({
+                package_id: packageId,
+                success_url: window.location.origin + '/success',
+                cancel_url: window.location.origin + '/cancel',
+            }),
+        });
+        
         const data = await response.json();
-        return data;
+        
+        if (data.success) {
+            window.location.href = data.url;
+        } else {
+            throw new Error(data.error || 'Payment failed');
+        }
     } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error('Payment error:', error);
+        showErrorMessage(error.message);
     }
 };
-
-// Use destructuring
-const { name, email } = user;
-
-// Use template literals
-const message = `Welcome ${name}!`;
 ```
 
-### Flutter Standards
-
-#### Dart Code Style
-Follow Dart style guide:
-
-```dart
-class UserService {
-  static const String _baseUrl = 'https://api.mewayz.com';
-  
-  Future<List<User>> getUsers() async {
-    try {
-      final response = await http.get(
-        Uri.parse('$_baseUrl/users'),
-        headers: {'Content-Type': 'application/json'},
-      );
-      
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return (data['data'] as List)
-            .map((user) => User.fromJson(user))
-            .toList();
-      }
-      
-      throw Exception('Failed to load users');
-    } catch (e) {
-      throw Exception('Error: $e');
+#### CSS/SCSS Style
+```scss
+// Use BEM methodology and utility classes
+.payment-card {
+    @apply bg-card-bg rounded-lg p-6 border border-border-color;
+    
+    &__header {
+        @apply flex items-center justify-between mb-4;
     }
-  }
+    
+    &__title {
+        @apply text-xl font-semibold text-primary-text;
+    }
+    
+    &__button {
+        @apply btn btn-primary w-full;
+        
+        &:hover {
+            @apply bg-primary-hover;
+        }
+        
+        &:disabled {
+            @apply bg-gray-400 cursor-not-allowed;
+        }
+    }
 }
 ```
 
-### Database Standards
+### Database Guidelines
 
-#### Migration Best Practices
+#### Migrations
 ```php
 <?php
 
@@ -337,339 +229,374 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('payment_transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('stripe_session_id')->unique();
+            $table->string('package_id');
+            $table->decimal('amount', 10, 2);
+            $table->string('currency', 3);
+            $table->string('status');
+            $table->json('metadata')->nullable();
             $table->timestamps();
             
-            $table->index(['email', 'created_at']);
+            $table->index(['user_id', 'status']);
+            $table->index('stripe_session_id');
         });
     }
     
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('payment_transactions');
     }
 };
 ```
 
----
-
-## 🧪 Testing Requirements
-
-### Backend Testing
-
-#### Unit Tests
+#### Model Definitions
 ```php
 <?php
 
-namespace Tests\Unit;
+namespace App\Models;
 
-use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class UserTest extends TestCase
+class PaymentTransaction extends Model
 {
-    use RefreshDatabase;
+    use HasFactory;
     
-    public function test_user_can_be_created(): void
+    protected $fillable = [
+        'user_id',
+        'stripe_session_id',
+        'package_id',
+        'amount',
+        'currency',
+        'status',
+        'metadata',
+    ];
+    
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'metadata' => 'array',
+    ];
+    
+    public function user(): BelongsTo
     {
-        $user = User::factory()->create([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
-        ]);
-        
-        $this->assertEquals('John Doe', $user->name);
-        $this->assertEquals('john@example.com', $user->email);
+        return $this->belongsTo(User::class);
+    }
+    
+    public function isCompleted(): bool
+    {
+        return $this->status === 'completed';
     }
 }
 ```
 
-#### Feature Tests
+### Testing Guidelines
+
+#### Writing Tests
 ```php
 <?php
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
+use App\Models\PaymentTransaction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class AuthenticationTest extends TestCase
+class PaymentTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_user_can_login(): void
+    public function test_user_can_create_checkout_session(): void
     {
         $user = User::factory()->create();
         
-        $response = $this->postJson('/api/auth/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+        $response = $this->actingAs($user)
+            ->postJson('/api/payments/checkout/session', [
+                'package_id' => 'starter',
+                'success_url' => 'https://example.com/success',
+                'cancel_url' => 'https://example.com/cancel',
+            ]);
         
         $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'success',
-                     'data' => ['user', 'token'],
-                 ]);
+            ->assertJsonStructure([
+                'success',
+                'session_id',
+                'url',
+            ]);
+        
+        $this->assertDatabaseHas('payment_transactions', [
+            'user_id' => $user->id,
+            'package_id' => 'starter',
+            'status' => 'pending',
+        ]);
+    }
+    
+    public function test_invalid_package_id_returns_validation_error(): void
+    {
+        $user = User::factory()->create();
+        
+        $response = $this->actingAs($user)
+            ->postJson('/api/payments/checkout/session', [
+                'package_id' => 'invalid',
+                'success_url' => 'https://example.com/success',
+                'cancel_url' => 'https://example.com/cancel',
+            ]);
+        
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['package_id']);
     }
 }
 ```
 
-### Frontend Testing
+#### Running Tests
+```bash
+# Run all tests
+php artisan test
 
-#### Flutter Widget Tests
-```dart
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mewayz_app/widgets/user_card.dart';
+# Run specific test file
+php artisan test tests/Feature/PaymentTest.php
 
-void main() {
-  group('UserCard Widget', () {
-    testWidgets('displays user information correctly', (WidgetTester tester) async {
-      const user = User(
-        id: 1,
-        name: 'John Doe',
-        email: 'john@example.com',
-      );
-      
-      await tester.pumpWidget(MaterialApp(
-        home: UserCard(user: user),
-      ));
-      
-      expect(find.text('John Doe'), findsOneWidget);
-      expect(find.text('john@example.com'), findsOneWidget);
-    });
-  });
-}
+# Run tests with coverage
+php artisan test --coverage
+
+# Run tests in parallel
+php artisan test --parallel
 ```
 
-### Test Coverage
+## 📝 Pull Request Process
 
-Maintain minimum test coverage:
-- **Unit Tests**: 80%+
-- **Feature Tests**: 70%+
-- **Integration Tests**: 60%+
+### Pull Request Template
+```markdown
+## Description
+Brief description of the changes made.
 
----
+## Type of Change
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Code refactoring
+
+## Changes Made
+- List the specific changes made
+- Include any new files or modified files
+- Mention any database changes
+
+## Testing
+- [ ] Tests pass locally
+- [ ] New tests added for new functionality
+- [ ] Manual testing completed
+
+## Documentation
+- [ ] Code is self-documenting
+- [ ] README updated (if applicable)
+- [ ] API documentation updated (if applicable)
+- [ ] Changelog updated
+
+## Screenshots (if applicable)
+Add screenshots to help explain your changes.
+
+## Checklist
+- [ ] My code follows the project's coding standards
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+```
+
+### Pull Request Guidelines
+1. **Create a branch**: Use descriptive branch names
+   ```bash
+   git checkout -b feature/stripe-payment-integration
+   git checkout -b bugfix/authentication-session-timeout
+   ```
+
+2. **Make commits**: Write clear, descriptive commit messages
+   ```bash
+   git commit -m "Add Stripe payment integration with checkout sessions"
+   git commit -m "Fix authentication session timeout issue"
+   ```
+
+3. **Keep PRs focused**: One feature or fix per pull request
+4. **Write tests**: Include tests for new functionality
+5. **Update documentation**: Keep docs up to date
+6. **Review your own PR**: Check for any issues before submitting
+
+### Review Process
+1. **Automated checks**: CI/CD pipeline runs tests
+2. **Code review**: Team members review the code
+3. **Testing**: Manual testing if required
+4. **Approval**: At least one approval required
+5. **Merge**: Squash and merge to main branch
+
+## 🧪 Testing
+
+### Test Categories
+- **Unit Tests**: Test individual components
+- **Feature Tests**: Test application features
+- **Integration Tests**: Test component interactions
+- **Browser Tests**: Test user interactions
+
+### Test Coverage Goals
+- **Overall coverage**: > 80%
+- **Critical paths**: 100% coverage
+- **New features**: 100% coverage
+- **Bug fixes**: Include regression tests
+
+### Running Tests
+```bash
+# Run all tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+
+# Run tests in parallel
+php artisan test --parallel
+```
 
 ## 📚 Documentation
 
-### Code Documentation
+### Documentation Standards
+- **Clear and concise**: Easy to understand
+- **Up to date**: Reflect current functionality
+- **Complete**: Cover all features and APIs
+- **Examples**: Include code examples
+- **Structured**: Well-organized and searchable
 
-#### PHP DocBlocks
-```php
-/**
- * Create a new user account
- *
- * @param array $userData User registration data
- * @return User The created user instance
- * @throws ValidationException If validation fails
- */
-public function createUser(array $userData): User
-{
-    // Implementation
-}
+### Documentation Types
+- **API Documentation**: Complete API reference
+- **User Guide**: End-user documentation
+- **Development Guide**: Setup and development
+- **Architecture**: System design and structure
+- **Troubleshooting**: Common issues and solutions
+
+### Writing Documentation
+```markdown
+# Feature Name
+
+## Overview
+Brief description of the feature.
+
+## Installation
+Step-by-step installation instructions.
+
+## Usage
+How to use the feature with examples.
+
+## API Reference
+Detailed API documentation.
+
+## Examples
+Code examples and use cases.
+
+## Troubleshooting
+Common issues and solutions.
 ```
 
-#### JavaScript JSDoc
-```javascript
-/**
- * Fetch user data from API
- * @param {number} userId - The user ID
- * @returns {Promise<Object>} User data
- * @throws {Error} If request fails
- */
-async function fetchUser(userId) {
-    // Implementation
-}
-```
+## 🔄 Release Process
 
-### API Documentation
+### Version Numbers
+We follow [Semantic Versioning](https://semver.org/):
+- **MAJOR**: Breaking changes
+- **MINOR**: New features, backward compatible
+- **PATCH**: Bug fixes
 
-Update API documentation for new endpoints:
-```yaml
-# openapi.yaml
-/api/users:
-  get:
-    summary: Get all users
-    parameters:
-      - name: page
-        in: query
-        schema:
-          type: integer
-    responses:
-      200:
-        description: Users retrieved successfully
-```
+### Release Checklist
+- [ ] Update version numbers
+- [ ] Update changelog
+- [ ] Run full test suite
+- [ ] Update documentation
+- [ ] Create release notes
+- [ ] Tag release
+- [ ] Deploy to production
 
----
+## 🏆 Recognition
 
-## 👥 Community
+### Contributors
+We recognize all contributors in:
+- README.md contributors section
+- Release notes
+- Annual contributor awards
+- Community highlights
 
-### Communication Channels
-
-#### Discord Server
-Join our Discord for real-time discussions:
-- **General**: General discussions
-- **Development**: Development-related topics
-- **Help**: Get help with contributions
-- **Announcements**: Important updates
-
-#### GitHub Discussions
-Use GitHub Discussions for:
-- Feature requests
-- Architecture discussions
-- Q&A
-- Show and tell
-
-### Community Guidelines
-
-#### Be Helpful
-- Answer questions when you can
-- Share knowledge and resources
-- Provide constructive feedback
-- Welcome new contributors
-
-#### Be Respectful
-- Respect different opinions
-- Be patient with beginners
-- Acknowledge contributions
-- Follow code of conduct
-
-### Recognition
-
-We recognize contributors through:
-- **Contributors page**: Listed on our website
-- **Release notes**: Mentioned in changelogs
-- **Community highlights**: Featured in newsletters
-- **Special badges**: GitHub profile badges
-
----
-
-## 🎯 Types of Contributions
-
-### Bug Reports
-
-#### How to Report
-1. Check existing issues first
-2. Use bug report template
-3. Provide detailed steps to reproduce
-4. Include system information
-5. Add relevant screenshots
-
-#### Good Bug Report
-```
-**Bug Description**
-Login fails with 500 error when using OAuth
-
-**Steps to Reproduce**
-1. Click "Login with Google"
-2. Complete OAuth flow
-3. Redirected to login page with error
-
-**Expected Behavior**
-Should login successfully
-
-**System Information**
-- OS: macOS 12.6
-- Browser: Chrome 108
-- PHP: 8.2.28
-```
-
-### Feature Requests
-
-#### How to Request
-1. Check existing feature requests
-2. Use feature request template
-3. Explain the use case
-4. Provide detailed requirements
-5. Consider implementation impact
-
-### Code Contributions
-
-#### Areas to Contribute
-- **Backend**: API endpoints, services, middleware
-- **Frontend**: UI components, pages, features
-- **Mobile**: Flutter widgets, screens, services
-- **Testing**: Unit tests, feature tests, e2e tests
-- **Documentation**: Guides, API docs, comments
-
-### Documentation Improvements
-
-#### Types of Documentation
-- **User guides**: Help users use features
-- **Developer docs**: Technical implementation
-- **API documentation**: Endpoint references
-- **Tutorials**: Step-by-step guides
-
----
-
-## 🏆 Contributor Levels
-
-### First-Time Contributor
-- Fix typos and documentation
-- Add missing tests
-- Improve error messages
-- Small bug fixes
-
-### Regular Contributor
-- Implement new features
-- Major bug fixes
-- Performance improvements
-- Code refactoring
-
-### Core Contributor
-- Architecture decisions
-- Review pull requests
-- Mentor new contributors
-- Lead feature development
-
----
+### Contribution Types
+- **Code**: Bug fixes, features, refactoring
+- **Documentation**: Writing, editing, translation
+- **Testing**: Bug reports, test writing
+- **Design**: UI/UX improvements
+- **Community**: Support, moderation, advocacy
 
 ## 📞 Getting Help
 
-### Support Channels
-- **Discord**: Real-time help
-- **GitHub Issues**: Bug reports and features
-- **Email**: contribute@mewayz.com
-- **Documentation**: https://docs.mewayz.com
+### Communication Channels
+- **GitHub Issues**: Bug reports and feature requests
+- **GitHub Discussions**: General discussions
+- **Email**: development@mewayz.com
+- **Discord**: Community chat (link in README)
 
-### Mentorship Program
-- Pair with experienced contributors
-- Guided contribution process
-- Regular check-ins and feedback
-- Skill development opportunities
+### Mentorship
+New contributors can request mentorship:
+- **Code review**: Detailed feedback on PRs
+- **Architecture guidance**: System design help
+- **Career advice**: Professional development
+
+## 📋 Contribution Ideas
+
+### Good First Issues
+- Documentation improvements
+- Small bug fixes
+- Test coverage improvements
+- UI/UX enhancements
+- Code cleanup and refactoring
+
+### Advanced Contributions
+- New feature development
+- Performance optimizations
+- Security improvements
+- API design
+- Architecture enhancements
+
+### Long-term Projects
+- Mobile app development
+- AI feature integration
+- Multi-language support
+- Advanced analytics
+- Enterprise features
+
+## 🎯 Goals and Roadmap
+
+### Short-term Goals (Q1 2025)
+- Improve test coverage to 90%
+- Add more comprehensive documentation
+- Implement advanced analytics
+- Enhance mobile responsiveness
+
+### Long-term Goals (2025)
+- Mobile app launch
+- AI-powered features
+- Enterprise edition
+- International expansion
+- Community-driven development
+
+## 🙏 Thank You
+
+We appreciate every contribution, no matter how small. Your involvement helps make Mewayz better for everyone. Thank you for being part of our community!
 
 ---
 
-## 📝 Legal
+**Last Updated**: January 16, 2025  
+**Contributing Guide Version**: 2.0  
+**Next Review**: April 2025
 
-### Contributor License Agreement (CLA)
-By contributing, you agree that:
-- You have the right to submit the work
-- You grant Mewayz Technologies Inc. rights to use your contribution
-- Your contribution is provided under the same license as the project
-
-### Attribution
-All contributors will be recognized in:
-- CONTRIBUTORS.md file
-- Release notes
-- Project documentation
-- Community announcements
-
----
-
-Thank you for contributing to Mewayz! Your contributions help make business management seamless for creators and entrepreneurs worldwide.
-
-*Mewayz Platform - Contributing Guide*  
-*Built by Mewayz Technologies Inc.*  
-*Creating seamless business solutions for the modern digital world*
-
-**Version**: 1.0.0  
-**Last Updated**: December 2024
+*This guide is a living document and will be updated as the project evolves.*
