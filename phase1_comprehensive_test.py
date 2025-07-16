@@ -153,9 +153,8 @@ class MewayzPhase1Test:
                 "billing_interval": "monthly"
             }),
             ("POST", "/workspace-setup/subscription", "subscription_save_endpoint", {
-                "plan": "professional",
-                "billing_cycle": "monthly",
-                "selected_features": ["bio_sites", "social_media", "analytics"]
+                "plan_id": 2,
+                "billing_interval": "monthly"
             }),
             ("POST", "/workspace-setup/branding", "branding_save_endpoint", {
                 "brand_name": "Test Brand",
