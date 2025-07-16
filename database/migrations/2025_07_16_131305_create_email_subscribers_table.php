@@ -12,8 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_subscribers', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('workspace_id');
+            $table->string('email')->unique();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('location')->nullable();
+            $table->enum('status', ['subscribed', 'unsubscribed', 'bounced', 'complained'])->default('subscribed');
+            $table->json('tags')->nullable(); // Custom tags for segmentation
+            $table->json('custom_fields')->nullable(); // Additional custom data
+            $table->timestamp('subscribed_at')->nullable();
+            $table->timestamp('unsubscribed_at')->nullable();
+            $table->string('source')->nullable(); // How they subscribed (form, import, etc.)
+            $table->string('ip_address')->nullable();
             $table->timestamps();
+            
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+            
+            $table->index(['workspace_id', 'status']);
+            $table->index(['email', 'status']);
+            $table->index(['workspace_id', 'created_at']);
         });
     }
 

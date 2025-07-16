@@ -12,8 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_campaign_analytics', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('campaign_id');
+            $table->uuid('subscriber_id');
+            $table->string('event_type'); // sent, delivered, opened, clicked, unsubscribed, bounced, complained
+            $table->timestamp('event_timestamp');
+            $table->string('user_agent')->nullable();
+            $table->string('ip_address')->nullable();
+            $table->json('event_data')->nullable(); // Additional event-specific data
             $table->timestamps();
+            
+            $table->foreign('campaign_id')->references('id')->on('email_campaigns')->onDelete('cascade');
+            $table->foreign('subscriber_id')->references('id')->on('email_subscribers')->onDelete('cascade');
+            
+            $table->index(['campaign_id', 'event_type']);
+            $table->index(['subscriber_id', 'event_type']);
+            $table->index(['campaign_id', 'event_timestamp']);
         });
     }
 

@@ -12,8 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_templates', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('workspace_id');
+            $table->uuid('user_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('category')->default('custom'); // newsletter, promotional, transactional, custom
+            $table->text('subject');
+            $table->longText('html_content');
+            $table->longText('text_content')->nullable();
+            $table->json('variables')->nullable(); // Template variables/placeholders
+            $table->string('thumbnail_url')->nullable();
+            $table->boolean('is_default')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->integer('usage_count')->default(0);
             $table->timestamps();
+            
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
+            $table->index(['workspace_id', 'category']);
+            $table->index(['workspace_id', 'is_active']);
         });
     }
 
