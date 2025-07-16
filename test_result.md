@@ -217,15 +217,18 @@
 backend:
   - task: "Instagram Management System"
     implemented: true
-    working: "NA"
+    working: false
     file: "app/Http/Controllers/Api/InstagramManagementController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Cannot test - server not running. Previous audit shows 100% functional with full CRUD operations, hashtag research, analytics."
+      - working: false
+        agent: "testing"
+        comment: "❌ CRITICAL FAILURES: Instagram Management severely broken - 2/11 tests passed (18.2%). Account creation/fetching failing with 500 errors, post creation failing, hashtag research failing. Only basic posts GET and analytics GET working. Requires immediate attention."
 
   - task: "Email Marketing Hub"
     implemented: true
