@@ -345,6 +345,40 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/feature-usage', [AdminController::class, 'getFeatureUsage']);
     });
     
+    // Link in Bio Builder routes
+    Route::prefix('link-in-bio')->group(function () {
+        Route::get('/sites', [LinkInBioController::class, 'getBioSites']);
+        Route::post('/sites', [LinkInBioController::class, 'createBioSite']);
+        Route::get('/sites/{id}', [LinkInBioController::class, 'getBioSiteBuilder']);
+        Route::put('/sites/{id}', [LinkInBioController::class, 'saveBioSite']);
+        Route::get('/sites/{id}/analytics', [LinkInBioController::class, 'getBioSiteAnalytics']);
+        Route::post('/sites/{id}/ab-test', [LinkInBioController::class, 'abTestBioSite']);
+        Route::get('/templates', [LinkInBioController::class, 'getTemplates']);
+        Route::get('/components', [LinkInBioController::class, 'getComponents']);
+    });
+    
+    // Template Marketplace routes
+    Route::prefix('templates')->group(function () {
+        Route::get('/', [TemplateMarketplaceController::class, 'getTemplates']);
+        Route::get('/categories', [TemplateMarketplaceController::class, 'getCategories']);
+        Route::get('/{id}', [TemplateMarketplaceController::class, 'getTemplateDetails']);
+        Route::post('/{id}/purchase', [TemplateMarketplaceController::class, 'purchaseTemplate']);
+        Route::get('/user/purchased', [TemplateMarketplaceController::class, 'getUserTemplates']);
+        Route::post('/upload', [TemplateMarketplaceController::class, 'uploadTemplate']);
+        Route::post('/{id}/rate', [TemplateMarketplaceController::class, 'rateTemplate']);
+    });
+    
+    // Gamification routes
+    Route::prefix('gamification')->group(function () {
+        Route::get('/achievements', [GamificationController::class, 'getAchievements']);
+        Route::get('/progress', [GamificationController::class, 'getProgress']);
+        Route::get('/leaderboard', [GamificationController::class, 'getLeaderboard']);
+        Route::get('/badges', [GamificationController::class, 'getBadges']);
+        Route::get('/challenges', [GamificationController::class, 'getChallenges']);
+        Route::get('/rewards', [GamificationController::class, 'getRewards']);
+        Route::post('/rewards/{id}/redeem', [GamificationController::class, 'redeemReward']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
