@@ -381,11 +381,11 @@ backend:
 
   - task: "E-commerce Platform"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/app/Http/Controllers/Api/EcommerceController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -393,6 +393,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ E-commerce platform fully functional. Product catalog management working, inventory tracking operational, order processing functional, payment integration working. Advanced features include product variants, shipping management, coupon system, and comprehensive order tracking."
+      - working: false
+        agent: "testing"
+        comment: "❌ REVIEW REQUEST TESTING FAILED: E-commerce Product CREATE operations failing with 500 errors. POST /api/ecommerce/products returns SQLSTATE[22007] error - 'Incorrect integer value: 'active' for column products.status'. Database schema issue where status field expects integer but receiving string. User_id assignment cannot be verified due to creation failure. CRITICAL: Database migration or model definition needs fixing for products table status field."
 
   - task: "Course Management System"
     implemented: true
