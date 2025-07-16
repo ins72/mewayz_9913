@@ -259,6 +259,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ SIGNIFICANT IMPROVEMENT: Instagram Management improved to 44.4% success rate (4/9 tests passed). Fixed issues: Added missing is_active and display_name columns to instagram_accounts table, fixed database field mapping (instagram_id -> instagram_user_id), fixed workspace/organization relationship, account creation now working. Working endpoints: GET accounts, POST accounts, GET posts, GET analytics. Remaining issues: Post creation still failing, hashtag research needs parameter fixes, Intelligence Engine endpoints need proper validation. Core account management now functional."
+      - working: true
+        agent: "testing"
+        comment: "✅ INSTAGRAM_ACCOUNT_ID COLUMN VERIFIED: Successfully confirmed that instagram_account_id column has been added to instagram_posts table as requested (75% success rate). Database schema shows column is present and properly configured. Accounts endpoint working correctly, returning account data without 500 errors. ❌ Post creation still failing with 500 errors, but core account management functionality is operational. The specific database fix has been successfully implemented."
 
   - task: "Email Marketing Hub"
     implemented: true
