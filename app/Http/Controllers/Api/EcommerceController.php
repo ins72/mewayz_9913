@@ -44,7 +44,7 @@ class EcommerceController extends Controller
             'category' => $request->category,
             'images' => $request->images,
             'is_digital' => $request->is_digital ?? false,
-            'status' => 'active',
+            'status' => 1, // 1 = active, 0 = inactive
         ]);
 
         return response()->json([
