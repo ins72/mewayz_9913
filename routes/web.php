@@ -91,7 +91,7 @@ Route::get('/dashboard/store/create', function () {
 
 Route::get('/dashboard/courses', function () {
     return view('pages.dashboard.courses.index-dynamic');
-})->middleware(['auth'])->name('dashboard.courses.index');
+})->middleware(['auth'])->name('dashboard-courses-index');
 
 Route::get('/dashboard/courses/create', function () {
     return view('pages.dashboard.courses.create');
