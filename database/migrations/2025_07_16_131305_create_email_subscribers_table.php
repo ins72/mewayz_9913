@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('email_subscribers', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('workspace_id');
-            $table->string('email')->unique();
+            $table->id();
+            $table->unsignedBigInteger('workspace_id');
+            $table->string('email');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('phone')->nullable();
@@ -30,6 +30,7 @@ return new class extends Migration
             
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             
+            $table->unique(['workspace_id', 'email']);
             $table->index(['workspace_id', 'status']);
             $table->index(['email', 'status']);
             $table->index(['workspace_id', 'created_at']);
