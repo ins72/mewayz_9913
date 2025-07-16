@@ -28,6 +28,10 @@ class Course extends BaseCourse
 
 
 	protected $casts = [
+		'status' => 'integer',
+		'price_type' => 'integer',
+		'course_expiry_type' => 'integer',
+		'position' => 'integer',
 		'settings' => 'array',
 		'course_includes' => 'array'
 	];
