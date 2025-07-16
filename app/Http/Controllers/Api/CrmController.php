@@ -63,6 +63,7 @@ class CrmController extends Controller
             $contact = Audience::create([
                 'user_id' => $user->id,
                 'workspace_id' => $workspace->id,
+                'owner_id' => $user->id,
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
