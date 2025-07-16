@@ -617,4 +617,50 @@ class AnalyticsController extends Controller
             return response()->json(['error' => 'Failed to export analytics'], 500);
         }
     }
+
+    /**
+     * Get available reports
+     */
+    public function getReports(Request $request)
+    {
+        try {
+            $reports = [
+                'available_reports' => [
+                    [
+                        'id' => 'traffic',
+                        'name' => 'Traffic Report',
+                        'description' => 'Detailed traffic analytics',
+                        'last_generated' => null,
+                    ],
+                    [
+                        'id' => 'revenue',
+                        'name' => 'Revenue Report',
+                        'description' => 'Sales and revenue analytics',
+                        'last_generated' => null,
+                    ],
+                    [
+                        'id' => 'social_media',
+                        'name' => 'Social Media Report',
+                        'description' => 'Social media performance',
+                        'last_generated' => null,
+                    ],
+                    [
+                        'id' => 'email_marketing',
+                        'name' => 'Email Marketing Report',
+                        'description' => 'Email campaign performance',
+                        'last_generated' => null,
+                    ],
+                ],
+                'scheduled_reports' => [],
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $reports,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error getting reports: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to get reports'], 500);
+        }
+    }
 }
