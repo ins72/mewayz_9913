@@ -112,6 +112,14 @@ class OAuthController extends Controller
                         'last_login_at' => now(),
                         'last_login_ip' => request()->ip()
                     ]);
+                    
+                    // Create default workspace for new user
+                    $workspace = $user->workspaces()->create([
+                        'name' => $user->name . "'s Workspace",
+                        'is_primary' => true,
+                        'setup_step' => 'goals',
+                        'setup_completed' => false,
+                    ]);
                 }
             }
 
