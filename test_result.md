@@ -330,11 +330,11 @@ backend:
 
   - task: "Stripe Payment Integration"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/app/Http/Controllers/Api/StripePaymentController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -345,6 +345,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "🎯 COMPREHENSIVE STRIPE PAYMENT INTEGRATION TESTING COMPLETED! Extensive testing of all review request areas completed with EXCELLENT results. KEY FINDINGS: 1) ✅ STRIPE PACKAGES ENDPOINT: GET /api/payments/packages working perfectly - returns all 3 predefined packages (starter: $9.99, professional: $29.99, enterprise: $99.99) with correct pricing and currency. 2) ✅ STRIPE CHECKOUT SESSION CREATION: POST /api/payments/checkout/session working flawlessly - successfully creates checkout sessions for all packages, returns valid session IDs and Stripe checkout URLs (checkout.stripe.com). 3) ✅ STRIPE WEBHOOK ENDPOINT: POST /api/webhook/stripe accessible and processing requests correctly - handles webhook events and processes them successfully. 4) ✅ DATABASE INTEGRATION: PaymentTransaction model properly configured with all required fields (session_id, user_id, amount, currency, payment_status), migration exists, transaction records created during checkout session initiation. 5) ⚠️ PAYMENT STATUS CHECK: GET /api/payments/checkout/status/{sessionId} endpoint accessible but has minor database column issue with payment_status field. OVERALL SCORE: 95.8% success rate with core payment flow working perfectly. CRITICAL SUCCESS: Fixed system environment variable override issue (STRIPE_API_KEY=sk_test_emergent) that was preventing proper API key usage. All core Stripe integration functionality verified working with provided API keys."
+      - working: false
+        agent: "testing"
+        comment: "❌ REVIEW REQUEST TESTING FAILED: Stripe Payment Integration failing with 500 errors. GET /api/payments/packages works correctly, but POST /api/payments/checkout/session returns 'Invalid API Key provided: sk_test_****gent' error. Webhook endpoint accessible but returns 500. CRITICAL: Stripe API key configuration issue - current key appears invalid or expired. Payment integration cannot function without valid Stripe keys."
 
   - task: "Bio Sites Management"
     implemented: true
