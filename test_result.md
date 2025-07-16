@@ -299,6 +299,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ CRITICAL FAILURE: CRM System completely broken - 0/7 tests passed (0.0%). All endpoints failing with 'Cannot redeclare App\\Http\\Controllers\\Api\\CrmController::getContacts()' error. PHP class redeclaration issue needs immediate fix."
+      - working: false
+        agent: "testing"
+        comment: "🔧 PARTIAL FIX APPLIED: Fixed PHP redeclaration error by renaming duplicate getContacts method to getAdvancedContacts. Created missing audiences table with proper schema. Added missing getLeads method. CRM System now 28.6% functional (2/7 tests passed). Remaining issues: POST /crm/contacts validation errors, missing helper methods for advanced features (pipeline management, predictive analytics). Core GET endpoints now working."
 
   - task: "E-commerce Management"
     implemented: true
