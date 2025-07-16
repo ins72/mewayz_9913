@@ -7,47 +7,47 @@
     "professional_package": true,
     "enterprise_package": true,
     "correct_pricing": true,
-    "response_time": 0.3356921672821045
+    "response_time": 0.3301863670349121
   },
   "stripe_checkout_test": {
     "endpoint_accessible": true,
-    "response_status": 500,
-    "session_created": false,
-    "session_id_returned": false,
-    "checkout_url_returned": false,
-    "starter_package_test": false,
-    "professional_package_test": false,
-    "enterprise_package_test": false,
-    "response_time": 0.18035078048706055
+    "response_status": 200,
+    "session_created": true,
+    "session_id_returned": true,
+    "checkout_url_returned": true,
+    "starter_package_test": true,
+    "professional_package_test": true,
+    "enterprise_package_test": true,
+    "response_time": 0.5328574180603027
   },
   "stripe_webhook_test": {
     "endpoint_accessible": true,
     "response_status": 200,
     "webhook_processed": true,
     "signature_validation": false,
-    "response_time": 0.024378061294555664
+    "response_time": 0.024266719818115234
   },
   "payment_status_test": {
     "endpoint_accessible": true,
-    "response_status": 404,
-    "status_returned": true,
+    "response_status": 500,
+    "status_returned": false,
     "session_found": false,
-    "response_time": 0.02317523956298828
+    "response_time": 0.26508545875549316
   },
   "database_integration_test": {
     "model_file_exists": true,
     "migration_exists": true,
     "database_structure": true,
-    "transaction_creation": false
+    "transaction_creation": true
   },
   "test_summary": {
-    "overall_score": 560.3630399420147,
-    "packages_score": 2579.1961520910263,
-    "checkout_score": 14.285714285714285,
+    "overall_score": 575.8254659175873,
+    "packages_score": 2579.1273295879364,
+    "checkout_score": 100.0,
     "webhook_score": 66.66666666666666,
-    "status_score": 66.66666666666666,
-    "database_score": 75.0,
-    "test_timestamp": "2025-07-16 00:36:20",
-    "total_response_time": 0.563596248626709
+    "status_score": 33.33333333333333,
+    "database_score": 100.0,
+    "test_timestamp": "2025-07-16 00:40:09",
+    "total_response_time": 1.1523959636688232
   }
 }
