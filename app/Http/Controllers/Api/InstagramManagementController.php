@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InstagramAccount;
 use App\Models\InstagramPost;
 use App\Models\InstagramHashtag;
-use App\Models\Organization;
+use App\Models\Workspace;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
