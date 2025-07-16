@@ -289,28 +289,21 @@ class MewayzPhase1Test:
                     data = response.json()
                     
                     if data.get('success', True):
-                        total_cost = data.get('total_cost', 0)
-                        recommended_plan = data.get('recommended_plan', '')
-                        feature_count = len(scenario["features"])
+                        total_cost = data.get('data', {}).get('pricing', {}).get('total_price', 0)
+                        plan_name = data.get('data', {}).get('plan', {}).get('name', '')
+                        feature_count = data.get('data', {}).get('feature_count', 0)
                         
-                        print(f"   ✅ Features: {feature_count}")
+                        print(f"   ✅ Plan: {plan_name}")
+                        print(f"   ✅ Feature count: {feature_count}")
                         print(f"   ✅ Total cost: ${total_cost}")
-                        print(f"   ✅ Recommended plan: {recommended_plan}")
                         
                         results[scenario["result_key"]] = True
                         results["pricing_calculations"][scenario["name"]] = {
                             "feature_count": feature_count,
                             "total_cost": total_cost,
-                            "recommended_plan": recommended_plan,
-                            "billing_cycle": scenario.get("billing_cycle", "monthly")
+                            "plan_name": plan_name,
+                            "billing_interval": scenario.get("billing_interval", "monthly")
                         }
-                        
-                        # Validate expected results
-                        if "expected_cost" in scenario and total_cost == scenario["expected_cost"]:
-                            print(f"   ✅ Cost matches expected: ${scenario['expected_cost']}")
-                        
-                        if "expected_plan" in scenario and recommended_plan.lower() == scenario["expected_plan"]:
-                            print(f"   ✅ Plan matches expected: {scenario['expected_plan']}")
                     else:
                         print(f"   ❌ Pricing calculation failed: {data.get('message', 'Unknown error')}")
                 else:
