@@ -526,8 +526,7 @@ class WorkspaceSetupTeamTest:
             print("\n🧪 Step 5: Saving team setup...")
             
             team_data = {
-                "team_size": "small",
-                "invitations": [
+                "team_members": [
                     {
                         "email": "teammate1@example.com",
                         "role": "member"
