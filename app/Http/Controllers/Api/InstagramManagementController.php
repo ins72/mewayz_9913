@@ -238,10 +238,27 @@ class InstagramManagementController extends Controller
                 return str_starts_with($tag, '#') ? $tag : '#' . $tag;
             }, $hashtags);
             
+            // Get the first Instagram account for this workspace (or create a default one)
+            $instagramAccount = InstagramAccount::where('workspace_id', $workspace->id)->first();
+            if (!$instagramAccount) {
+                $instagramAccount = InstagramAccount::create([
+                    'workspace_id' => $workspace->id,
+                    'user_id' => $user->id,
+                    'instagram_id' => 'default_account',
+                    'username' => 'default_account',
+                    'display_name' => 'Default Account',
+                    'is_active' => true,
+                    'account_type' => 'personal',
+                    'followers_count' => 0,
+                    'following_count' => 0,
+                    'media_count' => 0
+                ]);
+            }
+
             $post = InstagramPost::create([
                 'workspace_id' => $workspace->id,
                 'user_id' => $user->id,
-                'title' => $request->title,
+                'instagram_account_id' => $instagramAccount->id,
                 'caption' => $request->caption,
                 'media_urls' => $request->media_urls,
                 'hashtags' => $processedHashtags,
