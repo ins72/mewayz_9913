@@ -85,6 +85,34 @@ class CrmController extends Controller
         }
     }
 
+    /**
+     * Get leads
+     */
+    public function getLeads(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            
+            if (!$workspace) {
+                return response()->json(['error' => 'Workspace not found'], 404);
+            }
+
+            $leads = Audience::where('user_id', $user->id)
+                ->where('type', 'lead')
+                ->orderBy('created_at', 'desc')
+                ->paginate(20);
+
+            return response()->json([
+                'success' => true,
+                'data' => $leads,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error getting leads: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to get leads'], 500);
+        }
+    }
+
     public function createLead(Request $request)
     {
         $request->validate([
