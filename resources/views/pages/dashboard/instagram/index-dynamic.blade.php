@@ -290,9 +290,10 @@
             try {
                 const response = await fetch('/api/instagram-management/analytics', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    credentials: 'same-origin'
                 });
                 
                 if (response.ok) {
