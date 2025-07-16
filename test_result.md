@@ -559,14 +559,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Team Management Interface" 
-    - "Payment Integration Interface"
-    - "AI Features Interface"
-    - "PWA Manifest Registration"
+    - "CRM System" 
+    - "Instagram Management System"
+    - "Workspace Setup Wizard"
   stuck_tasks:
-    - "Team Management Interface"
+    - "CRM System"
+    - "Instagram Management System"
   test_all: false
-  test_priority: "frontend_complete"
+  test_priority: "backend_complete"
 
 agent_communication:
   - agent: "testing"
