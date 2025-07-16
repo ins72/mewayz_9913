@@ -13,7 +13,7 @@ class StripeService
 
     public function __construct()
     {
-        Stripe::setApiKey(env('STRIPE_API_KEY'));
+        Stripe::setApiKey(env('STRIPE_SECRET'));
         $this->webhookSecret = env('STRIPE_WEBHOOK_SECRET', '');
     }
 
