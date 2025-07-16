@@ -12,9 +12,6 @@ class EmailTemplate extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
     protected $fillable = [
         'workspace_id',
         'user_id',
@@ -37,17 +34,6 @@ class EmailTemplate extends Model
         'is_active' => 'boolean',
         'usage_count' => 'integer'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 
     /**
      * Get the workspace that owns the template
