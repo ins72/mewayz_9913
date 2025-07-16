@@ -17,7 +17,7 @@ class AIController extends Controller
         'openai' => [
             'name' => 'OpenAI GPT',
             'enabled' => true,
-            'test_mode' => true,
+            'test_mode' => false, // Use real OpenAI
             'features' => ['chat', 'content_generation', 'text_analysis'],
         ],
         'claude' => [
