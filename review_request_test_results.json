@@ -1,0 +1,33 @@
+{
+  "course_management_test": {
+    "endpoint_accessible": true,
+    "authentication_working": true,
+    "course_creation_successful": true,
+    "status_field_integer_fix": true,
+    "proper_json_response": true,
+    "no_database_errors": true,
+    "user_id_assignment": true,
+    "response_status": 201,
+    "response_time": 0.03624320030212402
+  },
+  "stripe_payment_test": {
+    "packages_endpoint_working": true,
+    "checkout_session_creation": false,
+    "corrected_api_key_working": false,
+    "no_invalid_api_key_errors": false,
+    "proper_json_response": true,
+    "session_id_returned": false,
+    "checkout_url_returned": false,
+    "response_status": 500,
+    "response_time": 0.023950576782226562
+  },
+  "test_summary": {
+    "overall_score": 64.28571428571428,
+    "course_management_score": 100.0,
+    "stripe_payment_score": 28.57142857142857,
+    "test_timestamp": "2025-07-16 09:40:23",
+    "course_status_fix_working": true,
+    "stripe_secret_fix_working": false,
+    "total_response_time": 0.060193777084350586
+  }
+}
