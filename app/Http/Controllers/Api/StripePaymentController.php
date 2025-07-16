@@ -251,6 +251,59 @@ class StripePaymentController extends Controller
     }
     
     /**
+     * Create test checkout session for local development
+     */
+    private function createTestCheckoutSession(Request $request)
+    {
+        try {
+            // Get package info
+            $packageId = $request->input('package_id') ?? $request->input('package');
+            
+            if (!isset(self::PACKAGES[$packageId])) {
+                return response()->json(['error' => 'Invalid package selected'], 400);
+            }
+            
+            $package = self::PACKAGES[$packageId];
+            $user = Auth::user();
+            
+            // Create a test session ID
+            $sessionId = 'test_session_' . time() . '_' . rand(1000, 9999);
+            
+            // Create payment transaction record
+            $transaction = PaymentTransaction::create([
+                'session_id' => $sessionId,
+                'user_id' => $user ? $user->id : null,
+                'email' => $user ? $user->email : 'test@example.com',
+                'amount' => $package['amount'],
+                'currency' => $package['currency'],
+                'metadata' => ['package' => $packageId, 'test_mode' => true],
+                'payment_status' => 'initiated',
+                'stripe_price_id' => null,
+                'quantity' => 1
+            ]);
+            
+            // Return test checkout URL
+            $baseUrl = config('app.url');
+            $testUrl = $baseUrl . '/dashboard/upgrade?test_session=' . $sessionId;
+            
+            return response()->json([
+                'success' => true,
+                'url' => $testUrl,
+                'session_id' => $sessionId,
+                'test_mode' => true
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Test checkout session creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['error' => 'Failed to create test checkout session'], 500);
+        }
+    }
+    
+    /**
      * Get available packages
      */
     public function getPackages()
