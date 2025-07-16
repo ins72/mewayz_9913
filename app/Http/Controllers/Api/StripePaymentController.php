@@ -35,8 +35,9 @@ class StripePaymentController extends Controller
         try {
             // Validate request
             $request->validate([
+                'package' => 'required_without:stripe_price_id|string',
                 'package_id' => 'required_without:stripe_price_id|string',
-                'stripe_price_id' => 'required_without:package_id|string',
+                'stripe_price_id' => 'required_without_all:package,package_id|string',
                 'quantity' => 'integer|min:1|max:10',
                 'success_url' => 'string',
                 'cancel_url' => 'string',
