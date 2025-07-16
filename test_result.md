@@ -354,9 +354,9 @@ backend:
 
   - task: "Bio Sites Management"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/app/Http/Controllers/Api/BioSiteController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -369,6 +369,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ REVIEW REQUEST TESTING COMPLETED: Bio Site CREATE operations working successfully. POST /api/bio-sites returns 200 status code (no 500 errors). Themes access functional. However, user_id assignment verification unclear from response format - responses return HTML instead of JSON, indicating potential routing or middleware issues. Core functionality operational but response format needs investigation."
+      - working: false
+        agent: "testing"
+        comment: "❌ FOCUSED REVIEW TESTING COMPLETED: Bio Site user_id assignment fix NOT WORKING. POST /api/bio-sites returns HTML redirect page instead of JSON response, indicating routing/middleware issues. The API request is being redirected to web interface rather than processed by API controller. User_id assignment cannot be verified due to routing problems. CRITICAL: API routing configuration needs investigation - bio site creation not reaching API controller."
 
   - task: "CRM System"
     implemented: true
