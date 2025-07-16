@@ -274,8 +274,8 @@ class MewayzPhase1Test:
                 print(f"\n🧪 Testing {scenario['name']}...")
                 
                 payload = {
-                    "selected_features": scenario["features"],
-                    "billing_cycle": scenario.get("billing_cycle", "monthly")
+                    "plan_id": scenario["plan_id"],
+                    "billing_interval": scenario.get("billing_interval", "monthly")
                 }
                 
                 response = requests.post(
