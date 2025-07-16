@@ -13,9 +13,6 @@ class EmailSubscriber extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
     protected $fillable = [
         'workspace_id',
         'email',
@@ -44,9 +41,6 @@ class EmailSubscriber extends Model
         parent::boot();
         
         static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
             if (empty($model->subscribed_at)) {
                 $model->subscribed_at = now();
             }
