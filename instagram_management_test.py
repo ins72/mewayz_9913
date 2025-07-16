@@ -464,7 +464,6 @@ class InstagramManagementTest:
         try:
             # Test valid post creation
             post_data = {
-                "title": "Welcome to Mewayz Platform",
                 "caption": "Discover the power of our all-in-one business platform for modern creators! 🚀 #mewayz #business #creators",
                 "media_urls": [
                     "https://example.com/image1.jpg",
@@ -477,7 +476,7 @@ class InstagramManagementTest:
                     "platform",
                     "success"
                 ],
-                "post_type": "feed"
+                "post_type": "photo"
             }
             
             start_time = time.time()
