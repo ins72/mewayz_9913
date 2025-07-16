@@ -270,6 +270,7 @@ class InstagramManagementController extends Controller
                 'workspace_id' => $workspace->id,
                 'user_id' => $user->id,
                 'instagram_account_id' => $instagramAccount->id,
+                'title' => $request->title,
                 'caption' => $request->caption,
                 'media_urls' => $request->media_urls,
                 'hashtags' => $processedHashtags,
