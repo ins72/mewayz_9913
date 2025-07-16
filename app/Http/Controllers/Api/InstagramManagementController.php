@@ -442,7 +442,7 @@ class InstagramManagementController extends Controller
             // Get hashtags from database
             $hashtags = InstagramHashtag::where('workspace_id', $workspace->id)
                 ->where('hashtag', 'like', '%' . $keyword . '%')
-                ->orderBy('post_count', 'desc')
+                ->orderBy('posts_count', 'desc')
                 ->limit($limit)
                 ->get();
             
