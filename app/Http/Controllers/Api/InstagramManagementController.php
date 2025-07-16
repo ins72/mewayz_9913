@@ -21,13 +21,19 @@ class InstagramManagementController extends Controller
     {
         try {
             $user = Auth::user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            // Get the user's organization (workspace)
+            $organization = $user->organizations()->first();
+            if (!$organization) {
+                // Create a default organization if none exists
+                $organization = $user->organizations()->create([
+                    'name' => $user->name . "'s Workspace",
+                    'slug' => strtolower(str_replace(' ', '-', $user->name)) . '-workspace',
+                    'is_active' => true
+                ]);
             }
             
-            $accounts = InstagramAccount::where('workspace_id', $workspace->id)
+            $accounts = InstagramAccount::where('workspace_id', $organization->id)
                 ->orderBy('is_active', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->get();
