@@ -157,9 +157,9 @@ class MewayzPhase1Test:
                 "billing_interval": "monthly"
             }),
             ("POST", "/workspace-setup/branding", "branding_save_endpoint", {
-                "brand_name": "Test Brand",
-                "brand_color": "#3B82F6",
-                "logo_url": "https://example.com/logo.png"
+                "workspace_name": "Test Brand",
+                "primary_color": "#3B82F6",
+                "logo": "https://example.com/logo.png"
             }),
             ("GET", "/workspace-setup/status", "status_get_endpoint", None),
             ("POST", "/workspace-setup/reset", "reset_endpoint", {})
