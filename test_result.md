@@ -673,10 +673,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "JavaScript Assets Verification"
-  stuck_tasks: []
+    - "Critical Backend System Failures"
+    - "Workspace Setup Wizard POST Endpoints"
+    - "Instagram Management System Recovery"
+    - "Payment Processing API Key Configuration"
+  stuck_tasks:
+    - "Workspace Setup Wizard POST Endpoints"
+    - "Instagram Management Account/Post Creation"
   test_all: false
-  test_priority: "comprehensive_fixes_verification_complete"
+  test_priority: "critical_failures_first"
 
 agent_communication:
   - agent: "testing"
