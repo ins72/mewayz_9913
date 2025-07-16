@@ -16,6 +16,7 @@ class InstagramPost extends Model
         'workspace_id',
         'instagram_account_id',
         'instagram_post_id',
+        'title',
         'caption',
         'media_urls',
         'hashtags',
