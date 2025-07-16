@@ -280,8 +280,8 @@ class WorkspaceSetupTeamTest:
                     results["invitation_created"] = True
                     
                     # Check for UUID generation
-                    invitation = data.get('invitation', {})
-                    invitation_uuid = invitation.get('uuid') or invitation.get('id')
+                    invitation = data.get('data', {}).get('invitation', {})
+                    invitation_uuid = invitation.get('uuid')
                     
                     if invitation_uuid:
                         results["uuid_generated"] = True
