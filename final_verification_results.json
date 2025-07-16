@@ -1,0 +1,172 @@
+{
+  "authentication_verification": {
+    "health_check": false,
+    "login_functionality": false,
+    "token_generation": false,
+    "protected_access": false,
+    "user_profile_access": false,
+    "oauth_endpoints": false,
+    "2fa_endpoints": false,
+    "security_headers": false,
+    "response_time": 0,
+    "error_details": [
+      "Authentication test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb10921d0410>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "course_management_verification": {
+    "courses_list": false,
+    "course_creation": false,
+    "course_details": false,
+    "lessons_management": false,
+    "student_enrollment": false,
+    "data_persistence": false,
+    "response_time": 0,
+    "error_details": [
+      "No authentication token available"
+    ]
+  },
+  "ecommerce_verification": {
+    "products_list": false,
+    "product_creation": false,
+    "product_details": false,
+    "orders_management": false,
+    "inventory_tracking": false,
+    "data_integrity": false,
+    "response_time": 0,
+    "error_details": [
+      "No authentication token available"
+    ]
+  },
+  "bio_sites_verification": {
+    "bio_sites_list": false,
+    "themes_access": false,
+    "bio_site_creation": false,
+    "analytics_access": false,
+    "ab_testing": false,
+    "monetization": false,
+    "user_id_assignment": false,
+    "response_time": 0,
+    "error_details": [
+      "No authentication token available"
+    ]
+  },
+  "stripe_payment_verification": {
+    "packages_endpoint": false,
+    "checkout_session_creation": false,
+    "webhook_endpoint": false,
+    "payment_status_check": false,
+    "api_key_configuration": false,
+    "database_integration": false,
+    "end_to_end_flow": false,
+    "response_time": 0,
+    "error_details": [
+      "Stripe payment test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/payments/packages (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb1090ec7a10>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "analytics_verification": {
+    "overview_analytics": false,
+    "reports_access": false,
+    "social_media_analytics": false,
+    "bio_site_analytics": false,
+    "ecommerce_analytics": false,
+    "email_marketing_analytics": false,
+    "data_collection": false,
+    "response_time": 0,
+    "error_details": [
+      "No authentication token available"
+    ]
+  },
+  "health_system_verification": {
+    "health_endpoint": false,
+    "system_info": false,
+    "maintenance_status": false,
+    "cache_management": false,
+    "system_optimization": false,
+    "platform_overview": false,
+    "platform_statistics": false,
+    "monitoring_capabilities": false,
+    "response_time": 0,
+    "error_details": [
+      "Health/system test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/health (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb1090ec7150>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "performance_verification": {
+    "average_response_time": 0,
+    "sub_200ms_target": false,
+    "concurrent_requests": false,
+    "memory_efficiency": false,
+    "database_performance": false,
+    "optimization_recommendations": false,
+    "scalability_metrics": false,
+    "error_details": [
+      "Concurrent requests failed: 0/5 successful",
+      "Performance test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/optimization/performance (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb1090ec78d0>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "security_verification": {
+    "authentication_security": false,
+    "csrf_protection": false,
+    "input_validation": false,
+    "sql_injection_prevention": false,
+    "xss_protection": false,
+    "rate_limiting": false,
+    "security_headers": false,
+    "oauth_security": false,
+    "error_details": [
+      "Authentication security not verified",
+      "Security test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/courses (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb1090e8fb50>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "integration_verification": {
+    "stripe_integration": false,
+    "oauth_integrations": false,
+    "email_systems": false,
+    "social_media_apis": false,
+    "third_party_services": false,
+    "api_connectivity": false,
+    "webhook_handling": false,
+    "error_details": [
+      "Integration test failed: HTTPConnectionPool(host='localhost', port=8001): Max retries exceeded with url: /api/payments/packages (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xfb1090e7d590>: Failed to establish a new connection: [Errno 111] Connection refused'))"
+    ]
+  },
+  "final_assessment": {
+    "overall_success_rate": 0.0,
+    "total_tests_run": 8,
+    "successful_tests": 0,
+    "failed_tests": 8,
+    "average_response_time": 0,
+    "sub_200ms_performance": true,
+    "area_scores": {
+      "authentication_verification": 0.0,
+      "course_management_verification": 0.0,
+      "ecommerce_verification": 0.0,
+      "bio_sites_verification": 0.0,
+      "stripe_payment_verification": 0.0,
+      "analytics_verification": 0.0,
+      "health_system_verification": 0.0,
+      "performance_verification": 0.0,
+      "security_verification": 0.0,
+      "integration_verification": 0.0
+    },
+    "working_areas": [],
+    "critical_issues": [
+      "Authentication",
+      "Course Management",
+      "Ecommerce",
+      "Bio Sites",
+      "Stripe Payment",
+      "Analytics",
+      "Health System",
+      "Performance",
+      "Security",
+      "Integration"
+    ],
+    "production_ready": false,
+    "test_timestamp": "2025-07-16T10:58:29.780204",
+    "recommendations": [
+      "Improve success rate from 0.0% to at least 85%",
+      "Fix Bio Sites Management routing issues (HTML responses instead of JSON)",
+      "Investigate Analytics Dashboard 500 errors for social media, bio sites, and e-commerce endpoints"
+    ]
+  }
+}
