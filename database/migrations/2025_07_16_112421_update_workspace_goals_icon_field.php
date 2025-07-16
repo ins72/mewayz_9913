@@ -11,7 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('workspace_goals', function (Blueprint $table) {
+            $table->text('icon')->change(); // Change from string to text
+        });
+        
+        Schema::table('features', function (Blueprint $table) {
+            $table->text('icon')->change(); // Change from string to text
+        });
     }
 
     /**
@@ -19,6 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('workspace_goals', function (Blueprint $table) {
+            $table->string('icon')->change();
+        });
+        
+        Schema::table('features', function (Blueprint $table) {
+            $table->string('icon')->change();
+        });
     }
 };
