@@ -454,7 +454,7 @@ class InstagramManagementController extends Controller
                     // Handle both model instances and sample objects
                     $formattedCount = method_exists($hashtag, 'getFormattedPostCount') 
                         ? $hashtag->getFormattedPostCount() 
-                        : $this->formatPostCount($hashtag->post_count);
+                        : $this->formatPostCount($hashtag->posts_count);
                     
                     $difficultyColor = method_exists($hashtag, 'getDifficultyColor') 
                         ? $hashtag->getDifficultyColor() 
