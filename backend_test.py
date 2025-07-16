@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """
-Mewayz Laravel Stripe Payment Integration Testing Suite
-======================================================
+Mewayz Platform Comprehensive Backend Testing Suite
+===================================================
 
-This test suite validates the Stripe payment integration for the Laravel Mewayz application
+This test suite validates the comprehensive backend functionality of the Mewayz platform
 as requested in the review. Focus areas:
 
-1. Stripe packages endpoint: GET /api/payments/packages
-2. Stripe checkout session creation: POST /api/payments/checkout/session
-3. Stripe webhook endpoint: POST /api/webhook/stripe
-4. Payment status check: GET /api/payments/checkout/status/{sessionId}
-5. Database integration: PaymentTransaction records creation
+1. Course Management System: Test course creation, lessons, enrollment, pricing APIs
+2. Bio Site Builder: Test bio site CRUD operations, A/B testing, monetization features
+3. E-commerce Platform: Test product management, orders, inventory, payment processing
+4. CRM System: Test contact management, lead scoring, automation workflows
+5. Instagram Management: Test account connection, post scheduling, analytics
+6. Workspace Setup: Test 6-step wizard, feature selection, pricing tiers
+7. Analytics Dashboard: Test metrics collection, reporting, data visualization
+8. Payment Integration: Test Stripe integration, subscriptions, transactions
+9. User Management: Test authentication, teams, permissions, profiles
 
-The Laravel application runs on port 8001 with predefined packages:
-- starter: $9.99
-- professional: $29.99  
-- enterprise: $99.99
+The Laravel application runs on port 8001 with comprehensive API endpoints.
 """
 
 import os
