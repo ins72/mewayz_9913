@@ -82,8 +82,12 @@ Route::get('/dashboard/community', function () {
 
 // Monetization
 Route::get('/dashboard/store', function () {
-    return view('pages.dashboard.store.index');
-})->middleware(['auth'])->name('dashboard-store-index');
+    return view('pages.dashboard.store.index-dynamic');
+})->middleware(['auth'])->name('dashboard.store.index');
+
+Route::get('/dashboard/store/create', function () {
+    return view('pages.dashboard.store.create');
+})->middleware(['auth'])->name('dashboard.store.create');
 
 Route::get('/dashboard/courses', function () {
     return view('pages.dashboard.courses.index-dynamic');
