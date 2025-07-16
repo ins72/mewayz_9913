@@ -551,10 +551,11 @@ frontend:
 
 metadata:
   created_by: "testing_agent"
-  version: "2.0"
-  test_sequence: 2
+  version: "3.0"
+  test_sequence: 3
   run_ui: true
   frontend_testing_completed: true
+  backend_testing_completed: true
   last_updated: "2025-01-16"
 
 test_plan:
