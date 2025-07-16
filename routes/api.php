@@ -305,6 +305,43 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/analyze-text', [AIController::class, 'analyzeText']);
     });
     
+    // PWA routes
+    Route::prefix('pwa')->group(function () {
+        Route::get('/manifest', [PWAController::class, 'getManifest']);
+        Route::post('/subscribe', [PWAController::class, 'subscribePushNotifications']);
+        Route::post('/unsubscribe', [PWAController::class, 'unsubscribePushNotifications']);
+        Route::post('/test-notification', [PWAController::class, 'sendTestNotification']);
+        Route::get('/installation-status', [PWAController::class, 'getInstallationStatus']);
+        Route::get('/offline-content', [PWAController::class, 'getOfflineContent']);
+        Route::post('/update-cache', [PWAController::class, 'updateCache']);
+        Route::get('/analytics', [PWAController::class, 'getAnalytics']);
+    });
+    
+    // Enhanced Analytics routes
+    Route::prefix('analytics')->group(function () {
+        Route::get('/overview', [AnalyticsController::class, 'getOverview']);
+        Route::get('/traffic', [AnalyticsController::class, 'getTrafficAnalytics']);
+        Route::get('/social-media', [AnalyticsController::class, 'getSocialMediaAnalytics']);
+        Route::get('/bio-sites', [AnalyticsController::class, 'getBioSitesAnalytics']);
+        Route::get('/ecommerce', [AnalyticsController::class, 'getEcommerceAnalytics']);
+        Route::get('/courses', [AnalyticsController::class, 'getCourseAnalytics']);
+        Route::get('/real-time', [AnalyticsController::class, 'getRealTimeAnalytics']);
+        Route::post('/export', [AnalyticsController::class, 'exportAnalytics']);
+    });
+    
+    // Admin Dashboard routes
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'getDashboardOverview']);
+        Route::get('/users', [AdminController::class, 'getUsers']);
+        Route::get('/users/{id}', [AdminController::class, 'getUserDetails']);
+        Route::put('/users/{id}/status', [AdminController::class, 'updateUserStatus']);
+        Route::get('/system-health', [AdminController::class, 'getSystemHealth']);
+        Route::get('/platform-analytics', [AdminController::class, 'getPlatformAnalytics']);
+        Route::get('/system-logs', [AdminController::class, 'getSystemLogs']);
+        Route::post('/announcement', [AdminController::class, 'sendAnnouncement']);
+        Route::get('/feature-usage', [AdminController::class, 'getFeatureUsage']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
