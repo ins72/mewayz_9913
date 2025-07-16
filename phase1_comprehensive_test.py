@@ -149,8 +149,8 @@ class MewayzPhase1Test:
                 ]
             }),
             ("POST", "/workspace-setup/pricing/calculate", "pricing_calculate_endpoint", {
-                "selected_features": ["bio_sites", "social_media", "analytics", "email_marketing"],
-                "billing_cycle": "monthly"
+                "plan_id": 1,
+                "billing_interval": "monthly"
             }),
             ("POST", "/workspace-setup/subscription", "subscription_save_endpoint", {
                 "plan": "professional",
