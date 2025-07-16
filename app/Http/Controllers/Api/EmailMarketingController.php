@@ -9,6 +9,7 @@ use App\Models\EmailTemplate;
 use App\Models\EmailList;
 use App\Models\EmailCampaignAnalytics;
 use App\Models\Workspace;
+use App\Services\ElasticEmailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
