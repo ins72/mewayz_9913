@@ -673,12 +673,15 @@ frontend:
 
 metadata:
   created_by: "testing_agent"
-  version: "3.0"
-  test_sequence: 3
+  version: "4.0"
+  test_sequence: 4
   run_ui: true
   frontend_testing_completed: true
   backend_testing_completed: true
   last_updated: "2025-01-16"
+  current_backend_success_rate: "57.3%"
+  critical_failures_count: 12
+  production_ready: false
 
 test_plan:
   current_focus:
