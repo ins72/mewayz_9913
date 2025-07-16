@@ -227,7 +227,7 @@ class InstagramManagementController extends Controller
                 'media_urls.*' => 'url',
                 'hashtags' => 'nullable|array|max:30',
                 'hashtags.*' => 'string|max:100',
-                'post_type' => 'required|string|in:photo,video,carousel,reel',
+                'post_type' => 'required|string|in:feed,story,reel',
                 'scheduled_at' => 'nullable|date|after:now'
             ]);
             
