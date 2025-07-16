@@ -243,6 +243,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/email-marketing', [AnalyticsController::class, 'getEmailMarketingAnalytics']);
     });
     
+    // Workspace Setup Wizard routes
+    Route::prefix('workspace-setup')->group(function () {
+        Route::get('/initial-data', [WorkspaceSetupWizardController::class, 'getInitialData']);
+        Route::post('/goals', [WorkspaceSetupWizardController::class, 'saveGoals']);
+        Route::get('/features', [WorkspaceSetupWizardController::class, 'getFeatures']);
+        Route::post('/features', [WorkspaceSetupWizardController::class, 'saveFeatures']);
+        Route::post('/team', [WorkspaceSetupWizardController::class, 'saveTeamSetup']);
+        Route::post('/pricing/calculate', [WorkspaceSetupWizardController::class, 'calculatePricing']);
+        Route::post('/subscription', [WorkspaceSetupWizardController::class, 'saveSubscription']);
+        Route::post('/branding', [WorkspaceSetupWizardController::class, 'saveBranding']);
+        Route::get('/status', [WorkspaceSetupWizardController::class, 'getSetupStatus']);
+        Route::post('/reset', [WorkspaceSetupWizardController::class, 'resetSetup']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
