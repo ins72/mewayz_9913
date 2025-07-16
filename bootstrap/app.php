@@ -79,15 +79,19 @@ if (!defined('QR_IMAGE')) {
     define('QR_IMAGE', true);
 }
 
-define('STRUCTURE_HEADER_BITS',  20);
-define('MAX_STRUCTURED_SYMBOLS', 16);
+if (!defined('STRUCTURE_HEADER_BITS')) {
+    define('STRUCTURE_HEADER_BITS',  20);
+    define('MAX_STRUCTURED_SYMBOLS', 16);
 
-define('N1', 3);
-define('N2', 3);
-define('N3', 40);
-define('N4', 10);
+    define('N1', 3);
+    define('N2', 3);
+    define('N3', 40);
+    define('N4', 10);
+}
 
-define('QR_VECT', true);
+if (!defined('QR_VECT')) {
+    define('QR_VECT', true);
+}
 
 /*
 |--------------------------------------------------------------------------
