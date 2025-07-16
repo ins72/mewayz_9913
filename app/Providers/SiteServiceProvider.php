@@ -20,31 +20,31 @@ class SiteServiceProvider extends ServiceProvider{
 
 
     public function registerRoutes(){
-        Folio::path(resource_path('views/pages'))->uri('/')->middleware([
-            '*' => [
-                'web'
-            ],
-            'console/*' => [
-                'auth',
-                'verified',
-                'handleProject'
-            ],
+        // Folio::path(resource_path('views/pages'))->uri('/')->middleware([
+        //     '*' => [
+        //         'web'
+        //     ],
+        //     'console/*' => [
+        //         'auth',
+        //         'verified',
+        //         'handleProject'
+        //     ],
 
-            'console/admin/*' => [
-                // 'password.confirm'
-            ],
+        //     'console/admin/*' => [
+        //         // 'password.confirm'
+        //     ],
 
-            'console/builder/*' => [
-                'handleBuilder'
-            ],
+        //     'console/builder/*' => [
+        //         'handleBuilder'
+        //     ],
 
-            'console/bio/*' => [
-                'handleBio'
-            ],
-            'console/mediakit/*' => [
-                'handleMediakit'
-            ],
-        ]);
+        //     'console/bio/*' => [
+        //         'handleBio'
+        //     ],
+        //     'console/mediakit/*' => [
+        //         'handleMediakit'
+        //     ],
+        // ]);
     }
 
     public function boot(){
