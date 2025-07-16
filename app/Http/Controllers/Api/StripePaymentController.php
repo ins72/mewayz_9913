@@ -59,9 +59,9 @@ class StripePaymentController extends Controller
             ];
             
             // Handle different payment types
-            if ($request->has('package_id')) {
+            if ($request->has('package_id') || $request->has('package')) {
                 // Fixed package - amount defined on server
-                $packageId = $request->input('package_id');
+                $packageId = $request->input('package_id') ?? $request->input('package');
                 
                 if (!isset(self::PACKAGES[$packageId])) {
                     return response()->json(['error' => 'Invalid package selected'], 400);
