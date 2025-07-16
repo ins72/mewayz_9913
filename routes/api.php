@@ -109,6 +109,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/analytics', [InstagramManagementController::class, 'getAnalytics']);
     });
     
+    // Email Marketing Hub routes
+    Route::prefix('email-marketing')->group(function () {
+        Route::get('/campaigns', [EmailMarketingController::class, 'getCampaigns']);
+        Route::post('/campaigns', [EmailMarketingController::class, 'createCampaign']);
+        Route::get('/campaigns/{campaignId}', [EmailMarketingController::class, 'getCampaign']);
+        Route::put('/campaigns/{campaignId}', [EmailMarketingController::class, 'updateCampaign']);
+        Route::delete('/campaigns/{campaignId}', [EmailMarketingController::class, 'deleteCampaign']);
+        Route::post('/campaigns/{campaignId}/send', [EmailMarketingController::class, 'sendCampaign']);
+        Route::get('/templates', [EmailMarketingController::class, 'getTemplates']);
+        Route::get('/lists', [EmailMarketingController::class, 'getEmailLists']);
+        Route::get('/subscribers', [EmailMarketingController::class, 'getSubscribers']);
+        Route::get('/analytics', [EmailMarketingController::class, 'getAnalytics']);
+    });
+    
     // Workspace Setup Wizard routes
     Route::prefix('workspace-setup')->group(function () {
         Route::get('/current-step', [WorkspaceSetupController::class, 'getCurrentStep']);
