@@ -12,9 +12,6 @@ class EmailList extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
-
     protected $fillable = [
         'workspace_id',
         'user_id',
@@ -31,17 +28,6 @@ class EmailList extends Model
         'segmentation_rules' => 'array',
         'is_active' => 'boolean'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
-    }
 
     /**
      * Get the workspace that owns the list
