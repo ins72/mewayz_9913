@@ -450,11 +450,11 @@ backend:
 
   - task: "Analytics Dashboard"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/app/Http/Controllers/Api/AnalyticsController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -462,6 +462,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ Analytics dashboard fully functional. Overview analytics working, detailed reporting operational, cross-platform metrics functional. Advanced features include bio site analytics, e-commerce analytics, email marketing analytics, and social media analytics."
+      - working: false
+        agent: "testing"
+        comment: "❌ REVIEW REQUEST TESTING PARTIALLY FAILED: Analytics Dashboard has mixed results. GET /api/analytics (overview) and /api/analytics/reports working (200 status). However, critical analytics endpoints failing with 500 errors: /api/analytics/social-media, /api/analytics/bio-sites, /api/analytics/ecommerce all return 500 errors. Course analytics returns 404 (acceptable). CRITICAL: Social media, bio site, and e-commerce analytics endpoints need investigation for 500 error root cause."
 
   - task: "Partnership & Admin System"
     implemented: true
