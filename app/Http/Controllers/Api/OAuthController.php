@@ -20,7 +20,7 @@ class OAuthController extends Controller
             'name' => 'Google',
             'icon' => 'google',
             'enabled' => true,
-            'test_mode' => true, // Enable test mode for development
+            'test_mode' => false, // Disable test mode for real Google OAuth
         ],
         'apple' => [
             'name' => 'Apple',
