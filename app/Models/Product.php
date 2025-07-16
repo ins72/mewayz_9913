@@ -174,6 +174,10 @@ class Product extends BaseProduct
         parent::boot();
 
         static::creating(function ($model) {
+            // Auto-assign user_id if not set
+            if (empty($model->user_id) && auth()->check()) {
+                $model->user_id = auth()->id();
+            }
             $model->slug = $model->slug ? $model->slug : (string) str()->random(17);
         });
 		
