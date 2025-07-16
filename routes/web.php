@@ -64,7 +64,7 @@ Route::get('/dashboard/templates', function () {
 
 // Social Media
 Route::get('/dashboard/instagram', function () {
-    return view('pages.dashboard.instagram.index');
+    return view('pages.dashboard.instagram.index-dynamic');
 })->middleware(['auth'])->name('dashboard-instagram-index');
 
 Route::get('/dashboard/social', function () {
