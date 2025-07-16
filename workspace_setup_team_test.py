@@ -365,10 +365,10 @@ class WorkspaceSetupTeamTest:
                 if data.get('success'):
                     results["invitation_found"] = True
                     
-                    invitation = data.get('invitation', {})
+                    invitation = data.get('data', {}).get('invitation', {})
                     
                     # Check UUID validation
-                    if invitation.get('uuid') == test_uuid or invitation.get('id') == test_uuid:
+                    if invitation.get('uuid') == test_uuid:
                         results["uuid_validation"] = True
                         print(f"   ✅ UUID validation successful")
                     
