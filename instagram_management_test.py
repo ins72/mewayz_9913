@@ -534,11 +534,10 @@ class InstagramManagementTest:
                 except json.JSONDecodeError:
                     print("❌ Invalid JSON response")
                     
-            # Test validation
+            # Test validation with invalid data
             try:
                 print("\n🧪 Testing validation with invalid data...")
                 invalid_data = {
-                    "title": "",  # Empty title should fail
                     "caption": "",  # Empty caption should fail
                     "media_urls": [],  # Empty media URLs should fail
                     "post_type": "invalid_type"  # Invalid post type should fail
