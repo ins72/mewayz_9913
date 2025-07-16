@@ -75,13 +75,14 @@ class InstagramManagementController extends Controller
         try {
             $request->validate([
                 'username' => 'required|string|max:100',
+                'display_name' => 'required|string|max:255',
                 'profile_picture_url' => 'nullable|url',
                 'bio' => 'nullable|string|max:500',
-                'is_primary' => 'boolean'
+                'is_active' => 'boolean'
             ]);
             
             $user = Auth::user();
-            $workspace = $user->organizations()->first();
+            $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
                 return response()->json(['error' => 'Workspace not found'], 404);
@@ -98,27 +99,19 @@ class InstagramManagementController extends Controller
                 ], 400);
             }
             
-            // If this is the first account or marked as primary, make it primary
-            $isPrimary = $request->is_primary ?? false;
-            if (!$isPrimary) {
-                $accountCount = InstagramAccount::where('workspace_id', $workspace->id)->count();
-                $isPrimary = $accountCount === 0;
-            }
-            
-            // If setting as primary, remove primary flag from other accounts
-            if ($isPrimary) {
-                InstagramAccount::where('workspace_id', $workspace->id)
-                    ->update(['is_primary' => false]);
-            }
-            
             $account = InstagramAccount::create([
                 'workspace_id' => $workspace->id,
                 'user_id' => $user->id,
+                'instagram_id' => 'demo_' . $request->username, // Demo ID
                 'username' => $request->username,
+                'display_name' => $request->display_name,
                 'profile_picture_url' => $request->profile_picture_url,
                 'bio' => $request->bio,
-                'is_primary' => $isPrimary,
-                'is_connected' => false // Will be true when connected via Instagram API
+                'is_active' => $request->is_active ?? true,
+                'account_type' => 'personal', // Default to personal
+                'followers_count' => 0,
+                'following_count' => 0,
+                'media_count' => 0
             ]);
             
             return response()->json([
@@ -127,10 +120,11 @@ class InstagramManagementController extends Controller
                 'account' => [
                     'id' => $account->id,
                     'username' => $account->username,
+                    'display_name' => $account->display_name,
                     'profile_picture_url' => $account->profile_picture_url,
                     'bio' => $account->bio,
-                    'is_primary' => $account->is_primary,
-                    'is_connected' => $account->is_connected
+                    'is_active' => $account->is_active,
+                    'account_type' => $account->account_type
                 ]
             ]);
             
