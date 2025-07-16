@@ -1,521 +1,876 @@
-# 🏗️ Mewayz Platform Architecture Guide
+# Mewayz Platform - Architecture Documentation
 
-*Technical Architecture Documentation for Mewayz Platform*
+This document provides a comprehensive overview of the Mewayz platform architecture, including system design, components, and technology stack.
 
-## 📋 Overview
-
-This document provides a comprehensive overview of the Mewayz Platform's architecture, design patterns, and technical implementation. The platform follows a clean, single-stack architecture with clear separation of concerns.
-
-## 🎯 Architecture Philosophy
-
-### Design Principles
-- **Single Responsibility**: Each component has one clear purpose
-- **Separation of Concerns**: Clear boundaries between layers
-- **Scalability**: Designed to handle growth efficiently
-- **Maintainability**: Clean, readable, and well-documented code
-- **Security**: Security-first approach throughout the stack
-- **Performance**: Optimized for speed and efficiency
-
-### Key Architectural Decisions
-- **Single Backend**: Laravel-only backend for simplicity
-- **Multiple Frontends**: Purpose-driven frontend implementations
-- **API-First**: RESTful API design
-- **Event-Driven**: Asynchronous processing where appropriate
-- **Microservices Ready**: Modular design for future scaling
-
-## 🏗️ System Architecture
+## 🏗 System Architecture Overview
 
 ### High-Level Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        CLIENT LAYER                            │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Laravel Web   │   Flutter       │   React Status  │   Mobile  │
-│   Interface     │   Mobile App    │   Display       │   Apps    │
-│   (Primary)     │   (Native)      │   (Minimal)     │   (Future)│
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-                                │
-                    ┌─────────────────┐
-                    │   API GATEWAY   │
-                    │   (Laravel)     │
-                    └─────────────────┘
-                                │
-┌─────────────────────────────────────────────────────────────────┐
-│                     APPLICATION LAYER                          │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Auth Service  │   Social Media  │   CRM Service   │   E-comm  │
-│   (2FA, OAuth)  │   Management    │   (AI-powered)  │   Engine  │
-├─────────────────┼─────────────────┼─────────────────┼───────────┤
-│   Bio Sites     │   Email         │   Course        │   Analytics│
-│   Builder       │   Marketing     │   Management    │   Engine  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-                                │
-┌─────────────────────────────────────────────────────────────────┐
-│                      DATA LAYER                                │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   MySQL         │   Redis         │   File Storage  │   Queue   │
-│   Database      │   Cache         │   (S3-compatible)│   System  │
-│   (Primary)     │   (Sessions)    │   (Assets)      │   (Jobs)  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-                                │
-┌─────────────────────────────────────────────────────────────────┐
-│                   INFRASTRUCTURE LAYER                         │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Web Server    │   Process       │   Monitoring    │   Security│
-│   (Nginx)       │   Manager       │   (Logging)     │   (SSL)   │
-│                 │   (Supervisor)  │                 │           │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+│                          Frontend Layer                         │
+├─────────────────────────────────────────────────────────────────┤
+│  Laravel Blade Templates │ Tailwind CSS │ Alpine.js │ Vite      │
+├─────────────────────────────────────────────────────────────────┤
+│                       Application Layer                         │
+├─────────────────────────────────────────────────────────────────┤
+│  Laravel Controllers │ Services │ Middleware │ Request/Response │
+├─────────────────────────────────────────────────────────────────┤
+│                        Business Logic                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Domain Services │ Payment Processing │ Site Management │ CRM   │
+├─────────────────────────────────────────────────────────────────┤
+│                         Data Layer                              │
+├─────────────────────────────────────────────────────────────────┤
+│  Eloquent ORM │ Database Migrations │ Model Relations │ Caching │
+├─────────────────────────────────────────────────────────────────┤
+│                     Infrastructure                              │
+├─────────────────────────────────────────────────────────────────┤
+│  MariaDB │ Redis │ Supervisor │ Kubernetes │ CDN │ Monitoring   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### Component Architecture
 
-#### 1. Frontend Layer
-- **Laravel Web Interface**: Primary user interface with Blade templates and Livewire components
-- **Flutter Mobile App**: Native mobile experience for iOS and Android
-- **React Status Display**: Minimal status interface for system monitoring
-- **Future Frontends**: Extensible for additional client types
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Web Client    │    │   API Client    │    │ Mobile Client   │
+│   (Browser)     │    │   (Third-party) │    │   (Future)      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+         ┌───────────────────────────────────────────────────┐
+         │              Load Balancer                        │
+         │           (Kubernetes Ingress)                    │
+         └───────────────────────────────────────────────────┘
+                                 │
+         ┌───────────────────────────────────────────────────┐
+         │                Web Server                         │
+         │              (Laravel App)                        │
+         └───────────────────────────────────────────────────┘
+                                 │
+    ┌─────────────┬──────────────┼──────────────┬─────────────┐
+    │             │              │              │             │
+┌───▼───┐   ┌────▼────┐   ┌─────▼─────┐   ┌───▼───┐   ┌────▼────┐
+│Payment│   │Site Mgmt│   │Social Med │   │   CRM │   │Analytics│
+│Service│   │ Service │   │  Service  │   │Service│   │ Service │
+└───────┘   └─────────┘   └───────────┘   └───────┘   └─────────┘
+                                 │
+         ┌───────────────────────────────────────────────────┐
+         │                Database Layer                     │
+         │         (MariaDB + Redis Cache)                   │
+         └───────────────────────────────────────────────────┘
+```
 
-#### 2. API Gateway
-- **Laravel Router**: Centralized routing and request handling
-- **Middleware Stack**: Authentication, rate limiting, CORS, validation
-- **API Versioning**: Structured API versioning for backward compatibility
-- **Request/Response Transformation**: Consistent API response format
-
-#### 3. Application Services
-- **Modular Services**: Each business function as a separate service
-- **Service Providers**: Laravel service providers for dependency injection
-- **Event System**: Laravel events for decoupled communication
-- **Queue System**: Asynchronous job processing
-
-#### 4. Data Layer
-- **MySQL Database**: Primary data storage with proper relationships
-- **Redis Cache**: Session storage and application caching
-- **File Storage**: S3-compatible storage for assets
-- **Queue Storage**: Job queue management
-
-## 🛠️ Technology Stack
+## 🔧 Technology Stack
 
 ### Backend Technologies
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      BACKEND STACK                             │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   PHP 8.1+      │   Laravel 10+   │   MySQL 8.0+    │   Redis   │
-│   (Runtime)     │   (Framework)   │   (Database)    │   (Cache) │
-├─────────────────┼─────────────────┼─────────────────┼───────────┤
-│   Composer      │   Eloquent ORM  │   Sanctum       │   Horizon │
-│   (Dependencies)│   (Database)    │   (Auth)        │   (Queue) │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-```
+
+#### Core Framework
+- **Laravel 10.48** - PHP web framework
+- **PHP 8.2** - Server-side programming language
+- **Composer** - Dependency management
+
+#### Database & Storage
+- **MariaDB 10.6+** - Primary database
+- **Redis** - Caching and session storage
+- **Laravel Eloquent** - ORM for database operations
+- **Migration System** - Database version control
+
+#### Authentication & Security
+- **Laravel Sanctum** - API authentication
+- **Laravel Auth** - Web authentication
+- **CSRF Protection** - Cross-site request forgery protection
+- **Password Hashing** - Bcrypt encryption
+
+#### Payment Processing
+- **Stripe PHP SDK** - Payment gateway integration
+- **Webhook Processing** - Real-time payment events
+- **Subscription Management** - Recurring billing
+- **Transaction Logging** - Payment audit trail
 
 ### Frontend Technologies
+
+#### Template Engine
+- **Laravel Blade** - Server-side templating
+- **Component System** - Reusable UI components
+- **Layout System** - Consistent page structure
+
+#### Styling & Design
+- **Tailwind CSS** - Utility-first CSS framework
+- **SASS/SCSS** - CSS preprocessing
+- **Dark Theme** - Professional UI design system
+- **Responsive Design** - Mobile-first approach
+
+#### JavaScript & Interactivity
+- **Alpine.js** - Reactive JavaScript framework
+- **Vite** - Modern build tool and bundler
+- **ES6+ JavaScript** - Modern JavaScript features
+- **LiveWire** - Dynamic PHP components
+
+### Infrastructure & DevOps
+
+#### Container & Orchestration
+- **Kubernetes** - Container orchestration
+- **Docker** - Containerization (optional)
+- **Supervisor** - Process management
+- **Ingress Controller** - Load balancing
+
+#### Monitoring & Logging
+- **Laravel Logs** - Application logging
+- **Error Tracking** - Exception monitoring
+- **Performance Monitoring** - Application metrics
+- **Health Checks** - System status monitoring
+
+## 🗂 Project Structure
+
+### Directory Organization
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     FRONTEND STACK                             │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Blade         │   Livewire      │   Alpine.js     │   Tailwind│
-│   (Templates)   │   (Components)  │   (JS Framework)│   (CSS)   │
-├─────────────────┼─────────────────┼─────────────────┼───────────┤
-│   Flutter       │   Dart          │   Provider      │   Material│
-│   (Mobile)      │   (Language)    │   (State Mgmt)  │   (Design)│
-├─────────────────┼─────────────────┼─────────────────┼───────────┤
-│   React         │   JavaScript    │   Axios         │   Basic   │
-│   (Status)      │   (Language)    │   (HTTP)        │   (UI)    │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+/app/
+├── app/                          # Laravel application core
+│   ├── Http/                     # HTTP layer
+│   │   ├── Controllers/          # Request handlers
+│   │   │   ├── Api/              # API controllers
+│   │   │   └── Admin/            # Admin controllers
+│   │   ├── Middleware/           # Request middleware
+│   │   └── Requests/             # Form requests
+│   ├── Models/                   # Eloquent models
+│   │   ├── User.php              # User model
+│   │   ├── PaymentTransaction.php # Payment model
+│   │   └── Site.php              # Site model
+│   ├── Services/                 # Business logic
+│   │   ├── StripeService.php     # Payment processing
+│   │   ├── SiteService.php       # Site management
+│   │   └── AnalyticsService.php  # Analytics processing
+│   ├── Providers/                # Service providers
+│   └── Helpers/                  # Utility functions
+├── database/                     # Database files
+│   ├── migrations/               # Database migrations
+│   ├── seeders/                  # Database seeders
+│   └── factories/                # Model factories
+├── resources/                    # Frontend resources
+│   ├── views/                    # Blade templates
+│   │   ├── layouts/              # Layout templates
+│   │   ├── components/           # UI components
+│   │   └── pages/                # Page templates
+│   ├── css/                      # Stylesheets
+│   ├── js/                       # JavaScript files
+│   └── sass/                     # SASS files
+├── routes/                       # Route definitions
+│   ├── web.php                   # Web routes
+│   ├── api.php                   # API routes
+│   └── auth.php                  # Authentication routes
+├── public/                       # Public assets
+├── storage/                      # Storage files
+├── config/                       # Configuration files
+└── docs/                         # Documentation
 ```
 
-### Infrastructure Technologies
+### Key Components
+
+#### Controllers
+```php
+app/Http/Controllers/
+├── Api/
+│   ├── StripePaymentController.php    # Payment API
+│   ├── SiteController.php             # Site management API
+│   └── AnalyticsController.php        # Analytics API
+├── Dashboard/
+│   ├── DashboardController.php        # Main dashboard
+│   ├── SiteController.php             # Site management
+│   └── SettingsController.php         # User settings
+└── Auth/
+    ├── LoginController.php            # Authentication
+    └── RegisterController.php         # User registration
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  INFRASTRUCTURE STACK                          │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Nginx         │   Supervisor    │   SSL/TLS       │   Ubuntu  │
-│   (Web Server)  │   (Process Mgr) │   (Security)    │   (OS)    │
-├─────────────────┼─────────────────┼─────────────────┼───────────┤
-│   Docker        │   Git           │   Logging       │   Backup  │
-│   (Optional)    │   (Version Ctrl)│   (Monitoring)  │   (Data)  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+
+#### Models
+```php
+app/Models/
+├── User.php                           # User management
+├── PaymentTransaction.php             # Payment processing
+├── Site.php                           # Site management
+├── InstagramAccount.php               # Social media
+├── EmailCampaign.php                  # Email marketing
+└── Analytics.php                      # Analytics data
 ```
 
-## 📊 Database Architecture
+#### Services
+```php
+app/Services/
+├── StripeService.php                  # Payment processing
+├── SiteService.php                    # Site management
+├── InstagramService.php               # Social media
+├── EmailService.php                   # Email marketing
+└── AnalyticsService.php               # Analytics
+```
 
-### Database Design Philosophy
-- **Normalized Structure**: Proper normalization to reduce redundancy
-- **Relationship Integrity**: Foreign key constraints and proper relationships
-- **Indexing Strategy**: Optimized indexes for query performance
-- **Scalability**: Designed for horizontal scaling
-- **Data Integrity**: Constraints and validation at database level
+## 🔄 Data Flow Architecture
 
-### Database Schema Overview
+### Request Processing Flow
+
+```
+1. User Request
+   ↓
+2. Web Server (Laravel)
+   ↓
+3. Middleware Processing
+   ↓
+4. Route Resolution
+   ↓
+5. Controller Action
+   ↓
+6. Service Layer
+   ↓
+7. Model/Database
+   ↓
+8. Response Generation
+   ↓
+9. Template Rendering
+   ↓
+10. Client Response
+```
+
+### Payment Processing Flow
+
+```
+1. User selects package
+   ↓
+2. Frontend validation
+   ↓
+3. POST /api/payments/checkout/session
+   ↓
+4. StripeService.createCheckoutSession()
+   ↓
+5. PaymentTransaction.create()
+   ↓
+6. Stripe API call
+   ↓
+7. Redirect to Stripe Checkout
+   ↓
+8. Payment completion
+   ↓
+9. Stripe webhook
+   ↓
+10. Payment status update
+```
+
+### Site Management Flow
+
+```
+1. User creates site
+   ↓
+2. Site validation
+   ↓
+3. Template selection
+   ↓
+4. Domain assignment
+   ↓
+5. Database record creation
+   ↓
+6. File system setup
+   ↓
+7. CDN configuration
+   ↓
+8. Site activation
+   ↓
+9. Analytics setup
+   ↓
+10. User notification
+```
+
+## 🗃 Database Architecture
+
+### Database Schema
+
+#### Core Tables
 ```sql
--- User Management
-users (id, name, email, password, 2fa_settings, created_at)
-organizations (id, name, description, logo, created_at)
-user_organizations (user_id, organization_id, role, created_at)
+-- Users table
+users (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    email_verified_at TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
 
--- Social Media
-social_media_accounts (id, user_id, platform, username, access_token, created_at)
-social_media_posts (id, account_id, content, media_urls, scheduled_at, posted_at)
+-- Sites table
+sites (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id),
+    name VARCHAR(255),
+    domain VARCHAR(255) UNIQUE,
+    template VARCHAR(100),
+    status ENUM('active', 'inactive', 'suspended'),
+    settings JSON,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
 
--- Bio Sites
-bio_sites (id, user_id, name, subdomain, theme, bio, settings, created_at)
-bio_site_links (id, bio_site_id, title, url, order, is_active, created_at)
-bio_site_analytics (id, bio_site_id, event_type, data, created_at)
-
--- CRM System
-audience (id, user_id, name, email, phone, type, source, score, created_at)
-crm_campaigns (id, user_id, name, type, settings, status, created_at)
-crm_automations (id, user_id, name, trigger, actions, is_active, created_at)
-
--- E-commerce
-products (id, user_id, name, description, price, stock, category, created_at)
-orders (id, user_id, total, status, payment_method, created_at)
-order_items (id, order_id, product_id, quantity, price, created_at)
-
--- Course Management
-courses (id, user_id, title, description, price, status, created_at)
-course_lessons (id, course_id, title, content, order, type, created_at)
-course_enrollments (id, course_id, user_id, progress, completed_at, created_at)
-
--- Email Marketing
-email_campaigns (id, user_id, name, subject, content, status, created_at)
-email_templates (id, user_id, name, content, category, created_at)
-email_subscribers (id, user_id, email, status, subscribed_at, created_at)
-
--- Analytics
-analytics_events (id, user_id, event_type, data, created_at)
-analytics_reports (id, user_id, type, data, generated_at, created_at)
+-- Payment transactions
+payment_transactions (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id),
+    stripe_session_id VARCHAR(255),
+    package_id VARCHAR(100),
+    amount DECIMAL(10,2),
+    currency VARCHAR(3),
+    status VARCHAR(50),
+    metadata JSON,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
 ```
 
-### Indexing Strategy
+#### Relationship Mapping
+```
+Users (1) → (Many) Sites
+Users (1) → (Many) PaymentTransactions
+Users (1) → (Many) InstagramAccounts
+Sites (1) → (Many) Analytics
+Sites (1) → (Many) Pages
+```
+
+### Database Optimization
+
+#### Indexing Strategy
 ```sql
--- Performance Indexes
+-- Performance indexes
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_social_posts_scheduled ON social_media_posts(scheduled_at);
-CREATE INDEX idx_bio_analytics_site_date ON bio_site_analytics(bio_site_id, created_at);
-CREATE INDEX idx_audience_user_type ON audience(user_id, type);
-CREATE INDEX idx_orders_user_status ON orders(user_id, status);
-CREATE INDEX idx_analytics_user_type_date ON analytics_events(user_id, event_type, created_at);
+CREATE INDEX idx_sites_user_id ON sites(user_id);
+CREATE INDEX idx_sites_domain ON sites(domain);
+CREATE INDEX idx_payment_transactions_user_id ON payment_transactions(user_id);
+CREATE INDEX idx_payment_transactions_stripe_session_id ON payment_transactions(stripe_session_id);
+```
 
--- Composite Indexes
-CREATE INDEX idx_user_organizations_user_org ON user_organizations(user_id, organization_id);
-CREATE INDEX idx_course_enrollments_course_user ON course_enrollments(course_id, user_id);
+#### Caching Strategy
+```php
+// Model caching
+class Site extends Model
+{
+    protected $cachePrefix = 'sites:';
+    
+    public function getCachedSite($id)
+    {
+        return Cache::remember("{$this->cachePrefix}{$id}", 3600, function() use ($id) {
+            return $this->find($id);
+        });
+    }
+}
 ```
 
 ## 🔐 Security Architecture
 
-### Authentication & Authorization
+### Authentication Flow
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     SECURITY LAYERS                            │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Input         │   Authentication│   Authorization │   Data    │
-│   Validation    │   (Multi-layer) │   (RBAC)        │   Encryption│
-│   (Sanitization)│                 │                 │   (AES-256)│
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+1. User login request
+   ↓
+2. Credential validation
+   ↓
+3. Password verification
+   ↓
+4. Session creation
+   ↓
+5. CSRF token generation
+   ↓
+6. Redirect to dashboard
 ```
 
-### Authentication Flow
+### Authorization Levels
+
 ```
-1. User Login Request
-   ↓
-2. Email/Password Validation
-   ↓
-3. 2FA Verification (if enabled)
-   ↓
-4. OAuth Provider Verification (if OAuth)
-   ↓
-5. Generate Sanctum Token
-   ↓
-6. Return Token to Client
-   ↓
-7. Client Stores Token
-   ↓
-8. Token Sent with Each Request
-   ↓
-9. Server Validates Token
-   ↓
-10. Grant/Deny Access
+┌─────────────────────────────────────────────────────────────┐
+│                     Super Admin                            │
+├─────────────────────────────────────────────────────────────┤
+│  Full system access | User management | System settings    │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                       Admin                                │
+├─────────────────────────────────────────────────────────────┤
+│  User management | Site management | Analytics | Support   │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                    Premium User                            │
+├─────────────────────────────────────────────────────────────┤
+│  All features | Unlimited sites | Advanced analytics      │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                    Regular User                            │
+├─────────────────────────────────────────────────────────────┤
+│  Basic features | Limited sites | Basic analytics          │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### Security Measures
-- **Input Validation**: Comprehensive request validation
-- **SQL Injection Prevention**: Eloquent ORM with prepared statements
-- **XSS Protection**: Output sanitization and CSP headers
-- **CSRF Protection**: Token-based CSRF protection
-- **Rate Limiting**: API rate limiting and throttling
-- **Security Headers**: HTTP security headers
-- **Encryption**: Data encryption at rest and in transit
 
-## 🚀 Performance Architecture
-
-### Caching Strategy
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     CACHING LAYERS                             │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Browser Cache│   CDN Cache     │   Application   │   Database│
-│   (Static Assets│   (Static Files)│   Cache (Redis) │   Cache   │
-│   CSS, JS, Images│              │   (Sessions,    │   (Query  │
-│   )             │                 │   Config)       │   Cache)  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-```
-
-### Performance Optimizations
-- **Database Optimization**: Proper indexing and query optimization
-- **Caching Strategy**: Multi-level caching for different data types
-- **Asset Optimization**: Minified CSS/JS and optimized images
-- **Lazy Loading**: Lazy loading for heavy resources
-- **Queue System**: Asynchronous processing for heavy operations
-- **CDN Integration**: Content delivery network for static assets
-
-### Scalability Considerations
-- **Horizontal Scaling**: Stateless application design
-- **Load Balancing**: Support for multiple application instances
-- **Database Sharding**: Prepared for database sharding
-- **Microservices**: Modular architecture for service separation
-- **API Gateway**: Centralized API management
-
-## 📡 API Architecture
-
-### API Design Philosophy
-- **RESTful Design**: Consistent REST API patterns
-- **Resource-Based**: URLs represent resources
-- **HTTP Methods**: Proper use of HTTP verbs
-- **Status Codes**: Meaningful HTTP status codes
-- **Versioning**: API versioning strategy
-- **Documentation**: Comprehensive API documentation
-
-### API Structure
-```
-/api/v1/
-├── auth/
-│   ├── login (POST)
-│   ├── register (POST)
-│   ├── logout (POST)
-│   └── user (GET)
-├── workspaces/
-│   ├── / (GET, POST)
-│   └── {id}/invite (POST)
-├── social-media/
-│   ├── accounts (GET, POST)
-│   ├── schedule (POST)
-│   └── analytics (GET)
-├── bio-sites/
-│   ├── / (GET, POST)
-│   ├── {id} (GET, PUT, DELETE)
-│   └── {id}/analytics (GET)
-├── crm/
-│   ├── contacts (GET, POST)
-│   ├── leads (GET, POST)
-│   └── import (POST)
-├── ecommerce/
-│   ├── products (GET, POST)
-│   ├── orders (GET, POST)
-│   └── analytics (GET)
-├── courses/
-│   ├── / (GET, POST)
-│   ├── {id}/lessons (GET, POST)
-│   └── analytics (GET)
-├── email-marketing/
-│   ├── campaigns (GET, POST)
-│   ├── templates (GET, POST)
-│   └── analytics (GET)
-└── analytics/
-    ├── overview (GET)
-    ├── traffic (GET)
-    └── reports (GET, POST)
-```
-
-### API Response Format
-```json
+#### Input Validation
+```php
+class CreateSiteRequest extends FormRequest
 {
-  "success": true,
-  "message": "Request successful",
-  "data": {
-    // Response data
-  },
-  "meta": {
-    "pagination": {
-      "current_page": 1,
-      "total_pages": 10,
-      "total_items": 100
-    },
-    "timestamp": "2025-07-15T10:30:00Z"
-  }
+    public function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'domain' => 'required|string|max:100|unique:sites',
+            'template' => 'required|string|in:professional,modern,classic',
+        ];
+    }
 }
 ```
 
-## 🔄 Event-Driven Architecture
-
-### Event System
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                       EVENT FLOW                               │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Event         │   Event         │   Event         │   Event   │
-│   Trigger       │   Dispatcher    │   Listeners     │   Actions │
-│   (User Action) │   (Laravel)     │   (Handlers)    │   (Side   │
-│                 │                 │                 │   Effects)│
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+#### CSRF Protection
+```php
+// Middleware configuration
+protected $middlewareGroups = [
+    'web' => [
+        \App\Http\Middleware\VerifyCsrfToken::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+    ],
+];
 ```
 
-### Key Events
-- **User Registration**: Welcome email, workspace creation
-- **Social Media Post**: Analytics tracking, engagement monitoring
-- **Bio Site Visit**: Traffic analytics, conversion tracking
-- **CRM Lead Created**: Lead scoring, automation triggers
-- **Order Placed**: Inventory update, email notifications
-- **Course Enrollment**: Welcome sequence, progress tracking
+#### Rate Limiting
+```php
+// API rate limiting
+Route::middleware('throttle:60,1')->group(function () {
+    Route::apiResource('sites', SiteController::class);
+});
 
-### Event Handlers
-- **Email Notifications**: Automated email sending
-- **Analytics Tracking**: Data collection and analysis
-- **Third-party Integrations**: External API calls
-- **Cache Updates**: Cache invalidation and refresh
-- **Audit Logging**: Security and compliance logging
-
-## 🧪 Testing Architecture
-
-### Testing Strategy
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      TESTING PYRAMID                           │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Unit Tests    │   Integration   │   Feature Tests │   E2E     │
-│   (Models,      │   Tests         │   (API Routes,  │   Tests   │
-│   Services)     │   (Database,    │   Controllers)  │   (Full   │
-│                 │   External APIs)│                 │   Flow)   │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+// Payment rate limiting
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/payments/checkout/session', [StripePaymentController::class, 'createCheckoutSession']);
+});
 ```
 
-### Test Types
-- **Unit Tests**: Individual component testing
-- **Integration Tests**: Component interaction testing
-- **Feature Tests**: Full feature workflow testing
-- **API Tests**: API endpoint testing
-- **Browser Tests**: Frontend functionality testing
-- **Performance Tests**: Load and stress testing
+## 📊 Performance Architecture
 
-## 📊 Monitoring Architecture
+### Caching Strategy
 
-### Monitoring Stack
+#### Multi-Layer Caching
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MONITORING LAYERS                           │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Application   │   Infrastructure│   Security      │   Business│
-│   Monitoring    │   Monitoring    │   Monitoring    │   Metrics │
-│   (Logs, Errors)│   (Server, DB)  │   (Auth, Access)│   (KPIs)  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-```
-
-### Monitoring Components
-- **Application Logs**: Laravel logs with structured logging
-- **Error Tracking**: Exception monitoring and alerting
-- **Performance Monitoring**: Response time and throughput
-- **Database Monitoring**: Query performance and connections
-- **Security Monitoring**: Authentication and access logs
-- **Business Metrics**: User engagement and conversion rates
-
-## 🔧 Development Architecture
-
-### Development Workflow
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   DEVELOPMENT PIPELINE                         │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Development   │   Testing       │   Staging       │   Production│
-│   (Local)       │   (Automated)   │   (Pre-prod)    │   (Live)   │
-│   Feature Dev   │   CI/CD         │   QA Testing    │   Deployment│
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Browser Cache                           │
+├─────────────────────────────────────────────────────────────┤
+│  Static assets | CSS | JavaScript | Images                 │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                     CDN Cache                              │
+├─────────────────────────────────────────────────────────────┤
+│  Global asset distribution | Edge caching                  │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                 Application Cache                          │
+├─────────────────────────────────────────────────────────────┤
+│  Redis | Query results | Session data | API responses     │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                  Database Cache                            │
+├─────────────────────────────────────────────────────────────┤
+│  Query cache | Buffer pool | Index cache                   │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Development Standards
-- **Code Standards**: PSR-12 for PHP, consistent formatting
-- **Documentation**: Comprehensive inline documentation
-- **Version Control**: Git flow with feature branches
-- **Code Reviews**: Mandatory code reviews before merge
-- **Testing**: Minimum test coverage requirements
-- **Deployment**: Automated deployment pipeline
+#### Cache Implementation
+```php
+// Service-level caching
+class SiteService
+{
+    public function getUserSites($userId)
+    {
+        return Cache::remember("user_sites_{$userId}", 3600, function() use ($userId) {
+            return Site::where('user_id', $userId)->with('analytics')->get();
+        });
+    }
+}
+```
+
+### Database Optimization
+
+#### Query Optimization
+```php
+// Eager loading to prevent N+1 queries
+$sites = Site::with(['user', 'analytics', 'pages'])->get();
+
+// Selective loading
+$sites = Site::select('id', 'name', 'domain', 'status')->get();
+
+// Chunked processing for large datasets
+Site::chunk(1000, function($sites) {
+    foreach ($sites as $site) {
+        // Process site
+    }
+});
+```
+
+#### Connection Pooling
+```php
+// Database configuration
+'mysql' => [
+    'read' => [
+        'host' => ['192.168.1.1', '192.168.1.2'],
+    ],
+    'write' => [
+        'host' => ['192.168.1.3'],
+    ],
+    'sticky' => true,
+    'pool' => [
+        'min_connections' => 10,
+        'max_connections' => 100,
+    ],
+];
+```
 
 ## 🚀 Deployment Architecture
 
-### Deployment Strategy
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   DEPLOYMENT PIPELINE                          │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Build         │   Test          │   Deploy        │   Monitor │
-│   (Assets,      │   (Automated    │   (Zero         │   (Health │
-│   Dependencies) │   Testing)      │   Downtime)     │   Checks) │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-```
+### Container Architecture
 
-### Deployment Components
-- **Build Process**: Asset compilation and optimization
-- **Testing**: Automated test execution
-- **Database Migration**: Schema updates and data migration
-- **Cache Warming**: Application cache preparation
-- **Health Checks**: Post-deployment verification
-- **Rollback Strategy**: Quick rollback capability
-
-## 📋 Configuration Management
-
-### Configuration Architecture
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   CONFIGURATION LAYERS                         │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Environment   │   Application   │   Service       │   Feature │
-│   Config        │   Config        │   Config        │   Flags   │
-│   (.env)        │   (config/)     │   (External)    │   (DB)    │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
-```
-
-### Configuration Management
-- **Environment Variables**: Sensitive configuration
-- **Configuration Files**: Application settings
-- **Database Configuration**: Runtime configuration
-- **Feature Flags**: Feature toggle management
-- **Service Configuration**: External service settings
-
-## 🔄 Maintenance Architecture
-
-### Maintenance Tasks
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   MAINTENANCE SCHEDULE                         │
-├─────────────────┬─────────────────┬─────────────────┬───────────┤
-│   Daily         │   Weekly        │   Monthly       │   Quarterly│
-│   (Backups,     │   (Updates,     │   (Security     │   (Architecture│
-│   Monitoring)   │   Cleanup)      │   Audit)        │   Review)  │
-└─────────────────┴─────────────────┴─────────────────┴───────────┘
+#### Kubernetes Deployment
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mewayz-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mewayz
+  template:
+    metadata:
+      labels:
+        app: mewayz
+    spec:
+      containers:
+      - name: mewayz
+        image: mewayz:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DB_HOST
+          value: "mysql-service"
+        - name: REDIS_HOST
+          value: "redis-service"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
 ```
 
-### Maintenance Components
-- **Database Maintenance**: Query optimization and cleanup
-- **Security Updates**: Regular security patches
-- **Performance Monitoring**: Performance optimization
-- **Backup Management**: Data backup and recovery
-- **Log Management**: Log rotation and archival
-- **Dependency Updates**: Package and security updates
+#### Service Architecture
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mewayz-service
+spec:
+  selector:
+    app: mewayz
+  ports:
+  - port: 80
+    targetPort: 8001
+  type: LoadBalancer
+```
 
-## 📞 Support Architecture
+### Auto-Scaling Configuration
 
-### Support Channels
-- **Documentation**: Comprehensive technical documentation
-- **Issue Tracking**: GitHub issues for bug reports
-- **Community Support**: Discord community
-- **Professional Support**: Enterprise support packages
-- **Training**: Developer training and certification
+#### Horizontal Pod Autoscaler
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mewayz-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mewayz-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+```
+
+## 🔍 Monitoring Architecture
+
+### Application Monitoring
+
+#### Health Checks
+```php
+// Health check endpoint
+Route::get('/api/health', function () {
+    return response()->json([
+        'status' => 'healthy',
+        'timestamp' => now(),
+        'version' => config('app.version'),
+        'services' => [
+            'database' => DB::connection()->getPdo() ? 'healthy' : 'unhealthy',
+            'redis' => Redis::connection()->ping() ? 'healthy' : 'unhealthy',
+            'stripe' => StripeService::healthCheck() ? 'healthy' : 'unhealthy',
+        ],
+    ]);
+});
+```
+
+#### Performance Metrics
+```php
+// Custom metrics collection
+class MetricsService
+{
+    public function recordPageLoad($duration, $route)
+    {
+        Cache::increment("page_loads_{$route}");
+        Cache::put("avg_load_time_{$route}", $duration, 3600);
+    }
+    
+    public function recordPaymentTransaction($amount, $status)
+    {
+        Cache::increment("payments_{$status}");
+        Cache::increment("revenue", $amount);
+    }
+}
+```
+
+### Infrastructure Monitoring
+
+#### Resource Monitoring
+```bash
+# CPU and Memory monitoring
+kubectl top pods
+kubectl top nodes
+
+# Application logs
+kubectl logs -f deployment/mewayz-app
+
+# Database monitoring
+mysql -e "SHOW PROCESSLIST;"
+redis-cli info
+```
+
+## 🔄 Integration Architecture
+
+### Third-Party Integrations
+
+#### Stripe Integration
+```php
+class StripeService
+{
+    private $stripe;
+    
+    public function __construct()
+    {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        $this->stripe = new \Stripe\StripeClient(config('services.stripe.secret'));
+    }
+    
+    public function createCheckoutSession($packageId, $successUrl, $cancelUrl)
+    {
+        return $this->stripe->checkout->sessions->create([
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelUrl,
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'unit_amount' => $this->getPackageAmount($packageId),
+                        'product_data' => [
+                            'name' => $this->getPackageName($packageId),
+                        ],
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+        ]);
+    }
+}
+```
+
+#### API Gateway Pattern
+```php
+class APIGateway
+{
+    public function route($service, $method, $parameters)
+    {
+        switch ($service) {
+            case 'payment':
+                return app(StripeService::class)->$method(...$parameters);
+            case 'site':
+                return app(SiteService::class)->$method(...$parameters);
+            case 'analytics':
+                return app(AnalyticsService::class)->$method(...$parameters);
+            default:
+                throw new InvalidArgumentException("Unknown service: {$service}");
+        }
+    }
+}
+```
+
+## 📈 Scalability Architecture
+
+### Horizontal Scaling
+
+#### Load Balancing
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Load Balancer                           │
+├─────────────────────────────────────────────────────────────┤
+│  Request distribution | Health checks | SSL termination    │
+└─────────────────────────────────────────────────────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+┌───────▼───────┐     ┌─────────▼─────────┐     ┌───────▼───────┐
+│  App Server 1 │     │  App Server 2     │     │  App Server 3 │
+├───────────────┤     ├───────────────────┤     ├───────────────┤
+│  Laravel      │     │  Laravel          │     │  Laravel      │
+│  PHP-FPM      │     │  PHP-FPM          │     │  PHP-FPM      │
+└───────────────┘     └───────────────────┘     └───────────────┘
+```
+
+#### Database Scaling
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   Master Database                          │
+├─────────────────────────────────────────────────────────────┤
+│  Write operations | Schema changes | Primary data          │
+└─────────────────────────────────────────────────────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+┌───────▼───────┐     ┌─────────▼─────────┐     ┌───────▼───────┐
+│  Read Replica │     │  Read Replica     │     │  Read Replica │
+├───────────────┤     ├───────────────────┤     ├───────────────┤
+│  Read queries │     │  Read queries     │     │  Read queries │
+│  Analytics    │     │  Reports          │     │  Backups      │
+└───────────────┘     └───────────────────┘     └───────────────┘
+```
+
+### Performance Optimization
+
+#### Asset Optimization
+```php
+// Vite configuration
+export default defineConfig({
+    plugins: [laravel(['resources/css/app.css', 'resources/js/app.js'])],
+    build: {
+        minify: 'terser',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['alpine', 'tailwindcss'],
+                    dashboard: ['./resources/js/dashboard.js'],
+                },
+            },
+        },
+    },
+});
+```
+
+#### Code Optimization
+```php
+// Optimized service methods
+class OptimizedSiteService
+{
+    public function getUserSitesOptimized($userId)
+    {
+        return Cache::remember("user_sites_{$userId}", 3600, function() use ($userId) {
+            return Site::select('id', 'name', 'domain', 'status')
+                ->where('user_id', $userId)
+                ->with(['analytics:site_id,visits,revenue'])
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        });
+    }
+}
+```
+
+## 🔮 Future Architecture Considerations
+
+### Microservices Migration
+```
+Current Monolith → Gradual Migration → Microservices
+
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Monolithic    │    │   Hybrid        │    │  Microservices  │
+│   Laravel App   │ →  │   Architecture  │ →  │   Architecture  │
+│                 │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+### Event-Driven Architecture
+```php
+// Event-driven pattern implementation
+class PaymentCompletedEvent
+{
+    public $transaction;
+    
+    public function __construct(PaymentTransaction $transaction)
+    {
+        $this->transaction = $transaction;
+    }
+}
+
+class UpdateUserSubscriptionListener
+{
+    public function handle(PaymentCompletedEvent $event)
+    {
+        // Update user subscription status
+        $user = $event->transaction->user;
+        $user->subscription_status = 'active';
+        $user->save();
+    }
+}
+```
+
+### Cloud-Native Features
+```yaml
+# Future cloud-native implementation
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: mewayz-serverless
+spec:
+  template:
+    spec:
+      containers:
+      - image: mewayz:serverless
+        env:
+        - name: CLOUD_PROVIDER
+          value: "aws"
+        - name: SERVERLESS_MODE
+          value: "true"
+```
 
 ---
 
-**Last Updated**: July 15, 2025  
-**Version**: 1.0.0  
-**Platform**: Mewayz All-in-One Business Solution
+**Last Updated**: January 16, 2025  
+**Architecture Version**: 2.0  
+**Status**: Production Ready
 
----
-
-*This architecture guide provides a comprehensive overview of the Mewayz Platform's technical implementation, design decisions, and best practices for development, deployment, and maintenance.*
+*This architecture documentation serves as the foundation for understanding the Mewayz platform's technical implementation and scalability approach.*
