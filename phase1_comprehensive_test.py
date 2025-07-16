@@ -140,7 +140,7 @@ class MewayzPhase1Test:
             }),
             ("GET", "/workspace-setup/features", "features_get_endpoint", None),
             ("POST", "/workspace-setup/features", "features_save_endpoint", {
-                "selected_features": ["bio_sites", "social_media", "analytics", "email_marketing"]
+                "features": [1, 2, 3, 4]  # Use feature IDs instead of slugs
             }),
             ("POST", "/workspace-setup/team", "team_setup_endpoint", {
                 "team_name": "Test Team",
