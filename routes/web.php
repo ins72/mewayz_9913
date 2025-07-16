@@ -146,6 +146,11 @@ Route::get('/dashboard/help', function () {
     return view('pages.dashboard.help.index');
 })->middleware(['auth'])->name('dashboard-help-index');
 
+// Upgrade route for Stripe payment integration
+Route::get('/dashboard/upgrade', function () {
+    return view('pages.dashboard.upgrade');
+})->middleware(['auth'])->name('dashboard-upgrade-index');
+
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
   Route::get('run-update', 'DatabaseController@update')->name('update');
