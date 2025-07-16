@@ -274,25 +274,37 @@ class WorkspaceSetupWizardController extends Controller
             $request->validate([
                 'plan_id' => 'required|integer|exists:subscription_plans,id',
                 'billing_interval' => 'required|string|in:monthly,yearly',
+                'features' => 'sometimes|array', // Allow features to be passed directly
+                'features.*' => 'integer|exists:features,id',
             ]);
             
             $user = auth()->user();
             $workspace = $user->workspaces()->first();
             $plan = SubscriptionPlan::find($request->plan_id);
             
-            if (!$workspace || !$workspace->selected_features) {
+            if (!$workspace) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No workspace found'
+                ], 404);
+            }
+            
+            // Use features from request if provided, otherwise use workspace selected features
+            $selectedFeatures = $request->features ?? $workspace->selected_features ?? [];
+            
+            if (empty($selectedFeatures)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'No features selected'
                 ], 400);
             }
             
-            $features = Feature::whereIn('id', $workspace->selected_features)->get();
-            $totalPrice = $plan->calculatePrice($workspace->selected_features, $request->billing_interval);
+            $features = Feature::whereIn('id', $selectedFeatures)->get();
+            $totalPrice = $plan->calculatePrice($selectedFeatures, $request->billing_interval);
             
             // Calculate savings for yearly billing
-            $monthlyPrice = $plan->calculatePrice($workspace->selected_features, 'monthly');
-            $yearlyPrice = $plan->calculatePrice($workspace->selected_features, 'yearly');
+            $monthlyPrice = $plan->calculatePrice($selectedFeatures, 'monthly');
+            $yearlyPrice = $plan->calculatePrice($selectedFeatures, 'yearly');
             $yearlyMonthlySavings = ($monthlyPrice * 12) - $yearlyPrice;
             
             return response()->json([
@@ -300,7 +312,7 @@ class WorkspaceSetupWizardController extends Controller
                 'data' => [
                     'plan' => $plan,
                     'features' => $features,
-                    'feature_count' => count($workspace->selected_features),
+                    'feature_count' => count($selectedFeatures),
                     'billing_interval' => $request->billing_interval,
                     'pricing' => [
                         'base_price' => $plan->base_price,
