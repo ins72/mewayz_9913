@@ -7,7 +7,7 @@
     "professional_package": true,
     "enterprise_package": true,
     "correct_pricing": true,
-    "response_time": 0.03441476821899414
+    "response_time": 0.33904457092285156
   },
   "stripe_checkout_test": {
     "endpoint_accessible": true,
@@ -18,21 +18,21 @@
     "starter_package_test": false,
     "professional_package_test": false,
     "enterprise_package_test": false,
-    "response_time": 0.18419981002807617
+    "response_time": 0.19090485572814941
   },
   "stripe_webhook_test": {
     "endpoint_accessible": true,
     "response_status": 200,
     "webhook_processed": true,
     "signature_validation": false,
-    "response_time": 0.024618148803710938
+    "response_time": 0.02442455291748047
   },
   "payment_status_test": {
     "endpoint_accessible": true,
     "response_status": 404,
     "status_returned": true,
     "session_found": false,
-    "response_time": 0.025539875030517578
+    "response_time": 0.0229339599609375
   },
   "database_integration_test": {
     "model_file_exists": true,
@@ -41,13 +41,13 @@
     "transaction_creation": false
   },
   "test_summary": {
-    "overall_score": 559.6098464443569,
-    "packages_score": 2575.4301846027374,
+    "overall_score": 560.3714209511165,
+    "packages_score": 2579.2380571365356,
     "checkout_score": 14.285714285714285,
     "webhook_score": 66.66666666666666,
     "status_score": 66.66666666666666,
     "database_score": 75.0,
-    "test_timestamp": "2025-07-16 00:34:54",
-    "total_response_time": 0.26877260208129883
+    "test_timestamp": "2025-07-16 00:35:55",
+    "total_response_time": 0.577307939529419
   }
 }
