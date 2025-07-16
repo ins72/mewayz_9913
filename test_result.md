@@ -267,10 +267,10 @@ backend:
         comment: "✅ INFRASTRUCTURE RESOLVED: PHP 8.2 installed, supervisor configuration conflicts fixed, MariaDB running with proper permissions, Laravel server operational on port 8001. All migrations completed successfully. Ready for comprehensive backend testing."
   - task: "Instagram Management System"
     implemented: true
-    working: true
+    working: false
     file: "app/Http/Controllers/Api/InstagramManagementController.php"
-    stuck_count: 0
-    priority: "high"
+    stuck_count: 1
+    priority: "critical"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -291,6 +291,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ INSTAGRAM MANAGEMENT FULLY OPERATIONAL: 100% success rate (7/7 tests passed). COMPREHENSIVE FIXES VERIFIED: 1) instagram_account_id column fix confirmed - accounts and posts endpoints working without 500 errors, 2) Account creation working with proper validation (username, account_type, followers_count, is_active, display_name), 3) Posts endpoint stable and returning data correctly, 4) Analytics endpoint functional. All core Instagram management functionality restored and operational. Database schema issues resolved."
+      - working: false
+        agent: "testing"
+        comment: "🚨 INSTAGRAM MANAGEMENT REGRESSED: Current testing shows 27.3% success rate (3/11 tests passed). CRITICAL FAILURES: POST /instagram-management/accounts failing with 500 error 'Failed to add Instagram account', POST /instagram-management/posts failing with 500 error 'Failed to create Instagram post', GET /instagram-management/hashtag-research failing with 500 error. Working endpoints: GET accounts, GET posts, GET analytics. This is a STUCK TASK - previous fixes appear to have been lost or reverted."
 
   - task: "Email Marketing Hub"
     implemented: true
