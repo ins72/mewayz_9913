@@ -107,7 +107,7 @@ Route::get('/dashboard/booking', function () {
 
 // Marketing
 Route::get('/dashboard/email', function () {
-    return view('pages.dashboard.email.index');
+    return view('pages.dashboard.email.index-dynamic');
 })->middleware(['auth'])->name('dashboard-email-index');
 
 Route::get('/dashboard/automation', function () {
