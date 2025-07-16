@@ -618,7 +618,6 @@ class InstagramManagementTest:
         try:
             # Test valid post update
             update_data = {
-                "title": "Updated: Welcome to Mewayz Platform",
                 "caption": "Updated caption with new information about our platform! 🚀 #mewayz #updated",
                 "hashtags": [
                     "mewayz",
