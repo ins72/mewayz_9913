@@ -64,7 +64,7 @@ class FocusedCriticalTester:
                 "media_urls": ["https://example.com/business-post.jpg"],
                 "hashtags": ["#BusinessGrowth", "#DigitalMarketing", "#Productivity", "#SocialMedia"],
                 "post_type": "photo",
-                "scheduled_at": "2025-01-17 14:00:00"
+                "scheduled_at": "2025-01-20 14:00:00"
             },
             "workspace_goals": {
                 "goals": [1, 2, 3],
