@@ -1,30 +1,28 @@
 #!/usr/bin/env python3
 """
-Mewayz Laravel-Only Backend Testing Suite
-=========================================
+Mewayz Laravel Stripe Payment Integration Testing Suite
+======================================================
 
-This test suite validates the Laravel-only architecture after the complete reorganization
-from the previous backend/frontend split to a single Laravel instance.
+This test suite validates the Stripe payment integration for the Laravel Mewayz application
+as requested in the review. Focus areas:
 
-Architecture Changes Verified:
-- All Laravel files moved from /app/backend to /app
-- Python/FastAPI completely removed
-- Single Laravel instance architecture
-- Professional project structure with proper documentation
+1. Stripe packages endpoint: GET /api/payments/packages
+2. Stripe checkout session creation: POST /api/payments/checkout/session
+3. Stripe webhook endpoint: POST /api/webhook/stripe
+4. Payment status check: GET /api/payments/checkout/status/{sessionId}
+5. Database integration: PaymentTransaction records creation
 
-Test Coverage:
-1. Health check endpoint: GET /api/health
-2. Laravel-based Stripe integration using StripeService
-3. Authentication endpoints: POST /api/auth/login, GET /api/auth/me
-4. Dashboard functionality (formerly console)
-5. API routes accessibility and working status
-6. Single Laravel instance configuration verification
+The Laravel application runs on port 8001 with predefined packages:
+- starter: $9.99
+- professional: $29.99  
+- enterprise: $99.99
 """
 
 import os
 import sys
 import json
 import time
+import requests
 from pathlib import Path
 
 class MewayzLaravelArchitectureTest:
