@@ -38,8 +38,8 @@ class StripePaymentController extends Controller
                 'package_id' => 'required_without:stripe_price_id|string',
                 'stripe_price_id' => 'required_without:package_id|string',
                 'quantity' => 'integer|min:1|max:10',
-                'success_url' => 'required|string',
-                'cancel_url' => 'required|string',
+                'success_url' => 'string',
+                'cancel_url' => 'string',
                 'metadata' => 'array'
             ]);
             
@@ -47,10 +47,11 @@ class StripePaymentController extends Controller
             $user = Auth::user();
             $userEmail = $user ? $user->email : $request->input('email');
             
-            // Prepare checkout data
+            // Prepare checkout data with defaults
+            $baseUrl = config('app.url');
             $checkoutData = [
-                'success_url' => $request->input('success_url'),
-                'cancel_url' => $request->input('cancel_url'),
+                'success_url' => $request->input('success_url', $baseUrl . '/dashboard/upgrade?success=true'),
+                'cancel_url' => $request->input('cancel_url', $baseUrl . '/dashboard/upgrade?cancelled=true'),
                 'metadata' => array_merge($request->input('metadata', []), [
                     'user_id' => $user ? (string)$user->id : '',
                     'email' => $userEmail ?: '',
