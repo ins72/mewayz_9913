@@ -45,6 +45,10 @@ Route::get('/dashboard/workspace', function () {
     return view('pages.dashboard.workspace.index');
 })->middleware(['auth'])->name('dashboard-workspace-index');
 
+Route::get('/workspace-setup', function () {
+    return view('pages.workspace-setup');
+})->middleware(['auth'])->name('workspace-setup');
+
 // Content & Sites
 Route::get('/dashboard/sites', function () {
     return view('pages.dashboard.sites.index');
