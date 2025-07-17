@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'handleBio' => \App\Http\Middleware\HandleBio::class,
         'handleMediakit' => \App\Http\Middleware\HandleMediakit::class,
         'isAdmin' => \App\Http\Middleware\IsAdmin::class,
+        'custom.auth' => \App\Http\Middleware\CustomSanctumAuth::class,
     ];
 }
