@@ -5,7 +5,9 @@
     'color' => 'currentColor',
     'fill' => 'none',
     'stroke' => 'currentColor',
-    'strokeWidth' => '2'
+    'strokeWidth' => '2',
+    'alt' => '',
+    'role' => 'img'
 ])
 
 @php
@@ -15,11 +17,22 @@
         'md' => 'w-6 h-6',
         'lg' => 'w-8 h-8',
         'xl' => 'w-10 h-10',
-        '2xl' => 'w-12 h-12'
+        '2xl' => 'w-12 h-12',
+        '3xl' => 'w-16 h-16',
+        '4xl' => 'w-20 h-20'
     ];
     
     $sizeClass = $sizeClasses[$size] ?? $sizeClasses['md'];
     $classes = "$sizeClass $class";
+    
+    // Accessibility attributes
+    $accessibilityAttrs = '';
+    if ($alt) {
+        $accessibilityAttrs .= ' aria-label="' . $alt . '"';
+    }
+    if ($role) {
+        $accessibilityAttrs .= ' role="' . $role . '"';
+    }
 @endphp
 
 @if($name === 'plus')
