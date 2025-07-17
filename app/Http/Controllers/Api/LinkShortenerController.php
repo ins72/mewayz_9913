@@ -274,10 +274,10 @@ class LinkShortenerController extends Controller
     /**
      * Delete a shortened link
      */
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             $link = ShortenedLink::where('id', $id)
                 ->where('user_id', $user->id)
