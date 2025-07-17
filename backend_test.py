@@ -706,6 +706,7 @@ class MewayzAPITester:
         self.test_crm_system()
         self.test_team_management()
         self.test_ai_integration()
+        self.test_website_builder()
         
         # Print summary
         self.print_summary()
