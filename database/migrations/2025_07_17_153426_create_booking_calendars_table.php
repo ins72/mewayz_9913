@@ -14,8 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('booking_calendars', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('service_id')->constrained('booking_services')->onDelete('cascade');
+            $table->date('date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->boolean('is_available')->default(true);
+            $table->string('override_reason')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
+            
+            $table->index(['service_id', 'date']);
+            $table->index(['date', 'is_available']);
         });
     }
 
