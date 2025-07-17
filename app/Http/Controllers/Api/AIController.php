@@ -73,8 +73,7 @@ class AIController extends Controller
                 'success' => false,
                 'error' => 'Failed to fetch AI services: ' . $e->getMessage()
             ], 500);
-
-
+        }
     }
 
     /**
