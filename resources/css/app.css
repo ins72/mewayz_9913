@@ -22,7 +22,12 @@
     --error: #EF4444;
     --warning: #F59E0B;
     --info: #3B82F6;
+    --primary: #3B82F6;
+    --secondary: #6B7280;
 }
+
+/* Import icon styles */
+@import url('./icons.css');
 
 /* Ensure variables are available in dark mode */
 @media (prefers-color-scheme: dark) {
