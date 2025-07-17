@@ -41,11 +41,7 @@ class BookingService extends Model
     {
         parent::boot();
         
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
+        // No need for UUID generation since we're using auto-increment
     }
 
     // Relationships
