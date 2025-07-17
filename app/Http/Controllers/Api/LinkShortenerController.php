@@ -38,7 +38,7 @@ class LinkShortenerController extends Controller
         }
 
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             // Generate unique slug
             $slug = $request->custom_slug ?: $this->generateUniqueSlug();
