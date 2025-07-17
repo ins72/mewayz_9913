@@ -46,6 +46,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PASS - Fixed User model issues (removed 'hashed' cast for Laravel 9.x, fixed getAvatar method). Registration and login working correctly. Minor: Profile endpoint fails due to middleware issue but core auth works."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASS - CONFIRMED WORKING: Registration and login endpoints fully functional after database fix. Users can register and receive tokens. Minor: Profile endpoint still fails due to middleware issue."
 
   - task: "Bio Sites & Link-in-Bio"
     implemented: true
