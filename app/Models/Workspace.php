@@ -34,6 +34,9 @@ class Workspace extends Model
             if (empty($model->id)) {
                 $model->id = (string) Str::uuid();
             }
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name) . '-' . Str::random(8);
+            }
         });
     }
     
