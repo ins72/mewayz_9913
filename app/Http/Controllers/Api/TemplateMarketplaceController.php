@@ -3,651 +3,686 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Template;
+use App\Models\TemplateCategory;
+use App\Models\TemplatePurchase;
+use App\Models\TemplateReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class TemplateMarketplaceController extends Controller
 {
     /**
-     * Get all templates
+     * Get all templates with filtering and pagination
      */
-    public function getTemplates(Request $request)
+    public function index(Request $request)
     {
         try {
-            $request->validate([
-                'category' => 'nullable|string|in:all,email,bio,course,social,marketing',
-                'type' => 'nullable|string|in:all,free,premium',
-                'search' => 'nullable|string|max:255',
-                'sort' => 'nullable|string|in:popular,newest,rating,price',
-                'page' => 'nullable|integer|min:1',
-                'per_page' => 'nullable|integer|min:1|max:50',
-            ]);
-
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $templates = [
-                // Email Templates
-                [
-                    'id' => 1,
-                    'name' => 'Professional Newsletter',
-                    'description' => 'Clean and professional newsletter template',
-                    'category' => 'email',
-                    'type' => 'free',
-                    'preview_image' => '/images/templates/email/professional-newsletter.jpg',
-                    'rating' => 4.5,
-                    'downloads' => 2456,
-                    'price' => 0,
-                    'author' => 'Mewayz Team',
-                    'created_at' => now()->subDays(30),
-                    'tags' => ['newsletter', 'business', 'professional'],
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'E-commerce Promo',
-                    'description' => 'Perfect for product promotions and sales',
-                    'category' => 'email',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/email/ecommerce-promo.jpg',
-                    'rating' => 4.8,
-                    'downloads' => 1834,
-                    'price' => 19.99,
-                    'author' => 'Design Pro',
-                    'created_at' => now()->subDays(15),
-                    'tags' => ['ecommerce', 'promotion', 'sales'],
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Event Invitation',
-                    'description' => 'Elegant template for event invitations',
-                    'category' => 'email',
-                    'type' => 'free',
-                    'preview_image' => '/images/templates/email/event-invitation.jpg',
-                    'rating' => 4.2,
-                    'downloads' => 1567,
-                    'price' => 0,
-                    'author' => 'Event Master',
-                    'created_at' => now()->subDays(20),
-                    'tags' => ['event', 'invitation', 'elegant'],
-                ],
-                
-                // Bio Site Templates
-                [
-                    'id' => 4,
-                    'name' => 'Business Professional',
-                    'description' => 'Professional bio site for business owners',
-                    'category' => 'bio',
-                    'type' => 'free',
-                    'preview_image' => '/images/templates/bio/business-professional.jpg',
-                    'rating' => 4.6,
-                    'downloads' => 3421,
-                    'price' => 0,
-                    'author' => 'Mewayz Team',
-                    'created_at' => now()->subDays(45),
-                    'tags' => ['business', 'professional', 'corporate'],
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Creative Portfolio',
-                    'description' => 'Showcase your creative work beautifully',
-                    'category' => 'bio',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/bio/creative-portfolio.jpg',
-                    'rating' => 4.9,
-                    'downloads' => 2876,
-                    'price' => 29.99,
-                    'author' => 'Creative Hub',
-                    'created_at' => now()->subDays(10),
-                    'tags' => ['creative', 'portfolio', 'artistic'],
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Social Influencer',
-                    'description' => 'Perfect for social media influencers',
-                    'category' => 'bio',
-                    'type' => 'free',
-                    'preview_image' => '/images/templates/bio/social-influencer.jpg',
-                    'rating' => 4.4,
-                    'downloads' => 4567,
-                    'price' => 0,
-                    'author' => 'Influencer Tools',
-                    'created_at' => now()->subDays(25),
-                    'tags' => ['social', 'influencer', 'trendy'],
-                ],
-                
-                // Course Templates
-                [
-                    'id' => 7,
-                    'name' => 'Online Course Landing',
-                    'description' => 'Convert visitors into course students',
-                    'category' => 'course',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/course/online-course-landing.jpg',
-                    'rating' => 4.7,
-                    'downloads' => 1234,
-                    'price' => 39.99,
-                    'author' => 'Edu Templates',
-                    'created_at' => now()->subDays(12),
-                    'tags' => ['course', 'education', 'landing'],
-                ],
-                [
-                    'id' => 8,
-                    'name' => 'Certification Course',
-                    'description' => 'Professional certification course template',
-                    'category' => 'course',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/course/certification-course.jpg',
-                    'rating' => 4.5,
-                    'downloads' => 987,
-                    'price' => 24.99,
-                    'author' => 'Cert Academy',
-                    'created_at' => now()->subDays(18),
-                    'tags' => ['certification', 'professional', 'course'],
-                ],
-                
-                // Social Media Templates
-                [
-                    'id' => 9,
-                    'name' => 'Instagram Story Pack',
-                    'description' => '20 Instagram story templates',
-                    'category' => 'social',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/social/instagram-story-pack.jpg',
-                    'rating' => 4.8,
-                    'downloads' => 5678,
-                    'price' => 14.99,
-                    'author' => 'Social Design',
-                    'created_at' => now()->subDays(8),
-                    'tags' => ['instagram', 'stories', 'social'],
-                ],
-                [
-                    'id' => 10,
-                    'name' => 'Facebook Ad Templates',
-                    'description' => 'High-converting Facebook ad designs',
-                    'category' => 'social',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/social/facebook-ad-templates.jpg',
-                    'rating' => 4.6,
-                    'downloads' => 2345,
-                    'price' => 19.99,
-                    'author' => 'Ad Masters',
-                    'created_at' => now()->subDays(22),
-                    'tags' => ['facebook', 'ads', 'conversion'],
-                ],
-                
-                // Marketing Templates
-                [
-                    'id' => 11,
-                    'name' => 'Marketing Campaign Kit',
-                    'description' => 'Complete marketing campaign templates',
-                    'category' => 'marketing',
-                    'type' => 'premium',
-                    'preview_image' => '/images/templates/marketing/campaign-kit.jpg',
-                    'rating' => 4.9,
-                    'downloads' => 1567,
-                    'price' => 49.99,
-                    'author' => 'Marketing Pro',
-                    'created_at' => now()->subDays(5),
-                    'tags' => ['marketing', 'campaign', 'complete'],
-                ],
-                [
-                    'id' => 12,
-                    'name' => 'Lead Magnet Templates',
-                    'description' => 'Templates for lead generation',
-                    'category' => 'marketing',
-                    'type' => 'free',
-                    'preview_image' => '/images/templates/marketing/lead-magnet.jpg',
-                    'rating' => 4.3,
-                    'downloads' => 3456,
-                    'price' => 0,
-                    'author' => 'Lead Gen Tools',
-                    'created_at' => now()->subDays(35),
-                    'tags' => ['leads', 'generation', 'marketing'],
-                ],
-            ];
+            $query = Template::with(['category', 'creator:id,name', 'reviews'])
+                ->where('status', 'approved')
+                ->where('is_active', true);
 
             // Apply filters
-            if ($request->category && $request->category !== 'all') {
-                $templates = array_filter($templates, function($template) use ($request) {
-                    return $template['category'] === $request->category;
-                });
+            if ($request->category_id) {
+                $query->where('category_id', $request->category_id);
             }
 
-            if ($request->type && $request->type !== 'all') {
-                $templates = array_filter($templates, function($template) use ($request) {
-                    return $template['type'] === $request->type;
-                });
+            if ($request->template_type) {
+                $query->where('template_type', $request->template_type);
+            }
+
+            if ($request->price_range) {
+                switch ($request->price_range) {
+                    case 'free':
+                        $query->where('price', 0);
+                        break;
+                    case 'paid':
+                        $query->where('price', '>', 0);
+                        break;
+                    case 'premium':
+                        $query->where('price', '>', 50);
+                        break;
+                }
             }
 
             if ($request->search) {
-                $search = strtolower($request->search);
-                $templates = array_filter($templates, function($template) use ($search) {
-                    return strpos(strtolower($template['name']), $search) !== false ||
-                           strpos(strtolower($template['description']), $search) !== false;
+                $query->where(function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->search . '%')
+                      ->orWhere('description', 'like', '%' . $request->search . '%')
+                      ->orWhere('tags', 'like', '%' . $request->search . '%');
                 });
             }
 
-            // Sort templates
-            $sortBy = $request->sort ?? 'popular';
-            usort($templates, function($a, $b) use ($sortBy) {
-                switch ($sortBy) {
-                    case 'newest':
-                        return $b['created_at'] <=> $a['created_at'];
-                    case 'rating':
-                        return $b['rating'] <=> $a['rating'];
-                    case 'price':
-                        return $a['price'] <=> $b['price'];
-                    default: // popular
-                        return $b['downloads'] <=> $a['downloads'];
-                }
-            });
-
-            // Pagination
-            $perPage = $request->per_page ?? 12;
-            $page = $request->page ?? 1;
-            $offset = ($page - 1) * $perPage;
-            $paginatedTemplates = array_slice($templates, $offset, $perPage);
-
-            return response()->json([
-                'success' => true,
-                'data' => array_values($paginatedTemplates),
-                'pagination' => [
-                    'current_page' => $page,
-                    'per_page' => $perPage,
-                    'total' => count($templates),
-                    'total_pages' => ceil(count($templates) / $perPage),
-                ],
-                'filters' => [
-                    'categories' => ['all', 'email', 'bio', 'course', 'social', 'marketing'],
-                    'types' => ['all', 'free', 'premium'],
-                    'sort_options' => ['popular', 'newest', 'rating', 'price'],
-                ],
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error getting templates: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get templates'], 500);
-        }
-    }
-
-    /**
-     * Get template details
-     */
-    public function getTemplateDetails($id)
-    {
-        try {
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            // Apply sorting
+            switch ($request->sort_by) {
+                case 'popular':
+                    $query->orderBy('download_count', 'desc');
+                    break;
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'price_low':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_high':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'rating':
+                    $query->orderBy('average_rating', 'desc');
+                    break;
+                default:
+                    $query->orderBy('featured', 'desc')->orderBy('created_at', 'desc');
             }
 
-            $template = [
-                'id' => $id,
-                'name' => 'Professional Newsletter',
-                'description' => 'Clean and professional newsletter template perfect for business communications',
-                'category' => 'email',
-                'type' => 'free',
-                'preview_image' => '/images/templates/email/professional-newsletter.jpg',
-                'rating' => 4.5,
-                'downloads' => 2456,
-                'price' => 0,
-                'author' => [
-                    'name' => 'Mewayz Team',
-                    'avatar' => '/images/avatars/mewayz-team.jpg',
-                    'verified' => true,
-                    'total_templates' => 45,
-                ],
-                'created_at' => now()->subDays(30),
-                'updated_at' => now()->subDays(5),
-                'tags' => ['newsletter', 'business', 'professional'],
-                'features' => [
-                    'Responsive design',
-                    'Mobile optimized',
-                    'Easy customization',
-                    'Multiple layouts',
-                    'Color variations',
-                ],
-                'preview_images' => [
-                    '/images/templates/email/professional-newsletter-1.jpg',
-                    '/images/templates/email/professional-newsletter-2.jpg',
-                    '/images/templates/email/professional-newsletter-3.jpg',
-                ],
-                'reviews' => [
-                    [
-                        'user' => 'John Doe',
-                        'rating' => 5,
-                        'comment' => 'Excellent template, very professional looking!',
-                        'date' => now()->subDays(5),
-                    ],
-                    [
-                        'user' => 'Jane Smith',
-                        'rating' => 4,
-                        'comment' => 'Great template, easy to customize.',
-                        'date' => now()->subDays(12),
-                    ],
-                    [
-                        'user' => 'Mike Johnson',
-                        'rating' => 5,
-                        'comment' => 'Perfect for my business newsletter.',
-                        'date' => now()->subDays(18),
-                    ],
-                ],
-                'related_templates' => [
-                    [
-                        'id' => 2,
-                        'name' => 'E-commerce Promo',
-                        'preview_image' => '/images/templates/email/ecommerce-promo.jpg',
-                        'price' => 19.99,
-                        'rating' => 4.8,
-                    ],
-                    [
-                        'id' => 3,
-                        'name' => 'Event Invitation',
-                        'preview_image' => '/images/templates/email/event-invitation.jpg',
-                        'price' => 0,
-                        'rating' => 4.2,
-                    ],
-                ],
-                'compatibility' => [
-                    'Email platforms' => ['Gmail', 'Outlook', 'Apple Mail', 'Thunderbird'],
-                    'Devices' => ['Desktop', 'Mobile', 'Tablet'],
-                    'Browsers' => ['Chrome', 'Firefox', 'Safari', 'Edge'],
-                ],
-                'files_included' => [
-                    'HTML template',
-                    'CSS styles',
-                    'Documentation',
-                    'Preview images',
-                    'Source files',
-                ],
-            ];
+            $templates = $query->paginate(20);
 
             return response()->json([
                 'success' => true,
-                'data' => $template,
+                'data' => $templates,
+                'message' => 'Templates retrieved successfully'
             ]);
         } catch (\Exception $e) {
-            Log::error('Error getting template details: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get template details'], 500);
-        }
-    }
-
-    /**
-     * Purchase template
-     */
-    public function purchaseTemplate(Request $request, $id)
-    {
-        try {
-            $request->validate([
-                'payment_method' => 'required|string|in:card,paypal,wallet',
-            ]);
-
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $purchase = [
-                'id' => rand(10000, 99999),
-                'template_id' => $id,
-                'user_id' => $user->id,
-                'workspace_id' => $workspace->id,
-                'amount' => 19.99,
-                'payment_method' => $request->payment_method,
-                'status' => 'completed',
-                'download_link' => '/templates/download/' . $id . '/' . time(),
-                'download_expires_at' => now()->addDays(30),
-                'purchased_at' => now(),
-            ];
-
-            Log::info('Template purchased', [
-                'user_id' => $user->id,
-                'template_id' => $id,
-                'amount' => $purchase['amount'],
-                'payment_method' => $request->payment_method,
-            ]);
-
+            Log::error('Failed to retrieve templates: ' . $e->getMessage());
             return response()->json([
-                'success' => true,
-                'message' => 'Template purchased successfully',
-                'data' => $purchase,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error purchasing template: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to purchase template'], 500);
-        }
-    }
-
-    /**
-     * Get user's purchased templates
-     */
-    public function getUserTemplates()
-    {
-        try {
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $userTemplates = [
-                [
-                    'id' => 1,
-                    'template_id' => 2,
-                    'template_name' => 'E-commerce Promo',
-                    'template_category' => 'email',
-                    'purchased_at' => now()->subDays(10),
-                    'download_link' => '/templates/download/2/' . time(),
-                    'download_expires_at' => now()->addDays(20),
-                    'download_count' => 3,
-                    'last_downloaded' => now()->subDays(2),
-                ],
-                [
-                    'id' => 2,
-                    'template_id' => 5,
-                    'template_name' => 'Creative Portfolio',
-                    'template_category' => 'bio',
-                    'purchased_at' => now()->subDays(25),
-                    'download_link' => '/templates/download/5/' . time(),
-                    'download_expires_at' => now()->addDays(5),
-                    'download_count' => 1,
-                    'last_downloaded' => now()->subDays(25),
-                ],
-                [
-                    'id' => 3,
-                    'template_id' => 7,
-                    'template_name' => 'Online Course Landing',
-                    'template_category' => 'course',
-                    'purchased_at' => now()->subDays(5),
-                    'download_link' => '/templates/download/7/' . time(),
-                    'download_expires_at' => now()->addDays(25),
-                    'download_count' => 2,
-                    'last_downloaded' => now()->subDays(1),
-                ],
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => $userTemplates,
-                'total' => count($userTemplates),
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error getting user templates: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get user templates'], 500);
-        }
-    }
-
-    /**
-     * Upload custom template
-     */
-    public function uploadTemplate(Request $request)
-    {
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required|string|max:1000',
-                'category' => 'required|string|in:email,bio,course,social,marketing',
-                'type' => 'required|string|in:free,premium',
-                'price' => 'required_if:type,premium|numeric|min:0',
-                'tags' => 'required|array|min:1',
-                'tags.*' => 'string|max:50',
-                'preview_image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-                'template_files' => 'required|file|mimes:zip|max:10240',
-            ]);
-
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            // Simulate file upload
-            $template = [
-                'id' => rand(10000, 99999),
-                'name' => $request->name,
-                'description' => $request->description,
-                'category' => $request->category,
-                'type' => $request->type,
-                'price' => $request->type === 'premium' ? $request->price : 0,
-                'tags' => $request->tags,
-                'author' => [
-                    'name' => $user->name,
-                    'id' => $user->id,
-                ],
-                'status' => 'pending_review',
-                'preview_image' => '/images/templates/user-uploads/' . time() . '.jpg',
-                'template_files' => '/templates/user-uploads/' . time() . '.zip',
-                'uploaded_at' => now(),
-                'rating' => 0,
-                'downloads' => 0,
-            ];
-
-            Log::info('Template uploaded', [
-                'user_id' => $user->id,
-                'template_name' => $request->name,
-                'category' => $request->category,
-                'type' => $request->type,
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Template uploaded successfully and is pending review',
-                'data' => $template,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error uploading template: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to upload template'], 500);
+                'success' => false,
+                'message' => 'Failed to retrieve templates'
+            ], 500);
         }
     }
 
     /**
      * Get template categories
      */
-    public function getCategories()
+    public function categories()
     {
         try {
-            $categories = [
-                [
-                    'id' => 'email',
-                    'name' => 'Email Templates',
-                    'description' => 'Professional email designs',
-                    'icon' => 'mail',
-                    'count' => 145,
-                ],
-                [
-                    'id' => 'bio',
-                    'name' => 'Link in Bio',
-                    'description' => 'Landing page layouts',
-                    'icon' => 'link',
-                    'count' => 87,
-                ],
-                [
-                    'id' => 'course',
-                    'name' => 'Course Templates',
-                    'description' => 'Educational content structures',
-                    'icon' => 'book',
-                    'count' => 56,
-                ],
-                [
-                    'id' => 'social',
-                    'name' => 'Social Media',
-                    'description' => 'Post and story designs',
-                    'icon' => 'share',
-                    'count' => 203,
-                ],
-                [
-                    'id' => 'marketing',
-                    'name' => 'Marketing Templates',
-                    'description' => 'Campaign and ad layouts',
-                    'icon' => 'trending-up',
-                    'count' => 98,
-                ],
-            ];
+            $categories = TemplateCategory::where('is_active', true)
+                ->withCount('templates')
+                ->orderBy('name')
+                ->get();
 
             return response()->json([
                 'success' => true,
                 'data' => $categories,
-                'total_templates' => array_sum(array_column($categories, 'count')),
+                'message' => 'Categories retrieved successfully'
             ]);
         } catch (\Exception $e) {
-            Log::error('Error getting categories: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get categories'], 500);
+            Log::error('Failed to retrieve categories: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve categories'
+            ], 500);
         }
     }
 
     /**
-     * Rate template
+     * Get featured templates
      */
-    public function rateTemplate(Request $request, $id)
+    public function featured()
     {
         try {
-            $request->validate([
-                'rating' => 'required|integer|min:1|max:5',
-                'comment' => 'nullable|string|max:500',
-            ]);
+            $templates = Template::with(['category', 'creator:id,name'])
+                ->where('featured', true)
+                ->where('status', 'approved')
+                ->where('is_active', true)
+                ->limit(10)
+                ->get();
 
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            return response()->json([
+                'success' => true,
+                'data' => $templates,
+                'message' => 'Featured templates retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve featured templates: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve featured templates'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get template details
+     */
+    public function show(Request $request, $id)
+    {
+        try {
+            $template = Template::with(['category', 'creator:id,name', 'reviews.user:id,name'])
+                ->where('id', $id)
+                ->where('status', 'approved')
+                ->where('is_active', true)
+                ->first();
+
+            if (!$template) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Template not found'
+                ], 404);
             }
 
-            $review = [
-                'id' => rand(10000, 99999),
-                'template_id' => $id,
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'rating' => $request->rating,
-                'comment' => $request->comment,
-                'created_at' => now(),
-            ];
+            // Check if user has purchased this template
+            $hasPurchased = false;
+            $user = Auth::user();
+            if ($user) {
+                $hasPurchased = TemplatePurchase::where('user_id', $user->id)
+                    ->where('template_id', $id)
+                    ->where('status', 'completed')
+                    ->exists();
+            }
 
-            Log::info('Template rated', [
-                'user_id' => $user->id,
-                'template_id' => $id,
-                'rating' => $request->rating,
+            $templateData = $template->toArray();
+            $templateData['has_purchased'] = $hasPurchased;
+
+            return response()->json([
+                'success' => true,
+                'data' => $templateData,
+                'message' => 'Template details retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve template details: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve template details'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create a new template
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'template_type' => 'required|string|in:website,email,social,bio,course',
+            'category_id' => 'required|exists:template_categories,id',
+            'price' => 'required|numeric|min:0|max:999.99',
+            'tags' => 'nullable|string|max:500',
+            'preview_images' => 'nullable|array|max:5',
+            'preview_images.*' => 'image|max:5120', // 5MB max per image
+            'template_data' => 'required|json',
+            'demo_url' => 'nullable|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $user = Auth::user();
+            
+            // Handle preview images upload
+            $previewImages = [];
+            if ($request->hasFile('preview_images')) {
+                foreach ($request->file('preview_images') as $image) {
+                    $path = $image->store('templates/previews', 'public');
+                    $previewImages[] = $path;
+                }
+            }
+
+            $template = Template::create([
+                'creator_id' => $user->id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'template_type' => $request->template_type,
+                'category_id' => $request->category_id,
+                'price' => $request->price,
+                'tags' => $request->tags,
+                'preview_images' => $previewImages,
+                'template_data' => json_decode($request->template_data, true),
+                'demo_url' => $request->demo_url,
+                'status' => 'pending',
+                'is_active' => true,
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Template rated successfully',
-                'data' => $review,
+                'message' => 'Template created successfully and submitted for review',
+                'data' => $template
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Failed to create template: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create template'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update an existing template
+     */
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string|max:1000',
+            'template_type' => 'sometimes|required|string|in:website,email,social,bio,course',
+            'category_id' => 'sometimes|required|exists:template_categories,id',
+            'price' => 'sometimes|required|numeric|min:0|max:999.99',
+            'tags' => 'nullable|string|max:500',
+            'preview_images' => 'nullable|array|max:5',
+            'preview_images.*' => 'image|max:5120',
+            'template_data' => 'sometimes|required|json',
+            'demo_url' => 'nullable|url',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $user = Auth::user();
+            
+            $template = Template::where('id', $id)
+                ->where('creator_id', $user->id)
+                ->first();
+
+            if (!$template) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Template not found or you do not have permission to edit it'
+                ], 404);
+            }
+
+            $updateData = [];
+            
+            foreach (['name', 'description', 'template_type', 'category_id', 'price', 'tags', 'demo_url'] as $field) {
+                if ($request->has($field)) {
+                    $updateData[$field] = $request->$field;
+                }
+            }
+
+            if ($request->has('template_data')) {
+                $updateData['template_data'] = json_decode($request->template_data, true);
+            }
+
+            // Handle preview images upload
+            if ($request->hasFile('preview_images')) {
+                $previewImages = [];
+                foreach ($request->file('preview_images') as $image) {
+                    $path = $image->store('templates/previews', 'public');
+                    $previewImages[] = $path;
+                }
+                $updateData['preview_images'] = $previewImages;
+            }
+
+            // Reset status to pending if template content is updated
+            if ($request->has('template_data') || $request->hasFile('preview_images')) {
+                $updateData['status'] = 'pending';
+            }
+
+            $template->update($updateData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Template updated successfully',
+                'data' => $template
             ]);
         } catch (\Exception $e) {
-            Log::error('Error rating template: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to rate template'], 500);
+            Log::error('Failed to update template: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update template'
+            ], 500);
         }
+    }
+
+    /**
+     * Delete a template
+     */
+    public function destroy($id)
+    {
+        try {
+            $user = Auth::user();
+            
+            $template = Template::where('id', $id)
+                ->where('creator_id', $user->id)
+                ->first();
+
+            if (!$template) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Template not found or you do not have permission to delete it'
+                ], 404);
+            }
+
+            $template->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Template deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to delete template: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete template'
+            ], 500);
+        }
+    }
+
+    /**
+     * Purchase a template
+     */
+    public function purchase(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'payment_method' => 'required|string|in:stripe,paypal,wallet',
+            'payment_token' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $user = Auth::user();
+            
+            $template = Template::where('id', $id)
+                ->where('status', 'approved')
+                ->where('is_active', true)
+                ->first();
+
+            if (!$template) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Template not found or not available for purchase'
+                ], 404);
+            }
+
+            // Check if user already purchased this template
+            $existingPurchase = TemplatePurchase::where('user_id', $user->id)
+                ->where('template_id', $id)
+                ->where('status', 'completed')
+                ->first();
+
+            if ($existingPurchase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You have already purchased this template'
+                ], 400);
+            }
+
+            // Create purchase record
+            $purchase = TemplatePurchase::create([
+                'user_id' => $user->id,
+                'template_id' => $id,
+                'creator_id' => $template->creator_id,
+                'amount' => $template->price,
+                'currency' => 'USD',
+                'payment_method' => $request->payment_method,
+                'payment_token' => $request->payment_token,
+                'status' => 'processing',
+            ]);
+
+            // Process payment (implement actual payment processing here)
+            $paymentResult = $this->processPayment($purchase);
+
+            if ($paymentResult['success']) {
+                $purchase->update([
+                    'status' => 'completed',
+                    'payment_reference' => $paymentResult['reference'],
+                    'completed_at' => now(),
+                ]);
+
+                // Increment download count
+                $template->increment('download_count');
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Template purchased successfully',
+                    'data' => [
+                        'purchase_id' => $purchase->id,
+                        'template' => $template,
+                        'download_url' => $template->download_url,
+                    ]
+                ]);
+            } else {
+                $purchase->update([
+                    'status' => 'failed',
+                    'failure_reason' => $paymentResult['error'],
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment failed: ' . $paymentResult['error']
+                ], 400);
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to purchase template: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to purchase template'
+            ], 500);
+        }
+    }
+
+    /**
+     * Download a purchased template
+     */
+    public function download($id)
+    {
+        try {
+            $user = Auth::user();
+            
+            // Check if user has purchased this template
+            $purchase = TemplatePurchase::where('user_id', $user->id)
+                ->where('template_id', $id)
+                ->where('status', 'completed')
+                ->first();
+
+            if (!$purchase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You have not purchased this template'
+                ], 403);
+            }
+
+            $template = Template::find($id);
+            
+            if (!$template) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Template not found'
+                ], 404);
+            }
+
+            // Return template data for download
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'template' => $template,
+                    'template_data' => $template->template_data,
+                    'download_count' => $template->download_count,
+                ],
+                'message' => 'Template downloaded successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to download template: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to download template'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get user's purchased templates
+     */
+    public function myPurchases()
+    {
+        try {
+            $user = Auth::user();
+            
+            $purchases = TemplatePurchase::where('user_id', $user->id)
+                ->where('status', 'completed')
+                ->with(['template' => function($query) {
+                    $query->with('category');
+                }])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $purchases,
+                'message' => 'Purchased templates retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve purchased templates: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve purchased templates'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get user's created templates
+     */
+    public function myTemplates()
+    {
+        try {
+            $user = Auth::user();
+            
+            $templates = Template::where('creator_id', $user->id)
+                ->with(['category', 'reviews'])
+                ->withCount(['purchases' => function($query) {
+                    $query->where('status', 'completed');
+                }])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $templates,
+                'message' => 'Your templates retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve user templates: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve user templates'
+            ], 500);
+        }
+    }
+
+    /**
+     * Add a review to a template
+     */
+    public function addReview(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $user = Auth::user();
+            
+            // Check if user has purchased this template
+            $purchase = TemplatePurchase::where('user_id', $user->id)
+                ->where('template_id', $id)
+                ->where('status', 'completed')
+                ->first();
+
+            if (!$purchase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You can only review templates you have purchased'
+                ], 403);
+            }
+
+            // Check if user has already reviewed this template
+            $existingReview = TemplateReview::where('user_id', $user->id)
+                ->where('template_id', $id)
+                ->first();
+
+            if ($existingReview) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You have already reviewed this template'
+                ], 400);
+            }
+
+            $review = TemplateReview::create([
+                'user_id' => $user->id,
+                'template_id' => $id,
+                'rating' => $request->rating,
+                'comment' => $request->comment,
+            ]);
+
+            // Update template average rating
+            $this->updateTemplateRating($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Review added successfully',
+                'data' => $review
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to add review: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add review'
+            ], 500);
+        }
+    }
+
+    /**
+     * Process payment for template purchase
+     */
+    private function processPayment($purchase)
+    {
+        // Mock payment processing
+        // In a real implementation, integrate with Stripe, PayPal, etc.
+        
+        return [
+            'success' => true,
+            'reference' => 'PAY_' . strtoupper(uniqid()),
+        ];
+    }
+
+    /**
+     * Update template average rating
+     */
+    private function updateTemplateRating($templateId)
+    {
+        $averageRating = TemplateReview::where('template_id', $templateId)
+            ->avg('rating');
+
+        $reviewCount = TemplateReview::where('template_id', $templateId)
+            ->count();
+
+        Template::where('id', $templateId)->update([
+            'average_rating' => round($averageRating, 2),
+            'review_count' => $reviewCount,
+        ]);
     }
 }
