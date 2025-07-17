@@ -45,6 +45,11 @@ class SubscriptionPlan extends Model
         'included_features' => 'array',
         'metadata' => 'array',
         'is_active' => 'boolean',
+        // New admin dashboard fields
+        'price_monthly' => 'decimal:2',
+        'price_yearly' => 'decimal:2',
+        'is_whitelabel' => 'boolean',
+        'features' => 'array',
     ];
 
     /**
