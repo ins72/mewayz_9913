@@ -122,11 +122,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::get('/auth/me', [AuthController::class, 'me']);
-});
-    Route::get('/oauth/status', [ApiOAuthController::class, 'getOAuthStatus']);
-    Route::post('/oauth/{provider}/link', [ApiOAuthController::class, 'linkAccount']);
-    Route::delete('/oauth/{provider}/unlink', [ApiOAuthController::class, 'unlinkAccount']);
-    
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
