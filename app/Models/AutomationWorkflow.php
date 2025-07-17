@@ -11,6 +11,9 @@ class AutomationWorkflow extends Model
     use HasFactory;
 
     protected $table = 'automation_workflows';
+    
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'user_id',
