@@ -52,10 +52,9 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
-
+        // Clear session manually to avoid Auth manager
+        $request->session()->forget('user_id');
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
