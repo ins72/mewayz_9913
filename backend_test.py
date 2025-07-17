@@ -1395,6 +1395,7 @@ class MewayzAPITester:
         self.test_analytics_reporting()
         self.test_payment_processing()
         self.test_workspace_management()
+        self.test_workspace_setup_wizard()  # NEW: Comprehensive 6-step workspace setup wizard test
         self.test_oauth_integration()
         self.test_two_factor_auth()
         self.test_crm_system()
