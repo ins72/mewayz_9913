@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mobile_sessions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->enum('device_type', ['mobile', 'tablet', 'desktop']);
             $table->enum('platform', ['ios', 'android', 'web']);
             $table->json('device_info')->nullable();
