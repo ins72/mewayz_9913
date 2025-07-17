@@ -31,10 +31,10 @@ class BookingService extends Model
     ];
 
     protected $casts = [
-        'id' => 'string',
         'price' => 'decimal:2',
-        'is_active' => 'boolean',
-        'requires_approval' => 'boolean',
+        'settings' => 'array',
+        'booking_workhours' => 'array',
+        'gallery' => 'array',
     ];
 
     protected static function boot()
