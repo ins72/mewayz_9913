@@ -571,6 +571,30 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->get('/user', f
     return $request->user();
 });
 
+// Link Shortener System
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('links')->group(function () {
+    Route::get('/', [App\Http\Controllers\Api\LinkShortenerController::class, 'index']);
+    Route::post('/', [App\Http\Controllers\Api\LinkShortenerController::class, 'create']);
+    Route::get('/{id}/analytics', [App\Http\Controllers\Api\LinkShortenerController::class, 'analytics']);
+    Route::put('/{id}', [App\Http\Controllers\Api\LinkShortenerController::class, 'update']);
+    Route::delete('/{id}', [App\Http\Controllers\Api\LinkShortenerController::class, 'delete']);
+    Route::get('/bulk-analytics', [App\Http\Controllers\Api\LinkShortenerController::class, 'bulkAnalytics']);
+});
+
+// Public link redirect (no authentication required)
+Route::get('/l/{slug}', [App\Http\Controllers\Api\LinkShortenerController::class, 'redirect']);
+Route::post('/l/{slug}', [App\Http\Controllers\Api\LinkShortenerController::class, 'redirect']);
+
+// Referral System
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('referrals')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Api\ReferralController::class, 'dashboard']);
+    Route::post('/invitations', [App\Http\Controllers\Api\ReferralController::class, 'sendInvitations']);
+    Route::get('/analytics', [App\Http\Controllers\Api\ReferralController::class, 'analytics']);
+    Route::get('/rewards', [App\Http\Controllers\Api\ReferralController::class, 'rewards']);
+    Route::post('/process', [App\Http\Controllers\Api\ReferralController::class, 'processReferral']);
+    Route::post('/complete', [App\Http\Controllers\Api\ReferralController::class, 'completeReferral']);
+});
+
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->json([
