@@ -32,7 +32,7 @@ class FocusedMewayzTester:
         
     def make_request(self, method, endpoint, data=None, headers=None, auth_required=True):
         """Make HTTP request with proper headers"""
-        time.sleep(0.1)  # Small delay
+        time.sleep(0.2)  # Increased delay
         
         url = f"{self.api_url}{endpoint}"
         
