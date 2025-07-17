@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('workspaces', function (Blueprint $table) {
-            //
+            $table->boolean('is_primary')->default(false)->after('user_id');
+            $table->index(['user_id', 'is_primary']);
         });
     }
 
@@ -26,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('workspaces', function (Blueprint $table) {
-            //
+            $table->dropIndex(['user_id', 'is_primary']);
+            $table->dropColumn('is_primary');
         });
     }
 };
