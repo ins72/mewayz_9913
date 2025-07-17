@@ -107,6 +107,14 @@ class BioSite extends BaseBioSite
         $this->forceDelete();
     }
 
+    /**
+     * Get the components for the bio site
+     */
+    public function components()
+    {
+        return $this->hasMany(BioSiteComponent::class, 'bio_site_id');
+    }
+
     protected static function boot(){
         parent::boot();
 
