@@ -121,7 +121,10 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
     
-    Route::get('/auth/me', [AuthController::class, 'me']);
+});
+
+// Protected routes (require authentication)
+Route::middleware('auth:sanctum')->group(function () {
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
