@@ -331,9 +331,7 @@
             <div class="dashboard-header">
                 <div class="flex items-center">
                     <button class="mr-4 lg:hidden" onclick="toggleSidebar()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
+                        <x-icon name="menu" size="md" alt="Toggle menu" />
                     </button>
                     <h1 class="text-xl font-semibold text-primary-text">{{ $pageTitle ?? 'Dashboard' }}</h1>
                 </div>
