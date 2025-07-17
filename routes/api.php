@@ -97,6 +97,7 @@ Route::prefix('auth')->group(function () {
     
     // OAuth routes
     Route::get('/oauth/providers', [ApiOAuthController::class, 'getProviders']);
+    Route::get('/oauth/status', [ApiOAuthController::class, 'getStatus']);
     Route::get('/oauth/{provider}', [ApiOAuthController::class, 'redirectToProvider']);
     Route::get('/oauth/{provider}/callback', [ApiOAuthController::class, 'handleProviderCallback']);
     Route::post('/oauth/{provider}/test', [ApiOAuthController::class, 'handleProviderCallback']); // For test mode
