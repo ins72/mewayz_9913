@@ -726,7 +726,7 @@ class CrmController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Advanced pipeline management failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            Log::error('Advanced pipeline management failed', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve advanced pipeline management data: ' . $e->getMessage()
