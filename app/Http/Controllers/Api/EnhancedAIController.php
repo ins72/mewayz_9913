@@ -798,4 +798,35 @@ class EnhancedAIController extends Controller
     {
         return min(95, $score * 0.8 + rand(5, 15));
     }
+
+    private function getRecommendedActions($score, $lead)
+    {
+        if ($score >= 80) {
+            return ['Schedule demo immediately', 'Assign to senior sales rep', 'Prepare custom proposal'];
+        } elseif ($score >= 60) {
+            return ['Send targeted content', 'Schedule follow-up call', 'Add to nurture campaign'];
+        } else {
+            return ['Add to general email list', 'Monitor engagement', 'Qualify further'];
+        }
+    }
+
+    private function generateScoringSummary($scoredLeads)
+    {
+        $total = count($scoredLeads);
+        $highPriority = count(array_filter($scoredLeads, fn($lead) => $lead['priority'] === 'high'));
+        $mediumPriority = count(array_filter($scoredLeads, fn($lead) => $lead['priority'] === 'medium'));
+        $lowPriority = count(array_filter($scoredLeads, fn($lead) => $lead['priority'] === 'low'));
+        
+        $avgScore = $total > 0 ? array_sum(array_column($scoredLeads, 'score')) / $total : 0;
+        
+        return [
+            'total_leads' => $total,
+            'high_priority' => $highPriority,
+            'medium_priority' => $mediumPriority,
+            'low_priority' => $lowPriority,
+            'average_score' => round($avgScore, 2),
+            'conversion_ready' => $highPriority,
+            'nurture_required' => $mediumPriority + $lowPriority
+        ];
+    }
 }
