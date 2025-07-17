@@ -187,7 +187,7 @@ class BioSiteController extends Controller
         try {
             // Prepare data for existing database schema
             $bioSiteData = [
-                'user_id' => auth()->id(),
+                'user_id' => $request->user()->id,
                 'name' => $request->name,
                 'title' => $request->name, // Use name as title
                 'slug' => $request->slug,
