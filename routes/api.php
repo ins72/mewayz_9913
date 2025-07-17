@@ -530,7 +530,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('analyt
 });
 
 // Advanced Booking System
-Route::middleware('auth:sanctum')->prefix('booking')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('booking')->group(function () {
     Route::get('/services', [AdvancedBookingController::class, 'getServices']);
     Route::post('/services', [AdvancedBookingController::class, 'createService']);
     Route::get('/services/{serviceId}/available-slots', [AdvancedBookingController::class, 'getAvailableSlots']);
