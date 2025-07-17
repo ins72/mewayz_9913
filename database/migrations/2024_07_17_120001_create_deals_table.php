@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('actual_close_date')->nullable();
             $table->string('close_reason')->nullable();
             $table->json('products')->nullable(); // Associated products/services
-            $table->foreignUuid('assigned_to')->nullable()->constrained('users');
+            $table->foreignId('assigned_to')->nullable()->constrained('users');
             $table->json('custom_fields')->nullable();
             $table->timestamps();
             
