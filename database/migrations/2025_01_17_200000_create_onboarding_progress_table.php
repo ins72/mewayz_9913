@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('onboarding_progress', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('current_step')->default(1);
             $table->json('completed_steps')->nullable();
             $table->integer('total_steps')->default(6);
