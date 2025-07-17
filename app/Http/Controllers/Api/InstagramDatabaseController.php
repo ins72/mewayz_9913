@@ -54,71 +54,71 @@ class InstagramDatabaseController extends Controller
             }
 
             // Follower count filters
-            if ($request->min_followers) {
-                $query->where('follower_count', '>=', $request->min_followers);
+            if ($request->input('min_followers')) {
+                $query->where('follower_count', '>=', $request->input('min_followers'));
             }
-            if ($request->max_followers) {
-                $query->where('follower_count', '<=', $request->max_followers);
+            if ($request->input('max_followers')) {
+                $query->where('follower_count', '<=', $request->input('max_followers'));
             }
 
             // Following count filters
-            if ($request->min_following) {
-                $query->where('following_count', '>=', $request->min_following);
+            if ($request->input('min_following')) {
+                $query->where('following_count', '>=', $request->input('min_following'));
             }
-            if ($request->max_following) {
-                $query->where('following_count', '<=', $request->max_following);
+            if ($request->input('max_following')) {
+                $query->where('following_count', '<=', $request->input('max_following'));
             }
 
             // Engagement rate filters
-            if ($request->min_engagement_rate) {
-                $query->where('engagement_rate', '>=', $request->min_engagement_rate);
+            if ($request->input('min_engagement_rate')) {
+                $query->where('engagement_rate', '>=', $request->input('min_engagement_rate'));
             }
-            if ($request->max_engagement_rate) {
-                $query->where('engagement_rate', '<=', $request->max_engagement_rate);
+            if ($request->input('max_engagement_rate')) {
+                $query->where('engagement_rate', '<=', $request->input('max_engagement_rate'));
             }
 
             // Location filter
-            if ($request->location) {
-                $query->where('location', 'like', '%' . $request->location . '%');
+            if ($request->input('location')) {
+                $query->where('location', 'like', '%' . $request->input('location') . '%');
             }
 
             // Category filter
-            if ($request->category) {
-                $query->where('category', $request->category);
+            if ($request->input('category')) {
+                $query->where('category', $request->input('category'));
             }
 
             // Account type filters
             if ($request->has('is_business_account')) {
-                $query->where('is_business_account', $request->is_business_account);
+                $query->where('is_business_account', $request->input('is_business_account'));
             }
             if ($request->has('is_verified')) {
-                $query->where('is_verified', $request->is_verified);
+                $query->where('is_verified', $request->input('is_verified'));
             }
 
             // Hashtag filter
-            if ($request->hashtags && is_array($request->hashtags)) {
+            if ($request->input('hashtags') && is_array($request->input('hashtags'))) {
                 $query->whereHas('hashtags', function ($q) use ($request) {
-                    $q->whereIn('hashtag', $request->hashtags);
+                    $q->whereIn('hashtag', $request->input('hashtags'));
                 });
             }
 
             // Bio keywords filter
-            if ($request->bio_keywords && is_array($request->bio_keywords)) {
+            if ($request->input('bio_keywords') && is_array($request->input('bio_keywords'))) {
                 $query->where(function ($q) use ($request) {
-                    foreach ($request->bio_keywords as $keyword) {
+                    foreach ($request->input('bio_keywords') as $keyword) {
                         $q->orWhere('bio', 'like', '%' . $keyword . '%');
                     }
                 });
             }
 
             // Language filter
-            if ($request->language) {
-                $query->where('language', $request->language);
+            if ($request->input('language')) {
+                $query->where('language', $request->input('language'));
             }
 
             // Sorting
-            $sortBy = $request->sort_by ?? 'follower_count';
-            $sortOrder = $request->sort_order ?? 'desc';
+            $sortBy = $request->input('sort_by', 'follower_count');
+            $sortOrder = $request->input('sort_order', 'desc');
             $query->orderBy($sortBy, $sortOrder);
 
             // Add secondary sort for consistency
@@ -127,7 +127,7 @@ class InstagramDatabaseController extends Controller
             }
 
             // Pagination
-            $perPage = $request->per_page ?? 20;
+            $perPage = $request->input('per_page', 20);
             $profiles = $query->paginate($perPage);
 
             return response()->json([
