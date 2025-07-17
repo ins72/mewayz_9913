@@ -1,9 +1,9 @@
-# 🚀 Mewayz Platform
+# 🚀 Mewayz Platform v2
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/mewayz/platform/main/docs/assets/logo.svg" width="200" alt="Mewayz Logo" />
+  <img src="https://raw.githubusercontent.com/mewayz/platform/main/docs/assets/logo.svg" width="200" alt="Mewayz v2 Logo" />
   
-  <h3>The Complete Creator Economy Platform</h3>
+  <h3>The Complete Creator Economy Platform v2</h3>
   
   <p>
     <strong>Bio Sites • Social Media Management • E-commerce • Courses • Email Marketing • Analytics</strong>
