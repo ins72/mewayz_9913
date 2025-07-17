@@ -24,7 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Schema::defaultStringLength(191);
         config([
             'filesystems.disks.local.url' => url('/'),
         ]);
