@@ -251,7 +251,7 @@ backend:
     file: "app/Http/Controllers/Api/CrmController.php"
     stuck_count: 1
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
@@ -259,6 +259,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ FAIL - Same middleware issue preventing access to authenticated endpoints. Controller exists."
+      - working: false
+        agent: "testing"
+        comment: "❌ FAIL - Controller implementation issue: CRM endpoints (/crm/contacts, /crm/leads) use Auth::user() instead of $request->user(), causing 'Call to a member function workspaces() on null' errors. Custom auth middleware working but controllers need updating."
 
   - task: "Team Management"
     implemented: true
