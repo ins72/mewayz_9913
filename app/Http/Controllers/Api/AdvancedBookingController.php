@@ -22,7 +22,6 @@ class AdvancedBookingController extends Controller
             $user = $request->user();
             
             $services = BookingService::where('user_id', $user->id)
-                ->with(['availabilities', 'calendar'])
                 ->orderBy('name')
                 ->get();
 
