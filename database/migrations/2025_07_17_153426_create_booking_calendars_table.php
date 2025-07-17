@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('booking_calendars', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('service_id')->constrained('booking_services')->onDelete('cascade');
+            $table->unsignedBigInteger('service_id');
+            $table->foreign('service_id')->references('id')->on('booking_services')->onDelete('cascade');
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
