@@ -14,8 +14,8 @@ class MewayzAPITester:
     def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        # Use a valid test token
-        self.auth_token = "3|d9wgyYICsOXueMFOUSQcIcsJkNIiyTp8L9Jd2ugL33bfaf85"
+        # Use a valid test token from the test_result.md
+        self.auth_token = "4|6AHqx0qtn59SBkCoejV1tsh7M9RDpyQRWMaBxR3R352c7ba3"
         self.user_id = None
         self.test_results = {}
         self.session = requests.Session()
