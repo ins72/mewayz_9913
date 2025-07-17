@@ -271,14 +271,14 @@ class AdminController extends Controller
                 'status' => $request->status,
                 'status_reason' => $request->reason,
                 'status_updated_at' => now(),
-                'status_updated_by' => Auth::id(),
+                'status_updated_by' => $request->user()->id,
             ]);
 
             Log::info('User status updated', [
                 'user_id' => $userId,
                 'new_status' => $request->status,
                 'reason' => $request->reason,
-                'admin_id' => Auth::id(),
+                'admin_id' => $request->user()->id,
             ]);
 
             return response()->json([
