@@ -68,10 +68,10 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-// Landing page route
-Route::get('/', function () {
-    return view('pages.index');
-})->name('home');
+// Landing page route (disabled for now - view may not exist)
+// Route::get('/', function () {
+//     return view('pages.index');
+// })->name('home');
 
 // PWA offline route
 Route::get('/offline', function () {
