@@ -506,16 +506,15 @@ metadata:
 
 test_plan:
   current_focus:
-    - "SwitchLocale Middleware Error"
-    - "Dashboard Access"
+    - "Instagram Integration"
+    - "Team Management" 
+    - "AI Integration"
+    - "Two-Factor Authentication"
   stuck_tasks:
-    - "Dashboard Access"
-    - "Bio Sites & Link-in-Bio Interface"
-    - "Social Media Management Interface"
-    - "E-commerce Interface"
-    - "Course Creation Interface"
-    - "Email Marketing Interface"
-    - "Analytics Dashboard"
+    - "Instagram Integration"
+    - "Team Management"
+    - "AI Integration"
+    - "Two-Factor Authentication"
   test_all: true
   test_priority: "high_first"
 
