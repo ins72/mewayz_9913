@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\PushNotificationController;
 |
 */
 
-Route::middleware(['custom_sanctum_auth'])->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
     
     // ================================
     // ENHANCED ONBOARDING SYSTEM
