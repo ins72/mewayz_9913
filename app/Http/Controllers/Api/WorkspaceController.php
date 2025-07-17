@@ -158,7 +158,7 @@ class WorkspaceController extends Controller
         }
     }
 
-    public function getMembers(Organization $workspace)
+    public function getMembers(Request $request, Organization $workspace)
     {
         // Check if user owns the workspace
         if ($workspace->user_id !== $request->user()->id) {
