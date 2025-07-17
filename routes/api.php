@@ -542,7 +542,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('bookin
 });
 
 // Advanced Financial Management
-Route::middleware('auth:sanctum')->prefix('financial')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('financial')->group(function () {
     Route::get('/dashboard', [AdvancedFinancialController::class, 'getFinancialDashboard']);
     Route::post('/invoices', [AdvancedFinancialController::class, 'createInvoice']);
     Route::get('/invoices', [AdvancedFinancialController::class, 'getInvoices']);
