@@ -502,22 +502,8 @@ class InstagramManagementController extends Controller
             ], 500);
         }
     }
-                        'average_engagement' => $data['count'] > 0 ? $data['engagement'] / $data['count'] : 0
-                    ];
-                })
-                ->sortByDesc('average_engagement')
-                ->take(10)
-                ->values();
-            
-            return response()->json([
-                'success' => true,
-                'analytics' => [
-                    'overview' => [
-                        'total_posts' => $totalPosts,
-                        'total_followers' => $followersCount,
-                        'total_engagement' => $totalEngagement,
-                        'average_engagement' => round($averageEngagement, 2),
-                        'engagement_rate' => round($engagementRate, 2),
+    
+    /**
                         'accounts_count' => $accounts->count()
                     ],
                     'top_posts' => $topPosts->map(function($post) {
