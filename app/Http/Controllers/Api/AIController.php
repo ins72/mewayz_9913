@@ -74,21 +74,7 @@ class AIController extends Controller
                 'error' => 'Failed to fetch AI services: ' . $e->getMessage()
             });
 
-            return response()->json([
-                'success' => true,
-                'services' => $enabledServices,
-                'test_mode' => config('app.env') !== 'production',
-                'features' => [
-                    'chat' => 'AI-powered chat assistance',
-                    'content_generation' => 'Generate marketing content',
-                    'text_analysis' => 'Analyze text and sentiment',
-                    'smart_recommendations' => 'AI-powered recommendations',
-                ],
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error fetching AI services: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to fetch AI services'], 500);
-        }
+
     }
 
     /**
