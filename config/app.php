@@ -205,7 +205,7 @@ return [
         /*
          * Package Service Providers...
          */
-        // Laravel\Sanctum\SanctumServiceProvider::class, // Commented out to fix auth guard conflicts
+        Laravel\Sanctum\SanctumServiceProvider::class,
 
         /*
          * Application Service Providers...
