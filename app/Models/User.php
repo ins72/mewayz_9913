@@ -64,12 +64,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 		// 'avatar_json', // Commented out to avoid missing helper function issues
 	];
 
-    protected function avatarJson(): Attribute {
-		$data = $this->getAvatar();
-        return new Attribute(
-            get: fn () => $data,
-        );
-    }
+//     protected function avatarJson(): Attribute {
+// 		$data = $this->getAvatar();
+//         return new Attribute(
+//             get: fn () => $data,
+//         );
+//     }
 
     protected static function boot(){
         parent::boot();
