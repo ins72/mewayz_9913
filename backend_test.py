@@ -683,6 +683,502 @@ class MewayzAPITester:
             else:
                 self.log_test("Delete Website", False, f"Website deletion failed - Status: {response.status_code if response else 'No response'}")
     
+    def test_biometric_authentication(self):
+        """Test Biometric Authentication functionality"""
+        print("\n=== Testing Biometric Authentication ===")
+        
+        if not self.auth_token:
+            self.log_test("Biometric Authentication", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get registration options
+        response = self.make_request('POST', '/biometric/registration-options')
+        if response and response.status_code == 200:
+            self.log_test("Get Biometric Registration Options", True, "Registration options retrieval successful")
+        else:
+            self.log_test("Get Biometric Registration Options", False, f"Registration options failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get authentication options (public endpoint)
+        response = self.make_request('POST', '/biometric/authentication-options', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Get Biometric Authentication Options", True, "Authentication options retrieval successful")
+        else:
+            self.log_test("Get Biometric Authentication Options", False, f"Authentication options failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get user credentials
+        response = self.make_request('GET', '/biometric/credentials')
+        if response and response.status_code == 200:
+            self.log_test("Get Biometric Credentials", True, "User credentials retrieval successful")
+        else:
+            self.log_test("Get Biometric Credentials", False, f"Credentials retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_realtime_features(self):
+        """Test Real-Time Features functionality"""
+        print("\n=== Testing Real-Time Features ===")
+        
+        if not self.auth_token:
+            self.log_test("Real-Time Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get notifications
+        response = self.make_request('GET', '/realtime/notifications')
+        if response and response.status_code == 200:
+            self.log_test("Get Real-Time Notifications", True, "Notifications retrieval successful")
+        else:
+            self.log_test("Get Real-Time Notifications", False, f"Notifications retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get activity feed
+        response = self.make_request('GET', '/realtime/activity-feed')
+        if response and response.status_code == 200:
+            self.log_test("Get Activity Feed", True, "Activity feed retrieval successful")
+        else:
+            self.log_test("Get Activity Feed", False, f"Activity feed retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get system status
+        response = self.make_request('GET', '/realtime/system-status')
+        if response and response.status_code == 200:
+            self.log_test("Get System Status", True, "System status retrieval successful")
+        else:
+            self.log_test("Get System Status", False, f"System status retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get user presence
+        response = self.make_request('GET', '/realtime/user-presence')
+        if response and response.status_code == 200:
+            self.log_test("Get User Presence", True, "User presence retrieval successful")
+        else:
+            self.log_test("Get User Presence", False, f"User presence retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test send message
+        message_data = {
+            "recipient_id": "test-user-id",
+            "message": "Hello from real-time testing!",
+            "type": "direct"
+        }
+        
+        response = self.make_request('POST', '/realtime/messages', message_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Send Real-Time Message", True, "Message sending successful")
+        else:
+            self.log_test("Send Real-Time Message", False, f"Message sending failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get workspace metrics
+        response = self.make_request('GET', '/realtime/workspace-metrics')
+        if response and response.status_code == 200:
+            self.log_test("Get Workspace Metrics", True, "Workspace metrics retrieval successful")
+        else:
+            self.log_test("Get Workspace Metrics", False, f"Workspace metrics retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_escrow_system(self):
+        """Test Escrow & Transaction Security functionality"""
+        print("\n=== Testing Escrow & Transaction Security ===")
+        
+        if not self.auth_token:
+            self.log_test("Escrow System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get escrow transactions
+        response = self.make_request('GET', '/escrow/')
+        if response and response.status_code == 200:
+            self.log_test("Get Escrow Transactions", True, "Escrow transactions retrieval successful")
+        else:
+            self.log_test("Get Escrow Transactions", False, f"Escrow transactions retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create escrow transaction
+        escrow_data = {
+            "buyer_id": "test-buyer-id",
+            "seller_id": "test-seller-id",
+            "amount": 100.00,
+            "currency": "USD",
+            "description": "Test digital product transaction",
+            "terms": "Standard escrow terms for digital product delivery"
+        }
+        
+        response = self.make_request('POST', '/escrow/', escrow_data)
+        escrow_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create Escrow Transaction", True, "Escrow transaction creation successful")
+            escrow_id = data.get('data', {}).get('id')
+        else:
+            self.log_test("Create Escrow Transaction", False, f"Escrow transaction creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get specific escrow transaction (if created successfully)
+        if escrow_id:
+            response = self.make_request('GET', f'/escrow/{escrow_id}')
+            if response and response.status_code == 200:
+                self.log_test("Get Specific Escrow Transaction", True, "Specific escrow transaction retrieval successful")
+            else:
+                self.log_test("Get Specific Escrow Transaction", False, f"Specific escrow transaction retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get escrow statistics
+        response = self.make_request('GET', '/escrow/statistics/overview')
+        if response and response.status_code == 200:
+            self.log_test("Get Escrow Statistics", True, "Escrow statistics retrieval successful")
+        else:
+            self.log_test("Get Escrow Statistics", False, f"Escrow statistics retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_advanced_analytics(self):
+        """Test Advanced Analytics & Business Intelligence functionality"""
+        print("\n=== Testing Advanced Analytics & Business Intelligence ===")
+        
+        if not self.auth_token:
+            self.log_test("Advanced Analytics", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get business intelligence
+        response = self.make_request('GET', '/analytics/business-intelligence')
+        if response and response.status_code == 200:
+            self.log_test("Get Business Intelligence", True, "Business intelligence retrieval successful")
+        else:
+            self.log_test("Get Business Intelligence", False, f"Business intelligence retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get realtime metrics
+        response = self.make_request('GET', '/analytics/realtime-metrics')
+        if response and response.status_code == 200:
+            self.log_test("Get Realtime Metrics", True, "Realtime metrics retrieval successful")
+        else:
+            self.log_test("Get Realtime Metrics", False, f"Realtime metrics retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get cohort analysis
+        response = self.make_request('GET', '/analytics/cohort-analysis')
+        if response and response.status_code == 200:
+            self.log_test("Get Cohort Analysis", True, "Cohort analysis retrieval successful")
+        else:
+            self.log_test("Get Cohort Analysis", False, f"Cohort analysis retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get funnel analysis
+        response = self.make_request('GET', '/analytics/funnel-analysis')
+        if response and response.status_code == 200:
+            self.log_test("Get Funnel Analysis", True, "Funnel analysis retrieval successful")
+        else:
+            self.log_test("Get Funnel Analysis", False, f"Funnel analysis retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get A/B test results
+        response = self.make_request('GET', '/analytics/ab-test-results')
+        if response and response.status_code == 200:
+            self.log_test("Get A/B Test Results", True, "A/B test results retrieval successful")
+        else:
+            self.log_test("Get A/B Test Results", False, f"A/B test results retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test generate custom report
+        report_data = {
+            "report_type": "revenue_analysis",
+            "date_range": {
+                "start": "2024-01-01",
+                "end": "2024-12-31"
+            },
+            "metrics": ["revenue", "conversions", "traffic"],
+            "filters": {
+                "source": "organic"
+            }
+        }
+        
+        response = self.make_request('POST', '/analytics/custom-report', report_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Generate Custom Report", True, "Custom report generation successful")
+        else:
+            self.log_test("Generate Custom Report", False, f"Custom report generation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get predictive analytics
+        response = self.make_request('GET', '/analytics/predictive-analytics')
+        if response and response.status_code == 200:
+            self.log_test("Get Predictive Analytics", True, "Predictive analytics retrieval successful")
+        else:
+            self.log_test("Get Predictive Analytics", False, f"Predictive analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_advanced_booking_system(self):
+        """Test Advanced Booking System functionality"""
+        print("\n=== Testing Advanced Booking System ===")
+        
+        if not self.auth_token:
+            self.log_test("Advanced Booking System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get booking services
+        response = self.make_request('GET', '/booking/services')
+        if response and response.status_code == 200:
+            self.log_test("Get Booking Services", True, "Booking services retrieval successful")
+        else:
+            self.log_test("Get Booking Services", False, f"Booking services retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create booking service
+        service_data = {
+            "name": "Business Consultation",
+            "description": "One-on-one business strategy consultation",
+            "duration": 60,
+            "price": 150.00,
+            "currency": "USD",
+            "category": "consultation"
+        }
+        
+        response = self.make_request('POST', '/booking/services', service_data)
+        service_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create Booking Service", True, "Booking service creation successful")
+            service_id = data.get('data', {}).get('id')
+        else:
+            self.log_test("Create Booking Service", False, f"Booking service creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get available slots (if service created successfully)
+        if service_id:
+            response = self.make_request('GET', f'/booking/services/{service_id}/available-slots')
+            if response and response.status_code == 200:
+                self.log_test("Get Available Slots", True, "Available slots retrieval successful")
+            else:
+                self.log_test("Get Available Slots", False, f"Available slots retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get appointments
+        response = self.make_request('GET', '/booking/appointments')
+        if response and response.status_code == 200:
+            self.log_test("Get Appointments", True, "Appointments retrieval successful")
+        else:
+            self.log_test("Get Appointments", False, f"Appointments retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create appointment
+        appointment_data = {
+            "service_id": service_id or "test-service-id",
+            "client_name": "John Doe",
+            "client_email": "john.doe@example.com",
+            "appointment_date": "2024-12-31",
+            "appointment_time": "14:00",
+            "notes": "Initial business consultation"
+        }
+        
+        response = self.make_request('POST', '/booking/appointments', appointment_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Create Appointment", True, "Appointment creation successful")
+        else:
+            self.log_test("Create Appointment", False, f"Appointment creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get booking analytics
+        response = self.make_request('GET', '/booking/analytics')
+        if response and response.status_code == 200:
+            self.log_test("Get Booking Analytics", True, "Booking analytics retrieval successful")
+        else:
+            self.log_test("Get Booking Analytics", False, f"Booking analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_advanced_financial_management(self):
+        """Test Advanced Financial Management functionality"""
+        print("\n=== Testing Advanced Financial Management ===")
+        
+        if not self.auth_token:
+            self.log_test("Advanced Financial Management", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get financial dashboard
+        response = self.make_request('GET', '/financial/dashboard')
+        if response and response.status_code == 200:
+            self.log_test("Get Financial Dashboard", True, "Financial dashboard retrieval successful")
+        else:
+            self.log_test("Get Financial Dashboard", False, f"Financial dashboard retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get invoices
+        response = self.make_request('GET', '/financial/invoices')
+        if response and response.status_code == 200:
+            self.log_test("Get Invoices", True, "Invoices retrieval successful")
+        else:
+            self.log_test("Get Invoices", False, f"Invoices retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create invoice
+        invoice_data = {
+            "client_name": "Acme Corporation",
+            "client_email": "billing@acme.com",
+            "amount": 1500.00,
+            "currency": "USD",
+            "description": "Web development services",
+            "due_date": "2024-12-31",
+            "items": [
+                {
+                    "description": "Frontend development",
+                    "quantity": 40,
+                    "rate": 25.00,
+                    "amount": 1000.00
+                },
+                {
+                    "description": "Backend development",
+                    "quantity": 20,
+                    "rate": 25.00,
+                    "amount": 500.00
+                }
+            ]
+        }
+        
+        response = self.make_request('POST', '/financial/invoices', invoice_data)
+        invoice_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create Invoice", True, "Invoice creation successful")
+            invoice_id = data.get('data', {}).get('id')
+        else:
+            self.log_test("Create Invoice", False, f"Invoice creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test calculate tax
+        tax_data = {
+            "amount": 1500.00,
+            "tax_rate": 0.08,
+            "location": "CA"
+        }
+        
+        response = self.make_request('POST', '/financial/tax/calculate', tax_data)
+        if response and response.status_code == 200:
+            self.log_test("Calculate Tax", True, "Tax calculation successful")
+        else:
+            self.log_test("Calculate Tax", False, f"Tax calculation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get financial reports
+        response = self.make_request('GET', '/financial/reports')
+        if response and response.status_code == 200:
+            self.log_test("Get Financial Reports", True, "Financial reports retrieval successful")
+        else:
+            self.log_test("Get Financial Reports", False, f"Financial reports retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get payment analytics
+        response = self.make_request('GET', '/financial/payment-analytics')
+        if response and response.status_code == 200:
+            self.log_test("Get Payment Analytics", True, "Payment analytics retrieval successful")
+        else:
+            self.log_test("Get Payment Analytics", False, f"Payment analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_enhanced_ai_features(self):
+        """Test Enhanced AI Features functionality"""
+        print("\n=== Testing Enhanced AI Features ===")
+        
+        if not self.auth_token:
+            self.log_test("Enhanced AI Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test generate content suggestions
+        content_data = {
+            "topic": "digital marketing strategies",
+            "content_type": "blog_post",
+            "target_audience": "small business owners",
+            "tone": "professional"
+        }
+        
+        response = self.make_request('POST', '/ai/content/generate', content_data)
+        if response and response.status_code == 200:
+            self.log_test("Generate Content Suggestions", True, "Content generation successful")
+        else:
+            self.log_test("Generate Content Suggestions", False, f"Content generation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test SEO optimization
+        seo_data = {
+            "content": "This is a sample blog post about digital marketing strategies for small businesses.",
+            "target_keywords": ["digital marketing", "small business", "online presence"],
+            "meta_description": "Learn effective digital marketing strategies for small businesses"
+        }
+        
+        response = self.make_request('POST', '/ai/content/seo-optimize', seo_data)
+        if response and response.status_code == 200:
+            self.log_test("SEO Content Optimization", True, "SEO optimization successful")
+        else:
+            self.log_test("SEO Content Optimization", False, f"SEO optimization failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test competitor analysis
+        competitor_data = {
+            "competitor_urls": ["https://competitor1.com", "https://competitor2.com"],
+            "analysis_type": "content_strategy",
+            "industry": "digital marketing"
+        }
+        
+        response = self.make_request('POST', '/ai/competitors/analyze', competitor_data)
+        if response and response.status_code == 200:
+            self.log_test("Analyze Competitors", True, "Competitor analysis successful")
+        else:
+            self.log_test("Analyze Competitors", False, f"Competitor analysis failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test business insights generation
+        insights_data = {
+            "business_type": "e-commerce",
+            "metrics": {
+                "revenue": 50000,
+                "customers": 1200,
+                "conversion_rate": 0.03
+            },
+            "time_period": "last_quarter"
+        }
+        
+        response = self.make_request('POST', '/ai/insights/business', insights_data)
+        if response and response.status_code == 200:
+            self.log_test("Generate Business Insights", True, "Business insights generation successful")
+        else:
+            self.log_test("Generate Business Insights", False, f"Business insights generation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test sentiment analysis
+        sentiment_data = {
+            "text": "I love this product! It's amazing and works perfectly for my needs.",
+            "context": "product_review"
+        }
+        
+        response = self.make_request('POST', '/ai/sentiment/analyze', sentiment_data)
+        if response and response.status_code == 200:
+            self.log_test("Analyze Sentiment", True, "Sentiment analysis successful")
+        else:
+            self.log_test("Analyze Sentiment", False, f"Sentiment analysis failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test pricing optimization
+        pricing_data = {
+            "product_type": "digital_course",
+            "current_price": 99.99,
+            "competitor_prices": [89.99, 109.99, 79.99],
+            "target_margin": 0.70
+        }
+        
+        response = self.make_request('POST', '/ai/pricing/optimize', pricing_data)
+        if response and response.status_code == 200:
+            self.log_test("Optimize Pricing", True, "Pricing optimization successful")
+        else:
+            self.log_test("Optimize Pricing", False, f"Pricing optimization failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test lead scoring
+        lead_data = {
+            "leads": [
+                {
+                    "email": "potential@customer.com",
+                    "company": "Tech Startup",
+                    "engagement_score": 85,
+                    "source": "website"
+                }
+            ]
+        }
+        
+        response = self.make_request('POST', '/ai/leads/score', lead_data)
+        if response and response.status_code == 200:
+            self.log_test("Score Leads", True, "Lead scoring successful")
+        else:
+            self.log_test("Score Leads", False, f"Lead scoring failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test chatbot response generation
+        chatbot_data = {
+            "message": "How can I improve my website's SEO?",
+            "context": "seo_consultation",
+            "user_profile": "small_business_owner"
+        }
+        
+        response = self.make_request('POST', '/ai/chatbot/respond', chatbot_data)
+        if response and response.status_code == 200:
+            self.log_test("Generate Chatbot Response", True, "Chatbot response generation successful")
+        else:
+            self.log_test("Generate Chatbot Response", False, f"Chatbot response generation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test trend prediction
+        trend_data = {
+            "industry": "digital_marketing",
+            "data_points": [
+                {"date": "2024-01-01", "value": 100},
+                {"date": "2024-02-01", "value": 110},
+                {"date": "2024-03-01", "value": 125}
+            ],
+            "prediction_period": "next_quarter"
+        }
+        
+        response = self.make_request('POST', '/ai/trends/predict', trend_data)
+        if response and response.status_code == 200:
+            self.log_test("Predict Trends", True, "Trend prediction successful")
+        else:
+            self.log_test("Predict Trends", False, f"Trend prediction failed - Status: {response.status_code if response else 'No response'}")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
