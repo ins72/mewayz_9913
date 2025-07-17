@@ -220,7 +220,7 @@ class LinkShortenerController extends Controller
         }
 
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             $link = ShortenedLink::where('id', $id)
                 ->where('user_id', $user->id)
