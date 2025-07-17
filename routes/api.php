@@ -111,13 +111,18 @@ Route::prefix('auth')->group(function () {
 });
 
 // Protected routes (require authentication)
+// Simple auth test routes with no parameters
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/simple-test', function (Request $request) {
+        return response()->json([
+            'message' => 'Simple auth test successful',
+            'user_id' => $request->user()->id,
+            'timestamp' => now()
+        ]);
+    });
     
-    // User profile routes
     Route::get('/auth/me', [AuthController::class, 'me']);
-    Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
-    
-    // OAuth management (protected routes)
+});
     Route::get('/oauth/status', [ApiOAuthController::class, 'getOAuthStatus']);
     Route::post('/oauth/{provider}/link', [ApiOAuthController::class, 'linkAccount']);
     Route::delete('/oauth/{provider}/unlink', [ApiOAuthController::class, 'unlinkAccount']);
