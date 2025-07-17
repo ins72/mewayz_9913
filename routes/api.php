@@ -143,6 +143,19 @@ Route::get('/test-no-auth', function (Request $request) {
 
 // Protected routes (require authentication) - FIXED: Using custom auth middleware
 Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
+    // Authentication endpoints
+    Route::get('/test-custom-auth', function (Request $request) {
+        $user = $request->user();
+        return response()->json([
+            'message' => 'Custom auth test successful',
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'timestamp' => now()
+        ]);
+    });
+    
+    Route::get('/auth/me', [AuthController::class, 'me']);
+    
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
