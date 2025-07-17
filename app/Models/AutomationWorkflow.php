@@ -10,6 +10,8 @@ class AutomationWorkflow extends Model
 {
     use HasFactory;
 
+    protected $table = 'automation_workflows';
+
     protected $fillable = [
         'user_id',
         'workspace_id',
