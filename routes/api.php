@@ -595,6 +595,22 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('referr
     Route::post('/complete', [App\Http\Controllers\Api\ReferralController::class, 'completeReferral']);
 });
 
+// Template Marketplace
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('templates')->group(function () {
+    Route::get('/', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'index']);
+    Route::post('/', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'store']);
+    Route::get('/categories', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'categories']);
+    Route::get('/featured', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'featured']);
+    Route::get('/my-templates', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'myTemplates']);
+    Route::get('/my-purchases', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'myPurchases']);
+    Route::get('/{id}', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'show']);
+    Route::put('/{id}', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'update']);
+    Route::delete('/{id}', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'destroy']);
+    Route::post('/{id}/purchase', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'purchase']);
+    Route::get('/{id}/download', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'download']);
+    Route::post('/{id}/review', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'addReview']);
+});
+
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->json([
