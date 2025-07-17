@@ -34,6 +34,11 @@ use App\Http\Controllers\Api\OptimizationController;
 use App\Http\Controllers\Api\WebsiteBuilderController;
 use App\Http\Controllers\Api\BiometricAuthController;
 use App\Http\Controllers\Api\RealTimeController;
+use App\Http\Controllers\Api\EscrowController;
+use App\Http\Controllers\Api\AdvancedAnalyticsController;
+use App\Http\Controllers\Api\AdvancedBookingController;
+use App\Http\Controllers\Api\AdvancedFinancialController;
+use App\Http\Controllers\Api\EnhancedAIController;
 
 /*
 |--------------------------------------------------------------------------
