@@ -111,19 +111,26 @@ Route::prefix('auth')->group(function () {
 });
 
 // Protected routes (require authentication)
-// Test route with custom auth middleware
-Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
-    Route::get('/test-custom-auth', function (Request $request) {
+// Instagram debugging route
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->get('/instagram/debug', function (Request $request) {
+    try {
         $user = $request->user();
+        $organizations = $user->organizations()->count();
+        
         return response()->json([
-            'message' => 'Custom auth test successful',
+            'success' => true,
             'user_id' => $user->id,
-            'user_name' => $user->name,
+            'organizations_count' => $organizations,
+            'debug' => 'Instagram debug successful',
             'timestamp' => now()
         ]);
-    });
-    
-    Route::get('/auth/me', [AuthController::class, 'me']);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
 });
 
 // Test route without auth middleware
