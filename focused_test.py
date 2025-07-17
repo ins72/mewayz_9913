@@ -14,7 +14,7 @@ class FocusedMewayzTester:
     def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        self.auth_token = "3|2tizxvYX1aqPpjgTN6rGz0QY2FMeWtHpnMts7GCY137499ef"
+        self.auth_token = "4|izvKQFwwuOh8g84sheh2esWZUsA9fg36n9zWq1CH3554df4b"
         self.test_results = {}
         self.session = requests.Session()
         
