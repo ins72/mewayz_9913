@@ -286,7 +286,8 @@ class MewayzAPITester:
             "description": "This is a test digital product",
             "price": 29.99,
             "type": "digital",
-            "status": "active"
+            "status": "active",
+            "stock_quantity": 100
         }
         
         response = self.make_request('POST', '/ecommerce/products', product_data)
