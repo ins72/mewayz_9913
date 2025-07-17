@@ -41,11 +41,7 @@ class BookingAppointment extends Model
     {
         parent::boot();
         
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-        });
+        // No UUID generation needed for existing table
     }
 
     // Relationships
