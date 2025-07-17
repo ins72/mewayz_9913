@@ -506,6 +506,66 @@ Route::middleware('auth:sanctum')->prefix('realtime')->group(function () {
     Route::get('/workspace-metrics', [RealTimeController::class, 'getWorkspaceMetrics']);
 });
 
+// Escrow & Transaction Security
+Route::middleware('auth:sanctum')->prefix('escrow')->group(function () {
+    Route::get('/', [EscrowController::class, 'index']);
+    Route::post('/', [EscrowController::class, 'store']);
+    Route::get('/{id}', [EscrowController::class, 'show']);
+    Route::post('/{id}/fund', [EscrowController::class, 'fundTransaction']);
+    Route::post('/{id}/deliver', [EscrowController::class, 'deliverItem']);
+    Route::post('/{id}/accept', [EscrowController::class, 'acceptDelivery']);
+    Route::post('/{id}/dispute', [EscrowController::class, 'createDispute']);
+    Route::get('/statistics/overview', [EscrowController::class, 'getStatistics']);
+});
+
+// Advanced Analytics & Business Intelligence
+Route::middleware('auth:sanctum')->prefix('analytics')->group(function () {
+    Route::get('/business-intelligence', [AdvancedAnalyticsController::class, 'getBusinessIntelligence']);
+    Route::get('/realtime-metrics', [AdvancedAnalyticsController::class, 'getRealtimeMetrics']);
+    Route::get('/cohort-analysis', [AdvancedAnalyticsController::class, 'getCohortAnalysis']);
+    Route::get('/funnel-analysis', [AdvancedAnalyticsController::class, 'getFunnelAnalysis']);
+    Route::get('/ab-test-results', [AdvancedAnalyticsController::class, 'getABTestResults']);
+    Route::post('/custom-report', [AdvancedAnalyticsController::class, 'generateCustomReport']);
+    Route::get('/predictive-analytics', [AdvancedAnalyticsController::class, 'getPredictiveAnalytics']);
+});
+
+// Advanced Booking System
+Route::middleware('auth:sanctum')->prefix('booking')->group(function () {
+    Route::get('/services', [AdvancedBookingController::class, 'getServices']);
+    Route::post('/services', [AdvancedBookingController::class, 'createService']);
+    Route::get('/services/{serviceId}/available-slots', [AdvancedBookingController::class, 'getAvailableSlots']);
+    Route::post('/appointments', [AdvancedBookingController::class, 'createAppointment']);
+    Route::get('/appointments', [AdvancedBookingController::class, 'getAppointments']);
+    Route::put('/appointments/{appointmentId}/status', [AdvancedBookingController::class, 'updateAppointmentStatus']);
+    Route::post('/services/{serviceId}/availability', [AdvancedBookingController::class, 'setAvailability']);
+    Route::get('/analytics', [AdvancedBookingController::class, 'getBookingAnalytics']);
+});
+
+// Advanced Financial Management
+Route::middleware('auth:sanctum')->prefix('financial')->group(function () {
+    Route::get('/dashboard', [AdvancedFinancialController::class, 'getFinancialDashboard']);
+    Route::post('/invoices', [AdvancedFinancialController::class, 'createInvoice']);
+    Route::get('/invoices', [AdvancedFinancialController::class, 'getInvoices']);
+    Route::post('/invoices/{invoiceId}/send', [AdvancedFinancialController::class, 'sendInvoice']);
+    Route::post('/invoices/{invoiceId}/payment', [AdvancedFinancialController::class, 'recordPayment']);
+    Route::post('/tax/calculate', [AdvancedFinancialController::class, 'calculateTax']);
+    Route::get('/reports', [AdvancedFinancialController::class, 'getFinancialReports']);
+    Route::get('/payment-analytics', [AdvancedFinancialController::class, 'getPaymentMethodAnalytics']);
+});
+
+// Enhanced AI Features
+Route::middleware('auth:sanctum')->prefix('ai')->group(function () {
+    Route::post('/content/generate', [EnhancedAIController::class, 'generateContentSuggestions']);
+    Route::post('/content/seo-optimize', [EnhancedAIController::class, 'optimizeContentForSEO']);
+    Route::post('/competitors/analyze', [EnhancedAIController::class, 'analyzeCompetitors']);
+    Route::post('/insights/business', [EnhancedAIController::class, 'generateBusinessInsights']);
+    Route::post('/sentiment/analyze', [EnhancedAIController::class, 'analyzeSentiment']);
+    Route::post('/pricing/optimize', [EnhancedAIController::class, 'optimizePricing']);
+    Route::post('/leads/score', [EnhancedAIController::class, 'scoreLeads']);
+    Route::post('/chatbot/respond', [EnhancedAIController::class, 'generateChatbotResponse']);
+    Route::post('/trends/predict', [EnhancedAIController::class, 'predictTrends']);
+});
+
 // Legacy route for compatibility
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
