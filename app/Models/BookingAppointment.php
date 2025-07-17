@@ -12,29 +12,20 @@ class BookingAppointment extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $keyType = 'int';
+    public $incrementing = true;
 
     protected $fillable = [
-        'service_id',
         'user_id',
-        'start_time',
-        'end_time',
-        'client_name',
-        'client_email',
-        'client_phone',
-        'notes',
-        'status',
-        'status_notes',
-        'status_updated_at',
-        'total_amount',
-        'currency',
-        'payment_status',
-        'payment_id',
-        'timezone',
-        'booking_reference',
-        'reminder_sent_at',
-        'follow_up_sent_at',
+        'payee_user_id',
+        'service_ids',
+        'date',
+        'time',
+        'settings',
+        'info',
+        'appointment_status',
+        'price',
+        'is_paid',
     ];
 
     protected $casts = [
