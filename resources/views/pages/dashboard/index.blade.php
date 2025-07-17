@@ -27,9 +27,7 @@
         <div class="dashboard-card">
             <div class="dashboard-card-header">
                 <h3 class="dashboard-card-title">Total Revenue</h3>
-                <svg class="dashboard-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-                </svg>
+                <x-icon name="dollar" size="md" class="dashboard-card-icon" alt="Revenue" />
             </div>
             <div class="dashboard-card-value">$45,320</div>
             <div class="dashboard-card-change positive">+12.5% from last month</div>
@@ -43,9 +41,7 @@
         <div class="dashboard-card">
             <div class="dashboard-card-header">
                 <h3 class="dashboard-card-title">Active Users</h3>
-                <svg class="dashboard-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                </svg>
+                <x-icon name="users" size="md" class="dashboard-card-icon" alt="Users" />
             </div>
             <div class="dashboard-card-value">2,847</div>
             <div class="dashboard-card-change positive">+8.2% from last month</div>
@@ -59,9 +55,7 @@
         <div class="dashboard-card">
             <div class="dashboard-card-header">
                 <h3 class="dashboard-card-title">Conversion Rate</h3>
-                <svg class="dashboard-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                </svg>
+                <x-icon name="trending" size="md" class="dashboard-card-icon" alt="Trending" />
             </div>
             <div class="dashboard-card-value">18.4%</div>
             <div class="dashboard-card-change positive">+2.1% from last month</div>
@@ -75,9 +69,7 @@
         <div class="dashboard-card">
             <div class="dashboard-card-header">
                 <h3 class="dashboard-card-title">Orders</h3>
-                <svg class="dashboard-card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                </svg>
+                <x-icon name="shopping-bag" size="md" class="dashboard-card-icon" alt="Orders" />
             </div>
             <div class="dashboard-card-value">1,234</div>
             <div class="dashboard-card-change positive">+15.3% from last month</div>
