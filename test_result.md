@@ -347,6 +347,9 @@ frontend:
       - working: false
         agent: "testing"
         comment: "❌ FAIL - Dashboard shows 'Illegal offset type' error in SwitchLocale middleware. Authentication redirect logic appears to work but core functionality blocked by middleware errors."
+      - working: false
+        agent: "testing"
+        comment: "❌ FAIL - CONFIRMED: Dashboard access still shows SwitchLocale middleware 'Illegal offset type' error. While Vite asset compilation is fixed, this middleware issue prevents dashboard functionality. Authentication redirect logic works but dashboard pages cannot load due to middleware error."
 
   - task: "Bio Sites & Link-in-Bio Interface"
     implemented: true
