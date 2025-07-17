@@ -2,195 +2,182 @@
 
 namespace App\Models;
 
-use App\Models\Base\Product as BaseProduct;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
-class Product extends BaseProduct
+class Product extends Model
 {
-	protected $fillable = [
-		'user_id',
-		'name',
-		'slug',
-		'status',
-		'price_type',
-		'price',
-		'price_pwyw',
-		'comparePrice',
-		'enableOptions',
-		'isDeal',
-		'dealPrice',
-		'dealEnds',
-		'enableBid',
-		'stock',
-		'stock_settings',
-		'productType',
-		'banner',
-		'media',
-		'description',
-		'ribbon',
-		'seo',
-		'api',
-		'files',
-		'extra',
-		'position'
-	];
+    use HasFactory;
 
-	
-	protected $casts = [
-		'user' => 'int',
-		'status' => 'int',
-		'price_type' => 'int',
-		'price' => 'float',
-		'enableOptions' => 'int',
-		'isDeal' => 'int',
-		'enableBid' => 'int',
-		'stock' => 'int',
-		'productType' => 'int',
-		'position' => 'int',
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-		
-		'media' => 'array',
-		'extra' => 'array',
-		'banner' => 'array',
-		'stock_settings' => 'array',
-		'seo' => 'array',
-		'files' => 'array'
-	];
+    protected $fillable = [
+        'workspace_id',
+        'name',
+        'sku',
+        'description',
+        'short_description',
+        'price',
+        'cost_price',
+        'currency',
+        'type',
+        'status',
+        'stock_quantity',
+        'track_inventory',
+        'low_stock_threshold',
+        'weight',
+        'dimensions',
+        'images',
+        'variants',
+        'seo_data',
+        'tags',
+        'custom_fields',
+    ];
 
-	protected $dates = [
-		'dealEnds'
-	];
+    protected $casts = [
+        'id' => 'string',
+        'price' => 'decimal:2',
+        'cost_price' => 'decimal:2',
+        'weight' => 'decimal:2',
+        'track_inventory' => 'boolean',
+        'dimensions' => 'array',
+        'images' => 'array',
+        'variants' => 'array',
+        'seo_data' => 'array',
+        'tags' => 'array',
+        'custom_fields' => 'array',
+    ];
 
-	public function getFeaturedImage(){
-		
-		$gallery = $this->banner;
-		$gallery = !empty($gallery) && is_array($gallery) ? gs('media/store/image', array_values($gallery)[0] ?? '') : null;
-
-		$image = null;
-
-		if($this->featured_img){
-			$image = gs('media/store/image', $this->featured_img);
-		}
-
-		if(empty($this->featured_img)) $image = $gallery;
-
-		return $image;
-	}
-	public function reviews() {
-		return $this->hasMany(ProductReview::class, 'product_id', 'id');
-	}
-
-	public function user(){
-		return $this->belongsTo(User::class, 'user_id', 'id');
-	}
-
-	public function getPrice(){
-		$price = $this->user()->first()->price($this->price);
-		// $price = Bio::price($this->price, $this->user);
-
-		// if(ao($this->extra, 'amazon_product')){
-		// 	$price = ao($this->extra, 'price');
-		// }
-
-		// if($this->linked_ref){
-		// 	if($linked = Product::where('id', $this->linked_ref)->first()){
-		// 		$price = Bio::price($linked->price, $linked->user);
-		// 	}
-		// }
-
-		return $price;
-	}
-
-	
-    public function hasPurchased($payee){
-		$product_id = $this->id;
-        $order = ProductOrder::where('user_id', $this->user_id)->where('payee_user_id', $payee);
-
-        $has_order = function() use($order, $product_id){
-            foreach ($order->get() as $item) {
-               if (in_array($product_id, $item->products)) {
-                   return true;
-               }
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
             }
 
+            // Auto-generate SKU if not provided
+            if (empty($model->sku)) {
+                $model->sku = 'PRD-' . strtoupper(Str::random(8));
+            }
+        });
+    }
 
-            return false;
-        };
+    // Relationships
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 
-        // $enrollment = ProductOrder::where('user', $bio_id)->where('payee_user_id', $payee->id)->orderBy('id', 'DESC')->first();
-        // $now = \Carbon\Carbon::now();
-        // if ($has_order() && $enrollment) {
-        //     if (is_array(ao($enrollment->extra, 'cart'))) {
+    // Accessors
+    public function getFormattedPriceAttribute(): string
+    {
+        return number_format($this->price, 2) . ' ' . $this->currency;
+    }
 
-        //         // code...
+    public function getProfitMarginAttribute(): ?float
+    {
+        if (!$this->cost_price) {
+            return null;
+        }
+        
+        return (($this->price - $this->cost_price) / $this->price) * 100;
+    }
 
+    public function getIsLowStockAttribute(): bool
+    {
+        return $this->track_inventory && 
+               $this->stock_quantity <= $this->low_stock_threshold;
+    }
 
-        //         foreach (ao($enrollment->extra, 'cart') as $key => $value) {
-        //             $product = Product::find(ao($value, 'attributes.product_id'));
+    public function getIsOutOfStockAttribute(): bool
+    {
+        return $this->track_inventory && $this->stock_quantity <= 0;
+    }
 
-        //             if ($product && $product->price_type == 2  && ao($value, 'attributes.product_id') == $product_id) {
+    public function getFeaturedImageAttribute(): ?string
+    {
+        $images = $this->images ?? [];
+        return count($images) > 0 ? $images[0] : null;
+    }
 
-        //                 $expiry = \Carbon\Carbon::parse(ao($value, 'attributes.membership.expire'));
-        //                 $expired = \Carbon\Carbon::parse($now)->isAfter($expiry);
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
 
-        //                 if (ao($value, 'attributes.membership.status') && !$expired) {
-        //                     return true;
-        //                 }
+    public function scopeInStock($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('track_inventory', false)
+              ->orWhere('stock_quantity', '>', 0);
+        });
+    }
 
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        // }
+    public function scopeLowStock($query)
+    {
+        return $query->where('track_inventory', true)
+                    ->whereColumn('stock_quantity', '<=', 'low_stock_threshold');
+    }
 
-        if ($has_order()) {
+    public function scopeByType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    // Business Logic Methods
+    public function adjustStock(int $quantity, string $reason = 'manual'): void
+    {
+        if (!$this->track_inventory) {
+            return;
+        }
+
+        $newQuantity = max(0, $this->stock_quantity + $quantity);
+        
+        $this->update(['stock_quantity' => $newQuantity]);
+
+        // Log stock movement (you could create a separate StockMovement model)
+        \Log::info("Stock adjusted for product {$this->sku}: {$quantity} (reason: {$reason})");
+    }
+
+    public function reduceStock(int $quantity): bool
+    {
+        if (!$this->track_inventory) {
             return true;
         }
 
+        if ($this->stock_quantity < $quantity) {
+            return false;
+        }
 
-        return false;
-    }
-	
-	public function variant(){
-        return $this->hasMany(ProductOption::class, 'product_id', 'id');
-    }
-
-	public function allMedia(){
-		$media = $this->media ?: [];
-
-		array_push($media, $this->featured_img);
-
-		$process = [];
-
-		foreach($media as $item){
-			if(!mediaExists('media/store/image', $item)) return;
-
-			$process[] = gs('media/store/image', $item);
-		}
-
-		return $process;
-	}
-
-    protected static function boot(){
-        parent::boot();
-
-        static::creating(function ($model) {
-            // Auto-assign user_id if not set
-            if (empty($model->user_id) && auth()->check()) {
-                $model->user_id = auth()->id();
-            }
-            $model->slug = $model->slug ? $model->slug : (string) str()->random(17);
-        });
-		
-        static::updated(function ($model) {
-            $model->slug = $model->slug ? $model->slug : (string) str()->random(17);
-        });
+        $this->adjustStock(-$quantity, 'sale');
+        return true;
     }
 
-    // protected static function boot(){
-    //     parent::boot();
+    public function restoreStock(int $quantity): void
+    {
+        $this->adjustStock($quantity, 'return');
+    }
 
-    //     static::creating(function ($model) {
-    //         $model->uuid = $model->uuid ? $model->uuid : (string) str()->uuid();
-    //     });
-    // }
+    public function addVariant(array $variant): void
+    {
+        $variants = $this->variants ?? [];
+        $variants[] = array_merge($variant, [
+            'id' => (string) Str::uuid(),
+            'created_at' => now()->toISOString(),
+        ]);
+        
+        $this->update(['variants' => $variants]);
+    }
+
+    public function updateSEO(array $seoData): void
+    {
+        $currentSEO = $this->seo_data ?? [];
+        $this->update(['seo_data' => array_merge($currentSEO, $seoData)]);
+    }
 }
