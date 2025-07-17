@@ -51,20 +51,23 @@ class MewayzAPITester:
             
         try:
             if method.upper() == 'GET':
-                response = self.session.get(url, headers=default_headers, params=data)
+                response = self.session.get(url, headers=default_headers, params=data, timeout=10)
             elif method.upper() == 'POST':
-                response = self.session.post(url, headers=default_headers, json=data)
+                response = self.session.post(url, headers=default_headers, json=data, timeout=10)
             elif method.upper() == 'PUT':
-                response = self.session.put(url, headers=default_headers, json=data)
+                response = self.session.put(url, headers=default_headers, json=data, timeout=10)
             elif method.upper() == 'DELETE':
-                response = self.session.delete(url, headers=default_headers)
+                response = self.session.delete(url, headers=default_headers, timeout=10)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
                 
             return response
             
+        except requests.exceptions.Timeout:
+            print(f"Request timeout for {url}")
+            return None
         except requests.exceptions.RequestException as e:
-            print(f"Request failed: {e}")
+            print(f"Request failed for {url}: {e}")
             return None
     
     def test_health_check(self):
