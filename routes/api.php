@@ -205,22 +205,6 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::post('/campaigns/{campaignId}/send-elastic-email', [EmailMarketingController::class, 'sendCampaignWithElasticEmail']);
     });
     
-    // Workspace Setup Wizard routes
-    Route::prefix('workspace-setup')->group(function () {
-        Route::get('/current-step', [WorkspaceSetupController::class, 'getCurrentStep']);
-        Route::get('/main-goals', [WorkspaceSetupController::class, 'getMainGoals']);
-        Route::get('/available-features', [WorkspaceSetupController::class, 'getAvailableFeatures']);
-        Route::get('/subscription-plans', [WorkspaceSetupController::class, 'getSubscriptionPlans']);
-        Route::post('/main-goals', [WorkspaceSetupController::class, 'saveMainGoals']);
-        Route::post('/feature-selection', [WorkspaceSetupController::class, 'saveFeatureSelection']);
-        Route::post('/team-setup', [WorkspaceSetupController::class, 'saveTeamSetup']);
-        Route::post('/subscription-selection', [WorkspaceSetupController::class, 'saveSubscriptionSelection']);
-        Route::post('/branding-configuration', [WorkspaceSetupController::class, 'saveBrandingConfiguration']);
-        Route::post('/complete', [WorkspaceSetupController::class, 'completeSetup']);
-        Route::get('/summary', [WorkspaceSetupController::class, 'getSetupSummary']);
-        Route::post('/reset', [WorkspaceSetupController::class, 'resetSetup']);
-    });
-    
     // Social Media routes
     Route::prefix('social-media')->group(function () {
         Route::get('/accounts', [SocialMediaController::class, 'getAccounts']);
