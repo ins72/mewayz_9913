@@ -111,7 +111,23 @@ class MewayzAPITester:
         """Test user authentication endpoints"""
         print("\n=== Testing Authentication System ===")
         
-        # Test user registration
+        # Test custom auth middleware with provided token
+        response = self.make_request('GET', '/test-custom-auth')
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_test("Custom Auth Middleware", True, f"Custom auth working - User: {data.get('user_name', 'unknown')}")
+        else:
+            self.log_test("Custom Auth Middleware", False, f"Custom auth failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test authenticated user profile with custom middleware
+        response = self.make_request('GET', '/auth/me')
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_test("User Profile (Custom Auth)", True, f"Profile retrieval successful - User: {data.get('user', {}).get('name', 'unknown')}")
+        else:
+            self.log_test("User Profile (Custom Auth)", False, f"Profile retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test user registration (new user)
         register_data = {
             "name": "Test Creator",
             "email": f"testcreator_{int(time.time())}@example.com",
@@ -126,9 +142,9 @@ class MewayzAPITester:
             
             # Store auth token if provided
             if 'token' in data:
-                self.auth_token = data['token']
+                new_token = data['token']
             elif 'access_token' in data:
-                self.auth_token = data['access_token']
+                new_token = data['access_token']
                 
             if 'user' in data:
                 self.user_id = data['user'].get('id')
@@ -145,22 +161,8 @@ class MewayzAPITester:
         if response and response.status_code == 200:
             data = response.json()
             self.log_test("User Login", True, "User login successful")
-            
-            # Update auth token
-            if 'token' in data:
-                self.auth_token = data['token']
-            elif 'access_token' in data:
-                self.auth_token = data['access_token']
         else:
             self.log_test("User Login", False, f"Login failed - Status: {response.status_code if response else 'No response'}")
-        
-        # Test authenticated user profile
-        if self.auth_token:
-            response = self.make_request('GET', '/auth/me')
-            if response and response.status_code == 200:
-                self.log_test("User Profile", True, "User profile retrieval successful")
-            else:
-                self.log_test("User Profile", False, f"Profile retrieval failed - Status: {response.status_code if response else 'No response'}")
     
     def test_bio_sites(self):
         """Test Bio Sites & Link-in-Bio functionality"""
