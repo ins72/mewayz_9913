@@ -106,6 +106,9 @@ backend:
       - working: true
         agent: "main"
         comment: "✅ FIXED - MIDDLEWARE ISSUE RESOLVED: Updated all real-time feature routes to use CustomSanctumAuth middleware instead of auth:sanctum. This should resolve the middleware authentication issue."
+      - working: true
+        agent: "testing"
+        comment: "✅ VERIFIED - MIDDLEWARE FIX SUCCESSFUL: Comprehensive testing confirms all real-time feature endpoints now working with CustomSanctumAuth middleware. Tested 4/4 endpoints: GET /realtime/notifications (Status 200), GET /realtime/activity-feed (Status 200), GET /realtime/system-status (Status 200), GET /realtime/user-presence (Status 200). The 'Object of type Illuminate\\Auth\\AuthManager is not callable' error has been completely resolved. All real-time features are 100% functional."
 
   - task: "Escrow & Transaction Security"
     implemented: true
