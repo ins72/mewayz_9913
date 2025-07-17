@@ -114,13 +114,30 @@ Route::prefix('auth')->group(function () {
 // Simple auth test routes with no parameters
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/simple-test', function (Request $request) {
-        return response()->json([
-            'message' => 'Simple auth test successful',
-            'user_id' => $request->user()->id,
-            'timestamp' => now()
-        ]);
+        try {
+            $user = $request->user();
+            return response()->json([
+                'message' => 'Simple auth test successful',
+                'user_id' => $user ? $user->id : null,
+                'timestamp' => now()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
     });
     
+    Route::get('/auth/me', [AuthController::class, 'me']);
+});
+
+// Test route without auth middleware
+Route::get('/test-no-auth', function (Request $request) {
+    return response()->json([
+        'message' => 'Test without auth middleware',
+        'timestamp' => now()
+    ]);
 });
 
 // Protected routes (require authentication)
