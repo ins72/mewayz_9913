@@ -5,7 +5,14 @@ All notable changes to the Mewayz platform will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] - v2.1.0
+
+### Planned for Q1 2025
+- Advanced AI automation workflows
+- Blockchain integration for NFT marketplace
+- VR/AR content creation tools
+- Advanced enterprise features
+- Global expansion capabilities
 
 ### Added
 - Real-time collaboration features
