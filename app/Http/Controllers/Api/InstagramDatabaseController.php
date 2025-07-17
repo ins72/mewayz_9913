@@ -245,7 +245,7 @@ class InstagramDatabaseController extends Controller
                     'is_verified' => $scrapedData['is_verified'] ?? false,
                     'language' => $scrapedData['language'] ?? 'en',
                     'last_scraped' => now(),
-                    'workspace_id' => $request->user()->current_workspace_id
+                    'workspace_id' => $request->user()->workspaces()->first()->id ?? null
                 ]
             );
 
