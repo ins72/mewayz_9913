@@ -240,6 +240,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Type | Description |
 |---------|-------------|------|-------------|
+| 2.0.0   | 2025-01-17  | Major | Complete v2 platform with enterprise features |
 | 1.2.0   | 2025-01-20  | Major | Advanced features and improvements |
 | 1.1.0   | 2024-12-15  | Minor | Course creation and email marketing |
 | 1.0.0   | 2024-11-01  | Major | Initial public release |
