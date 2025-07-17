@@ -26,6 +26,12 @@ class SubscriptionPlan extends Model
         'included_features',
         'metadata',
         'is_active',
+        // New admin dashboard fields
+        'price_monthly',
+        'price_yearly',
+        'feature_limit',
+        'is_whitelabel',
+        'features',
     ];
 
     protected $casts = [
