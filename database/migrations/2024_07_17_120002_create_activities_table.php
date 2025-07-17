@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignUuid('workspace_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('contact_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignUuid('deal_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('type'); // call, email, meeting, note, task
             $table->string('subject');
             $table->text('description')->nullable();
