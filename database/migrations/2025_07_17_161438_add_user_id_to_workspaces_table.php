@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('workspaces', function (Blueprint $table) {
-            //
+            $table->unsignedBigInteger('user_id')->after('id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index(['user_id']);
         });
     }
 
@@ -26,7 +28,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('workspaces', function (Blueprint $table) {
-            //
+            $table->dropForeign(['user_id']);
+            $table->dropIndex(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 };
