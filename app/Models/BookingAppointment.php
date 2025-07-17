@@ -2,151 +2,174 @@
 
 namespace App\Models;
 
-use App\Models\Base\BookingAppointment as BaseBookingAppointment;
-use App\Yena\BookingTime;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
-class BookingAppointment extends BaseBookingAppointment
+class BookingAppointment extends Model
 {
-	protected $appends = ['start_time', 'end_time', 'status_text', 'services', 'services_name', 'nice_start_time', 'nice_end_time'];
+    use HasFactory;
 
-	protected $fillable = [
-		'user',
-		'payee_user_id',
-		'service_ids',
-		'date',
-		'time',
-		'settings',
-		'info',
-		'appointment_status',
-		'price',
-		'is_paid'
-	];
-	protected $casts = [
-		'service_ids' => 'array',
-		'settings' => 'array'
-	];
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-	public function payee(){
-		return $this->belongsTo(User::class, 'payee_user_id', 'id');
-	}
-	public function getStatusTextAttribute(){
-		switch ($this->appointment_status) {
-			case 0:
-				return __('Pending');
-			break;
-			case 1:
-				return __('Completed');
-			break;
-			case 2:
-				return __('Canceled');
-			break;
-		}
+    protected $fillable = [
+        'service_id',
+        'user_id',
+        'start_time',
+        'end_time',
+        'client_name',
+        'client_email',
+        'client_phone',
+        'notes',
+        'status',
+        'status_notes',
+        'status_updated_at',
+        'total_amount',
+        'currency',
+        'payment_status',
+        'payment_id',
+        'timezone',
+        'booking_reference',
+        'reminder_sent_at',
+        'follow_up_sent_at',
+    ];
 
+    protected $casts = [
+        'id' => 'string',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'status_updated_at' => 'datetime',
+        'reminder_sent_at' => 'datetime',
+        'follow_up_sent_at' => 'datetime',
+        'total_amount' => 'decimal:2',
+    ];
 
-		return 'error';
-	}
-	
-	public function getServicesAttribute()
-	{
-		$services = [];
-		$item = $this;
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
-		if(!empty($item->service_ids) && is_array($item->service_ids)){
-			foreach ($item->service_ids as $key => $value) {
-				/*if($service = Service::find($value)){
-					$services[$key] = $service;
+    // Relationships
+    public function service(): BelongsTo
+    {
+        return $this->belongsTo(BookingService::class);
+    }
 
-					if ($after_hour = AfterHourService::where('barber_id', $item->barber_id)->where('service_id', $service->id)->first()) {
-						$services[$key]['price'] = $after_hour->price;
-					}
-				}*/
-			}
-		}
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
+    // Accessors
+    public function getStatusBadgeAttribute(): array
+    {
+        $statusMap = [
+            'pending' => ['color' => 'warning', 'text' => 'Pending'],
+            'confirmed' => ['color' => 'success', 'text' => 'Confirmed'],
+            'completed' => ['color' => 'info', 'text' => 'Completed'],
+            'cancelled' => ['color' => 'error', 'text' => 'Cancelled'],
+            'no_show' => ['color' => 'secondary', 'text' => 'No Show'],
+        ];
 
-        return $services;
-	}
-	
-	public function getServicesNameAttribute()
-	{
-		$services = [];
-		$item = $this;
+        return $statusMap[$this->status] ?? ['color' => 'secondary', 'text' => ucfirst($this->status)];
+    }
 
-		if(!empty($item->service_ids) && is_array($item->service_ids)){
-			$items = BookingService::whereIn('id', $item->service_ids)->get();
-
-			foreach ($items as $i) {
-				$services[] = $i->name;
-			}
-		}
-
-		$services = implode(', ', $services);
-
-
-        return $services;
-	}
-
-	public function getStartTimeAttribute()
-	{
-        try{
-            $times = explode('-', $this->time);
-
-            return (int) $times[0];
-        }catch(\Exception $e){
-
+    public function getTimeUntilAppointmentAttribute(): ?string
+    {
+        if ($this->start_time->isPast()) {
+            return null;
         }
 
-        return false;
-	}
-	
-	public function getEndTimeAttribute()
-	{
-        try{
-            $times = explode('-', $this->time);
-
-            return (int) $times[1];
-        }catch(\Exception $e){
-
+        $diff = now()->diffInHours($this->start_time, false);
+        
+        if ($diff < 24) {
+            return $diff . ' hours';
         }
+        
+        return ceil($diff / 24) . ' days';
+    }
 
-        return false;
-	}
+    public function getFormattedDateTimeAttribute(): string
+    {
+        return $this->start_time->format('M j, Y \a\t g:i A');
+    }
 
-	
-	public function getNiceStartTimeAttribute()
-	{
-        try{
-            $times = explode('-', $this->time);
-			$time = (int) $times[0];
-			$time = (new BookingTime($this->user_id))->format_minutes($time);
-            return $time;
-        }catch(\Exception $e){
+    // Scopes
+    public function scopeUpcoming($query)
+    {
+        return $query->where('start_time', '>', now())
+                    ->whereIn('status', ['pending', 'confirmed']);
+    }
 
-        }
+    public function scopeToday($query)
+    {
+        return $query->whereDate('start_time', today());
+    }
 
-        return false;
-	}
-	
-	public function getNiceEndTimeAttribute()
-	{
-        try{
-            $times = explode('-', $this->time);
-			$time = (int) $times[1];
-			$time = (new BookingTime($this->user_id))->format_minutes($time);
-            return $time;
-        }catch(\Exception $e){
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
 
-        }
+    // Business Logic Methods
+    public function confirm(): void
+    {
+        $this->update([
+            'status' => 'confirmed',
+            'status_updated_at' => now(),
+        ]);
+    }
 
-        return false;
-	}
-	
-	public function getServices()
-	{
-		$item = $this;
-		$services = BookingService::whereIn('id', $item->service_ids)->get();
+    public function complete(): void
+    {
+        $this->update([
+            'status' => 'completed',
+            'status_updated_at' => now(),
+        ]);
+    }
 
+    public function cancel(string $reason = null): void
+    {
+        $this->update([
+            'status' => 'cancelled',
+            'status_notes' => $reason,
+            'status_updated_at' => now(),
+        ]);
+    }
 
-        return $services;
-	}
+    public function markNoShow(): void
+    {
+        $this->update([
+            'status' => 'no_show',
+            'status_updated_at' => now(),
+        ]);
+    }
+
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, ['pending', 'confirmed']) && 
+               $this->start_time->isFuture();
+    }
+
+    public function canBeRescheduled(): bool
+    {
+        return in_array($this->status, ['pending', 'confirmed']) && 
+               $this->start_time->isFuture();
+    }
+
+    public function needsReminder(): bool
+    {
+        return $this->status === 'confirmed' && 
+               !$this->reminder_sent_at && 
+               $this->start_time->diffInHours(now()) <= 24;
+    }
 }
