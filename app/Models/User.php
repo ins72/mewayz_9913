@@ -53,7 +53,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
         'payment_subscription_ids' => 'array',
         'store' => 'array',
         'wallet_settings' => 'array',
