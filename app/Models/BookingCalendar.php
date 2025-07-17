@@ -44,7 +44,7 @@ class BookingCalendar extends Model
     // Relationships
     public function service(): BelongsTo
     {
-        return $this->belongsTo(BookingService::class);
+        return $this->belongsTo(BookingService::class, 'service_id', 'id');
     }
 
     // Accessors
