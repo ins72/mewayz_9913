@@ -428,20 +428,21 @@ metadata:
 
 test_plan:
   current_focus:
-    - "SubstituteBindings Middleware Error"
-    - "Auth:Sanctum Protected Routes Issue"
+    - "Vite Asset Compilation Issue"
+    - "SwitchLocale Middleware Error"
+    - "Authentication Flow UI Rendering"
   stuck_tasks:
-    - "Bio Sites & Link-in-Bio"
-    - "Social Media Management"
-    - "Instagram Integration"
-    - "E-commerce System"
-    - "Course Creation"
-    - "Email Marketing"
-    - "Analytics & Reporting"
-    - "Workspace Management"
-    - "CRM System"
-    - "Team Management"
-    - "AI Integration"
+    - "Authentication Flow (Login/Register)"
+    - "Dashboard Access"
+    - "Bio Sites & Link-in-Bio Interface"
+    - "Social Media Management Interface"
+    - "E-commerce Interface"
+    - "Course Creation Interface"
+    - "Email Marketing Interface"
+    - "Analytics Dashboard"
+    - "Responsive Design"
+    - "Form Functionality"
+    - "Navigation System"
   test_all: true
   test_priority: "high_first"
 
