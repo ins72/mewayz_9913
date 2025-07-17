@@ -80,7 +80,8 @@ class FocusedMewayzTester:
             self.log_test("Biometric Registration Options", False, f"Registration options failed - Status: {response.status_code if response else 'No response'}")
         
         # Test get authentication options (public endpoint)
-        response = self.make_request('POST', '/biometric/authentication-options', auth_required=False)
+        auth_data = {"email": "test@example.com"}
+        response = self.make_request('POST', '/biometric/authentication-options', auth_data, auth_required=False)
         if response and response.status_code == 200:
             self.log_test("Biometric Authentication Options", True, "Authentication options retrieval successful")
         else:
