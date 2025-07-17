@@ -628,7 +628,7 @@ class CrmController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('AI lead scoring failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            Log::error('AI lead scoring failed', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to perform AI lead scoring: ' . $e->getMessage()
