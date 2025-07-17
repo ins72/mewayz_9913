@@ -3,422 +3,654 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\TeamInvitation;
-use App\Models\Workspace;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Workspace;
+use App\Models\WorkspaceUser;
+use App\Models\Team;
+use App\Models\Department;
+use App\Models\Role;
+use App\Models\Permission;
+use App\Models\AuditLog;
+use App\Models\TimeTracking;
+use App\Models\PerformanceMetric;
+use App\Models\ApprovalWorkflow;
+use App\Services\TeamManagementService;
+use App\Services\NotificationService;
+use App\Services\AnalyticsService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 class TeamManagementController extends Controller
 {
+    protected $teamService;
+    protected $notificationService;
+    protected $analyticsService;
+
+    public function __construct(
+        TeamManagementService $teamService,
+        NotificationService $notificationService,
+        AnalyticsService $analyticsService
+    ) {
+        $this->teamService = $teamService;
+        $this->notificationService = $notificationService;
+        $this->analyticsService = $analyticsService;
+    }
+
     /**
-     * Get team members and invitations
+     * Get team structure
      */
-    public function getTeam(Request $request)
+    public function getTeamStructure(Request $request)
     {
         try {
             $user = $request->user();
-            
-            // Simple team response to avoid timeouts
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'owner' => [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'role' => 'owner'
-                    ],
-                    'team_members' => [],
-                    'pending_invitations' => [],
-                    'team_size' => 1,
-                    'available_roles' => ['admin', 'editor', 'viewer'],
-                ],
-                'message' => 'Team data retrieved successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to load team: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-    
-    /**
-     * Send team invitation
-     */
-    public function sendInvitation(Request $request)
-    {
-        try {
-            $request->validate([
-                'email' => 'required|email',
-                'role' => 'required|string|in:member,editor,manager,admin',
-                'permissions' => 'sometimes|array',
-                'message' => 'sometimes|string|max:500',
-            ]);
-            
-            $user = auth()->user();
-            $workspace = $user->workspaces()->first();
-            
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
             if (!$workspace) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No workspace found'
+                    'error' => 'Workspace not found'
                 ], 404);
             }
-            
-            // Check if user is already invited or is the owner
-            if ($request->email === $user->email) {
+
+            $structure = $this->teamService->getTeamStructure($workspace);
+
+            return response()->json([
+                'success' => true,
+                'data' => $structure,
+                'message' => 'Team structure retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to retrieve team structure',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create department
+     */
+    public function createDepartment(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'parent_department_id' => 'nullable|uuid|exists:departments,id',
+            'manager_id' => 'nullable|uuid|exists:users,id',
+            'budget' => 'nullable|numeric|min:0',
+            'settings' => 'nullable|array'
+        ]);
+
+        try {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canManageDepartments($user, $workspace)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'You cannot invite yourself'
-                ], 400);
+                    'error' => 'Insufficient permissions'
+                ], 403);
             }
-            
-            $existingInvitation = $workspace->teamInvitations()
-                ->where('email', $request->email)
-                ->whereIn('status', ['pending', 'accepted'])
-                ->first();
-                
-            if ($existingInvitation) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User is already invited or part of the team'
-                ], 400);
-            }
-            
-            // Create invitation
-            $invitation = TeamInvitation::create([
+
+            $department = Department::create([
                 'workspace_id' => $workspace->id,
-                'invited_by' => $user->id,
-                'email' => $request->email,
-                'role' => $request->role,
-                'permissions' => $request->permissions ?? [],
-                'expires_at' => now()->addDays(7),
+                'name' => $request->name,
+                'description' => $request->description,
+                'parent_department_id' => $request->parent_department_id,
+                'manager_id' => $request->manager_id,
+                'budget' => $request->budget,
+                'settings' => $request->settings ?? [],
+                'created_by' => $user->id
             ]);
-            
-            // TODO: Send invitation email
-            // Mail::to($request->email)->send(new TeamInvitationMail($invitation));
-            
+
+            // Create audit log
+            $this->createAuditLog($user, $workspace, 'department_created', [
+                'department_id' => $department->id,
+                'department_name' => $department->name
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Invitation sent successfully',
-                'data' => [
-                    'invitation' => $invitation->load('invitedBy'),
-                    'invitation_url' => $invitation->getInvitationUrl(),
-                ]
+                'data' => $department->load(['manager', 'parent', 'children', 'users']),
+                'message' => 'Department created successfully'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to create department',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get permission templates
+     */
+    public function getPermissionTemplates(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            $templates = $this->teamService->getPermissionTemplates($workspace);
+
+            return response()->json([
+                'success' => true,
+                'data' => $templates,
+                'message' => 'Permission templates retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to send invitation: ' . $e->getMessage()
+                'error' => 'Failed to retrieve permission templates',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Accept team invitation
+     * Create role with permissions
      */
-    public function acceptInvitation(Request $request, $uuid)
+    public function createRole(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'permissions' => 'required|array',
+            'permissions.*' => 'string|exists:permissions,name',
+            'template_id' => 'nullable|uuid|exists:role_templates,id',
+            'level' => 'required|integer|min:1|max:10'
+        ]);
+
         try {
-            $request->validate([
-                'token' => 'required|string',
-            ]);
-            
-            $invitation = TeamInvitation::where('uuid', $uuid)
-                ->where('token', $request->token)
-                ->where('status', 'pending')
-                ->first();
-                
-            if (!$invitation) {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canManageRoles($user, $workspace)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid or expired invitation'
-                ], 404);
+                    'error' => 'Insufficient permissions'
+                ], 403);
             }
-            
-            if ($invitation->isExpired()) {
-                $invitation->markAsExpired();
+
+            DB::beginTransaction();
+
+            $role = Role::create([
+                'workspace_id' => $workspace->id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'level' => $request->level,
+                'template_id' => $request->template_id,
+                'created_by' => $user->id
+            ]);
+
+            // Attach permissions
+            $permissions = Permission::whereIn('name', $request->permissions)->get();
+            $role->permissions()->sync($permissions->pluck('id'));
+
+            DB::commit();
+
+            // Create audit log
+            $this->createAuditLog($user, $workspace, 'role_created', [
+                'role_id' => $role->id,
+                'role_name' => $role->name,
+                'permissions' => $request->permissions
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $role->load('permissions'),
+                'message' => 'Role created successfully'
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to create role',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get audit logs
+     */
+    public function getAuditLogs(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'user_id' => 'nullable|uuid|exists:users,id',
+            'action' => 'nullable|string',
+            'page' => 'nullable|integer|min:1',
+            'per_page' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        try {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canViewAuditLogs($user, $workspace)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invitation has expired'
+                    'error' => 'Insufficient permissions'
+                ], 403);
+            }
+
+            $query = AuditLog::where('workspace_id', $workspace->id)
+                ->with(['user', 'targetUser'])
+                ->orderBy('created_at', 'desc');
+
+            // Apply filters
+            if ($request->start_date) {
+                $query->whereDate('created_at', '>=', $request->start_date);
+            }
+
+            if ($request->end_date) {
+                $query->whereDate('created_at', '<=', $request->end_date);
+            }
+
+            if ($request->user_id) {
+                $query->where('user_id', $request->user_id);
+            }
+
+            if ($request->action) {
+                $query->where('action', $request->action);
+            }
+
+            $logs = $query->paginate($request->per_page ?? 20);
+
+            return response()->json([
+                'success' => true,
+                'data' => $logs,
+                'message' => 'Audit logs retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to retrieve audit logs',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Start time tracking
+     */
+    public function startTimeTracking(Request $request)
+    {
+        $request->validate([
+            'project_id' => 'nullable|uuid|exists:projects,id',
+            'task_id' => 'nullable|uuid|exists:tasks,id',
+            'description' => 'nullable|string|max:500',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50'
+        ]);
+
+        try {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            // Check if user already has active time tracking
+            $activeTracking = TimeTracking::where('user_id', $user->id)
+                ->where('workspace_id', $workspace->id)
+                ->whereNull('ended_at')
+                ->first();
+
+            if ($activeTracking) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Active time tracking session exists',
+                    'data' => $activeTracking
                 ], 400);
             }
-            
-            $user = auth()->user();
-            
-            // Check if user email matches invitation email
-            if ($user->email !== $invitation->email) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invitation email does not match your account'
-                ], 400);
-            }
-            
-            // Accept the invitation
-            $invitation->accept();
-            
-            // Update user's workspace relationship (if needed)
-            // This depends on your user-workspace relationship structure
-            
+
+            $timeTracking = TimeTracking::create([
+                'user_id' => $user->id,
+                'workspace_id' => $workspace->id,
+                'project_id' => $request->project_id,
+                'task_id' => $request->task_id,
+                'description' => $request->description,
+                'tags' => $request->tags ?? [],
+                'started_at' => now(),
+                'status' => 'active'
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Invitation accepted successfully',
-                'data' => [
-                    'invitation' => $invitation->load('workspace', 'invitedBy'),
-                    'workspace' => $invitation->workspace,
-                    'role' => $invitation->role,
-                    'permissions' => $invitation->permissions,
-                ]
-            ]);
+                'data' => $timeTracking,
+                'message' => 'Time tracking started successfully'
+            ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to accept invitation: ' . $e->getMessage()
+                'error' => 'Failed to start time tracking',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Reject team invitation
+     * Stop time tracking
      */
-    public function rejectInvitation(Request $request, $uuid)
+    public function stopTimeTracking(Request $request)
     {
+        $request->validate([
+            'tracking_id' => 'required|uuid|exists:time_trackings,id',
+            'notes' => 'nullable|string|max:1000'
+        ]);
+
         try {
-            $request->validate([
-                'token' => 'required|string',
-            ]);
-            
-            $invitation = TeamInvitation::where('uuid', $uuid)
-                ->where('token', $request->token)
-                ->where('status', 'pending')
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            $timeTracking = TimeTracking::where('id', $request->tracking_id)
+                ->where('user_id', $user->id)
+                ->where('workspace_id', $workspace->id)
+                ->whereNull('ended_at')
                 ->first();
-                
-            if (!$invitation) {
+
+            if (!$timeTracking) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid or expired invitation'
+                    'error' => 'Active time tracking session not found'
                 ], 404);
             }
-            
-            $invitation->reject();
-            
+
+            $endTime = now();
+            $duration = $endTime->diffInMinutes($timeTracking->started_at);
+
+            $timeTracking->update([
+                'ended_at' => $endTime,
+                'duration_minutes' => $duration,
+                'notes' => $request->notes,
+                'status' => 'completed'
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Invitation rejected successfully'
+                'data' => $timeTracking,
+                'message' => 'Time tracking stopped successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to reject invitation: ' . $e->getMessage()
+                'error' => 'Failed to stop time tracking',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Resend invitation
+     * Get performance metrics
      */
-    public function resendInvitation($invitationId)
+    public function getPerformanceMetrics(Request $request)
     {
+        $request->validate([
+            'user_id' => 'nullable|uuid|exists:users,id',
+            'department_id' => 'nullable|uuid|exists:departments,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'metric_type' => 'nullable|string|in:productivity,quality,collaboration,growth'
+        ]);
+
         try {
-            $user = auth()->user();
-            $workspace = $user->workspaces()->first();
-            
-            $invitation = $workspace->teamInvitations()
-                ->where('id', $invitationId)
-                ->where('status', 'pending')
-                ->first();
-                
-            if (!$invitation) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invitation not found'
-                ], 404);
-            }
-            
-            // Extend expiration date
-            $invitation->update([
-                'expires_at' => now()->addDays(7),
-                'token' => Str::random(64), // Generate new token
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            $metrics = $this->teamService->getPerformanceMetrics($workspace, [
+                'user_id' => $request->user_id,
+                'department_id' => $request->department_id,
+                'start_date' => $request->start_date ?? now()->subMonth(),
+                'end_date' => $request->end_date ?? now(),
+                'metric_type' => $request->metric_type
             ]);
-            
-            // TODO: Resend invitation email
-            // Mail::to($invitation->email)->send(new TeamInvitationMail($invitation));
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Invitation resent successfully',
-                'data' => [
-                    'invitation' => $invitation,
-                    'invitation_url' => $invitation->getInvitationUrl(),
-                ]
+                'data' => $metrics,
+                'message' => 'Performance metrics retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to resend invitation: ' . $e->getMessage()
+                'error' => 'Failed to retrieve performance metrics',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Cancel invitation
+     * Create approval workflow
      */
-    public function cancelInvitation($invitationId)
+    public function createApprovalWorkflow(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'trigger_type' => 'required|string|in:manual,automatic,scheduled',
+            'trigger_conditions' => 'nullable|array',
+            'steps' => 'required|array|min:1',
+            'steps.*.approver_id' => 'required|uuid|exists:users,id',
+            'steps.*.approver_type' => 'required|string|in:user,role,department',
+            'steps.*.order' => 'required|integer|min:1',
+            'steps.*.required' => 'required|boolean',
+            'steps.*.timeout_hours' => 'nullable|integer|min:1'
+        ]);
+
         try {
-            $user = auth()->user();
-            $workspace = $user->workspaces()->first();
-            
-            $invitation = $workspace->teamInvitations()
-                ->where('id', $invitationId)
-                ->where('status', 'pending')
-                ->first();
-                
-            if (!$invitation) {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canManageWorkflows($user, $workspace)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invitation not found'
-                ], 404);
+                    'error' => 'Insufficient permissions'
+                ], 403);
             }
-            
-            $invitation->update(['status' => 'expired']);
-            
+
+            DB::beginTransaction();
+
+            $workflow = ApprovalWorkflow::create([
+                'workspace_id' => $workspace->id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'trigger_type' => $request->trigger_type,
+                'trigger_conditions' => $request->trigger_conditions ?? [],
+                'steps' => $request->steps,
+                'created_by' => $user->id,
+                'status' => 'active'
+            ]);
+
+            DB::commit();
+
+            // Create audit log
+            $this->createAuditLog($user, $workspace, 'workflow_created', [
+                'workflow_id' => $workflow->id,
+                'workflow_name' => $workflow->name
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Invitation cancelled successfully'
-            ]);
+                'data' => $workflow,
+                'message' => 'Approval workflow created successfully'
+            ], 201);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to cancel invitation: ' . $e->getMessage()
+                'error' => 'Failed to create approval workflow',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Update team member role
+     * Get team analytics
      */
-    public function updateMemberRole(Request $request, $invitationId)
+    public function getTeamAnalytics(Request $request)
     {
+        $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'department_id' => 'nullable|uuid|exists:departments,id',
+            'metrics' => 'nullable|array',
+            'metrics.*' => 'string|in:productivity,collaboration,performance,growth,engagement'
+        ]);
+
         try {
-            $request->validate([
-                'role' => 'required|string|in:member,editor,manager,admin',
-                'permissions' => 'sometimes|array',
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            $analytics = $this->teamService->getTeamAnalytics($workspace, [
+                'start_date' => $request->start_date ?? now()->subMonth(),
+                'end_date' => $request->end_date ?? now(),
+                'department_id' => $request->department_id,
+                'metrics' => $request->metrics ?? ['productivity', 'collaboration', 'performance']
             ]);
-            
-            $user = auth()->user();
-            $workspace = $user->workspaces()->first();
-            
-            $invitation = $workspace->teamInvitations()
-                ->where('id', $invitationId)
-                ->where('status', 'accepted')
-                ->first();
-                
-            if (!$invitation) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Team member not found'
-                ], 404);
-            }
-            
-            $invitation->update([
-                'role' => $request->role,
-                'permissions' => $request->permissions ?? $invitation->permissions,
-            ]);
-            
+
             return response()->json([
                 'success' => true,
-                'message' => 'Member role updated successfully',
-                'data' => [
-                    'invitation' => $invitation,
-                ]
+                'data' => $analytics,
+                'message' => 'Team analytics retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update member role: ' . $e->getMessage()
+                'error' => 'Failed to retrieve team analytics',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Remove team member
+     * Bulk invite team members
      */
-    public function removeMember($invitationId)
+    public function bulkInviteMembers(Request $request)
     {
+        $request->validate([
+            'invitations' => 'required|array|min:1|max:50',
+            'invitations.*.email' => 'required|email',
+            'invitations.*.role' => 'required|string|exists:roles,name',
+            'invitations.*.department_id' => 'nullable|uuid|exists:departments,id',
+            'invitations.*.custom_message' => 'nullable|string|max:500',
+            'send_welcome_email' => 'boolean'
+        ]);
+
         try {
-            $user = auth()->user();
-            $workspace = $user->workspaces()->first();
-            
-            $invitation = $workspace->teamInvitations()
-                ->where('id', $invitationId)
-                ->where('status', 'accepted')
-                ->first();
-                
-            if (!$invitation) {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canInviteMembers($user, $workspace)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Team member not found'
-                ], 404);
+                    'error' => 'Insufficient permissions'
+                ], 403);
             }
-            
-            $invitation->delete();
-            
+
+            $results = $this->teamService->bulkInviteMembers($workspace, $user, $request->invitations, [
+                'send_welcome_email' => $request->send_welcome_email ?? true
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message' => 'Team member removed successfully'
+                'data' => $results,
+                'message' => 'Bulk invitation process completed'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to remove member: ' . $e->getMessage()
+                'error' => 'Failed to send bulk invitations',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
-    
+
     /**
-     * Get invitation details (for invitation page)
+     * Create audit log entry
      */
-    public function getInvitationDetails($uuid)
+    private function createAuditLog($user, $workspace, $action, $details = [])
+    {
+        AuditLog::create([
+            'user_id' => $user->id,
+            'workspace_id' => $workspace->id,
+            'action' => $action,
+            'details' => $details,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->header('User-Agent'),
+            'timestamp' => now()
+        ]);
+    }
+
+    /**
+     * Get team collaboration stats
+     */
+    public function getCollaborationStats(Request $request)
     {
         try {
-            $invitation = TeamInvitation::where('uuid', $uuid)
-                ->where('status', 'pending')
-                ->with('workspace', 'invitedBy')
-                ->first();
-                
-            if (!$invitation) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid or expired invitation'
-                ], 404);
-            }
-            
-            if ($invitation->isExpired()) {
-                $invitation->markAsExpired();
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invitation has expired'
-                ], 400);
-            }
-            
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            $stats = $this->teamService->getCollaborationStats($workspace);
+
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'invitation' => $invitation,
-                    'workspace' => $invitation->workspace,
-                    'invited_by' => $invitation->invitedBy,
-                    'role' => $invitation->getRoleDisplayName(),
-                    'expires_at' => $invitation->expires_at->toISOString(),
-                ]
+                'data' => $stats,
+                'message' => 'Collaboration stats retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to get invitation details: ' . $e->getMessage()
+                'error' => 'Failed to retrieve collaboration stats',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Export team data
+     */
+    public function exportTeamData(Request $request)
+    {
+        $request->validate([
+            'format' => 'required|string|in:csv,xlsx,pdf',
+            'data_types' => 'required|array',
+            'data_types.*' => 'string|in:members,roles,departments,time_tracking,performance,audit_logs',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date'
+        ]);
+
+        try {
+            $user = $request->user();
+            $workspace = $request->workspace ?? $user->workspaces()->first();
+
+            if (!$this->teamService->canExportData($user, $workspace)) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Insufficient permissions'
+                ], 403);
+            }
+
+            $export = $this->teamService->exportTeamData($workspace, [
+                'format' => $request->format,
+                'data_types' => $request->data_types,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'requested_by' => $user->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $export,
+                'message' => 'Team data export initiated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to export team data',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
