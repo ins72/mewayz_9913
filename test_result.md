@@ -152,7 +152,7 @@ backend:
     file: "app/Http/Controllers/Api/EmailMarketingController.php"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
@@ -160,6 +160,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ FAIL - Same middleware issue preventing access to authenticated endpoints. Controller exists."
+      - working: false
+        agent: "testing"
+        comment: "❌ FAIL - Controller implementation issue: All email marketing endpoints (/campaigns, /templates, /subscribers) use Auth::user() instead of $request->user(), causing 'Call to a member function workspaces() on null' errors. Custom auth middleware working but controllers need updating."
 
   - task: "Analytics & Reporting"
     implemented: true
