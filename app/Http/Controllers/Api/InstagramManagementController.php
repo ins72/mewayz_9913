@@ -20,7 +20,7 @@ class InstagramManagementController extends Controller
     public function getAccounts(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             // Get the user's organization (workspace)
             $organization = $user->organizations()->first();
@@ -87,7 +87,7 @@ class InstagramManagementController extends Controller
                 'is_active' => 'boolean'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             
             // Get the user's organization (workspace)
             $organization = $user->organizations()->first();
@@ -158,7 +158,7 @@ class InstagramManagementController extends Controller
     public function getPosts(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             // Get the user's organization (workspace)
             $organization = $user->organizations()->first();
@@ -231,7 +231,7 @@ class InstagramManagementController extends Controller
                 'scheduled_at' => 'nullable|date|after:now'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -323,7 +323,7 @@ class InstagramManagementController extends Controller
                 'scheduled_at' => 'nullable|date|after:now'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -391,7 +391,7 @@ class InstagramManagementController extends Controller
     public function deletePost($postId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -438,7 +438,7 @@ class InstagramManagementController extends Controller
                 'limit' => 'integer|min:1|max:100'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -506,7 +506,7 @@ class InstagramManagementController extends Controller
     public function getAnalytics(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

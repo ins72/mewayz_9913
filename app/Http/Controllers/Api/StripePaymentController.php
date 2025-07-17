@@ -44,7 +44,7 @@ class StripePaymentController extends Controller
             }
             
             // Get user info
-            $user = Auth::user();
+            $user = $request->user();
             $userEmail = $user ? $user->email : $request->input('email');
             
             // Prepare checkout data with defaults
@@ -264,7 +264,7 @@ class StripePaymentController extends Controller
             }
             
             $package = self::PACKAGES[$packageId];
-            $user = Auth::user();
+            $user = $request->user();
             
             // Create a test session ID
             $sessionId = 'test_session_' . time() . '_' . rand(1000, 9999);

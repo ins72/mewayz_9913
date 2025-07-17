@@ -23,7 +23,7 @@ class EmailMarketingController extends Controller
     public function getCampaigns(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -74,7 +74,7 @@ class EmailMarketingController extends Controller
                 ], 400);
             }
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -119,7 +119,7 @@ class EmailMarketingController extends Controller
     public function getCampaign(Request $request, $campaignId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -152,7 +152,7 @@ class EmailMarketingController extends Controller
     public function updateCampaign(Request $request, $campaignId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -215,7 +215,7 @@ class EmailMarketingController extends Controller
     public function deleteCampaign(Request $request, $campaignId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -248,7 +248,7 @@ class EmailMarketingController extends Controller
     public function sendCampaign(Request $request, $campaignId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -329,7 +329,7 @@ class EmailMarketingController extends Controller
     public function getTemplates(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -374,7 +374,7 @@ class EmailMarketingController extends Controller
     public function getEmailLists(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -414,7 +414,7 @@ class EmailMarketingController extends Controller
     public function getSubscribers(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -466,7 +466,7 @@ class EmailMarketingController extends Controller
     public function getAnalytics(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -583,7 +583,7 @@ class EmailMarketingController extends Controller
     public function sendCampaignWithElasticEmail($campaignId)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

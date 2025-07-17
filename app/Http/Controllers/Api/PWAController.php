@@ -118,7 +118,7 @@ class PWAController extends Controller
                 'keys.auth' => 'required|string',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);
@@ -161,7 +161,7 @@ class PWAController extends Controller
                 'endpoint' => 'required|url',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);
@@ -189,7 +189,7 @@ class PWAController extends Controller
     public function sendTestNotification(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);
@@ -230,7 +230,7 @@ class PWAController extends Controller
     public function getInstallationStatus()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);
@@ -357,7 +357,7 @@ class PWAController extends Controller
                 'force_update' => 'boolean'
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);
@@ -406,7 +406,7 @@ class PWAController extends Controller
     public function getAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             if (!$user) {
                 return response()->json(['error' => 'User not authenticated'], 401);

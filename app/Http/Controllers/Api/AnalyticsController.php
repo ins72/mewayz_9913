@@ -17,7 +17,7 @@ class AnalyticsController extends Controller
     public function getOverview(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -107,7 +107,7 @@ class AnalyticsController extends Controller
                 'end_date' => 'nullable|date|after:start_date',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -185,7 +185,7 @@ class AnalyticsController extends Controller
     public function getSocialMediaAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -291,7 +291,7 @@ class AnalyticsController extends Controller
     public function getBioSitesAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -378,7 +378,7 @@ class AnalyticsController extends Controller
     public function getEcommerceAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -453,7 +453,7 @@ class AnalyticsController extends Controller
     public function getCourseAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -528,7 +528,7 @@ class AnalyticsController extends Controller
     public function getRealTimeAnalytics()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -589,7 +589,7 @@ class AnalyticsController extends Controller
                 'date_range.end' => 'required|date|after:date_range.start',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

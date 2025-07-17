@@ -266,7 +266,7 @@ class OAuthController extends Controller
                 ], 400);
             }
 
-            $user = Auth::user();
+            $user = $request->user();
             
             // Check if OAuth account is already linked to another user
             $existingLink = User::where('oauth_provider', $provider)
@@ -319,7 +319,7 @@ class OAuthController extends Controller
                 ], 400);
             }
 
-            $user = Auth::user();
+            $user = $request->user();
             
             // Make sure user has a password before unlinking OAuth
             if (!$user->password && $user->oauth_provider === $provider) {
@@ -354,7 +354,7 @@ class OAuthController extends Controller
     public function getOAuthStatus()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             return response()->json([
                 'success' => true,

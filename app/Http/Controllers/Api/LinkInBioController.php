@@ -17,7 +17,7 @@ class LinkInBioController extends Controller
     public function getBioSites(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -80,7 +80,7 @@ class LinkInBioController extends Controller
     public function getBioSiteBuilder($id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -368,7 +368,7 @@ class LinkInBioController extends Controller
                 'seo' => 'nullable|array',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -415,7 +415,7 @@ class LinkInBioController extends Controller
                 'template' => 'required|string',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -452,7 +452,7 @@ class LinkInBioController extends Controller
     public function getBioSiteAnalytics($id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -527,7 +527,7 @@ class LinkInBioController extends Controller
                 'duration_days' => 'required|integer|min:1|max:30',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

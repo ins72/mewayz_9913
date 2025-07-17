@@ -22,7 +22,7 @@ class AdminController extends Controller
     {
         $this->middleware('auth:sanctum');
         $this->middleware(function ($request, $next) {
-            $user = Auth::user();
+            $user = $request->user();
             if (!$user || !$user->is_admin) {
                 return response()->json(['error' => 'Admin access required'], 403);
             }

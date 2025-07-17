@@ -25,7 +25,7 @@ class TemplateMarketplaceController extends Controller
                 'per_page' => 'nullable|integer|min:1|max:50',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -281,7 +281,7 @@ class TemplateMarketplaceController extends Controller
     public function getTemplateDetails($id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -389,7 +389,7 @@ class TemplateMarketplaceController extends Controller
                 'payment_method' => 'required|string|in:card,paypal,wallet',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -433,7 +433,7 @@ class TemplateMarketplaceController extends Controller
     public function getUserTemplates()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -505,7 +505,7 @@ class TemplateMarketplaceController extends Controller
                 'template_files' => 'required|file|mimes:zip|max:10240',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -617,7 +617,7 @@ class TemplateMarketplaceController extends Controller
                 'comment' => 'nullable|string|max:500',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

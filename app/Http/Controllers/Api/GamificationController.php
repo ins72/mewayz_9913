@@ -16,7 +16,7 @@ class GamificationController extends Controller
     public function getAchievements()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -168,7 +168,7 @@ class GamificationController extends Controller
     public function getProgress()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -296,7 +296,7 @@ class GamificationController extends Controller
                 'limit' => 'nullable|integer|min:1|max:100',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -415,7 +415,7 @@ class GamificationController extends Controller
     public function getBadges()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -532,7 +532,7 @@ class GamificationController extends Controller
     public function getChallenges()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -660,7 +660,7 @@ class GamificationController extends Controller
     public function getRewards()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -800,7 +800,7 @@ class GamificationController extends Controller
     public function redeemReward(Request $request, $id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

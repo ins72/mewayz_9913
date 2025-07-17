@@ -40,7 +40,7 @@ class AIController extends Controller
     public function getServices()
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -81,7 +81,7 @@ class AIController extends Controller
                 'conversation_id' => 'sometimes|string',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -121,7 +121,7 @@ class AIController extends Controller
                 'keywords.*' => 'string|max:50',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -160,7 +160,7 @@ class AIController extends Controller
                 'data' => 'sometimes|array',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -196,7 +196,7 @@ class AIController extends Controller
                 'analysis_type' => 'required|string|in:sentiment,readability,keywords,summary',
             ]);
 
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {

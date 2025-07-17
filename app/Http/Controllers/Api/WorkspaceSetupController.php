@@ -130,7 +130,7 @@ class WorkspaceSetupController extends Controller
     public function getCurrentStep(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             // Get user's primary workspace or create one
             $workspace = $user->workspaces()->where('is_primary', true)->first();
@@ -190,7 +190,7 @@ class WorkspaceSetupController extends Controller
                 'target_audience' => 'required|string|max:500'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -262,7 +262,7 @@ class WorkspaceSetupController extends Controller
                 'subscription_plan' => 'required|string|in:free,professional,enterprise'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -333,7 +333,7 @@ class WorkspaceSetupController extends Controller
                 'custom_roles.*.permissions' => 'required|array'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -391,7 +391,7 @@ class WorkspaceSetupController extends Controller
                 'payment_method' => 'string|in:stripe,paypal,bank_transfer'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -458,7 +458,7 @@ class WorkspaceSetupController extends Controller
                 'custom_domain' => 'nullable|string|max:255'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -531,7 +531,7 @@ class WorkspaceSetupController extends Controller
                 'description' => 'nullable|string|max:1000'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -591,7 +591,7 @@ class WorkspaceSetupController extends Controller
                 'target_audience' => 'required|string|max:500'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -644,7 +644,7 @@ class WorkspaceSetupController extends Controller
                 'brand_values.*' => 'string|max:100'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -697,7 +697,7 @@ class WorkspaceSetupController extends Controller
                 'hashtag_strategy' => 'required|string|in:trending,branded,mixed,niche'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -753,7 +753,7 @@ class WorkspaceSetupController extends Controller
                 'success_metrics.*' => 'string|max:100'
             ]);
             
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -796,7 +796,7 @@ class WorkspaceSetupController extends Controller
     public function completeSetup(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -1052,7 +1052,7 @@ class WorkspaceSetupController extends Controller
     public function completeSetupLegacy(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -1121,7 +1121,7 @@ class WorkspaceSetupController extends Controller
     public function getSetupSummary(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
@@ -1171,7 +1171,7 @@ class WorkspaceSetupController extends Controller
     public function resetSetup(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
