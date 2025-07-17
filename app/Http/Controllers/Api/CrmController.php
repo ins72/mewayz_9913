@@ -914,7 +914,7 @@ class CrmController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Predictive analytics failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            Log::error('Predictive analytics failed', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to generate predictive analytics: ' . $e->getMessage()
