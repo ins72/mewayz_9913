@@ -138,12 +138,12 @@ class FocusedMewayzTester:
         
         # Test create escrow transaction
         escrow_data = {
-            "buyer_id": "test-buyer-id",
-            "seller_id": "test-seller-id",
-            "amount": 100.00,
-            "currency": "USD",
-            "description": "Test digital product transaction",
-            "terms": "Standard escrow terms for digital product delivery"
+            "seller_id": "1",
+            "item_type": "service",
+            "item_title": "Test Item",
+            "item_description": "Test Description",
+            "total_amount": 100,
+            "currency": "USD"
         }
         
         response = self.make_request('POST', '/escrow/', escrow_data)
