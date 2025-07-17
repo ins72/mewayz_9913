@@ -284,8 +284,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Middleware Configuration Issue"
-    - "Authenticated Endpoints Access"
+    - "SubstituteBindings Middleware Error"
+    - "Auth:Sanctum Protected Routes Issue"
   stuck_tasks:
     - "Bio Sites & Link-in-Bio"
     - "Social Media Management"
