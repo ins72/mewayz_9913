@@ -490,6 +490,17 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/templates', [LinkInBioController::class, 'getTemplates']);
         Route::get('/components', [LinkInBioController::class, 'getComponents']);
     });
+    
+    // Visual Bio Builder routes (New Drag & Drop Builder)
+    Route::prefix('visual-bio-builder')->group(function () {
+        Route::get('/components', [VisualBioBuilderController::class, 'getComponents']);
+        Route::get('/templates', [VisualBioBuilderController::class, 'getTemplates']);
+        Route::get('/sites/{id}/builder', [VisualBioBuilderController::class, 'getBioSiteBuilder']);
+        Route::post('/sites/{id}/save', [VisualBioBuilderController::class, 'saveBioSite']);
+        Route::post('/sites/{id}/template', [VisualBioBuilderController::class, 'applyTemplate']);
+        Route::post('/sites/{id}/upload', [VisualBioBuilderController::class, 'uploadMedia']);
+        Route::get('/sites/{slug}/preview', [VisualBioBuilderController::class, 'previewBioSite']);
+    });
 
 });
 
