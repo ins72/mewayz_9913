@@ -25,11 +25,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Comment out rate limiter that might be causing auth issues
-        // RateLimiter::for('api', function (Request $request) {
-        //     $userId = auth('sanctum')->id();
-        //     return Limit::perMinute(60)->by($userId ?: $request->ip());
-        // });
+        RateLimiter::for('api', function (Request $request) {
+            // Use safe IP-based rate limiting to avoid auth issues
+            return Limit::perMinute(60)->by($request->ip());
+        });
 
         $this->routes(function () {
             Route::middleware('api')
