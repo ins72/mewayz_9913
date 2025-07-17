@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('push_notification_subscriptions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('endpoint');
             $table->text('p256dh_key');
             $table->text('auth_key');
