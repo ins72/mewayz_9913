@@ -39,6 +39,17 @@ class AutomationWorkflow extends Model
         'next_execution_at' => 'datetime'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) \Illuminate\Support\Str::uuid();
+            }
+        });
+    }
+
     /**
      * Get the user that owns the workflow
      */
