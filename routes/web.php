@@ -93,13 +93,18 @@ Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
 })->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-index');
 
+// Console (Main Dashboard)
+Route::get('/console', function () {
+    return view('dashboard.console');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('console');
+
 // Workspace Setup
 Route::get('/dashboard/workspace', function () {
     return view('pages.dashboard.workspace.index');
 })->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-workspace-index');
 
 Route::get('/workspace-setup', function () {
-    return view('pages.workspace-setup');
+    return view('workspace.setup.index');
 })->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('workspace-setup');
 
 // Content & Sites
