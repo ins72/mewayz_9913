@@ -529,6 +529,160 @@ class MewayzAPITester:
         else:
             self.log_test("Get AI Services", False, f"AI services failed - Status: {response.status_code if response else 'No response'}")
     
+    def test_website_builder(self):
+        """Test Website Builder functionality"""
+        print("\n=== Testing Website Builder ===")
+        
+        if not self.auth_token:
+            self.log_test("Website Builder", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get all websites
+        response = self.make_request('GET', '/websites/')
+        if response and response.status_code == 200:
+            self.log_test("Get Websites", True, "Websites retrieval successful")
+        else:
+            self.log_test("Get Websites", False, f"Websites retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get website templates
+        response = self.make_request('GET', '/websites/templates')
+        if response and response.status_code == 200:
+            self.log_test("Get Website Templates", True, "Website templates retrieval successful")
+        else:
+            self.log_test("Get Website Templates", False, f"Templates retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get website components
+        response = self.make_request('GET', '/websites/components')
+        if response and response.status_code == 200:
+            self.log_test("Get Website Components", True, "Website components retrieval successful")
+        else:
+            self.log_test("Get Website Components", False, f"Components retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create website
+        website_data = {
+            "name": "Test Business Website",
+            "domain": f"test-business-{int(time.time())}.com",
+            "description": "A comprehensive test website for business",
+            "settings": {
+                "theme": "modern",
+                "color_scheme": "blue",
+                "layout": "responsive"
+            }
+        }
+        
+        response = self.make_request('POST', '/websites/', website_data)
+        website_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create Website", True, "Website creation successful")
+            website_id = data.get('data', {}).get('id')
+        else:
+            self.log_test("Create Website", False, f"Website creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get specific website (if created successfully)
+        if website_id:
+            response = self.make_request('GET', f'/websites/{website_id}')
+            if response and response.status_code == 200:
+                self.log_test("Get Specific Website", True, "Specific website retrieval successful")
+            else:
+                self.log_test("Get Specific Website", False, f"Specific website retrieval failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test update website
+            update_data = {
+                "name": "Updated Test Business Website",
+                "domain": website_data["domain"],
+                "description": "Updated description for test website",
+                "status": "draft"
+            }
+            
+            response = self.make_request('PUT', f'/websites/{website_id}', update_data)
+            if response and response.status_code == 200:
+                self.log_test("Update Website", True, "Website update successful")
+            else:
+                self.log_test("Update Website", False, f"Website update failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test create page for website
+            page_data = {
+                "name": "About Us",
+                "slug": "about-us",
+                "title": "About Our Company",
+                "content": [
+                    {
+                        "type": "heading",
+                        "content": {"level": 1, "text": "About Our Company"}
+                    },
+                    {
+                        "type": "paragraph",
+                        "content": {"text": "We are a leading company in our industry."}
+                    }
+                ],
+                "meta_description": "Learn more about our company and mission"
+            }
+            
+            response = self.make_request('POST', f'/websites/{website_id}/pages', page_data)
+            page_id = None
+            if response and response.status_code in [200, 201]:
+                data = response.json()
+                self.log_test("Create Website Page", True, "Website page creation successful")
+                page_id = data.get('data', {}).get('id')
+            else:
+                self.log_test("Create Website Page", False, f"Page creation failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test update page (if created successfully)
+            if page_id:
+                update_page_data = {
+                    "name": "About Us - Updated",
+                    "slug": "about-us",
+                    "title": "About Our Amazing Company",
+                    "content": [
+                        {
+                            "type": "heading",
+                            "content": {"level": 1, "text": "About Our Amazing Company"}
+                        },
+                        {
+                            "type": "paragraph",
+                            "content": {"text": "We are the leading company in our industry with years of experience."}
+                        }
+                    ],
+                    "meta_description": "Learn more about our amazing company and mission",
+                    "status": "draft"
+                }
+                
+                response = self.make_request('PUT', f'/websites/{website_id}/pages/{page_id}', update_page_data)
+                if response and response.status_code == 200:
+                    self.log_test("Update Website Page", True, "Website page update successful")
+                else:
+                    self.log_test("Update Website Page", False, f"Page update failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test publish website
+            response = self.make_request('PUT', f'/websites/{website_id}/publish')
+            if response and response.status_code == 200:
+                self.log_test("Publish Website", True, "Website publishing successful")
+            else:
+                self.log_test("Publish Website", False, f"Website publishing failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test get website analytics
+            response = self.make_request('GET', f'/websites/{website_id}/analytics')
+            if response and response.status_code == 200:
+                self.log_test("Get Website Analytics", True, "Website analytics retrieval successful")
+            else:
+                self.log_test("Get Website Analytics", False, f"Analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test delete page (if created successfully)
+            if page_id:
+                response = self.make_request('DELETE', f'/websites/{website_id}/pages/{page_id}')
+                if response and response.status_code == 200:
+                    self.log_test("Delete Website Page", True, "Website page deletion successful")
+                else:
+                    self.log_test("Delete Website Page", False, f"Page deletion failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test delete website
+            response = self.make_request('DELETE', f'/websites/{website_id}')
+            if response and response.status_code == 200:
+                self.log_test("Delete Website", True, "Website deletion successful")
+            else:
+                self.log_test("Delete Website", False, f"Website deletion failed - Status: {response.status_code if response else 'No response'}")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
