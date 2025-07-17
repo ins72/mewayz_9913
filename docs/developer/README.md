@@ -1,217 +1,231 @@
 # Mewayz Platform v2 - Developer Guide
 
-*Last Updated: January 17, 2025*
+*Last Updated: July 17, 2025*
 
-## 👨‍💻 **DEVELOPER OVERVIEW**
+## Overview
 
-Welcome to the **Mewayz Platform v2** developer documentation. This guide covers technical implementation, API integration, and development workflows for our **Laravel 11 + MySQL** platform.
+This guide provides comprehensive technical documentation for developers working with the Mewayz Platform v2. The platform is built on Laravel 11 + MySQL with modern development practices and enterprise-grade architecture.
 
----
+## Architecture Overview
 
-## 🏗️ **TECHNICAL ARCHITECTURE**
+### Technology Stack
+- **Backend Framework**: Laravel 11 with PHP 8.2+
+- **Database**: MySQL 8.0+ (MariaDB compatible)
+- **Frontend**: Laravel Blade templates with Vite.js
+- **Styling**: Tailwind CSS with SASS preprocessing
+- **JavaScript**: Modern ES6+ with module system
+- **Process Management**: Supervisor for service orchestration
+- **Authentication**: Laravel Sanctum with custom middleware
+- **API Design**: RESTful architecture with JSON responses
 
-### Backend Stack
-- **Framework**: Laravel 11 with PHP 8.2+
-- **Database**: MySQL 8.0+ with 85+ optimized tables
-- **Authentication**: CustomSanctumAuth middleware
-- **API Design**: 150+ RESTful endpoints across 40+ controllers
-- **Caching**: Redis for session and query caching
-- **File Storage**: AWS S3 integration with CDN
-- **Queue System**: Laravel Queues for background processing
+### Directory Structure
+```
+/app/
+├── app/                    # Laravel application core
+│   ├── Http/
+│   │   ├── Controllers/    # API and web controllers
+│   │   │   └── Api/        # API-specific controllers
+│   │   ├── Middleware/     # Custom middleware
+│   │   └── Requests/       # Form request validation
+│   ├── Models/            # Eloquent models
+│   ├── Services/          # Business logic services
+│   └── Providers/         # Service providers
+├── database/
+│   ├── migrations/        # Database schema migrations
+│   ├── seeders/          # Database seeders
+│   └── factories/        # Model factories
+├── resources/
+│   ├── views/            # Blade templates
+│   ├── css/              # Stylesheets
+│   ├── js/               # JavaScript files
+│   └── sass/             # SASS files
+├── routes/
+│   ├── web.php           # Web routes
+│   ├── api.php           # Main API routes
+│   └── api_phase*.php    # Phase-specific API routes
+├── public/               # Public assets
+├── storage/              # Application storage
+└── tests/                # Test files
+```
 
-### Frontend Stack
-- **Template Engine**: Laravel Blade with modern JavaScript
-- **Build Tool**: Vite for asset compilation and optimization
-- **Styling**: Tailwind CSS with custom dark theme
-- **JavaScript**: Alpine.js for interactive components
-- **PWA Features**: Service Worker and Web App Manifest
-- **Mobile-First**: Responsive design optimized for mobile devices
-
-### Database Schema
-- **Primary Database**: MySQL with 85+ optimized tables
-- **UUID Primary Keys**: Enhanced security and scalability
-- **Proper Relationships**: Foreign key constraints and indexes
-- **Migrations**: Laravel migrations for version control
-- **Seeders**: Database seeders for initial data
-
----
-
-## 🚀 **DEVELOPMENT SETUP**
+## Development Environment Setup
 
 ### Prerequisites
-- **PHP**: 8.2 or higher
-- **Composer**: 2.0 or higher
-- **Node.js**: 18.0 or higher
-- **MySQL**: 8.0 or higher
-- **Redis**: 6.0 or higher
+- PHP 8.2+ with required extensions
+- Composer for PHP dependency management
+- MySQL 8.0+ or MariaDB 10.5+
+- Node.js 18+ with NPM
+- Git for version control
 
-### Local Development Environment
-```bash
-# Clone the repository
-git clone https://github.com/mewayz/platform.git
-cd platform
+### Installation Steps
 
-# Install PHP dependencies
-composer install
+1. **Clone and Setup**
+   ```bash
+   git clone [repository-url]
+   cd mewayz-platform
+   
+   # Install PHP dependencies
+   composer install
+   
+   # Install Node.js dependencies
+   npm install
+   ```
 
-# Install Node.js dependencies
-npm install
+2. **Environment Configuration**
+   ```bash
+   # Copy environment file
+   cp .env.example .env
+   
+   # Generate application key
+   php artisan key:generate
+   
+   # Configure database in .env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=mewayz
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-# Copy environment file
-cp .env.example .env
+3. **Database Setup**
+   ```bash
+   # Create database
+   mysql -u root -p -e "CREATE DATABASE mewayz;"
+   
+   # Run migrations
+   php artisan migrate
+   
+   # Seed database (optional)
+   php artisan db:seed
+   ```
 
-# Generate application key
-php artisan key:generate
+4. **Asset Compilation**
+   ```bash
+   # Development build
+   npm run dev
+   
+   # Production build
+   npm run build
+   ```
 
-# Create database
-mysql -u root -p -e "CREATE DATABASE mewayz_v2;"
+5. **Start Services**
+   ```bash
+   # Start Laravel development server
+   php artisan serve --host=0.0.0.0 --port=8001
+   
+   # Start queue worker
+   php artisan queue:work
+   ```
 
-# Run migrations
-php artisan migrate
+## API Development
 
-# Seed database (optional)
-php artisan db:seed
+### Controller Structure
 
-# Compile assets
-npm run dev
+Controllers are organized by functionality and phase:
 
-# Start development server
-php artisan serve
-```
-
-### Development Tools
-- **IDE**: PhpStorm, VS Code, or Sublime Text
-- **Database**: MySQL Workbench, phpMyAdmin, or TablePlus
-- **API Testing**: Postman, Insomnia, or curl
-- **Version Control**: Git with GitHub/GitLab
-- **Task Runner**: Laravel Sail (Docker environment)
-
----
-
-## 📡 **API DEVELOPMENT**
-
-### API Structure
-```
-/api/v2/
-├── auth/              # Authentication endpoints
-├── workspaces/        # Workspace management
-├── social-media/      # Social media features
-├── bio-sites/         # Link in bio functionality
-├── ecommerce/         # E-commerce features
-├── crm/               # CRM functionality
-├── email-marketing/   # Email campaigns
-├── courses/           # Course management
-├── analytics/         # Analytics and reporting
-├── escrow/            # Escrow transactions
-├── ai/                # AI features
-└── admin/             # Admin functionality
-```
-
-### API Authentication
 ```php
-// CustomSanctumAuth Middleware
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class ExampleController extends Controller
+{
+    public function index(Request $request)
+    {
+        try {
+            $data = ExampleModel::where('user_id', $request->user()->id)
+                ->paginate(20);
+            
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'message' => 'Data retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve data'
+            ], 500);
+        }
+    }
+}
+```
+
+### Authentication Middleware
+
+The platform uses custom Sanctum authentication:
+
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
+
 class CustomSanctumAuth
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user()) {
+        $token = $request->bearerToken();
+        
+        if (!$token) {
             return response()->json([
                 'success' => false,
-                'error' => 'Unauthorized'
+                'message' => 'Unauthorized'
             ], 401);
         }
+        
+        $accessToken = PersonalAccessToken::findToken($token);
+        
+        if (!$accessToken) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid token'
+            ], 401);
+        }
+        
+        $request->setUserResolver(function () use ($accessToken) {
+            return $accessToken->tokenable;
+        });
         
         return $next($request);
     }
 }
 ```
 
-### API Response Format
+### Database Models
+
+Models follow Eloquent conventions with relationships:
+
 ```php
-// Standard Success Response
-return response()->json([
-    'success' => true,
-    'data' => $data,
-    'message' => 'Operation successful',
-    'meta' => [
-        'current_page' => 1,
-        'per_page' => 20,
-        'total' => 100
-    ]
-]);
+<?php
 
-// Standard Error Response
-return response()->json([
-    'success' => false,
-    'error' => [
-        'code' => 'VALIDATION_ERROR',
-        'message' => 'The given data was invalid.',
-        'details' => $validator->errors()
-    ]
-], 422);
-```
+namespace App\Models;
 
----
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-## 🗄️ **DATABASE DEVELOPMENT**
-
-### Database Schema Design
-```sql
--- Core Tables
-users (id UUID, name, email, password, created_at, updated_at)
-workspaces (id UUID, name, user_id, settings, created_at, updated_at)
-workspace_users (id UUID, workspace_id, user_id, role, created_at, updated_at)
-
--- Social Media Tables
-social_media_accounts (id UUID, workspace_id, platform, access_token, created_at, updated_at)
-social_media_posts (id UUID, workspace_id, content, published_at, created_at, updated_at)
-instagram_profiles (id UUID, workspace_id, username, followers_count, created_at, updated_at)
-
--- E-commerce Tables
-products (id UUID, workspace_id, name, price, stock, created_at, updated_at)
-orders (id UUID, workspace_id, user_id, total_amount, status, created_at, updated_at)
-order_items (id UUID, order_id, product_id, quantity, price, created_at, updated_at)
-```
-
-### Model Relationships
-```php
-// User Model
-class User extends Authenticatable
+class ExampleModel extends Model
 {
-    protected $keyType = 'string';
-    public $incrementing = false;
-    
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->id = (string) Str::uuid();
-        });
-    }
-    
-    public function workspaces()
-    {
-        return $this->hasMany(Workspace::class);
-    }
-    
-    public function workspaceUsers()
-    {
-        return $this->hasMany(WorkspaceUser::class);
-    }
-}
-
-// Workspace Model
-class Workspace extends Model
-{
-    protected $keyType = 'string';
-    public $incrementing = false;
+    use HasFactory;
     
     protected $fillable = [
-        'name', 'slug', 'description', 'user_id', 'settings'
+        'name',
+        'description',
+        'user_id',
+        'status'
     ];
     
     protected $casts = [
-        'settings' => 'json'
+        'settings' => 'array',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
     ];
     
     public function user()
@@ -219,498 +233,521 @@ class Workspace extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function users()
+    public function relatedModels()
     {
-        return $this->belongsToMany(User::class, 'workspace_users');
+        return $this->hasMany(RelatedModel::class);
     }
 }
 ```
 
-### Migration Best Practices
-```php
-// Create Migration
-php artisan make:migration create_workspaces_table
+### API Routes
 
-// Migration Structure
-public function up()
-{
-    Schema::create('workspaces', function (Blueprint $table) {
-        $table->uuid('id')->primary();
-        $table->string('name');
-        $table->string('slug')->unique();
-        $table->text('description')->nullable();
-        $table->uuid('user_id');
-        $table->json('settings')->nullable();
-        $table->timestamps();
+Routes are organized by phases for maintainability:
+
+```php
+<?php
+// routes/api_phase1.php
+
+use App\Http\Controllers\Api\OnboardingController;
+use App\Http\Controllers\Api\ThemeController;
+
+Route::middleware([\App\Http\Middleware\CustomSanctumAuth::class])
+    ->group(function () {
         
-        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        $table->index(['user_id', 'created_at']);
+    // Onboarding routes
+    Route::prefix('onboarding')->group(function () {
+        Route::get('/progress', [OnboardingController::class, 'getProgress']);
+        Route::post('/progress', [OnboardingController::class, 'updateProgress']);
+        Route::get('/recommendations', [OnboardingController::class, 'getRecommendations']);
     });
+    
+    // Theme routes
+    Route::prefix('theme')->group(function () {
+        Route::get('/', [ThemeController::class, 'getCurrentTheme']);
+        Route::post('/update', [ThemeController::class, 'updateTheme']);
+        Route::get('/system', [ThemeController::class, 'getSystemTheme']);
+    });
+});
+```
+
+## Database Development
+
+### Migration Guidelines
+
+Create migrations with proper foreign key relationships:
+
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('example_table', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->json('settings')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamps();
+            
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade');
+            $table->index(['user_id', 'status']);
+        });
+    }
+    
+    public function down()
+    {
+        Schema::dropIfExists('example_table');
+    }
+};
+```
+
+### Seeder Development
+
+Create seeders for testing and development:
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\ExampleModel;
+
+class ExampleSeeder extends Seeder
+{
+    public function run()
+    {
+        $users = User::factory(10)->create();
+        
+        foreach ($users as $user) {
+            ExampleModel::factory(5)->create([
+                'user_id' => $user->id
+            ]);
+        }
+    }
 }
 ```
 
----
-
-## 🎨 **FRONTEND DEVELOPMENT**
+## Frontend Development
 
 ### Blade Templates
+
+Use Blade templates with Tailwind CSS:
+
 ```blade
-<!-- resources/views/layouts/app.blade.php -->
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Mewayz') }}</title>
-    
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-900 text-white">
-    <div id="app">
-        @yield('content')
+@extends('layouts.app')
+
+@section('title', 'Dashboard')
+
+@section('content')
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Content cards -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">{{ __('Dashboard') }}</h2>
+            <div class="space-y-4">
+                <!-- Dashboard content -->
+            </div>
+        </div>
     </div>
-    
-    @yield('scripts')
-</body>
-</html>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    // Page-specific JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize dashboard
+    });
+</script>
+@endpush
 ```
 
-### Alpine.js Components
+### JavaScript Development
+
+Use modern JavaScript with modules:
+
 ```javascript
-// resources/js/components/workspace-selector.js
-Alpine.data('workspaceSelector', () => ({
-    workspaces: [],
-    currentWorkspace: null,
-    loading: false,
+// resources/js/dashboard.js
+import { ApiClient } from './modules/api-client.js';
+
+class Dashboard {
+    constructor() {
+        this.apiClient = new ApiClient();
+        this.init();
+    }
     
-    async init() {
-        await this.loadWorkspaces();
-    },
+    init() {
+        this.loadDashboardData();
+        this.bindEvents();
+    }
     
-    async loadWorkspaces() {
-        this.loading = true;
+    async loadDashboardData() {
         try {
-            const response = await fetch('/api/workspaces', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            this.workspaces = await response.json();
+            const response = await this.apiClient.get('/api/dashboard/data');
+            this.renderDashboard(response.data);
         } catch (error) {
-            console.error('Error loading workspaces:', error);
-        } finally {
-            this.loading = false;
-        }
-    },
-    
-    selectWorkspace(workspace) {
-        this.currentWorkspace = workspace;
-        localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
-        window.location.reload();
-    }
-}));
-```
-
-### Tailwind CSS Configuration
-```javascript
-// tailwind.config.js
-module.exports = {
-    content: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
-    ],
-    theme: {
-        extend: {
-            colors: {
-                'app-bg': '#101010',
-                'card-bg': '#191919',
-                'primary-text': '#F1F1F1',
-                'secondary-text': '#7B7B7B',
-            }
-        }
-    },
-    plugins: []
-}
-```
-
----
-
-## 🔧 **BACKEND DEVELOPMENT**
-
-### Controller Structure
-```php
-// app/Http/Controllers/Api/WorkspaceController.php
-class WorkspaceController extends Controller
-{
-    public function index(Request $request)
-    {
-        $workspaces = $request->user()->workspaces()
-            ->with('users')
-            ->paginate(20);
-            
-        return response()->json([
-            'success' => true,
-            'data' => $workspaces,
-            'message' => 'Workspaces retrieved successfully'
-        ]);
-    }
-    
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string'
-        ]);
-        
-        $workspace = $request->user()->workspaces()->create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-            'settings' => [
-                'theme' => 'dark',
-                'features' => []
-            ]
-        ]);
-        
-        return response()->json([
-            'success' => true,
-            'data' => $workspace,
-            'message' => 'Workspace created successfully'
-        ], 201);
-    }
-}
-```
-
-### Service Layer
-```php
-// app/Services/WorkspaceService.php
-class WorkspaceService
-{
-    public function createWorkspace(User $user, array $data): Workspace
-    {
-        DB::beginTransaction();
-        
-        try {
-            $workspace = $user->workspaces()->create([
-                'name' => $data['name'],
-                'slug' => Str::slug($data['name']),
-                'description' => $data['description'] ?? null,
-                'settings' => $this->getDefaultSettings($data)
-            ]);
-            
-            // Create default workspace user record
-            $workspace->users()->attach($user->id, [
-                'role' => 'owner',
-                'permissions' => ['*']
-            ]);
-            
-            DB::commit();
-            return $workspace;
-        } catch (Exception $e) {
-            DB::rollBack();
-            throw $e;
+            console.error('Failed to load dashboard data:', error);
         }
     }
     
-    private function getDefaultSettings(array $data): array
-    {
-        return [
-            'theme' => 'dark',
-            'features' => $data['features'] ?? [],
-            'branding' => [
-                'logo' => null,
-                'colors' => [
-                    'primary' => '#007AFF',
-                    'secondary' => '#191919'
-                ]
-            ]
-        ];
+    bindEvents() {
+        document.addEventListener('click', this.handleClick.bind(this));
+    }
+    
+    handleClick(event) {
+        // Handle dashboard interactions
+    }
+    
+    renderDashboard(data) {
+        // Render dashboard content
     }
 }
+
+// Initialize dashboard
+new Dashboard();
 ```
 
----
+## Testing
 
-## 🧪 **TESTING**
+### Backend Testing
 
-### Unit Testing
+Create feature tests for API endpoints:
+
 ```php
-// tests/Unit/WorkspaceServiceTest.php
-class WorkspaceServiceTest extends TestCase
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class ExampleApiTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_can_create_workspace()
+    public function test_can_get_user_data()
     {
         $user = User::factory()->create();
-        $service = new WorkspaceService();
+        $token = $user->createToken('test-token')->plainTextToken;
         
-        $workspace = $service->createWorkspace($user, [
-            'name' => 'Test Workspace',
-            'description' => 'Test description'
-        ]);
-        
-        $this->assertDatabaseHas('workspaces', [
-            'name' => 'Test Workspace',
-            'user_id' => $user->id
-        ]);
-        
-        $this->assertDatabaseHas('workspace_users', [
-            'workspace_id' => $workspace->id,
-            'user_id' => $user->id,
-            'role' => 'owner'
-        ]);
-    }
-}
-```
-
-### Feature Testing
-```php
-// tests/Feature/WorkspaceApiTest.php
-class WorkspaceApiTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    public function test_can_list_workspaces()
-    {
-        $user = User::factory()->create();
-        $workspace = Workspace::factory()->create(['user_id' => $user->id]);
-        
-        $response = $this->actingAs($user)
-            ->getJson('/api/workspaces');
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ])->getJson('/api/example');
         
         $response->assertStatus(200)
-            ->assertJsonStructure([
-                'success',
-                'data' => [
-                    'data' => [
-                        '*' => ['id', 'name', 'slug', 'description']
-                    ]
-                ]
-            ]);
+                ->assertJsonStructure([
+                    'success',
+                    'data',
+                    'message'
+                ]);
     }
 }
 ```
 
-### Browser Testing
+### Frontend Testing
+
+Use Laravel Dusk for browser testing:
+
 ```php
-// tests/Browser/WorkspaceTest.php
-class WorkspaceTest extends DuskTestCase
+<?php
+
+namespace Tests\Browser;
+
+use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
+
+class DashboardTest extends DuskTestCase
 {
-    public function test_user_can_create_workspace()
+    public function test_dashboard_loads_correctly()
     {
-        $user = User::factory()->create();
-        
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->loginAs($user)
-                ->visit('/workspaces/create')
-                ->type('name', 'New Workspace')
-                ->type('description', 'Workspace description')
-                ->press('Create Workspace')
-                ->waitForText('Workspace created successfully')
-                ->assertSee('New Workspace');
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/dashboard')
+                    ->assertSee('Dashboard')
+                    ->assertVisible('.dashboard-container');
         });
     }
 }
 ```
 
----
+## Performance Optimization
 
-## 🚀 **DEPLOYMENT**
+### Database Optimization
 
-### Environment Configuration
-```env
-# .env.production
-APP_NAME="Mewayz Platform v2"
-APP_ENV=production
-APP_KEY=base64:your-app-key-here
-APP_DEBUG=false
-APP_URL=https://your-domain.com
-
-DB_CONNECTION=mysql
-DB_HOST=localhost
-DB_PORT=3306
-DB_DATABASE=mewayz_v2
-DB_USERNAME=mewayz_user
-DB_PASSWORD=secure_password
-
-REDIS_HOST=localhost
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailgun.org
-MAIL_PORT=587
-MAIL_USERNAME=your-username
-MAIL_PASSWORD=your-password
-MAIL_ENCRYPTION=tls
-
-STRIPE_KEY=pk_live_your_stripe_key
-STRIPE_SECRET=sk_live_your_stripe_secret
-```
-
-### Deployment Script
-```bash
-#!/bin/bash
-# deploy.sh
-
-# Pull latest code
-git pull origin main
-
-# Install dependencies
-composer install --no-dev --optimize-autoloader
-
-# Install Node.js dependencies
-npm ci
-
-# Build assets
-npm run build
-
-# Run migrations
-php artisan migrate --force
-
-# Clear and cache config
-php artisan config:clear
-php artisan config:cache
-
-# Clear and cache routes
-php artisan route:clear
-php artisan route:cache
-
-# Clear and cache views
-php artisan view:clear
-php artisan view:cache
-
-# Restart queue workers
-php artisan queue:restart
-
-# Restart PHP-FPM
-sudo systemctl restart php8.2-fpm
-
-echo "Deployment completed successfully!"
-```
-
----
-
-## 📊 **MONITORING & DEBUGGING**
-
-### Error Tracking
 ```php
-// config/logging.php
-'channels' => [
-    'stack' => [
-        'driver' => 'stack',
-        'channels' => ['single', 'slack'],
-        'ignore_exceptions' => false,
-    ],
-    'single' => [
-        'driver' => 'single',
-        'path' => storage_path('logs/laravel.log'),
-        'level' => env('LOG_LEVEL', 'debug'),
-    ],
-    'slack' => [
-        'driver' => 'slack',
-        'url' => env('LOG_SLACK_WEBHOOK_URL'),
-        'username' => 'Laravel Log',
-        'emoji' => ':boom:',
-        'level' => env('LOG_LEVEL', 'critical'),
-    ],
-]
+// Use eager loading to prevent N+1 queries
+$users = User::with(['profile', 'subscriptions'])->get();
+
+// Use database transactions for multiple operations
+DB::transaction(function () {
+    $user = User::create($userData);
+    $profile = Profile::create($profileData);
+    $subscription = Subscription::create($subscriptionData);
+});
+
+// Use query optimization
+$users = User::select(['id', 'name', 'email'])
+    ->where('active', true)
+    ->orderBy('created_at', 'desc')
+    ->paginate(20);
 ```
 
-### Performance Monitoring
+### Caching Strategy
+
 ```php
-// app/Http/Middleware/PerformanceMonitoring.php
-class PerformanceMonitoring
+// Cache expensive queries
+$users = Cache::remember('active_users', 3600, function () {
+    return User::where('active', true)->get();
+});
+
+// Cache API responses
+public function getStats(Request $request)
 {
-    public function handle($request, Closure $next)
+    $cacheKey = 'user_stats_' . $request->user()->id;
+    
+    $stats = Cache::remember($cacheKey, 1800, function () use ($request) {
+        return $this->calculateUserStats($request->user());
+    });
+    
+    return response()->json(['data' => $stats]);
+}
+```
+
+## Security Best Practices
+
+### Input Validation
+
+```php
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateExampleRequest extends FormRequest
+{
+    public function authorize()
     {
-        $start = microtime(true);
-        
-        $response = $next($request);
-        
-        $duration = microtime(true) - $start;
-        
-        if ($duration > 1.0) {
-            Log::warning('Slow request detected', [
-                'url' => $request->url(),
-                'method' => $request->method(),
-                'duration' => $duration,
-                'memory' => memory_get_peak_usage(true)
-            ]);
-        }
-        
-        return $response;
+        return true;
+    }
+    
+    public function rules()
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'settings' => 'array',
+            'settings.theme' => 'string|in:light,dark',
+        ];
     }
 }
 ```
 
----
+### SQL Injection Prevention
 
-## 📚 **BEST PRACTICES**
+```php
+// Use Eloquent ORM or query builder
+$users = User::where('email', $email)->first();
 
-### Code Standards
-- **PSR-12**: Follow PHP coding standards
-- **Laravel Conventions**: Use Laravel naming conventions
-- **Type Hints**: Use strict type declarations
-- **Documentation**: Document all public methods
-- **Testing**: Write tests for all new features
+// Use parameter binding for raw queries
+$results = DB::select('SELECT * FROM users WHERE email = ?', [$email]);
 
-### Security Best Practices
-- **Input Validation**: Validate all user inputs
-- **SQL Injection**: Use Eloquent ORM or prepared statements
-- **XSS Protection**: Escape all output
-- **CSRF Protection**: Use CSRF tokens
-- **Authentication**: Implement proper authentication
+// Never concatenate user input
+// DON'T DO THIS:
+// $query = "SELECT * FROM users WHERE email = '$email'";
+```
 
-### Performance Optimization
-- **Database Indexing**: Index frequently queried columns
-- **Query Optimization**: Use eager loading and select specific columns
-- **Caching**: Implement Redis caching
-- **CDN**: Use CDN for static assets
-- **Compression**: Enable gzip compression
+## Deployment
 
----
+### Environment Configuration
 
-## 🛠️ **DEVELOPMENT TOOLS**
+```bash
+# Production environment variables
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
 
-### Recommended Extensions
-- **PhpStorm**: Laravel Plugin, Database Tools
-- **VS Code**: Laravel Extension Pack, PHP Intelephense
-- **Chrome**: Laravel Debugbar, Vue DevTools
-- **Postman**: API testing and documentation
-- **TablePlus**: Database management
+# Database configuration
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=mewayz_production
+DB_USERNAME=mewayz_user
+DB_PASSWORD=secure_password
 
-### Debugging Tools
-- **Laravel Debugbar**: Web profiler
-- **Telescope**: Application debugging
-- **Ray**: Debug tool by Spatie
-- **Xdebug**: PHP debugger
-- **Laravel Tinker**: Interactive shell
+# Cache configuration
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
 
----
+### Optimization Commands
 
-## 📞 **DEVELOPER SUPPORT**
+```bash
+# Optimize for production
+php artisan optimize
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 
-### Resources
-- **Documentation**: https://docs.mewayz.com
-- **API Reference**: https://api.mewayz.com/docs
-- **GitHub Repository**: https://github.com/mewayz/platform
-- **Developer Forum**: https://forum.mewayz.com
-- **Status Page**: https://status.mewayz.com
+# Build production assets
+npm run build
+```
 
-### Getting Help
-- **Technical Support**: dev-support@mewayz.com
-- **Bug Reports**: bugs@mewayz.com
-- **Feature Requests**: features@mewayz.com
-- **Security Issues**: security@mewayz.com
+## Code Standards
 
----
+### PHP Standards
 
-*Last Updated: January 17, 2025*
-*Platform Version: v2.0.0*
-*Framework: Laravel 11 + MySQL*
-*Status: Production-Ready*
+Follow PSR-12 coding standards:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
+class ExampleController extends Controller
+{
+    public function index(Request $request): JsonResponse
+    {
+        $data = $this->getExampleData($request);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+            'message' => 'Data retrieved successfully',
+        ]);
+    }
+    
+    private function getExampleData(Request $request): array
+    {
+        // Implementation
+        return [];
+    }
+}
+```
+
+### JavaScript Standards
+
+Use ES6+ features and consistent formatting:
+
+```javascript
+// Use const/let instead of var
+const apiClient = new ApiClient();
+let currentUser = null;
+
+// Use arrow functions
+const processData = (data) => {
+    return data.map(item => ({
+        id: item.id,
+        name: item.name,
+        processed: true
+    }));
+};
+
+// Use async/await
+const fetchUserData = async (userId) => {
+    try {
+        const response = await apiClient.get(`/api/users/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        throw error;
+    }
+};
+```
+
+## Version Control
+
+### Git Workflow
+
+```bash
+# Feature development
+git checkout -b feature/new-feature
+git add .
+git commit -m "feat: add new feature"
+git push origin feature/new-feature
+
+# Create pull request
+# After review and approval, merge to main
+```
+
+### Commit Message Format
+
+```
+type(scope): description
+
+feat: add new feature
+fix: resolve bug in authentication
+docs: update API documentation
+style: improve code formatting
+refactor: restructure user service
+test: add unit tests for user model
+chore: update dependencies
+```
+
+## Monitoring and Logging
+
+### Application Logging
+
+```php
+use Illuminate\Support\Facades\Log;
+
+// Log different levels
+Log::info('User logged in', ['user_id' => $user->id]);
+Log::warning('High memory usage detected');
+Log::error('Failed to process payment', ['error' => $exception->getMessage()]);
+
+// Custom log channels
+Log::channel('api')->info('API request', [
+    'endpoint' => $request->path(),
+    'method' => $request->method(),
+    'user_id' => $request->user()->id ?? null
+]);
+```
+
+### Error Handling
+
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
+
+class Handler extends ExceptionHandler
+{
+    public function render($request, Throwable $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode()
+            ], 500);
+        }
+        
+        return parent::render($request, $exception);
+    }
+}
+```
+
+This developer guide provides comprehensive information for working with the Mewayz Platform v2. For specific implementation details, refer to the codebase and additional documentation in the `docs` folder.

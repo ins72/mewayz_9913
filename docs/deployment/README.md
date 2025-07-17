@@ -1,522 +1,454 @@
 # Mewayz Platform v2 - Deployment Guide
 
-*Last Updated: January 17, 2025*
+*Last Updated: July 17, 2025*
 
-## 🚀 **DEPLOYMENT OVERVIEW**
+## Overview
 
-This comprehensive guide covers deployment strategies, infrastructure setup, and production configuration for the **Mewayz Platform v2** built on **Laravel 11 + MySQL**.
+This guide covers the deployment of Mewayz Platform v2 in production environments. The platform is built on Laravel 11 + MySQL and uses Supervisor for process management.
 
----
+## System Requirements
 
-## 🎯 **DEPLOYMENT OPTIONS**
+### Minimum Requirements
+- **OS**: Linux (Ubuntu 20.04+ or CentOS 7+)
+- **PHP**: 8.2 or higher
+- **MySQL**: 8.0 or higher (MariaDB 10.5+ compatible)
+- **Memory**: 2GB RAM minimum (4GB recommended)
+- **Storage**: 10GB available disk space
+- **Network**: HTTPS/SSL certificate required
 
-### 1. Traditional Server Deployment
-- **Best for**: Small to medium applications
-- **Requirements**: VPS/Dedicated server
-- **Technologies**: LAMP/LEMP stack with Laravel 11
-- **Estimated Cost**: $50-200/month
+### Recommended Requirements
+- **CPU**: 4 cores or more
+- **Memory**: 8GB RAM
+- **Storage**: 50GB SSD
+- **Network**: CDN integration for static assets
 
-### 2. Container Deployment
-- **Best for**: Scalable applications
-- **Requirements**: Docker, Kubernetes
-- **Technologies**: Docker, K8s, Helm
-- **Estimated Cost**: $100-500/month
+## Installation
 
-### 3. Cloud Platform Deployment
-- **Best for**: Enterprise applications
-- **Requirements**: Cloud provider account
-- **Technologies**: AWS, GCP, Azure
-- **Estimated Cost**: $200-1000+/month
+### 1. Server Preparation
 
----
-
-## 📋 **SYSTEM REQUIREMENTS**
-
-### Server Requirements
-- **OS**: Ubuntu 22.04+ / CentOS 8+
-- **PHP**: 8.2+ (required for Laravel 11)
-- **Database**: MySQL 8.0+ / MariaDB 10.6+
-- **Web Server**: Nginx 1.20+ / Apache 2.4+
-- **Memory**: 4GB+ RAM (8GB+ recommended)
-- **Storage**: 50GB+ SSD (100GB+ recommended)
-- **CPU**: 2+ cores (4+ recommended)
-
-### Laravel 11 Specific Requirements
-- **PHP Extensions**: mbstring, OpenSSL, PDO, Tokenizer, XML, Ctype, JSON, BCMath, Fileinfo
-- **Composer**: 2.0+
-- **Node.js**: 18+ (for asset compilation)
-- **Redis**: 6.0+ (for caching and sessions)
-
----
-
-## 🔧 **INSTALLATION STEPS**
-
-### 1. Server Setup
 ```bash
-# Update system packages
+# Update system
 sudo apt update && sudo apt upgrade -y
 
 # Install required packages
-sudo apt install -y nginx mysql-server php8.2-fpm php8.2-mysql php8.2-xml php8.2-curl php8.2-zip php8.2-mbstring php8.2-gd php8.2-redis redis-server
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+
+# Install PHP 8.2 and extensions
+sudo apt install -y php8.2 php8.2-cli php8.2-fpm php8.2-mysql \
+  php8.2-mbstring php8.2-xml php8.2-curl php8.2-zip \
+  php8.2-gd php8.2-bcmath php8.2-json php8.2-tokenizer \
+  php8.2-ctype php8.2-fileinfo
+
+# Install MySQL
+sudo apt install -y mysql-server
 
 # Install Composer
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
-# Install Node.js
+# Install Node.js and NPM
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt install -y nodejs
+
+# Install Supervisor
+sudo apt install -y supervisor
 ```
 
-### 2. Database Configuration
+### 2. Application Deployment
+
 ```bash
-# Secure MySQL installation
-sudo mysql_secure_installation
-
-# Create database and user
-sudo mysql -u root -p
-```
-
-```sql
-CREATE DATABASE mewayz_v2;
-CREATE USER 'mewayz_user'@'localhost' IDENTIFIED BY 'secure_password';
-GRANT ALL PRIVILEGES ON mewayz_v2.* TO 'mewayz_user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
-
-### 3. Application Deployment
-```bash
-# Clone repository
-git clone https://github.com/mewayz/platform.git /var/www/mewayz
+# Clone the repository
+git clone [repository-url] /var/www/mewayz
 cd /var/www/mewayz
-
-# Install dependencies
-composer install --no-dev --optimize-autoloader
-npm install
-npm run build
 
 # Set permissions
 sudo chown -R www-data:www-data /var/www/mewayz
-sudo chmod -R 755 /var/www/mewayz
-sudo chmod -R 775 /var/www/mewayz/storage
-sudo chmod -R 775 /var/www/mewayz/bootstrap/cache
-```
+sudo chmod -R 755 /var/www/mewayz/storage
+sudo chmod -R 755 /var/www/mewayz/bootstrap/cache
 
-### 4. Environment Configuration
-```bash
-# Copy environment file
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+npm ci --only=production
+
+# Environment configuration
 cp .env.example .env
-
-# Generate application key
 php artisan key:generate
-
-# Configure database settings
-nano .env
 ```
+
+### 3. Database Setup
+
+```bash
+# Create database
+mysql -u root -p -e "CREATE DATABASE mewayz;"
+mysql -u root -p -e "CREATE USER 'mewayz'@'localhost' IDENTIFIED BY 'secure_password';"
+mysql -u root -p -e "GRANT ALL PRIVILEGES ON mewayz.* TO 'mewayz'@'localhost';"
+mysql -u root -p -e "FLUSH PRIVILEGES;"
+
+# Run migrations
+php artisan migrate --force
+```
+
+### 4. Build Assets
+
+```bash
+# Build production assets
+npm run build
+
+# Optimize Laravel
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+## Configuration
+
+### Environment Variables
+
+Create and configure `/var/www/mewayz/.env`:
 
 ```env
-APP_NAME="Mewayz Platform v2"
+APP_NAME=Mewayz
 APP_ENV=production
 APP_KEY=base64:generated_key_here
 APP_DEBUG=false
 APP_URL=https://your-domain.com
 
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=error
+
 DB_CONNECTION=mysql
-DB_HOST=localhost
+DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=mewayz_v2
-DB_USERNAME=mewayz_user
+DB_DATABASE=mewayz
+DB_USERNAME=mewayz
 DB_PASSWORD=secure_password
 
-REDIS_HOST=localhost
+BROADCAST_DRIVER=log
+CACHE_DRIVER=redis
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+
+REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
+MAIL_HOST=your-smtp-host
+MAIL_PORT=587
+MAIL_USERNAME=your-email
+MAIL_PASSWORD=your-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@your-domain.com
+MAIL_FROM_NAME="${APP_NAME}"
 
-STRIPE_KEY=your_stripe_key
-STRIPE_SECRET=your_stripe_secret
+# Additional production settings
+SESSION_SECURE_COOKIE=true
+SANCTUM_STATEFUL_DOMAINS=your-domain.com
 ```
 
-### 5. Database Migration
-```bash
-# Run migrations
-php artisan migrate --force
+### Supervisor Configuration
 
-# Seed database (optional)
-php artisan db:seed --force
+Create `/etc/supervisor/conf.d/mewayz.conf`:
 
-# Optimize application
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+```ini
+[program:mewayz-app]
+process_name=%(program_name)s
+command=php /var/www/mewayz/artisan serve --host=0.0.0.0 --port=8001
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/log/supervisor/mewayz-app.log
+stderr_logfile=/var/log/supervisor/mewayz-app.err.log
+
+[program:mewayz-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/mewayz/artisan queue:work --sleep=3 --tries=3 --timeout=90
+autostart=true
+autorestart=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/log/supervisor/mewayz-worker.log
+stderr_logfile=/var/log/supervisor/mewayz-worker.err.log
+
+[program:mewayz-scheduler]
+process_name=%(program_name)s
+command=php /var/www/mewayz/artisan schedule:work
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/var/log/supervisor/mewayz-scheduler.log
+stderr_logfile=/var/log/supervisor/mewayz-scheduler.err.log
 ```
-
----
-
-## 🌐 **WEB SERVER CONFIGURATION**
 
 ### Nginx Configuration
+
+Create `/etc/nginx/sites-available/mewayz`:
+
 ```nginx
-# /etc/nginx/sites-available/mewayz
 server {
     listen 80;
-    server_name your-domain.com www.your-domain.com;
+    server_name your-domain.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
     root /var/www/mewayz/public;
-    
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-XSS-Protection "1; mode=block";
-    add_header X-Content-Type-Options "nosniff";
-    
+
+    ssl_certificate /path/to/ssl/cert.pem;
+    ssl_certificate_key /path/to/ssl/private.key;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:MozTLS:10m;
+    ssl_session_tickets off;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
     index index.php;
-    
+
     charset utf-8;
-    
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
-    
+
     location = /favicon.ico { access_log off; log_not_found off; }
     location = /robots.txt  { access_log off; log_not_found off; }
-    
+
     error_page 404 /index.php;
-    
+
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
-    
+
     location ~ /\.(?!well-known).* {
         deny all;
+    }
+
+    # API routes
+    location /api {
+        proxy_pass http://127.0.0.1:8001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 ```
 
-### SSL Configuration (Let's Encrypt)
+## Service Management
+
+### Start Services
+
 ```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx
+# Reload Supervisor configuration
+sudo supervisorctl reread
+sudo supervisorctl update
 
-# Obtain SSL certificate
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+# Start all services
+sudo supervisorctl start all
 
-# Auto-renewal
-sudo crontab -e
-# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+# Enable Nginx site
+sudo ln -s /etc/nginx/sites-available/mewayz /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
 ```
 
----
+### Service Commands
 
-## 🐳 **DOCKER DEPLOYMENT**
-
-### Dockerfile
-```dockerfile
-FROM php:8.2-fpm
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip \
-    nginx
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
-# Set working directory
-WORKDIR /var/www
-
-# Copy application files
-COPY . .
-
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-RUN npm install && npm run build
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www
-RUN chmod -R 755 /var/www/storage
-
-EXPOSE 80
-
-CMD ["php-fpm"]
-```
-
-### Docker Compose
-```yaml
-version: '3.8'
-
-services:
-  app:
-    build: .
-    container_name: mewayz_app
-    working_dir: /var/www
-    volumes:
-      - ./:/var/www
-    depends_on:
-      - mysql
-      - redis
-    networks:
-      - mewayz
-
-  nginx:
-    image: nginx:alpine
-    container_name: mewayz_nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www
-      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - app
-    networks:
-      - mewayz
-
-  mysql:
-    image: mysql:8.0
-    container_name: mewayz_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mewayz_v2
-      MYSQL_USER: mewayz_user
-      MYSQL_PASSWORD: secure_password
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - mewayz
-
-  redis:
-    image: redis:7-alpine
-    container_name: mewayz_redis
-    networks:
-      - mewayz
-
-volumes:
-  mysql_data:
-
-networks:
-  mewayz:
-    driver: bridge
-```
-
----
-
-## ☁️ **CLOUD DEPLOYMENT**
-
-### AWS Deployment
 ```bash
-# Install AWS CLI
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+# Check service status
+sudo supervisorctl status
 
-# Configure AWS credentials
-aws configure
+# Start specific service
+sudo supervisorctl start mewayz-app
 
-# Deploy using Elastic Beanstalk
-eb init
-eb create mewayz-production
-eb deploy
+# Restart services
+sudo supervisorctl restart all
+
+# View logs
+sudo supervisorctl tail mewayz-app
+sudo supervisorctl tail mewayz-worker
+
+# Stop services
+sudo supervisorctl stop all
 ```
 
-### Google Cloud Platform
+## Monitoring
+
+### Log Files
+
 ```bash
-# Install Google Cloud SDK
-curl https://sdk.cloud.google.com | bash
-exec -l $SHELL
+# Application logs
+tail -f /var/www/mewayz/storage/logs/laravel.log
 
-# Initialize project
-gcloud init
+# Supervisor logs
+tail -f /var/log/supervisor/mewayz-app.log
+tail -f /var/log/supervisor/mewayz-worker.log
 
-# Deploy to App Engine
-gcloud app deploy
+# Nginx logs
+tail -f /var/log/nginx/access.log
+tail -f /var/log/nginx/error.log
 ```
 
----
+### Health Checks
 
-## 🔍 **MONITORING & LOGGING**
-
-### System Monitoring
 ```bash
-# Install monitoring tools
-sudo apt install -y htop iotop nethogs
+# Application health
+curl -H "Accept: application/json" https://your-domain.com/api/health
 
-# Setup log rotation
-sudo nano /etc/logrotate.d/mewayz
+# Database connection
+php /var/www/mewayz/artisan tinker
+>>> DB::connection()->getPdo();
+
+# Queue status
+php /var/www/mewayz/artisan queue:monitor
 ```
 
-### Application Logging
-```php
-// config/logging.php
-'channels' => [
-    'single' => [
-        'driver' => 'single',
-        'path' => storage_path('logs/laravel.log'),
-        'level' => env('LOG_LEVEL', 'debug'),
-    ],
-    'daily' => [
-        'driver' => 'daily',
-        'path' => storage_path('logs/laravel.log'),
-        'level' => env('LOG_LEVEL', 'debug'),
-        'days' => 14,
-    ],
-]
+## Performance Optimization
+
+### PHP-FPM Configuration
+
+Edit `/etc/php/8.2/fpm/pool.d/www.conf`:
+
+```ini
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+pm.max_requests = 1000
 ```
 
----
+### MySQL Optimization
 
-## 🚀 **PERFORMANCE OPTIMIZATION**
+Edit `/etc/mysql/mysql.conf.d/mysqld.cnf`:
 
-### Database Optimization
-```sql
--- Enable MySQL query cache
-SET GLOBAL query_cache_size = 1048576;
-SET GLOBAL query_cache_type = ON;
-
--- Optimize table indexes
-OPTIMIZE TABLE users, workspaces, social_media_posts;
+```ini
+[mysqld]
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
 ```
 
-### Application Optimization
+### Redis Configuration
+
+Install and configure Redis:
+
 ```bash
-# Cache optimization
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Queue processing
-php artisan queue:work --daemon
-
-# Schedule jobs
-* * * * * cd /var/www/mewayz && php artisan schedule:run >> /dev/null 2>&1
+sudo apt install -y redis-server
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
 ```
 
-### CDN Configuration
+## Security
+
+### SSL/TLS Configuration
+
+Use Let's Encrypt for free SSL certificates:
+
 ```bash
-# Configure AWS CloudFront
-aws cloudfront create-distribution \
-    --distribution-config file://distribution-config.json
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d your-domain.com
+sudo systemctl enable certbot.timer
 ```
 
----
+### Firewall Configuration
 
-## 🔄 **BACKUP & RECOVERY**
+```bash
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw --force enable
+```
+
+### Security Headers
+
+Add to Nginx configuration:
+
+```nginx
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-XSS-Protection "1; mode=block" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+```
+
+## Backup and Recovery
 
 ### Database Backup
+
 ```bash
+# Create backup script
+cat > /usr/local/bin/backup-mewayz.sh << 'EOF'
 #!/bin/bash
-# backup.sh
 BACKUP_DIR="/var/backups/mewayz"
 DATE=$(date +%Y%m%d_%H%M%S)
 
 mkdir -p $BACKUP_DIR
+mysqldump -u mewayz -p mewayz > $BACKUP_DIR/mewayz_$DATE.sql
+gzip $BACKUP_DIR/mewayz_$DATE.sql
 
-# Create database backup
-mysqldump -u mewayz_user -p mewayz_v2 > $BACKUP_DIR/db_backup_$DATE.sql
+# Keep only last 7 days
+find $BACKUP_DIR -name "*.gz" -mtime +7 -delete
+EOF
 
-# Create application backup
-tar -czf $BACKUP_DIR/app_backup_$DATE.tar.gz /var/www/mewayz
+chmod +x /usr/local/bin/backup-mewayz.sh
 
-# Upload to S3 (optional)
-aws s3 cp $BACKUP_DIR/db_backup_$DATE.sql s3://mewayz-backups/
-```
-
-### Automated Backup
-```bash
 # Add to crontab
-0 2 * * * /path/to/backup.sh
+echo "0 2 * * * /usr/local/bin/backup-mewayz.sh" | sudo crontab -
 ```
 
----
+### Application Backup
 
-## 🛡️ **SECURITY HARDENING**
-
-### Server Security
 ```bash
-# Configure firewall
-sudo ufw allow OpenSSH
-sudo ufw allow 'Nginx Full'
-sudo ufw --force enable
-
-# Disable root login
-sudo nano /etc/ssh/sshd_config
-# Set: PermitRootLogin no
-
-# Install fail2ban
-sudo apt install fail2ban
-sudo systemctl enable fail2ban
+# Backup application files
+tar -czf /var/backups/mewayz_app_$(date +%Y%m%d).tar.gz \
+  --exclude=node_modules \
+  --exclude=vendor \
+  --exclude=storage/logs \
+  /var/www/mewayz
 ```
 
-### Application Security
-```php
-// config/session.php
-'secure' => env('SESSION_SECURE_COOKIE', true),
-'http_only' => true,
-'same_site' => 'strict',
-```
-
----
-
-## 🎉 **DEPLOYMENT CHECKLIST**
-
-### Pre-Deployment
-- [ ] Server requirements met
-- [ ] Database configured
-- [ ] Environment variables set
-- [ ] SSL certificate installed
-- [ ] Backup system configured
-
-### Post-Deployment
-- [ ] Application accessible
-- [ ] Database migrations completed
-- [ ] Caching configured
-- [ ] Monitoring setup
-- [ ] Security hardening applied
-
-### Testing
-- [ ] Health check endpoint responds
-- [ ] User registration works
-- [ ] API endpoints functional
-- [ ] Payment processing tested
-- [ ] Email functionality verified
-
----
-
-## 📞 **SUPPORT**
-
-### Deployment Support
-- **Email**: deployment@mewayz.com
-- **Documentation**: https://docs.mewayz.com
-- **Status Page**: https://status.mewayz.com
+## Troubleshooting
 
 ### Common Issues
-- **Port conflicts**: Check nginx/apache configuration
-- **Permission errors**: Verify file permissions
-- **Database connection**: Check MySQL credentials
-- **Asset compilation**: Verify Node.js version
 
----
+1. **Permission Errors**
+   ```bash
+   sudo chown -R www-data:www-data /var/www/mewayz
+   sudo chmod -R 755 /var/www/mewayz/storage
+   ```
 
-*Last Updated: January 17, 2025*
-*Platform Version: v2.0.0*
-*Framework: Laravel 11 + MySQL*
-*Status: Production-Ready*
+2. **Memory Issues**
+   ```bash
+   # Increase PHP memory limit
+   echo "memory_limit = 512M" >> /etc/php/8.2/cli/php.ini
+   ```
+
+3. **Database Connection**
+   ```bash
+   php /var/www/mewayz/artisan config:clear
+   php /var/www/mewayz/artisan cache:clear
+   ```
+
+### Support
+
+For deployment support:
+- Check the [Troubleshooting Guide](../troubleshooting/README.md)
+- Review the [Developer Guide](../developer/README.md)
+- Consult the main [Documentation](../README.md)
