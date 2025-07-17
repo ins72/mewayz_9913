@@ -567,7 +567,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('ai')->
 });
 
 // Legacy route for compatibility
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->get('/user', function (Request $request) {
     return $request->user();
 });
 
