@@ -132,7 +132,7 @@ class LinkShortenerController extends Controller
     public function analytics(Request $request, $id)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             
             $link = ShortenedLink::where('id', $id)
                 ->where('user_id', $user->id)
