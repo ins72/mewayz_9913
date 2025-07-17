@@ -53,15 +53,6 @@ Route::get('/test', function () {
     ]);
 });
 
-// Test auth route
-Route::middleware('auth:sanctum')->get('/test-auth', function (Request $request) {
-    return response()->json([
-        'message' => 'Auth test successful',
-        'user' => $request->user(),
-        'timestamp' => now()
-    ]);
-});
-
 Route::get('/health', function () {
     return response()->json([
         'status' => 'healthy',
