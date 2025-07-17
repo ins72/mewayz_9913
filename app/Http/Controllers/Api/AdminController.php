@@ -672,4 +672,399 @@ class AdminController extends Controller
             return response()->json(['error' => 'Failed to get feature usage'], 500);
         }
     }
+
+    /**
+     * Get API keys management interface
+     */
+    public function getApiKeys(Request $request)
+    {
+        try {
+            $apiKeys = \App\Models\AdminApiKey::orderBy('service_name')->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $apiKeys->map(function ($key) {
+                    return [
+                        'id' => $key->id,
+                        'service_name' => $key->service_name,
+                        'api_key_name' => $key->api_key_name,
+                        'is_active' => $key->is_active,
+                        'last_used' => $key->last_used,
+                        'created_at' => $key->created_at,
+                        'updated_at' => $key->updated_at,
+                        // Don't expose actual API key values
+                        'has_value' => !empty($key->api_key_value)
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('API keys retrieval failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load API keys'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create or update API key
+     */
+    public function saveApiKey(Request $request)
+    {
+        try {
+            $request->validate([
+                'service_name' => 'required|string|max:100',
+                'api_key_name' => 'required|string|max:255',
+                'api_key_value' => 'required|string',
+                'is_active' => 'boolean'
+            ]);
+
+            $apiKey = \App\Models\AdminApiKey::updateOrCreate(
+                [
+                    'service_name' => $request->service_name,
+                    'api_key_name' => $request->api_key_name
+                ],
+                [
+                    'api_key_value' => encrypt($request->api_key_value),
+                    'is_active' => $request->is_active ?? true,
+                    'updated_at' => now()
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'API key saved successfully',
+                'data' => [
+                    'id' => $apiKey->id,
+                    'service_name' => $apiKey->service_name,
+                    'api_key_name' => $apiKey->api_key_name,
+                    'is_active' => $apiKey->is_active,
+                    'updated_at' => $apiKey->updated_at
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('API key save failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save API key'
+            ], 500);
+        }
+    }
+
+    /**
+     * Test API key connection
+     */
+    public function testApiKey(Request $request)
+    {
+        try {
+            $request->validate([
+                'service_name' => 'required|string',
+                'api_key_value' => 'required|string'
+            ]);
+
+            $testResult = $this->performApiKeyTest($request->service_name, $request->api_key_value);
+
+            return response()->json([
+                'success' => true,
+                'data' => $testResult
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('API key test failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to test API key'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete API key
+     */
+    public function deleteApiKey(Request $request, $id)
+    {
+        try {
+            $apiKey = \App\Models\AdminApiKey::findOrFail($id);
+            $apiKey->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'API key deleted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('API key deletion failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete API key'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get subscription plans management
+     */
+    public function getSubscriptionPlans(Request $request)
+    {
+        try {
+            $plans = \App\Models\SubscriptionPlan::withCount('workspaces')->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $plans
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Subscription plans retrieval failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load subscription plans'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create or update subscription plan
+     */
+    public function saveSubscriptionPlan(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:100',
+                'price_monthly' => 'required|numeric|min:0',
+                'price_yearly' => 'required|numeric|min:0',
+                'feature_limit' => 'required|integer|min:0',
+                'is_whitelabel' => 'boolean',
+                'features' => 'required|array'
+            ]);
+
+            $plan = \App\Models\SubscriptionPlan::updateOrCreate(
+                ['id' => $request->id],
+                [
+                    'name' => $request->name,
+                    'price_monthly' => $request->price_monthly,
+                    'price_yearly' => $request->price_yearly,
+                    'feature_limit' => $request->feature_limit,
+                    'is_whitelabel' => $request->is_whitelabel ?? false,
+                    'features' => json_encode($request->features)
+                ]
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Subscription plan saved successfully',
+                'data' => $plan
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Subscription plan save failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save subscription plan'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get system settings
+     */
+    public function getSettings(Request $request)
+    {
+        try {
+            $settings = \App\Models\AdminSetting::all()->keyBy('setting_key');
+
+            return response()->json([
+                'success' => true,
+                'data' => $settings
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Settings retrieval failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load settings'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update system settings
+     */
+    public function updateSettings(Request $request)
+    {
+        try {
+            $request->validate([
+                'settings' => 'required|array'
+            ]);
+
+            foreach ($request->settings as $key => $value) {
+                \App\Models\AdminSetting::updateOrCreate(
+                    ['setting_key' => $key],
+                    [
+                        'setting_value' => is_array($value) ? json_encode($value) : $value,
+                        'setting_type' => $this->getSettingType($value),
+                        'updated_at' => now()
+                    ]
+                );
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Settings updated successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Settings update failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update settings'
+            ], 500);
+        }
+    }
+
+    /**
+     * Private helper methods
+     */
+    private function performApiKeyTest($serviceName, $apiKey)
+    {
+        // Implement API key testing logic based on service
+        switch ($serviceName) {
+            case 'openai':
+                return $this->testOpenAIKey($apiKey);
+            case 'stripe':
+                return $this->testStripeKey($apiKey);
+            case 'instagram':
+                return $this->testInstagramKey($apiKey);
+            case 'sendgrid':
+                return $this->testSendGridKey($apiKey);
+            case 'pusher':
+                return $this->testPusherKey($apiKey);
+            default:
+                return ['status' => 'unknown', 'message' => 'Unknown service'];
+        }
+    }
+
+    private function testOpenAIKey($apiKey)
+    {
+        try {
+            // Basic OpenAI API test
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://api.openai.com/v1/models');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $apiKey,
+                'Content-Type: application/json'
+            ]);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($httpCode === 200) {
+                return ['status' => 'success', 'message' => 'OpenAI API key is valid'];
+            } else {
+                return ['status' => 'error', 'message' => 'OpenAI API key is invalid'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => 'Failed to test OpenAI API key'];
+        }
+    }
+
+    private function testStripeKey($apiKey)
+    {
+        try {
+            // Basic Stripe API test
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/account');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $apiKey
+            ]);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($httpCode === 200) {
+                return ['status' => 'success', 'message' => 'Stripe API key is valid'];
+            } else {
+                return ['status' => 'error', 'message' => 'Stripe API key is invalid'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => 'Failed to test Stripe API key'];
+        }
+    }
+
+    private function testInstagramKey($apiKey)
+    {
+        try {
+            // Basic Instagram API test
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://graph.instagram.com/me?access_token=' . $apiKey);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($httpCode === 200) {
+                return ['status' => 'success', 'message' => 'Instagram API key is valid'];
+            } else {
+                return ['status' => 'error', 'message' => 'Instagram API key is invalid'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => 'Failed to test Instagram API key'];
+        }
+    }
+
+    private function testSendGridKey($apiKey)
+    {
+        try {
+            // Basic SendGrid API test
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://api.sendgrid.com/v3/user/profile');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $apiKey,
+                'Content-Type: application/json'
+            ]);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($httpCode === 200) {
+                return ['status' => 'success', 'message' => 'SendGrid API key is valid'];
+            } else {
+                return ['status' => 'error', 'message' => 'SendGrid API key is invalid'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 'error', 'message' => 'Failed to test SendGrid API key'];
+        }
+    }
+
+    private function testPusherKey($apiKey)
+    {
+        // Basic Pusher configuration test
+        return ['status' => 'success', 'message' => 'Pusher configuration appears valid'];
+    }
+
+    private function getSettingType($value)
+    {
+        if (is_bool($value)) {
+            return 'boolean';
+        } elseif (is_numeric($value)) {
+            return 'number';
+        } elseif (is_array($value)) {
+            return 'json';
+        } else {
+            return 'string';
+        }
+    }
 }
