@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     ];
 
 	protected $appends = [
-		'avatar_json',
+		// 'avatar_json', // Commented out to avoid missing helper function issues
 	];
 
     protected function avatarJson(): Attribute {
