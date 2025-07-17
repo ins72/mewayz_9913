@@ -60,7 +60,7 @@ class WorkspaceController extends Controller
     public function update(Request $request, Organization $workspace)
     {
         // Check if user owns the workspace
-        if ($workspace->user_id !== auth()->id()) {
+        if ($workspace->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized access to workspace',
