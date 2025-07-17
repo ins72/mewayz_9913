@@ -1670,6 +1670,234 @@ class MewayzAPITester:
             else:
                 self.log_test("Delete Template", False, f"Template deletion failed - Status: {response.status_code if response else 'No response'}")
     
+    def test_phase1_onboarding_system(self):
+        """Test Phase 1 Enhanced Onboarding System"""
+        print("\n=== Testing Phase 1 Enhanced Onboarding System ===")
+        
+        if not self.auth_token:
+            self.log_test("Phase 1 Onboarding", False, "Cannot test - no authentication token")
+            return
+        
+        # Test GET /api/onboarding/progress
+        response = self.make_request('GET', '/onboarding/progress')
+        if response and response.status_code == 200:
+            data = response.json()
+            progress_data = data.get('data', {}).get('progress', {})
+            self.log_test("Get Onboarding Progress", True, f"Progress retrieved - Step: {progress_data.get('current_step', 'unknown')}, Progress: {progress_data.get('progress_percentage', 0)}%")
+        else:
+            self.log_test("Get Onboarding Progress", False, f"Progress retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test POST /api/onboarding/progress
+        progress_update = {
+            "step": 2,
+            "completed": True,
+            "data": {
+                "features_explored": ["bio_sites", "social_media"],
+                "time_spent": 120
+            }
+        }
+        response = self.make_request('POST', '/onboarding/progress', progress_update)
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_test("Update Onboarding Progress", True, f"Progress updated successfully - Next step: {data.get('data', {}).get('next_step', {}).get('title', 'unknown')}")
+        else:
+            self.log_test("Update Onboarding Progress", False, f"Progress update failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test GET /api/onboarding/recommendations
+        response = self.make_request('GET', '/onboarding/recommendations')
+        if response and response.status_code == 200:
+            data = response.json()
+            recommendations = data.get('data', [])
+            self.log_test("Get Onboarding Recommendations", True, f"Recommendations retrieved - Count: {len(recommendations) if isinstance(recommendations, list) else 'N/A'}")
+        else:
+            self.log_test("Get Onboarding Recommendations", False, f"Recommendations retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test POST /api/onboarding/step/complete
+        step_completion = {
+            "step": 1,
+            "step_data": {
+                "goals": ["increase_engagement", "grow_audience"],
+                "business_type": "content_creator",
+                "experience_level": "intermediate",
+                "team_size": "1-5"
+            }
+        }
+        response = self.make_request('POST', '/onboarding/step/complete', step_completion)
+        if response and response.status_code == 200:
+            data = response.json()
+            self.log_test("Complete Onboarding Step", True, f"Step completed successfully - Next: {data.get('data', {}).get('next_step', {}).get('title', 'unknown')}")
+        else:
+            self.log_test("Complete Onboarding Step", False, f"Step completion failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test GET /api/onboarding/demo
+        response = self.make_request('GET', '/onboarding/demo')
+        if response and response.status_code == 200:
+            data = response.json()
+            demo_data = data.get('data', {})
+            self.log_test("Get Interactive Demo", True, f"Demo data retrieved - Features: {len(demo_data.get('features', [])) if 'features' in demo_data else 'N/A'}")
+        else:
+            self.log_test("Get Interactive Demo", False, f"Demo data retrieval failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_phase1_theme_system(self):
+        """Test Phase 1 Smart Theme System"""
+        print("\n=== Testing Phase 1 Smart Theme System ===")
+        
+        if not self.auth_token:
+            self.log_test("Phase 1 Theme System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test GET /api/theme/ (current theme)
+        response = self.make_request('GET', '/theme/')
+        if response and response.status_code == 200:
+            data = response.json()
+            theme_data = data.get('data', {})
+            current_theme = theme_data.get('current_theme', 'unknown')
+            available_themes = theme_data.get('available_themes', {})
+            self.log_test("Get Current Theme", True, f"Current theme: {current_theme}, Available: {len(available_themes)} themes")
+        else:
+            self.log_test("Get Current Theme", False, f"Theme retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test POST /api/theme/update
+        theme_update = {
+            "theme": "dark",
+            "accessibility_options": {
+                "high_contrast": False,
+                "reduced_motion": False,
+                "large_text": False
+            }
+        }
+        response = self.make_request('POST', '/theme/update', theme_update)
+        if response and response.status_code == 200:
+            data = response.json()
+            updated_theme = data.get('data', {}).get('theme', 'unknown')
+            self.log_test("Update Theme Settings", True, f"Theme updated to: {updated_theme}")
+        else:
+            self.log_test("Update Theme Settings", False, f"Theme update failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test GET /api/theme/system (intelligent theme detection)
+        response = self.make_request('GET', '/theme/system')
+        if response and response.status_code == 200:
+            data = response.json()
+            system_theme = data.get('data', {}).get('system_theme', 'unknown')
+            supported = data.get('data', {}).get('supported', False)
+            self.log_test("Get System Theme Detection", True, f"System theme detected: {system_theme}, Supported: {supported}")
+        else:
+            self.log_test("Get System Theme Detection", False, f"System theme detection failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test GET /api/theme/presets (available themes)
+        response = self.make_request('GET', '/theme/presets')
+        if response and response.status_code == 200:
+            data = response.json()
+            presets = data.get('data', [])
+            self.log_test("Get Theme Presets", True, f"Theme presets retrieved - Count: {len(presets) if isinstance(presets, list) else 'N/A'}")
+        else:
+            self.log_test("Get Theme Presets", False, f"Theme presets retrieval failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_phase1_core_platform_features(self):
+        """Test Phase 1 Core Platform Features"""
+        print("\n=== Testing Phase 1 Core Platform Features ===")
+        
+        if not self.auth_token:
+            self.log_test("Phase 1 Core Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test Website Builder system
+        response = self.make_request('GET', '/websites/templates')
+        if response and response.status_code == 200:
+            data = response.json()
+            templates = data.get('data', [])
+            self.log_test("Website Builder Templates", True, f"Templates retrieved - Count: {len(templates) if isinstance(templates, list) else 'N/A'}")
+        else:
+            self.log_test("Website Builder Templates", False, f"Templates retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Bio Sites functionality
+        response = self.make_request('GET', '/bio-sites/')
+        if response and response.status_code == 200:
+            data = response.json()
+            bio_sites = data.get('data', [])
+            self.log_test("Bio Sites Management", True, f"Bio sites retrieved - Count: {len(bio_sites) if isinstance(bio_sites, list) else 'N/A'}")
+        else:
+            self.log_test("Bio Sites Management", False, f"Bio sites retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Basic authentication (already tested in authentication_system)
+        response = self.make_request('GET', '/auth/me')
+        if response and response.status_code == 200:
+            data = response.json()
+            user_data = data.get('user', {})
+            self.log_test("Basic Authentication", True, f"User authenticated - Name: {user_data.get('name', 'unknown')}")
+        else:
+            self.log_test("Basic Authentication", False, f"Authentication failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Workspace management
+        response = self.make_request('GET', '/workspaces')
+        if response and response.status_code == 200:
+            data = response.json()
+            workspaces = data.get('data', [])
+            self.log_test("Workspace Management", True, f"Workspaces retrieved - Count: {len(workspaces) if isinstance(workspaces, list) else 'N/A'}")
+        else:
+            self.log_test("Workspace Management", False, f"Workspaces retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Basic analytics and reporting
+        response = self.make_request('GET', '/analytics/overview')
+        if response and response.status_code == 200:
+            data = response.json()
+            analytics = data.get('data', {})
+            self.log_test("Basic Analytics", True, f"Analytics retrieved - Metrics available: {len(analytics) if isinstance(analytics, dict) else 'N/A'}")
+        else:
+            self.log_test("Basic Analytics", False, f"Analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_phase1_enhanced_ux_features(self):
+        """Test Phase 1 Enhanced UX Features"""
+        print("\n=== Testing Phase 1 Enhanced UX Features ===")
+        
+        if not self.auth_token:
+            self.log_test("Phase 1 UX Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test Dashboard personalization
+        response = self.make_request('GET', '/workspace-personalization/layout')
+        if response and response.status_code == 200:
+            data = response.json()
+            layout = data.get('data', {})
+            self.log_test("Dashboard Personalization", True, f"Layout retrieved - Widgets: {len(layout.get('widgets', [])) if 'widgets' in layout else 'N/A'}")
+        else:
+            self.log_test("Dashboard Personalization", False, f"Dashboard personalization failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Mobile-first improvements
+        response = self.make_request('GET', '/mobile/config')
+        if response and response.status_code == 200:
+            data = response.json()
+            mobile_config = data.get('data', {})
+            self.log_test("Mobile-First Improvements", True, f"Mobile config retrieved - Features: {len(mobile_config) if isinstance(mobile_config, dict) else 'N/A'}")
+        else:
+            self.log_test("Mobile-First Improvements", False, f"Mobile config failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Basic user preferences
+        response = self.make_request('GET', '/preferences/')
+        if response and response.status_code == 200:
+            data = response.json()
+            preferences = data.get('data', {})
+            self.log_test("User Preferences", True, f"Preferences retrieved - Settings: {len(preferences) if isinstance(preferences, dict) else 'N/A'}")
+        else:
+            self.log_test("User Preferences", False, f"User preferences failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test Activity tracking
+        activity_data = {
+            "event": "page_view",
+            "page": "/dashboard",
+            "timestamp": "2024-12-19T10:00:00Z",
+            "metadata": {
+                "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                "referrer": "/login"
+            }
+        }
+        response = self.make_request('POST', '/analytics/track', activity_data)
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Activity Tracking", True, "Activity tracked successfully")
+        else:
+            self.log_test("Activity Tracking", False, f"Activity tracking failed - Status: {response.status_code if response else 'No response'}")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
