@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->uuid('parent_department_id')->nullable();
-            $table->uuid('manager_id')->nullable();
+            $table->unsignedBigInteger('manager_id')->nullable();
             $table->decimal('budget', 15, 2)->default(0);
             $table->json('settings')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
