@@ -14,8 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('escrow_documents', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('escrow_transaction_id')->constrained('escrow_transactions')->onDelete('cascade');
+            $table->foreignUuid('uploaded_by')->constrained('users')->onDelete('cascade');
+            $table->string('file_name');
+            $table->string('file_path');
+            $table->unsignedBigInteger('file_size');
+            $table->string('file_type');
+            $table->enum('document_type', ['contract', 'invoice', 'receipt', 'evidence', 'delivery_proof', 'other'])->default('other');
+            $table->text('description')->nullable();
+            $table->boolean('is_public')->default(false);
             $table->timestamps();
+            
+            $table->index(['escrow_transaction_id', 'document_type']);
         });
     }
 
