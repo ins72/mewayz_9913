@@ -491,6 +491,45 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::post('/reset', [WorkspaceSetupController::class, 'resetSetup']);
     });
 
+    // Admin Dashboard routes (MOVED INSIDE MIDDLEWARE GROUP)
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'getDashboardOverview']);
+        Route::get('/users', [AdminController::class, 'getUsers']);
+        Route::get('/users/{id}', [AdminController::class, 'getUserDetails']);
+        Route::put('/users/{id}/status', [AdminController::class, 'updateUserStatus']);
+        Route::get('/system-health', [AdminController::class, 'getSystemHealth']);
+        Route::get('/platform-analytics', [AdminController::class, 'getPlatformAnalytics']);
+        Route::get('/system-logs', [AdminController::class, 'getSystemLogs']);
+        Route::post('/announcement', [AdminController::class, 'sendAnnouncement']);
+        Route::get('/feature-usage', [AdminController::class, 'getFeatureUsage']);
+        
+        // API Key Management routes
+        Route::get('/api-keys', [AdminController::class, 'getApiKeys']);
+        Route::post('/api-keys', [AdminController::class, 'saveApiKey']);
+        Route::post('/api-keys/test', [AdminController::class, 'testApiKey']);
+        Route::delete('/api-keys/{id}', [AdminController::class, 'deleteApiKey']);
+        
+        // Subscription Plan Management routes
+        Route::get('/subscription-plans', [AdminController::class, 'getSubscriptionPlans']);
+        Route::post('/subscription-plans', [AdminController::class, 'saveSubscriptionPlan']);
+        
+        // System Settings routes
+        Route::get('/settings', [AdminController::class, 'getSettings']);
+        Route::post('/settings', [AdminController::class, 'updateSettings']);
+    });
+
+    // Link in Bio Builder routes
+    Route::prefix('link-in-bio')->group(function () {
+        Route::get('/sites', [LinkInBioController::class, 'getBioSites']);
+        Route::post('/sites', [LinkInBioController::class, 'createBioSite']);
+        Route::get('/sites/{id}', [LinkInBioController::class, 'getBioSiteBuilder']);
+        Route::put('/sites/{id}', [LinkInBioController::class, 'saveBioSite']);
+        Route::get('/sites/{id}/analytics', [LinkInBioController::class, 'getBioSiteAnalytics']);
+        Route::post('/sites/{id}/ab-test', [LinkInBioController::class, 'abTestBioSite']);
+        Route::get('/templates', [LinkInBioController::class, 'getTemplates']);
+        Route::get('/components', [LinkInBioController::class, 'getComponents']);
+    });
+
 });
 
 // Stripe Payment routes - public access for webhooks
