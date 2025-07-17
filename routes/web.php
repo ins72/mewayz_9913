@@ -47,6 +47,25 @@ Route::get('/health', function () {
     ]);
 });
 
+// Root route fallback
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'Welcome to Mewayz - The Complete Creator Economy Platform',
+        'status' => 'online',
+        'api_docs' => '/api/health',
+        'version' => '1.0.0',
+        'features' => [
+            'Bio Sites & Link-in-Bio',
+            'Social Media Management', 
+            'E-commerce',
+            'Course Creation',
+            'Email Marketing',
+            'Analytics & Reporting'
+        ],
+        'timestamp' => now()
+    ]);
+});
+
 require __DIR__.'/auth.php';
 
 // Landing page route
