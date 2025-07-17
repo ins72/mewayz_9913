@@ -810,7 +810,7 @@ class AdminController extends Controller
     public function getSubscriptionPlans(Request $request)
     {
         try {
-            $plans = \App\Models\SubscriptionPlan::withCount('workspaces')->get();
+            $plans = \App\Models\SubscriptionPlan::all();
 
             return response()->json([
                 'success' => true,
