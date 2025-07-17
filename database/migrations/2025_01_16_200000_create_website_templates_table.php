@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('template_data')->nullable();
             $table->json('styles')->nullable();
             $table->json('scripts')->nullable();
-            $table->uuid('created_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->json('tags')->nullable();
             $table->timestamps();
 
