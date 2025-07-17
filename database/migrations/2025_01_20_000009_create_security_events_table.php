@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->string('user_agent', 1000)->nullable();
             $table->boolean('is_resolved')->default(false);
-            $table->uuid('resolved_by')->nullable();
+            $table->unsignedBigInteger('resolved_by')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
             
