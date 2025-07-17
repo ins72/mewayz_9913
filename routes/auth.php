@@ -4,7 +4,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::middleware('guest')->group(function () {
+Route::middleware(\App\Http\Middleware\RedirectIfAuthenticated::class)->group(function () {
     Route::get('register', function () {
         return view('pages.auth.register');
     })->name('register');
