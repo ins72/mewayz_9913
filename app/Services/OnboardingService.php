@@ -477,8 +477,222 @@ class OnboardingService
      */
     private function getRecommendedTemplates(array $goals, ?string $businessType)
     {
-        // This would return template recommendations based on goals and business type
-        return [];
+        $templates = [];
+        
+        // Goal-based template recommendations
+        foreach ($goals as $goal) {
+            switch ($goal) {
+                case 'instagram':
+                    $templates[] = [
+                        'id' => 'instagram-pro',
+                        'name' => 'Instagram Pro',
+                        'description' => 'Perfect for social media influencers and content creators',
+                        'preview' => '/templates/instagram-pro.jpg',
+                        'features' => ['Social Media Integration', 'Content Scheduler', 'Analytics Dashboard'],
+                        'price' => 29.99,
+                        'category' => 'Social Media'
+                    ];
+                    $templates[] = [
+                        'id' => 'content-creator',
+                        'name' => 'Content Creator Hub',
+                        'description' => 'All-in-one solution for content creators',
+                        'preview' => '/templates/content-creator.jpg',
+                        'features' => ['Multi-Platform Posting', 'Brand Collaborations', 'Revenue Tracking'],
+                        'price' => 49.99,
+                        'category' => 'Content Creation'
+                    ];
+                    break;
+                    
+                case 'link_in_bio':
+                    $templates[] = [
+                        'id' => 'linktree-pro',
+                        'name' => 'LinkTree Pro',
+                        'description' => 'Professional link-in-bio solution',
+                        'preview' => '/templates/linktree-pro.jpg',
+                        'features' => ['Custom Branding', 'Link Analytics', 'QR Code Generation'],
+                        'price' => 19.99,
+                        'category' => 'Link Management'
+                    ];
+                    $templates[] = [
+                        'id' => 'bio-showcase',
+                        'name' => 'Bio Showcase',
+                        'description' => 'Showcase your work and links in style',
+                        'preview' => '/templates/bio-showcase.jpg',
+                        'features' => ['Portfolio Gallery', 'Contact Forms', 'Social Integration'],
+                        'price' => 24.99,
+                        'category' => 'Portfolio'
+                    ];
+                    break;
+                    
+                case 'ecommerce':
+                    $templates[] = [
+                        'id' => 'store-builder',
+                        'name' => 'Store Builder Pro',
+                        'description' => 'Complete e-commerce solution',
+                        'preview' => '/templates/store-builder.jpg',
+                        'features' => ['Product Catalog', 'Payment Processing', 'Order Management'],
+                        'price' => 79.99,
+                        'category' => 'E-commerce'
+                    ];
+                    $templates[] = [
+                        'id' => 'digital-products',
+                        'name' => 'Digital Products Store',
+                        'description' => 'Perfect for selling digital products',
+                        'preview' => '/templates/digital-products.jpg',
+                        'features' => ['Digital Downloads', 'License Management', 'Customer Portal'],
+                        'price' => 59.99,
+                        'category' => 'Digital Commerce'
+                    ];
+                    break;
+                    
+                case 'crm':
+                    $templates[] = [
+                        'id' => 'crm-dashboard',
+                        'name' => 'CRM Dashboard',
+                        'description' => 'Customer relationship management made easy',
+                        'preview' => '/templates/crm-dashboard.jpg',
+                        'features' => ['Contact Management', 'Sales Pipeline', 'Email Automation'],
+                        'price' => 39.99,
+                        'category' => 'CRM'
+                    ];
+                    break;
+                    
+                case 'courses':
+                    $templates[] = [
+                        'id' => 'course-platform',
+                        'name' => 'Course Platform',
+                        'description' => 'Create and sell online courses',
+                        'preview' => '/templates/course-platform.jpg',
+                        'features' => ['Course Builder', 'Student Management', 'Certificates'],
+                        'price' => 89.99,
+                        'category' => 'Education'
+                    ];
+                    break;
+                    
+                case 'analytics':
+                    $templates[] = [
+                        'id' => 'analytics-pro',
+                        'name' => 'Analytics Pro',
+                        'description' => 'Advanced analytics and reporting',
+                        'preview' => '/templates/analytics-pro.jpg',
+                        'features' => ['Custom Reports', 'Real-time Metrics', 'Data Visualization'],
+                        'price' => 49.99,
+                        'category' => 'Analytics'
+                    ];
+                    break;
+            }
+        }
+        
+        // Business type specific recommendations
+        if ($businessType) {
+            switch ($businessType) {
+                case 'influencer':
+                    $templates[] = [
+                        'id' => 'influencer-hub',
+                        'name' => 'Influencer Hub',
+                        'description' => 'Complete influencer management platform',
+                        'preview' => '/templates/influencer-hub.jpg',
+                        'features' => ['Brand Partnerships', 'Content Calendar', 'Performance Analytics'],
+                        'price' => 69.99,
+                        'category' => 'Influencer'
+                    ];
+                    break;
+                    
+                case 'small_business':
+                    $templates[] = [
+                        'id' => 'business-suite',
+                        'name' => 'Business Suite',
+                        'description' => 'All-in-one business management solution',
+                        'preview' => '/templates/business-suite.jpg',
+                        'features' => ['CRM', 'E-commerce', 'Email Marketing', 'Analytics'],
+                        'price' => 99.99,
+                        'category' => 'Business'
+                    ];
+                    break;
+                    
+                case 'freelancer':
+                    $templates[] = [
+                        'id' => 'freelancer-portfolio',
+                        'name' => 'Freelancer Portfolio',
+                        'description' => 'Professional portfolio for freelancers',
+                        'preview' => '/templates/freelancer-portfolio.jpg',
+                        'features' => ['Portfolio Gallery', 'Client Management', 'Invoice System'],
+                        'price' => 39.99,
+                        'category' => 'Portfolio'
+                    ];
+                    break;
+                    
+                case 'startup':
+                    $templates[] = [
+                        'id' => 'startup-launcher',
+                        'name' => 'Startup Launcher',
+                        'description' => 'Perfect for launching your startup',
+                        'preview' => '/templates/startup-launcher.jpg',
+                        'features' => ['Landing Pages', 'User Analytics', 'Growth Tools'],
+                        'price' => 79.99,
+                        'category' => 'Startup'
+                    ];
+                    break;
+                    
+                case 'agency':
+                    $templates[] = [
+                        'id' => 'agency-pro',
+                        'name' => 'Agency Pro',
+                        'description' => 'Multi-client agency management',
+                        'preview' => '/templates/agency-pro.jpg',
+                        'features' => ['Client Portals', 'Project Management', 'White Label'],
+                        'price' => 129.99,
+                        'category' => 'Agency'
+                    ];
+                    break;
+            }
+        }
+        
+        // Add some popular general templates
+        $generalTemplates = [
+            [
+                'id' => 'professional-dashboard',
+                'name' => 'Professional Dashboard',
+                'description' => 'Clean and professional dashboard template',
+                'preview' => '/templates/professional-dashboard.jpg',
+                'features' => ['Customizable Widgets', 'Dark/Light Mode', 'Mobile Responsive'],
+                'price' => 34.99,
+                'category' => 'General'
+            ],
+            [
+                'id' => 'minimalist-bio',
+                'name' => 'Minimalist Bio',
+                'description' => 'Simple and elegant bio page',
+                'preview' => '/templates/minimalist-bio.jpg',
+                'features' => ['Clean Design', 'Fast Loading', 'SEO Optimized'],
+                'price' => 14.99,
+                'category' => 'Bio'
+            ],
+            [
+                'id' => 'creative-portfolio',
+                'name' => 'Creative Portfolio',
+                'description' => 'Showcase your creative work',
+                'preview' => '/templates/creative-portfolio.jpg',
+                'features' => ['Image Gallery', 'Animation Effects', 'Contact Forms'],
+                'price' => 44.99,
+                'category' => 'Portfolio'
+            ]
+        ];
+        
+        $templates = array_merge($templates, $generalTemplates);
+        
+        // Remove duplicates and sort by relevance
+        $templates = array_unique($templates, SORT_REGULAR);
+        
+        // Sort by price (ascending) and then by category
+        usort($templates, function($a, $b) {
+            if ($a['price'] == $b['price']) {
+                return strcmp($a['category'], $b['category']);
+            }
+            return $a['price'] <=> $b['price'];
+        });
+        
+        return array_slice($templates, 0, 6); // Return top 6 recommendations
     }
 
     /**
