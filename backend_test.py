@@ -1377,6 +1377,296 @@ class MewayzAPITester:
         else:
             self.log_test("Predict Trends", False, f"Trend prediction failed - Status: {response.status_code if response else 'No response'}")
     
+    def test_link_shortener_system(self):
+        """Test Link Shortener System functionality"""
+        print("\n=== Testing Link Shortener System ===")
+        
+        if not self.auth_token:
+            self.log_test("Link Shortener System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get all links
+        response = self.make_request('GET', '/links')
+        if response and response.status_code == 200:
+            self.log_test("Get All Links", True, "Links retrieval successful")
+        else:
+            self.log_test("Get All Links", False, f"Links retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create shortened link
+        link_data = {
+            "original_url": "https://www.example.com/very-long-url-that-needs-shortening",
+            "custom_slug": f"test-{int(time.time())}",
+            "title": "Test Link",
+            "description": "This is a test shortened link",
+            "expires_at": "2024-12-31 23:59:59"
+        }
+        
+        response = self.make_request('POST', '/links', link_data)
+        link_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create Shortened Link", True, "Link creation successful")
+            link_id = data.get('data', {}).get('id') or data.get('id')
+        else:
+            self.log_test("Create Shortened Link", False, f"Link creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get link analytics (if link created successfully)
+        if link_id:
+            response = self.make_request('GET', f'/links/{link_id}/analytics')
+            if response and response.status_code == 200:
+                self.log_test("Get Link Analytics", True, "Link analytics retrieval successful")
+            else:
+                self.log_test("Get Link Analytics", False, f"Link analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test update link
+            update_data = {
+                "title": "Updated Test Link",
+                "description": "This is an updated test shortened link",
+                "active": True
+            }
+            
+            response = self.make_request('PUT', f'/links/{link_id}', update_data)
+            if response and response.status_code == 200:
+                self.log_test("Update Link", True, "Link update successful")
+            else:
+                self.log_test("Update Link", False, f"Link update failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test bulk analytics
+        response = self.make_request('GET', '/links/bulk-analytics')
+        if response and response.status_code == 200:
+            self.log_test("Get Bulk Analytics", True, "Bulk analytics retrieval successful")
+        else:
+            self.log_test("Get Bulk Analytics", False, f"Bulk analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test public redirect (no auth required)
+        if link_id:
+            # First get the slug from the created link
+            response = self.make_request('GET', f'/links/{link_id}')
+            if response and response.status_code == 200:
+                data = response.json()
+                slug = data.get('data', {}).get('slug') or data.get('slug')
+                if slug:
+                    # Test redirect endpoint
+                    response = self.make_request('GET', f'/l/{slug}', auth_required=False)
+                    if response and response.status_code in [200, 302, 301]:
+                        self.log_test("Public Link Redirect", True, "Link redirect working")
+                    else:
+                        self.log_test("Public Link Redirect", False, f"Link redirect failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test delete link (if created successfully)
+        if link_id:
+            response = self.make_request('DELETE', f'/links/{link_id}')
+            if response and response.status_code == 200:
+                self.log_test("Delete Link", True, "Link deletion successful")
+            else:
+                self.log_test("Delete Link", False, f"Link deletion failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_referral_system(self):
+        """Test Referral System functionality"""
+        print("\n=== Testing Referral System ===")
+        
+        if not self.auth_token:
+            self.log_test("Referral System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get referral dashboard
+        response = self.make_request('GET', '/referrals/dashboard')
+        if response and response.status_code == 200:
+            self.log_test("Get Referral Dashboard", True, "Referral dashboard retrieval successful")
+        else:
+            self.log_test("Get Referral Dashboard", False, f"Referral dashboard retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test send referral invitations
+        invitation_data = {
+            "emails": [
+                "friend1@example.com",
+                "friend2@example.com",
+                "colleague@example.com"
+            ],
+            "message": "Join me on this amazing platform! You'll love the features.",
+            "reward_type": "credits"
+        }
+        
+        response = self.make_request('POST', '/referrals/invitations', invitation_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Send Referral Invitations", True, "Referral invitations sent successfully")
+        else:
+            self.log_test("Send Referral Invitations", False, f"Referral invitations failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get referral analytics
+        response = self.make_request('GET', '/referrals/analytics')
+        if response and response.status_code == 200:
+            self.log_test("Get Referral Analytics", True, "Referral analytics retrieval successful")
+        else:
+            self.log_test("Get Referral Analytics", False, f"Referral analytics retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get referral rewards
+        response = self.make_request('GET', '/referrals/rewards')
+        if response and response.status_code == 200:
+            self.log_test("Get Referral Rewards", True, "Referral rewards retrieval successful")
+        else:
+            self.log_test("Get Referral Rewards", False, f"Referral rewards retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test process referral signup
+        referral_data = {
+            "referral_code": "TEST123",
+            "new_user_email": f"newuser_{int(time.time())}@example.com",
+            "signup_data": {
+                "name": "New Referred User",
+                "email": f"newuser_{int(time.time())}@example.com"
+            }
+        }
+        
+        response = self.make_request('POST', '/referrals/process', referral_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Process Referral Signup", True, "Referral signup processing successful")
+        else:
+            self.log_test("Process Referral Signup", False, f"Referral signup processing failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test complete referral
+        completion_data = {
+            "referral_id": "test-referral-id",
+            "completion_type": "first_purchase",
+            "reward_amount": 10.00
+        }
+        
+        response = self.make_request('POST', '/referrals/complete', completion_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Complete Referral", True, "Referral completion successful")
+        else:
+            self.log_test("Complete Referral", False, f"Referral completion failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_template_marketplace(self):
+        """Test Template Marketplace functionality"""
+        print("\n=== Testing Template Marketplace ===")
+        
+        if not self.auth_token:
+            self.log_test("Template Marketplace", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get all templates
+        response = self.make_request('GET', '/templates')
+        if response and response.status_code == 200:
+            self.log_test("Get All Templates", True, "Templates retrieval successful")
+        else:
+            self.log_test("Get All Templates", False, f"Templates retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get template categories
+        response = self.make_request('GET', '/templates/categories')
+        if response and response.status_code == 200:
+            self.log_test("Get Template Categories", True, "Template categories retrieval successful")
+        else:
+            self.log_test("Get Template Categories", False, f"Template categories retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get featured templates
+        response = self.make_request('GET', '/templates/featured')
+        if response and response.status_code == 200:
+            self.log_test("Get Featured Templates", True, "Featured templates retrieval successful")
+        else:
+            self.log_test("Get Featured Templates", False, f"Featured templates retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create new template
+        template_data = {
+            "name": "Modern Business Template",
+            "description": "A sleek and professional template for modern businesses",
+            "category": "business",
+            "price": 29.99,
+            "tags": ["modern", "business", "professional", "responsive"],
+            "preview_images": [
+                "https://example.com/preview1.jpg",
+                "https://example.com/preview2.jpg"
+            ],
+            "template_files": {
+                "html": "<html><body><h1>Modern Business Template</h1></body></html>",
+                "css": "body { font-family: Arial, sans-serif; }",
+                "js": "console.log('Template loaded');"
+            }
+        }
+        
+        response = self.make_request('POST', '/templates', template_data)
+        template_id = None
+        if response and response.status_code in [200, 201]:
+            data = response.json()
+            self.log_test("Create New Template", True, "Template creation successful")
+            template_id = data.get('data', {}).get('id') or data.get('id')
+        else:
+            self.log_test("Create New Template", False, f"Template creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get my templates
+        response = self.make_request('GET', '/templates/my-templates')
+        if response and response.status_code == 200:
+            self.log_test("Get My Templates", True, "My templates retrieval successful")
+        else:
+            self.log_test("Get My Templates", False, f"My templates retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get my purchases
+        response = self.make_request('GET', '/templates/my-purchases')
+        if response and response.status_code == 200:
+            self.log_test("Get My Purchases", True, "My purchases retrieval successful")
+        else:
+            self.log_test("Get My Purchases", False, f"My purchases retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get specific template details (if template created successfully)
+        if template_id:
+            response = self.make_request('GET', f'/templates/{template_id}')
+            if response and response.status_code == 200:
+                self.log_test("Get Template Details", True, "Template details retrieval successful")
+            else:
+                self.log_test("Get Template Details", False, f"Template details retrieval failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test update template
+            update_data = {
+                "name": "Updated Modern Business Template",
+                "description": "An updated sleek and professional template for modern businesses",
+                "price": 34.99
+            }
+            
+            response = self.make_request('PUT', f'/templates/{template_id}', update_data)
+            if response and response.status_code == 200:
+                self.log_test("Update Template", True, "Template update successful")
+            else:
+                self.log_test("Update Template", False, f"Template update failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test purchase template
+            purchase_data = {
+                "payment_method": "stripe",
+                "payment_token": "test_token_123"
+            }
+            
+            response = self.make_request('POST', f'/templates/{template_id}/purchase', purchase_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Purchase Template", True, "Template purchase successful")
+            else:
+                self.log_test("Purchase Template", False, f"Template purchase failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test download template
+            response = self.make_request('GET', f'/templates/{template_id}/download')
+            if response and response.status_code == 200:
+                self.log_test("Download Template", True, "Template download successful")
+            else:
+                self.log_test("Download Template", False, f"Template download failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test add review
+            review_data = {
+                "rating": 5,
+                "comment": "Excellent template! Very professional and easy to customize.",
+                "pros": ["Great design", "Easy to use", "Good documentation"],
+                "cons": ["Could use more color options"]
+            }
+            
+            response = self.make_request('POST', f'/templates/{template_id}/review', review_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Add Template Review", True, "Template review added successfully")
+            else:
+                self.log_test("Add Template Review", False, f"Template review failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test delete template
+            response = self.make_request('DELETE', f'/templates/{template_id}')
+            if response and response.status_code == 200:
+                self.log_test("Delete Template", True, "Template deletion successful")
+            else:
+                self.log_test("Delete Template", False, f"Template deletion failed - Status: {response.status_code if response else 'No response'}")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
