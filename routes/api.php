@@ -507,7 +507,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('realti
 });
 
 // Escrow & Transaction Security
-Route::middleware('auth:sanctum')->prefix('escrow')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('escrow')->group(function () {
     Route::get('/', [EscrowController::class, 'index']);
     Route::post('/', [EscrowController::class, 'store']);
     Route::get('/{id}', [EscrowController::class, 'show']);
