@@ -1202,7 +1202,20 @@ class MewayzAPITester:
         self.test_crm_system()
         self.test_team_management()
         self.test_ai_integration()
+        
+        # NEW ADVANCED FEATURES TESTING
+        print("\n" + "=" * 80)
+        print("🔥 TESTING NEW ADVANCED FEATURES")
+        print("=" * 80)
+        
         self.test_website_builder()
+        self.test_biometric_authentication()
+        self.test_realtime_features()
+        self.test_escrow_system()
+        self.test_advanced_analytics()
+        self.test_advanced_booking_system()
+        self.test_advanced_financial_management()
+        self.test_enhanced_ai_features()
         
         # Print summary
         self.print_summary()
