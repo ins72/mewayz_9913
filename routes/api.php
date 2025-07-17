@@ -554,7 +554,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('financ
 });
 
 // Enhanced AI Features
-Route::middleware('auth:sanctum')->prefix('ai')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('ai')->group(function () {
     Route::post('/content/generate', [EnhancedAIController::class, 'generateContentSuggestions']);
     Route::post('/content/seo-optimize', [EnhancedAIController::class, 'optimizeContentForSEO']);
     Route::post('/competitors/analyze', [EnhancedAIController::class, 'analyzeCompetitors']);
