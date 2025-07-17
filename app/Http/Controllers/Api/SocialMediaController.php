@@ -26,7 +26,7 @@ class SocialMediaController extends Controller
         ]);
 
         try {
-            $query = SocialMediaAccount::where('user_id', auth()->id());
+            $query = SocialMediaAccount::where('user_id', $request->user()->id);
 
             // Apply filters
             if ($request->platform) {
