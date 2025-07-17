@@ -111,25 +111,38 @@ Route::prefix('auth')->group(function () {
 });
 
 // Protected routes (require authentication)
-// Simple auth test routes with no parameters
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/simple-test', function (Request $request) {
-        try {
-            $user = $request->user();
-            return response()->json([
-                'message' => 'Simple auth test successful',
-                'user_id' => $user ? $user->id : null,
-                'timestamp' => now()
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ], 500);
+// Test manual auth without middleware
+Route::get('/test-manual-auth', function (Request $request) {
+    try {
+        // Manual token verification
+        $token = $request->bearerToken();
+        if (!$token) {
+            return response()->json(['error' => 'No token provided'], 401);
         }
-    });
-    
-    Route::get('/auth/me', [AuthController::class, 'me']);
+        
+        // Find user by token
+        $personalAccessToken = \Laravel\Sanctum\PersonalAccessToken::findToken($token);
+        if (!$personalAccessToken) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        }
+        
+        $user = $personalAccessToken->tokenable;
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 401);
+        }
+        
+        return response()->json([
+            'message' => 'Manual auth test successful',
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'timestamp' => now()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
 });
 
 // Test route without auth middleware
