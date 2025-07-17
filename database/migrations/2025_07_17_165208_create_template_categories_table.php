@@ -14,8 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('template_categories', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('slug')->unique();
+            $table->string('icon')->nullable();
+            $table->string('color', 7)->nullable();
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->json('metadata')->nullable();
             $table->timestamps();
+            
+            $table->index(['is_active', 'sort_order']);
         });
     }
 
