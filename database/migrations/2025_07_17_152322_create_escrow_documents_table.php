@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('escrow_documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('escrow_transaction_id')->constrained('escrow_transactions')->onDelete('cascade');
-            $table->foreignUuid('uploaded_by')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('uploaded_by');
+            $table->foreign('uploaded_by')->references('id')->on('users')->onDelete('cascade');
             $table->string('file_name');
             $table->string('file_path');
             $table->unsignedBigInteger('file_size');
