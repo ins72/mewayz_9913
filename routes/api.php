@@ -480,6 +480,27 @@ Route::prefix('stripe')->group(function () {
 // Stripe webhook - must be outside auth middleware
 Route::post('/webhook/stripe', [StripePaymentController::class, 'handleWebhook']);
 
+// Biometric Authentication routes
+Route::prefix('biometric')->group(function () {
+    Route::post('/registration-options', [BiometricAuthController::class, 'getRegistrationOptions'])->middleware('auth:sanctum');
+    Route::post('/register', [BiometricAuthController::class, 'register'])->middleware('auth:sanctum');
+    Route::post('/authentication-options', [BiometricAuthController::class, 'getAuthenticationOptions']);
+    Route::post('/authenticate', [BiometricAuthController::class, 'authenticate']);
+    Route::get('/credentials', [BiometricAuthController::class, 'getUserCredentials'])->middleware('auth:sanctum');
+    Route::delete('/credentials/{credentialId}', [BiometricAuthController::class, 'revoke'])->middleware('auth:sanctum');
+});
+
+// Real-time features
+Route::middleware('auth:sanctum')->prefix('realtime')->group(function () {
+    Route::get('/notifications', [RealTimeController::class, 'getNotifications']);
+    Route::post('/notifications/{notificationId}/read', [RealTimeController::class, 'markAsRead']);
+    Route::get('/activity-feed', [RealTimeController::class, 'getActivityFeed']);
+    Route::get('/system-status', [RealTimeController::class, 'getSystemStatus']);
+    Route::get('/user-presence', [RealTimeController::class, 'getUserPresence']);
+    Route::post('/messages', [RealTimeController::class, 'sendMessage']);
+    Route::get('/workspace-metrics', [RealTimeController::class, 'getWorkspaceMetrics']);
+});
+
 // Legacy route for compatibility
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
