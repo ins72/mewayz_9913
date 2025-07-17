@@ -112,7 +112,7 @@ Route::prefix('auth')->group(function () {
 
 // Protected routes (require authentication)
 // Test route with custom auth middleware
-Route::middleware('custom.auth')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
     Route::get('/test-custom-auth', function (Request $request) {
         $user = $request->user();
         return response()->json([
