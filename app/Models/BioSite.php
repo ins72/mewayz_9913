@@ -11,6 +11,8 @@ class BioSite extends BaseBioSite
 	protected $fillable = [
 		'user_id',
 		'name',
+		'title',
+		'slug',
 		'address',
 		'bio',
 		'background',
