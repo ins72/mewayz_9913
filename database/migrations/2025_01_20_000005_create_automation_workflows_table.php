@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('automation_workflows', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->uuid('workspace_id');
             $table->string('name');
             $table->text('description')->nullable();
