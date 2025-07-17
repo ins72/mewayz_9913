@@ -157,6 +157,9 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     
     Route::get('/auth/me', [AuthController::class, 'me']);
     
+    // OAuth status (authenticated)
+    Route::get('/oauth/status', [ApiOAuthController::class, 'getStatus']);
+    
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
