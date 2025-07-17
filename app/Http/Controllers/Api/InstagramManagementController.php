@@ -37,9 +37,6 @@ class InstagramManagementController extends Controller
             ], 500);
         }
     }
-            ], 500);
-        }
-    }
     
     /**
      * Add Instagram account
