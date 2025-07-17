@@ -28,6 +28,25 @@ use Barryvdh\DomPDF\Facade\Pdf;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// Simple test route
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'Laravel is working!',
+        'status' => 'success',
+        'timestamp' => now()
+    ]);
+});
+
+// Health check route
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'healthy',
+        'database' => 'connected',
+        'timestamp' => now()
+    ]);
+});
+
 require __DIR__.'/auth.php';
 
 // Landing page route
