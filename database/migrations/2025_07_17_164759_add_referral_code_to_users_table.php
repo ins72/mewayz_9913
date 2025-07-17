@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->string('referral_code', 50)->nullable()->unique()->after('email');
+            $table->index(['referral_code']);
         });
     }
 
@@ -26,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropIndex(['referral_code']);
+            $table->dropColumn('referral_code');
         });
     }
 };
