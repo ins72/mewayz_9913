@@ -37,27 +37,6 @@ class InstagramManagementController extends Controller
             ], 500);
         }
     }
-                        'following_count' => $account->following_count,
-                        'media_count' => $account->media_count,
-                        'is_active' => $account->is_active,
-                        'is_verified' => $account->is_verified,
-                        'account_type' => $account->account_type,
-                        'engagement_rate' => $account->getEngagementRate(),
-                        'formatted_followers' => $account->getFormattedFollowersCount(),
-                        'token_expired' => $account->isTokenExpired()
-                    ];
-                })
-            ]);
-            
-        } catch (\Exception $e) {
-            Log::error('Error fetching Instagram accounts', [
-                'error' => $e->getMessage(),
-                'user_id' => Auth::id()
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'error' => 'Failed to fetch Instagram accounts'
             ], 500);
         }
     }
