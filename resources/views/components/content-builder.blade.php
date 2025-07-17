@@ -142,9 +142,7 @@
 
                 <div class="content-canvas-area min-h-96 bg-card-bg border-2 border-dashed border-border-color rounded-lg p-6" id="canvas-area">
                     <div class="canvas-placeholder text-center text-secondary-text">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-secondary-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
+                        <x-icon name="plus" size="4xl" class="mx-auto mb-4 text-secondary-text" alt="Add content" />
                         <p>Drop content blocks here to start building</p>
                     </div>
                 </div>
