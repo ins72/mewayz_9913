@@ -692,6 +692,51 @@ class EnhancedAIController extends Controller
         ];
     }
 
+    private function calculateSentimentScore($overallSentiment)
+    {
+        $total = array_sum($overallSentiment);
+        if ($total === 0) return 0;
+        
+        $positiveRatio = $overallSentiment['positive'] / $total;
+        $negativeRatio = $overallSentiment['negative'] / $total;
+        
+        return ($positiveRatio - $negativeRatio) * 100;
+    }
+
+    private function extractKeyThemes($textData)
+    {
+        $themes = ['customer service', 'product quality', 'pricing', 'user experience', 'features'];
+        $foundThemes = [];
+        
+        foreach ($themes as $theme) {
+            foreach ($textData as $text) {
+                if (stripos($text, $theme) !== false) {
+                    $foundThemes[] = $theme;
+                    break;
+                }
+            }
+        }
+        
+        return array_unique($foundThemes);
+    }
+
+    private function generateSentimentRecommendations($overallSentiment)
+    {
+        $total = array_sum($overallSentiment);
+        if ($total === 0) return [];
+        
+        $positiveRatio = $overallSentiment['positive'] / $total;
+        $negativeRatio = $overallSentiment['negative'] / $total;
+        
+        if ($positiveRatio > 0.7) {
+            return ['Leverage positive sentiment in marketing', 'Share customer testimonials', 'Maintain current quality standards'];
+        } elseif ($negativeRatio > 0.5) {
+            return ['Address negative feedback immediately', 'Improve customer support', 'Investigate common complaints'];
+        } else {
+            return ['Monitor sentiment trends', 'Engage with neutral customers', 'Focus on improving satisfaction'];
+        }
+    }
+
     private function calculateLeadScore($lead, $criteria)
     {
         $score = 0;
