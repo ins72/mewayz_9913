@@ -91,130 +91,130 @@ Route::get('/sw.js', function () {
 // Dashboard routes - Laravel Folio will handle the dashboard pages
 Route::get('/dashboard', function () {
     return view('pages.dashboard.index');
-})->middleware(['custom.web.auth'])->name('dashboard-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-index');
 
 // Workspace Setup
 Route::get('/dashboard/workspace', function () {
     return view('pages.dashboard.workspace.index');
-})->middleware(['custom.web.auth'])->name('dashboard-workspace-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-workspace-index');
 
 Route::get('/workspace-setup', function () {
     return view('pages.workspace-setup');
-})->middleware(['custom.web.auth'])->name('workspace-setup');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('workspace-setup');
 
 // Content & Sites
 Route::get('/dashboard/sites', function () {
     return view('pages.dashboard.sites.index');
-})->middleware(['custom.web.auth'])->name('dashboard-sites-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-sites-index');
 
 Route::get('/dashboard/linkinbio', function () {
     return view('pages.dashboard.linkinbio.index');
-})->middleware(['custom.web.auth'])->name('dashboard-linkinbio-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-linkinbio-index');
 
 Route::get('/dashboard/templates', function () {
     return view('pages.dashboard.templates.index');
-})->middleware(['custom.web.auth'])->name('dashboard-templates-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-templates-index');
 
 // Social Media
 Route::get('/dashboard/instagram', function () {
     return view('pages.dashboard.instagram.index-dynamic');
-})->middleware(['custom.web.auth'])->name('dashboard-instagram-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-instagram-index');
 
 Route::get('/dashboard/social', function () {
     return view('pages.dashboard.social.index');
-})->middleware(['custom.web.auth'])->name('dashboard-social-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-social-index');
 
 // Business Growth
 Route::get('/dashboard/audience', function () {
     return view('pages.dashboard.audience.index');
-})->middleware(['custom.web.auth'])->name('dashboard-audience-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-audience-index');
 
 Route::get('/dashboard/crm', function () {
     return view('pages.dashboard.crm.index');
-})->middleware(['custom.web.auth'])->name('dashboard-crm-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-crm-index');
 
 Route::get('/dashboard/community', function () {
     return view('pages.dashboard.community.index');
-})->middleware(['custom.web.auth'])->name('dashboard-community-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-community-index');
 
 // Monetization
 Route::get('/dashboard/store', function () {
     return view('pages.dashboard.store.index-dynamic');
-})->middleware(['custom.web.auth'])->name('dashboard-store-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-store-index');
 
 Route::get('/dashboard/store/create', function () {
     return view('pages.dashboard.store.create');
-})->middleware(['custom.web.auth'])->name('dashboard.store.create');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard.store.create');
 
 Route::get('/dashboard/courses', function () {
     return view('pages.dashboard.courses.index-dynamic');
-})->middleware(['custom.web.auth'])->name('dashboard-courses-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-courses-index');
 
 Route::get('/dashboard/courses/create', function () {
     return view('pages.dashboard.courses.create');
-})->middleware(['custom.web.auth'])->name('dashboard.courses.create');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard.courses.create');
 
 Route::get('/dashboard/booking', function () {
     return view('pages.dashboard.booking.index');
-})->middleware(['custom.web.auth'])->name('dashboard-booking-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-booking-index');
 
 // Marketing
 Route::get('/dashboard/email', function () {
     return view('pages.dashboard.email.index-dynamic');
-})->middleware(['custom.web.auth'])->name('dashboard-email-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-email-index');
 
 Route::get('/dashboard/automation', function () {
     return view('pages.dashboard.automation.index');
-})->middleware(['custom.web.auth'])->name('dashboard-automation-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-automation-index');
 
 // Analytics
 Route::get('/dashboard/analytics', function () {
     return view('pages.dashboard.analytics.index');
-})->middleware(['custom.web.auth'])->name('dashboard-analytics-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-analytics-index');
 
 Route::get('/dashboard/reports', function () {
     return view('pages.dashboard.reports.index');
-})->middleware(['custom.web.auth'])->name('dashboard-reports-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-reports-index');
 
 // Business Management
 Route::get('/dashboard/wallet', function () {
     return view('pages.dashboard.wallet.index');
-})->middleware(['custom.web.auth'])->name('dashboard-wallet-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-wallet-index');
 
 Route::get('/dashboard/invoices', function () {
     return view('pages.dashboard.invoices.index');
-})->middleware(['custom.web.auth'])->name('dashboard-invoices-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-invoices-index');
 
 Route::get('/dashboard/team', function () {
     return view('pages.dashboard.team.index');
-})->middleware(['custom.web.auth'])->name('dashboard-team-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-team-index');
 
 // AI & Tools
 Route::get('/dashboard/ai', function () {
     return view('pages.dashboard.ai.index');
-})->middleware(['custom.web.auth'])->name('dashboard-ai-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-ai-index');
 
 Route::get('/dashboard/media', function () {
     return view('pages.dashboard.media.index');
-})->middleware(['custom.web.auth'])->name('dashboard-media-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-media-index');
 
 Route::get('/dashboard/integrations', function () {
     return view('pages.dashboard.integrations.index');
-})->middleware(['custom.web.auth'])->name('dashboard-integrations-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-integrations-index');
 
 // Settings
 Route::get('/dashboard/settings', function () {
     return view('pages.dashboard.settings.index');
-})->middleware(['custom.web.auth'])->name('dashboard-settings-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-settings-index');
 
 Route::get('/dashboard/help', function () {
     return view('pages.dashboard.help.index');
-})->middleware(['custom.web.auth'])->name('dashboard-help-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-help-index');
 
 // Upgrade route for Stripe payment integration
 Route::get('/dashboard/upgrade', function () {
     return view('pages.dashboard.upgrade');
-})->middleware(['custom.web.auth'])->name('dashboard-upgrade-index');
+})->middleware([\App\Http\Middleware\CustomWebAuth::class])->name('dashboard-upgrade-index');
 
 
 Route::name('run-')->namespace('App\Http\Controllers\Run')->group(function() {
