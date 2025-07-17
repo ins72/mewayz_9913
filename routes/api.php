@@ -43,6 +43,25 @@ use App\Http\Controllers\Api\OptimizationController;
 |
 */
 
+// API Test Routes (for external access)
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'Mewayz API is working!',
+        'status' => 'success',
+        'version' => '1.0.0',
+        'timestamp' => now()
+    ]);
+});
+
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'healthy',
+        'database' => 'connected',
+        'redis' => 'available',
+        'timestamp' => now()
+    ]);
+});
+
 // Health and System Routes
 Route::get('/health', [HealthController::class, 'index']);
 Route::get('/system/info', [SystemController::class, 'info']);
