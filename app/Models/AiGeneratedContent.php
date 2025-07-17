@@ -11,6 +11,9 @@ class AiGeneratedContent extends Model
     use HasFactory;
 
     protected $table = 'ai_generated_content';
+    
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'user_id',
