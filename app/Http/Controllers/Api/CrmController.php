@@ -162,7 +162,7 @@ class CrmController extends Controller
     public function updateLead(Request $request, Audience $lead)
     {
         // Check if user owns the lead
-        if ($lead->user_id !== auth()->id()) {
+        if ($lead->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized access to lead',
