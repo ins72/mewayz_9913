@@ -31,6 +31,7 @@ use App\Http\Controllers\Api\SystemController;
 use App\Http\Controllers\Api\PlatformController;
 use App\Http\Controllers\Api\BrandingController;
 use App\Http\Controllers\Api\OptimizationController;
+use App\Http\Controllers\Api\WebsiteBuilderController;
 
 /*
 |--------------------------------------------------------------------------
