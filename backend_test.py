@@ -15,7 +15,7 @@ class MewayzAPITester:
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         # Use a valid test token from the test_result.md
-        self.auth_token = "3|tBn24bcMfBMYR5OKp7QjsK0RF6fmP57e0h6MWKlpffe81281"
+        self.auth_token = "3|2tizxvYX1aqPpjgTN6rGz0QY2FMeWtHpnMts7GCY137499ef"
         self.user_id = None
         self.test_results = {}
         self.session = requests.Session()
