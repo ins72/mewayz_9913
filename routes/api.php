@@ -39,6 +39,7 @@ use App\Http\Controllers\Api\AdvancedAnalyticsController;
 use App\Http\Controllers\Api\AdvancedBookingController;
 use App\Http\Controllers\Api\AdvancedFinancialController;
 use App\Http\Controllers\Api\EnhancedAIController;
+use App\Http\Controllers\Api\InstagramDatabaseController;
 
 /*
 |--------------------------------------------------------------------------
