@@ -558,7 +558,7 @@ class AdminController extends Controller
                 'target' => $request->target,
                 'send_email' => $request->send_email ?? false,
                 'send_push' => $request->send_push ?? false,
-                'sent_by' => Auth::id(),
+                'sent_by' => $request->user()->id,
                 'sent_at' => now()->toISOString(),
                 'recipients_count' => 0,
             ];
