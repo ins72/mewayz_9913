@@ -496,7 +496,7 @@ Route::prefix('biometric')->group(function () {
 });
 
 // Real-time features
-Route::middleware('auth:sanctum')->prefix('realtime')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('realtime')->group(function () {
     Route::get('/notifications', [RealTimeController::class, 'getNotifications']);
     Route::post('/notifications/{notificationId}/read', [RealTimeController::class, 'markAsRead']);
     Route::get('/activity-feed', [RealTimeController::class, 'getActivityFeed']);
