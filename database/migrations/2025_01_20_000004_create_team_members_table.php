@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('team_members', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('team_id');
-            $table->uuid('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('role')->default('member');
             $table->timestamp('joined_at');
             $table->enum('status', ['active', 'inactive'])->default('active');
