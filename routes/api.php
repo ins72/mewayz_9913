@@ -243,6 +243,16 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/analytics', [InstagramDatabaseController::class, 'getAnalytics']);
     });
     
+    // AI & Automation routes
+    Route::prefix('ai-automation')->group(function () {
+        Route::post('/generate-content', [AiAutomationController::class, 'generateContent']);
+        Route::post('/content-suggestions', [AiAutomationController::class, 'getContentSuggestions']);
+        Route::get('/workflows', [AiAutomationController::class, 'getWorkflows']);
+        Route::post('/workflows', [AiAutomationController::class, 'createWorkflow']);
+        Route::post('/workflows/{id}/execute', [AiAutomationController::class, 'executeWorkflow']);
+        Route::get('/analytics', [AiAutomationController::class, 'getAiAnalytics']);
+    });
+    
     // Bio Site routes
     Route::prefix('bio-sites')->group(function () {
         Route::get('/', [BioSiteController::class, 'index']);
