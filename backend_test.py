@@ -184,10 +184,11 @@ class MewayzAPITester:
         
         # Test create bio site
         bio_site_data = {
+            "name": "Test Creator Bio",
             "title": "Test Creator Bio",
             "slug": f"test-creator-{int(time.time())}",
             "description": "This is a test bio site for the creator",
-            "theme": "default"
+            "theme": "minimal"
         }
         
         response = self.make_request('POST', '/bio-sites/', bio_site_data)
