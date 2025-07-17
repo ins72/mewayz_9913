@@ -251,9 +251,56 @@ class ThemeController extends Controller
      */
     private function detectSystemTheme($userAgent)
     {
-        // This is a simplified detection - in real implementation,
-        // you would use JavaScript to detect system theme
-        return 'dark'; // Default to dark theme
+        // Default theme
+        $theme = 'dark';
+        
+        // Check if user agent contains dark mode indicators
+        if (strpos($userAgent, 'dark') !== false) {
+            $theme = 'dark';
+        } elseif (strpos($userAgent, 'light') !== false) {
+            $theme = 'light';
+        }
+        
+        // Check for mobile devices - they often prefer dark mode
+        $mobileDevices = ['iPhone', 'iPad', 'Android', 'BlackBerry', 'Windows Phone'];
+        foreach ($mobileDevices as $device) {
+            if (strpos($userAgent, $device) !== false) {
+                $theme = 'dark'; // Mobile devices often prefer dark mode
+                break;
+            }
+        }
+        
+        // Check for desktop browsers and their preferences
+        if (strpos($userAgent, 'Chrome') !== false) {
+            // Chrome users often prefer light mode during day
+            $currentHour = date('H');
+            if ($currentHour >= 6 && $currentHour <= 18) {
+                $theme = 'light';
+            } else {
+                $theme = 'dark';
+            }
+        } elseif (strpos($userAgent, 'Firefox') !== false) {
+            // Firefox users often prefer dark mode
+            $theme = 'dark';
+        } elseif (strpos($userAgent, 'Safari') !== false && strpos($userAgent, 'Chrome') === false) {
+            // Safari users (excluding Chrome on mobile) often prefer light mode
+            $theme = 'light';
+        } elseif (strpos($userAgent, 'Edge') !== false) {
+            // Edge users preference based on Windows theme
+            $theme = 'dark';
+        }
+        
+        // Override with time-based logic for better UX
+        $currentHour = date('H');
+        if ($currentHour >= 6 && $currentHour <= 18) {
+            // Daytime: prefer light mode
+            $theme = 'light';
+        } else {
+            // Evening/Night: prefer dark mode
+            $theme = 'dark';
+        }
+        
+        return $theme;
     }
 
     /**
