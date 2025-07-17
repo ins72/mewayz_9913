@@ -659,6 +659,9 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('templa
     Route::post('/{id}/review', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'addReview']);
 });
 
+// Include Phase 1 Foundation Features
+require __DIR__ . '/api_phase1.php';
+
 // Include Phase 2 Professional Features
 require __DIR__ . '/api_phase2.php';
 
