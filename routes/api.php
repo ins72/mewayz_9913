@@ -487,12 +487,12 @@ Route::post('/webhook/stripe', [StripePaymentController::class, 'handleWebhook']
 
 // Biometric Authentication routes
 Route::prefix('biometric')->group(function () {
-    Route::post('/registration-options', [BiometricAuthController::class, 'getRegistrationOptions'])->middleware('auth:sanctum');
-    Route::post('/register', [BiometricAuthController::class, 'register'])->middleware('auth:sanctum');
+    Route::post('/registration-options', [BiometricAuthController::class, 'getRegistrationOptions'])->middleware(\App\Http\Middleware\CustomSanctumAuth::class);
+    Route::post('/register', [BiometricAuthController::class, 'register'])->middleware(\App\Http\Middleware\CustomSanctumAuth::class);
     Route::post('/authentication-options', [BiometricAuthController::class, 'getAuthenticationOptions']);
     Route::post('/authenticate', [BiometricAuthController::class, 'authenticate']);
-    Route::get('/credentials', [BiometricAuthController::class, 'getUserCredentials'])->middleware('auth:sanctum');
-    Route::delete('/credentials/{credentialId}', [BiometricAuthController::class, 'revoke'])->middleware('auth:sanctum');
+    Route::get('/credentials', [BiometricAuthController::class, 'getUserCredentials'])->middleware(\App\Http\Middleware\CustomSanctumAuth::class);
+    Route::delete('/credentials/{credentialId}', [BiometricAuthController::class, 'revoke'])->middleware(\App\Http\Middleware\CustomSanctumAuth::class);
 });
 
 // Real-time features
