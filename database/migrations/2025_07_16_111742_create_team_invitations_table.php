@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('team_invitations', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
-            $table->foreignId('workspace_id')->constrained()->onDelete('cascade');
+            $table->char('workspace_id', 36);
             $table->foreignId('invited_by')->constrained('users')->onDelete('cascade');
             $table->string('email');
             $table->string('role')->default('member');
@@ -25,6 +25,8 @@ return new class extends Migration
             $table->timestamp('rejected_at')->nullable();
             $table->string('token')->unique();
             $table->timestamps();
+            
+            $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
         });
     }
 
