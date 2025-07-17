@@ -49,6 +49,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PASS - CONFIRMED WORKING: Registration and login endpoints fully functional after database fix. Users can register and receive tokens. Minor: Profile endpoint still fails due to middleware issue."
+      - working: true
+        agent: "testing"
+        comment: "✅ PASS - MAJOR SUCCESS: Custom authentication middleware (CustomSanctumAuth) working perfectly! Registration, login, /auth/me, and /test-custom-auth all work correctly with provided token. Authentication system fully functional."
 
   - task: "Bio Sites & Link-in-Bio"
     implemented: true
