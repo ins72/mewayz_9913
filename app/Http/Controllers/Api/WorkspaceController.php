@@ -120,7 +120,7 @@ class WorkspaceController extends Controller
                 'organization_id' => $workspace->id,
                 'email' => $request->email,
                 'role' => $request->role,
-                'invited_by' => auth()->id(),
+                'invited_by' => $request->user()->id,
                 'token' => \Illuminate\Support\Str::random(64),
                 'expires_at' => now()->addDays(7),
                 'status' => 'pending'
