@@ -43,12 +43,21 @@ use App\Http\Controllers\Api\OptimizationController;
 |
 */
 
-// API Test Routes (for external access)
+// Test Routes
 Route::get('/test', function () {
     return response()->json([
         'message' => 'Mewayz API is working!',
         'status' => 'success',
         'version' => '1.0.0',
+        'timestamp' => now()
+    ]);
+});
+
+// Test auth route
+Route::middleware('auth:sanctum')->get('/test-auth', function (Request $request) {
+    return response()->json([
+        'message' => 'Auth test successful',
+        'user' => $request->user(),
         'timestamp' => now()
     ]);
 });
