@@ -25,7 +25,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Comment out rate limiter to test auth issue
+        // Comment out rate limiter that might be causing auth issues
         // RateLimiter::for('api', function (Request $request) {
         //     $userId = auth('sanctum')->id();
         //     return Limit::perMinute(60)->by($userId ?: $request->ip());
