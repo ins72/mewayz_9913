@@ -232,6 +232,16 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/content-suggestions', [InstagramController::class, 'getContentSuggestions']);
     });
     
+    // Instagram Database & Lead Generation routes
+    Route::prefix('instagram-database')->group(function () {
+        Route::get('/search', [InstagramDatabaseController::class, 'searchProfiles']);
+        Route::get('/profiles/{id}', [InstagramDatabaseController::class, 'getProfile']);
+        Route::post('/scrape', [InstagramDatabaseController::class, 'scrapeProfile']);
+        Route::post('/export', [InstagramDatabaseController::class, 'exportProfiles']);
+        Route::post('/import', [InstagramDatabaseController::class, 'importProfiles']);
+        Route::get('/analytics', [InstagramDatabaseController::class, 'getAnalytics']);
+    });
+    
     // Bio Site routes
     Route::prefix('bio-sites')->group(function () {
         Route::get('/', [BioSiteController::class, 'index']);
