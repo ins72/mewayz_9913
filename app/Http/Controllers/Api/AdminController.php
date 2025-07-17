@@ -20,7 +20,8 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        // CustomSanctumAuth middleware already handles authentication in routes
+        // Only need to check admin access here
         $this->middleware(function ($request, $next) {
             $user = $request->user();
             if (!$user || !$user->is_admin) {
