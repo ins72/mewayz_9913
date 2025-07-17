@@ -658,7 +658,7 @@ class CrmController extends Controller
             $dateRange = $this->parseDateRange($request->date_range ?? 'last_30_days', $request->start_date, $request->end_date);
             
             // Get pipeline data
-            $pipelineData = $this->getPipelineData(auth()->id(), $request->pipeline_id, $dateRange);
+            $pipelineData = $this->getPipelineData($request->user()->id, $request->pipeline_id, $dateRange);
             
             // Calculate advanced metrics
             $pipelineMetrics = $this->calculateAdvancedPipelineMetrics($pipelineData, $dateRange);
