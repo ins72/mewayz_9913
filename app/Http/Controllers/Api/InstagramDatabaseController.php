@@ -45,11 +45,11 @@ class InstagramDatabaseController extends Controller
             $query = InstagramProfile::query();
 
             // Text search
-            if ($request->query) {
+            if ($request->input('query')) {
                 $query->where(function ($q) use ($request) {
-                    $q->where('username', 'like', '%' . $request->query . '%')
-                      ->orWhere('display_name', 'like', '%' . $request->query . '%')
-                      ->orWhere('bio', 'like', '%' . $request->query . '%');
+                    $q->where('username', 'like', '%' . $request->input('query') . '%')
+                      ->orWhere('display_name', 'like', '%' . $request->input('query') . '%')
+                      ->orWhere('bio', 'like', '%' . $request->input('query') . '%');
                 });
             }
 
