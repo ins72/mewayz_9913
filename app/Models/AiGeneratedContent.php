@@ -10,6 +10,8 @@ class AiGeneratedContent extends Model
 {
     use HasFactory;
 
+    protected $table = 'ai_generated_content';
+
     protected $fillable = [
         'user_id',
         'workspace_id',
