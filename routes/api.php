@@ -519,7 +519,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('escrow
 });
 
 // Advanced Analytics & Business Intelligence
-Route::middleware('auth:sanctum')->prefix('analytics')->group(function () {
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('analytics')->group(function () {
     Route::get('/business-intelligence', [AdvancedAnalyticsController::class, 'getBusinessIntelligence']);
     Route::get('/realtime-metrics', [AdvancedAnalyticsController::class, 'getRealtimeMetrics']);
     Route::get('/cohort-analysis', [AdvancedAnalyticsController::class, 'getCohortAnalysis']);
