@@ -339,11 +339,7 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <button class="relative">
-                        <svg class="w-6 h-6 text-secondary-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.595-3.595a.908.908 0 00-1.28 0L15 17z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17h3"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13h.01"/>
-                        </svg>
+                        <x-icon name="notification" size="md" class="text-secondary-text" alt="Notifications" />
                         <span class="absolute -top-2 -right-2 bg-error text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
                     </button>
                     <div class="relative">
