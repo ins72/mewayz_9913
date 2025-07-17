@@ -5,6 +5,8 @@
     --card-bg: #191919;
     --primary-text: #F1F1F1;
     --secondary-text: #7B7B7B;
+    --background: #101010;
+    --secondary-bg: #1a1a1a;
     
     /* Button Colors */
     --btn-primary-bg: #FDFDFD;
@@ -20,6 +22,24 @@
     --error: #EF4444;
     --warning: #F59E0B;
     --info: #3B82F6;
+}
+
+/* Ensure variables are available in dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --app-bg: #101010;
+        --card-bg: #191919;
+        --primary-text: #F1F1F1;
+        --secondary-text: #7B7B7B;
+        --background: #101010;
+        --secondary-bg: #1a1a1a;
+        --border-color: #282828;
+        --hover-bg: #222222;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+        --info: #3B82F6;
+    }
 }
 
 /* Base Styles */
