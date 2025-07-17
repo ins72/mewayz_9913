@@ -22,13 +22,27 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+        ]);
 
+        // Manual authentication to bypass Auth manager
+        $user = \App\Models\User::where('email', $request->email)->first();
+        
+        if (!$user || !password_verify($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+
+        // Set session manually
         $request->session()->regenerate();
+        $request->session()->put('user_id', $user->id);
 
-        // Redirect to dashboard instead of console
+        // Redirect to dashboard
         return redirect()->intended('/dashboard');
     }
 
