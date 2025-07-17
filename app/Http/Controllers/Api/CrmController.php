@@ -518,7 +518,7 @@ class CrmController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Automation workflow creation failed', ['error' => $e->getMessage(), 'user_id' => auth()->id()]);
+            Log::error('Automation workflow creation failed', ['error' => $e->getMessage(), 'user_id' => $request->user()->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create automation workflow: ' . $e->getMessage()
