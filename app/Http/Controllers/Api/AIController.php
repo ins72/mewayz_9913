@@ -71,7 +71,7 @@ class AIController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                return $service['enabled'];
+                'error' => 'Failed to fetch AI services: ' . $e->getMessage()
             });
 
             return response()->json([
