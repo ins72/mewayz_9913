@@ -13,11 +13,11 @@ return new class extends Migration
             $table->uuid('workspace_id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->uuid('leader_id')->nullable();
+            $table->unsignedBigInteger('leader_id')->nullable();
             $table->uuid('department_id')->nullable();
             $table->json('settings')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->uuid('created_by');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
             
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
