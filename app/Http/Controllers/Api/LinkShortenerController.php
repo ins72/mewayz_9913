@@ -472,7 +472,7 @@ class LinkShortenerController extends Controller
     public function bulkAnalytics(Request $request)
     {
         try {
-            $user = Auth::user();
+            $user = $request->user();
             $workspaceId = $request->workspace_id;
 
             $query = ShortenedLink::where('user_id', $user->id);
