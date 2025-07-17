@@ -94,27 +94,20 @@ class BioSiteController extends Controller
     public function index(Request $request)
     {
         try {
-            $bioSites = BioSite::with(['links' => function ($query) {
-                $query->where('is_active', true)->orderBy('sort_order');
-            }])
-            ->where('user_id', $request->user()->id)
-            ->select(['id', 'title', 'slug', 'description', 'status', 'template_id', 'theme_config', 'view_count', 'click_count', 'created_at', 'updated_at'])
+            $bioSites = BioSite::where('user_id', $request->user()->id)
+            ->select(['id', 'name', 'title', 'slug', 'description', 'status', 'theme_config', 'created_at', 'updated_at'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($bioSite) {
                 return [
                     'id' => $bioSite->id,
+                    'name' => $bioSite->name,
                     'title' => $bioSite->title,
                     'slug' => $bioSite->slug,
                     'description' => $bioSite->description,
                     'status' => $bioSite->status,
-                    'template_id' => $bioSite->template_id,
                     'theme_config' => $bioSite->theme_config ? json_decode($bioSite->theme_config, true) : null,
-                    'links_count' => $bioSite->links->count(),
-                    'view_count' => $bioSite->view_count ?? 0,
-                    'click_count' => $bioSite->click_count ?? 0,
                     'url' => url("/bio/{$bioSite->slug}"),
-                    'qr_code' => url("/api/bio-sites/{$bioSite->id}/qr-code"),
                     'created_at' => $bioSite->created_at,
                     'updated_at' => $bioSite->updated_at,
                 ];
