@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('security_events', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->uuid('workspace_id')->nullable();
             $table->string('event_type');
             $table->string('severity'); // low, medium, high, critical
