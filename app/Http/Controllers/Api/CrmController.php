@@ -466,7 +466,7 @@ class CrmController extends Controller
         try {
             $workflow = [
                 'id' => uniqid('workflow_'),
-                'user_id' => auth()->id(),
+                'user_id' => $request->user()->id,
                 'workflow_name' => $request->workflow_name,
                 'description' => $request->description,
                 'trigger_type' => $request->trigger_type,
