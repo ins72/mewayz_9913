@@ -118,11 +118,11 @@ backend:
 
   - task: "Escrow & Transaction Security"
     implemented: true
-    working: true
+    working: false
     file: "app/Http/Controllers/Api/EscrowController.php"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -139,6 +139,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "🎉 ESCROW SYSTEM FULLY FUNCTIONAL: Comprehensive end-to-end testing confirms the escrow system is working perfectly! ✅ ALL 8 CORE ENDPOINTS TESTED: GET /escrow/ (list transactions), POST /escrow/ (create), GET /escrow/{id} (get specific), POST /escrow/{id}/fund (fund transaction), POST /escrow/{id}/deliver (deliver item), POST /escrow/{id}/accept (accept delivery), POST /escrow/{id}/dispute (create dispute), GET /escrow/statistics/overview (get statistics). ✅ COMPLETE WORKFLOW TESTED: Created escrow transaction ($299.99), funded via Stripe payment, delivered item with proof, accepted delivery, completed transaction successfully. ✅ DISPUTE SYSTEM WORKING: Successfully tested dispute creation by both buyer and seller, proper status updates to 'disputed', validation working correctly. ✅ AUTHENTICATION: CustomSanctumAuth middleware working perfectly for all endpoints. ✅ DATABASE MODELS: EscrowTransaction, EscrowMilestone, EscrowDispute, and EscrowDocument models all working correctly with proper relationships. The previously reported 500 errors due to missing EscrowDocument model have been completely resolved. Success rate: 100% for core workflow, 62.5% for dispute validation (minor validation issues only)."
+      - working: false
+        agent: "testing"
+        comment: "❌ FAIL - FOCUSED TESTING REVEALS ISSUES: Escrow system endpoints failing with timeout/no response using fresh token '3|tBn24bcMfBMYR5OKp7QjsK0RF6fmP57e0h6MWKlpffe81281'. All 3 tested endpoints failed: GET /escrow/, POST /escrow/, GET /escrow/statistics/overview. This suggests controller implementation issues or database problems. Authentication middleware working but escrow functionality needs investigation."
 
   - task: "Advanced Analytics & BI"
     implemented: true
