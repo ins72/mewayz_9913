@@ -441,6 +441,24 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::post('/rewards/{id}/redeem', [GamificationController::class, 'redeemReward']);
     });
     
+    // Website Builder routes
+    Route::prefix('websites')->group(function () {
+        Route::get('/', [WebsiteBuilderController::class, 'index']);
+        Route::post('/', [WebsiteBuilderController::class, 'store']);
+        Route::get('/templates', [WebsiteBuilderController::class, 'getTemplates']);
+        Route::get('/components', [WebsiteBuilderController::class, 'getComponents']);
+        Route::get('/{id}', [WebsiteBuilderController::class, 'show']);
+        Route::put('/{id}', [WebsiteBuilderController::class, 'update']);
+        Route::delete('/{id}', [WebsiteBuilderController::class, 'destroy']);
+        Route::put('/{id}/publish', [WebsiteBuilderController::class, 'publish']);
+        Route::get('/{id}/analytics', [WebsiteBuilderController::class, 'getAnalytics']);
+        
+        // Page management routes
+        Route::post('/{id}/pages', [WebsiteBuilderController::class, 'createPage']);
+        Route::put('/{id}/pages/{pageId}', [WebsiteBuilderController::class, 'updatePage']);
+        Route::delete('/{id}/pages/{pageId}', [WebsiteBuilderController::class, 'deletePage']);
+    });
+    
 });
 
 // Stripe Payment routes - public access for webhooks
