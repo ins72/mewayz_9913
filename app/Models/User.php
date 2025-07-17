@@ -142,18 +142,17 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return collect($features);
     }
 
-	public function getAvatar(){
-        $avatar = $this->avatar;
-        $default = "https://api.dicebear.com/8.x/initials/svg?seed=$this->name";
-        $check = mediaExists('media/avatar', $avatar);
-        $path = getStorage('media/avatar', $avatar);
-
-        $avatar = (!empty($avatar) && $check) ? $path : $default;
-
-        if(validate_url($this->avatar)) $avatar = $this->avatar;
-
-        return $avatar;
-	}
+    public function getAvatar(){
+        $avatar = $this->avatar ?? null;
+        $default = "https://api.dicebear.com/8.x/initials/svg?seed=" . urlencode($this->name);
+        
+        // Simple fallback for missing helper functions
+        if (!empty($avatar) && filter_var($avatar, FILTER_VALIDATE_URL)) {
+            return $avatar;
+        }
+        
+        return $default;
+    }
 
     public function isAdmin(){
      
