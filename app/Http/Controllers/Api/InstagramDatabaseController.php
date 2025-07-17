@@ -397,7 +397,9 @@ class InstagramDatabaseController extends Controller
     public function getAnalytics(Request $request)
     {
         try {
-            $workspaceId = $request->user()->current_workspace_id;
+            // Get user's first workspace
+            $workspace = $request->user()->workspaces()->first();
+            $workspaceId = $workspace ? $workspace->id : null;
             
             $analytics = [
                 'total_profiles' => InstagramProfile::where('workspace_id', $workspaceId)->count(),
