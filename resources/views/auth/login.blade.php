@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mewayz</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/auth.css', 'resources/js/app.js'])
+<x-layouts.app title="Login - Mewayz">
     <style>
         :root {
             --app-bg: #101010;
@@ -30,10 +23,197 @@
         html, body {
             background-color: var(--app-bg) !important;
             color: var(--primary-text) !important;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
+        
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--app-bg);
+            padding: 1rem;
+        }
+        
+        .auth-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--primary-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .auth-subtitle {
+            color: var(--secondary-text);
+            font-size: 0.875rem;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--primary-text);
+        }
+        
+        .form-input {
+            padding: 0.75rem;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--primary-text);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--info);
+        }
+        
+        .form-input::placeholder {
+            color: var(--secondary-text);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--btn-primary-bg);
+            color: var(--btn-primary-text);
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-1px);
+        }
+        
+        .oauth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .oauth-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            color: var(--primary-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .oauth-button:hover {
+            background-color: var(--hover-bg);
+            transform: translateY(-1px);
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-color);
+        }
+        
+        .auth-divider span {
+            padding: 0 1rem;
+            color: var(--secondary-text);
+            font-size: 0.875rem;
+        }
+        
+        .auth-link {
+            color: var(--info);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+        
+        .auth-link:hover {
+            color: #60A5FA;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .auth-message {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .auth-error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+        }
+        
+        .auth-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #6EE7B7;
+        }
+        
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .gap-2 { gap: 0.5rem; }
+        .text-sm { font-size: 0.875rem; }
     </style>
-</head>
-<body>
+    
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
@@ -118,5 +298,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</x-layouts.app>
