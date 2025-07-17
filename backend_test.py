@@ -1706,6 +1706,15 @@ class MewayzAPITester:
         self.test_advanced_financial_management()
         self.test_enhanced_ai_features()
         
+        # NEW CRITICAL FEATURES TESTING (from review request)
+        print("\n" + "=" * 80)
+        print("🎯 TESTING NEW CRITICAL FEATURES FROM REVIEW REQUEST")
+        print("=" * 80)
+        
+        self.test_link_shortener_system()
+        self.test_referral_system()
+        self.test_template_marketplace()
+        
         # Print summary
         self.print_summary()
     
