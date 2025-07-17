@@ -5,15 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class TemplateCategory extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'name',
-        'slug',
         'description',
+        'slug',
         'icon',
         'color',
         'sort_order',
@@ -22,6 +26,8 @@ class TemplateCategory extends Model
     ];
 
     protected $casts = [
+        'id' => 'string',
+        'sort_order' => 'integer',
         'is_active' => 'boolean',
         'metadata' => 'array',
     ];
@@ -29,82 +35,110 @@ class TemplateCategory extends Model
     protected static function boot()
     {
         parent::boot();
+        
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
+            
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
+            }
+        });
 
-        static::creating(function ($category) {
-            if (empty($category->slug)) {
-                $category->slug = \Str::slug($category->name);
+        static::updating(function ($model) {
+            if ($model->isDirty('name') && empty($model->slug)) {
+                $model->slug = Str::slug($model->name);
             }
         });
     }
 
-    /**
-     * Get templates in this category
-     */
+    // Relationships
     public function templates(): HasMany
     {
-        return $this->hasMany(Template::class);
+        return $this->hasMany(Template::class, 'category_id');
     }
 
-    /**
-     * Get published templates in this category
-     */
-    public function publishedTemplates(): HasMany
+    // Accessors
+    public function getTemplateCountAttribute(): int
     {
-        return $this->templates()->published();
+        return $this->templates()->count();
     }
 
-    /**
-     * Get template count in this category
-     */
-    public function getTemplateCount(): int
+    public function getActiveTemplateCountAttribute(): int
     {
-        return $this->templates()->published()->count();
+        return $this->templates()->active()->count();
     }
 
-    /**
-     * Scope to get active categories
-     */
+    public function getApprovedTemplateCountAttribute(): int
+    {
+        return $this->templates()->approved()->active()->count();
+    }
+
+    public function getUrlAttribute(): string
+    {
+        return url("/templates/category/{$this->slug}");
+    }
+
+    // Scopes
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    /**
-     * Scope to order by sort order
-     */
-    public function scopeOrdered($query)
+    public function scopeOrderBySortOrder($query)
     {
-        return $query->orderBy('sort_order');
+        return $query->orderBy('sort_order', 'asc');
     }
 
-    /**
-     * Get the icon HTML for display
-     */
-    public function getIconHtml(): string
+    public function scopeBySlug($query, $slug)
     {
-        if (empty($this->icon)) {
-            return '<div class="w-6 h-6 bg-gray-400 rounded"></div>';
-        }
-
-        // If it's an SVG string, return it directly
-        if (str_starts_with($this->icon, '<svg')) {
-            return $this->icon;
-        }
-
-        // If it's a CSS class (like Font Awesome), return as icon
-        if (str_starts_with($this->icon, 'fa-') || str_starts_with($this->icon, 'heroicon-')) {
-            return '<i class="' . $this->icon . '"></i>';
-        }
-
-        // Default SVG icon
-        return '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg>';
+        return $query->where('slug', $slug);
     }
 
-    /**
-     * Get color style for display
-     */
-    public function getColorStyle(): string
+    // Business Logic
+    public function activate(): void
     {
-        return "color: {$this->color}; background-color: {$this->color}20;";
+        $this->update(['is_active' => true]);
+    }
+
+    public function deactivate(): void
+    {
+        $this->update(['is_active' => false]);
+    }
+
+    public function updateSortOrder(int $order): void
+    {
+        $this->update(['sort_order' => $order]);
+    }
+
+    public function getPopularTemplates(int $limit = 10)
+    {
+        return $this->templates()
+            ->approved()
+            ->active()
+            ->popular()
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getRecentTemplates(int $limit = 10)
+    {
+        return $this->templates()
+            ->approved()
+            ->active()
+            ->recent()
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getFeaturedTemplates(int $limit = 5)
+    {
+        return $this->templates()
+            ->approved()
+            ->active()
+            ->featured()
+            ->limit($limit)
+            ->get();
     }
 }

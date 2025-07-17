@@ -6,237 +6,312 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Template extends Model
 {
     use HasFactory;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'type',
+        'creator_id',
         'category_id',
-        'user_id',
-        'template_data',
-        'preview_image',
-        'tags',
+        'name',
+        'description',
+        'template_type',
         'price',
+        'tags',
+        'preview_images',
+        'template_data',
+        'demo_url',
+        'download_count',
         'status',
-        'is_featured',
-        'is_premium',
-        'downloads',
-        'rating',
-        'rating_count',
+        'is_active',
+        'featured',
+        'average_rating',
+        'review_count',
         'metadata',
     ];
 
     protected $casts = [
-        'template_data' => 'array',
-        'tags' => 'array',
-        'metadata' => 'array',
+        'id' => 'string',
         'price' => 'decimal:2',
-        'rating' => 'decimal:2',
-        'is_featured' => 'boolean',
-        'is_premium' => 'boolean',
+        'preview_images' => 'array',
+        'template_data' => 'array',
+        'download_count' => 'integer',
+        'is_active' => 'boolean',
+        'featured' => 'boolean',
+        'average_rating' => 'decimal:2',
+        'review_count' => 'integer',
+        'metadata' => 'array',
     ];
 
     protected static function boot()
     {
         parent::boot();
-
-        static::creating(function ($template) {
-            if (empty($template->slug)) {
-                $template->slug = \Str::slug($template->name);
+        
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
             }
         });
     }
 
-    /**
-     * Get the category that owns this template
-     */
+    // Relationships
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(TemplateCategory::class);
     }
 
-    /**
-     * Get the user who created this template
-     */
-    public function user(): BelongsTo
+    public function purchases(): HasMany
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(TemplatePurchase::class);
     }
 
-    /**
-     * Check if template is free
-     */
-    public function isFree(): bool
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(TemplateReview::class);
+    }
+
+    // Accessors
+    public function getDownloadUrlAttribute(): string
+    {
+        return url("/api/templates/{$this->id}/download");
+    }
+
+    public function getPreviewUrlAttribute(): ?string
+    {
+        return $this->demo_url ?: url("/api/templates/{$this->id}/preview");
+    }
+
+    public function getIsFreeAttribute(): bool
     {
         return $this->price == 0;
     }
 
-    /**
-     * Check if template is published
-     */
-    public function isPublished(): bool
+    public function getIsPremiumAttribute(): bool
     {
-        return $this->status === 'published';
+        return $this->price > 50;
     }
 
-    /**
-     * Check if template is draft
-     */
-    public function isDraft(): bool
+    public function getStatusLabelAttribute(): string
     {
-        return $this->status === 'draft';
+        return match($this->status) {
+            'pending' => 'Pending Review',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+            'suspended' => 'Suspended',
+            default => 'Unknown'
+        };
     }
 
-    /**
-     * Increment download count
-     */
-    public function incrementDownloads()
+    public function getTemplateTypeLabelAttribute(): string
     {
-        $this->increment('downloads');
+        return match($this->template_type) {
+            'website' => 'Website Template',
+            'email' => 'Email Template',
+            'social' => 'Social Media Template',
+            'bio' => 'Link in Bio Template',
+            'course' => 'Course Template',
+            default => 'Unknown Type'
+        };
     }
 
-    /**
-     * Add rating to template
-     */
-    public function addRating(float $rating)
+    public function getTagsArrayAttribute(): array
     {
-        $totalRating = ($this->rating * $this->rating_count) + $rating;
-        $this->rating_count++;
-        $this->rating = $totalRating / $this->rating_count;
-        $this->save();
+        return $this->tags ? explode(',', $this->tags) : [];
     }
 
-    /**
-     * Get formatted price
-     */
-    public function getFormattedPrice(): string
+    public function getFirstPreviewImageAttribute(): ?string
     {
-        return $this->isFree() ? 'Free' : '$' . number_format($this->price, 2);
+        return $this->preview_images && count($this->preview_images) > 0 
+            ? $this->preview_images[0] 
+            : null;
     }
 
-    /**
-     * Get template preview URL
-     */
-    public function getPreviewUrl(): string
+    public function getFormattedPriceAttribute(): string
     {
-        return $this->preview_image ?: '/images/template-placeholder.png';
+        return $this->price == 0 ? 'Free' : '$' . number_format($this->price, 2);
     }
 
-    /**
-     * Scope to get published templates
-     */
-    public function scopePublished($query)
+    public function getRatingStarsAttribute(): string
     {
-        return $query->where('status', 'published');
+        $fullStars = floor($this->average_rating);
+        $halfStar = $this->average_rating - $fullStars >= 0.5;
+        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+
+        return str_repeat('★', $fullStars) . 
+               ($halfStar ? '☆' : '') . 
+               str_repeat('☆', $emptyStars);
     }
 
-    /**
-     * Scope to get featured templates
-     */
+    // Scopes
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function scopeFeatured($query)
     {
-        return $query->where('is_featured', true);
+        return $query->where('featured', true);
     }
 
-    /**
-     * Scope to get free templates
-     */
-    public function scopeFree($query)
+    public function scopeByType($query, $type)
     {
-        return $query->where('price', 0);
+        return $query->where('template_type', $type);
     }
 
-    /**
-     * Scope to get premium templates
-     */
-    public function scopePremium($query)
-    {
-        return $query->where('is_premium', true);
-    }
-
-    /**
-     * Scope to get templates by type
-     */
-    public function scopeByType($query, string $type)
-    {
-        return $query->where('type', $type);
-    }
-
-    /**
-     * Scope to get templates by category
-     */
     public function scopeByCategory($query, $categoryId)
     {
         return $query->where('category_id', $categoryId);
     }
 
-    /**
-     * Scope to search templates
-     */
-    public function scopeSearch($query, string $search)
+    public function scopeByCreator($query, $creatorId)
     {
-        return $query->where(function ($query) use ($search) {
-            $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhereJsonContains('tags', $search);
-        });
+        return $query->where('creator_id', $creatorId);
     }
 
-    /**
-     * Scope to order by popularity
-     */
+    public function scopeFree($query)
+    {
+        return $query->where('price', 0);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where('price', '>', 0);
+    }
+
+    public function scopePremium($query)
+    {
+        return $query->where('price', '>', 50);
+    }
+
     public function scopePopular($query)
     {
-        return $query->orderBy('downloads', 'desc')
-                     ->orderBy('rating', 'desc');
+        return $query->orderBy('download_count', 'desc');
     }
 
-    /**
-     * Scope to order by rating
-     */
-    public function scopeHighRated($query)
+    public function scopeTopRated($query)
     {
-        return $query->orderBy('rating', 'desc')
-                     ->orderBy('rating_count', 'desc');
+        return $query->orderBy('average_rating', 'desc');
     }
 
-    /**
-     * Scope to order by newest
-     */
-    public function scopeNewest($query)
+    public function scopeRecent($query)
     {
         return $query->orderBy('created_at', 'desc');
     }
 
-    /**
-     * Get template types
-     */
-    public static function getTypes(): array
+    public function scopeSearchByName($query, $search)
     {
-        return [
-            'email' => 'Email Templates',
-            'bio-page' => 'Bio Page Templates',
-            'landing-page' => 'Landing Page Templates',
-            'course' => 'Course Templates',
-            'social-media' => 'Social Media Templates',
-            'marketing' => 'Marketing Templates',
-        ];
+        return $query->where('name', 'like', "%{$search}%");
     }
 
-    /**
-     * Get template statuses
-     */
-    public static function getStatuses(): array
+    public function scopeSearchByTags($query, $search)
     {
-        return [
-            'draft' => 'Draft',
-            'published' => 'Published',
-            'rejected' => 'Rejected',
-        ];
+        return $query->where('tags', 'like', "%{$search}%");
+    }
+
+    // Business Logic
+    public function approve(): void
+    {
+        $this->update(['status' => 'approved']);
+    }
+
+    public function reject(): void
+    {
+        $this->update(['status' => 'rejected']);
+    }
+
+    public function suspend(): void
+    {
+        $this->update(['status' => 'suspended']);
+    }
+
+    public function activate(): void
+    {
+        $this->update(['is_active' => true]);
+    }
+
+    public function deactivate(): void
+    {
+        $this->update(['is_active' => false]);
+    }
+
+    public function makeFeatured(): void
+    {
+        $this->update(['featured' => true]);
+    }
+
+    public function removeFeatured(): void
+    {
+        $this->update(['featured' => false]);
+    }
+
+    public function incrementDownloads(): void
+    {
+        $this->increment('download_count');
+    }
+
+    public function canBeEditedBy(User $user): bool
+    {
+        return $this->creator_id === $user->id;
+    }
+
+    public function canBeDeletedBy(User $user): bool
+    {
+        return $this->creator_id === $user->id;
+    }
+
+    public function hasPurchasedBy(User $user): bool
+    {
+        return $this->purchases()
+            ->where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->exists();
+    }
+
+    public function hasReviewedBy(User $user): bool
+    {
+        return $this->reviews()
+            ->where('user_id', $user->id)
+            ->exists();
+    }
+
+    public function getTotalEarnings(): float
+    {
+        return $this->purchases()
+            ->where('status', 'completed')
+            ->sum('amount');
+    }
+
+    public function getMonthlyEarnings(): float
+    {
+        return $this->purchases()
+            ->where('status', 'completed')
+            ->where('created_at', '>=', now()->subMonth())
+            ->sum('amount');
+    }
+
+    public function updateRating(): void
+    {
+        $averageRating = $this->reviews()->avg('rating');
+        $reviewCount = $this->reviews()->count();
+
+        $this->update([
+            'average_rating' => round($averageRating, 2),
+            'review_count' => $reviewCount,
+        ]);
     }
 }
