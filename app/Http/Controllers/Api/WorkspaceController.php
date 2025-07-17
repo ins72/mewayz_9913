@@ -27,7 +27,7 @@ class WorkspaceController extends Controller
             'description' => 'nullable|string|max:1000',
         ]);
 
-        $workspace = Organization::create([
+        $workspace = Workspace::create([
             'user_id' => $request->user()->id,
             'name' => $request->name,
             'description' => $request->description,
