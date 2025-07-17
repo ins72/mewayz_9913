@@ -134,8 +134,8 @@ Route::get('/test-no-auth', function (Request $request) {
     ]);
 });
 
-// Protected routes (require authentication)
-Route::middleware('auth:sanctum')->group(function () {
+// Protected routes (require authentication) - FIXED: Using custom auth middleware
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
     // Workspace routes
     Route::get('/workspaces', [WorkspaceController::class, 'index']);
     Route::post('/workspaces', [WorkspaceController::class, 'store']);
