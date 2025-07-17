@@ -488,11 +488,9 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Vite Asset Compilation Issue"
     - "SwitchLocale Middleware Error"
-    - "Authentication Flow UI Rendering"
+    - "Dashboard Access"
   stuck_tasks:
-    - "Authentication Flow (Login/Register)"
     - "Dashboard Access"
     - "Bio Sites & Link-in-Bio Interface"
     - "Social Media Management Interface"
@@ -500,9 +498,6 @@ test_plan:
     - "Course Creation Interface"
     - "Email Marketing Interface"
     - "Analytics Dashboard"
-    - "Responsive Design"
-    - "Form Functionality"
-    - "Navigation System"
   test_all: true
   test_priority: "high_first"
 
