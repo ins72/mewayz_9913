@@ -573,11 +573,11 @@ class EnhancedAIController extends Controller
 
     private function generateChatResponse($message, $conversationHistory, $context, $userData)
     {
-        // Analyze message intent
+        // Simplified intent analysis
         $intent = $this->analyzeMessageIntent($message);
         $entities = $this->extractEntities($message);
         
-        // Generate appropriate response
+        // Generate appropriate response based on intent
         $response = $this->generateContextualResponse($intent, $entities, $conversationHistory, $context);
 
         return [
@@ -588,6 +588,87 @@ class EnhancedAIController extends Controller
             'suggested_actions' => $this->getSuggestedActions($intent),
             'follow_up_questions' => $this->generateFollowUpQuestions($intent),
         ];
+    }
+
+    private function analyzeMessageIntent($message)
+    {
+        $message = strtolower($message);
+        
+        if (strpos($message, 'price') !== false || strpos($message, 'cost') !== false) {
+            return 'pricing_inquiry';
+        } elseif (strpos($message, 'help') !== false || strpos($message, 'support') !== false) {
+            return 'support_request';
+        } elseif (strpos($message, 'demo') !== false || strpos($message, 'trial') !== false) {
+            return 'demo_request';
+        } elseif (strpos($message, 'feature') !== false || strpos($message, 'function') !== false) {
+            return 'feature_inquiry';
+        } else {
+            return 'general_inquiry';
+        }
+    }
+
+    private function extractEntities($message)
+    {
+        $entities = [];
+        
+        // Extract simple entities
+        if (preg_match('/\$(\d+)/', $message, $matches)) {
+            $entities['price'] = $matches[1];
+        }
+        
+        if (preg_match('/(\d+)\s+(day|week|month|year)s?/', $message, $matches)) {
+            $entities['duration'] = $matches[1] . ' ' . $matches[2];
+        }
+        
+        return $entities;
+    }
+
+    private function generateContextualResponse($intent, $entities, $conversationHistory, $context)
+    {
+        switch ($intent) {
+            case 'pricing_inquiry':
+                return "I'd be happy to help you with pricing information. Our plans start at $29/month and scale based on your needs. Would you like to see a detailed breakdown?";
+            case 'support_request':
+                return "I'm here to help! What specific issue are you experiencing? I can provide immediate assistance or connect you with our support team.";
+            case 'demo_request':
+                return "Great! I'd love to show you our platform. Would you prefer a live demo or a self-guided tour? I can set that up for you right away.";
+            case 'feature_inquiry':
+                return "Our platform includes comprehensive features for social media management, e-commerce, CRM, and analytics. Which specific feature would you like to know more about?";
+            default:
+                return "Thank you for your message! I'm here to help with any questions about our platform, pricing, or features. How can I assist you today?";
+        }
+    }
+
+    private function getSuggestedActions($intent)
+    {
+        switch ($intent) {
+            case 'pricing_inquiry':
+                return ['Show pricing plans', 'Schedule consultation', 'Start free trial'];
+            case 'support_request':
+                return ['Contact support', 'View help articles', 'Schedule technical call'];
+            case 'demo_request':
+                return ['Schedule demo', 'Start free trial', 'Watch product video'];
+            case 'feature_inquiry':
+                return ['Explore features', 'Read documentation', 'Try feature demo'];
+            default:
+                return ['Learn more', 'Contact sales', 'Start free trial'];
+        }
+    }
+
+    private function generateFollowUpQuestions($intent)
+    {
+        switch ($intent) {
+            case 'pricing_inquiry':
+                return ['What\'s your team size?', 'What\'s your budget range?', 'Do you need enterprise features?'];
+            case 'support_request':
+                return ['What error are you seeing?', 'When did this issue start?', 'Have you tried restarting?'];
+            case 'demo_request':
+                return ['What\'s your role?', 'What\'s your main use case?', 'When would you like to schedule?'];
+            case 'feature_inquiry':
+                return ['Which features interest you most?', 'What\'s your current workflow?', 'Any specific requirements?'];
+            default:
+                return ['What brings you here today?', 'What\'s your main goal?', 'How can we help you succeed?'];
+        }
     }
 
     private function performTrendPrediction($dataType, $historicalData, $predictionPeriod, $externalFactors)
