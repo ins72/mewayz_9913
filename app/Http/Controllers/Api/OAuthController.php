@@ -67,6 +67,32 @@ class OAuthController extends Controller
     }
 
     /**
+     * Get OAuth status for user
+     */
+    public function getStatus(Request $request)
+    {
+        try {
+            $user = $request->user();
+            
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'connected_accounts' => [],
+                    'available_providers' => array_keys($this->providers),
+                    'user_id' => $user->id,
+                ],
+                'message' => 'OAuth status retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get OAuth status',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Redirect to OAuth provider
      */
     public function redirectToProvider($provider)
