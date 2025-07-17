@@ -41,6 +41,7 @@ use App\Http\Controllers\Api\AdvancedFinancialController;
 use App\Http\Controllers\Api\EnhancedAIController;
 use App\Http\Controllers\Api\InstagramDatabaseController;
 use App\Http\Controllers\Api\VisualBioBuilderController;
+use App\Http\Controllers\Api\AiAutomationController;
 
 /*
 |--------------------------------------------------------------------------
