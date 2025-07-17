@@ -362,7 +362,7 @@ class InstagramDatabaseController extends Controller
                     InstagramProfile::updateOrCreate(
                         ['username' => $profileData['username']],
                         array_merge($profileData, [
-                            'workspace_id' => $request->user()->current_workspace_id,
+                            'workspace_id' => $request->user()->workspaces()->first()->id ?? null,
                             'last_scraped' => now()
                         ])
                     );
