@@ -153,66 +153,47 @@ class AdvancedBookingController extends Controller
     public function createAppointment(Request $request)
     {
         $request->validate([
-            'service_id' => 'required|exists:booking_services,id',
-            'start_time' => 'required|date',
+            'service_ids' => 'required|array',
+            'service_ids.*' => 'required|integer|exists:booking_services,id',
+            'date' => 'required|date',
+            'time' => 'required|string',
             'client_name' => 'required|string|max:255',
             'client_email' => 'required|email',
             'client_phone' => 'nullable|string|max:20',
             'notes' => 'nullable|string|max:1000',
-            'timezone' => 'nullable|string',
         ]);
 
         try {
             $user = $request->user();
-            $startTime = Carbon::parse($request->start_time);
 
-            $service = BookingService::where('id', $request->service_id)
-                ->where('user_id', $user->id)
-                ->firstOrFail();
-
-            $endTime = $startTime->copy()->addMinutes($service->duration_minutes);
-
-            // Check if slot is still available
-            $conflictingAppointment = BookingAppointment::where('service_id', $service->id)
-                ->where('status', '!=', 'cancelled')
-                ->where(function ($query) use ($startTime, $endTime) {
-                    $query->where(function ($q) use ($startTime, $endTime) {
-                        $q->where('start_time', '<', $endTime)
-                          ->where('end_time', '>', $startTime);
-                    });
-                })
-                ->first();
-
-            if ($conflictingAppointment) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Time slot is no longer available'
-                ], 400);
-            }
+            // Get the first service to calculate price
+            $service = BookingService::find($request->service_ids[0]);
 
             $appointment = BookingAppointment::create([
-                'service_id' => $service->id,
                 'user_id' => $user->id,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'client_name' => $request->client_name,
-                'client_email' => $request->client_email,
-                'client_phone' => $request->client_phone,
-                'notes' => $request->notes,
-                'status' => $service->requires_approval ? 'pending' : 'confirmed',
-                'total_amount' => $service->price,
-                'currency' => $service->currency,
-                'timezone' => $request->timezone ?? 'UTC',
-                'booking_reference' => 'BK-' . strtoupper(substr(uniqid(), -8)),
+                'payee_user_id' => $user->id,
+                'service_ids' => $request->service_ids,
+                'date' => $request->date,
+                'time' => $request->time,
+                'settings' => [
+                    'client_name' => $request->client_name,
+                    'client_email' => $request->client_email,
+                    'client_phone' => $request->client_phone,
+                    'notes' => $request->notes,
+                ],
+                'info' => [
+                    'booking_reference' => 'BK-' . strtoupper(substr(uniqid(), -8)),
+                    'timezone' => $request->timezone ?? 'UTC',
+                ],
+                'appointment_status' => 0, // Pending
+                'price' => $service->price,
+                'is_paid' => false,
             ]);
-
-            // Send confirmation email (implementation needed)
-            $this->sendBookingConfirmation($appointment);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Appointment booked successfully',
-                'data' => $appointment->load('service')
+                'data' => $appointment
             ], 201);
         } catch (\Exception $e) {
             Log::error('Failed to create appointment: ' . $e->getMessage());
