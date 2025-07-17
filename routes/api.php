@@ -396,6 +396,20 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/system-logs', [AdminController::class, 'getSystemLogs']);
         Route::post('/announcement', [AdminController::class, 'sendAnnouncement']);
         Route::get('/feature-usage', [AdminController::class, 'getFeatureUsage']);
+        
+        // API Key Management routes
+        Route::get('/api-keys', [AdminController::class, 'getApiKeys']);
+        Route::post('/api-keys', [AdminController::class, 'saveApiKey']);
+        Route::post('/api-keys/test', [AdminController::class, 'testApiKey']);
+        Route::delete('/api-keys/{id}', [AdminController::class, 'deleteApiKey']);
+        
+        // Subscription Plan Management routes
+        Route::get('/subscription-plans', [AdminController::class, 'getSubscriptionPlans']);
+        Route::post('/subscription-plans', [AdminController::class, 'saveSubscriptionPlan']);
+        
+        // System Settings routes
+        Route::get('/settings', [AdminController::class, 'getSettings']);
+        Route::post('/settings', [AdminController::class, 'updateSettings']);
     });
     
     // Link in Bio Builder routes
