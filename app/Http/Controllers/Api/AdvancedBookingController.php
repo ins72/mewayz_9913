@@ -210,35 +210,36 @@ class AdvancedBookingController extends Controller
     public function getAppointments(Request $request)
     {
         $request->validate([
-            'status' => 'nullable|in:pending,confirmed,completed,cancelled,no_show',
+            'appointment_status' => 'nullable|in:0,1,2,3',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'service_id' => 'nullable|exists:booking_services,id',
+            'is_paid' => 'nullable|boolean',
         ]);
 
         try {
             $user = $request->user();
             
-            $query = BookingAppointment::where('user_id', $user->id)
-                ->with(['service']);
+            $query = BookingAppointment::where('user_id', $user->id);
 
-            if ($request->status) {
-                $query->where('status', $request->status);
+            if ($request->has('appointment_status')) {
+                $query->where('appointment_status', $request->appointment_status);
             }
 
             if ($request->start_date) {
-                $query->where('start_time', '>=', Carbon::parse($request->start_date));
+                $query->where('date', '>=', $request->start_date);
             }
 
             if ($request->end_date) {
-                $query->where('start_time', '<=', Carbon::parse($request->end_date)->endOfDay());
+                $query->where('date', '<=', $request->end_date);
             }
 
-            if ($request->service_id) {
-                $query->where('service_id', $request->service_id);
+            if ($request->has('is_paid')) {
+                $query->where('is_paid', $request->is_paid);
             }
 
-            $appointments = $query->orderBy('start_time', 'desc')->paginate(20);
+            $appointments = $query->orderBy('date', 'desc')
+                ->orderBy('time', 'desc')
+                ->paginate(20);
 
             return response()->json([
                 'success' => true,
