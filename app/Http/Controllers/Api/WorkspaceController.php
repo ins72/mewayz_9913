@@ -10,7 +10,7 @@ class WorkspaceController extends Controller
 {
     public function index(Request $request)
     {
-        $workspaces = Organization::where('user_id', $request->user()->id)
+        $workspaces = Workspace::where('user_id', $request->user()->id)
             ->orderBy('created_at', 'desc')
             ->get();
 
