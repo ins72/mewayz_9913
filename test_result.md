@@ -54,7 +54,7 @@ backend:
     implemented: true
     working: false
     file: "app/Http/Controllers/Api/BioSiteController.php"
-    stuck_count: 1
+    stuck_count: 2
     priority: "high"
     needs_retesting: true
     status_history:
@@ -64,6 +64,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ FAIL - All authenticated endpoints fail due to middleware issue: 'Object of type Illuminate\\Auth\\AuthManager is not callable'. Controller exists but middleware blocking access."
+      - working: false
+        agent: "testing"
+        comment: "❌ FAIL - CONFIRMED: SubstituteBindings middleware error persists. All bio site endpoints (/api/bio-sites/) fail with 'Object of type Illuminate\\Auth\\AuthManager is not callable' error."
 
   - task: "Social Media Management"
     implemented: true
