@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('budget', 15, 2)->default(0);
             $table->json('settings')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->uuid('created_by');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
             
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
