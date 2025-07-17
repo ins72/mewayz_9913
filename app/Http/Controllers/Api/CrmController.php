@@ -754,7 +754,7 @@ class CrmController extends Controller
         ]);
 
         try {
-            $query = Audience::where('user_id', auth()->id())->where('type', 'contact');
+            $query = Audience::where('user_id', $request->user()->id)->where('type', 'contact');
 
             if ($request->contact_ids) {
                 $query->whereIn('id', $request->contact_ids);
