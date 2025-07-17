@@ -12,8 +12,8 @@ class BookingService extends Model
 {
     use HasFactory;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $keyType = 'int';
+    public $incrementing = true;
 
     protected $fillable = [
         'user_id',
