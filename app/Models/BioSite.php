@@ -15,6 +15,8 @@ class BioSite extends BaseBioSite
 		'slug',
 		'address',
 		'bio',
+		'description',
+		'theme_config',
 		'background',
 		'settings',
 		'location',
