@@ -659,6 +659,18 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('templa
     Route::post('/{id}/review', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'addReview']);
 });
 
+// Include Phase 1 Foundation Features
+require __DIR__ . '/api_phase1.php';
+
+// Include Phase 2 Professional Features (when ready)
+// require __DIR__ . '/api_phase2.php';
+
+// Include Phase 3 Scale Features (when ready)
+// require __DIR__ . '/api_phase3.php';
+
+// Include Phase 4 Innovation Features (when ready)
+// require __DIR__ . '/api_phase4.php';
+
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->json([
