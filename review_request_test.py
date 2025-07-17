@@ -15,7 +15,7 @@ class ReviewRequestTester:
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         # Use the existing token from previous tests
-        self.auth_token = "4|6AHqx0qtn59SBkCoejV1tsh7M9RDpyQRWMaBxR3R352c7ba3"
+        self.auth_token = "1|2mIDz7pbpVkMV6iDfPIZnKdee9T2s9sw6vN4J5Dmedb70bc9"
         self.test_results = {}
         self.session = requests.Session()
         
