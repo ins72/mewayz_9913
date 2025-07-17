@@ -14,8 +14,8 @@ class EscrowTester:
     def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        # Use the working token from test_result.md
-        self.auth_token = "4|6AHqx0qtn59SBkCoejV1tsh7M9RDpyQRWMaBxR3R352c7ba3"
+        # Use a fresh token from registration
+        self.auth_token = "6|p896WtfIk5xpt8EIdVZxzHBBRmxZX0C3eWbxevzHc5980fb8"
         self.test_results = {}
         self.session = requests.Session()
         
