@@ -29,13 +29,12 @@ class BookingAppointment extends Model
     ];
 
     protected $casts = [
-        'id' => 'string',
-        'start_time' => 'datetime',
-        'end_time' => 'datetime',
-        'status_updated_at' => 'datetime',
-        'reminder_sent_at' => 'datetime',
-        'follow_up_sent_at' => 'datetime',
-        'total_amount' => 'decimal:2',
+        'date' => 'date',
+        'service_ids' => 'array',
+        'settings' => 'array',
+        'info' => 'array',
+        'price' => 'decimal:2',
+        'is_paid' => 'boolean',
     ];
 
     protected static function boot()
