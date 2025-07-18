@@ -91,6 +91,11 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard-qr-index');
 });
 
+// Test route without auth
+Route::get('/test-dashboard', function () {
+    return 'Dashboard test route working!';
+})->name('test-dashboard');
+
 // Authentication Routes - handled by auth.php
 require __DIR__ . '/auth.php';
 
