@@ -201,7 +201,7 @@ class BusinessController extends Controller
             ]
         ];
 
-        return view('business.contact', compact('contactMethods'));
+        return view('pages.business.contact', compact('contactMethods'));
     }
 
     /**
