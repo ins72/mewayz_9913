@@ -18,6 +18,11 @@ Route::get('/', function () {
     return view('pages.index');
 })->name('home');
 
+// Dashboard route
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 // Include legal routes
 require __DIR__.'/legal.php';
 
