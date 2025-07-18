@@ -200,7 +200,7 @@ class GamificationController extends Controller
             $user = User::findOrFail($request->user_id);
             
             // Get or create user level
-            $userLevel = $user->gamificationLevel() ?? $this->createUserLevel($user);
+            $userLevel = $user->gamificationLevel ?? $this->createUserLevel($user);
             
             // Award XP
             $userLevel->addXp($request->amount, $request->event_type, [
