@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 
 class MewayzAPITester:
-    def __init__(self, base_url="http://localhost:8001"):
+    def __init__(self, base_url="https://mewayz.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.web_url = base_url  # For testing web routes
