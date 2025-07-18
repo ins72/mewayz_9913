@@ -820,6 +820,48 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
 // Phase 4 routes
 // require __DIR__ . '/api_phase4.php';
 
+// Add this to the end of the file before the closing PHP tag
+
+// Professional Payment System Routes
+Route::middleware(['custom.auth'])->group(function () {
+    Route::prefix('payments')->group(function () {
+        Route::post('/checkout/session', [PaymentManagementController::class, 'createCheckoutSession']);
+        Route::get('/checkout/status/{session_id}', [PaymentManagementController::class, 'checkCheckoutStatus']);
+        Route::get('/history', [PaymentManagementController::class, 'getPaymentHistory']);
+        Route::get('/subscription-packages', [PaymentManagementController::class, 'getSubscriptionPackages']);
+    });
+});
+
+// Payment Webhook (no auth required)
+Route::post('/webhook/stripe', [PaymentManagementController::class, 'handleStripeWebhook']);
+
+// Account Management Routes
+Route::middleware(['custom.auth'])->group(function () {
+    Route::prefix('account')->group(function () {
+        Route::post('/deletion/request', [AccountDeletionController::class, 'requestDeletion']);
+        Route::post('/deletion/cancel', [AccountDeletionController::class, 'cancelDeletion']);
+        Route::get('/deletion/status', [AccountDeletionController::class, 'getDeletionStatus']);
+        Route::post('/deletion/execute', [AccountDeletionController::class, 'executeDeletion']);
+        Route::get('/export', [AccountDeletionController::class, 'exportUserData']);
+    });
+});
+
+// Enhanced Affiliate System Routes
+Route::middleware(['custom.auth'])->group(function () {
+    Route::prefix('affiliate')->group(function () {
+        Route::get('/dashboard', [AffiliateController::class, 'getDashboard']);
+        Route::post('/generate-link', [AffiliateController::class, 'generateAffiliateLink']);
+        Route::post('/track-referral', [AffiliateController::class, 'trackReferral']);
+        Route::post('/process-commission', [AffiliateController::class, 'processCommission']);
+        Route::get('/analytics', [AffiliateController::class, 'getAnalytics']);
+    });
+});
+
+// Use the updated controller imports
+use App\Http\Controllers\Api\PaymentManagementController;
+use App\Http\Controllers\Api\AccountDeletionController;
+use App\Http\Controllers\Api\AffiliateController;
+
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->json([
