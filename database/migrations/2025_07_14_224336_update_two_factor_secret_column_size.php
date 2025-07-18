@@ -25,7 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('two_factor_secret', 191)->nullable()->change();
+            // Only modify the column if it exists
+            if (Schema::hasColumn('users', 'two_factor_secret')) {
+                $table->string('two_factor_secret', 191)->nullable()->change();
+            }
         });
     }
 };
