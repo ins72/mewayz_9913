@@ -2919,11 +2919,11 @@ class MewayzAPITester:
         print("\n" + "=" * 80)
 
 if __name__ == "__main__":
-    # Initialize tester
+    # Initialize tester with production URL
     tester = MewayzAPITester()
     
-    # Run all tests
-    tester.run_all_tests()
+    # Run comprehensive production readiness test
+    tester.run_comprehensive_production_test()
     
     # Exit with appropriate code
     failed_count = sum(1 for result in tester.test_results.values() if not result['success'])
