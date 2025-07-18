@@ -4,836 +4,834 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Achievement;
+use App\Models\UserProgress;
+use App\Models\Leaderboard;
+use App\Models\Challenge;
+use App\Models\Guild;
+use App\Models\Reward;
+use App\Models\UnifiedAnalyticsEvent;
 use Carbon\Carbon;
 
 class GamificationController extends Controller
 {
     /**
-     * Get user achievements
+     * Get user's gamification dashboard
      */
-    public function getAchievements()
+    public function getDashboard(Request $request)
     {
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $userProgress = $this->getUserProgress($user);
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $achievements = [
-                [
-                    'id' => 1,
-                    'name' => 'First Post',
-                    'description' => 'Create your first Instagram post',
-                    'category' => 'instagram',
-                    'icon' => 'camera',
-                    'points' => 100,
-                    'rarity' => 'common',
-                    'unlocked' => true,
-                    'unlocked_at' => now()->subDays(25),
-                    'progress' => 100,
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Content Creator',
-                    'description' => 'Create 10 Instagram posts',
-                    'category' => 'instagram',
-                    'icon' => 'edit',
-                    'points' => 500,
-                    'rarity' => 'uncommon',
-                    'unlocked' => true,
-                    'unlocked_at' => now()->subDays(15),
-                    'progress' => 100,
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Hashtag Master',
-                    'description' => 'Research 100 hashtags',
-                    'category' => 'instagram',
-                    'icon' => 'hash',
-                    'points' => 750,
-                    'rarity' => 'rare',
-                    'unlocked' => true,
-                    'unlocked_at' => now()->subDays(8),
-                    'progress' => 100,
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Email Marketer',
-                    'description' => 'Send your first email campaign',
-                    'category' => 'email',
-                    'icon' => 'mail',
-                    'points' => 200,
-                    'rarity' => 'common',
-                    'unlocked' => true,
-                    'unlocked_at' => now()->subDays(20),
-                    'progress' => 100,
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Campaign Expert',
-                    'description' => 'Send 50 email campaigns',
-                    'category' => 'email',
-                    'icon' => 'send',
-                    'points' => 1000,
-                    'rarity' => 'rare',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 68,
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Team Builder',
-                    'description' => 'Invite 5 team members',
-                    'category' => 'team',
-                    'icon' => 'users',
-                    'points' => 600,
-                    'rarity' => 'uncommon',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 40,
-                ],
-                [
-                    'id' => 7,
-                    'name' => 'Analytics Ninja',
-                    'description' => 'View analytics 100 times',
-                    'category' => 'analytics',
-                    'icon' => 'bar-chart',
-                    'points' => 800,
-                    'rarity' => 'rare',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 23,
-                ],
-                [
-                    'id' => 8,
-                    'name' => 'Revenue Generator',
-                    'description' => 'Generate $1000 in revenue',
-                    'category' => 'business',
-                    'icon' => 'dollar-sign',
-                    'points' => 2000,
-                    'rarity' => 'legendary',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 45,
-                ],
-                [
-                    'id' => 9,
-                    'name' => 'Course Creator',
-                    'description' => 'Create your first course',
-                    'category' => 'courses',
-                    'icon' => 'book',
-                    'points' => 1500,
-                    'rarity' => 'epic',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 0,
-                ],
-                [
-                    'id' => 10,
-                    'name' => 'Social Media Master',
-                    'description' => 'Complete all social media achievements',
-                    'category' => 'meta',
-                    'icon' => 'trophy',
-                    'points' => 5000,
-                    'rarity' => 'legendary',
-                    'unlocked' => false,
-                    'unlocked_at' => null,
-                    'progress' => 75,
-                ],
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => $achievements,
-                'summary' => [
-                    'total_achievements' => count($achievements),
-                    'unlocked_achievements' => count(array_filter($achievements, function($a) { return $a['unlocked']; })),
-                    'total_points' => array_sum(array_column(array_filter($achievements, function($a) { return $a['unlocked']; }), 'points')),
-                    'completion_rate' => round(count(array_filter($achievements, function($a) { return $a['unlocked']; })) / count($achievements) * 100, 1),
-                ],
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error getting achievements: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get achievements'], 500);
-        }
-    }
-
-    /**
-     * Get user progress
-     */
-    public function getProgress()
-    {
-        try {
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $progress = [
-                'level' => 8,
-                'current_xp' => 3450,
-                'next_level_xp' => 4000,
-                'total_xp' => 3450,
-                'xp_to_next_level' => 550,
-                'progress_percentage' => 86.25,
-                'daily_streak' => 7,
-                'longest_streak' => 15,
-                'categories' => [
-                    [
-                        'category' => 'instagram',
-                        'name' => 'Instagram Management',
-                        'level' => 12,
-                        'xp' => 1200,
-                        'progress' => 75,
-                        'icon' => 'camera',
-                        'color' => '#E91E63',
-                    ],
-                    [
-                        'category' => 'email',
-                        'name' => 'Email Marketing',
-                        'level' => 8,
-                        'xp' => 800,
-                        'progress' => 60,
-                        'icon' => 'mail',
-                        'color' => '#2196F3',
-                    ],
-                    [
-                        'category' => 'analytics',
-                        'name' => 'Analytics',
-                        'level' => 5,
-                        'xp' => 500,
-                        'progress' => 40,
-                        'icon' => 'bar-chart',
-                        'color' => '#4CAF50',
-                    ],
-                    [
-                        'category' => 'team',
-                        'name' => 'Team Management',
-                        'level' => 3,
-                        'xp' => 300,
-                        'progress' => 25,
-                        'icon' => 'users',
-                        'color' => '#FF9800',
-                    ],
-                    [
-                        'category' => 'courses',
-                        'name' => 'Course Creation',
-                        'level' => 1,
-                        'xp' => 100,
-                        'progress' => 10,
-                        'icon' => 'book',
-                        'color' => '#9C27B0',
-                    ],
-                    [
-                        'category' => 'business',
-                        'name' => 'Business Growth',
-                        'level' => 6,
-                        'xp' => 550,
-                        'progress' => 55,
-                        'icon' => 'trending-up',
-                        'color' => '#F44336',
-                    ],
-                ],
-                'recent_activities' => [
-                    [
-                        'activity' => 'Created Instagram post',
-                        'xp_gained' => 50,
-                        'timestamp' => now()->subHours(2),
-                        'category' => 'instagram',
-                    ],
-                    [
-                        'activity' => 'Sent email campaign',
-                        'xp_gained' => 100,
-                        'timestamp' => now()->subHours(5),
-                        'category' => 'email',
-                    ],
-                    [
-                        'activity' => 'Viewed analytics dashboard',
-                        'xp_gained' => 25,
-                        'timestamp' => now()->subHours(8),
-                        'category' => 'analytics',
-                    ],
-                    [
-                        'activity' => 'Invited team member',
-                        'xp_gained' => 75,
-                        'timestamp' => now()->subDays(1),
-                        'category' => 'team',
-                    ],
-                    [
-                        'activity' => 'Completed workspace setup',
-                        'xp_gained' => 200,
-                        'timestamp' => now()->subDays(2),
-                        'category' => 'business',
-                    ],
-                ],
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => $progress,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error getting progress: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get progress'], 500);
-        }
-    }
-
-    /**
-     * Get leaderboard
-     */
-    public function getLeaderboard(Request $request)
-    {
-        try {
-            $request->validate([
-                'period' => 'nullable|in:weekly,monthly,all_time',
-                'category' => 'nullable|in:all,instagram,email,analytics,team,courses,business',
-                'limit' => 'nullable|integer|min:1|max:100',
-            ]);
-
-            $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
-            
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            $period = $request->period ?? 'weekly';
-            $category = $request->category ?? 'all';
-            $limit = $request->limit ?? 50;
-
-            $leaderboard = [
-                [
-                    'rank' => 1,
-                    'user_id' => 101,
-                    'name' => 'Sarah Johnson',
-                    'avatar' => '/images/avatars/sarah.jpg',
-                    'level' => 15,
-                    'xp' => 12450,
-                    'achievements' => 28,
-                    'badge' => 'Social Media Master',
-                    'is_current_user' => false,
-                ],
-                [
-                    'rank' => 2,
-                    'user_id' => 102,
-                    'name' => 'Michael Chen',
-                    'avatar' => '/images/avatars/michael.jpg',
-                    'level' => 14,
-                    'xp' => 11890,
-                    'achievements' => 25,
-                    'badge' => 'Email Expert',
-                    'is_current_user' => false,
-                ],
-                [
-                    'rank' => 3,
-                    'user_id' => 103,
-                    'name' => 'Emma Rodriguez',
-                    'avatar' => '/images/avatars/emma.jpg',
-                    'level' => 13,
-                    'xp' => 10567,
-                    'achievements' => 22,
-                    'badge' => 'Analytics Ninja',
-                    'is_current_user' => false,
-                ],
-                [
-                    'rank' => 4,
-                    'user_id' => 104,
-                    'name' => 'David Kim',
-                    'avatar' => '/images/avatars/david.jpg',
-                    'level' => 12,
-                    'xp' => 9234,
-                    'achievements' => 20,
-                    'badge' => 'Team Builder',
-                    'is_current_user' => false,
-                ],
-                [
-                    'rank' => 5,
-                    'user_id' => $user->id,
+            $dashboard = [
+                'user_info' => [
+                    'id' => $user->id,
                     'name' => $user->name,
                     'avatar' => $user->avatar,
-                    'level' => 8,
-                    'xp' => 3450,
-                    'achievements' => 12,
-                    'badge' => 'Content Creator',
-                    'is_current_user' => true,
+                    'level' => $userProgress->current_level,
+                    'xp' => $userProgress->current_xp,
+                    'total_xp' => $userProgress->total_xp,
+                    'xp_to_next_level' => $userProgress->xp_to_next_level,
+                    'prestige' => $userProgress->prestige,
+                    'prestige_points' => $userProgress->prestige_points
                 ],
-                [
-                    'rank' => 6,
-                    'user_id' => 105,
-                    'name' => 'Lisa Thompson',
-                    'avatar' => '/images/avatars/lisa.jpg',
-                    'level' => 7,
-                    'xp' => 2890,
-                    'achievements' => 10,
-                    'badge' => 'Beginner',
-                    'is_current_user' => false,
-                ],
-                [
-                    'rank' => 7,
-                    'user_id' => 106,
-                    'name' => 'James Wilson',
-                    'avatar' => '/images/avatars/james.jpg',
-                    'level' => 6,
-                    'xp' => 2345,
-                    'achievements' => 8,
-                    'badge' => 'Newcomer',
-                    'is_current_user' => false,
-                ],
+                'recent_achievements' => $this->getRecentAchievements($user, 5),
+                'active_challenges' => $this->getActiveChallenges($user, 3),
+                'leaderboard_positions' => $this->getLeaderboardPositions($user),
+                'daily_quests' => $this->getDailyQuests($user),
+                'streaks' => $this->getStreakData($user),
+                'guild_info' => $this->getGuildInfo($user),
+                'next_rewards' => $this->getNextRewards($user),
+                'progress_stats' => $this->getProgressStats($user),
+                'recommendations' => $this->getPersonalizedRecommendations($user)
             ];
 
             return response()->json([
                 'success' => true,
-                'data' => array_slice($leaderboard, 0, $limit),
-                'current_user_rank' => 5,
-                'current_user_stats' => [
-                    'level' => 8,
-                    'xp' => 3450,
-                    'achievements' => 12,
-                    'badge' => 'Content Creator',
-                ],
-                'filters' => [
-                    'period' => $period,
-                    'category' => $category,
-                    'limit' => $limit,
-                ],
+                'data' => $dashboard
             ]);
+
         } catch (\Exception $e) {
-            Log::error('Error getting leaderboard: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get leaderboard'], 500);
+            Log::error('Gamification dashboard failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load gamification dashboard'
+            ], 500);
         }
     }
 
     /**
-     * Get badges
+     * Get user achievements
      */
-    public function getBadges()
+    public function getAchievements(Request $request)
     {
+        $request->validate([
+            'category' => 'nullable|string',
+            'tier' => 'nullable|string',
+            'status' => 'nullable|string|in:earned,available,locked'
+        ]);
+
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $query = Achievement::active();
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            if ($request->category) {
+                $query->where('category', $request->category);
             }
+            
+            if ($request->tier) {
+                $query->where('tier', $request->tier);
+            }
+            
+            $achievements = $query->get()->map(function ($achievement) use ($user) {
+                $isEarned = $achievement->isEarnedBy($user);
+                $canEarn = $achievement->canBeEarnedBy($user);
+                $progress = $achievement->getProgressFor($user);
+                
+                return [
+                    'id' => $achievement->id,
+                    'name' => $achievement->name,
+                    'description' => $achievement->description,
+                    'flavor_text' => $achievement->flavor_text,
+                    'category' => $achievement->category,
+                    'tier' => $achievement->tier,
+                    'tier_color' => $achievement->tier_color,
+                    'difficulty' => $achievement->difficulty,
+                    'difficulty_color' => $achievement->difficulty_color,
+                    'rarity' => $achievement->rarity,
+                    'rarity_text' => $achievement->rarity_text,
+                    'icon' => $achievement->icon,
+                    'animated_icon' => $achievement->animated_icon,
+                    'completion_rate' => $achievement->completion_rate,
+                    'earned_count' => $achievement->earned_count,
+                    'is_earned' => $isEarned,
+                    'can_earn' => $canEarn,
+                    'is_hidden' => $achievement->is_hidden && !$isEarned,
+                    'is_secret' => $achievement->is_secret && !$isEarned,
+                    'progress' => $progress,
+                    'rewards' => $achievement->rewards,
+                    'estimated_time' => $achievement->estimated_time
+                ];
+            });
 
-            $badges = [
-                [
-                    'id' => 1,
-                    'name' => 'First Steps',
-                    'description' => 'Complete your first action',
-                    'icon' => 'footprints',
-                    'rarity' => 'common',
-                    'color' => '#4CAF50',
-                    'earned' => true,
-                    'earned_at' => now()->subDays(30),
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Content Creator',
-                    'description' => 'Create 10 pieces of content',
-                    'icon' => 'edit',
-                    'rarity' => 'uncommon',
-                    'color' => '#2196F3',
-                    'earned' => true,
-                    'earned_at' => now()->subDays(15),
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Social Media Master',
-                    'description' => 'Complete all social media challenges',
-                    'icon' => 'share',
-                    'rarity' => 'rare',
-                    'color' => '#FF9800',
-                    'earned' => true,
-                    'earned_at' => now()->subDays(8),
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Email Expert',
-                    'description' => 'Send 100 email campaigns',
-                    'icon' => 'mail',
-                    'rarity' => 'epic',
-                    'color' => '#9C27B0',
-                    'earned' => false,
-                    'earned_at' => null,
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Analytics Ninja',
-                    'description' => 'Master analytics and reporting',
-                    'icon' => 'bar-chart',
-                    'rarity' => 'legendary',
-                    'color' => '#F44336',
-                    'earned' => false,
-                    'earned_at' => null,
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Team Builder',
-                    'description' => 'Build a team of 10 members',
-                    'icon' => 'users',
-                    'rarity' => 'rare',
-                    'color' => '#FF5722',
-                    'earned' => false,
-                    'earned_at' => null,
-                ],
-                [
-                    'id' => 7,
-                    'name' => 'Revenue Generator',
-                    'description' => 'Generate $10,000 in revenue',
-                    'icon' => 'dollar-sign',
-                    'rarity' => 'legendary',
-                    'color' => '#795548',
-                    'earned' => false,
-                    'earned_at' => null,
-                ],
-                [
-                    'id' => 8,
-                    'name' => 'Course Creator',
-                    'description' => 'Create and publish 5 courses',
-                    'icon' => 'book',
-                    'rarity' => 'epic',
-                    'color' => '#607D8B',
-                    'earned' => false,
-                    'earned_at' => null,
-                ],
-            ];
+            // Filter by status if requested
+            if ($request->status) {
+                $achievements = $achievements->filter(function ($achievement) use ($request) {
+                    switch ($request->status) {
+                        case 'earned':
+                            return $achievement['is_earned'];
+                        case 'available':
+                            return !$achievement['is_earned'] && $achievement['can_earn'];
+                        case 'locked':
+                            return !$achievement['is_earned'] && !$achievement['can_earn'];
+                        default:
+                            return true;
+                    }
+                });
+            }
 
             return response()->json([
                 'success' => true,
-                'data' => $badges,
-                'summary' => [
-                    'total_badges' => count($badges),
-                    'earned_badges' => count(array_filter($badges, function($b) { return $b['earned']; })),
-                    'rarity_breakdown' => [
-                        'common' => count(array_filter($badges, function($b) { return $b['rarity'] === 'common'; })),
-                        'uncommon' => count(array_filter($badges, function($b) { return $b['rarity'] === 'uncommon'; })),
-                        'rare' => count(array_filter($badges, function($b) { return $b['rarity'] === 'rare'; })),
-                        'epic' => count(array_filter($badges, function($b) { return $b['rarity'] === 'epic'; })),
-                        'legendary' => count(array_filter($badges, function($b) { return $b['rarity'] === 'legendary'; })),
-                    ],
-                ],
+                'data' => $achievements->values()
             ]);
+
         } catch (\Exception $e) {
-            Log::error('Error getting badges: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get badges'], 500);
+            Log::error('Get achievements failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load achievements'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get leaderboards
+     */
+    public function getLeaderboards(Request $request)
+    {
+        $request->validate([
+            'type' => 'nullable|string',
+            'category' => 'nullable|string',
+            'timeframe' => 'nullable|string',
+            'limit' => 'nullable|integer|min:1|max:100'
+        ]);
+
+        try {
+            $query = Leaderboard::active()->public();
+            
+            if ($request->type) {
+                $query->where('type', $request->type);
+            }
+            
+            if ($request->category) {
+                $query->where('category', $request->category);
+            }
+            
+            if ($request->timeframe) {
+                $query->where('timeframe', $request->timeframe);
+            }
+            
+            $leaderboards = $query->get()->map(function ($leaderboard) use ($request) {
+                $limit = $request->limit ?? 100;
+                return [
+                    'id' => $leaderboard->id,
+                    'name' => $leaderboard->name,
+                    'description' => $leaderboard->description,
+                    'type' => $leaderboard->type,
+                    'category' => $leaderboard->category,
+                    'timeframe' => $leaderboard->timeframe,
+                    'rankings' => $leaderboard->getCurrentRankings($limit),
+                    'user_position' => $leaderboard->getUserPosition($request->user()->id),
+                    'last_reset' => $leaderboard->last_reset,
+                    'next_reset' => $leaderboard->next_reset
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $leaderboards
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Get leaderboards failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load leaderboards'
+            ], 500);
         }
     }
 
     /**
      * Get challenges
      */
-    public function getChallenges()
+    public function getChallenges(Request $request)
     {
+        $request->validate([
+            'type' => 'nullable|string',
+            'category' => 'nullable|string',
+            'difficulty' => 'nullable|string',
+            'status' => 'nullable|string|in:available,joined,completed'
+        ]);
+
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $query = Challenge::active();
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            if ($request->type) {
+                $query->where('type', $request->type);
             }
+            
+            if ($request->category) {
+                $query->where('category', $request->category);
+            }
+            
+            if ($request->difficulty) {
+                $query->where('difficulty', $request->difficulty);
+            }
+            
+            $challenges = $query->get()->map(function ($challenge) use ($user) {
+                $isJoined = $challenge->isJoinedBy($user);
+                $isCompleted = $challenge->isCompletedBy($user);
+                $canJoin = $challenge->canBeJoinedBy($user);
+                $progress = $challenge->getProgressFor($user);
+                
+                return [
+                    'id' => $challenge->id,
+                    'name' => $challenge->name,
+                    'description' => $challenge->description,
+                    'story' => $challenge->story,
+                    'type' => $challenge->type,
+                    'category' => $challenge->category,
+                    'difficulty' => $challenge->difficulty,
+                    'difficulty_color' => $challenge->difficulty_color,
+                    'start_date' => $challenge->start_date,
+                    'end_date' => $challenge->end_date,
+                    'duration_days' => $challenge->duration_days,
+                    'time_remaining' => $challenge->time_remaining,
+                    'is_active_now' => $challenge->is_active_now,
+                    'is_upcoming' => $challenge->is_upcoming,
+                    'is_expired' => $challenge->is_expired,
+                    'participant_limit' => $challenge->participant_limit,
+                    'current_participants' => $challenge->current_participants,
+                    'participation_percentage' => $challenge->participation_percentage,
+                    'completion_rate' => $challenge->completion_rate,
+                    'is_team_challenge' => $challenge->is_team_challenge,
+                    'team_size' => $challenge->team_size,
+                    'is_ranked' => $challenge->is_ranked,
+                    'is_featured' => $challenge->is_featured,
+                    'is_joined' => $isJoined,
+                    'is_completed' => $isCompleted,
+                    'can_join' => $canJoin,
+                    'progress' => $progress,
+                    'requirements' => $challenge->requirements,
+                    'rewards' => $challenge->rewards,
+                    'top_performers' => $challenge->getTopPerformers(5)
+                ];
+            });
 
-            $challenges = [
-                [
-                    'id' => 1,
-                    'name' => 'Weekly Content Challenge',
-                    'description' => 'Create 7 posts this week',
-                    'category' => 'instagram',
-                    'type' => 'weekly',
-                    'difficulty' => 'easy',
-                    'xp_reward' => 500,
-                    'badge_reward' => 'Weekly Warrior',
-                    'start_date' => now()->startOfWeek(),
-                    'end_date' => now()->endOfWeek(),
-                    'progress' => 4,
-                    'target' => 7,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Email Marketing Sprint',
-                    'description' => 'Send 5 email campaigns this month',
-                    'category' => 'email',
-                    'type' => 'monthly',
-                    'difficulty' => 'medium',
-                    'xp_reward' => 1000,
-                    'badge_reward' => 'Email Champion',
-                    'start_date' => now()->startOfMonth(),
-                    'end_date' => now()->endOfMonth(),
-                    'progress' => 3,
-                    'target' => 5,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'Analytics Deep Dive',
-                    'description' => 'Check analytics 30 times this month',
-                    'category' => 'analytics',
-                    'type' => 'monthly',
-                    'difficulty' => 'easy',
-                    'xp_reward' => 300,
-                    'badge_reward' => 'Data Detective',
-                    'start_date' => now()->startOfMonth(),
-                    'end_date' => now()->endOfMonth(),
-                    'progress' => 18,
-                    'target' => 30,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Team Building Challenge',
-                    'description' => 'Invite 3 new team members',
-                    'category' => 'team',
-                    'type' => 'special',
-                    'difficulty' => 'hard',
-                    'xp_reward' => 1500,
-                    'badge_reward' => 'Team Builder Supreme',
-                    'start_date' => now()->subDays(10),
-                    'end_date' => now()->addDays(20),
-                    'progress' => 1,
-                    'target' => 3,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Revenue Milestone',
-                    'description' => 'Generate $1000 in revenue',
-                    'category' => 'business',
-                    'type' => 'milestone',
-                    'difficulty' => 'hard',
-                    'xp_reward' => 2000,
-                    'badge_reward' => 'Revenue Rockstar',
-                    'start_date' => now()->subDays(30),
-                    'end_date' => now()->addDays(60),
-                    'progress' => 450,
-                    'target' => 1000,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Content Consistency',
-                    'description' => 'Post for 30 consecutive days',
-                    'category' => 'instagram',
-                    'type' => 'streak',
-                    'difficulty' => 'medium',
-                    'xp_reward' => 1200,
-                    'badge_reward' => 'Consistency King',
-                    'start_date' => now()->subDays(7),
-                    'end_date' => now()->addDays(23),
-                    'progress' => 7,
-                    'target' => 30,
-                    'completed' => false,
-                    'status' => 'active',
-                ],
-            ];
+            // Filter by status if requested
+            if ($request->status) {
+                $challenges = $challenges->filter(function ($challenge) use ($request) {
+                    switch ($request->status) {
+                        case 'available':
+                            return !$challenge['is_joined'] && $challenge['can_join'];
+                        case 'joined':
+                            return $challenge['is_joined'] && !$challenge['is_completed'];
+                        case 'completed':
+                            return $challenge['is_completed'];
+                        default:
+                            return true;
+                    }
+                });
+            }
 
             return response()->json([
                 'success' => true,
-                'data' => $challenges,
-                'summary' => [
-                    'total_challenges' => count($challenges),
-                    'active_challenges' => count(array_filter($challenges, function($c) { return $c['status'] === 'active'; })),
-                    'completed_challenges' => count(array_filter($challenges, function($c) { return $c['completed']; })),
-                    'total_xp_available' => array_sum(array_column($challenges, 'xp_reward')),
-                ],
+                'data' => $challenges->values()
             ]);
+
         } catch (\Exception $e) {
-            Log::error('Error getting challenges: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get challenges'], 500);
+            Log::error('Get challenges failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load challenges'
+            ], 500);
         }
     }
 
     /**
-     * Get rewards
+     * Join a challenge
      */
-    public function getRewards()
+    public function joinChallenge(Request $request, $challengeId)
     {
+        $request->validate([
+            'team_id' => 'nullable|integer|exists:challenge_teams,id'
+        ]);
+
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $challenge = Challenge::findOrFail($challengeId);
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+            $result = $challenge->addParticipant($user, $request->team_id);
+            
+            if ($result) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Successfully joined challenge',
+                    'data' => [
+                        'challenge_id' => $challenge->id,
+                        'progress' => $challenge->getProgressFor($user)
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unable to join challenge. Check requirements and availability.'
+                ], 400);
             }
 
-            $rewards = [
-                [
-                    'id' => 1,
-                    'name' => 'Premium Template',
-                    'description' => 'Unlock a premium template of your choice',
-                    'type' => 'template',
-                    'cost' => 1000,
-                    'currency' => 'xp',
-                    'value' => '$29.99',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'gift',
-                    'category' => 'premium',
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Extra Analytics',
-                    'description' => '30 days of advanced analytics',
-                    'type' => 'feature',
-                    'cost' => 1500,
-                    'currency' => 'xp',
-                    'value' => '$19.99',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'bar-chart',
-                    'category' => 'premium',
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'AI Content Credits',
-                    'description' => '100 AI content generation credits',
-                    'type' => 'credits',
-                    'cost' => 800,
-                    'currency' => 'xp',
-                    'value' => '$14.99',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'zap',
-                    'category' => 'premium',
-                ],
-                [
-                    'id' => 4,
-                    'name' => 'Custom Badge',
-                    'description' => 'Create your own custom badge',
-                    'type' => 'customization',
-                    'cost' => 2000,
-                    'currency' => 'xp',
-                    'value' => 'Exclusive',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'award',
-                    'category' => 'exclusive',
-                ],
-                [
-                    'id' => 5,
-                    'name' => 'Priority Support',
-                    'description' => '7 days of priority customer support',
-                    'type' => 'support',
-                    'cost' => 1200,
-                    'currency' => 'xp',
-                    'value' => '$49.99',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'headphones',
-                    'category' => 'premium',
-                ],
-                [
-                    'id' => 6,
-                    'name' => 'Team Boost',
-                    'description' => '2x XP for your entire team for 7 days',
-                    'type' => 'boost',
-                    'cost' => 2500,
-                    'currency' => 'xp',
-                    'value' => 'Team Bonus',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'users',
-                    'category' => 'team',
-                ],
-                [
-                    'id' => 7,
-                    'name' => 'Mewayz Merchandise',
-                    'description' => 'Exclusive Mewayz branded items',
-                    'type' => 'physical',
-                    'cost' => 3000,
-                    'currency' => 'xp',
-                    'value' => '$39.99',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'package',
-                    'category' => 'exclusive',
-                ],
-                [
-                    'id' => 8,
-                    'name' => 'Feature Request',
-                    'description' => 'Request a new feature to be prioritized',
-                    'type' => 'feature_request',
-                    'cost' => 5000,
-                    'currency' => 'xp',
-                    'value' => 'Priceless',
-                    'available' => true,
-                    'redeemed' => false,
-                    'icon' => 'lightbulb',
-                    'category' => 'exclusive',
-                ],
-            ];
-
-            return response()->json([
-                'success' => true,
-                'data' => $rewards,
-                'user_balance' => [
-                    'xp' => 3450,
-                    'points' => 1200,
-                    'tokens' => 45,
-                ],
-                'categories' => [
-                    'premium' => count(array_filter($rewards, function($r) { return $r['category'] === 'premium'; })),
-                    'exclusive' => count(array_filter($rewards, function($r) { return $r['category'] === 'exclusive'; })),
-                    'team' => count(array_filter($rewards, function($r) { return $r['category'] === 'team'; })),
-                ],
-            ]);
         } catch (\Exception $e) {
-            Log::error('Error getting rewards: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to get rewards'], 500);
+            Log::error('Join challenge failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id,
+                'challenge_id' => $challengeId
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to join challenge'
+            ], 500);
         }
     }
 
     /**
-     * Redeem reward
+     * Add XP to user
      */
-    public function redeemReward(Request $request, $id)
+    public function addXP(Request $request)
     {
+        $request->validate([
+            'amount' => 'required|integer|min:1|max:10000',
+            'source' => 'required|string|max:255',
+            'description' => 'nullable|string|max:500',
+            'metadata' => 'nullable|array'
+        ]);
+
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_primary', true)->first();
+            $userProgress = $this->getUserProgress($user);
             
-            if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
-            }
-
-            // Simulate reward redemption
-            $redemption = [
-                'id' => rand(10000, 99999),
-                'reward_id' => $id,
-                'user_id' => $user->id,
-                'workspace_id' => $workspace->id,
-                'cost' => 1000,
-                'currency' => 'xp',
-                'status' => 'redeemed',
-                'redeemed_at' => now(),
-                'expires_at' => now()->addDays(30),
-            ];
-
-            Log::info('Reward redeemed', [
-                'user_id' => $user->id,
-                'reward_id' => $id,
-                'cost' => $redemption['cost'],
-            ]);
-
+            $finalAmount = $userProgress->addXP(
+                $request->amount,
+                $request->source,
+                $request->metadata ?? []
+            );
+            
+            // Check for new achievements
+            $newAchievements = $this->checkForNewAchievements($user);
+            
             return response()->json([
                 'success' => true,
-                'message' => 'Reward redeemed successfully',
-                'data' => $redemption,
+                'message' => "Added {$finalAmount} XP",
+                'data' => [
+                    'xp_added' => $finalAmount,
+                    'current_level' => $userProgress->current_level,
+                    'current_xp' => $userProgress->current_xp,
+                    'total_xp' => $userProgress->total_xp,
+                    'xp_to_next_level' => $userProgress->xp_to_next_level,
+                    'new_achievements' => $newAchievements
+                ]
             ]);
+
         } catch (\Exception $e) {
-            Log::error('Error redeeming reward: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to redeem reward'], 500);
+            Log::error('Add XP failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add XP'
+            ], 500);
         }
+    }
+
+    /**
+     * Update user streak
+     */
+    public function updateStreak(Request $request)
+    {
+        $request->validate([
+            'streak_type' => 'required|string|in:daily_login,content_creation,sales_performance,learning_progress,community_engagement',
+            'action' => 'required|string|in:increment,maintain,break'
+        ]);
+
+        try {
+            $user = $request->user();
+            $userProgress = $this->getUserProgress($user);
+            
+            $userProgress->updateStreak($request->streak_type, $request->action);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Streak updated successfully',
+                'data' => [
+                    'streaks' => $userProgress->streaks
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Update streak failed', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update streak'
+            ], 500);
+        }
+    }
+
+    /**
+     * Get or create user progress
+     */
+    private function getUserProgress(User $user)
+    {
+        $userProgress = $user->userProgress()->first();
+        
+        if (!$userProgress) {
+            $userProgress = UserProgress::create([
+                'user_id' => $user->id,
+                'current_level' => 1,
+                'current_xp' => 0,
+                'total_xp' => 0,
+                'lifetime_xp' => 0,
+                'prestige' => 0,
+                'prestige_points' => 0,
+                'streaks' => [
+                    'daily_login' => ['current' => 0, 'longest' => 0, 'total' => 0, 'last_updated' => now()->toDateString(), 'freeze_tokens' => 0],
+                    'content_creation' => ['current' => 0, 'longest' => 0, 'total' => 0, 'last_updated' => now()->toDateString(), 'freeze_tokens' => 0],
+                    'sales_performance' => ['current' => 0, 'longest' => 0, 'total' => 0, 'last_updated' => now()->toDateString(), 'freeze_tokens' => 0],
+                    'learning_progress' => ['current' => 0, 'longest' => 0, 'total' => 0, 'last_updated' => now()->toDateString(), 'freeze_tokens' => 0],
+                    'community_engagement' => ['current' => 0, 'longest' => 0, 'total' => 0, 'last_updated' => now()->toDateString(), 'freeze_tokens' => 0]
+                ]
+            ]);
+        }
+        
+        return $userProgress;
+    }
+
+    /**
+     * Get recent achievements
+     */
+    private function getRecentAchievements(User $user, $limit = 5)
+    {
+        return $user->achievements()
+                   ->orderByPivot('earned_at', 'desc')
+                   ->limit($limit)
+                   ->get()
+                   ->map(function ($achievement) {
+                       return [
+                           'id' => $achievement->id,
+                           'name' => $achievement->name,
+                           'description' => $achievement->description,
+                           'tier' => $achievement->tier,
+                           'icon' => $achievement->icon,
+                           'earned_at' => $achievement->pivot->earned_at
+                       ];
+                   });
+    }
+
+    /**
+     * Get active challenges for user
+     */
+    private function getActiveChallenges(User $user, $limit = 3)
+    {
+        return $user->challenges()
+                   ->where('is_active', true)
+                   ->whereNull('challenge_participants.completed_at')
+                   ->limit($limit)
+                   ->get()
+                   ->map(function ($challenge) use ($user) {
+                       return [
+                           'id' => $challenge->id,
+                           'name' => $challenge->name,
+                           'description' => $challenge->description,
+                           'type' => $challenge->type,
+                           'progress' => $challenge->pivot->progress,
+                           'end_date' => $challenge->end_date,
+                           'time_remaining' => $challenge->time_remaining
+                       ];
+                   });
+    }
+
+    /**
+     * Get user's leaderboard positions
+     */
+    private function getLeaderboardPositions(User $user)
+    {
+        $positions = [];
+        $leaderboards = Leaderboard::active()->public()->get();
+        
+        foreach ($leaderboards as $leaderboard) {
+            $position = $leaderboard->getUserPosition($user->id);
+            if ($position) {
+                $positions[] = [
+                    'leaderboard_id' => $leaderboard->id,
+                    'leaderboard_name' => $leaderboard->name,
+                    'category' => $leaderboard->category,
+                    'rank' => $position['rank'],
+                    'score' => $position['score'],
+                    'change' => $position['change']
+                ];
+            }
+        }
+        
+        return $positions;
+    }
+
+    /**
+     * Get daily quests for user
+     */
+    private function getDailyQuests(User $user)
+    {
+        $today = now()->toDateString();
+        
+        $quests = $user->dailyQuests()
+                      ->where('quest_date', $today)
+                      ->get();
+        
+        // Generate new quests if none exist for today
+        if ($quests->isEmpty()) {
+            $quests = $this->generateDailyQuests($user, $today);
+        }
+        
+        return $quests->map(function ($quest) {
+            return [
+                'id' => $quest->id,
+                'title' => $quest->title,
+                'description' => $quest->description,
+                'progress' => $quest->progress,
+                'target' => $quest->target,
+                'is_completed' => $quest->is_completed,
+                'rewards' => $quest->rewards
+            ];
+        });
+    }
+
+    /**
+     * Generate daily quests for user
+     */
+    private function generateDailyQuests(User $user, $date)
+    {
+        $questTemplates = [
+            [
+                'quest_type' => 'content_creation',
+                'title' => 'Content Creator',
+                'description' => 'Create 3 pieces of content today',
+                'target' => 3,
+                'rewards' => [['type' => 'xp', 'value' => 100], ['type' => 'credits', 'value' => 50]]
+            ],
+            [
+                'quest_type' => 'social_engagement',
+                'title' => 'Social Butterfly',
+                'description' => 'Engage with 10 posts today',
+                'target' => 10,
+                'rewards' => [['type' => 'xp', 'value' => 75]]
+            ],
+            [
+                'quest_type' => 'learning',
+                'title' => 'Knowledge Seeker',
+                'description' => 'Complete 1 course lesson today',
+                'target' => 1,
+                'rewards' => [['type' => 'xp', 'value' => 150]]
+            ]
+        ];
+        
+        $quests = collect();
+        
+        foreach ($questTemplates as $template) {
+            $quest = $user->dailyQuests()->create([
+                'quest_type' => $template['quest_type'],
+                'title' => $template['title'],
+                'description' => $template['description'],
+                'requirements' => ['action' => $template['quest_type']],
+                'rewards' => $template['rewards'],
+                'target' => $template['target'],
+                'quest_date' => $date
+            ]);
+            
+            $quests->push($quest);
+        }
+        
+        return $quests;
+    }
+
+    /**
+     * Get streak data
+     */
+    private function getStreakData(User $user)
+    {
+        $userProgress = $this->getUserProgress($user);
+        return $userProgress->streaks ?? [];
+    }
+
+    /**
+     * Get guild info for user
+     */
+    private function getGuildInfo(User $user)
+    {
+        $guild = $user->guild()->first();
+        
+        if (!$guild) {
+            return null;
+        }
+        
+        return [
+            'id' => $guild->id,
+            'name' => $guild->name,
+            'level' => $guild->level,
+            'member_count' => $guild->member_count,
+            'user_role' => $guild->pivot->role,
+            'contribution_xp' => $guild->pivot->contribution_xp
+        ];
+    }
+
+    /**
+     * Get next available rewards
+     */
+    private function getNextRewards(User $user)
+    {
+        return Reward::where('cost', '>', 0)
+                    ->where('stock', '>', 0)
+                    ->orderBy('cost', 'asc')
+                    ->limit(5)
+                    ->get()
+                    ->map(function ($reward) {
+                        return [
+                            'id' => $reward->id,
+                            'name' => $reward->name,
+                            'description' => $reward->description,
+                            'type' => $reward->type,
+                            'cost' => $reward->cost,
+                            'currency' => $reward->currency
+                        ];
+                    });
+    }
+
+    /**
+     * Get progress statistics
+     */
+    private function getProgressStats(User $user)
+    {
+        $userProgress = $this->getUserProgress($user);
+        
+        return [
+            'achievements_earned' => $user->achievements()->count(),
+            'challenges_completed' => $user->challenges()->wherePivot('completed_at', '!=', null)->count(),
+            'days_active' => $user->created_at->diffInDays(now()),
+            'total_contributions' => $user->analyticsEvents()->count(),
+            'rank_percentile' => $this->getUserRankPercentile($user),
+            'activity_score' => $this->calculateActivityScore($user)
+        ];
+    }
+
+    /**
+     * Get personalized recommendations
+     */
+    private function getPersonalizedRecommendations(User $user)
+    {
+        $recommendations = [];
+        
+        // Suggest challenges based on user interests
+        $availableChallenges = Challenge::active()
+                                     ->ongoing()
+                                     ->whereNotIn('id', $user->challenges()->pluck('challenge_id'))
+                                     ->limit(3)
+                                     ->get();
+        
+        foreach ($availableChallenges as $challenge) {
+            if ($challenge->canBeJoinedBy($user)) {
+                $recommendations[] = [
+                    'type' => 'challenge',
+                    'title' => "Join Challenge: {$challenge->name}",
+                    'description' => $challenge->description,
+                    'action_url' => "/challenges/{$challenge->id}",
+                    'priority' => 'medium'
+                ];
+            }
+        }
+        
+        // Suggest achievements close to completion
+        $achievements = Achievement::active()->get();
+        foreach ($achievements as $achievement) {
+            if (!$achievement->isEarnedBy($user) && $achievement->canBeEarnedBy($user)) {
+                $progress = $achievement->getProgressFor($user);
+                $totalProgress = 0;
+                $completedRequirements = 0;
+                
+                foreach ($progress as $req) {
+                    $totalProgress += $req['percentage'];
+                    if ($req['completed']) {
+                        $completedRequirements++;
+                    }
+                }
+                
+                $avgProgress = count($progress) > 0 ? $totalProgress / count($progress) : 0;
+                
+                if ($avgProgress > 50) {
+                    $recommendations[] = [
+                        'type' => 'achievement',
+                        'title' => "Complete Achievement: {$achievement->name}",
+                        'description' => $achievement->description,
+                        'progress' => $avgProgress,
+                        'action_url' => "/achievements/{$achievement->id}",
+                        'priority' => $avgProgress > 80 ? 'high' : 'medium'
+                    ];
+                }
+            }
+        }
+        
+        // Sort by priority
+        usort($recommendations, function ($a, $b) {
+            $priorities = ['high' => 3, 'medium' => 2, 'low' => 1];
+            return $priorities[$b['priority']] - $priorities[$a['priority']];
+        });
+        
+        return array_slice($recommendations, 0, 5);
+    }
+
+    /**
+     * Check for new achievements
+     */
+    private function checkForNewAchievements(User $user)
+    {
+        $newAchievements = [];
+        $achievements = Achievement::active()->get();
+        
+        foreach ($achievements as $achievement) {
+            if (!$achievement->isEarnedBy($user) && $achievement->canBeEarnedBy($user)) {
+                $progress = $achievement->getProgressFor($user);
+                $allCompleted = true;
+                
+                foreach ($progress as $req) {
+                    if (!$req['completed']) {
+                        $allCompleted = false;
+                        break;
+                    }
+                }
+                
+                if ($allCompleted) {
+                    if ($achievement->awardTo($user)) {
+                        $newAchievements[] = [
+                            'id' => $achievement->id,
+                            'name' => $achievement->name,
+                            'description' => $achievement->description,
+                            'tier' => $achievement->tier,
+                            'icon' => $achievement->icon,
+                            'rewards' => $achievement->rewards
+                        ];
+                    }
+                }
+            }
+        }
+        
+        return $newAchievements;
+    }
+
+    /**
+     * Calculate user rank percentile
+     */
+    private function getUserRankPercentile(User $user)
+    {
+        $userProgress = $this->getUserProgress($user);
+        $totalUsers = UserProgress::count();
+        
+        if ($totalUsers <= 1) {
+            return 100;
+        }
+        
+        $usersWithLowerXP = UserProgress::where('total_xp', '<', $userProgress->total_xp)->count();
+        return round(($usersWithLowerXP / $totalUsers) * 100, 1);
+    }
+
+    /**
+     * Calculate activity score
+     */
+    private function calculateActivityScore(User $user)
+    {
+        $recentActivity = $user->analyticsEvents()
+                             ->where('created_at', '>=', now()->subDays(30))
+                             ->count();
+        
+        $streakBonus = 0;
+        $userProgress = $this->getUserProgress($user);
+        if ($userProgress->streaks) {
+            foreach ($userProgress->streaks as $streak) {
+                $streakBonus += $streak['current'] ?? 0;
+            }
+        }
+        
+        return min(100, $recentActivity + $streakBonus);
     }
 }
