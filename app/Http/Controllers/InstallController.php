@@ -447,33 +447,103 @@ class InstallController extends Controller
             $pdo = new PDO($dsn, $config['username'], $config['password'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_TIMEOUT => 10,
             ]);
             
-            // Test a simple query
+            // Test basic operations
             $pdo->query('SELECT 1');
+            
+            // Check database version
+            $stmt = $pdo->query('SELECT VERSION()');
+            $version = $stmt->fetchColumn();
+            
+            // Check if we can create tables
+            $pdo->exec('CREATE TABLE IF NOT EXISTS installer_test (id INT PRIMARY KEY AUTO_INCREMENT, test_column VARCHAR(255))');
+            $pdo->exec('DROP TABLE IF EXISTS installer_test');
+            
+            // Check database timezone
+            $stmt = $pdo->query('SELECT @@time_zone');
+            $timezone = $stmt->fetchColumn();
+            
+            // Check database charset
+            $stmt = $pdo->query('SELECT DEFAULT_CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?');
+            $stmt->execute([$config['database']]);
+            $charset = $stmt->fetchColumn();
+            
+            // Verify database permissions
+            $tables = $pdo->query('SHOW TABLES')->fetchAll();
             
         } catch (PDOException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Database connection failed: ' . $e->getMessage()
+                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'details' => [
+                    'error_code' => $e->getCode(),
+                    'error_info' => $e->errorInfo ?? []
+                ]
             ], 400);
         }
 
-        // Update .env file
+        // Create database user if needed (MySQL/MariaDB only)
+        if (in_array($config['connection'], ['mysql', 'mariadb'])) {
+            try {
+                $this->createDatabaseUser($config);
+            } catch (Exception $e) {
+                // Log but don't fail if user creation fails
+                \Log::warning('Database user creation failed: ' . $e->getMessage());
+            }
+        }
+
+        // Update .env file with production-ready settings
         $this->updateEnvFile([
             'DB_CONNECTION' => $config['connection'],
             'DB_HOST' => $config['host'],
             'DB_PORT' => $config['port'],
             'DB_DATABASE' => $config['database'],
             'DB_USERNAME' => $config['username'],
-            'DB_PASSWORD' => $config['password']
+            'DB_PASSWORD' => $config['password'],
+            'DB_CHARSET' => 'utf8mb4',
+            'DB_COLLATION' => 'utf8mb4_unicode_ci',
+            'DB_TIMEZONE' => '+00:00',
+            'DB_STRICT' => 'true',
+            'DB_ENGINE' => 'InnoDB'
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Database configuration saved successfully!',
+            'details' => [
+                'version' => $version ?? 'Unknown',
+                'charset' => $charset ?? 'Unknown',
+                'timezone' => $timezone ?? 'Unknown',
+                'tables_count' => count($tables)
+            ],
             'nextStep' => 'environment'
         ]);
+    }
+
+    private function createDatabaseUser($config)
+    {
+        if ($config['username'] === 'root') {
+            return; // Skip for root user
+        }
+
+        try {
+            $rootDsn = "{$config['connection']}:host={$config['host']};port={$config['port']}";
+            $rootPdo = new PDO($rootDsn, 'root', '', [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ]);
+
+            // Create user if not exists
+            $rootPdo->exec("CREATE USER IF NOT EXISTS '{$config['username']}'@'%' IDENTIFIED BY '{$config['password']}'");
+            
+            // Grant privileges
+            $rootPdo->exec("GRANT ALL PRIVILEGES ON `{$config['database']}`.* TO '{$config['username']}'@'%'");
+            $rootPdo->exec("FLUSH PRIVILEGES");
+            
+        } catch (PDOException $e) {
+            throw new Exception("Failed to create database user: " . $e->getMessage());
+        }
     }
 
     private function getCurrentEnvConfig()
