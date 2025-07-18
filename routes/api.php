@@ -876,7 +876,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 });
 
 // Enhanced Admin System Routes
-Route::middleware(['custom.auth', 'admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [EnhancedAdminController::class, 'getDashboard']);
         Route::post('/subscriptions/manage', [EnhancedAdminController::class, 'manageSubscriptionPlans']);
