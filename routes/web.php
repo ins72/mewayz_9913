@@ -81,6 +81,10 @@ Route::get('/dashboard/qr', function () {
     return view('pages.dashboard.qr.index');
 })->name('dashboard-qr-index');
 
+Route::get('/dashboard/calendar', function () {
+    return view('pages.dashboard.calendar.index');
+})->name('dashboard-calendar-index');
+
 // Test route without auth
 Route::get('/test-dashboard', function () {
     return 'Dashboard test route working!';
