@@ -785,12 +785,35 @@ class CourseController extends Controller
             ], 403);
         }
 
-        // TODO: Get course students
-        $students = [];
+        // Get course students from enrollments
+        $students = \App\Models\CourseEnrollment::where('course_id', $course->id)
+            ->with('user')
+            ->get()
+            ->map(function ($enrollment) {
+                return [
+                    'id' => $enrollment->user->id,
+                    'name' => $enrollment->user->name,
+                    'email' => $enrollment->user->email,
+                    'enrolled_at' => $enrollment->created_at,
+                    'progress' => $enrollment->progress_percentage ?? 0,
+                    'completion_status' => $enrollment->completion_status ?? 'in_progress',
+                    'last_activity' => $enrollment->last_activity_at,
+                    'total_time_spent' => $enrollment->total_time_spent ?? 0,
+                    'lessons_completed' => $enrollment->lessons_completed ?? 0,
+                    'quiz_scores' => $enrollment->quiz_scores ?? [],
+                    'certificates_earned' => $enrollment->certificates_earned ?? 0
+                ];
+            });
 
         return response()->json([
             'success' => true,
             'data' => $students,
+            'total_students' => $students->count(),
+            'course_info' => [
+                'id' => $course->id,
+                'name' => $course->name,
+                'total_lessons' => $course->lessons()->count()
+            ]
         ]);
     }
 
