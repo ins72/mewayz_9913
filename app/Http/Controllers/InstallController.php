@@ -994,9 +994,9 @@ class InstallController extends Controller
         try {
             $securityConfig = [
                 'BCRYPT_ROUNDS' => 12,
-                'SANCTUM_STATEFUL_DOMAINS' => env('APP_URL'),
-                'SESSION_SECURE_COOKIE' => env('APP_ENV') === 'production',
-                'SESSION_SAME_SITE' => 'strict',
+                'SANCTUM_STATEFUL_DOMAINS' => parse_url(env('APP_URL'), PHP_URL_HOST),
+                'SESSION_SECURE_COOKIE' => env('APP_ENV') === 'production' ? '1' : '0',
+                'SESSION_SAME_SITE' => env('APP_ENV') === 'production' ? 'strict' : 'lax',
                 'TRUSTED_PROXIES' => '*',
                 'ASSET_URL' => env('APP_URL')
             ];
