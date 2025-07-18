@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mewayz-setup:
+    build:
+      context: .
+      dockerfile: Dockerfile.complete
+    container_name: mewayz-setup
+    ports:
+      - "8080:8080"  # Setup Wizard
+      - "80:80"      # Main Application
+    environment:
+      - LANG=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+    restart: unless-stopped
+    volumes:
+      - mewayz_data:/var/www/html/storage
+      - mewayz_logs:/var/log
+    networks:
+      - mewayz-network
+
+networks:
+  mewayz-network:
+    driver: bridge
+
+volumes:
+  mewayz_data:
+  mewayz_logs:
