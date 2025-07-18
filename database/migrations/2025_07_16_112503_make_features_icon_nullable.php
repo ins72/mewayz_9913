@@ -25,4 +25,5 @@ return new class extends Migration
             $table->text('icon')->nullable(false)->change();
         });
 
+}
 };

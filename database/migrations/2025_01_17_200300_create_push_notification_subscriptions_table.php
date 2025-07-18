@@ -38,4 +38,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('push_notification_subscriptions');
 
+}
 };

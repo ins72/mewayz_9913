@@ -45,4 +45,5 @@ return new class extends Migration
             $table->dropColumn(['slug', 'title', 'description', 'theme_config', 'view_count', 'click_count', 'template_id']);
         });
 
+}
 };

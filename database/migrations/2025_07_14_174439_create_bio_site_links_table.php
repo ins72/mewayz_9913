@@ -37,4 +37,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('bio_site_links');
 
+}
 };

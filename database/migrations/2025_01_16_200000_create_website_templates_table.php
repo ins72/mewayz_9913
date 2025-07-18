@@ -42,4 +42,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('website_templates');
 
+}
 };

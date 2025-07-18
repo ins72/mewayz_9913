@@ -39,4 +39,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('social_media_posts');
 
+}
 };

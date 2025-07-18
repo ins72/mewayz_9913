@@ -48,4 +48,5 @@ return new class() extends Migration {
     {
         return (new Wallet())->getTable();
 
+}
 };

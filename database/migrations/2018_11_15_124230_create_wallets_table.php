@@ -62,4 +62,5 @@ return new class() extends Migration {
     {
         return (new Transaction())->getTable();
 
+}
 };
