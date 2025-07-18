@@ -189,6 +189,49 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/statistics', [GamificationController::class, 'getStatistics']);
     });
     
+    // Admin routes
+    Route::prefix('admin')->middleware(['admin'])->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [AdminDashboardController::class, 'index']);
+        
+        // User Management
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserManagementController::class, 'index']);
+            Route::get('/{id}', [UserManagementController::class, 'show']);
+            Route::post('/bulk-import', [UserManagementController::class, 'bulkImport']);
+            Route::post('/bulk-update', [UserManagementController::class, 'bulkUpdate']);
+            Route::post('/bulk-delete', [UserManagementController::class, 'bulkDelete']);
+            Route::get('/statistics', [UserManagementController::class, 'getStatistics']);
+        });
+        
+        // Subscription Plans
+        Route::prefix('plans')->group(function () {
+            Route::get('/', [SubscriptionPlanController::class, 'index']);
+            Route::post('/', [SubscriptionPlanController::class, 'store']);
+            Route::get('/{id}', [SubscriptionPlanController::class, 'show']);
+            Route::put('/{id}', [SubscriptionPlanController::class, 'update']);
+            Route::delete('/{id}', [SubscriptionPlanController::class, 'destroy']);
+            Route::put('/{id}/features', [SubscriptionPlanController::class, 'updateFeatures']);
+            Route::put('/{id}/pricing', [SubscriptionPlanController::class, 'updatePricing']);
+            Route::post('/comparison', [SubscriptionPlanController::class, 'getComparison']);
+            Route::get('/analytics', [SubscriptionPlanController::class, 'getAnalytics']);
+        });
+        
+        // Environment Configuration
+        Route::prefix('environment')->group(function () {
+            Route::get('/', [EnvironmentController::class, 'index']);
+            Route::post('/', [EnvironmentController::class, 'store']);
+            Route::put('/{id}', [EnvironmentController::class, 'update']);
+            Route::delete('/{id}', [EnvironmentController::class, 'destroy']);
+            Route::post('/sync-from-env', [EnvironmentController::class, 'syncFromEnv']);
+            Route::post('/write-to-env', [EnvironmentController::class, 'writeToEnv']);
+            Route::get('/system-settings', [EnvironmentController::class, 'getSystemSettings']);
+            Route::put('/system-settings/{key}', [EnvironmentController::class, 'updateSystemSetting']);
+            Route::get('/system-info', [EnvironmentController::class, 'getSystemInfo']);
+            Route::post('/clear-cache', [EnvironmentController::class, 'clearCache']);
+        });
+    });
+    
     // Instagram Management routes
     Route::prefix('instagram-management')->group(function () {
         Route::get('/accounts', [InstagramManagementController::class, 'getAccounts']);
