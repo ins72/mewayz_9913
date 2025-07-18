@@ -165,7 +165,7 @@ class LegalPagesAPITester:
         """Verify the health check is working as mentioned in review request"""
         print("\n=== VERIFICATION: Health Check Status ===")
         
-        response = self.make_request('GET', '/health', auth_required=False)
+        response = self.make_request('GET', '/health', auth_required=False, use_api=True)
         if response and response.status_code == 200:
             try:
                 data = response.json()
