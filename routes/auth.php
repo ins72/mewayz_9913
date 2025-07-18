@@ -6,7 +6,7 @@ use Livewire\Volt\Volt;
 
 Route::middleware(\App\Http\Middleware\RedirectIfAuthenticated::class)->group(function () {
     Route::get('register', function () {
-        return view('pages.auth.register');
+        return view('auth.register');
     })->name('register');
     
     Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
