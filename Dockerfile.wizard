@@ -1,0 +1,90 @@
+FROM php:8.2-fpm-alpine
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apk add --no-cache \
+    nginx \
+    supervisor \
+    nodejs \
+    npm \
+    git \
+    curl \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    mysql-client \
+    redis \
+    openssl
+
+# Install PHP extensions
+RUN docker-php-ext-install \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip \
+    intl
+
+# Install Redis extension
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy Nginx configuration
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
+
+# Copy Supervisor configuration
+COPY docker/supervisor/supervisord.conf /etc/supervisord.conf
+
+# Copy application files
+COPY . .
+
+# Create setup wizard directory and files
+RUN mkdir -p /var/www/html/setup
+
+# Copy setup wizard files
+COPY docker/setup-wizard/ /var/www/html/setup/
+
+# Install dependencies (will be done after setup if not exists)
+RUN if [ -f "composer.json" ]; then composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs || true; fi
+RUN if [ -f "package.json" ]; then npm ci && npm run build || true; fi
+
+# Create required directories
+RUN mkdir -p \
+    resources/views/livewire \
+    storage/app/public \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache \
+    public/storage
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && chmod +x /var/www/html/setup/install.sh
+
+# Create startup script
+RUN echo '#!/bin/sh' > /startup.sh \
+    && echo 'if [ ! -f "/var/www/html/.env" ]; then' >> /startup.sh \
+    && echo '  echo "First run - Setup wizard will be available at http://localhost:8080"' >> /startup.sh \
+    && echo '  ln -sf /var/www/html/setup/index.php /var/www/html/public/index.php' >> /startup.sh \
+    && echo 'fi' >> /startup.sh \
+    && echo 'supervisord -c /etc/supervisord.conf' >> /startup.sh \
+    && chmod +x /startup.sh
+
+# Expose ports
+EXPOSE 80 443 8080
+
+# Start services
+CMD ["/startup.sh"]
