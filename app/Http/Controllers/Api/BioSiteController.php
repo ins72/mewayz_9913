@@ -631,7 +631,7 @@ class BioSiteController extends Controller
     }
 
     // Helper methods for analytics data generation
-    private function generateDailyViews()
+    private function generateDailyViewsOverview()
     {
         $views = [];
         for ($i = 29; $i >= 0; $i--) {
