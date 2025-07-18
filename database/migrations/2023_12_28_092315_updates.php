@@ -311,12 +311,15 @@ return new class extends Migration
 
             if (!Schema::hasColumn('sites', 'created_by')) {
                 $table->integer('created_by')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'email')) {
                 $table->string('email')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'favicon')) {
                 $table->string('favicon')->after('logo')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'current_edit_page')) {
                 $table->string('current_edit_page')->after('settings')->nullable();
