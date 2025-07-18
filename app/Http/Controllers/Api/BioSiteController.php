@@ -388,7 +388,7 @@ class BioSiteController extends Controller
                 'bounce_rate' => 34.5
             ],
             'time_series' => [
-                'daily_views' => $this->generateDailyViews(),
+                'daily_views' => $this->generateDailyViewsOverview(),
                 'hourly_distribution' => $this->generateHourlyDistribution(),
                 'weekly_trends' => $this->generateWeeklyTrends()
             ],
