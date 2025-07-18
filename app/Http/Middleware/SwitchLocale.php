@@ -3,6 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\App;
 
 class SwitchLocale
 {
@@ -13,11 +16,14 @@ class SwitchLocale
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {  
-        if (\Cookie::get('yenaLocale')) {
-             \App::setLocale(\Cookie::get('yenaLocale'));
+        $locale = Cookie::get('yenaLocale');
+        
+        if ($locale && is_string($locale)) {
+            App::setLocale($locale);
         }
+        
         return $next($request);
     }
 }
