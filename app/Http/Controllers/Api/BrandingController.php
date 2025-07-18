@@ -50,7 +50,7 @@ class BrandingController extends Controller
                 'empty_state' => 'No content available yet. Start creating!'
             ],
             'contact' => [
-                'website' => 'https://mewayz.com',
+                'website' => config('app.url'),
                 'support_email' => 'support@mewayz.com',
                 'contact_email' => 'hello@mewayz.com',
                 'phone' => '+1-800-MEWAYZ',
@@ -65,9 +65,9 @@ class BrandingController extends Controller
             ],
             'legal' => [
                 'copyright' => '© 2025 Mewayz Technologies Inc. All rights reserved.',
-                'terms_url' => 'https://mewayz.com/terms',
-                'privacy_url' => 'https://mewayz.com/privacy',
-                'cookie_policy_url' => 'https://mewayz.com/cookies'
+                'terms_url' => config('app.url') . '/terms-of-service',
+                'privacy_url' => config('app.url') . '/privacy-policy',
+                'cookie_policy_url' => config('app.url') . '/cookie-policy'
             ]
         ];
 
