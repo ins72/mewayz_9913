@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
-
+    }
 
     /**
      * Reverse the migrations.
@@ -29,5 +29,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('personal_access_tokens');
-
-};
+    }
+}
