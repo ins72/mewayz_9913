@@ -21,6 +21,9 @@ Route::get('/', function () {
 // Include legal routes
 require __DIR__.'/legal.php';
 
+// Include auth routes
+require __DIR__.'/auth.php';
+
 // Include business routes
 require __DIR__.'/business.php';
 
