@@ -27,7 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('social_media_accounts', function (Blueprint $table) {
-            //
+            $table->dropColumn(['connected_at', 'last_sync_at']);
         });
     }
 };
