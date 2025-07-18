@@ -25,7 +25,7 @@ class AdminDashboardController extends Controller
             // Overview Statistics
             $stats = [
                 'total_users' => User::count(),
-                'active_users' => User::where('status', 1)->count(),
+                'active_users' => User::where('status', 'active')->count(),
                 'new_users_today' => User::whereDate('created_at', today())->count(),
                 'new_users_this_week' => User::where('created_at', '>=', now()->startOfWeek())->count(),
                 'new_users_this_month' => User::where('created_at', '>=', now()->startOfMonth())->count(),
