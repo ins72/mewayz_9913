@@ -119,7 +119,7 @@ return new class extends Migration
         if (!Schema::hasTable('bio_pages')) {
             Schema::create('bio_pages', function (Blueprint $table) {
                 $table->id();
-                $table->uuid()->after('id');
+                $table->uuid();
                 $table->integer('site_id');
                 $table->string('name')->nullable();
                 $table->string('slug')->nullable();
