@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('instagram_hashtags', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workspace_id');
+            $table->uuid('workspace_id');
             $table->string('hashtag');
             $table->integer('post_count')->default(0);
             $table->decimal('engagement_rate', 5, 2)->default(0.00);

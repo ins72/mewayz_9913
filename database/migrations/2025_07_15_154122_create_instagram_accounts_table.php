@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('instagram_accounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workspace_id');
+            $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
             $table->string('username');
             $table->string('instagram_user_id')->nullable(); // Instagram API user ID

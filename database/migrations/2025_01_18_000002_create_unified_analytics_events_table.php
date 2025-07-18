@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('unified_analytics_events', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('workspace_id')->nullable();
+            $table->uuid('workspace_id')->nullable();
             $table->string('event_type', 100);
             $table->string('event_category', 50)->default('engagement');
             $table->string('platform', 50);

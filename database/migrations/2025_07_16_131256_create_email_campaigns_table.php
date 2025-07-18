@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('email_campaigns', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workspace_id');
+            $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('subject');
