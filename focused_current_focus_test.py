@@ -52,13 +52,13 @@ class FocusedTester:
             
         try:
             if method.upper() == 'GET':
-                response = self.session.get(url, headers=default_headers, params=data, timeout=15)
+                response = self.session.get(url, headers=default_headers, params=data, timeout=10)
             elif method.upper() == 'POST':
-                response = self.session.post(url, headers=default_headers, json=data, timeout=15)
+                response = self.session.post(url, headers=default_headers, json=data, timeout=10)
             elif method.upper() == 'PUT':
-                response = self.session.put(url, headers=default_headers, json=data, timeout=15)
+                response = self.session.put(url, headers=default_headers, json=data, timeout=10)
             elif method.upper() == 'DELETE':
-                response = self.session.delete(url, headers=default_headers, timeout=15)
+                response = self.session.delete(url, headers=default_headers, timeout=10)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
                 
