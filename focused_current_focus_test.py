@@ -14,7 +14,7 @@ class FocusedTester:
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         # Use a valid test token from the test_result.md
-        self.auth_token = "3|96zxMcWghY55EiL0rRdvo88SQNwShOaQVjEUcYX8d25c90f0"
+        self.auth_token = "3|yHHRGVcNjzxdu8szdT1LRua2Dy2GPnff0iQyCSm7cf941e64"
         self.test_results = {}
         self.session = requests.Session()
         
