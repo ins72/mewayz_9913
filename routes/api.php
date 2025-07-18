@@ -893,6 +893,7 @@ Route::prefix('admin')->group(function () {
         Route::get('/metrics', [EnhancedAdminController::class, 'getMetrics']);
         Route::get('/health', [EnhancedAdminController::class, 'getSystemHealth']);
     });
+}); // Close the main admin middleware group
 
 // Fallback route for 404 errors
 Route::fallback(function () {
