@@ -63,10 +63,10 @@ return new class() extends Migration {
     private function table(): string
     {
         return (new Transfer())->getTable();
-
+    }
 
     private function transactionTable(): string
     {
         return (new Transaction())->getTable();
-
-};
+    }
+}
