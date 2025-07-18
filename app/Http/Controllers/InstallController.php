@@ -712,6 +712,9 @@ class InstallController extends Controller
     {
         try {
             $results = [];
+            
+            // Create backup of current installation
+            $results['backup'] = $this->createBackup();
 
             // Run database migrations
             $results['migrations'] = $this->runMigrations();
@@ -719,26 +722,73 @@ class InstallController extends Controller
             // Run database seeders
             $results['seeders'] = $this->runSeeders();
 
-            // Clear and cache config
-            $results['config'] = $this->optimizeApplication();
+            // Set up production-ready directory structure
+            $results['directories'] = $this->setupDirectories();
+
+            // Clear and optimize application
+            $results['optimization'] = $this->optimizeApplication();
 
             // Create storage links
             $results['storage'] = $this->createStorageLinks();
 
+            // Set up queue workers
+            $results['queues'] = $this->setupQueues();
+
+            // Set up cron jobs
+            $results['cron'] = $this->setupCronJobs();
+
+            // Configure security settings
+            $results['security'] = $this->configureSecuritySettings();
+
             // Set up WebSocket and services
             $results['services'] = $this->setupServices();
 
+            // Generate production keys
+            $results['keys'] = $this->generateProductionKeys();
+
+            // Create initial admin user if not exists
+            $results['admin_check'] = $this->ensureAdminUser();
+
+            // Set proper file permissions
+            $results['permissions'] = $this->setFilePermissions();
+
+            // Create production-ready .htaccess
+            $results['htaccess'] = $this->createProductionHtaccess();
+
+            // Set up monitoring and logging
+            $results['monitoring'] = $this->setupMonitoring();
+
             // Mark as installed
-            File::put(base_path('.installed'), json_encode([
+            $installationInfo = [
                 'installed_at' => now()->toISOString(),
                 'version' => '2.0.0',
-                'installer_version' => '1.0.0'
-            ]));
+                'installer_version' => '2.0.0',
+                'environment' => env('APP_ENV', 'production'),
+                'php_version' => PHP_VERSION,
+                'laravel_version' => app()->version(),
+                'database_version' => $this->getDatabaseVersion(),
+                'installation_id' => \Str::uuid(),
+                'features' => [
+                    'social_media_management' => true,
+                    'ecommerce' => true,
+                    'course_creation' => true,
+                    'email_marketing' => true,
+                    'analytics' => true,
+                    'gamification' => true,
+                    'ai_integration' => true,
+                    'websocket_collaboration' => true,
+                    'biometric_auth' => true,
+                    'advanced_admin' => true
+                ]
+            ];
+
+            File::put(base_path('.installed'), json_encode($installationInfo, JSON_PRETTY_PRINT));
 
             return response()->json([
                 'success' => true,
                 'message' => 'Installation completed successfully!',
                 'results' => $results,
+                'installation_info' => $installationInfo,
                 'nextStep' => 'complete'
             ]);
 
@@ -748,6 +798,40 @@ class InstallController extends Controller
                 'message' => 'Installation failed: ' . $e->getMessage(),
                 'error' => $e->getTraceAsString()
             ], 500);
+        }
+    }
+
+    private function createBackup()
+    {
+        try {
+            $backupDir = storage_path('app/backups');
+            if (!File::exists($backupDir)) {
+                File::makeDirectory($backupDir, 0755, true);
+            }
+            
+            $timestamp = now()->format('Y-m-d_H-i-s');
+            $backupFile = $backupDir . "/backup_{$timestamp}.json";
+            
+            $backupData = [
+                'timestamp' => $timestamp,
+                'env_backup' => File::exists(base_path('.env')) ? File::get(base_path('.env')) : null,
+                'database_tables' => $this->getDatabaseTables(),
+                'php_version' => PHP_VERSION,
+                'laravel_version' => app()->version()
+            ];
+            
+            File::put($backupFile, json_encode($backupData, JSON_PRETTY_PRINT));
+            
+            return [
+                'success' => true,
+                'message' => 'Backup created successfully',
+                'file' => $backupFile
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Backup failed: ' . $e->getMessage()
+            ];
         }
     }
 
