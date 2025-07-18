@@ -803,7 +803,7 @@ class GamificationController extends Controller
                 return [now()->subDays(30), now()];
         }
     }
-}
+
     /**
      * Get user's gamification dashboard
      */
