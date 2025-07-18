@@ -14,12 +14,11 @@ class ContactMessage extends Model
         'email',
         'subject',
         'message',
-        'phone',
         'company',
-        'inquiry_type',
+        'phone',
+        'status',
         'ip_address',
-        'user_agent',
-        'status'
+        'user_agent'
     ];
 
     public function scopeNew($query)
@@ -27,8 +26,13 @@ class ContactMessage extends Model
         return $query->where('status', 'new');
     }
 
-    public function scopeByInquiryType($query, $type)
+    public function scopeProcessed($query)
     {
-        return $query->where('inquiry_type', $type);
+        return $query->where('status', 'processed');
+    }
+
+    public function markAsProcessed()
+    {
+        $this->update(['status' => 'processed']);
     }
 }
