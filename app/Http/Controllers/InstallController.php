@@ -202,24 +202,114 @@ class InstallController extends Controller
                 'path' => storage_path(),
                 'required' => true,
                 'status' => is_writable(storage_path()),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . storage_path()
+            ],
+            'storage_logs' => [
+                'name' => 'Storage Logs Directory',
+                'path' => storage_path('logs'),
+                'required' => true,
+                'status' => is_writable(storage_path('logs')),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . storage_path('logs')
+            ],
+            'storage_framework' => [
+                'name' => 'Storage Framework Directory',
+                'path' => storage_path('framework'),
+                'required' => true,
+                'status' => is_writable(storage_path('framework')),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . storage_path('framework')
             ],
             'bootstrap_cache' => [
                 'name' => 'Bootstrap Cache',
                 'path' => base_path('bootstrap/cache'),
                 'required' => true,
                 'status' => is_writable(base_path('bootstrap/cache')),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . base_path('bootstrap/cache')
             ],
             'config' => [
                 'name' => 'Config Directory',
                 'path' => config_path(),
                 'required' => true,
                 'status' => is_writable(config_path()),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . config_path()
             ],
             'env_file' => [
                 'name' => '.env File',
                 'path' => base_path('.env'),
                 'required' => true,
                 'status' => is_writable(base_path('.env')),
+                'chmod' => '644',
+                'fix_command' => 'sudo chmod 644 ' . base_path('.env')
+            ],
+            'public' => [
+                'name' => 'Public Directory',
+                'path' => public_path(),
+                'required' => true,
+                'status' => is_writable(public_path()),
+                'chmod' => '755',
+                'fix_command' => 'sudo chmod -R 755 ' . public_path()
+            ]
+        ];
+
+        // Check system services
+        $services = [
+            'mysql' => [
+                'name' => 'MySQL/MariaDB Service',
+                'required' => true,
+                'status' => $this->checkServiceStatus('mysql') || $this->checkServiceStatus('mariadb'),
+                'fix_command' => 'sudo systemctl start mysql || sudo systemctl start mariadb'
+            ],
+            'redis' => [
+                'name' => 'Redis Service',
+                'required' => true,
+                'status' => $this->checkServiceStatus('redis') || $this->checkServiceStatus('redis-server'),
+                'fix_command' => 'sudo systemctl start redis || sudo systemctl start redis-server'
+            ],
+            'nginx' => [
+                'name' => 'Web Server (Nginx/Apache)',
+                'required' => false,
+                'status' => $this->checkServiceStatus('nginx') || $this->checkServiceStatus('apache2'),
+                'fix_command' => 'sudo systemctl start nginx || sudo systemctl start apache2'
+            ]
+        ];
+
+        // Check PHP configuration
+        $phpConfig = [
+            'memory_limit' => [
+                'name' => 'PHP Memory Limit',
+                'required' => true,
+                'current' => ini_get('memory_limit'),
+                'recommended' => '256M',
+                'status' => $this->convertToBytes(ini_get('memory_limit')) >= $this->convertToBytes('256M'),
+                'fix_command' => 'Increase memory_limit to 256M in php.ini'
+            ],
+            'max_execution_time' => [
+                'name' => 'Max Execution Time',
+                'required' => true,
+                'current' => ini_get('max_execution_time'),
+                'recommended' => '300',
+                'status' => ini_get('max_execution_time') >= 300 || ini_get('max_execution_time') == 0,
+                'fix_command' => 'Increase max_execution_time to 300 in php.ini'
+            ],
+            'upload_max_filesize' => [
+                'name' => 'Upload Max Filesize',
+                'required' => true,
+                'current' => ini_get('upload_max_filesize'),
+                'recommended' => '64M',
+                'status' => $this->convertToBytes(ini_get('upload_max_filesize')) >= $this->convertToBytes('64M'),
+                'fix_command' => 'Increase upload_max_filesize to 64M in php.ini'
+            ],
+            'post_max_size' => [
+                'name' => 'Post Max Size',
+                'required' => true,
+                'current' => ini_get('post_max_size'),
+                'recommended' => '64M',
+                'status' => $this->convertToBytes(ini_get('post_max_size')) >= $this->convertToBytes('64M'),
+                'fix_command' => 'Increase post_max_size to 64M in php.ini'
             ]
         ];
 
