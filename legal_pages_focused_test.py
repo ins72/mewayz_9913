@@ -187,7 +187,7 @@ class LegalPagesAPITester:
         print("\n=== VERIFICATION: API Syntax Fix ===")
         
         # Test a basic API endpoint to verify syntax is fixed
-        response = self.make_request('GET', '/test', auth_required=False)
+        response = self.make_request('GET', '/test', auth_required=False, use_api=True)
         if response and response.status_code == 200:
             try:
                 data = response.json()
