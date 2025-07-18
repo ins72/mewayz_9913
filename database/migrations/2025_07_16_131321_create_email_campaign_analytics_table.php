@@ -42,5 +42,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('email_campaign_analytics');
 
-}
 };

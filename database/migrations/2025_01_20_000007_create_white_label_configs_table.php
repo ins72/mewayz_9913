@@ -35,5 +35,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('white_label_configs');
 
-}
 };

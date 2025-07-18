@@ -82,5 +82,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('unified_analytics_events');
 
-}
 };

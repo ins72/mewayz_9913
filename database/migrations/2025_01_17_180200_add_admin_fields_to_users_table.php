@@ -33,5 +33,4 @@ return new class extends Migration
             $table->dropColumn(['is_admin', 'status', 'last_login_at']);
         });
 
-}
 };

@@ -59,5 +59,4 @@ return new class extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
         });
 
-}
 };

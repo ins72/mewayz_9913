@@ -27,5 +27,4 @@ return new class extends Migration
             $table->dropColumn('instagram_account_id');
         });
 
-}
 };

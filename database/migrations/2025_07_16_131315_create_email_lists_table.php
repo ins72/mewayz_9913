@@ -60,5 +60,4 @@ return new class extends Migration
         Schema::dropIfExists('email_list_subscribers');
         Schema::dropIfExists('email_lists');
 
-}
 };

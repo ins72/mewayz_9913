@@ -38,5 +38,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('security_events');
 
-}
 };

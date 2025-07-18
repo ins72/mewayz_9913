@@ -30,5 +30,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('ai_models');
 
-}
 };

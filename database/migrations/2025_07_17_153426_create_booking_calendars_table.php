@@ -40,5 +40,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('booking_calendars');
 
-}
 };

@@ -59,5 +59,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('escrow_transactions');
 
-}
 };

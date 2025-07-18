@@ -356,5 +356,4 @@ return new class extends Migration
         Schema::dropIfExists('admin_users');
         Schema::dropIfExists('admin_roles');
     }
-}
 };

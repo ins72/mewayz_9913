@@ -44,5 +44,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('analytics_events');
 
-}
 };

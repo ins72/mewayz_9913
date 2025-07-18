@@ -33,5 +33,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('admin_api_keys');
 
-}
 };

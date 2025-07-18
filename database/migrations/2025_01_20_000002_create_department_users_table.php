@@ -28,5 +28,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('department_users');
 
-}
 };

@@ -45,5 +45,4 @@ return new class extends Migration
             $table->dropColumn(['oauth_provider', 'oauth_id', 'avatar']);
         });
 
-}
 };
