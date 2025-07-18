@@ -163,4 +163,30 @@ class AdminDashboardController extends Controller
             'queue_size' => 12
         ];
     }
+
+    private function safeCount($modelClass, $conditions = [])
+    {
+        try {
+            $query = $modelClass::query();
+            foreach ($conditions as $field => $value) {
+                if ($field === 'created_at' && $value instanceof \Carbon\Carbon) {
+                    $query->whereDate($field, $value);
+                } else {
+                    $query->where($field, $value);
+                }
+            }
+            return $query->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    private function safeSum($modelClass, $field)
+    {
+        try {
+            return $modelClass::sum($field) ?? 0;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
 }
