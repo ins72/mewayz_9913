@@ -143,7 +143,7 @@
                                 class="bg-red-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-red-700 transition-colors">
                             Request Account Deletion
                         </button>
-                        <a href="{{ route('dashboard') }}" 
+                        <a href="/dashboard" 
                            class="bg-slate-200 text-slate-700 py-3 px-6 rounded-xl font-semibold hover:bg-slate-300 transition-colors">
                             Cancel
                         </a>
