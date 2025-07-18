@@ -877,19 +877,19 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 // Enhanced Admin System Routes
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return response()->json([
-                'success' => true,
-                'message' => 'Admin dashboard working',
-                'timestamp' => now()
-            ]);
-        });
+// Simple test route
+Route::get('/admin/dashboard', function () {
+    return response()->json([
+        'success' => true,
+        'message' => 'Admin dashboard working',
+        'timestamp' => now()
+    ]);
+});
+
+Route::prefix('admin')->group(function () {
         Route::post('/subscriptions/manage', [EnhancedAdminController::class, 'manageSubscriptionPlans']);
-        Route::post('/users/manage', [EnhancedAdminController::class, 'manageUsers']);
-        Route::post('/affiliates/manage', [EnhancedAdminController::class, 'manageAffiliates']);
-        Route::post('/system/manage', [EnhancedAdminController::class, 'manageSystemSettings']);
-        Route::get('/audit-logs', [LegalComplianceController::class, 'auditLog']);
+        Route::get('/metrics', [EnhancedAdminController::class, 'getMetrics']);
+        Route::get('/health', [EnhancedAdminController::class, 'getSystemHealth']);
     });
 });
 
