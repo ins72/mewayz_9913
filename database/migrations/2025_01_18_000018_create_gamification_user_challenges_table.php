@@ -24,10 +24,10 @@ return new class extends Migration
             $table->json('rewards_claimed')->nullable(); // Rewards already claimed
             $table->string('status')->default('active'); // active, completed, failed, expired
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('challenge_id')->references('id')->on('gamification_challenges')->onDelete('cascade');
-            
+
             $table->unique(['user_id', 'challenge_id']);
             $table->index(['user_id', 'status']);
             $table->index(['challenge_id', 'completed']);

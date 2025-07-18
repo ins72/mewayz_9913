@@ -34,10 +34,10 @@ return new class extends Migration
             $table->string('utm_term')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'workspace_id']);
             $table->index(['slug']);
             $table->index(['expires_at']);

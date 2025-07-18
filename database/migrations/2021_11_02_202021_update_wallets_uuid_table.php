@@ -14,7 +14,7 @@ return new class() extends Migration {
     {
         if (Schema::hasColumn($this->table(), 'uuid')) {
             return;
-    
+
 
         // upgrade from 6.x
         Schema::table($this->table(), static function (Blueprint $table) {

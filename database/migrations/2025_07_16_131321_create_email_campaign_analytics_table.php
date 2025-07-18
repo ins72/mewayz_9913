@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
             $table->json('event_data')->nullable(); // Additional event-specific data
             $table->timestamps();
-            
+
             $table->foreign('campaign_id')->references('id')->on('email_campaigns')->onDelete('cascade');
             $table->foreign('subscriber_id')->references('id')->on('email_subscribers')->onDelete('cascade');
-            
+
             $table->index(['campaign_id', 'event_type']);
             $table->index(['subscriber_id', 'event_type']);
             $table->index(['campaign_id', 'event_timestamp']);
@@ -38,7 +38,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('email_campaign_analytics');
 

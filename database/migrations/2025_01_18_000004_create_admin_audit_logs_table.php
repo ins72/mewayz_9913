@@ -24,9 +24,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->enum('severity', ['low', 'medium', 'high', 'critical'])->default('medium');
             $table->timestamps();
-            
+
             $table->foreign('admin_user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['admin_user_id']);
             $table->index(['action']);
             $table->index(['target_type', 'target_id']);

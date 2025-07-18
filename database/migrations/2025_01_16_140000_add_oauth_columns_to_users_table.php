@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'oauth_provider')) {
                 $table->string('oauth_provider')->nullable()->after('email_verified_at');
-        
+
             if (!Schema::hasColumn('users', 'oauth_id')) {
                 $table->string('oauth_id')->nullable()->after('oauth_provider');
-        
+
             // Avatar column already exists, skip adding it
-            
+
             // Add index if it doesn't exist
             $indexes = Schema::getConnection()->getDoctrineSchemaManager()->listTableIndexes('users');
             $indexExists = false;
@@ -27,11 +27,11 @@ return new class extends Migration
                 if ($index->getColumns() === ['oauth_provider', 'oauth_id']) {
                     $indexExists = true;
                     break;
-            
-        
+
+
             if (!$indexExists) {
                 $table->index(['oauth_provider', 'oauth_id']);
-        
+
         });
 
 

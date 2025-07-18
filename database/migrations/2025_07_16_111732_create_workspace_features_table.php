@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('enabled_at')->nullable();
             $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->unique(['workspace_id', 'feature_id']);
         });
@@ -33,7 +33,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('workspace_features');
 

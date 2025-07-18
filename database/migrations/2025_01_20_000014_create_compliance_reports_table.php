@@ -19,10 +19,10 @@ return new class extends Migration
             $table->timestamp('generated_at')->nullable();
             $table->unsignedBigInteger('generated_by')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('generated_by')->references('id')->on('users')->onDelete('set null');
-            
+
             $table->index(['workspace_id', 'report_type']);
             $table->index(['status']);
         });

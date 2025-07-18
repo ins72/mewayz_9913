@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('user_agent', 1000)->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'created_at']);
             $table->index(['workspace_id', 'created_at']);
             $table->index(['resource_type', 'resource_id']);

@@ -42,7 +42,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['category', 'tier']);
             $table->index(['difficulty', 'is_active']);
             $table->index(['rarity', 'is_hidden']);
@@ -57,7 +57,7 @@ return new class extends Migration
             $table->integer('progress')->default(100);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['user_id', 'achievement_id']);
             $table->index(['user_id', 'earned_at']);
         });
@@ -85,7 +85,7 @@ return new class extends Migration
             $table->bigInteger('yearly_xp')->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique('user_id');
             $table->index(['current_level', 'current_xp']);
             $table->index(['total_xp']);
@@ -112,7 +112,7 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'category', 'is_active']);
             $table->index(['timeframe', 'reset_frequency']);
         });
@@ -134,7 +134,7 @@ return new class extends Migration
             $table->timestamp('last_active')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['leaderboard_id', 'user_id']);
             $table->index(['leaderboard_id', 'rank']);
             $table->index(['user_id', 'score']);
@@ -175,7 +175,7 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'category', 'is_active']);
             $table->index(['difficulty', 'start_date']);
             $table->index(['is_featured', 'start_date']);
@@ -193,7 +193,7 @@ return new class extends Migration
             $table->integer('rank')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['challenge_id', 'user_id']);
             $table->index(['challenge_id', 'score']);
             $table->index(['user_id', 'joined_at']);
@@ -214,7 +214,7 @@ return new class extends Migration
             $table->json('settings')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['challenge_id', 'team_score']);
             $table->index(['challenge_id', 'is_recruiting']);
         });
@@ -229,7 +229,7 @@ return new class extends Migration
             $table->decimal('individual_score', 10, 2)->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['team_id', 'user_id']);
             $table->index(['team_id', 'role']);
         });
@@ -266,7 +266,7 @@ return new class extends Migration
             $table->json('governance')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['is_public', 'is_recruiting']);
             $table->index(['level', 'reputation']);
         });
@@ -284,7 +284,7 @@ return new class extends Migration
             $table->json('achievements')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['guild_id', 'user_id']);
             $table->index(['guild_id', 'role']);
             $table->index(['user_id', 'joined_at']);
@@ -309,7 +309,7 @@ return new class extends Migration
             $table->timestamp('available_until')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'category']);
             $table->index(['cost', 'currency']);
             $table->index(['available_from', 'available_until']);
@@ -326,7 +326,7 @@ return new class extends Migration
             $table->string('currency_paid', 10)->default('credits');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'claimed_at']);
             $table->index(['reward_id', 'status']);
         });
@@ -342,7 +342,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'created_at']);
             $table->index(['source', 'created_at']);
         });
@@ -360,7 +360,7 @@ return new class extends Migration
             $table->string('earned_from')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['user_id', 'badge_slug']);
             $table->index(['user_id', 'earned_at']);
             $table->index(['badge_rarity', 'earned_at']);
@@ -382,7 +382,7 @@ return new class extends Migration
             $table->date('quest_date');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['user_id', 'quest_type', 'quest_date']);
             $table->index(['user_id', 'quest_date', 'is_completed']);
         });
@@ -404,7 +404,7 @@ return new class extends Migration
             $table->text('mentee_feedback')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['mentor_id', 'mentee_id']);
             $table->index(['mentor_id', 'status']);
             $table->index(['mentee_id', 'status']);
@@ -429,7 +429,7 @@ return new class extends Migration
             $table->decimal('total_revenue', 10, 2)->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'status']);
             $table->index(['creator_id', 'status']);
         });
@@ -447,7 +447,7 @@ return new class extends Migration
             $table->json('contributions')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['project_id', 'user_id']);
             $table->index(['project_id', 'role']);
         });

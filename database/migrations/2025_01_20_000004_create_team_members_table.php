@@ -16,10 +16,10 @@ return new class extends Migration
             $table->timestamp('joined_at');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-            
+
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->unique(['team_id', 'user_id']);
         });
 

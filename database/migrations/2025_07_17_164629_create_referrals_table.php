@@ -31,11 +31,11 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('referrer_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('referee_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->index(['referrer_id', 'status']);
             $table->index(['referee_id']);
             $table->index(['referral_code']);

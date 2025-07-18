@@ -32,7 +32,7 @@ return new class extends Migration
             $table->decimal('deal_value', 10, 2)->nullable();
             $table->timestamp('last_contact_date')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'type']);
             $table->index(['user_id', 'status']);
             $table->index(['email']);
@@ -45,7 +45,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('audiences');
 

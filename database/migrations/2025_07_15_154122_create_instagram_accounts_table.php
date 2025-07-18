@@ -29,20 +29,22 @@ return new class extends Migration
                 $table->boolean('is_primary')->default(false);
                 $table->json('account_info')->nullable();
                 $table->timestamps();
-                
+
                 $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
                 $table->index(['workspace_id', 'is_connected']);
                 $table->index(['user_id', 'is_primary']);
             });
-    
+
 
 
     /**
      * Reverse the migrations.
      */
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('instagram_accounts');
 

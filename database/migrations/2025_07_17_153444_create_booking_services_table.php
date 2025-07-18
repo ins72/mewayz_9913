@@ -36,7 +36,7 @@ return new class extends Migration
             $table->text('preparation_instructions')->nullable();
             $table->text('cancellation_policy')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_active']);
             $table->index(['category', 'is_active']);
         });

@@ -28,9 +28,9 @@ return new class extends Migration
             $table->string('source')->nullable(); // How they subscribed (form, import, etc.)
             $table->string('ip_address')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->unique(['workspace_id', 'email']);
             $table->index(['workspace_id', 'status']);
             $table->index(['email', 'status']);
@@ -44,7 +44,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('email_subscribers');
 

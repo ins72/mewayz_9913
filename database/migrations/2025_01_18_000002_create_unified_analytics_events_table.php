@@ -61,14 +61,14 @@ return new class extends Migration
             $table->index(['timestamp', 'event_type']);
             $table->index(['revenue', 'conversion_value']);
             $table->index(['platform', 'event_category', 'timestamp']);
-            
+
             // Composite indexes for common queries
             $table->index(['user_id', 'platform', 'timestamp']);
             $table->index(['workspace_id', 'event_type', 'timestamp']);
             $table->index(['visitor_id', 'platform', 'timestamp']);
             $table->index(['session_id', 'event_type', 'timestamp']);
             $table->index(['platform', 'event_category', 'revenue']);
-            
+
             // Foreign key constraints (optional - depends on your database setup)
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             // $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');

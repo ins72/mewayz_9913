@@ -25,9 +25,9 @@ return new class extends Migration
             $table->integer('streak_multiplier')->default(1);
             $table->json('milestones')->nullable(); // Streak milestone rewards
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->unique(['user_id', 'streak_type']);
             $table->index(['streak_type', 'current_streak']);
             $table->index(['is_active', 'last_activity_date']);

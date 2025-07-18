@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('unlock_condition')->nullable(); // Required achievement or level
             $table->integer('sort_order')->default(0);
             $table->timestamps();
-            
+
             $table->index(['type', 'category']);
             $table->index(['is_active', 'difficulty']);
         });

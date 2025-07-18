@@ -20,15 +20,15 @@ return new class extends Migration
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('manager_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('created_by')->references('id')->on('users');
-            
+
             $table->index(['workspace_id', 'status']);
             $table->index(['parent_department_id']);
         });
-        
+
         // Add self-referencing foreign key constraint after table creation
         Schema::table('departments', function (Blueprint $table) {
             $table->foreign('parent_department_id')->references('id')->on('departments')->onDelete('cascade');

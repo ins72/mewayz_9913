@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('cost_per_request', 10, 6)->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+
             $table->index(['type', 'is_active']);
             $table->index(['provider']);
         });

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('namespace')->default('default');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
             $table->unique(['language_id', 'key', 'namespace']);
             $table->index(['language_id', 'namespace']);

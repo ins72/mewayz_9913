@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->json('attribute_mapping')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->index(['workspace_id', 'is_active']);
         });

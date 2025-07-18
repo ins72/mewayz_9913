@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('stripe_price_id')->nullable();
             $table->integer('quantity')->default(1);
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->index(['session_id', 'payment_status']);
         });

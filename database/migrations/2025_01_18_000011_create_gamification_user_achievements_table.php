@@ -22,10 +22,10 @@ return new class extends Migration
             $table->integer('completion_count')->default(0);
             $table->json('progress_data')->nullable(); // Dynamic progress tracking
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('achievement_id')->references('id')->on('gamification_achievements')->onDelete('cascade');
-            
+
             $table->unique(['user_id', 'achievement_id']);
             $table->index(['user_id', 'completed']);
             $table->index(['achievement_id', 'completed']);

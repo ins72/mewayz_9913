@@ -34,10 +34,10 @@ return new class extends Migration
             $table->decimal('click_rate', 5, 2)->default(0);
             $table->json('settings')->nullable(); // Campaign settings (tracking, etc.)
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['workspace_id', 'status']);
             $table->index(['user_id', 'created_at']);
         });
@@ -49,7 +49,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('email_campaigns');
 

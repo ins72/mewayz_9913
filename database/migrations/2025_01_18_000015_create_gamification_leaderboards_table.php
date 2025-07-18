@@ -28,7 +28,7 @@ return new class extends Migration
             $table->boolean('is_public')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
-            
+
             $table->index(['type', 'category']);
             $table->index(['is_active', 'period']);
         });

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('custom_login_page')->default(false);
             $table->json('login_page_config')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->unique(['workspace_id']);
         });

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('audience', function (Blueprint $table) {
             if (!Schema::hasColumn('audience', 'type')) {
                 $table->string('type')->default('contact')->after('id');
-        
+
         });
 
 

@@ -26,9 +26,9 @@ return new class extends Migration
             $table->boolean('is_bonus')->default(false);
             $table->string('bonus_reason')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'event_type']);
             $table->index(['event_category', 'created_at']);
             $table->index(['source_type', 'source_id']);

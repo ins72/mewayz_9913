@@ -23,10 +23,10 @@ return new class extends Migration
             $table->json('achievements_data')->nullable(); // Related achievements
             $table->datetime('last_updated')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('leaderboard_id')->references('id')->on('gamification_leaderboards')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->unique(['leaderboard_id', 'user_id']);
             $table->index(['leaderboard_id', 'position']);
             $table->index(['user_id', 'score']);

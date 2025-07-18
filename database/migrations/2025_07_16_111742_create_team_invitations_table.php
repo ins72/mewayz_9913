@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('rejected_at')->nullable();
             $table->string('token')->unique();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
         });
 
@@ -37,7 +37,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('team_invitations');
 

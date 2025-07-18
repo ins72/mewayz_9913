@@ -29,9 +29,9 @@ return new class extends Migration
             $table->string('session_id')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('shortened_link_id')->references('id')->on('shortened_links')->onDelete('cascade');
-            
+
             $table->index(['shortened_link_id', 'clicked_at']);
             $table->index(['ip_address']);
             $table->index(['country']);

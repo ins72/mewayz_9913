@@ -32,7 +32,7 @@ return new class extends Migration
             $table->json('participation_requirements')->nullable(); // Level, achievements required
             $table->json('metadata')->nullable(); // Additional challenge data
             $table->timestamps();
-            
+
             $table->index(['type', 'category']);
             $table->index(['is_active', 'is_featured']);
             $table->index(['start_date', 'end_date']);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('audience', function (Blueprint $table) {
             if (!Schema::hasColumn('audience', 'owner_id')) {
                 $table->unsignedBigInteger('owner_id')->after('user_id')->default(0);
-        
+
         });
 
 

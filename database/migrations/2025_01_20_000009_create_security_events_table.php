@@ -23,11 +23,11 @@ return new class extends Migration
             $table->unsignedBigInteger('resolved_by')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('resolved_by')->references('id')->on('users')->onDelete('set null');
-            
+
             $table->index(['event_type', 'severity']);
             $table->index(['workspace_id', 'is_resolved']);
             $table->index(['created_at']);

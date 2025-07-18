@@ -28,7 +28,7 @@ return new class extends Migration
             $table->integer('click_count')->default(0);
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'is_published']);
             $table->index('slug');
             $table->index('custom_domain');

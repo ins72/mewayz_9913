@@ -23,10 +23,10 @@ return new class extends Migration
             $table->timestamp('last_executed_at')->nullable();
             $table->timestamp('next_execution_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'is_active']);
             $table->index(['workspace_id', 'is_active']);
             $table->index(['trigger_type']);

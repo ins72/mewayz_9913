@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['hierarchy_level', 'is_active']);
         });
 
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique('user_id');
             $table->index(['role_id', 'is_active']);
             $table->index(['is_super_admin', 'is_active']);
@@ -66,7 +66,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['user_id', 'is_active']);
             $table->index(['key_id', 'is_active']);
             $table->index(['expires_at', 'is_active']);
@@ -93,7 +93,7 @@ return new class extends Migration
             $table->text('current_step')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['initiated_by', 'status']);
             $table->index(['type', 'status']);
             $table->index(['created_at', 'status']);
@@ -119,7 +119,7 @@ return new class extends Migration
             $table->decimal('total_discount_amount', 12, 2)->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'is_active']);
             $table->index(['valid_from', 'valid_until']);
             $table->index(['priority', 'is_active']);
@@ -139,7 +139,7 @@ return new class extends Migration
             $table->json('options')->nullable(); // For dropdown/select settings
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
-            
+
             $table->unique(['category', 'key']);
             $table->index(['category', 'is_public']);
         });
@@ -158,7 +158,7 @@ return new class extends Migration
             $table->foreignId('modified_by')->nullable()->constrained('users')->onDelete('set null');
             $table->json('backup_history')->nullable();
             $table->timestamps();
-            
+
             $table->unique('key');
             $table->index(['category', 'is_sensitive']);
         });
@@ -179,7 +179,7 @@ return new class extends Migration
             $table->text('error_message')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['initiated_by', 'type']);
             $table->index(['status', 'created_at']);
         });
@@ -200,7 +200,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'is_active']);
             $table->index(['created_by', 'is_active']);
         });
@@ -214,7 +214,7 @@ return new class extends Migration
             $table->enum('added_method', ['automatic', 'manual', 'import']);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['user_id', 'segment_id']);
             $table->index(['segment_id', 'added_at']);
         });
@@ -236,7 +236,7 @@ return new class extends Migration
             $table->json('feature_usage')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['plan_id', 'date']);
             $table->index(['date', 'plan_id']);
         });
@@ -256,7 +256,7 @@ return new class extends Migration
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['is_enabled', 'rollout_type']);
             $table->index(['created_by', 'is_enabled']);
         });
@@ -285,7 +285,7 @@ return new class extends Migration
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'status']);
             $table->index(['created_by', 'status']);
             $table->index(['scheduled_at', 'status']);
@@ -305,7 +305,7 @@ return new class extends Migration
             $table->timestamp('recorded_at');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['metric_type', 'metric_name', 'recorded_at']);
             $table->index(['status', 'recorded_at']);
         });
@@ -328,7 +328,7 @@ return new class extends Migration
             $table->timestamp('occurred_at');
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->index(['event_type', 'occurred_at']);
             $table->index(['user_id', 'occurred_at']);
             $table->index(['compliance_type', 'requires_attention']);

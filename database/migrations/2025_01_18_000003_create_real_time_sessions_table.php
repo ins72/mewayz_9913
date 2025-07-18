@@ -25,10 +25,10 @@ return new class extends Migration
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['workspace_id', 'status']);
             $table->index(['session_id']);
             $table->index(['channel_name']);

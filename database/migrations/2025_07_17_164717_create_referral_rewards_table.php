@@ -28,10 +28,10 @@ return new class extends Migration
             $table->string('payment_reference')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('referral_id')->references('id')->on('referrals')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'status']);
             $table->index(['referral_id']);
             $table->index(['status']);

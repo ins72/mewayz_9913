@@ -23,7 +23,7 @@ return new class extends Migration
             $table->json('related_hashtags')->nullable();
             $table->json('analytics')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->unique(['workspace_id', 'hashtag']);
             $table->index(['workspace_id', 'is_trending']);
@@ -36,7 +36,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('instagram_hashtags');
 

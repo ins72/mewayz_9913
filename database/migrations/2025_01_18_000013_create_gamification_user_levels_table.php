@@ -24,9 +24,9 @@ return new class extends Migration
             $table->json('level_benefits')->nullable(); // Unlocked features, bonuses
             $table->timestamp('last_level_up')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->unique('user_id');
             $table->index(['level', 'level_tier']);
         });

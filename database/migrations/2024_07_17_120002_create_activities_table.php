@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->json('metadata')->nullable(); // Additional data like call duration, email open rate, etc.
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'type']);
             $table->index(['workspace_id', 'status']);
             $table->index(['contact_id', 'type']);

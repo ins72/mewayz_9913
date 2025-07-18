@@ -28,10 +28,10 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->integer('usage_count')->default(0);
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['workspace_id', 'category']);
             $table->index(['workspace_id', 'is_active']);
         });
@@ -43,7 +43,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('email_templates');
 

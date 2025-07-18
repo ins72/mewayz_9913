@@ -32,10 +32,10 @@ return new class extends Migration
             $table->unsignedInteger('review_count')->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('template_categories')->onDelete('cascade');
-            
+
             $table->index(['status', 'is_active']);
             $table->index(['template_type', 'status']);
             $table->index(['creator_id']);
@@ -51,7 +51,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('templates');
 

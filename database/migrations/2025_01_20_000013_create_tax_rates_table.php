@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('effective_from');
             $table->date('effective_to')->nullable();
             $table->timestamps();
-            
+
             $table->index(['country_code', 'state_code', 'is_active']);
         });
 

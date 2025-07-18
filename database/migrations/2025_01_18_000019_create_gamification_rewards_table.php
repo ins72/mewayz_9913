@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('current_redemptions')->default(0);
             $table->datetime('expires_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['type', 'rarity']);
             $table->index(['is_active', 'is_redeemable']);
         });

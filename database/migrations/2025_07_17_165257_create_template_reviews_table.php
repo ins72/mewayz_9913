@@ -22,10 +22,10 @@ return new class extends Migration
             $table->unsignedInteger('helpful_count')->default(0);
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
-            
+
             $table->unique(['user_id', 'template_id']);
             $table->index(['template_id', 'rating']);
             $table->index(['is_verified']);
@@ -39,7 +39,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('template_reviews');
 

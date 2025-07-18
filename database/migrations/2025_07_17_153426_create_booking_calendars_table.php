@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('override_reason')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
-            
+
             $table->index(['service_id', 'date']);
             $table->index(['date', 'is_available']);
         });

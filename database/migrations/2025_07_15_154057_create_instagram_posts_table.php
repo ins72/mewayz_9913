@@ -28,13 +28,13 @@ return new class extends Migration
                 $table->json('analytics')->nullable(); // Engagement metrics
                 $table->json('metadata')->nullable(); // Additional data
                 $table->timestamps();
-                
+
                 $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
                 $table->index(['workspace_id', 'status']);
                 $table->index(['user_id', 'scheduled_at']);
             });
-    
+
 
 
     /**

@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignId('assigned_to')->nullable()->constrained('users');
             $table->json('custom_fields')->nullable();
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'stage']);
             $table->index(['workspace_id', 'assigned_to']);
             $table->index('expected_close_date');

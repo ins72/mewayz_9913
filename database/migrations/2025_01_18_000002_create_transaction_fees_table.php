@@ -25,9 +25,9 @@ return new class extends Migration
             $table->json('fee_breakdown')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
-            
+
             $table->index(['workspace_id', 'transaction_type']);
             $table->index(['transaction_type', 'subscription_plan']);
             $table->index(['created_at']);

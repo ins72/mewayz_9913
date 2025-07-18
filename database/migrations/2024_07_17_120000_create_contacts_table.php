@@ -32,7 +32,7 @@ return new class extends Migration
             $table->json('social_profiles')->nullable(); // LinkedIn, Twitter, etc.
             $table->json('custom_fields')->nullable();
             $table->timestamps();
-            
+
             $table->index(['workspace_id', 'status']);
             $table->index(['workspace_id', 'email']);
             $table->index('lead_score');

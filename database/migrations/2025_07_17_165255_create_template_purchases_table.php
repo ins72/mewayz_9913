@@ -27,11 +27,11 @@ return new class extends Migration
             $table->text('failure_reason')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('template_id')->references('id')->on('templates')->onDelete('cascade');
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->index(['user_id', 'status']);
             $table->index(['template_id', 'status']);
             $table->index(['creator_id', 'status']);
@@ -46,7 +46,9 @@ return new class extends Migration
 
 
 
-    public function down(): void
+}
+
+public function down(): void
     {
         Schema::dropIfExists('template_purchases');
 

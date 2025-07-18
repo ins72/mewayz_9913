@@ -15,7 +15,7 @@ return new class extends Migration
             if (!Schema::hasColumn('workspaces', 'user_id')) {
                 $table->unsignedBigInteger('user_id')->after('id');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        
+
         });
 
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('plan', ['free', 'professional', 'enterprise'])->default('free');
             $table->timestamp('trial_ends_at')->nullable();
             $table->timestamps();
-            
+
             $table->index('slug');
             $table->index('plan');
         });
