@@ -98,6 +98,122 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function get_original_user(){
         return Teams::get_original_user();
     }
+
+    // Gamification relationships and methods
+    public function gamificationLevel()
+    {
+        return $this->hasOne(\App\Models\Gamification\UserLevel::class);
+    }
+
+    public function gamificationAchievements()
+    {
+        return $this->hasMany(\App\Models\Gamification\UserAchievement::class);
+    }
+
+    public function gamificationXpEvents()
+    {
+        return $this->hasMany(\App\Models\Gamification\XpEvent::class);
+    }
+
+    public function gamificationStreaks()
+    {
+        return $this->hasMany(\App\Models\Gamification\Streak::class);
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany(\App\Models\Gamification\Achievement::class, 'gamification_user_achievements', 'user_id', 'achievement_id')
+                    ->withPivot(['progress', 'target', 'completed', 'completed_at', 'completion_count', 'progress_data'])
+                    ->withTimestamps();
+    }
+
+    public function addXp($amount, $eventType = 'manual', $eventData = [])
+    {
+        $userLevel = $this->gamificationLevel();
+        
+        if (!$userLevel) {
+            $userLevel = \App\Models\Gamification\UserLevel::create([
+                'user_id' => $this->id,
+                'level' => 1,
+                'total_xp' => 0,
+                'current_level_xp' => 0,
+                'next_level_xp' => 100,
+                'xp_to_next_level' => 100,
+                'level_name' => 'Newcomer',
+                'level_tier' => 'Bronze',
+                'level_benefits' => []
+            ]);
+        }
+
+        return $userLevel->addXp($amount, $eventType, $eventData);
+    }
+
+    public function hasCompletedAchievement(\App\Models\Gamification\Achievement $achievement)
+    {
+        return $this->gamificationAchievements()
+                    ->where('achievement_id', $achievement->id)
+                    ->where('completed', true)
+                    ->exists();
+    }
+
+    public function getAchievementCompletionCount(\App\Models\Gamification\Achievement $achievement)
+    {
+        $userAchievement = $this->gamificationAchievements()
+                                ->where('achievement_id', $achievement->id)
+                                ->first();
+        
+        return $userAchievement ? $userAchievement->completion_count : 0;
+    }
+
+    public function updateStreak($streakType, $activityDate = null)
+    {
+        $streak = $this->gamificationStreaks()->where('streak_type', $streakType)->first();
+        
+        if (!$streak) {
+            $streak = \App\Models\Gamification\Streak::create([
+                'user_id' => $this->id,
+                'streak_type' => $streakType,
+                'current_streak' => 0,
+                'longest_streak' => 0,
+                'total_completions' => 0,
+                'is_active' => true,
+                'streak_multiplier' => 1,
+                'milestones' => []
+            ]);
+        }
+
+        return $streak->updateStreak($activityDate);
+    }
+
+    public function getGamificationStats()
+    {
+        $userLevel = $this->gamificationLevel();
+        
+        if (!$userLevel) {
+            return [
+                'level' => 1,
+                'total_xp' => 0,
+                'achievements_completed' => 0,
+                'active_streaks' => 0,
+                'longest_streak' => 0
+            ];
+        }
+
+        $achievementsCompleted = $this->gamificationAchievements()->where('completed', true)->count();
+        $activeStreaks = $this->gamificationStreaks()->where('is_active', true)->count();
+        $longestStreak = $this->gamificationStreaks()->max('longest_streak') ?? 0;
+
+        return [
+            'level' => $userLevel->level,
+            'level_name' => $userLevel->level_name,
+            'level_tier' => $userLevel->level_tier,
+            'total_xp' => $userLevel->total_xp,
+            'achievements_completed' => $achievementsCompleted,
+            'active_streaks' => $activeStreaks,
+            'longest_streak' => $longestStreak,
+            'progress_percentage' => $userLevel->getProgressPercentage()
+        ];
+    }
     
     public function team(){
 
