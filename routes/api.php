@@ -515,6 +515,69 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
         Route::get('/sites/{slug}/preview', [VisualBioBuilderController::class, 'previewBioSite']);
     });
 
+    // Unified Data & Cross-Platform Integration routes
+    Route::prefix('unified')->group(function () {
+        // Unified customer journey
+        Route::get('/customer-journey/{customerId}', [UnifiedDataController::class, 'getUnifiedCustomerJourney']);
+        
+        // Cross-platform analytics
+        Route::get('/analytics', [UnifiedDataController::class, 'getCrossPlatformAnalytics']);
+        
+        // Intelligent automation recommendations
+        Route::get('/automation-recommendations', [UnifiedDataController::class, 'getIntelligentAutomationRecommendations']);
+        
+        // Cross-platform campaign execution
+        Route::post('/campaigns', [UnifiedDataController::class, 'executeCrossPlatformCampaign']);
+        
+        // Unified insights
+        Route::get('/insights', [UnifiedDataController::class, 'getUnifiedInsights']);
+        
+        // Data synchronization
+        Route::post('/sync', [UnifiedDataController::class, 'synchronizeAllData']);
+        
+        // Lead routing
+        Route::post('/lead-routing', [UnifiedDataController::class, 'performIntelligentLeadRouting']);
+        
+        // Performance optimization
+        Route::post('/optimize', [UnifiedDataController::class, 'optimizeCrossPlatformPerformance']);
+        
+        // Attribution analysis
+        Route::get('/attribution/{timeRange?}', [UnifiedDataController::class, 'getAttributionAnalysis']);
+        
+        // Customer 360 view
+        Route::get('/customer-360/{customerId}', [UnifiedDataController::class, 'getCustomer360View']);
+        
+        // Revenue attribution
+        Route::get('/revenue-attribution', [UnifiedDataController::class, 'getRevenueAttribution']);
+        
+        // Platform health check
+        Route::get('/platform-health', [UnifiedDataController::class, 'getPlatformHealthCheck']);
+        
+        // Integration opportunities
+        Route::get('/integration-opportunities', [UnifiedDataController::class, 'getIntegrationOpportunities']);
+        
+        // Advanced automation workflows
+        Route::post('/automation-workflows', [UnifiedDataController::class, 'createAdvancedAutomationWorkflows']);
+        
+        // Predictive modeling
+        Route::get('/predictive-models', [UnifiedDataController::class, 'getPredictiveModels']);
+        
+        // Customer segment analysis
+        Route::get('/segment-analysis', [UnifiedDataController::class, 'getCustomerSegmentAnalysis']);
+        
+        // Engagement scoring
+        Route::get('/engagement-scoring', [UnifiedDataController::class, 'getEngagementScoring']);
+        
+        // Conversion optimization
+        Route::get('/conversion-optimization', [UnifiedDataController::class, 'getConversionOptimization']);
+        
+        // Platform recommendations
+        Route::get('/platform-recommendations', [UnifiedDataController::class, 'getPlatformRecommendations']);
+        
+        // Business intelligence
+        Route::get('/business-intelligence', [UnifiedDataController::class, 'getBusinessIntelligence']);
+    });
+
 });
 
 // Stripe Payment routes - public access for webhooks
