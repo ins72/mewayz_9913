@@ -127,14 +127,14 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     // ACCESSIBILITY FEATURES
     // ================================
     
-    Route::prefix('accessibility')->group(function () {
-        Route::get('/options', [AccessibilityController::class, 'getOptions']);
-        Route::post('/update', [AccessibilityController::class, 'updateOptions']);
-        Route::get('/voice-commands', [AccessibilityController::class, 'getVoiceCommands']);
-        Route::post('/voice-commands', [AccessibilityController::class, 'updateVoiceCommands']);
-        Route::get('/keyboard-shortcuts', [AccessibilityController::class, 'getKeyboardShortcuts']);
-        Route::post('/keyboard-shortcuts', [AccessibilityController::class, 'updateKeyboardShortcuts']);
-    });
+    // Route::prefix('accessibility')->group(function () {
+    //     Route::get('/options', [AccessibilityController::class, 'getOptions']);
+    //     Route::post('/update', [AccessibilityController::class, 'updateOptions']);
+    //     Route::get('/voice-commands', [AccessibilityController::class, 'getVoiceCommands']);
+    //     Route::post('/voice-commands', [AccessibilityController::class, 'updateVoiceCommands']);
+    //     Route::get('/keyboard-shortcuts', [AccessibilityController::class, 'getKeyboardShortcuts']);
+    //     Route::post('/keyboard-shortcuts', [AccessibilityController::class, 'updateKeyboardShortcuts']);
+    // });
     
     // ================================
     // PERFORMANCE MONITORING
