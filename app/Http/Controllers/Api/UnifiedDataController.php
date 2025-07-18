@@ -597,22 +597,23 @@ class UnifiedDataController extends Controller
             $touchpoints = [];
             
             // Get course enrollments
-            $enrollments = \App\Models\CourseEnrollment::where('user_id', $customer->user_id)
+            $enrollments = \App\Models\CoursesEnrollment::where('user', $customer->user_id)
                 ->whereBetween('created_at', $timeRange)
                 ->with('course')
                 ->get();
                 
             foreach ($enrollments as $enrollment) {
+                $course = $enrollment->course;
                 $touchpoints[] = [
                     'platform' => 'courses',
                     'type' => 'course_enrollment',
                     'timestamp' => $enrollment->created_at->toISOString(),
                     'data' => [
-                        'course_id' => $enrollment->course->id,
-                        'course_name' => $enrollment->course->name,
-                        'price' => $enrollment->course->price,
-                        'payment_amount' => $enrollment->payment_amount ?? $enrollment->course->price,
-                        'payment_method' => $enrollment->payment_method ?? 'credit_card'
+                        'course_id' => $course->id ?? $enrollment->course_id,
+                        'course_name' => $course->name ?? 'Unknown Course',
+                        'price' => $course->price ?? 0,
+                        'payment_amount' => $course->price ?? 0,
+                        'payment_method' => 'credit_card'
                     ],
                     'engagement_score' => 9.5
                 ];
@@ -625,15 +626,17 @@ class UnifiedDataController extends Controller
                 ->get();
                 
             foreach ($lessonCompletions as $completion) {
+                $lesson = $completion->lesson;
+                $course = $lesson->course ?? null;
                 $touchpoints[] = [
                     'platform' => 'courses',
                     'type' => 'lesson_completion',
                     'timestamp' => $completion->created_at->toISOString(),
                     'data' => [
-                        'course_id' => $completion->lesson->course->id,
-                        'course_name' => $completion->lesson->course->name,
-                        'lesson_id' => $completion->lesson->id,
-                        'lesson_name' => $completion->lesson->title,
+                        'course_id' => $course->id ?? null,
+                        'course_name' => $course->name ?? 'Unknown Course',
+                        'lesson_id' => $lesson->id ?? null,
+                        'lesson_name' => $lesson->title ?? 'Unknown Lesson',
                         'completion_percentage' => $completion->completion_percentage ?? 100,
                         'time_spent' => $completion->time_spent ?? 0
                     ],
@@ -648,16 +651,19 @@ class UnifiedDataController extends Controller
                 ->get();
                 
             foreach ($quizCompletions as $quiz) {
+                $quizObj = $quiz->quiz;
+                $lesson = $quizObj->lesson ?? null;
+                $course = $lesson->course ?? null;
                 $touchpoints[] = [
                     'platform' => 'courses',
                     'type' => 'quiz_completion',
                     'timestamp' => $quiz->created_at->toISOString(),
                     'data' => [
-                        'course_id' => $quiz->quiz->lesson->course->id,
-                        'course_name' => $quiz->quiz->lesson->course->name,
-                        'quiz_id' => $quiz->quiz->id,
+                        'course_id' => $course->id ?? null,
+                        'course_name' => $course->name ?? 'Unknown Course',
+                        'quiz_id' => $quizObj->id ?? null,
                         'score' => $quiz->score ?? 0,
-                        'max_score' => $quiz->quiz->max_score ?? 100,
+                        'max_score' => $quizObj->max_score ?? 100,
                         'passed' => $quiz->passed ?? false
                     ],
                     'engagement_score' => 7.0 + ($quiz->score ?? 0) / 10
