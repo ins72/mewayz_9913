@@ -857,10 +857,39 @@ Route::middleware(['custom.auth'])->group(function () {
     });
 });
 
+// Real-time Subscription Management Routes
+Route::middleware(['custom.auth'])->group(function () {
+    Route::prefix('subscriptions')->group(function () {
+        Route::get('/plans', [RealTimeSubscriptionController::class, 'getPlans']);
+        Route::get('/current', [RealTimeSubscriptionController::class, 'getCurrentSubscription']);
+        Route::get('/updates', [RealTimeSubscriptionController::class, 'getPlanUpdates']);
+    });
+});
+
+// Admin-only subscription management
+Route::middleware(['custom.auth', 'admin'])->group(function () {
+    Route::prefix('admin/subscriptions')->group(function () {
+        Route::post('/plans', [RealTimeSubscriptionController::class, 'createPlan']);
+        Route::put('/plans/{planId}', [RealTimeSubscriptionController::class, 'updatePlan']);
+        Route::delete('/plans/{planId}', [RealTimeSubscriptionController::class, 'deletePlan']);
+    });
+});
+
+// Enhanced Admin System Routes
+Route::middleware(['custom.auth', 'admin'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [EnhancedAdminController::class, 'getDashboard']);
+        Route::post('/subscriptions/manage', [EnhancedAdminController::class, 'manageSubscriptionPlans']);
+        Route::post('/users/manage', [EnhancedAdminController::class, 'manageUsers']);
+        Route::post('/affiliates/manage', [EnhancedAdminController::class, 'manageAffiliates']);
+        Route::post('/system/manage', [EnhancedAdminController::class, 'manageSystemSettings']);
+        Route::get('/audit-logs', [LegalComplianceController::class, 'auditLog']);
+    });
+});
+
 // Use the updated controller imports
-use App\Http\Controllers\Api\PaymentManagementController;
-use App\Http\Controllers\Api\AccountDeletionController;
-use App\Http\Controllers\Api\AffiliateController;
+use App\Http\Controllers\Api\RealTimeSubscriptionController;
+use App\Http\Controllers\Api\EnhancedAdminController;
 
 // Fallback route for 404 errors
 Route::fallback(function () {
