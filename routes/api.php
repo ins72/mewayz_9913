@@ -659,6 +659,33 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->prefix('templa
     Route::post('/{id}/review', [App\Http\Controllers\Api\TemplateMarketplaceController::class, 'addReview']);
 });
 
+// WebSocket Collaboration routes
+Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function () {
+    Route::prefix('websocket')->group(function () {
+        // Workspace presence management
+        Route::post('/join-workspace', [WebSocketController::class, 'joinWorkspace']);
+        Route::post('/leave-workspace', [WebSocketController::class, 'leaveWorkspace']);
+        Route::get('/workspace-users/{workspaceId}', [WebSocketController::class, 'getWorkspaceUsers']);
+        
+        // Real-time cursor tracking
+        Route::post('/update-cursor', [WebSocketController::class, 'updateCursor']);
+        
+        // Real-time document collaboration
+        Route::post('/update-document', [WebSocketController::class, 'updateDocument']);
+        
+        // Real-time notifications
+        Route::post('/send-notification', [WebSocketController::class, 'sendNotification']);
+        
+        // Activity feed
+        Route::get('/activity-feed', [WebSocketController::class, 'getActivityFeed']);
+        
+        // Collaborative sessions
+        Route::post('/start-session', [WebSocketController::class, 'startSession']);
+        Route::post('/join-session', [WebSocketController::class, 'joinSession']);
+        Route::post('/end-session', [WebSocketController::class, 'endSession']);
+    });
+});
+
 // Include Phase 1 Foundation Features
 require __DIR__ . '/api_phase1.php';
 
