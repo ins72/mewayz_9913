@@ -40,57 +40,46 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/workspace-setup/calculate-pricing', [WorkspaceSetupController::class, 'calculatePricing'])->name('workspace-setup.calculate-pricing');
 });
 
-// Dashboard Routes
-// Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('pages.dashboard.index');
-    })->name('dashboard-index');
-// });
-    
-    Route::get('/dashboard/instagram', function () {
-        return view('pages.dashboard.instagram.index');
-    })->name('dashboard-instagram-index');
-    
-    Route::get('/dashboard/social', function () {
-        return view('pages.dashboard.social.index');
-    })->name('dashboard-social-index');
-    
-    Route::get('/dashboard/linkinbio', function () {
-        return view('pages.dashboard.linkinbio.index');
-    })->name('dashboard-linkinbio-index');
-    
-    Route::get('/dashboard/courses', function () {
-        return view('pages.dashboard.courses.index');
-    })->name('dashboard-courses-index');
-    
-    Route::get('/dashboard/store', function () {
-        return view('pages.dashboard.store.index');
-    })->name('dashboard-store-index');
-    
-    Route::get('/dashboard/crm', function () {
-        return view('pages.dashboard.crm.index');
-    })->name('dashboard-crm-index');
-    
-    Route::get('/dashboard/email', function () {
-        return view('pages.dashboard.email.index');
-    })->name('dashboard-email-index');
-    
-    Route::get('/dashboard/calendar', function () {
-        return view('pages.dashboard.calendar.index');
-    })->name('dashboard-calendar-index');
-    
-    Route::get('/dashboard/analytics', function () {
-        return view('pages.dashboard.analytics.index');
-    })->name('dashboard-analytics-index');
-    
-    Route::get('/dashboard/settings', function () {
-        return view('pages.dashboard.settings.index');
-    })->name('dashboard-settings-index');
-    
-    Route::get('/dashboard/qr', function () {
-        return view('pages.dashboard.qr.index');
-    })->name('dashboard-qr-index');
-});
+// Dashboard Routes (temporarily without auth for testing)
+Route::get('/dashboard', function () {
+    return view('pages.dashboard.index');
+})->name('dashboard-index');
+
+Route::get('/dashboard/instagram', function () {
+    return view('pages.dashboard.instagram.index');
+})->name('dashboard-instagram-index');
+
+Route::get('/dashboard/social', function () {
+    return view('pages.dashboard.social.index');
+})->name('dashboard-social-index');
+
+Route::get('/dashboard/linkinbio', function () {
+    return view('pages.dashboard.linkinbio.index');
+})->name('dashboard-linkinbio-index');
+
+Route::get('/dashboard/courses', function () {
+    return view('pages.dashboard.courses.index');
+})->name('dashboard-courses-index');
+
+Route::get('/dashboard/store', function () {
+    return view('pages.dashboard.store.index');
+})->name('dashboard-store-index');
+
+Route::get('/dashboard/crm', function () {
+    return view('pages.dashboard.crm.index');
+})->name('dashboard-crm-index');
+
+Route::get('/dashboard/email', function () {
+    return view('pages.dashboard.email.index');
+})->name('dashboard-email-index');
+
+Route::get('/dashboard/analytics', function () {
+    return view('pages.dashboard.analytics.index');
+})->name('dashboard-analytics-index');
+
+Route::get('/dashboard/qr', function () {
+    return view('pages.dashboard.qr.index');
+})->name('dashboard-qr-index');
 
 // Test route without auth
 Route::get('/test-dashboard', function () {
