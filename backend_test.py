@@ -36,7 +36,7 @@ class MewayzAPITester:
     def make_request(self, method, endpoint, data=None, headers=None, auth_required=True):
         """Make HTTP request with proper headers"""
         # Add delay to avoid rate limiting
-        time.sleep(0.1)
+        time.sleep(0.5)  # Increased delay to avoid rate limiting
         
         url = f"{self.api_url}{endpoint}"
         
