@@ -92,6 +92,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // Authentication Routes - handled by auth.php
-// Auth::routes(); // Commented out - using modern auth routes in auth.php
+require __DIR__ . '/auth.php';
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
