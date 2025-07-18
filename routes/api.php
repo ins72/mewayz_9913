@@ -194,7 +194,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     });
     
     // Admin routes
-    Route::prefix('admin')->middleware(['admin'])->group(function () {
+    Route::prefix('admin')->middleware(['custom.auth', 'admin'])->group(function () {
         // Dashboard
         Route::get('/dashboard', [AdminDashboardController::class, 'index']);
         
