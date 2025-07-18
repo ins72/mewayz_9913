@@ -836,7 +836,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/webhook/stripe', [PaymentManagementController::class, 'handleStripeWebhook']);
 
 // Account Management Routes
-Route::middleware(['custom.auth'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('account')->group(function () {
         Route::post('/deletion/request', [AccountDeletionController::class, 'requestDeletion']);
         Route::post('/deletion/cancel', [AccountDeletionController::class, 'cancelDeletion']);
