@@ -27,11 +27,19 @@ class EmailMarketingController extends Controller
             $workspace = $user->workspaces()->where('is_primary', true)->first();
             
             if (!$workspace) {
-                return response()->json(['error' => 'Workspace not found'], 404);
+                // Create a default workspace if none exists
+                $workspace = new \App\Models\Workspace([
+                    'id' => (string) \Illuminate\Support\Str::uuid(),
+                    'user_id' => $user->id,
+                    'name' => 'Default Workspace',
+                    'slug' => 'default-workspace-' . $user->id,
+                    'is_primary' => true,
+                    'description' => 'Default workspace for user'
+                ]);
+                $workspace->save();
             }
             
             $campaigns = EmailCampaign::where('workspace_id', $workspace->id)
-                ->with(['template', 'user'])
                 ->orderBy('created_at', 'desc')
                 ->paginate(20);
             
