@@ -85,6 +85,10 @@ Route::get('/dashboard/calendar', function () {
     return view('pages.dashboard.calendar.index');
 })->name('dashboard-calendar-index');
 
+Route::get('/dashboard/settings', function () {
+    return view('pages.dashboard.settings.index');
+})->name('dashboard-settings-index');
+
 // Test route without auth
 Route::get('/test-dashboard', function () {
     return 'Dashboard test route working!';
