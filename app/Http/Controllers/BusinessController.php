@@ -131,7 +131,7 @@ class BusinessController extends Controller
             ]
         ];
 
-        return view('business.features', compact('features', 'categories'));
+        return view('pages.business.features', compact('features', 'categories'));
     }
 
     /**
