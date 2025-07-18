@@ -261,7 +261,7 @@ backend:
     implemented: true
     working: false
     file: "app/Http/Controllers/Api/AdvancedBookingController.php"
-    stuck_count: 2
+    stuck_count: 3
     priority: "high"
     needs_retesting: false
     status_history:
@@ -286,6 +286,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "❌ DATABASE/MODEL ISSUES PERSIST - Comprehensive testing reveals Advanced Booking System is NOT fixed as claimed in review request: 1) GET /booking/services returns 'Failed to retrieve booking services' - indicates database/model relationship problems. 2) POST /booking/services returns timeout/no response - controller implementation issues. 3) GET /booking/appointments returns 'Failed to retrieve appointments' - database query problems. 4) GET /booking/analytics returns timeout/no response - controller implementation issues. Authentication middleware is working correctly (token accepted), but controllers fail to interact with database properly. The claimed 'Enhanced Model Relationships' and 'Database Schema Complete' fixes are NOT working for booking system. This contradicts the review request claim of Advanced Booking System being functional."
+      - working: false
+        agent: "testing"
+        comment: "❌ CONTROLLER DATABASE/MODEL ISSUES CONFIRMED - Post-migration testing with fresh authentication token '3|yHHRGVcNjzxdu8szdT1LRua2Dy2GPnff0iQyCSm7cf941e64' reveals persistent controller implementation problems: 1) GET /booking/services returns 'Failed to retrieve booking services' - database/model relationship issues persist despite claimed fixes. 2) POST /booking/services endpoint times out - controller implementation problems continue. Authentication middleware (CustomSanctumAuth) is working perfectly, but controllers cannot properly interact with database models. The claimed database migration fixes and enhanced model relationships from review request are NOT resolving the core data retrieval issues."
 
   - task: "Advanced Financial Management"
     implemented: true
