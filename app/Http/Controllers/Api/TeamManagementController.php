@@ -15,7 +15,6 @@ use App\Models\AuditLog;
 use App\Models\TimeTracking;
 use App\Models\PerformanceMetric;
 use App\Models\ApprovalWorkflow;
-use App\Services\TeamManagementService;
 use App\Services\NotificationService;
 use App\Services\AnalyticsService;
 use Illuminate\Support\Facades\DB;
@@ -23,16 +22,14 @@ use Illuminate\Support\Facades\Mail;
 
 class TeamManagementController extends Controller
 {
-    protected $teamService;
     protected $notificationService;
     protected $analyticsService;
 
     public function __construct(
-        TeamManagementService $teamService,
         NotificationService $notificationService,
         AnalyticsService $analyticsService
     ) {
-        $this->teamService = $teamService;
+        $this->notificationService = $notificationService;
         $this->notificationService = $notificationService;
         $this->analyticsService = $analyticsService;
     }
