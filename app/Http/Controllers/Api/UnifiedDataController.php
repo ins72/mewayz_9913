@@ -481,18 +481,18 @@ class UnifiedDataController extends Controller
                 
             foreach ($bioSites as $bioSite) {
                 // Get page visits
-                $visits = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                $visits = \App\Models\UnifiedAnalyticsEvent::where('user_id', $customer->user_id)
                     ->where('event_type', 'bio_site_visit')
-                    ->where('reference_id', $bioSite->id)
-                    ->whereBetween('created_at', $timeRange)
+                    ->where('entity_id', $bioSite->id)
+                    ->whereBetween('timestamp', $timeRange)
                     ->get();
                     
                 foreach ($visits as $visit) {
-                    $eventData = json_decode($visit->event_data, true) ?? [];
+                    $eventData = $visit->properties ?? [];
                     $touchpoints[] = [
                         'platform' => 'bio_sites',
                         'type' => 'page_visit',
-                        'timestamp' => $visit->created_at->toISOString(),
+                        'timestamp' => $visit->timestamp->toISOString(),
                         'data' => [
                             'bio_site_id' => $bioSite->id,
                             'duration' => $eventData['duration'] ?? 0,
@@ -504,18 +504,18 @@ class UnifiedDataController extends Controller
                 }
                 
                 // Get link clicks
-                $linkClicks = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                $linkClicks = \App\Models\UnifiedAnalyticsEvent::where('user_id', $customer->user_id)
                     ->where('event_type', 'bio_site_link_click')
-                    ->where('reference_id', $bioSite->id)
-                    ->whereBetween('created_at', $timeRange)
+                    ->where('entity_id', $bioSite->id)
+                    ->whereBetween('timestamp', $timeRange)
                     ->get();
                     
                 foreach ($linkClicks as $click) {
-                    $eventData = json_decode($click->event_data, true) ?? [];
+                    $eventData = $click->properties ?? [];
                     $touchpoints[] = [
                         'platform' => 'bio_sites',
                         'type' => 'link_click',
-                        'timestamp' => $click->created_at->toISOString(),
+                        'timestamp' => $click->timestamp->toISOString(),
                         'data' => [
                             'bio_site_id' => $bioSite->id,
                             'link_url' => $eventData['link_url'] ?? '',
