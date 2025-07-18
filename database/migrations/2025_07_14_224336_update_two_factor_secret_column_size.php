@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('two_factor_secret')->nullable()->change();
+            // Only modify the column if it exists
+            if (Schema::hasColumn('users', 'two_factor_secret')) {
+                $table->text('two_factor_secret')->nullable()->change();
+            }
         });
     }
 
