@@ -894,10 +894,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/health', [EnhancedAdminController::class, 'getSystemHealth']);
     });
 
-// Use the updated controller imports
-use App\Http\Controllers\Api\RealTimeSubscriptionController;
-use App\Http\Controllers\Api\EnhancedAdminController;
-
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->json([
