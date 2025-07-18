@@ -53,12 +53,12 @@ return new class() extends Migration {
                 ->onDelete('cascade')
             ;
         });
-
+    }
 
     public function down(): void
     {
         Schema::drop($this->table());
-
+    }
 
     private function table(): string
     {
