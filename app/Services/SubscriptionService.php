@@ -2,363 +2,460 @@
 
 namespace App\Services;
 
-use App\Models\User;
+use App\Models\Subscription;
 use App\Models\SubscriptionPlan;
-use App\Models\UserSubscription;
-use App\Models\PaymentMethod;
-use App\Models\Invoice;
-use App\Models\Transaction;
-use App\Models\SubscriptionAddon;
+use App\Models\SubscriptionItem;
+use App\Models\Workspace;
+use App\Models\Feature;
+use App\Models\PaymentFailure;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 
 class SubscriptionService
 {
-    protected $paymentService;
-    protected $stripeService;
-
-    public function __construct(PaymentService $paymentService, StripeService $stripeService)
-    {
-        $this->paymentService = $paymentService;
-        $this->stripeService = $stripeService;
-    }
+    public function __construct(
+        private StripeService $stripeService,
+        private PricingCalculatorService $pricingCalculator
+    ) {}
 
     /**
-     * Create a new subscription
+     * Create a new subscription.
      */
-    public function createSubscription(User $user, SubscriptionPlan $plan, PaymentMethod $paymentMethod = null, array $billingAddress = [], array $addons = [])
-    {
-        DB::beginTransaction();
-
-        try {
-            // Create Stripe customer if not exists
-            $stripeCustomer = $this->stripeService->createOrGetCustomer($user);
-
-            // Calculate trial end date
-            $trialEnd = $plan->trial_days ? now()->addDays($plan->trial_days) : null;
-
-            // Create subscription in Stripe
-            $stripeSubscription = $this->stripeService->createSubscription([
-                'customer' => $stripeCustomer->id,
-                'items' => [
-                    [
-                        'price' => $plan->stripe_price_id,
-                        'quantity' => 1,
-                    ],
-                ],
-                'default_payment_method' => $paymentMethod ? $paymentMethod->stripe_payment_method_id : null,
-                'trial_end' => $trialEnd ? $trialEnd->timestamp : null,
-                'billing_address' => $billingAddress,
-                'expand' => ['latest_invoice.payment_intent'],
+    public function createSubscription(
+        Workspace $workspace,
+        int $planId,
+        array $features,
+        string $billingCycle,
+        string $paymentMethodId
+    ): Subscription {
+        $plan = SubscriptionPlan::findOrFail($planId);
+        
+        return DB::transaction(function () use ($workspace, $plan, $features, $billingCycle, $paymentMethodId) {
+            // Create local subscription record
+            $subscription = Subscription::create([
+                'workspace_id' => $workspace->id,
+                'plan_id' => $plan->id,
+                'status' => 'trialing',
+                'trial_start' => now(),
+                'trial_end' => now()->addDays(14),
+                'current_period_start' => now(),
+                'current_period_end' => now()->addDays(14),
             ]);
 
-            // Create local subscription
-            $subscription = UserSubscription::create([
-                'user_id' => $user->id,
-                'plan_id' => $plan->id,
+            // Create Stripe subscription
+            $stripeSubscription = $this->stripeService->createSubscription(
+                $workspace,
+                $plan,
+                $features,
+                $billingCycle,
+                $paymentMethodId
+            );
+
+            // Update subscription with Stripe data
+            $subscription->update([
                 'stripe_subscription_id' => $stripeSubscription->id,
                 'status' => $stripeSubscription->status,
-                'amount' => $plan->price,
-                'billing_cycle' => $plan->billing_cycle,
-                'current_period_start' => Carbon::createFromTimestamp($stripeSubscription->current_period_start),
-                'current_period_end' => Carbon::createFromTimestamp($stripeSubscription->current_period_end),
-                'trial_ends_at' => $trialEnd,
-                'next_billing_date' => Carbon::createFromTimestamp($stripeSubscription->current_period_end),
-                'default_payment_method_id' => $paymentMethod ? $paymentMethod->id : null,
-                'metadata' => [
-                    'billing_address' => $billingAddress,
-                    'stripe_customer_id' => $stripeCustomer->id
-                ]
+                'current_period_start' => $stripeSubscription->current_period_start,
+                'current_period_end' => $stripeSubscription->current_period_end,
+                'trial_start' => $stripeSubscription->trial_start,
+                'trial_end' => $stripeSubscription->trial_end,
             ]);
 
-            // Add addons if any
-            if (!empty($addons)) {
-                $this->addSubscriptionAddons($subscription, $addons);
+            // Create subscription items for feature-based pricing
+            if ($plan->pricing_type === 'feature_based') {
+                $this->createSubscriptionItems($subscription, $features, $billingCycle);
             }
 
-            // Create invoice
-            $invoice = $this->createInvoiceFromStripe($subscription, $stripeSubscription->latest_invoice);
+            // Apply features to workspace
+            $this->applyFeaturesToWorkspace($workspace, $subscription);
 
-            DB::commit();
+            // Log subscription creation
+            Log::info('Subscription created', [
+                'subscription_id' => $subscription->id,
+                'workspace_id' => $workspace->id,
+                'plan_id' => $plan->id,
+                'features' => $features,
+            ]);
 
-            return $subscription;
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Error creating subscription: ' . $e->getMessage());
-            throw $e;
-        }
+            return $subscription->fresh(['plan', 'items']);
+        });
     }
 
     /**
-     * Change subscription plan
+     * Change subscription plan.
      */
-    public function changePlan(UserSubscription $subscription, SubscriptionPlan $newPlan, $effectiveDate = null, $prorationDetails = null)
-    {
-        DB::beginTransaction();
-
-        try {
-            // Update subscription in Stripe
-            $stripeSubscription = $this->stripeService->updateSubscription($subscription->stripe_subscription_id, [
-                'items' => [
-                    [
-                        'id' => $subscription->stripe_subscription_item_id,
-                        'price' => $newPlan->stripe_price_id,
-                    ],
-                ],
-                'proration_behavior' => $prorationDetails ? 'create_prorations' : 'none',
-                'proration_date' => $effectiveDate ? Carbon::parse($effectiveDate)->timestamp : null,
-            ]);
+    public function changePlan(
+        Subscription $subscription,
+        int $newPlanId,
+        array $features,
+        string $billingCycle
+    ): Subscription {
+        $newPlan = SubscriptionPlan::findOrFail($newPlanId);
+        
+        return DB::transaction(function () use ($subscription, $newPlan, $features, $billingCycle) {
+            // Update Stripe subscription
+            $stripeSubscription = $this->stripeService->updateSubscription(
+                $subscription->stripe_subscription_id,
+                $newPlan,
+                $features,
+                $billingCycle
+            );
 
             // Update local subscription
             $subscription->update([
                 'plan_id' => $newPlan->id,
-                'amount' => $newPlan->price,
-                'billing_cycle' => $newPlan->billing_cycle,
-                'current_period_start' => Carbon::createFromTimestamp($stripeSubscription->current_period_start),
-                'current_period_end' => Carbon::createFromTimestamp($stripeSubscription->current_period_end),
-                'next_billing_date' => Carbon::createFromTimestamp($stripeSubscription->current_period_end),
+                'status' => $stripeSubscription->status,
+                'current_period_start' => $stripeSubscription->current_period_start,
+                'current_period_end' => $stripeSubscription->current_period_end,
             ]);
 
-            // Create proration invoice if needed
-            if ($prorationDetails) {
-                $this->createProrationInvoice($subscription, $prorationDetails);
+            // Update subscription items
+            $subscription->items()->delete();
+            if ($newPlan->pricing_type === 'feature_based') {
+                $this->createSubscriptionItems($subscription, $features, $billingCycle);
             }
 
-            DB::commit();
+            // Update workspace features
+            $this->applyFeaturesToWorkspace($subscription->workspace, $subscription);
 
-            return $subscription->fresh();
+            // Log plan change
+            Log::info('Subscription plan changed', [
+                'subscription_id' => $subscription->id,
+                'old_plan_id' => $subscription->getOriginal('plan_id'),
+                'new_plan_id' => $newPlan->id,
+                'features' => $features,
+            ]);
 
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Error changing subscription plan: ' . $e->getMessage());
-            throw $e;
-        }
+            return $subscription->fresh(['plan', 'items']);
+        });
     }
 
     /**
-     * Cancel subscription
+     * Cancel subscription.
      */
-    public function cancelSubscription(UserSubscription $subscription, $immediately = false, $reason = null, $feedback = null)
-    {
-        DB::beginTransaction();
+    public function cancelSubscription(
+        Subscription $subscription,
+        ?string $reason = null,
+        ?string $feedback = null,
+        bool $cancelImmediately = false
+    ): Subscription {
+        return DB::transaction(function () use ($subscription, $reason, $feedback, $cancelImmediately) {
+            // Cancel Stripe subscription
+            $stripeSubscription = $this->stripeService->cancelSubscription(
+                $subscription->stripe_subscription_id,
+                $cancelImmediately
+            );
 
-        try {
-            if ($immediately) {
-                // Cancel immediately in Stripe
-                $stripeSubscription = $this->stripeService->cancelSubscription($subscription->stripe_subscription_id);
-                
-                $subscription->update([
-                    'status' => 'canceled',
-                    'canceled_at' => now(),
-                    'cancel_at_period_end' => false,
-                    'metadata' => array_merge($subscription->metadata ?? [], [
-                        'cancellation_reason' => $reason,
-                        'cancellation_feedback' => $feedback,
-                        'canceled_immediately' => true
-                    ])
-                ]);
-            } else {
-                // Cancel at period end
-                $stripeSubscription = $this->stripeService->updateSubscription($subscription->stripe_subscription_id, [
-                    'cancel_at_period_end' => true,
-                    'cancellation_details' => [
-                        'comment' => $reason,
-                        'feedback' => $feedback
-                    ]
-                ]);
-
-                $subscription->update([
-                    'cancel_at_period_end' => true,
-                    'canceled_at' => now(),
-                    'metadata' => array_merge($subscription->metadata ?? [], [
-                        'cancellation_reason' => $reason,
-                        'cancellation_feedback' => $feedback
-                    ])
-                ]);
-            }
-
-            DB::commit();
-
-            return $subscription->fresh();
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Error canceling subscription: ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    /**
-     * Reactivate subscription
-     */
-    public function reactivateSubscription(UserSubscription $subscription)
-    {
-        DB::beginTransaction();
-
-        try {
-            // Reactivate in Stripe
-            $stripeSubscription = $this->stripeService->updateSubscription($subscription->stripe_subscription_id, [
-                'cancel_at_period_end' => false,
-            ]);
-
+            // Update local subscription
             $subscription->update([
                 'status' => $stripeSubscription->status,
-                'cancel_at_period_end' => false,
-                'canceled_at' => null,
+                'cancelled_at' => now(),
+                'current_period_end' => $stripeSubscription->current_period_end,
                 'metadata' => array_merge($subscription->metadata ?? [], [
-                    'reactivated_at' => now()->toISOString()
-                ])
+                    'cancellation_reason' => $reason,
+                    'cancellation_feedback' => $feedback,
+                    'cancelled_immediately' => $cancelImmediately,
+                ]),
             ]);
 
-            DB::commit();
+            // If cancelled immediately, revoke features
+            if ($cancelImmediately) {
+                $this->revokeWorkspaceFeatures($subscription->workspace);
+            }
 
-            return $subscription->fresh();
+            // Log cancellation
+            Log::info('Subscription cancelled', [
+                'subscription_id' => $subscription->id,
+                'reason' => $reason,
+                'immediate' => $cancelImmediately,
+            ]);
 
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Error reactivating subscription: ' . $e->getMessage());
-            throw $e;
-        }
+            return $subscription->fresh(['plan', 'items']);
+        });
     }
 
     /**
-     * Calculate proration for plan change
+     * Resume cancelled subscription.
      */
-    public function calculateProration(UserSubscription $subscription, SubscriptionPlan $newPlan)
+    public function resumeSubscription(Subscription $subscription): Subscription
     {
-        $currentPlan = $subscription->plan;
-        $daysRemaining = $subscription->current_period_end->diffInDays(now());
-        $totalDays = $subscription->current_period_start->diffInDays($subscription->current_period_end);
+        return DB::transaction(function () use ($subscription) {
+            // Resume Stripe subscription
+            $stripeSubscription = $this->stripeService->resumeSubscription(
+                $subscription->stripe_subscription_id
+            );
 
-        $unusedAmount = ($currentPlan->price * $daysRemaining) / $totalDays;
-        $newAmount = ($newPlan->price * $daysRemaining) / $totalDays;
-        $prorationAmount = $newAmount - $unusedAmount;
+            // Update local subscription
+            $subscription->update([
+                'status' => $stripeSubscription->status,
+                'cancelled_at' => null,
+                'current_period_end' => $stripeSubscription->current_period_end,
+            ]);
 
-        return [
-            'current_plan_unused' => round($unusedAmount, 2),
-            'new_plan_amount' => round($newAmount, 2),
-            'proration_amount' => round($prorationAmount, 2),
-            'days_remaining' => $daysRemaining,
-            'effective_date' => now()->toISOString()
+            // Reapply features to workspace
+            $this->applyFeaturesToWorkspace($subscription->workspace, $subscription);
+
+            // Log resumption
+            Log::info('Subscription resumed', [
+                'subscription_id' => $subscription->id,
+            ]);
+
+            return $subscription->fresh(['plan', 'items']);
+        });
+    }
+
+    /**
+     * Update payment method.
+     */
+    public function updatePaymentMethod(Subscription $subscription, string $paymentMethodId): void
+    {
+        $this->stripeService->updateSubscriptionPaymentMethod(
+            $subscription->stripe_subscription_id,
+            $paymentMethodId
+        );
+
+        Log::info('Payment method updated', [
+            'subscription_id' => $subscription->id,
+        ]);
+    }
+
+    /**
+     * Get subscription usage data.
+     */
+    public function getUsageData(Subscription $subscription): array
+    {
+        $items = $subscription->items()->with('feature')->get();
+        $workspace = $subscription->workspace;
+
+        $usageData = [
+            'current_period' => [
+                'start' => $subscription->current_period_start,
+                'end' => $subscription->current_period_end,
+                'days_remaining' => $subscription->current_period_end ? 
+                    max(0, $subscription->current_period_end->diffInDays(now())) : 0,
+            ],
+            'features' => [],
+            'summary' => [
+                'total_features' => $items->count(),
+                'features_at_limit' => 0,
+                'features_approaching_limit' => 0,
+                'total_usage' => 0,
+            ],
         ];
+
+        foreach ($items as $item) {
+            $workspaceFeature = $workspace->features()->where('key', $item->feature_key)->first();
+            $currentUsage = $workspaceFeature?->pivot->usage_count ?? 0;
+            
+            $featureData = [
+                'key' => $item->feature_key,
+                'name' => $item->feature?->name ?? $item->feature_key,
+                'quota_limit' => $item->quota_limit,
+                'usage_count' => $currentUsage,
+                'remaining' => $item->quota_limit ? max(0, $item->quota_limit - $currentUsage) : null,
+                'percentage' => $item->quota_limit ? min(100, ($currentUsage / $item->quota_limit) * 100) : 0,
+                'status' => $this->getFeatureUsageStatus($currentUsage, $item->quota_limit),
+            ];
+
+            $usageData['features'][] = $featureData;
+            $usageData['summary']['total_usage'] += $currentUsage;
+
+            if ($item->quota_limit && $currentUsage >= $item->quota_limit) {
+                $usageData['summary']['features_at_limit']++;
+            } elseif ($item->quota_limit && $currentUsage >= ($item->quota_limit * 0.8)) {
+                $usageData['summary']['features_approaching_limit']++;
+            }
+        }
+
+        return $usageData;
     }
 
     /**
-     * Add addons to subscription
+     * Get billing history.
      */
-    public function addSubscriptionAddons(UserSubscription $subscription, array $addons)
+    public function getBillingHistory(Subscription $subscription): array
     {
-        foreach ($addons as $addonData) {
-            $addon = SubscriptionAddon::find($addonData['id']);
-            if ($addon) {
-                $subscription->addons()->attach($addon->id, [
-                    'quantity' => $addonData['quantity'] ?? 1,
-                    'price' => $addon->price
+        return $this->stripeService->getInvoices($subscription->stripe_subscription_id);
+    }
+
+    /**
+     * Get upcoming invoice.
+     */
+    public function getUpcomingInvoice(Subscription $subscription): ?array
+    {
+        return $this->stripeService->getUpcomingInvoice($subscription->stripe_subscription_id);
+    }
+
+    /**
+     * Get proration amount for subscription changes.
+     */
+    public function getProrationAmount(Subscription $subscription): float
+    {
+        $upcomingInvoice = $this->getUpcomingInvoice($subscription);
+        return $upcomingInvoice ? $upcomingInvoice['amount_due'] / 100 : 0.0;
+    }
+
+    /**
+     * Get invoice download URL.
+     */
+    public function getInvoiceDownloadUrl(Subscription $subscription, string $invoiceId): string
+    {
+        return $this->stripeService->getInvoiceDownloadUrl($invoiceId);
+    }
+
+    /**
+     * Get retention offers for cancellation flow.
+     */
+    public function getRetentionOffers(Subscription $subscription): array
+    {
+        $plan = $subscription->plan;
+        $currentPrice = $subscription->getMonthlyCost();
+
+        $offers = [];
+
+        // Discount offer
+        if ($currentPrice > 0) {
+            $offers[] = [
+                'type' => 'discount',
+                'title' => '50% Off for 3 Months',
+                'description' => 'Continue with your current plan at 50% off for the next 3 months',
+                'discount_percentage' => 50,
+                'discount_duration' => 3,
+                'new_price' => $currentPrice * 0.5,
+                'savings' => $currentPrice * 0.5 * 3,
+            ];
+        }
+
+        // Downgrade offer
+        $lowerPlans = SubscriptionPlan::where('base_price', '<', $plan->base_price)
+            ->where('feature_price_monthly', '<', $plan->feature_price_monthly)
+            ->active()
+            ->get();
+
+        if ($lowerPlans->count() > 0) {
+            $suggestedPlan = $lowerPlans->first();
+            $offers[] = [
+                'type' => 'downgrade',
+                'title' => 'Switch to ' . $suggestedPlan->name,
+                'description' => 'Reduce your costs while keeping essential features',
+                'plan_id' => $suggestedPlan->id,
+                'plan_name' => $suggestedPlan->name,
+                'new_price' => $suggestedPlan->base_price,
+                'savings' => $currentPrice - $suggestedPlan->base_price,
+            ];
+        }
+
+        // Pause offer
+        $offers[] = [
+            'type' => 'pause',
+            'title' => 'Pause Your Subscription',
+            'description' => 'Take a break for up to 3 months, then resume automatically',
+            'pause_duration' => 90,
+            'resume_date' => now()->addDays(90)->format('F j, Y'),
+        ];
+
+        // Annual discount offer
+        if ($plan->feature_price_yearly > 0) {
+            $yearlyDiscount = (($plan->feature_price_monthly * 12) - $plan->feature_price_yearly) / ($plan->feature_price_monthly * 12) * 100;
+            $offers[] = [
+                'type' => 'annual',
+                'title' => 'Switch to Annual Billing',
+                'description' => 'Save ' . round($yearlyDiscount) . '% with annual billing',
+                'discount_percentage' => round($yearlyDiscount),
+                'new_price' => $plan->feature_price_yearly,
+                'savings' => ($plan->feature_price_monthly * 12) - $plan->feature_price_yearly,
+            ];
+        }
+
+        return $offers;
+    }
+
+    /**
+     * Create subscription items for feature-based pricing.
+     */
+    private function createSubscriptionItems(Subscription $subscription, array $features, string $billingCycle): void
+    {
+        $plan = $subscription->plan;
+        $unitPrice = $billingCycle === 'yearly' ? $plan->feature_price_yearly : $plan->feature_price_monthly;
+
+        foreach ($features as $featureKey) {
+            $feature = Feature::where('key', $featureKey)->first();
+            $planFeature = $plan->features()->where('key', $featureKey)->first();
+
+            if ($feature && $planFeature) {
+                SubscriptionItem::create([
+                    'subscription_id' => $subscription->id,
+                    'feature_key' => $featureKey,
+                    'quantity' => 1,
+                    'unit_price' => $unitPrice,
+                    'quota_limit' => $planFeature->pivot->quota_limit,
+                    'usage_count' => 0,
                 ]);
             }
         }
     }
 
     /**
-     * Get upcoming invoice
+     * Apply subscription features to workspace.
      */
-    public function getUpcomingInvoice(UserSubscription $subscription)
+    private function applyFeaturesToWorkspace(Workspace $workspace, Subscription $subscription): void
     {
-        try {
-            $upcomingInvoice = $this->stripeService->getUpcomingInvoice($subscription->stripe_subscription_id);
-            
-            return [
-                'amount' => $upcomingInvoice->amount_due / 100,
-                'currency' => $upcomingInvoice->currency,
-                'period_start' => Carbon::createFromTimestamp($upcomingInvoice->period_start),
-                'period_end' => Carbon::createFromTimestamp($upcomingInvoice->period_end),
-                'due_date' => Carbon::createFromTimestamp($upcomingInvoice->due_date),
-                'line_items' => collect($upcomingInvoice->lines->data)->map(function ($item) {
-                    return [
-                        'description' => $item->description,
-                        'amount' => $item->amount / 100,
-                        'quantity' => $item->quantity
+        $plan = $subscription->plan;
+        $features = [];
+
+        if ($plan->pricing_type === 'flat_monthly') {
+            // For flat pricing, use all included features from the plan
+            foreach ($plan->features as $feature) {
+                if ($feature->pivot->is_included) {
+                    $features[$feature->key] = [
+                        'is_enabled' => true,
+                        'quota_limit' => $feature->pivot->quota_limit,
+                        'usage_count' => 0,
                     ];
-                })
-            ];
-
-        } catch (\Exception $e) {
-            Log::error('Error getting upcoming invoice: ' . $e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Generate invoice PDF
-     */
-    public function generateInvoicePDF(Invoice $invoice)
-    {
-        $data = [
-            'invoice' => $invoice,
-            'user' => $invoice->user,
-            'subscription' => $invoice->subscription,
-            'company' => [
-                'name' => config('app.name'),
-                'address' => config('app.company_address'),
-                'phone' => config('app.company_phone'),
-                'email' => config('app.company_email')
-            ]
-        ];
-
-        $pdf = Pdf::loadView('invoices.template', $data);
-        return $pdf->output();
-    }
-
-    /**
-     * Create invoice from Stripe invoice
-     */
-    private function createInvoiceFromStripe(UserSubscription $subscription, $stripeInvoice)
-    {
-        return Invoice::create([
-            'user_id' => $subscription->user_id,
-            'subscription_id' => $subscription->id,
-            'stripe_invoice_id' => $stripeInvoice->id,
-            'invoice_number' => $stripeInvoice->number,
-            'subtotal' => $stripeInvoice->subtotal / 100,
-            'tax_amount' => $stripeInvoice->tax / 100,
-            'total' => $stripeInvoice->total / 100,
-            'status' => $stripeInvoice->status,
-            'due_date' => $stripeInvoice->due_date ? Carbon::createFromTimestamp($stripeInvoice->due_date) : null,
-            'paid_at' => $stripeInvoice->status_transitions->paid_at ? Carbon::createFromTimestamp($stripeInvoice->status_transitions->paid_at) : null,
-            'line_items' => collect($stripeInvoice->lines->data)->map(function ($item) {
-                return [
-                    'description' => $item->description,
-                    'amount' => $item->amount / 100,
-                    'quantity' => $item->quantity
+                }
+            }
+        } else {
+            // For feature-based pricing, use subscription items
+            foreach ($subscription->items as $item) {
+                $features[$item->feature_key] = [
+                    'is_enabled' => true,
+                    'quota_limit' => $item->quota_limit,
+                    'usage_count' => 0,
                 ];
-            })
-        ]);
+            }
+        }
+
+        $workspace->features()->sync($features);
     }
 
     /**
-     * Create proration invoice
+     * Revoke all features from workspace.
      */
-    private function createProrationInvoice(UserSubscription $subscription, array $prorationDetails)
+    private function revokeWorkspaceFeatures(Workspace $workspace): void
     {
-        return Invoice::create([
-            'user_id' => $subscription->user_id,
-            'subscription_id' => $subscription->id,
-            'invoice_number' => 'PRORATION-' . now()->format('YmdHis'),
-            'subtotal' => $prorationDetails['proration_amount'],
-            'tax_amount' => 0,
-            'total' => $prorationDetails['proration_amount'],
-            'status' => 'paid',
-            'paid_at' => now(),
-            'line_items' => [
-                [
-                    'description' => 'Plan change proration',
-                    'amount' => $prorationDetails['proration_amount'],
-                    'quantity' => 1
-                ]
-            ]
-        ]);
+        $workspace->features()->sync([]);
+    }
+
+    /**
+     * Get feature usage status.
+     */
+    private function getFeatureUsageStatus(int $usage, ?int $limit): string
+    {
+        if (!$limit) {
+            return 'unlimited';
+        }
+
+        $percentage = ($usage / $limit) * 100;
+
+        if ($percentage >= 100) {
+            return 'at_limit';
+        } elseif ($percentage >= 80) {
+            return 'approaching_limit';
+        } elseif ($percentage >= 50) {
+            return 'moderate';
+        } else {
+            return 'low';
+        }
     }
 }
