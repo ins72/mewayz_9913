@@ -50,7 +50,75 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('pages.dashboard.index');
+    })->name('dashboard');
+
+    Route::get('/dashboard', function () {
+        return view('pages.dashboard.index');
     })->name('dashboard-index');
+
+    Route::get('/dashboard/workspace', function () {
+        return view('pages.dashboard.workspace.index');
+    })->name('dashboard-workspace-index');
+
+    Route::get('/dashboard/sites', function () {
+        return view('pages.dashboard.sites.index');
+    })->name('dashboard-sites-index');
+
+    Route::get('/dashboard/templates', function () {
+        return view('pages.dashboard.templates.index');
+    })->name('dashboard-templates-index');
+
+    Route::get('/dashboard/audience', function () {
+        return view('pages.dashboard.audience.index');
+    })->name('dashboard-audience-index');
+
+    Route::get('/dashboard/community', function () {
+        return view('pages.dashboard.community.index');
+    })->name('dashboard-community-index');
+
+    Route::get('/dashboard/booking', function () {
+        return view('pages.dashboard.booking.index');
+    })->name('dashboard-booking-index');
+
+    Route::get('/dashboard/automation', function () {
+        return view('pages.dashboard.automation.index');
+    })->name('dashboard-automation-index');
+
+    Route::get('/dashboard/reports', function () {
+        return view('pages.dashboard.reports.index');
+    })->name('dashboard-reports-index');
+
+    Route::get('/dashboard/wallet', function () {
+        return view('pages.dashboard.wallet.index');
+    })->name('dashboard-wallet-index');
+
+    Route::get('/dashboard/invoices', function () {
+        return view('pages.dashboard.invoices.index');
+    })->name('dashboard-invoices-index');
+
+    Route::get('/dashboard/team', function () {
+        return view('pages.dashboard.team.index');
+    })->name('dashboard-team-index');
+
+    Route::get('/dashboard/ai', function () {
+        return view('pages.dashboard.ai.index');
+    })->name('dashboard-ai-index');
+
+    Route::get('/dashboard/media', function () {
+        return view('pages.dashboard.media.index');
+    })->name('dashboard-media-index');
+
+    Route::get('/dashboard/integrations', function () {
+        return view('pages.dashboard.integrations.index');
+    })->name('dashboard-integrations-index');
+
+    Route::get('/dashboard/help', function () {
+        return view('pages.dashboard.help.index');
+    })->name('dashboard-help-index');
+
+    Route::get('/dashboard/upgrade', function () {
+        return view('pages.dashboard.upgrade.index');
+    })->name('dashboard-upgrade-index');
 
     Route::get('/dashboard/instagram', function () {
         return view('pages.dashboard.instagram.index');
