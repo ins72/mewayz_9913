@@ -22,10 +22,9 @@ class AffiliateController extends Controller
     protected $affiliateService;
     protected $notificationService;
 
-    public function __construct(AffiliateService $affiliateService, NotificationService $notificationService)
+    public function __construct()
     {
-        $this->affiliateService = $affiliateService;
-        $this->notificationService = $notificationService;
+        // Constructor
     }
 
     /**
