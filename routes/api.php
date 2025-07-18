@@ -882,7 +882,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
             return response()->json([
                 'success' => true,
                 'message' => 'Admin dashboard working',
-                'user' => auth()->user(),
                 'timestamp' => now()
             ]);
         });
