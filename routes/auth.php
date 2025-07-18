@@ -12,7 +12,7 @@ Route::middleware(\App\Http\Middleware\RedirectIfAuthenticated::class)->group(fu
     Route::post('register', [App\Http\Controllers\Auth\RegisteredUserController::class, 'store']);
 
     Route::get('login', function () {
-        return view('pages.auth.login');
+        return view('auth.login');
     })->name('login');
     
     Route::post('login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store']);
