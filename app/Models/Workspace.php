@@ -2,402 +2,262 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Workspace extends Model
 {
     use HasFactory;
-    
-    /**
-     * Indicates if the model's ID is auto-incrementing.
-     */
-    public $incrementing = false;
-    
-    /**
-     * The data type of the auto-incrementing ID.
-     */
-    protected $keyType = 'string';
-    
-    /**
-     * Boot the model.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-        
-        static::creating(function ($model) {
-            if (empty($model->id)) {
-                $model->id = (string) Str::uuid();
-            }
-            if (empty($model->slug)) {
-                $model->slug = Str::slug($model->name) . '-' . Str::random(8);
-            }
-        });
-    }
-    
+
     protected $fillable = [
-        'user_id',
+        'uuid',
         'name',
+        'slug',
         'description',
-        'is_primary',
+        'logo_url',
+        'brand_color',
         'settings',
-        'selected_goals',
-        'selected_features',
-        'team_setup',
         'subscription_plan_id',
-        'branding_config',
-        'setup_step',
-        'setup_completed',
-        'setup_completed_at',
+        'subscription_status',
+        'trial_ends_at',
     ];
-    
+
     protected $casts = [
         'settings' => 'array',
-        'is_primary' => 'boolean',
-        'selected_goals' => 'array',
-        'selected_features' => 'array',
-        'team_setup' => 'array',
-        'branding_config' => 'array',
-        'setup_completed' => 'boolean',
-        'setup_completed_at' => 'datetime',
+        'trial_ends_at' => 'datetime',
     ];
-    
-    /**
-     * Get the user that owns the workspace
-     */
-    public function user(): BelongsTo
+
+    protected static function booted(): void
     {
-        return $this->belongsTo(User::class);
+        static::creating(function (Workspace $workspace) {
+            $workspace->uuid = Str::uuid();
+            $workspace->slug = Str::slug($workspace->name);
+        });
     }
 
     /**
-     * Get the subscription plan for this workspace
+     * Get the users that belong to this workspace.
      */
-    public function subscriptionPlan(): BelongsTo
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(SubscriptionPlan::class);
+        return $this->belongsToMany(User::class, 'workspace_users')
+            ->withPivot(['role', 'permissions', 'invited_at', 'joined_at'])
+            ->withTimestamps();
     }
 
     /**
-     * Get features enabled in this workspace
+     * Get the goals enabled for this workspace.
+     */
+    public function goals(): BelongsToMany
+    {
+        return $this->belongsToMany(Goal::class, 'workspace_goals', 'workspace_id', 'goal_key', 'id', 'key')
+            ->withPivot(['is_enabled', 'settings'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the features enabled for this workspace.
      */
     public function features(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class, 'workspace_features')
-                    ->withPivot('is_enabled', 'configuration', 'enabled_at', 'disabled_at')
-                    ->withTimestamps();
+        return $this->belongsToMany(Feature::class, 'workspace_features', 'workspace_id', 'feature_key', 'id', 'key')
+            ->withPivot(['is_enabled', 'quota_limit', 'usage_count', 'last_used_at'])
+            ->withTimestamps();
     }
 
     /**
-     * Get workspace features pivot records
+     * Get the subscription plan for this workspace.
      */
-    public function workspaceFeatures(): HasMany
+    public function subscriptionPlan(): BelongsTo
     {
-        return $this->hasMany(WorkspaceFeature::class);
+        return $this->belongsTo(SubscriptionPlan::class, 'subscription_plan_id');
     }
 
     /**
-     * Get enabled features
+     * Get the subscription for this workspace.
      */
-    public function enabledFeatures(): BelongsToMany
+    public function subscription(): HasOne
     {
-        return $this->features()->wherePivot('is_enabled', true);
+        return $this->hasOne(Subscription::class);
     }
 
     /**
-     * Get team invitations
+     * Check if this workspace has a specific feature enabled.
      */
-    public function teamInvitations(): HasMany
+    public function hasFeature(string $featureKey): bool
     {
-        return $this->hasMany(TeamInvitation::class);
+        return $this->features()
+            ->where('key', $featureKey)
+            ->where('is_enabled', true)
+            ->exists();
     }
 
     /**
-     * Get pending team invitations
+     * Check if this workspace has reached the quota limit for a feature.
      */
-    public function pendingInvitations(): HasMany
+    public function hasReachedQuotaLimit(string $featureKey): bool
     {
-        return $this->teamInvitations()->pending();
-    }
+        $feature = $this->features()
+            ->where('key', $featureKey)
+            ->first();
 
-    /**
-     * Get selected goals as models
-     */
-    public function getSelectedGoalsModels()
-    {
-        if (empty($this->selected_goals)) {
-            return collect([]);
+        if (!$feature || !$feature->pivot->quota_limit) {
+            return false;
         }
 
-        return WorkspaceGoal::whereIn('slug', $this->selected_goals)->ordered()->get();
+        return $feature->pivot->usage_count >= $feature->pivot->quota_limit;
     }
 
     /**
-     * Get selected features as models
+     * Get the remaining quota for a feature.
      */
-    public function getSelectedFeaturesModels()
+    public function getRemainingQuota(string $featureKey): int
     {
-        if (empty($this->selected_features)) {
-            return collect([]);
+        $feature = $this->features()
+            ->where('key', $featureKey)
+            ->first();
+
+        if (!$feature || !$feature->pivot->quota_limit) {
+            return PHP_INT_MAX;
         }
 
-        return Feature::whereIn('id', $this->selected_features)->orderBy('sort_order')->get();
+        return max(0, $feature->pivot->quota_limit - $feature->pivot->usage_count);
     }
 
     /**
-     * Check if workspace has specific goal
+     * Increment the usage count for a feature.
      */
-    public function hasGoal(string $goalSlug): bool
+    public function incrementFeatureUsage(string $featureKey, int $amount = 1): bool
     {
-        return in_array($goalSlug, $this->selected_goals ?? []);
+        $feature = $this->features()
+            ->where('key', $featureKey)
+            ->first();
+
+        if (!$feature) {
+            return false;
+        }
+
+        $this->features()->updateExistingPivot($featureKey, [
+            'usage_count' => $feature->pivot->usage_count + $amount,
+            'last_used_at' => now(),
+        ]);
+
+        return true;
     }
 
     /**
-     * Check if workspace has specific feature
+     * Reset the usage count for a feature.
      */
-    public function hasFeature(int $featureId): bool
+    public function resetFeatureUsage(string $featureKey): bool
     {
-        return in_array($featureId, $this->selected_features ?? []);
+        $feature = $this->features()
+            ->where('key', $featureKey)
+            ->first();
+
+        if (!$feature) {
+            return false;
+        }
+
+        $this->features()->updateExistingPivot($featureKey, [
+            'usage_count' => 0,
+        ]);
+
+        return true;
     }
 
     /**
-     * Check if workspace has feature enabled
+     * Enable a feature for this workspace.
      */
-    public function hasFeatureEnabled(int $featureId): bool
+    public function enableFeature(string $featureKey, ?int $quotaLimit = null): void
     {
-        return $this->workspaceFeatures()
-                    ->where('feature_id', $featureId)
-                    ->where('is_enabled', true)
-                    ->exists();
-    }
-
-    /**
-     * Enable a feature
-     */
-    public function enableFeature(int $featureId, array $configuration = [])
-    {
-        $workspaceFeature = $this->workspaceFeatures()
-                                ->where('feature_id', $featureId)
-                                ->first();
-
-        if ($workspaceFeature) {
-            $workspaceFeature->enable();
-            if (!empty($configuration)) {
-                $workspaceFeature->updateConfiguration($configuration);
-            }
-        } else {
-            $this->workspaceFeatures()->create([
-                'feature_id' => $featureId,
+        $this->features()->syncWithoutDetaching([
+            $featureKey => [
                 'is_enabled' => true,
-                'configuration' => $configuration,
-                'enabled_at' => now(),
-            ]);
-        }
-    }
-
-    /**
-     * Disable a feature
-     */
-    public function disableFeature(int $featureId)
-    {
-        $workspaceFeature = $this->workspaceFeatures()
-                                ->where('feature_id', $featureId)
-                                ->first();
-
-        if ($workspaceFeature) {
-            $workspaceFeature->disable();
-        }
-    }
-
-    /**
-     * Get workspace feature configuration
-     */
-    public function getFeatureConfiguration(int $featureId, string $key = null, $default = null)
-    {
-        $workspaceFeature = $this->workspaceFeatures()
-                                ->where('feature_id', $featureId)
-                                ->first();
-
-        if (!$workspaceFeature) {
-            return $default;
-        }
-
-        if ($key === null) {
-            return $workspaceFeature->configuration;
-        }
-
-        return $workspaceFeature->getConfiguration($key, $default);
-    }
-
-    /**
-     * Set workspace feature configuration
-     */
-    public function setFeatureConfiguration(int $featureId, string $key, $value)
-    {
-        $workspaceFeature = $this->workspaceFeatures()
-                                ->where('feature_id', $featureId)
-                                ->first();
-
-        if ($workspaceFeature) {
-            $workspaceFeature->setConfiguration($key, $value);
-        }
-    }
-
-    /**
-     * Check if setup is completed
-     */
-    public function isSetupCompleted(): bool
-    {
-        return $this->setup_completed;
-    }
-
-    /**
-     * Mark setup as completed
-     */
-    public function markSetupCompleted()
-    {
-        $this->update([
-            'setup_step' => 'complete',
-            'setup_completed' => true,
-            'setup_completed_at' => now(),
+                'quota_limit' => $quotaLimit,
+                'usage_count' => 0,
+                'last_used_at' => null,
+            ]
         ]);
     }
 
     /**
-     * Get current setup step
+     * Disable a feature for this workspace.
      */
-    public function getCurrentSetupStep(): string
+    public function disableFeature(string $featureKey): void
     {
-        return $this->setup_step;
+        $this->features()->updateExistingPivot($featureKey, [
+            'is_enabled' => false,
+        ]);
     }
 
     /**
-     * Move to next setup step
+     * Get the workspace owner.
      */
-    public function moveToNextSetupStep()
+    public function owner(): ?User
     {
-        $steps = ['goals', 'features', 'team', 'subscription', 'branding', 'complete'];
-        $currentIndex = array_search($this->setup_step, $steps);
-        
-        if ($currentIndex !== false && $currentIndex < count($steps) - 1) {
-            $nextStep = $steps[$currentIndex + 1];
-            $this->update(['setup_step' => $nextStep]);
-            
-            if ($nextStep === 'complete') {
-                $this->markSetupCompleted();
-            }
-        }
+        return $this->users()->wherePivot('role', 'owner')->first();
     }
 
     /**
-     * Get setup progress percentage
+     * Check if a user is the owner of this workspace.
      */
-    public function getSetupProgress(): int
+    public function isOwner(User $user): bool
     {
-        $steps = ['goals', 'features', 'team', 'subscription', 'branding', 'complete'];
-        $currentIndex = array_search($this->setup_step, $steps);
-        
-        if ($currentIndex === false) {
-            return 0;
-        }
-        
-        return (int) (($currentIndex + 1) / count($steps) * 100);
+        return $this->users()
+            ->where('user_id', $user->id)
+            ->wherePivot('role', 'owner')
+            ->exists();
     }
 
     /**
-     * Calculate monthly cost
+     * Check if a user is a member of this workspace.
      */
-    public function calculateMonthlyCost(): float
+    public function isMember(User $user): bool
     {
-        if (!$this->subscriptionPlan) {
-            return 0.0;
-        }
-
-        return $this->subscriptionPlan->calculateMonthlyPrice($this->selected_features ?? []);
+        return $this->users()
+            ->where('user_id', $user->id)
+            ->exists();
     }
 
     /**
-     * Calculate yearly cost
+     * Get the workspace statistics.
      */
-    public function calculateYearlyCost(): float
+    public function getStats(): array
     {
-        if (!$this->subscriptionPlan) {
-            return 0.0;
-        }
-
-        return $this->subscriptionPlan->calculateYearlyPrice($this->selected_features ?? []);
+        return [
+            'active_features' => $this->features()->where('is_enabled', true)->count(),
+            'total_posts' => 0, // This would be calculated based on actual posts
+            'monthly_revenue' => '$0', // This would be calculated based on actual revenue
+            'users_count' => $this->users()->count(),
+            'goals_count' => $this->goals()->where('is_enabled', true)->count(),
+        ];
     }
 
     /**
-     * Get branding configuration
+     * Check if the workspace is on trial.
      */
-    public function getBrandingConfig(string $key = null, $default = null)
+    public function isOnTrial(): bool
     {
-        if ($key === null) {
-            return $this->branding_config;
-        }
-
-        return data_get($this->branding_config, $key, $default);
+        return $this->trial_ends_at && $this->trial_ends_at->isFuture();
     }
 
     /**
-     * Set branding configuration
+     * Check if the workspace trial has expired.
      */
-    public function setBrandingConfig(string $key, $value)
+    public function trialExpired(): bool
     {
-        $config = $this->branding_config ?? [];
-        data_set($config, $key, $value);
-        $this->update(['branding_config' => $config]);
+        return $this->trial_ends_at && $this->trial_ends_at->isPast();
     }
 
     /**
-     * Get team setup configuration
+     * Get the route key for the model.
      */
-    public function getTeamSetup(string $key = null, $default = null)
+    public function getRouteKeyName(): string
     {
-        if ($key === null) {
-            return $this->team_setup;
-        }
-
-        return data_get($this->team_setup, $key, $default);
-    }
-
-    /**
-     * Set team setup configuration
-     */
-    public function setTeamSetup(string $key, $value)
-    {
-        $config = $this->team_setup ?? [];
-        data_set($config, $key, $value);
-        $this->update(['team_setup' => $config]);
-    }
-
-    /**
-     * Scope to get workspaces with completed setup
-     */
-    public function scopeSetupCompleted($query)
-    {
-        return $query->where('setup_completed', true);
-    }
-
-    /**
-     * Scope to get workspaces with incomplete setup
-     */
-    public function scopeSetupIncomplete($query)
-    {
-        return $query->where('setup_completed', false);
-    }
-
-    /**
-     * Scope to get primary workspaces
-     */
-    public function scopePrimary($query)
-    {
-        return $query->where('is_primary', true);
+        return 'uuid';
     }
 }
