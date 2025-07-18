@@ -316,11 +316,41 @@ class InstallController extends Controller
         return [
             'requirements' => $requirements,
             'permissions' => $permissions,
-            'overall' => $this->getOverallStatus($requirements, $permissions)
+            'services' => $services,
+            'phpConfig' => $phpConfig,
+            'overall' => $this->getOverallStatus($requirements, $permissions, $services, $phpConfig)
         ];
     }
 
-    private function getOverallStatus($requirements, $permissions)
+    private function checkServiceStatus($service)
+    {
+        try {
+            $output = shell_exec("systemctl is-active $service 2>/dev/null");
+            return trim($output) === 'active';
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    private function convertToBytes($value)
+    {
+        $value = trim($value);
+        $unit = strtolower(substr($value, -1));
+        $number = (int) substr($value, 0, -1);
+        
+        switch ($unit) {
+            case 'g':
+                return $number * 1024 * 1024 * 1024;
+            case 'm':
+                return $number * 1024 * 1024;
+            case 'k':
+                return $number * 1024;
+            default:
+                return (int) $value;
+        }
+    }
+
+    private function getOverallStatus($requirements, $permissions, $services, $phpConfig)
     {
         $requiredMet = true;
         $recommendedMet = true;
@@ -336,6 +366,18 @@ class InstallController extends Controller
 
         foreach ($permissions as $perm) {
             if ($perm['required'] && !$perm['status']) {
+                $requiredMet = false;
+            }
+        }
+
+        foreach ($services as $service) {
+            if ($service['required'] && !$service['status']) {
+                $requiredMet = false;
+            }
+        }
+
+        foreach ($phpConfig as $config) {
+            if ($config['required'] && !$config['status']) {
                 $requiredMet = false;
             }
         }
