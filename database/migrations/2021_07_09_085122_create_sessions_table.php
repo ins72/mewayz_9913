@@ -34,5 +34,5 @@ class CreateSessionsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('sessions');
-
-}
+    }
+};
