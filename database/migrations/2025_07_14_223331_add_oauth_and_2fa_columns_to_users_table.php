@@ -40,14 +40,30 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'provider_avatar',
-                'two_factor_enabled',
-                'two_factor_secret',
-                'two_factor_recovery_codes',
-                'last_login_at',
-                'last_login_ip'
-            ]);
+            // Only drop columns that exist
+            $columnsToDrop = [];
+            if (Schema::hasColumn('users', 'provider_avatar')) {
+                $columnsToDrop[] = 'provider_avatar';
+            }
+            if (Schema::hasColumn('users', 'two_factor_enabled')) {
+                $columnsToDrop[] = 'two_factor_enabled';
+            }
+            if (Schema::hasColumn('users', 'two_factor_secret')) {
+                $columnsToDrop[] = 'two_factor_secret';
+            }
+            if (Schema::hasColumn('users', 'two_factor_recovery_codes')) {
+                $columnsToDrop[] = 'two_factor_recovery_codes';
+            }
+            if (Schema::hasColumn('users', 'last_login_at')) {
+                $columnsToDrop[] = 'last_login_at';
+            }
+            if (Schema::hasColumn('users', 'last_login_ip')) {
+                $columnsToDrop[] = 'last_login_ip';
+            }
+            
+            if (!empty($columnsToDrop)) {
+                $table->dropColumn($columnsToDrop);
+            }
         });
     }
 };
