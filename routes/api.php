@@ -808,17 +808,17 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     });
 });
 
-// Include Phase 1 Foundation Features
-require __DIR__ . '/api_phase1.php';
+// Phase route files - temporarily commented out for testing
+// require __DIR__ . '/api_phase1.php';
 
-// Include Phase 2 Professional Features
-require __DIR__ . '/api_phase2.php';
+// Phase 2 routes
+// require __DIR__ . '/api_phase2.php';
 
-// Include Phase 3 Scale Features
-require __DIR__ . '/api_phase3.php';
+// Phase 3 routes
+// require __DIR__ . '/api_phase3.php';
 
-// Include Phase 4 Innovation Features
-require __DIR__ . '/api_phase4.php';
+// Phase 4 routes
+// require __DIR__ . '/api_phase4.php';
 
 // Fallback route for 404 errors
 Route::fallback(function () {
