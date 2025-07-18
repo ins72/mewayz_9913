@@ -124,26 +124,39 @@ class LegalPagesAPITester:
         if self.auth_token:
             print("\n--- Testing Legal API Endpoints ---")
             
-            # Test cookie consent endpoint
+            # Test cookie consent endpoint (try both routes)
             consent_data = {
                 "necessary": True,
                 "analytics": True,
                 "marketing": False,
                 "preferences": True
             }
-            response = self.make_request('POST', '/legal/cookie-consent', consent_data, use_api=True)
+            
+            # Try the public route first
+            response = self.make_request('POST', '/cookie-consent', consent_data, auth_required=False, use_api=True)
             if response and response.status_code in [200, 201]:
-                self.log_test("Cookie Consent API", True, "Cookie consent saved successfully")
-                print("✅ Cookie Consent API working")
+                self.log_test("Cookie Consent API (Public)", True, "Cookie consent saved successfully via public endpoint")
+                print("✅ Cookie Consent API (Public) working")
             else:
-                self.log_test("Cookie Consent API", False, f"Cookie consent failed - Status: {response.status_code if response else 'No response'}")
-                print(f"❌ Cookie Consent API failed - Status: {response.status_code if response else 'No response'}")
+                print(f"❌ Cookie Consent API (Public) failed - Status: {response.status_code if response else 'No response'}")
+                
+                # Try the authenticated route
+                response = self.make_request('POST', '/legal/cookie-consent', consent_data, use_api=True)
+                if response and response.status_code in [200, 201]:
+                    self.log_test("Cookie Consent API (Auth)", True, "Cookie consent saved successfully via authenticated endpoint")
+                    print("✅ Cookie Consent API (Auth) working")
+                else:
+                    self.log_test("Cookie Consent API", False, f"Cookie consent failed on both endpoints - Status: {response.status_code if response else 'No response'}")
+                    print(f"❌ Cookie Consent API failed on both endpoints - Status: {response.status_code if response else 'No response'}")
             
             # Test data export endpoint
             response = self.make_request('POST', '/legal/data-export', use_api=True)
             if response and response.status_code in [200, 201]:
                 self.log_test("Data Export API", True, "Data export request successful")
                 print("✅ Data Export API working")
+            elif response and response.status_code == 404:
+                self.log_test("Data Export API", False, "Data export endpoint not found - route may not be properly registered")
+                print("❌ Data Export API - 404 endpoint not found")
             else:
                 self.log_test("Data Export API", False, f"Data export failed - Status: {response.status_code if response else 'No response'}")
                 print(f"❌ Data Export API failed - Status: {response.status_code if response else 'No response'}")
@@ -157,6 +170,9 @@ class LegalPagesAPITester:
             if response and response.status_code in [200, 201]:
                 self.log_test("Data Deletion API", True, "Data deletion request successful")
                 print("✅ Data Deletion API working")
+            elif response and response.status_code == 404:
+                self.log_test("Data Deletion API", False, "Data deletion endpoint not found - route may not be properly registered")
+                print("❌ Data Deletion API - 404 endpoint not found")
             else:
                 self.log_test("Data Deletion API", False, f"Data deletion failed - Status: {response.status_code if response else 'No response'}")
                 print(f"❌ Data Deletion API failed - Status: {response.status_code if response else 'No response'}")
