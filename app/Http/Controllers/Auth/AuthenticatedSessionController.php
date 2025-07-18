@@ -30,21 +30,15 @@ class AuthenticatedSessionController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Manual authentication to bypass Auth manager
-        $user = \App\Models\User::where('email', $request->email)->first();
-        
-        if (!$user || !password_verify($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            
+            return redirect()->intended('/dashboard');
         }
 
-        // Set session manually
-        $request->session()->regenerate();
-        $request->session()->put('user_id', $user->id);
-
-        // Redirect to dashboard
-        return redirect()->intended('/dashboard');
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
     }
 
     /**
