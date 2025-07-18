@@ -17,7 +17,7 @@ return new class extends Migration
             $table->json('findings')->nullable();
             $table->text('report_url')->nullable();
             $table->timestamp('generated_at')->nullable();
-            $table->uuid('generated_by')->nullable();
+            $table->unsignedBigInteger('generated_by')->nullable();
             $table->timestamps();
             
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
