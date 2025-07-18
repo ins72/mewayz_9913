@@ -33,7 +33,7 @@ class InstallController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('install.welcome', compact('installSteps'));
+        return view('install.welcome', ['installSteps' => $this->installSteps]);
     }
 
     public function step($step)
