@@ -101,11 +101,10 @@ class BioSiteController extends Controller
             ->map(function ($bioSite) {
                 return [
                     'id' => $bioSite->id,
-                    'name' => $bioSite->name,
                     'title' => $bioSite->title,
                     'slug' => $bioSite->slug,
                     'description' => $bioSite->description,
-                    'status' => $bioSite->status,
+                    'is_active' => $bioSite->is_active,
                     'theme_config' => $bioSite->theme_config ? json_decode($bioSite->theme_config, true) : null,
                     'url' => url("/bio/{$bioSite->slug}"),
                     'created_at' => $bioSite->created_at,
