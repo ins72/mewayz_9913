@@ -162,7 +162,7 @@ class BusinessController extends Controller
             ]
         ];
 
-        return view('business.pricing', compact('plans', 'faqs'));
+        return view('pages.business.pricing', compact('plans', 'faqs'));
     }
 
     /**
