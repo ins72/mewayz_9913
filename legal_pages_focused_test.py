@@ -140,7 +140,7 @@ class LegalPagesAPITester:
                 print(f"❌ Cookie Consent API failed - Status: {response.status_code if response else 'No response'}")
             
             # Test data export endpoint
-            response = self.make_request('POST', '/legal/data-export')
+            response = self.make_request('POST', '/legal/data-export', use_api=True)
             if response and response.status_code in [200, 201]:
                 self.log_test("Data Export API", True, "Data export request successful")
                 print("✅ Data Export API working")
