@@ -541,17 +541,17 @@ class UnifiedDataController extends Controller
             $touchpoints = [];
             
             // Get email campaigns that customer interacted with
-            $emailInteractions = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+            $emailInteractions = \App\Models\UnifiedAnalyticsEvent::where('user_id', $customer->user_id)
                 ->whereIn('event_type', ['email_open', 'email_click', 'email_reply', 'email_forward'])
-                ->whereBetween('created_at', $timeRange)
+                ->whereBetween('timestamp', $timeRange)
                 ->get();
                 
             foreach ($emailInteractions as $interaction) {
-                $eventData = json_decode($interaction->event_data, true) ?? [];
+                $eventData = $interaction->properties ?? [];
                 $touchpoints[] = [
                     'platform' => 'email',
                     'type' => $interaction->event_type,
-                    'timestamp' => $interaction->created_at->toISOString(),
+                    'timestamp' => $interaction->timestamp->toISOString(),
                     'data' => [
                         'campaign_id' => $eventData['campaign_id'] ?? '',
                         'subject' => $eventData['subject'] ?? '',
@@ -563,17 +563,17 @@ class UnifiedDataController extends Controller
             }
             
             // Get newsletter subscriptions
-            $subscriptions = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+            $subscriptions = \App\Models\UnifiedAnalyticsEvent::where('user_id', $customer->user_id)
                 ->where('event_type', 'email_subscription')
-                ->whereBetween('created_at', $timeRange)
+                ->whereBetween('timestamp', $timeRange)
                 ->get();
                 
             foreach ($subscriptions as $subscription) {
-                $eventData = json_decode($subscription->event_data, true) ?? [];
+                $eventData = $subscription->properties ?? [];
                 $touchpoints[] = [
                     'platform' => 'email',
                     'type' => 'subscription',
-                    'timestamp' => $subscription->created_at->toISOString(),
+                    'timestamp' => $subscription->timestamp->toISOString(),
                     'data' => [
                         'list_name' => $eventData['list_name'] ?? '',
                         'source' => $eventData['source'] ?? 'website',
