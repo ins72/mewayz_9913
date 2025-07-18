@@ -73,9 +73,9 @@ class WebSocketController extends Controller
             return response()->json(['error' => 'Workspace ID is required'], 400);
         }
 
-        // Remove user presence
+        // Remove user presence from Redis
         $presenceKey = "workspace.{$workspaceId}.users.{$user->id}";
-        Cache::forget($presenceKey);
+        \Illuminate\Support\Facades\Redis::del($presenceKey);
 
         // Broadcast user left event
         broadcast(new WorkspaceCollaboration(
