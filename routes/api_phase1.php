@@ -115,13 +115,13 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     // USER PREFERENCES SYSTEM
     // ================================
     
-    Route::prefix('preferences')->group(function () {
-        Route::get('/', [UserPreferencesController::class, 'getPreferences']);
-        Route::post('/update', [UserPreferencesController::class, 'updatePreferences']);
-        Route::post('/reset', [UserPreferencesController::class, 'resetPreferences']);
-        Route::get('/export', [UserPreferencesController::class, 'exportPreferences']);
-        Route::post('/import', [UserPreferencesController::class, 'importPreferences']);
-    });
+    // Route::prefix('preferences')->group(function () {
+    //     Route::get('/', [UserPreferencesController::class, 'getPreferences']);
+    //     Route::post('/update', [UserPreferencesController::class, 'updatePreferences']);
+    //     Route::post('/reset', [UserPreferencesController::class, 'resetPreferences']);
+    //     Route::get('/export', [UserPreferencesController::class, 'exportPreferences']);
+    //     Route::post('/import', [UserPreferencesController::class, 'importPreferences']);
+    // });
     
     // ================================
     // ACCESSIBILITY FEATURES
