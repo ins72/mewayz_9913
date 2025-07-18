@@ -38,7 +38,7 @@
                     </div>
                     <h3 class="text-lg font-semibold text-slate-900 mb-2">Contact Support</h3>
                     <p class="text-slate-600 mb-4">Get personalized help from our team</p>
-                    <a href="{{ route('business.contact') }}" class="text-green-600 hover:text-green-800 font-semibold">
+                    <a href="/contact" class="text-green-600 hover:text-green-800 font-semibold">
                         Contact Us →
                     </a>
                 </div>
