@@ -23,8 +23,6 @@ class TeamManagementController extends Controller
     public function __construct()
     {
         // Constructor
-        $this->notificationService = $notificationService;
-        $this->analyticsService = $analyticsService;
     }
 
     /**
