@@ -730,6 +730,474 @@ class MewayzAPITester:
             self.log_test("Get AI Services", True, "AI services retrieval successful")
         else:
             self.log_test("Get AI Services", False, f"AI services failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_legal_pages_system(self):
+        """Test Legal Pages System functionality"""
+        print("\n=== Testing Legal Pages System ===")
+        
+        # Test all 5 legal document endpoints
+        legal_pages = [
+            'terms-of-service',
+            'privacy-policy', 
+            'cookie-policy',
+            'refund-policy',
+            'accessibility'
+        ]
+        
+        for page in legal_pages:
+            response = self.make_request('GET', f'/{page}', auth_required=False)
+            if response and response.status_code == 200:
+                self.log_test(f"Legal Page - {page.title()}", True, f"{page} page accessible and returns content")
+            else:
+                self.log_test(f"Legal Page - {page.title()}", False, f"{page} page failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test legal API endpoints
+        if self.auth_token:
+            # Test cookie consent endpoint
+            consent_data = {
+                "necessary": True,
+                "analytics": True,
+                "marketing": False,
+                "preferences": True
+            }
+            response = self.make_request('POST', '/legal/cookie-consent', consent_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Cookie Consent API", True, "Cookie consent saved successfully")
+            else:
+                self.log_test("Cookie Consent API", False, f"Cookie consent failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test data export endpoint
+            response = self.make_request('POST', '/legal/data-export')
+            if response and response.status_code in [200, 201]:
+                self.log_test("Data Export API", True, "Data export request successful")
+            else:
+                self.log_test("Data Export API", False, f"Data export failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test data deletion endpoint
+            deletion_data = {
+                "reason": "No longer need the service",
+                "confirmation": True
+            }
+            response = self.make_request('POST', '/legal/data-deletion', deletion_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Data Deletion API", True, "Data deletion request successful")
+            else:
+                self.log_test("Data Deletion API", False, f"Data deletion failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_account_removal_system(self):
+        """Test Account Removal System functionality"""
+        print("\n=== Testing Account Removal System ===")
+        
+        # Test account removal page access
+        response = self.make_request('GET', '/account-removal', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Account Removal Page", True, "Account removal page accessible")
+        else:
+            self.log_test("Account Removal Page", False, f"Account removal page failed - Status: {response.status_code if response else 'No response'}")
+        
+        if self.auth_token:
+            # Test account removal request
+            removal_data = {
+                "reason": "No longer using the platform",
+                "feedback": "The platform served its purpose",
+                "data_export_requested": True,
+                "confirmation": True
+            }
+            response = self.make_request('POST', '/account/removal-request', removal_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Account Removal Request", True, "Account removal request submitted successfully")
+            else:
+                self.log_test("Account Removal Request", False, f"Account removal request failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_support_center_system(self):
+        """Test Support Center System functionality"""
+        print("\n=== Testing Support Center System ===")
+        
+        # Test support center page access
+        response = self.make_request('GET', '/support', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Support Center Page", True, "Support center page accessible")
+        else:
+            self.log_test("Support Center Page", False, f"Support center page failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test FAQ endpoint
+        response = self.make_request('GET', '/support/faq', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Support FAQ", True, "FAQ section accessible")
+        else:
+            self.log_test("Support FAQ", False, f"FAQ section failed - Status: {response.status_code if response else 'No response'}")
+        
+        if self.auth_token:
+            # Test support ticket creation
+            ticket_data = {
+                "subject": "Test Support Ticket",
+                "category": "technical",
+                "priority": "medium",
+                "description": "This is a test support ticket to verify the system functionality"
+            }
+            response = self.make_request('POST', '/support/tickets', ticket_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Support Ticket Creation", True, "Support ticket created successfully")
+            else:
+                self.log_test("Support Ticket Creation", False, f"Support ticket creation failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_ultra_advanced_gamification(self):
+        """Test Ultra-Advanced Gamification System functionality"""
+        print("\n=== Testing Ultra-Advanced Gamification System ===")
+        
+        if not self.auth_token:
+            self.log_test("Gamification System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get user level
+        response = self.make_request('GET', '/gamification/user-level')
+        if response and response.status_code == 200:
+            self.log_test("Get User Level", True, "User level retrieval successful")
+        else:
+            self.log_test("Get User Level", False, f"User level retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get achievements
+        response = self.make_request('GET', '/gamification/achievements')
+        if response and response.status_code == 200:
+            self.log_test("Get Achievements", True, "Achievements retrieval successful")
+        else:
+            self.log_test("Get Achievements", False, f"Achievements retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test award XP
+        xp_data = {
+            "action": "profile_completion",
+            "points": 50,
+            "description": "Completed profile setup"
+        }
+        response = self.make_request('POST', '/gamification/award-xp', xp_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Award XP", True, "XP awarded successfully")
+        else:
+            self.log_test("Award XP", False, f"XP award failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get leaderboard
+        response = self.make_request('GET', '/gamification/leaderboard')
+        if response and response.status_code == 200:
+            self.log_test("Get Leaderboard", True, "Leaderboard retrieval successful")
+        else:
+            self.log_test("Get Leaderboard", False, f"Leaderboard retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test get user streaks
+        response = self.make_request('GET', '/gamification/streaks')
+        if response and response.status_code == 200:
+            self.log_test("Get User Streaks", True, "User streaks retrieval successful")
+        else:
+            self.log_test("Get User Streaks", False, f"User streaks retrieval failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_automated_installer_system(self):
+        """Test Automated Installer System functionality"""
+        print("\n=== Testing Automated Installer System ===")
+        
+        # Test installation status check
+        response = self.make_request('GET', '/install/status', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Installation Status Check", True, "Installation status check successful")
+        else:
+            self.log_test("Installation Status Check", False, f"Installation status check failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test system requirements check
+        response = self.make_request('GET', '/install/requirements', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("System Requirements Check", True, "System requirements check successful")
+        else:
+            self.log_test("System Requirements Check", False, f"System requirements check failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test database configuration check
+        response = self.make_request('GET', '/install/database-config', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Database Configuration Check", True, "Database configuration check successful")
+        else:
+            self.log_test("Database Configuration Check", False, f"Database configuration check failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_enhanced_ai_features(self):
+        """Test Enhanced AI Features functionality"""
+        print("\n=== Testing Enhanced AI Features ===")
+        
+        if not self.auth_token:
+            self.log_test("Enhanced AI Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test get AI services
+        response = self.make_request('GET', '/ai/services')
+        if response and response.status_code == 200:
+            self.log_test("Get AI Services", True, "AI services retrieval successful")
+        else:
+            self.log_test("Get AI Services", False, f"AI services retrieval failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test content generation
+        content_data = {
+            "type": "social_media_post",
+            "topic": "Digital Marketing Tips",
+            "tone": "professional",
+            "length": "medium"
+        }
+        response = self.make_request('POST', '/ai/content-generation', content_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("AI Content Generation", True, "Content generation successful")
+        else:
+            self.log_test("AI Content Generation", False, f"Content generation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test SEO optimization
+        seo_data = {
+            "content": "This is a test blog post about digital marketing strategies",
+            "target_keywords": ["digital marketing", "SEO", "content strategy"]
+        }
+        response = self.make_request('POST', '/ai/seo-optimization', seo_data)
+        if response and response.status_code in [200, 201]:
+            self.log_test("AI SEO Optimization", True, "SEO optimization successful")
+        else:
+            self.log_test("AI SEO Optimization", False, f"SEO optimization failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_database_tables_creation(self):
+        """Test Phase 1 Database Tables Creation"""
+        print("\n=== Testing Phase 1 Database Tables Creation ===")
+        
+        if not self.auth_token:
+            self.log_test("Database Tables", False, "Cannot test - no authentication token")
+            return
+        
+        # Test bio_sites table
+        response = self.make_request('GET', '/bio-sites/')
+        if response and response.status_code == 200:
+            self.log_test("Bio Sites Table", True, "bio_sites table accessible and functional")
+        else:
+            self.log_test("Bio Sites Table", False, f"bio_sites table access failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test escrow_transactions table
+        response = self.make_request('GET', '/escrow/')
+        if response and response.status_code == 200:
+            self.log_test("Escrow Transactions Table", True, "escrow_transactions table accessible and functional")
+        else:
+            self.log_test("Escrow Transactions Table", False, f"escrow_transactions table access failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test booking_services table
+        response = self.make_request('GET', '/booking/services')
+        if response and response.status_code == 200:
+            self.log_test("Booking Services Table", True, "booking_services table accessible and functional")
+        else:
+            self.log_test("Booking Services Table", False, f"booking_services table access failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test workspaces table
+        response = self.make_request('GET', '/workspaces')
+        if response and response.status_code == 200:
+            self.log_test("Workspaces Table", True, "workspaces table accessible and functional")
+        else:
+            self.log_test("Workspaces Table", False, f"workspaces table access failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test email_campaigns table
+        response = self.make_request('GET', '/email-marketing/campaigns')
+        if response and response.status_code == 200:
+            self.log_test("Email Campaigns Table", True, "email_campaigns table accessible and functional")
+        else:
+            self.log_test("Email Campaigns Table", False, f"email_campaigns table access failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_admin_dashboard_system(self):
+        """Test Ultra-Comprehensive Admin Dashboard System"""
+        print("\n=== Testing Ultra-Comprehensive Admin Dashboard System ===")
+        
+        if not self.auth_token:
+            self.log_test("Admin Dashboard", False, "Cannot test - no authentication token")
+            return
+        
+        # Test admin dashboard access (should return 403 for non-admin users)
+        response = self.make_request('GET', '/admin/dashboard')
+        if response and response.status_code == 403:
+            self.log_test("Admin Dashboard Security", True, "Admin dashboard properly secured - returns 403 for non-admin users")
+        elif response and response.status_code == 200:
+            self.log_test("Admin Dashboard Access", True, "Admin dashboard accessible (user has admin privileges)")
+        else:
+            self.log_test("Admin Dashboard", False, f"Admin dashboard failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test admin user management (should also return 403 for non-admin)
+        response = self.make_request('GET', '/admin/users')
+        if response and response.status_code == 403:
+            self.log_test("Admin User Management Security", True, "Admin user management properly secured")
+        elif response and response.status_code == 200:
+            self.log_test("Admin User Management", True, "Admin user management accessible")
+        else:
+            self.log_test("Admin User Management", False, f"Admin user management failed - Status: {response.status_code if response else 'No response'}")
+
+    def test_production_performance(self):
+        """Test production performance metrics"""
+        print("\n=== Testing Production Performance ===")
+        
+        start_time = time.time()
+        
+        # Test API response times
+        response = self.make_request('GET', '/health', auth_required=False)
+        health_time = time.time() - start_time
+        
+        if response and response.status_code == 200 and health_time < 2.0:
+            self.log_test("API Response Time", True, f"Health endpoint responds in {health_time:.3f}s (< 2s)")
+        else:
+            self.log_test("API Response Time", False, f"Health endpoint slow or failed - Time: {health_time:.3f}s, Status: {response.status_code if response else 'No response'}")
+        
+        if self.auth_token:
+            # Test authenticated endpoint performance
+            start_time = time.time()
+            response = self.make_request('GET', '/auth/me')
+            auth_time = time.time() - start_time
+            
+            if response and response.status_code == 200 and auth_time < 3.0:
+                self.log_test("Authenticated API Performance", True, f"Auth endpoint responds in {auth_time:.3f}s (< 3s)")
+            else:
+                self.log_test("Authenticated API Performance", False, f"Auth endpoint slow or failed - Time: {auth_time:.3f}s, Status: {response.status_code if response else 'No response'}")
+
+    def test_security_headers(self):
+        """Test security headers and CORS configuration"""
+        print("\n=== Testing Security Configuration ===")
+        
+        response = self.make_request('GET', '/health', auth_required=False)
+        if response:
+            headers = response.headers
+            
+            # Check for security headers
+            security_checks = [
+                ('X-Frame-Options', 'Clickjacking protection'),
+                ('X-Content-Type-Options', 'MIME type sniffing protection'),
+                ('X-XSS-Protection', 'XSS protection'),
+                ('Strict-Transport-Security', 'HTTPS enforcement'),
+                ('Content-Security-Policy', 'Content security policy')
+            ]
+            
+            for header, description in security_checks:
+                if header in headers:
+                    self.log_test(f"Security Header - {header}", True, f"{description} enabled")
+                else:
+                    self.log_test(f"Security Header - {header}", False, f"{description} missing")
+        else:
+            self.log_test("Security Headers", False, "Cannot test security headers - no response")
+
+    def run_comprehensive_production_test(self):
+        """Run comprehensive production readiness test"""
+        print("🚀 STARTING COMPREHENSIVE PRODUCTION READINESS BACKEND TESTING")
+        print("=" * 80)
+        print(f"Testing against: {self.base_url}")
+        print(f"API Endpoint: {self.api_url}")
+        print(f"Authentication Token: {'Available' if self.auth_token else 'Not Available'}")
+        print("=" * 80)
+        
+        # Core Infrastructure Tests
+        self.test_health_check()
+        self.test_database_connectivity()
+        self.test_production_performance()
+        self.test_security_headers()
+        
+        # Authentication & Security Tests
+        self.test_authentication_system()
+        
+        # Legal & Compliance Tests (NEW)
+        self.test_legal_pages_system()
+        self.test_account_removal_system()
+        self.test_support_center_system()
+        
+        # Database & Migration Tests
+        self.test_database_tables_creation()
+        
+        # Core Business Features Tests
+        self.test_bio_sites()
+        self.test_social_media_management()
+        self.test_instagram_integration()
+        self.test_ecommerce_system()
+        self.test_course_creation()
+        self.test_email_marketing()
+        self.test_analytics_reporting()
+        self.test_payment_processing()
+        self.test_workspace_management()
+        
+        # Advanced Features Tests
+        self.test_ultra_advanced_gamification()
+        self.test_admin_dashboard_system()
+        self.test_website_builder()
+        self.test_biometric_authentication()
+        self.test_realtime_features()
+        self.test_escrow_system()
+        self.test_advanced_analytics()
+        self.test_advanced_booking_system()
+        self.test_advanced_financial_management()
+        self.test_enhanced_ai_features()
+        
+        # Integration Tests
+        self.test_oauth_integration()
+        self.test_two_factor_auth()
+        self.test_crm_system()
+        self.test_team_management()
+        self.test_ai_integration()
+        
+        # System Tests
+        self.test_automated_installer_system()
+        
+        # Generate comprehensive report
+        self.generate_production_report()
+
+    def generate_production_report(self):
+        """Generate comprehensive production readiness report"""
+        print("\n" + "=" * 80)
+        print("🎯 COMPREHENSIVE PRODUCTION READINESS REPORT")
+        print("=" * 80)
+        
+        total_tests = len(self.test_results)
+        passed_tests = sum(1 for result in self.test_results.values() if result['success'])
+        failed_tests = total_tests - passed_tests
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"📊 OVERALL STATISTICS:")
+        print(f"   Total Tests: {total_tests}")
+        print(f"   Passed: {passed_tests} ✅")
+        print(f"   Failed: {failed_tests} ❌")
+        print(f"   Success Rate: {success_rate:.1f}%")
+        print()
+        
+        # Categorize results
+        categories = {
+            'Legal & Compliance': ['Legal Page', 'Cookie Consent', 'Data Export', 'Data Deletion', 'Account Removal', 'Support'],
+            'Core Infrastructure': ['Health Check', 'Database', 'API Response Time', 'Security Header'],
+            'Authentication & Security': ['Custom Auth', 'User Profile', 'User Registration', 'User Login', 'Biometric', '2FA'],
+            'Business Features': ['Bio Sites', 'Social Media', 'Instagram', 'E-commerce', 'Course', 'Email Marketing'],
+            'Advanced Features': ['Gamification', 'Admin Dashboard', 'Website Builder', 'Real-Time', 'Escrow', 'Analytics'],
+            'Database Tables': ['Bio Sites Table', 'Escrow Transactions Table', 'Booking Services Table', 'Workspaces Table'],
+            'Performance & Security': ['API Response Time', 'Authenticated API Performance', 'Security Header']
+        }
+        
+        for category, keywords in categories.items():
+            category_tests = [name for name in self.test_results.keys() if any(keyword in name for keyword in keywords)]
+            if category_tests:
+                category_passed = sum(1 for name in category_tests if self.test_results[name]['success'])
+                category_total = len(category_tests)
+                category_rate = (category_passed / category_total * 100) if category_total > 0 else 0
+                
+                print(f"📋 {category.upper()}:")
+                print(f"   Success Rate: {category_rate:.1f}% ({category_passed}/{category_total})")
+                
+                # Show failed tests in this category
+                failed_in_category = [name for name in category_tests if not self.test_results[name]['success']]
+                if failed_in_category:
+                    print(f"   ❌ Failed: {', '.join(failed_in_category[:3])}{'...' if len(failed_in_category) > 3 else ''}")
+                print()
+        
+        # Production readiness assessment
+        print("🏆 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 90:
+            print("   Status: ✅ PRODUCTION READY")
+            print("   Assessment: System is ready for production deployment")
+        elif success_rate >= 75:
+            print("   Status: ⚠️  MOSTLY READY")
+            print("   Assessment: System is mostly ready with minor issues to address")
+        elif success_rate >= 50:
+            print("   Status: 🔧 NEEDS WORK")
+            print("   Assessment: System needs significant improvements before production")
+        else:
+            print("   Status: ❌ NOT READY")
+            print("   Assessment: System requires major fixes before production deployment")
+        
+        print("\n" + "=" * 80)
+        print("🎯 TESTING COMPLETE - DETAILED RESULTS LOGGED ABOVE")
+        print("=" * 80)
     
     def test_website_builder(self):
         """Test Website Builder functionality"""
