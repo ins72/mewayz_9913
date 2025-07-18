@@ -95,7 +95,7 @@ class BioSiteController extends Controller
     {
         try {
             $bioSites = BioSite::where('user_id', $request->user()->id)
-            ->select(['id', 'name', 'title', 'slug', 'description', 'status', 'theme_config', 'created_at', 'updated_at'])
+            ->select(['id', 'title', 'slug', 'description', 'is_active', 'theme_config', 'created_at', 'updated_at'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($bioSite) {
