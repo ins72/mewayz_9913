@@ -65,7 +65,7 @@ class FocusedTester:
             return response
             
         except requests.exceptions.Timeout:
-            print(f"Request timeout for {url} after 15 seconds")
+            print(f"Request timeout for {url} after 10 seconds")
             return None
         except requests.exceptions.RequestException as e:
             print(f"Request failed for {url}: {e}")
