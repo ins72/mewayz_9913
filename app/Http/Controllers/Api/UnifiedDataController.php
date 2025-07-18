@@ -537,23 +537,58 @@ class UnifiedDataController extends Controller
 
     private function getEmailTouchpoints($customer, $timeRange)
     {
-        // Mock email touchpoints
-        return [
-            [
-                'platform' => 'email',
-                'type' => 'email_open',
-                'timestamp' => now()->subDays(6)->toISOString(),
-                'data' => ['campaign' => 'welcome_series', 'subject' => 'Welcome to Mewayz'],
-                'engagement_score' => 4.7
-            ],
-            [
-                'platform' => 'email',
-                'type' => 'email_click',
-                'timestamp' => now()->subDays(1)->toISOString(),
-                'data' => ['campaign' => 'product_launch', 'link' => 'learn_more'],
-                'engagement_score' => 7.2
-            ]
-        ];
+        try {
+            $touchpoints = [];
+            
+            // Get email campaigns that customer interacted with
+            $emailInteractions = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                ->whereIn('event_type', ['email_open', 'email_click', 'email_reply', 'email_forward'])
+                ->whereBetween('created_at', $timeRange)
+                ->get();
+                
+            foreach ($emailInteractions as $interaction) {
+                $eventData = json_decode($interaction->event_data, true) ?? [];
+                $touchpoints[] = [
+                    'platform' => 'email',
+                    'type' => $interaction->event_type,
+                    'timestamp' => $interaction->created_at->toISOString(),
+                    'data' => [
+                        'campaign_id' => $eventData['campaign_id'] ?? '',
+                        'subject' => $eventData['subject'] ?? '',
+                        'link_url' => $eventData['link_url'] ?? '',
+                        'email_type' => $eventData['email_type'] ?? 'newsletter'
+                    ],
+                    'engagement_score' => $this->calculateEmailEngagementScore($interaction->event_type, $eventData)
+                ];
+            }
+            
+            // Get newsletter subscriptions
+            $subscriptions = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                ->where('event_type', 'email_subscription')
+                ->whereBetween('created_at', $timeRange)
+                ->get();
+                
+            foreach ($subscriptions as $subscription) {
+                $eventData = json_decode($subscription->event_data, true) ?? [];
+                $touchpoints[] = [
+                    'platform' => 'email',
+                    'type' => 'subscription',
+                    'timestamp' => $subscription->created_at->toISOString(),
+                    'data' => [
+                        'list_name' => $eventData['list_name'] ?? '',
+                        'source' => $eventData['source'] ?? 'website',
+                        'double_optin' => $eventData['double_optin'] ?? true
+                    ],
+                    'engagement_score' => 6.0
+                ];
+            }
+            
+            return $touchpoints;
+            
+        } catch (\Exception $e) {
+            Log::error('Error fetching email touchpoints: ' . $e->getMessage());
+            return [];
+        }
     }
 
     private function getCourseTouchpoints($customer, $timeRange)
