@@ -25,7 +25,7 @@ class GamificationController extends Controller
             $user = $request->user();
             
             // Get or create user level
-            $userLevel = $user->gamificationLevel() ?? $this->createUserLevel($user);
+            $userLevel = $user->gamificationLevel ?? $this->createUserLevel($user);
             
             // Get achievements
             $achievements = $this->getUserAchievements($user);
