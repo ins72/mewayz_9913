@@ -2370,6 +2370,10 @@ class MewayzAPITester:
         self.test_health_check()
         self.test_database_connectivity()
         self.test_authentication_system()
+        
+        # Test the specific task that needs retesting
+        self.test_dashboard_access()
+        
         self.test_bio_sites()
         self.test_social_media_management()
         self.test_instagram_integration()
