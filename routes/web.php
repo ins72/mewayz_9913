@@ -41,10 +41,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // Dashboard Routes
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return view('pages.dashboard.index');
     })->name('dashboard-index');
+// });
     
     Route::get('/dashboard/instagram', function () {
         return view('pages.dashboard.instagram.index');
