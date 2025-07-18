@@ -986,16 +986,16 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Enhanced Controllers Testing"
+    - "Legal Pages System"
     - "Ultra-Comprehensive Admin Dashboard System"
-    - "Escrow & Transaction Security"
-    - "Advanced Booking System"
+    - "Bio Sites & Link-in-Bio"
+    - "Website Builder System"
+    - "Ultra-Advanced Gamification System"
   stuck_tasks:
-    - "Enhanced Controllers Testing"
-    - "Escrow & Transaction Security"
-    - "Advanced Booking System"
+    - "Legal Pages System"
+    - "Ultra-Comprehensive Admin Dashboard System"
   test_all: false
-  test_priority: "stuck_first"
+  test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
