@@ -757,7 +757,7 @@ frontend:
     implemented: true
     working: false
     file: "routes/web.php"
-    stuck_count: 4
+    stuck_count: 5
     priority: "high"
     needs_retesting: false
     status_history:
