@@ -36,7 +36,7 @@ class LegalController extends Controller
             ->latest()
             ->first();
 
-        return view('legal.privacy-policy', compact('document'));
+        return view('pages.legal.privacy-policy', compact('document'));
     }
 
     /**
