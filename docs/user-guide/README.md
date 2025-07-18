@@ -1,384 +1,191 @@
-# Mewayz Platform v2 - User Guide
+# Mewayz Platform - User Guide
 
-*Last Updated: July 17, 2025*
+*Complete guide to using Mewayz Platform v2.0*
 
-## Welcome to Mewayz Platform v2
+## 👋 Welcome to Mewayz
 
-Mewayz Platform v2 is a comprehensive creator economy platform designed to empower content creators, small businesses, and enterprises with professional tools for growth, monetization, and business management.
+Mewayz Platform is your all-in-one business solution designed specifically for creators, entrepreneurs, and businesses looking to build their digital empire. This comprehensive guide will help you master every aspect of the platform.
 
-## Getting Started
+---
 
-### Account Creation
+## 🚀 Getting Started
 
-1. **Sign Up**
-   - Visit the homepage
-   - Click "Get Started" or "Sign Up"
-   - Fill in your details (name, email, password)
-   - Verify your email address
+### 1. Account Setup
+- **[Registration & Login](authentication.md)** - Create your account and secure access
+- **[Profile Configuration](profile-setup.md)** - Set up your personal profile
+- **[Workspace Creation](workspaces.md)** - Create and manage your business workspace
 
-2. **Login Options**
-   - Email and password
-   - Google OAuth
-   - Apple Sign-In
-   - Facebook Login
-   - Biometric authentication (supported devices)
+### 2. Quick Start Guide
+Follow our **[5-Minute Quick Start](quick-start.md)** to:
+1. Create your account
+2. Set up your first workspace
+3. Choose your business goals
+4. Enable key features
+5. Start building your digital presence
 
-### Enhanced Onboarding Experience
+---
 
-The platform features a comprehensive 6-step onboarding process:
-
-1. **Welcome & Goals**
-   - Define your primary goals (growth, monetization, efficiency)
-   - Select your business type (creator, small business, enterprise)
-
-2. **Business Information**
-   - Enter your business details
-   - Choose your industry category
-   - Set your experience level
-
-3. **Feature Selection**
-   - Choose which features to enable
-   - Customize your dashboard layout
-   - Set up integrations
-
-4. **Template Recommendations**
-   - Receive personalized template suggestions
-   - Preview and select templates
-   - Customize branding elements
-
-5. **Theme & Personalization**
-   - Choose your preferred theme (light/dark/auto)
-   - Customize colors and branding
-   - Set accessibility preferences
-
-6. **Workspace Setup**
-   - Create your first workspace
-   - Invite team members (if applicable)
-   - Configure initial settings
-
-## Core Features
-
-### Dashboard
-
-The main dashboard provides:
-- **Personalized Widgets**: Drag-and-drop customization
-- **Real-time Analytics**: Live performance metrics
-- **Quick Actions**: One-click access to common tasks
-- **Activity Feed**: Recent activities and notifications
-- **Smart Recommendations**: AI-powered suggestions
-
-### Bio Sites & Link-in-Bio
-
-Create professional bio pages with:
-- **Drag-and-Drop Builder**: Easy page creation
-- **Custom Templates**: Professional designs
-- **Link Management**: Organize and track links
-- **Analytics**: Detailed click tracking
-- **QR Code Generation**: Easy sharing
-- **Custom Branding**: Personalized appearance
-
-### Website Builder
-
-Build complete websites with:
-- **Template Library**: Professional templates
-- **Visual Editor**: No-code website building
-- **Responsive Design**: Mobile-optimized layouts
-- **SEO Optimization**: Built-in SEO tools
-- **Custom Domains**: Professional web presence
-- **E-commerce Integration**: Online store capabilities
+## 🎯 Core Features
 
 ### Social Media Management
+**Master your social media presence across all platforms**
+- **[Account Connection](social-media/account-setup.md)** - Connect Instagram, Facebook, Twitter, LinkedIn, TikTok
+- **[Content Creation](social-media/content-creation.md)** - Create engaging posts with AI assistance
+- **[Scheduling & Automation](social-media/scheduling.md)** - Plan and automate your posting strategy
+- **[Analytics & Insights](social-media/analytics.md)** - Track performance and optimize content
 
-Manage your social presence:
-- **Multi-Platform Support**: Instagram, Twitter, Facebook, LinkedIn
-- **Content Calendar**: Schedule and plan posts
-- **Analytics Dashboard**: Track engagement and growth
-- **Hashtag Research**: Find trending hashtags
-- **Audience Insights**: Understand your followers
-- **Automated Posting**: Schedule content in advance
+### Link in Bio Builder
+**Create professional, converting bio pages**
+- **[Page Builder](link-in-bio/page-builder.md)** - Drag-and-drop page creation
+- **[Theme Customization](link-in-bio/themes.md)** - Brand your pages perfectly
+- **[Advanced Features](link-in-bio/advanced-features.md)** - E-commerce, lead capture, analytics
+- **[Performance Tracking](link-in-bio/analytics.md)** - Monitor clicks and conversions
 
-### E-commerce & Marketplace
+### E-commerce Platform
+**Build and manage your online store**
+- **[Store Setup](ecommerce/store-setup.md)** - Configure your online store
+- **[Product Management](ecommerce/products.md)** - Add and organize products
+- **[Order Processing](ecommerce/orders.md)** - Manage orders and fulfillment
+- **[Payment Integration](ecommerce/payments.md)** - Set up secure payment processing
 
-Sell products and services:
-- **Product Catalog**: Organize your offerings
-- **Payment Processing**: Secure transactions
-- **Order Management**: Track and fulfill orders
-- **Digital Downloads**: Sell digital products
-- **Subscription Products**: Recurring revenue
-- **Marketplace Integration**: Sell to wider audience
+### Course Creation & Community
+**Share knowledge and build communities**
+- **[Course Builder](courses/course-creation.md)** - Create engaging online courses
+- **[Video Management](courses/video-hosting.md)** - Upload and manage course videos
+- **[Student Management](courses/student-management.md)** - Track student progress
+- **[Community Features](courses/community.md)** - Build learning communities
 
-### Course Creation Platform
+### CRM & Email Marketing
+**Manage customers and grow your audience**
+- **[Contact Management](crm/contacts.md)** - Organize and segment contacts
+- **[Email Campaigns](crm/email-marketing.md)** - Create and send targeted campaigns
+- **[Automation Workflows](crm/automation.md)** - Set up automated sequences
+- **[Lead Tracking](crm/lead-management.md)** - Track and nurture leads
 
-Create and sell online courses:
-- **Course Builder**: Structure your content
-- **Video Hosting**: High-quality video delivery
-- **Student Management**: Track progress
-- **Certificates**: Award completions
-- **Community Features**: Student discussions
-- **Payment Integration**: Monetize your knowledge
+### Website Builder
+**Create professional websites without coding**
+- **[Template Selection](website/templates.md)** - Choose from professional templates
+- **[Page Editor](website/page-editor.md)** - Customize pages with drag-and-drop
+- **[SEO Optimization](website/seo.md)** - Optimize for search engines
+- **[Domain Setup](website/domains.md)** - Connect custom domains
 
-### Email Marketing
+---
 
-Engage your audience:
-- **Email Campaigns**: Design and send emails
-- **Automation Workflows**: Triggered sequences
-- **Subscriber Management**: Organize your lists
-- **Analytics**: Track open and click rates
-- **Templates**: Professional email designs
-- **A/B Testing**: Optimize performance
+## 🎨 Advanced Features
 
-### CRM & Customer Management
+### AI-Powered Tools
+**Leverage artificial intelligence for your business**
+- **[Content Generation](ai/content-generation.md)** - AI-powered content creation
+- **[SEO Optimization](ai/seo-optimization.md)** - Automated SEO improvements
+- **[Competitor Analysis](ai/competitor-analysis.md)** - AI-driven market insights
+- **[Predictive Analytics](ai/predictive-analytics.md)** - Forecast trends and performance
 
-Manage customer relationships:
-- **Contact Management**: Organize customer data
-- **Sales Pipeline**: Track deals and opportunities
-- **Communication History**: Log all interactions
-- **Task Management**: Follow up actions
-- **Custom Fields**: Tailor to your needs
-- **Integration**: Connect with other tools
+### Business Management
+**Professional tools for growing businesses**
+- **[Invoice & Billing](business/invoicing.md)** - Create and manage invoices
+- **[Financial Reporting](business/financial-reports.md)** - Track revenue and expenses
+- **[Appointment Booking](business/booking-system.md)** - Manage appointments and meetings
+- **[Team Collaboration](business/team-management.md)** - Work with team members
 
-## Advanced Features
+### Analytics & Reporting
+**Data-driven insights for better decisions**
+- **[Dashboard Overview](analytics/dashboard.md)** - Understand your metrics at a glance
+- **[Custom Reports](analytics/custom-reports.md)** - Create detailed business reports
+- **[Performance Tracking](analytics/performance-tracking.md)** - Monitor key performance indicators
+- **[Data Export](analytics/data-export.md)** - Export data for external analysis
 
-### Phase 2: Enterprise Features
+---
 
-#### Team Management
-- **Hierarchical Departments**: Organize teams
-- **Role-Based Permissions**: Control access
-- **Team Collaboration**: Work together efficiently
-- **Performance Tracking**: Monitor team productivity
-- **Audit Logs**: Track all activities
+## ⚙️ Account Management
 
-#### Single Sign-On (SSO)
-- **SAML Integration**: Enterprise identity providers
-- **OAuth Support**: Popular authentication services
-- **Active Directory**: Windows domain integration
-- **Multi-Factor Authentication**: Enhanced security
-- **Session Management**: Secure access control
+### Subscription & Billing
+- **[Plan Selection](account/subscription-plans.md)** - Choose the right plan for your needs
+- **[Feature Management](account/feature-management.md)** - Enable and configure features
+- **[Billing & Payments](account/billing.md)** - Manage subscription and payments
+- **[Usage Monitoring](account/usage-tracking.md)** - Track feature usage and limits
 
-#### White-Label Solutions
-- **Custom Branding**: Your brand throughout
-- **Custom Domains**: Professional presence
-- **Client Portals**: Branded client access
-- **API Customization**: Tailored integrations
-- **Reseller Programs**: Partner opportunities
+### Security & Privacy
+- **[Account Security](security/account-security.md)** - Secure your account with 2FA
+- **[Privacy Settings](security/privacy-settings.md)** - Control your data and privacy
+- **[Data Management](security/data-management.md)** - Export and delete your data
+- **[Audit Logs](security/audit-logs.md)** - Review account activity
 
-### Phase 3: International & Security
+### Team Management
+- **[User Roles](team/user-roles.md)** - Understand different user permissions
+- **[Team Invitations](team/invitations.md)** - Invite and manage team members
+- **[Collaboration](team/collaboration.md)** - Work together effectively
+- **[Access Control](team/access-control.md)** - Manage feature and data access
 
-#### Multi-Language Support
-- **Language Selection**: Multiple languages supported
-- **Content Translation**: Localized content
-- **RTL Support**: Right-to-left languages
-- **Cultural Adaptation**: Region-specific features
-- **Date/Number Formats**: Local conventions
+---
 
-#### Security Features
-- **Advanced Encryption**: Data protection
-- **Threat Detection**: Real-time monitoring
-- **Compliance Monitoring**: Meet regulations
-- **Security Audits**: Regular assessments
-- **Incident Response**: Rapid threat handling
+## 🛠️ Integrations
 
-#### Regional Compliance
-- **Tax Calculations**: Local tax requirements
-- **Legal Compliance**: Regional regulations
-- **Payment Methods**: Local payment options
-- **Currency Support**: Multiple currencies
-- **Data Residency**: Compliant data storage
+### Third-Party Connections
+- **[Social Media Platforms](integrations/social-platforms.md)** - Connect your social accounts
+- **[Email Marketing Tools](integrations/email-tools.md)** - Sync with existing tools
+- **[Payment Processors](integrations/payment-processors.md)** - Accept payments seamlessly
+- **[Analytics Tools](integrations/analytics-tools.md)** - Connect Google Analytics, Facebook Pixel
 
-### Phase 4: AI & Advanced Analytics
+### API & Webhooks
+- **[API Access](integrations/api-access.md)** - Use our API for custom integrations
+- **[Webhook Setup](integrations/webhooks.md)** - Receive real-time notifications
+- **[Custom Integrations](integrations/custom-integrations.md)** - Build your own connections
 
-#### AI-Powered Features
-- **Content Generation**: AI-created content
-- **Smart Recommendations**: Personalized suggestions
-- **Predictive Analytics**: Future insights
-- **Automated Optimization**: Performance tuning
-- **Intelligent Automation**: Smart workflows
+---
 
-#### Advanced Analytics
-- **Business Intelligence**: Deep insights
-- **Predictive Modeling**: Forecast trends
-- **Custom Reports**: Tailored analytics
-- **Real-time Dashboards**: Live data
-- **Performance Metrics**: Comprehensive tracking
-
-#### Automation Workflows
-- **Trigger-Based Actions**: Automated responses
-- **Multi-Step Workflows**: Complex automation
-- **Conditional Logic**: Smart decision making
-- **Integration Automation**: Connect systems
-- **Performance Monitoring**: Track automation
-
-## Mobile Experience
-
-### Progressive Web App (PWA)
-- **Mobile-Optimized**: Responsive design
-- **Offline Capabilities**: Work without internet
-- **Push Notifications**: Stay informed
-- **App-Like Experience**: Native feel
-- **Touch Gestures**: Intuitive navigation
-
-### Mobile Features
-- **Biometric Authentication**: Face ID/Touch ID
-- **Camera Integration**: Photo/video capture
-- **GPS Features**: Location-based services
-- **Voice Commands**: Hands-free operation
-- **Mobile-Specific Workflows**: Optimized tasks
-
-## Settings & Customization
-
-### Account Settings
-- **Profile Management**: Update personal info
-- **Security Settings**: Password, 2FA
-- **Privacy Controls**: Data preferences
-- **Notification Settings**: Communication preferences
-- **Integration Management**: Connected services
-
-### Theme & Appearance
-- **Light/Dark Mode**: Visual preference
-- **Custom Colors**: Brand colors
-- **Font Selection**: Typography options
-- **Layout Options**: Dashboard arrangement
-- **Accessibility**: Support for disabilities
-
-### Workspace Settings
-- **Team Management**: Add/remove members
-- **Role Permissions**: Define access levels
-- **Billing Settings**: Subscription management
-- **Integration Settings**: Third-party connections
-- **Data Export**: Backup your data
-
-## Analytics & Reporting
-
-### Performance Metrics
-- **Traffic Analytics**: Website/bio site visits
-- **Engagement Metrics**: Social media performance
-- **Conversion Rates**: Sales and leads
-- **Revenue Tracking**: Financial performance
-- **User Behavior**: How visitors interact
-
-### Custom Reports
-- **Report Builder**: Create custom reports
-- **Scheduled Reports**: Automated delivery
-- **Data Visualization**: Charts and graphs
-- **Export Options**: PDF, CSV, Excel
-- **Historical Data**: Track trends over time
-
-### Real-Time Dashboard
-- **Live Metrics**: Current performance
-- **Alerts**: Important notifications
-- **Quick Insights**: Key performance indicators
-- **Trend Analysis**: Performance patterns
-- **Comparison Tools**: Period comparisons
-
-## Integrations
-
-### Popular Integrations
-- **Payment Processors**: Stripe, PayPal, Square
-- **Email Services**: Mailchimp, ConvertKit
-- **Social Platforms**: Facebook, Instagram, Twitter
-- **Analytics**: Google Analytics, Facebook Pixel
-- **CRM Systems**: Salesforce, HubSpot
-- **Cloud Storage**: Google Drive, Dropbox
-
-### API Access
-- **RESTful API**: Full platform access
-- **Webhooks**: Real-time notifications
-- **SDK Support**: Developer tools
-- **Custom Integrations**: Build your own
-- **Rate Limiting**: Fair usage policies
-
-## Support & Resources
-
-### Getting Help
-- **Help Center**: Comprehensive documentation
-- **Video Tutorials**: Step-by-step guides
-- **Community Forum**: User discussions
-- **Live Chat**: Real-time support
-- **Email Support**: Detailed assistance
-
-### Learning Resources
-- **Knowledge Base**: Detailed articles
-- **Best Practices**: Optimization tips
-- **Case Studies**: Success stories
-- **Webinars**: Live training sessions
-- **Blog**: Latest updates and insights
-
-### Account Types
-
-#### Free Plan
-- Basic features
-- Limited storage
-- Community support
-- Basic analytics
-- 1 workspace
-
-#### Professional Plan
-- Advanced features
-- Increased limits
-- Priority support
-- Advanced analytics
-- Multiple workspaces
-
-#### Enterprise Plan
-- All features
-- Unlimited usage
-- Dedicated support
-- Custom integrations
-- White-label options
-
-## Best Practices
+## 💡 Best Practices & Tips
 
 ### Content Strategy
-- **Consistent Branding**: Maintain visual identity
-- **Quality Content**: Focus on value
-- **Engagement**: Interact with audience
-- **SEO Optimization**: Improve discoverability
-- **Regular Updates**: Keep content fresh
+- **[Content Planning](best-practices/content-planning.md)** - Plan your content calendar
+- **[Engagement Strategies](best-practices/engagement.md)** - Increase audience engagement
+- **[Brand Consistency](best-practices/branding.md)** - Maintain consistent branding
+- **[Growth Hacking](best-practices/growth-hacking.md)** - Accelerate your growth
 
-### Security
-- **Strong Passwords**: Use unique passwords
-- **Two-Factor Authentication**: Enable 2FA
-- **Regular Updates**: Keep software current
-- **Data Backups**: Regular backups
-- **Access Control**: Limit permissions
+### Business Growth
+- **[Monetization Strategies](best-practices/monetization.md)** - Turn your audience into revenue
+- **[Customer Retention](best-practices/customer-retention.md)** - Keep customers coming back
+- **[Scale Your Operations](best-practices/scaling.md)** - Grow efficiently with Mewayz
+- **[Performance Optimization](best-practices/optimization.md)** - Optimize for better results
 
-### Performance
-- **Image Optimization**: Fast loading times
-- **Content Organization**: Easy navigation
-- **Regular Monitoring**: Track performance
-- **User Feedback**: Listen to users
-- **Continuous Improvement**: Iterate and optimize
+---
 
-## Troubleshooting
+## 🆘 Support & Resources
 
-### Common Issues
-- **Login Problems**: Password reset, account lockout
-- **Performance Issues**: Slow loading, timeouts
-- **Payment Issues**: Failed transactions, billing
-- **Integration Problems**: Connection issues
-- **Mobile Issues**: App functionality
+### Getting Help
+- **[FAQ](faq.md)** - Frequently asked questions and quick answers
+- **[Video Tutorials](tutorials/)** - Step-by-step video guides
+- **[Live Chat Support](support/live-chat.md)** - Real-time assistance
+- **[Email Support](support/email-support.md)** - Submit support tickets
 
-### Getting Support
-1. Check the Help Center
-2. Search the community forum
-3. Contact support team
-4. Schedule a consultation
-5. Report bugs or issues
+### Community Resources
+- **[User Community](community/user-forum.md)** - Connect with other users
+- **[Success Stories](community/success-stories.md)** - Learn from other users
+- **[Feature Requests](community/feature-requests.md)** - Request new features
+- **[Beta Testing](community/beta-testing.md)** - Test new features early
 
-## Updates & Releases
+### Learning Resources
+- **[Webinar Library](resources/webinars.md)** - Educational webinars and workshops
+- **[Blog & Articles](resources/blog.md)** - Latest tips and strategies
+- **[Templates & Downloads](resources/templates.md)** - Free templates and resources
+- **[Certification Program](resources/certification.md)** - Become a Mewayz expert
 
-### Stay Updated
-- **Release Notes**: New features and fixes
-- **Email Notifications**: Important updates
-- **In-App Notifications**: Feature announcements
-- **Blog Posts**: Detailed explanations
-- **Social Media**: Quick updates
+---
 
-### Feature Requests
-- **Feedback Forms**: Request new features
-- **Community Voting**: Popular requests
-- **Development Roadmap**: Planned features
-- **Beta Testing**: Early access programs
-- **User Research**: Participation opportunities
+## 📱 Mobile Experience
 
-This comprehensive user guide covers all aspects of the Mewayz Platform v2. For specific technical questions, refer to the developer documentation or contact support for assistance.
+### Mobile App
+- **[Download & Setup](mobile/app-setup.md)** - Get the mobile app
+- **[Mobile Features](mobile/features.md)** - Available features on mobile
+- **[Push Notifications](mobile/notifications.md)** - Stay updated on the go
+- **[Offline Mode](mobile/offline-mode.md)** - Work without internet
+
+### Progressive Web App (PWA)
+- **[PWA Installation](mobile/pwa-installation.md)** - Install as a native app
+- **[PWA Features](mobile/pwa-features.md)** - Native app-like experience
+- **[Offline Functionality](mobile/pwa-offline.md)** - Work offline with PWA
+
+---
+
+**Ready to get started?** Begin with our **[Quick Start Guide](quick-start.md)** or jump to any specific feature you're interested in.
+
+**Need immediate help?** Contact our support team at **support@mewayz.com** or use the live chat feature.

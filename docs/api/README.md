@@ -1,265 +1,476 @@
-# Mewayz Platform v2 - API Documentation
+# Mewayz Platform API Reference
 
-*Last Updated: July 17, 2025*
+*Version: 2.0 | Last Updated: July 19, 2025*
 
-## Overview
+## 🌟 Overview
 
-This document provides comprehensive API documentation for the Mewayz Platform v2. The platform exposes 200+ RESTful endpoints across 50+ controllers, organized into 4 phases of functionality.
+The Mewayz Platform API provides programmatic access to all platform features, enabling developers to build custom integrations, automate workflows, and extend functionality.
 
-## Base URL
+### API Characteristics
+- **RESTful Design**: Standard HTTP methods and status codes
+- **JSON Format**: All requests and responses use JSON
+- **Rate Limited**: Prevents abuse and ensures fair usage
+- **Versioned**: Maintains backward compatibility
+- **Secure**: OAuth 2.0 and API key authentication
 
-```
-Production: https://your-domain.com/api
-Development: http://localhost:8001/api
-```
+---
 
-## Authentication
+## 🚀 Quick Start
 
-The platform uses Laravel Sanctum with custom middleware for authentication:
-
+### 1. Authentication
 ```bash
-# Login to get token
-POST /api/auth/login
-Content-Type: application/json
-{
-  "email": "user@example.com",
-  "password": "password"
-}
+# Get access token
+curl -X POST https://api.mewayz.com/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "your@email.com",
+    "password": "your_password"
+  }'
 
 # Response
 {
   "success": true,
-  "token": "1|abc123...",
-  "user": { ... }
+  "data": {
+    "token": "1|eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "user": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "your@email.com"
+    }
+  }
 }
+```
 
+### 2. Making API Calls
+```bash
 # Use token in subsequent requests
-Authorization: Bearer 1|abc123...
+curl -X GET https://api.mewayz.com/workspaces \
+  -H "Authorization: Bearer {your_token}" \
+  -H "Accept: application/json"
 ```
 
-## API Endpoints by Phase
-
-### Phase 1: Enhanced User Experience
-
-#### Onboarding System
-- `GET /api/onboarding/progress` - Get user onboarding progress
-- `POST /api/onboarding/progress` - Update onboarding progress
-- `GET /api/onboarding/recommendations` - Get personalized template recommendations
-- `POST /api/onboarding/step/complete` - Complete onboarding step
-- `GET /api/onboarding/demo` - Get interactive demo data
-
-#### Theme Management
-- `GET /api/theme/` - Get current theme settings
-- `POST /api/theme/update` - Update theme preferences
-- `GET /api/theme/system` - Get intelligent system theme detection
-- `GET /api/theme/presets` - Get available theme presets
-
-#### Core Platform Features
-- `GET /api/websites/templates` - Get website templates
-- `GET /api/bio-sites/` - Get bio sites
-- `POST /api/bio-sites/` - Create bio site
-- `GET /api/workspaces` - Get user workspaces
-
-### Phase 2: Enterprise Features
-
-#### SSO Management
-- `GET /api/sso/providers` - Get SSO providers
-- `POST /api/sso/providers` - Create SSO provider
-- `PUT /api/sso/providers/{id}` - Update SSO provider
-- `DELETE /api/sso/providers/{id}` - Delete SSO provider
-
-#### Team Management
-- `GET /api/team/departments` - Get departments
-- `POST /api/team/departments` - Create department
-- `GET /api/team/members` - Get team members
-- `POST /api/team/members` - Add team member
-- `GET /api/team/roles` - Get team roles
-
-#### White Label Solutions
-- `GET /api/white-label/settings` - Get white label settings
-- `POST /api/white-label/settings` - Update white label settings
-- `GET /api/white-label/domains` - Get custom domains
-- `POST /api/white-label/domains` - Add custom domain
-
-#### Audit & Compliance
-- `GET /api/audit/logs` - Get audit logs
-- `POST /api/audit/logs` - Create audit log entry
-- `GET /api/compliance/reports` - Get compliance reports
-- `POST /api/compliance/reports` - Generate compliance report
-
-### Phase 3: International & Security
-
-#### Multi-Language Support
-- `GET /api/i18n/languages` - Get supported languages
-- `POST /api/i18n/languages` - Add language
-- `GET /api/i18n/translations` - Get translations
-- `POST /api/i18n/translations` - Update translations
-
-#### Regional Settings
-- `GET /api/regional/settings` - Get regional settings
-- `POST /api/regional/settings` - Update regional settings
-- `GET /api/regional/currencies` - Get supported currencies
-- `GET /api/regional/tax-rates` - Get tax rates
-
-#### Security Features
-- `GET /api/security/events` - Get security events
-- `POST /api/security/events` - Log security event
-- `GET /api/security/threats` - Get threat detection data
-- `GET /api/security/compliance` - Get compliance status
-
-### Phase 4: Advanced AI & Analytics
-
-#### AI Content Generation
-- `POST /api/ai/content/generate` - Generate AI content
-- `POST /api/ai/leads/score` - Score leads using AI
-- `GET /api/ai/models` - Get available AI models
-- `POST /api/ai/models` - Configure AI model
-
-#### Advanced Analytics
-- `GET /api/analytics/business-intelligence` - Get BI data
-- `GET /api/analytics/predictive` - Get predictive analytics
-- `GET /api/analytics/performance` - Get performance metrics
-- `GET /api/analytics/realtime` - Get real-time metrics
-
-#### Automation Workflows
-- `GET /api/automation/workflows` - Get automation workflows
-- `POST /api/automation/workflows` - Create workflow
-- `PUT /api/automation/workflows/{id}` - Update workflow
-- `DELETE /api/automation/workflows/{id}` - Delete workflow
-
-## Core System Endpoints
-
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/me` - Get current user
-- `PUT /api/auth/profile` - Update user profile
-
-### Biometric Authentication
-- `POST /api/biometric/registration-options` - Get biometric registration options
-- `POST /api/biometric/authentication-options` - Get biometric authentication options
-- `GET /api/biometric/credentials` - Get user biometric credentials
-
-### Real-Time Features
-- `GET /api/realtime/notifications` - Get notifications
-- `POST /api/realtime/notifications` - Send notification
-- `GET /api/realtime/activity-feed` - Get activity feed
-- `GET /api/realtime/system-status` - Get system status
-
-### Booking System
-- `GET /api/booking/services` - Get booking services
-- `POST /api/booking/services` - Create booking service
-- `GET /api/booking/appointments` - Get appointments
-- `POST /api/booking/appointments` - Book appointment
-
-### Financial Management
-- `GET /api/financial/dashboard` - Get financial dashboard
-- `GET /api/financial/invoices` - Get invoices
-- `POST /api/financial/invoices` - Create invoice
-- `GET /api/financial/reports` - Get financial reports
-
-### Escrow System
-- `GET /api/escrow/` - Get escrow transactions
-- `POST /api/escrow/` - Create escrow transaction
-- `GET /api/escrow/statistics/overview` - Get escrow statistics
-- `PUT /api/escrow/{id}/status` - Update escrow status
-
-## Request/Response Format
-
-### Standard Request Format
-```json
-{
-  "Content-Type": "application/json",
-  "Accept": "application/json",
-  "Authorization": "Bearer {token}"
-}
-```
-
-### Standard Response Format
+### 3. Response Format
+All API responses follow this consistent format:
 ```json
 {
   "success": true,
-  "data": { ... },
+  "data": {
+    // Response data here
+  },
   "message": "Operation completed successfully",
-  "timestamp": "2025-07-17T22:00:00Z"
+  "meta": {
+    "timestamp": "2025-07-19T10:30:00Z",
+    "version": "2.0.0",
+    "rate_limit": {
+      "remaining": 999,
+      "reset_at": "2025-07-19T11:00:00Z"
+    }
+  }
 }
 ```
+
+---
+
+## 🔐 Authentication
+
+### Methods Available
+1. **API Token** (Recommended for integrations)
+2. **OAuth 2.0** (For third-party applications)
+3. **Session-based** (For web applications)
+
+### API Token Authentication
+```bash
+# Include in header
+Authorization: Bearer {your_api_token}
+
+# Or as query parameter
+?api_token={your_api_token}
+```
+
+### OAuth 2.0 Flow
+```bash
+# 1. Authorization URL
+GET /oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope=read+write
+
+# 2. Exchange code for token
+POST /oauth/token
+{
+  "grant_type": "authorization_code",
+  "client_id": "{client_id}",
+  "client_secret": "{client_secret}",
+  "code": "{authorization_code}",
+  "redirect_uri": "{redirect_uri}"
+}
+```
+
+---
+
+## 📋 Core Endpoints
+
+### System Health
+```bash
+GET /api/health
+# Check system status and availability
+```
+
+### Authentication
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/login` | POST | User authentication |
+| `/api/auth/register` | POST | User registration |
+| `/api/auth/logout` | POST | Logout current session |
+| `/api/auth/me` | GET | Get current user info |
+| `/api/auth/refresh` | POST | Refresh authentication token |
+
+### Workspace Management
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/workspaces` | GET | List all workspaces |
+| `/api/workspaces` | POST | Create new workspace |
+| `/api/workspaces/{id}` | GET | Get specific workspace |
+| `/api/workspaces/{id}` | PUT | Update workspace |
+| `/api/workspaces/{id}` | DELETE | Delete workspace |
+
+### Social Media Management
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/social-media/accounts` | GET | List connected accounts |
+| `/api/social-media/accounts` | POST | Connect new account |
+| `/api/social-media/posts` | GET | List scheduled posts |
+| `/api/social-media/posts` | POST | Create/schedule new post |
+| `/api/social-media/analytics` | GET | Get social media analytics |
+
+### Link in Bio
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/bio-sites` | GET | List bio sites |
+| `/api/bio-sites` | POST | Create new bio site |
+| `/api/bio-sites/{slug}` | GET | Get bio site by slug |
+| `/api/bio-sites/{id}/analytics` | GET | Get bio site analytics |
+
+### E-commerce
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/ecommerce/products` | GET | List products |
+| `/api/ecommerce/products` | POST | Create product |
+| `/api/ecommerce/orders` | GET | List orders |
+| `/api/ecommerce/orders/{id}` | GET | Get order details |
+
+### Course Management
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/courses` | GET | List courses |
+| `/api/courses` | POST | Create course |
+| `/api/courses/{id}/lessons` | GET | Get course lessons |
+| `/api/courses/{id}/students` | GET | Get enrolled students |
+
+### CRM & Email Marketing
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/crm/contacts` | GET | List contacts |
+| `/api/crm/contacts` | POST | Create contact |
+| `/api/email-marketing/campaigns` | GET | List campaigns |
+| `/api/email-marketing/campaigns` | POST | Create campaign |
+
+### Analytics
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/analytics/overview` | GET | Platform overview stats |
+| `/api/analytics/social-media` | GET | Social media analytics |
+| `/api/analytics/ecommerce` | GET | E-commerce analytics |
+| `/api/analytics/reports` | GET | Custom reports |
+
+---
+
+## 📊 Request & Response Examples
+
+### Create Workspace
+**Request:**
+```bash
+POST /api/workspaces
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "name": "My Business",
+  "description": "My awesome business workspace",
+  "goals": ["instagram", "ecommerce", "courses"]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 123,
+    "name": "My Business",
+    "description": "My awesome business workspace",
+    "slug": "my-business",
+    "goals": ["instagram", "ecommerce", "courses"],
+    "created_at": "2025-07-19T10:30:00Z",
+    "updated_at": "2025-07-19T10:30:00Z"
+  },
+  "message": "Workspace created successfully"
+}
+```
+
+### Schedule Social Media Post
+**Request:**
+```bash
+POST /api/social-media/posts
+Content-Type: application/json
+Authorization: Bearer {token}
+
+{
+  "accounts": ["instagram_123", "facebook_456"],
+  "content": "Check out our latest product! 🚀",
+  "media": ["https://example.com/image.jpg"],
+  "scheduled_for": "2025-07-20T14:00:00Z",
+  "hashtags": ["#product", "#launch", "#awesome"]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 789,
+    "content": "Check out our latest product! 🚀",
+    "accounts": [
+      {
+        "id": "instagram_123",
+        "platform": "instagram",
+        "username": "@mybusiness"
+      },
+      {
+        "id": "facebook_456",
+        "platform": "facebook",
+        "name": "My Business Page"
+      }
+    ],
+    "scheduled_for": "2025-07-20T14:00:00Z",
+    "status": "scheduled",
+    "created_at": "2025-07-19T10:30:00Z"
+  },
+  "message": "Post scheduled successfully"
+}
+```
+
+---
+
+## ⚠️ Error Handling
+
+### HTTP Status Codes
+| Code | Meaning | Description |
+|------|---------|-------------|
+| 200 | OK | Request successful |
+| 201 | Created | Resource created successfully |
+| 400 | Bad Request | Invalid request data |
+| 401 | Unauthorized | Authentication required |
+| 403 | Forbidden | Insufficient permissions |
+| 404 | Not Found | Resource not found |
+| 422 | Validation Error | Invalid input data |
+| 429 | Rate Limited | Too many requests |
+| 500 | Server Error | Internal server error |
 
 ### Error Response Format
 ```json
 {
   "success": false,
-  "message": "Error description",
+  "message": "Validation failed",
   "errors": {
-    "field": ["validation error message"]
+    "email": ["The email field is required."],
+    "password": ["The password must be at least 8 characters."]
   },
-  "code": 400
+  "meta": {
+    "timestamp": "2025-07-19T10:30:00Z",
+    "version": "2.0.0"
+  }
 }
 ```
 
-## HTTP Status Codes
+---
 
-- `200 OK` - Request successful
-- `201 Created` - Resource created successfully
-- `400 Bad Request` - Invalid request data
-- `401 Unauthorized` - Authentication required
-- `403 Forbidden` - Insufficient permissions
-- `404 Not Found` - Resource not found
-- `422 Unprocessable Entity` - Validation errors
-- `500 Internal Server Error` - Server error
+## 🔒 Rate Limiting
 
-## Rate Limiting
+### Limits by Plan
+| Plan | Requests/Hour | Burst Limit |
+|------|---------------|-------------|
+| Free | 100 | 10/minute |
+| Professional | 1,000 | 50/minute |
+| Enterprise | 10,000 | 200/minute |
 
-- **Authenticated users**: 1000 requests per hour
-- **Guest users**: 100 requests per hour
-- **API key users**: 5000 requests per hour
-
-## Pagination
-
-List endpoints support pagination:
-
-```bash
-GET /api/endpoint?page=1&per_page=20
-
-# Response
-{
-  "data": [...],
-  "current_page": 1,
-  "per_page": 20,
-  "total": 100,
-  "last_page": 5,
-  "next_page_url": "...",
-  "prev_page_url": null
-}
+### Rate Limit Headers
+```http
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1642678800
 ```
 
-## Testing
-
-### Backend Testing Results
-- **Total Endpoints Tested**: 23 critical endpoints
-- **Success Rate**: 100% (23/23 passed)
-- **Response Time**: 0.02-0.04 seconds average
-- **Authentication**: Custom Sanctum middleware working
-
-### Example Test Commands
+### Handling Rate Limits
 ```bash
-# Health check
-curl -X GET http://localhost:8001/api/health
-
-# Login
-curl -X POST http://localhost:8001/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"password"}'
-
-# Get user profile
-curl -X GET http://localhost:8001/api/auth/me \
+# Check remaining requests
+curl -I https://api.mewayz.com/workspaces \
   -H "Authorization: Bearer {token}"
+
+# Implement exponential backoff
+if [ "$response_code" -eq 429 ]; then
+  sleep_time=$((2 ** retry_count))
+  sleep $sleep_time
+fi
 ```
 
-## Support
+---
 
-For API support and questions:
-- Check the [Troubleshooting Guide](../troubleshooting/README.md)
-- Review the [Developer Guide](../developer/README.md)
-- Consult the main [Documentation](../README.md)
+## 📝 Pagination
+
+### Standard Pagination
+```bash
+GET /api/workspaces?page=2&per_page=25
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": [...],
+  "meta": {
+    "current_page": 2,
+    "last_page": 5,
+    "per_page": 25,
+    "total": 123
+  },
+  "links": {
+    "first": "https://api.mewayz.com/workspaces?page=1",
+    "last": "https://api.mewayz.com/workspaces?page=5",
+    "prev": "https://api.mewayz.com/workspaces?page=1",
+    "next": "https://api.mewayz.com/workspaces?page=3"
+  }
+}
+```
+
+---
+
+## 🔍 Filtering & Searching
+
+### Query Parameters
+```bash
+# Filter by status
+GET /api/social-media/posts?status=scheduled
+
+# Search by keyword
+GET /api/crm/contacts?search=john
+
+# Sort results
+GET /api/ecommerce/products?sort=price&order=asc
+
+# Date range filtering
+GET /api/analytics/overview?from=2025-01-01&to=2025-01-31
+
+# Multiple filters
+GET /api/crm/contacts?status=active&tag=customer&sort=created_at&order=desc
+```
+
+---
+
+## 🎯 Webhooks
+
+### Available Events
+- `workspace.created`
+- `social_media.post.published`
+- `ecommerce.order.created`
+- `course.enrollment.completed`
+- `payment.received`
+
+### Webhook Configuration
+```bash
+POST /api/webhooks
+{
+  "url": "https://yoursite.com/webhook/mewayz",
+  "events": ["ecommerce.order.created", "payment.received"],
+  "secret": "your_webhook_secret"
+}
+```
+
+### Webhook Payload Example
+```json
+{
+  "event": "ecommerce.order.created",
+  "data": {
+    "id": 456,
+    "total": 99.99,
+    "customer_email": "customer@example.com",
+    "created_at": "2025-07-19T10:30:00Z"
+  },
+  "timestamp": "2025-07-19T10:30:00Z"
+}
+```
+
+---
+
+## 🛠️ SDKs & Libraries
+
+### Official SDKs
+- **PHP**: `composer require mewayz/php-sdk`
+- **JavaScript**: `npm install @mewayz/js-sdk`
+- **Python**: `pip install mewayz-sdk`
+
+### PHP SDK Example
+```php
+use Mewayz\SDK\Client;
+
+$client = new Client('your_api_token');
+
+// Create workspace
+$workspace = $client->workspaces()->create([
+    'name' => 'My Business',
+    'goals' => ['instagram', 'ecommerce']
+]);
+
+// Schedule social post
+$post = $client->socialMedia()->schedulePost([
+    'content' => 'Hello world!',
+    'accounts' => ['instagram_123'],
+    'scheduled_for' => '2025-07-20T14:00:00Z'
+]);
+```
+
+### JavaScript SDK Example
+```javascript
+import MewayzSDK from '@mewayz/js-sdk';
+
+const client = new MewayzSDK('your_api_token');
+
+// Get workspaces
+const workspaces = await client.workspaces.list();
+
+// Create product
+const product = await client.ecommerce.products.create({
+  name: 'Awesome Product',
+  price: 29.99,
+  description: 'This is an awesome product'
+});
+```
+
+---
+
+## 📞 Support
+
+### Getting Help
+- **Documentation**: [https://docs.mewayz.com](https://docs.mewayz.com)
+- **API Status**: [https://status.mewayz.com](https://status.mewayz.com)
+- **Support Email**: api-support@mewayz.com
+- **Developer Community**: [Discord Server](https://discord.gg/mewayz)
+
+### API Support Levels
+| Plan | Support Level | Response Time |
+|------|---------------|---------------|
+| Free | Community | Best effort |
+| Professional | Email | 24-48 hours |
+| Enterprise | Priority + Phone | 4-8 hours |
+
+---
+
+**Ready to build something amazing?** Start with our **[Quick Start Guide](quick-start.md)** or explore the **[Code Examples](examples/)**.
