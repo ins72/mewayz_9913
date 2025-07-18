@@ -556,4 +556,7 @@ if __name__ == "__main__":
     results = tester.run_all_tests()
     
     # Exit with appropriate code
-    sys.exit(0 if results['failed_tests'] == 0 else 1)
+    if results:
+        sys.exit(0 if results['failed_tests'] == 0 else 1)
+    else:
+        sys.exit(1)
