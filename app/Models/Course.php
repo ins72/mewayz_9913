@@ -44,6 +44,30 @@ class Course extends BaseCourse
 		return $this->hasMany(CoursesLesson::class, 'course_id', 'id');
 	}
 
+	public function enrollments(){
+		return $this->hasMany(CourseEnrollment::class, 'course_id', 'id');
+	}
+
+	public function students(){
+		return $this->belongsToMany(User::class, 'course_enrollments', 'course_id', 'user_id');
+	}
+
+	public function reviews(){
+		return $this->hasMany(CourseReview::class, 'course_id', 'id');
+	}
+
+	public function quizzes(){
+		return $this->hasMany(Quiz::class, 'course_id', 'id');
+	}
+
+	public function certificates(){
+		return $this->hasMany(CourseCertificate::class, 'course_id', 'id');
+	}
+
+	public function communityGroups(){
+		return $this->hasMany(CommunityGroup::class, 'course_id', 'id');
+	}
+
     public function has_enroll($payee){
         // // Check IF its in membership
         // $levels = ao($course->settings, 'membership.levels');
