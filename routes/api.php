@@ -847,7 +847,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Enhanced Affiliate System Routes
-Route::middleware(['custom.auth'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('affiliate')->group(function () {
         Route::get('/dashboard', [AffiliateController::class, 'getDashboard']);
         Route::post('/generate-link', [AffiliateController::class, 'generateAffiliateLink']);
