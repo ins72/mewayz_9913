@@ -14,8 +14,8 @@ class GamificationTester:
     def __init__(self, base_url="http://localhost:8001"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        # Use a valid test token from the test_result.md
-        self.auth_token = "3|2tizxvYX1aqPpjgTN6rGz0QY2FMeWtHpnMts7GCY137499ef"
+        # Use a valid test token
+        self.auth_token = "2|m04sXBvdqfGQOBK3e61dQznndhe9aitchCJTWXUn0debc46c"
         self.test_results = {}
         self.session = requests.Session()
         
