@@ -91,7 +91,7 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard-qr-index');
 });
 
-// Authentication Routes
-Auth::routes();
+// Authentication Routes - handled by auth.php
+// Auth::routes(); // Commented out - using modern auth routes in auth.php
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
