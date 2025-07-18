@@ -179,6 +179,16 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
     Route::put('/workspaces/{id}', [WorkspaceController::class, 'update']);
     Route::delete('/workspaces/{id}', [WorkspaceController::class, 'destroy']);
     
+    // Gamification routes
+    Route::prefix('gamification')->group(function () {
+        Route::get('/profile', [GamificationController::class, 'getProfile']);
+        Route::get('/achievements', [GamificationController::class, 'getAchievements']);
+        Route::post('/award-xp', [GamificationController::class, 'awardXp']);
+        Route::post('/update-streak', [GamificationController::class, 'updateStreak']);
+        Route::get('/leaderboard', [GamificationController::class, 'getLeaderboard']);
+        Route::get('/statistics', [GamificationController::class, 'getStatistics']);
+    });
+    
     // Instagram Management routes
     Route::prefix('instagram-management')->group(function () {
         Route::get('/accounts', [InstagramManagementController::class, 'getAccounts']);
