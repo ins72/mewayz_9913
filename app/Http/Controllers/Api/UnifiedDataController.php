@@ -593,23 +593,83 @@ class UnifiedDataController extends Controller
 
     private function getCourseTouchpoints($customer, $timeRange)
     {
-        // Mock course touchpoints
-        return [
-            [
-                'platform' => 'courses',
-                'type' => 'course_enrollment',
-                'timestamp' => now()->subDays(7)->toISOString(),
-                'data' => ['course' => 'Digital Marketing Mastery', 'payment' => 99.99],
-                'engagement_score' => 9.5
-            ],
-            [
-                'platform' => 'courses',
-                'type' => 'lesson_completion',
-                'timestamp' => now()->subDays(1)->toISOString(),
-                'data' => ['course' => 'Digital Marketing Mastery', 'lesson' => 'Social Media Strategy'],
-                'engagement_score' => 8.8
-            ]
-        ];
+        try {
+            $touchpoints = [];
+            
+            // Get course enrollments
+            $enrollments = \App\Models\CourseEnrollment::where('user_id', $customer->user_id)
+                ->whereBetween('created_at', $timeRange)
+                ->with('course')
+                ->get();
+                
+            foreach ($enrollments as $enrollment) {
+                $touchpoints[] = [
+                    'platform' => 'courses',
+                    'type' => 'course_enrollment',
+                    'timestamp' => $enrollment->created_at->toISOString(),
+                    'data' => [
+                        'course_id' => $enrollment->course->id,
+                        'course_name' => $enrollment->course->name,
+                        'price' => $enrollment->course->price,
+                        'payment_amount' => $enrollment->payment_amount ?? $enrollment->course->price,
+                        'payment_method' => $enrollment->payment_method ?? 'credit_card'
+                    ],
+                    'engagement_score' => 9.5
+                ];
+            }
+            
+            // Get lesson completions
+            $lessonCompletions = \App\Models\LessonCompletion::where('user_id', $customer->user_id)
+                ->whereBetween('created_at', $timeRange)
+                ->with(['lesson.course'])
+                ->get();
+                
+            foreach ($lessonCompletions as $completion) {
+                $touchpoints[] = [
+                    'platform' => 'courses',
+                    'type' => 'lesson_completion',
+                    'timestamp' => $completion->created_at->toISOString(),
+                    'data' => [
+                        'course_id' => $completion->lesson->course->id,
+                        'course_name' => $completion->lesson->course->name,
+                        'lesson_id' => $completion->lesson->id,
+                        'lesson_name' => $completion->lesson->title,
+                        'completion_percentage' => $completion->completion_percentage ?? 100,
+                        'time_spent' => $completion->time_spent ?? 0
+                    ],
+                    'engagement_score' => 8.0 + ($completion->completion_percentage ?? 100) / 100
+                ];
+            }
+            
+            // Get quiz completions
+            $quizCompletions = \App\Models\QuizCompletion::where('user_id', $customer->user_id)
+                ->whereBetween('created_at', $timeRange)
+                ->with(['quiz.lesson.course'])
+                ->get();
+                
+            foreach ($quizCompletions as $quiz) {
+                $touchpoints[] = [
+                    'platform' => 'courses',
+                    'type' => 'quiz_completion',
+                    'timestamp' => $quiz->created_at->toISOString(),
+                    'data' => [
+                        'course_id' => $quiz->quiz->lesson->course->id,
+                        'course_name' => $quiz->quiz->lesson->course->name,
+                        'quiz_id' => $quiz->quiz->id,
+                        'score' => $quiz->score ?? 0,
+                        'max_score' => $quiz->quiz->max_score ?? 100,
+                        'passed' => $quiz->passed ?? false
+                    ],
+                    'engagement_score' => 7.0 + ($quiz->score ?? 0) / 10
+                ];
+            }
+            
+            return $touchpoints;
+            
+        } catch (\Exception $e) {
+            Log::error('Error fetching course touchpoints: ' . $e->getMessage());
+            return [];
+        }
     }
 
     private function getEcommerceTouchpoints($customer, $timeRange)
