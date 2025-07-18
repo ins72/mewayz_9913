@@ -3271,8 +3271,8 @@ if __name__ == "__main__":
     # Initialize tester with production URL
     tester = MewayzAPITester()
     
-    # Run comprehensive production readiness test
-    tester.run_comprehensive_production_test()
+    # Run comprehensive final backend test
+    tester.test_comprehensive_final_backend()
     
     # Exit with appropriate code
     failed_count = sum(1 for result in tester.test_results.values() if not result['success'])
