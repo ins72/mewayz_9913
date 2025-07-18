@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('social_media_accounts', function (Blueprint $table) {
-            //
+            $table->timestamp('connected_at')->nullable();
+            $table->timestamp('last_sync_at')->nullable();
         });
     }
 
