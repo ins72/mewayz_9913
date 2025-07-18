@@ -290,12 +290,15 @@ return new class extends Migration
 
             if (!Schema::hasColumn('sites', 'ai_generate_prompt')) {
                 $table->longText('ai_generate_prompt')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'workspace_permission')) {
                 $table->string('workspace_permission')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'ai_completed')) {
                 $table->integer('ai_completed')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'published')) {
                 $table->integer('published')->after('settings')->default(0);
