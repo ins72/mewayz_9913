@@ -23,7 +23,7 @@ class LegalController extends Controller
             ->latest()
             ->first();
 
-        return view('legal.terms-of-service', compact('document'));
+        return view('pages.legal.terms-of-service', compact('document'));
     }
 
     /**
