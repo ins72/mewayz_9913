@@ -320,12 +320,15 @@ return new class extends Migration
 
             if (!Schema::hasColumn('sites', 'current_edit_page')) {
                 $table->string('current_edit_page')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'header')) {
                 $table->longText('header')->after('settings')->nullable();
+            }
 
             if (!Schema::hasColumn('sites', 'footer')) {
                 $table->longText('footer')->after('settings')->nullable();
+            }
 
         });
 
