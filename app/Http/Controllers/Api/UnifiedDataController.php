@@ -454,8 +454,8 @@ class UnifiedDataController extends Controller
                     $touchpoints[] = [
                         'platform' => 'instagram',
                         'type' => 'profile_visit',
-                        'timestamp' => $visit->created_at->toISOString(),
-                        'data' => json_decode($visit->event_data, true) ?? [],
+                        'timestamp' => $visit->timestamp->toISOString(),
+                        'data' => $visit->properties ?? [],
                         'engagement_score' => 3.0
                     ];
                 }
