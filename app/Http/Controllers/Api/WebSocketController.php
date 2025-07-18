@@ -98,21 +98,27 @@ class WebSocketController extends Controller
     public function getWorkspaceUsers($workspaceId)
     {
         $users = [];
-        $pattern = "workspace.{$workspaceId}.users.*";
         
-        // Get all cache keys for this workspace
-        $cacheKeys = Cache::getMemory()->getKeys();
-        
-        foreach ($cacheKeys as $key) {
-            if (str_contains($key, "workspace.{$workspaceId}.users.")) {
-                $userData = Cache::get($key);
+        try {
+            // Use Redis to get workspace users
+            $redis = \Illuminate\Support\Facades\Redis::connection();
+            $pattern = "workspace.{$workspaceId}.users.*";
+            
+            // Get all keys matching the pattern
+            $keys = $redis->keys($pattern);
+            
+            foreach ($keys as $key) {
+                $userData = $redis->get($key);
                 if ($userData) {
-                    $users[] = $userData;
+                    $users[] = json_decode($userData, true);
                 }
             }
+            
+            return $users;
+        } catch (\Exception $e) {
+            \Log::error('Error getting workspace users: ' . $e->getMessage());
+            return [];
         }
-
-        return $users;
     }
 
     /**
