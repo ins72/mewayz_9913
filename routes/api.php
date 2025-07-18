@@ -858,7 +858,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Real-time Subscription Management Routes
-Route::middleware(['custom.auth'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('subscriptions')->group(function () {
         Route::get('/plans', [RealTimeSubscriptionController::class, 'getPlans']);
         Route::get('/current', [RealTimeSubscriptionController::class, 'getCurrentSubscription']);
