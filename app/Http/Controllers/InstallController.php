@@ -100,67 +100,99 @@ class InstallController extends Controller
                 'name' => 'PHP Version >= 8.1',
                 'required' => true,
                 'status' => version_compare(PHP_VERSION, '8.1.0', '>='),
-                'current' => PHP_VERSION
+                'current' => PHP_VERSION,
+                'fix_command' => 'Please upgrade PHP to version 8.1 or higher'
             ],
             'openssl' => [
                 'name' => 'OpenSSL Extension',
                 'required' => true,
                 'status' => extension_loaded('openssl'),
-                'current' => extension_loaded('openssl') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('openssl') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-openssl'
             ],
             'pdo' => [
                 'name' => 'PDO Extension',
                 'required' => true,
                 'status' => extension_loaded('pdo'),
-                'current' => extension_loaded('pdo') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('pdo') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-pdo'
             ],
             'mbstring' => [
                 'name' => 'Mbstring Extension',
                 'required' => true,
                 'status' => extension_loaded('mbstring'),
-                'current' => extension_loaded('mbstring') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('mbstring') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-mbstring'
             ],
             'tokenizer' => [
                 'name' => 'Tokenizer Extension',
                 'required' => true,
                 'status' => extension_loaded('tokenizer'),
-                'current' => extension_loaded('tokenizer') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('tokenizer') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-tokenizer'
             ],
             'xml' => [
                 'name' => 'XML Extension',
                 'required' => true,
                 'status' => extension_loaded('xml'),
-                'current' => extension_loaded('xml') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('xml') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-xml'
             ],
             'ctype' => [
                 'name' => 'Ctype Extension',
                 'required' => true,
                 'status' => extension_loaded('ctype'),
-                'current' => extension_loaded('ctype') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('ctype') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-ctype'
             ],
             'json' => [
                 'name' => 'JSON Extension',
                 'required' => true,
                 'status' => extension_loaded('json'),
-                'current' => extension_loaded('json') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('json') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-json'
             ],
             'curl' => [
                 'name' => 'cURL Extension',
                 'required' => true,
                 'status' => extension_loaded('curl'),
-                'current' => extension_loaded('curl') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('curl') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-curl'
+            ],
+            'redis' => [
+                'name' => 'Redis Extension',
+                'required' => true,
+                'status' => extension_loaded('redis'),
+                'current' => extension_loaded('redis') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-redis'
             ],
             'gd' => [
                 'name' => 'GD Extension',
-                'required' => false,
+                'required' => true,
                 'status' => extension_loaded('gd'),
-                'current' => extension_loaded('gd') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('gd') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-gd'
             ],
             'zip' => [
                 'name' => 'ZIP Extension',
-                'required' => false,
+                'required' => true,
                 'status' => extension_loaded('zip'),
-                'current' => extension_loaded('zip') ? 'Enabled' : 'Not Available'
+                'current' => extension_loaded('zip') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-zip'
+            ],
+            'bcmath' => [
+                'name' => 'BCMath Extension',
+                'required' => true,
+                'status' => extension_loaded('bcmath'),
+                'current' => extension_loaded('bcmath') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-bcmath'
+            ],
+            'intl' => [
+                'name' => 'Intl Extension',
+                'required' => true,
+                'status' => extension_loaded('intl'),
+                'current' => extension_loaded('intl') ? 'Enabled' : 'Not Available',
+                'fix_command' => 'sudo apt-get install php-intl'
             ]
         ];
 
