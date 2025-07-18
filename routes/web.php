@@ -23,6 +23,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+// Demo dashboard without authentication
+Route::get('/demo', function () {
+    return view('demo-dashboard');
+})->name('demo');
+
 // Include legal routes
 require __DIR__.'/legal.php';
 
