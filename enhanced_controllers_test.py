@@ -15,7 +15,7 @@ class EnhancedControllersTest:
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         # Use a valid test token from the test_result.md
-        self.auth_token = "3|2tizxvYX1aqPpjgTN6rGz0QY2FMeWtHpnMts7GCY137499ef"
+        self.auth_token = "1|dm9rN38ifdjS9n1IPVbr5bCUoD8tlYRsVna9PyXJ8629276c"
         self.test_results = {}
         self.session = requests.Session()
         
