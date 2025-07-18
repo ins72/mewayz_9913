@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('instagram_posts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('workspace_id');
+            $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('caption');
