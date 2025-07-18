@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SocialMediaAccount extends Model
 {
@@ -15,58 +13,45 @@ class SocialMediaAccount extends Model
         'user_id',
         'platform',
         'username',
-        'display_name',
+        'account_id',
         'access_token',
-        'access_token_secret',
-        'avatar_url',
+        'refresh_token',
+        'expires_at',
+        'is_active',
         'followers_count',
         'following_count',
-        'is_active',
-        'connected_at',
-        'metadata',
+        'posts_count',
+        'is_verified',
+        'account_type',
+        'last_sync_at'
     ];
 
     protected $casts = [
+        'expires_at' => 'datetime',
+        'is_active' => 'boolean',
         'followers_count' => 'integer',
         'following_count' => 'integer',
-        'is_active' => 'boolean',
-        'connected_at' => 'datetime',
-        'metadata' => 'array',
+        'posts_count' => 'integer',
+        'is_verified' => 'boolean',
+        'last_sync_at' => 'datetime'
     ];
 
-    protected $hidden = [
-        'access_token',
-        'access_token_secret',
-    ];
-
-    /**
-     * Get the user that owns the social media account
-     */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the posts associated with this account
-     */
-    public function posts(): BelongsToMany
+    public function posts()
     {
-        return $this->belongsToMany(SocialMediaPost::class, 'social_media_post_accounts');
+        return $this->hasMany(InstagramPost::class, 'account_id');
     }
 
-    /**
-     * Scope for active accounts
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    /**
-     * Scope for specific platform
-     */
-    public function scopePlatform($query, $platform)
+    public function scopeByPlatform($query, $platform)
     {
         return $query->where('platform', $platform);
     }
