@@ -6,7 +6,7 @@
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-primary-text">Welcome back, {{ auth()->user()->name }}!</h1>
+                <h1 class="text-3xl font-bold text-primary-text">Welcome back, {{ auth()->check() ? auth()->user()->name : 'Guest' }}!</h1>
                 <p class="text-secondary-text mt-2">Here's what's happening with your business today</p>
             </div>
             <div class="flex items-center space-x-4">
