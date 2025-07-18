@@ -73,17 +73,17 @@ class EnhancedControllersTest:
         """Test UnifiedDataController - all new unified analytics endpoints"""
         print("\n=== Testing UnifiedDataController (Phase 1 Fixes) ===")
         
-        # Test 1: POST /api/unified-data/customer-journey
+        # Test 1: GET /api/unified/customer-journey/{customerId}
         print("\n--- Testing Customer Journey Endpoint ---")
-        customer_journey_data = {
-            "customer_id": "test-customer-123",
+        customer_id = "test-customer-123"
+        customer_journey_params = {
             "time_range": "30d",
             "include_touchpoints": True,
             "include_predictions": True,
             "include_recommendations": True
         }
         
-        response = self.make_request('POST', '/unified-data/customer-journey', customer_journey_data)
+        response = self.make_request('GET', f'/unified/customer-journey/{customer_id}', customer_journey_params)
         if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
@@ -107,9 +107,9 @@ class EnhancedControllersTest:
             self.log_test("UnifiedData - Customer Journey", False, 
                         f"Endpoint failed - Status: {response.status_code if response else 'No response'}")
 
-        # Test 2: POST /api/unified-data/cross-platform-analytics
+        # Test 2: GET /api/unified/analytics
         print("\n--- Testing Cross-Platform Analytics Endpoint ---")
-        cross_platform_data = {
+        cross_platform_params = {
             "time_range": "30d",
             "platforms": ["instagram", "bio_sites", "email", "courses"],
             "metrics": ["engagement", "conversion", "revenue"],
@@ -117,7 +117,7 @@ class EnhancedControllersTest:
             "include_anomaly_detection": True
         }
         
-        response = self.make_request('POST', '/unified-data/cross-platform-analytics', cross_platform_data)
+        response = self.make_request('GET', '/unified/analytics', cross_platform_params)
         if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
@@ -141,9 +141,9 @@ class EnhancedControllersTest:
             self.log_test("UnifiedData - Cross-Platform Analytics", False, 
                         f"Endpoint failed - Status: {response.status_code if response else 'No response'}")
 
-        # Test 3: POST /api/unified-data/automation-recommendations
+        # Test 3: GET /api/unified/automation-recommendations
         print("\n--- Testing Automation Recommendations Endpoint ---")
-        automation_data = {
+        automation_params = {
             "automation_type": "marketing",
             "complexity_level": "intermediate",
             "business_goals": ["lead_generation", "customer_retention"],
@@ -152,7 +152,7 @@ class EnhancedControllersTest:
             "time_investment": "moderate"
         }
         
-        response = self.make_request('POST', '/unified-data/automation-recommendations', automation_data)
+        response = self.make_request('GET', '/unified/automation-recommendations', automation_params)
         if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
@@ -176,7 +176,7 @@ class EnhancedControllersTest:
             self.log_test("UnifiedData - Automation Recommendations", False, 
                         f"Endpoint failed - Status: {response.status_code if response else 'No response'}")
 
-        # Test 4: POST /api/unified-data/cross-platform-campaign
+        # Test 4: POST /api/unified/campaigns
         print("\n--- Testing Cross-Platform Campaign Endpoint ---")
         campaign_data = {
             "campaign_name": "Test Product Launch Campaign",
@@ -201,7 +201,7 @@ class EnhancedControllersTest:
             "success_metrics": ["click_through_rate", "conversion_rate", "engagement_rate"]
         }
         
-        response = self.make_request('POST', '/unified-data/cross-platform-campaign', campaign_data)
+        response = self.make_request('POST', '/unified/campaigns', campaign_data)
         if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
