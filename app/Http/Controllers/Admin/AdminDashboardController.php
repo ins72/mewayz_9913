@@ -40,11 +40,8 @@ class AdminDashboardController extends Controller
             ];
 
             // Recent Activity
-            $recentActivity = AdminActivityLog::with('adminUser')
-                                             ->orderBy('created_at', 'desc')
-                                             ->limit(10)
-                                             ->get();
-
+            $recentActivity = $this->safeGetRecentActivity();
+            
             // User Growth Chart Data
             $userGrowthData = $this->getUserGrowthData();
             
@@ -58,11 +55,7 @@ class AdminDashboardController extends Controller
             $systemHealth = $this->getSystemHealth();
 
             // Top Performing Plans
-            $topPlans = SubscriptionPlan::withCount('assignments')
-                                       ->where('status', 'active')
-                                       ->orderBy('assignments_count', 'desc')
-                                       ->limit(5)
-                                       ->get();
+            $topPlans = $this->safeGetTopPlans();
 
             return response()->json([
                 'success' => true,
