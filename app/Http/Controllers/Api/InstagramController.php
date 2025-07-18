@@ -378,9 +378,7 @@ class InstagramController extends Controller
                     'posts_count' => $account->posts_count ?? 0,
                     'is_verified' => $account->is_verified ?? false,
                     'account_type' => $account->account_type ?? 'personal',
-                    'last_sync' => $account->last_sync_at
-                ]
-            ]);
+                    'last_sync' => $account->last_sync_at,
                     'platform' => $account->platform
                 ]
             ]);
