@@ -529,7 +529,7 @@ class GamificationController extends Controller
 
     protected function getUserLeaderboardPosition(User $user)
     {
-        $userLevel = $user->gamificationLevel();
+        $userLevel = $user->gamificationLevel;
         if (!$userLevel) {
             return ['global_rank' => null, 'total_xp' => 0];
         }
