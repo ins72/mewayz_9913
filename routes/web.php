@@ -27,6 +27,9 @@ require __DIR__.'/auth.php';
 // Include business routes
 require __DIR__.'/business.php';
 
+// Include install routes
+require __DIR__.'/install.php';
+
 Route::get('/landing', function () {
     return view('pages.landing');
 });
