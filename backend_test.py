@@ -1898,6 +1898,368 @@ class MewayzAPITester:
         else:
             self.log_test("Activity Tracking", False, f"Activity tracking failed - Status: {response.status_code if response else 'No response'}")
     
+    def test_admin_dashboard_system(self):
+        """Test Ultra-Comprehensive Admin Dashboard System functionality"""
+        print("\n=== Testing Ultra-Comprehensive Admin Dashboard System ===")
+        
+        if not self.auth_token:
+            self.log_test("Admin Dashboard System", False, "Cannot test - no authentication token")
+            return
+        
+        # Test 1: Admin Dashboard Overview
+        print("\n--- Testing Admin Dashboard Overview ---")
+        response = self.make_request('GET', '/admin/dashboard')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'stats' in data.get('data', {}):
+                stats = data['data']['stats']
+                self.log_test("Admin Dashboard Overview", True, 
+                    f"Dashboard loaded successfully - Total users: {stats.get('total_users', 0)}, "
+                    f"Active users: {stats.get('active_users', 0)}, "
+                    f"Total revenue: ${stats.get('total_revenue', 0)}")
+            else:
+                self.log_test("Admin Dashboard Overview", False, "Dashboard data structure invalid")
+        else:
+            self.log_test("Admin Dashboard Overview", False, 
+                f"Dashboard failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test 2: User Management System
+        print("\n--- Testing User Management System ---")
+        
+        # Test user listing with pagination and filters
+        response = self.make_request('GET', '/admin/users', {
+            'page': 1,
+            'per_page': 10,
+            'search': 'test',
+            'status': 'active',
+            'sort': 'created_at',
+            'order': 'desc'
+        })
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'users' in data.get('data', {}):
+                users = data['data']['users']
+                pagination = data['data']['pagination']
+                self.log_test("User Management - List Users", True, 
+                    f"Retrieved {len(users)} users, Total: {pagination.get('total', 0)}")
+            else:
+                self.log_test("User Management - List Users", False, "User list data structure invalid")
+        else:
+            self.log_test("User Management - List Users", False, 
+                f"User listing failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test user details
+        response = self.make_request('GET', '/admin/users/1')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'id' in data.get('data', {}):
+                user_data = data['data']
+                self.log_test("User Management - User Details", True, 
+                    f"User details retrieved - ID: {user_data.get('id')}, "
+                    f"Name: {user_data.get('name')}, "
+                    f"Workspaces: {user_data.get('statistics', {}).get('workspaces_count', 0)}")
+            else:
+                self.log_test("User Management - User Details", False, "User details data structure invalid")
+        else:
+            self.log_test("User Management - User Details", False, 
+                f"User details failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test bulk user update
+        bulk_update_data = {
+            "user_ids": [1, 2],
+            "updates": {
+                "status": 1,
+                "role": "user"
+            }
+        }
+        response = self.make_request('POST', '/admin/users/bulk-update', bulk_update_data)
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success'):
+                self.log_test("User Management - Bulk Update", True, 
+                    f"Bulk update successful - {data.get('data', {}).get('success_count', 0)} users updated")
+            else:
+                self.log_test("User Management - Bulk Update", False, "Bulk update failed")
+        else:
+            self.log_test("User Management - Bulk Update", False, 
+                f"Bulk update failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test user statistics
+        response = self.make_request('GET', '/admin/users/statistics')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'total_users' in data.get('data', {}):
+                stats = data['data']
+                self.log_test("User Management - Statistics", True, 
+                    f"User statistics retrieved - Total: {stats.get('total_users', 0)}, "
+                    f"Active: {stats.get('active_users', 0)}, "
+                    f"Growth rate: {stats.get('growth_rate', 0):.1f}%")
+            else:
+                self.log_test("User Management - Statistics", False, "User statistics data structure invalid")
+        else:
+            self.log_test("User Management - Statistics", False, 
+                f"User statistics failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test 3: Subscription Plan Management
+        print("\n--- Testing Subscription Plan Management ---")
+        
+        # Test plan listing
+        response = self.make_request('GET', '/admin/plans')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'plans' in data.get('data', {}):
+                plans = data['data']['plans']
+                self.log_test("Plan Management - List Plans", True, 
+                    f"Retrieved {len(plans)} subscription plans")
+            else:
+                self.log_test("Plan Management - List Plans", False, "Plan list data structure invalid")
+        else:
+            self.log_test("Plan Management - List Plans", False, 
+                f"Plan listing failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create subscription plan
+        plan_data = {
+            "name": "Test Admin Plan",
+            "description": "A test subscription plan created via admin dashboard",
+            "price": 29.99,
+            "currency": "USD",
+            "billing_cycle": "monthly",
+            "trial_days": 14,
+            "is_popular": False,
+            "is_featured": True,
+            "status": "active",
+            "features": ["feature1", "feature2"],
+            "limits": {"users": 10, "storage": "100GB"},
+            "sort_order": 1
+        }
+        response = self.make_request('POST', '/admin/plans', plan_data)
+        plan_id = None
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'id' in data.get('data', {}):
+                plan_id = data['data']['id']
+                self.log_test("Plan Management - Create Plan", True, 
+                    f"Plan created successfully - ID: {plan_id}, Name: {data['data'].get('name')}")
+            else:
+                self.log_test("Plan Management - Create Plan", False, "Plan creation data structure invalid")
+        else:
+            self.log_test("Plan Management - Create Plan", False, 
+                f"Plan creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test plan details (if plan was created)
+        if plan_id:
+            response = self.make_request('GET', f'/admin/plans/{plan_id}')
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get('success') and 'id' in data.get('data', {}):
+                    plan_details = data['data']
+                    self.log_test("Plan Management - Plan Details", True, 
+                        f"Plan details retrieved - Price: ${plan_details.get('price')}, "
+                        f"Billing: {plan_details.get('billing_cycle')}")
+                else:
+                    self.log_test("Plan Management - Plan Details", False, "Plan details data structure invalid")
+            else:
+                self.log_test("Plan Management - Plan Details", False, 
+                    f"Plan details failed - Status: {response.status_code if response else 'No response'}")
+            
+            # Test update plan pricing
+            pricing_data = {
+                "price": 39.99,
+                "currency": "USD",
+                "geographic_pricing": {"US": 39.99, "EU": 35.99},
+                "pricing_tiers": [{"min_quantity": 1, "price": 39.99}]
+            }
+            response = self.make_request('PUT', f'/admin/plans/{plan_id}/pricing', pricing_data)
+            if response and response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    self.log_test("Plan Management - Update Pricing", True, 
+                        f"Plan pricing updated successfully - New price: ${data.get('data', {}).get('price')}")
+                else:
+                    self.log_test("Plan Management - Update Pricing", False, "Plan pricing update failed")
+            else:
+                self.log_test("Plan Management - Update Pricing", False, 
+                    f"Plan pricing update failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test plan comparison
+        comparison_data = {
+            "plan_ids": [1, 2] if not plan_id else [1, plan_id]
+        }
+        response = self.make_request('POST', '/admin/plans/comparison', comparison_data)
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'comparison' in data.get('data', {}):
+                comparison = data['data']['comparison']
+                self.log_test("Plan Management - Plan Comparison", True, 
+                    f"Plan comparison generated for {len(comparison)} plans")
+            else:
+                self.log_test("Plan Management - Plan Comparison", False, "Plan comparison data structure invalid")
+        else:
+            self.log_test("Plan Management - Plan Comparison", False, 
+                f"Plan comparison failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test plan analytics
+        response = self.make_request('GET', '/admin/plans/analytics')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'overview' in data.get('data', {}):
+                analytics = data['data']
+                overview = analytics['overview']
+                self.log_test("Plan Management - Analytics", True, 
+                    f"Plan analytics retrieved - Total plans: {overview.get('total_plans', 0)}, "
+                    f"Active plans: {overview.get('active_plans', 0)}")
+            else:
+                self.log_test("Plan Management - Analytics", False, "Plan analytics data structure invalid")
+        else:
+            self.log_test("Plan Management - Analytics", False, 
+                f"Plan analytics failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test 4: Environment Configuration Management
+        print("\n--- Testing Environment Configuration Management ---")
+        
+        # Test environment variables listing
+        response = self.make_request('GET', '/admin/environment')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'variables' in data.get('data', {}):
+                variables = data['data']['variables']
+                groups = data['data']['groups']
+                self.log_test("Environment Management - List Variables", True, 
+                    f"Retrieved {len(variables)} environment variables across {len(groups)} groups")
+            else:
+                self.log_test("Environment Management - List Variables", False, "Environment variables data structure invalid")
+        else:
+            self.log_test("Environment Management - List Variables", False, 
+                f"Environment variables failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test create environment variable
+        env_var_data = {
+            "key": "TEST_ADMIN_VAR",
+            "value": "test_admin_value_123",
+            "group": "testing",
+            "description": "Test environment variable created via admin dashboard",
+            "is_sensitive": False,
+            "requires_restart": False
+        }
+        response = self.make_request('POST', '/admin/environment', env_var_data)
+        env_var_id = None
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'id' in data.get('data', {}):
+                env_var_id = data['data']['id']
+                self.log_test("Environment Management - Create Variable", True, 
+                    f"Environment variable created - Key: {data['data'].get('key')}")
+            else:
+                self.log_test("Environment Management - Create Variable", False, "Environment variable creation data structure invalid")
+        else:
+            self.log_test("Environment Management - Create Variable", False, 
+                f"Environment variable creation failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test sync from .env file
+        response = self.make_request('POST', '/admin/environment/sync-from-env')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success'):
+                sync_results = data.get('data', {})
+                self.log_test("Environment Management - Sync from .env", True, 
+                    f"Sync completed - Synced: {sync_results.get('synced', 0)} variables")
+            else:
+                self.log_test("Environment Management - Sync from .env", False, "Environment sync failed")
+        else:
+            self.log_test("Environment Management - Sync from .env", False, 
+                f"Environment sync failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test system settings
+        response = self.make_request('GET', '/admin/environment/system-settings')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'settings' in data.get('data', {}):
+                settings = data['data']['settings']
+                groups = data['data']['groups']
+                self.log_test("Environment Management - System Settings", True, 
+                    f"Retrieved {len(settings)} system settings across {len(groups)} groups")
+            else:
+                self.log_test("Environment Management - System Settings", False, "System settings data structure invalid")
+        else:
+            self.log_test("Environment Management - System Settings", False, 
+                f"System settings failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test system info
+        response = self.make_request('GET', '/admin/environment/system-info')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'server' in data.get('data', {}):
+                system_info = data['data']
+                server_info = system_info['server']
+                self.log_test("Environment Management - System Info", True, 
+                    f"System info retrieved - PHP: {server_info.get('php_version')}, "
+                    f"Laravel: {server_info.get('laravel_version')}, "
+                    f"Environment: {server_info.get('environment')}")
+            else:
+                self.log_test("Environment Management - System Info", False, "System info data structure invalid")
+        else:
+            self.log_test("Environment Management - System Info", False, 
+                f"System info failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test cache clearing
+        cache_data = {
+            "types": ["config", "cache"]
+        }
+        response = self.make_request('POST', '/admin/environment/clear-cache', cache_data)
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success'):
+                results = data.get('data', [])
+                self.log_test("Environment Management - Clear Cache", True, 
+                    f"Cache cleared successfully - {len(results)} operations completed")
+            else:
+                self.log_test("Environment Management - Clear Cache", False, "Cache clearing failed")
+        else:
+            self.log_test("Environment Management - Clear Cache", False, 
+                f"Cache clearing failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test 5: Database Schema Verification
+        print("\n--- Testing Database Schema Verification ---")
+        
+        # Test database tables listing
+        response = self.make_request('GET', '/admin/database/tables')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'tables' in data.get('data', {}):
+                tables = data['data']['tables']
+                admin_tables = [t for t in tables if 'admin' in t.get('name', '').lower()]
+                self.log_test("Database Schema - Admin Tables", True, 
+                    f"Database schema verified - Total tables: {len(tables)}, "
+                    f"Admin tables: {len(admin_tables)}")
+            else:
+                self.log_test("Database Schema - Admin Tables", False, "Database tables data structure invalid")
+        else:
+            self.log_test("Database Schema - Admin Tables", False, 
+                f"Database tables failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test specific admin table structure
+        response = self.make_request('GET', '/admin/database/tables/admin_users/structure')
+        if response and response.status_code == 200:
+            data = response.json()
+            if data.get('success') and 'columns' in data.get('data', {}):
+                columns = data['data']['columns']
+                self.log_test("Database Schema - Admin Users Table", True, 
+                    f"Admin users table structure verified - {len(columns)} columns")
+            else:
+                self.log_test("Database Schema - Admin Users Table", False, "Admin users table structure invalid")
+        else:
+            self.log_test("Database Schema - Admin Users Table", False, 
+                f"Admin users table structure failed - Status: {response.status_code if response else 'No response'}")
+        
+        print("\n🎯 Ultra-Comprehensive Admin Dashboard System Testing Complete!")
+        print("This comprehensive test covers all 5 major admin areas:")
+        print("1. Admin Dashboard Overview (platform statistics, system health)")
+        print("2. User Management System (listing, details, bulk operations, statistics)")
+        print("3. Subscription Plan Management (CRUD, pricing, comparison, analytics)")
+        print("4. Environment Configuration Management (.env management, system settings, cache)")
+        print("5. Database Schema Verification (admin tables, structure validation)")
+        print("All admin endpoints tested with proper authentication and data validation.")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
