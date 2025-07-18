@@ -358,6 +358,15 @@
         </div>
     </div>
     
+    <!-- WebSocket Collaboration Features -->
+    @if(auth()->check() && request()->is('dashboard*'))
+        <x-websocket-collaboration 
+            :workspace-id="auth()->user()->workspace_id ?? 'default'"
+            :auth-token="auth()->user()->createToken('websocket')->plainTextToken"
+            :current-user="auth()->user()"
+        />
+    @endif
+    
     <!-- Mobile Sidebar Overlay -->
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden hidden" id="sidebar-overlay" onclick="closeSidebar()"></div>
     
