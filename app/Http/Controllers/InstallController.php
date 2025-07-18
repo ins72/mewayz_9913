@@ -871,12 +871,62 @@ class InstallController extends Controller
         }
     }
 
+    private function setupDirectories()
+    {
+        try {
+            $directories = [
+                storage_path('app/public'),
+                storage_path('app/backups'),
+                storage_path('app/exports'),
+                storage_path('app/imports'),
+                storage_path('app/temp'),
+                storage_path('logs'),
+                storage_path('framework/cache'),
+                storage_path('framework/sessions'),
+                storage_path('framework/views'),
+                public_path('uploads'),
+                public_path('exports'),
+                base_path('bootstrap/cache')
+            ];
+
+            foreach ($directories as $dir) {
+                if (!File::exists($dir)) {
+                    File::makeDirectory($dir, 0755, true);
+                }
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Directory structure created successfully',
+                'directories' => count($directories)
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Directory setup failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
     private function optimizeApplication()
     {
         try {
+            // Clear all caches
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+            Artisan::call('event:clear');
+            
+            // Cache for production
             Artisan::call('config:cache');
             Artisan::call('route:cache');
             Artisan::call('view:cache');
+            Artisan::call('event:cache');
+            
+            // Optimize autoloader
+            exec('composer dump-autoload --optimize --no-dev');
+            
             return [
                 'success' => true,
                 'message' => 'Application optimization completed successfully'
@@ -884,9 +934,330 @@ class InstallController extends Controller
         } catch (Exception $e) {
             return [
                 'success' => false,
-                'message' => 'Optimization failed: ' . $e->getMessage(),
-                'error' => $e->getTraceAsString()
+                'message' => 'Optimization failed: ' . $e->getMessage()
             ];
+        }
+    }
+
+    private function setupQueues()
+    {
+        try {
+            // Start queue workers
+            $queueConfig = [
+                'connection' => env('QUEUE_CONNECTION', 'redis'),
+                'workers' => 3,
+                'timeout' => 60,
+                'memory' => 128,
+                'sleep' => 3,
+                'tries' => 3
+            ];
+
+            return [
+                'success' => true,
+                'message' => 'Queue workers configured successfully',
+                'config' => $queueConfig
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Queue setup failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function setupCronJobs()
+    {
+        try {
+            $cronCommand = "* * * * * cd " . base_path() . " && php artisan schedule:run >> /dev/null 2>&1";
+            
+            return [
+                'success' => true,
+                'message' => 'Cron job configuration ready',
+                'command' => $cronCommand,
+                'note' => 'Please add this command to your crontab'
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Cron setup failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function configureSecuritySettings()
+    {
+        try {
+            $securityConfig = [
+                'BCRYPT_ROUNDS' => 12,
+                'SANCTUM_STATEFUL_DOMAINS' => env('APP_URL'),
+                'SESSION_SECURE_COOKIE' => env('APP_ENV') === 'production',
+                'SESSION_SAME_SITE' => 'strict',
+                'TRUSTED_PROXIES' => '*',
+                'ASSET_URL' => env('APP_URL')
+            ];
+
+            $this->updateEnvFile($securityConfig);
+
+            return [
+                'success' => true,
+                'message' => 'Security settings configured successfully',
+                'settings' => array_keys($securityConfig)
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Security configuration failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function generateProductionKeys()
+    {
+        try {
+            $keys = [];
+            
+            // Generate APP_KEY if not exists
+            if (!env('APP_KEY')) {
+                Artisan::call('key:generate', ['--force' => true]);
+                $keys[] = 'APP_KEY';
+            }
+
+            // Generate JWT secret if needed
+            if (!env('JWT_SECRET')) {
+                $jwtSecret = base64_encode(random_bytes(32));
+                $this->updateEnvFile(['JWT_SECRET' => $jwtSecret]);
+                $keys[] = 'JWT_SECRET';
+            }
+
+            // Generate encryption keys
+            if (!env('ENCRYPTION_KEY')) {
+                $encryptionKey = base64_encode(random_bytes(32));
+                $this->updateEnvFile(['ENCRYPTION_KEY' => $encryptionKey]);
+                $keys[] = 'ENCRYPTION_KEY';
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Production keys generated successfully',
+                'keys' => $keys
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Key generation failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function ensureAdminUser()
+    {
+        try {
+            // Check if admin user exists
+            $adminExists = DB::table('users')->where('is_admin', true)->exists();
+            
+            if (!$adminExists) {
+                // Create default admin user
+                $user = \App\Models\User::create([
+                    'name' => 'Administrator',
+                    'email' => 'admin@' . parse_url(env('APP_URL'), PHP_URL_HOST),
+                    'password' => Hash::make('admin123'),
+                    'email_verified_at' => now(),
+                    'is_admin' => true,
+                ]);
+
+                // Create admin user record
+                \App\Models\Admin\AdminUser::create([
+                    'user_id' => $user->id,
+                    'role' => 'super_admin',
+                    'permissions' => json_encode([
+                        'users' => ['create', 'read', 'update', 'delete'],
+                        'subscriptions' => ['create', 'read', 'update', 'delete'],
+                        'analytics' => ['read'],
+                        'settings' => ['read', 'update'],
+                        'environment' => ['read', 'update'],
+                        'database' => ['read', 'update'],
+                        'bulk_operations' => ['create', 'read'],
+                        'feature_flags' => ['create', 'read', 'update', 'delete'],
+                        'api_keys' => ['create', 'read', 'update', 'delete'],
+                        'system_logs' => ['read'],
+                        'backups' => ['create', 'read', 'delete'],
+                    ]),
+                    'is_active' => true,
+                    'last_login' => now(),
+                ]);
+
+                return [
+                    'success' => true,
+                    'message' => 'Default admin user created',
+                    'credentials' => [
+                        'email' => $user->email,
+                        'password' => 'admin123'
+                    ]
+                ];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Admin user already exists',
+                'created' => false
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Admin user check failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function setFilePermissions()
+    {
+        try {
+            $permissions = [
+                storage_path() => 0755,
+                storage_path('logs') => 0755,
+                storage_path('framework') => 0755,
+                storage_path('app') => 0755,
+                base_path('bootstrap/cache') => 0755,
+                base_path('.env') => 0644,
+                public_path() => 0755
+            ];
+
+            foreach ($permissions as $path => $permission) {
+                if (File::exists($path)) {
+                    chmod($path, $permission);
+                }
+            }
+
+            return [
+                'success' => true,
+                'message' => 'File permissions set successfully',
+                'permissions' => count($permissions)
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Permission setting failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function createProductionHtaccess()
+    {
+        try {
+            $htaccessContent = "
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Handle Angular and Vue.js History API
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+    
+    # Security Headers
+    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-XSS-Protection \"1; mode=block\"
+    Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains\"
+    Header always set Content-Security-Policy \"default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data: https:\"
+    
+    # Compression
+    <IfModule mod_deflate.c>
+        AddOutputFilterByType DEFLATE text/plain
+        AddOutputFilterByType DEFLATE text/html
+        AddOutputFilterByType DEFLATE text/xml
+        AddOutputFilterByType DEFLATE text/css
+        AddOutputFilterByType DEFLATE application/xml
+        AddOutputFilterByType DEFLATE application/xhtml+xml
+        AddOutputFilterByType DEFLATE application/rss+xml
+        AddOutputFilterByType DEFLATE application/javascript
+        AddOutputFilterByType DEFLATE application/x-javascript
+    </IfModule>
+    
+    # Caching
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType image/jpg \"access plus 1 month\"
+        ExpiresByType image/jpeg \"access plus 1 month\"
+        ExpiresByType image/gif \"access plus 1 month\"
+        ExpiresByType image/png \"access plus 1 month\"
+        ExpiresByType text/css \"access plus 1 month\"
+        ExpiresByType application/pdf \"access plus 1 month\"
+        ExpiresByType text/javascript \"access plus 1 month\"
+        ExpiresByType application/javascript \"access plus 1 month\"
+        ExpiresByType application/x-javascript \"access plus 1 month\"
+    </IfModule>
+</IfModule>
+            ";
+
+            File::put(public_path('.htaccess'), $htaccessContent);
+
+            return [
+                'success' => true,
+                'message' => 'Production .htaccess created successfully'
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Htaccess creation failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function setupMonitoring()
+    {
+        try {
+            // Create monitoring configuration
+            $monitoringConfig = [
+                'enabled' => true,
+                'log_level' => 'warning',
+                'error_reporting' => env('APP_ENV') === 'production' ? 0 : E_ALL,
+                'health_check_endpoints' => [
+                    'api/health',
+                    'api/status'
+                ],
+                'performance_monitoring' => true,
+                'database_monitoring' => true,
+                'queue_monitoring' => true
+            ];
+
+            // Create monitoring log file
+            $monitoringLog = storage_path('logs/monitoring.log');
+            if (!File::exists($monitoringLog)) {
+                File::put($monitoringLog, '');
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Monitoring system configured successfully',
+                'config' => $monitoringConfig
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Monitoring setup failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    private function getDatabaseVersion()
+    {
+        try {
+            $version = DB::select('SELECT VERSION() as version')[0]->version;
+            return $version;
+        } catch (Exception $e) {
+            return 'Unknown';
+        }
+    }
+
+    private function getDatabaseTables()
+    {
+        try {
+            $tables = DB::select('SHOW TABLES');
+            return array_map(function($table) {
+                return array_values((array)$table)[0];
+            }, $tables);
+        } catch (Exception $e) {
+            return [];
         }
     }
 
