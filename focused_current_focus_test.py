@@ -33,7 +33,7 @@ class FocusedTester:
     def make_request(self, method, endpoint, data=None, headers=None, auth_required=True):
         """Make HTTP request with proper headers"""
         # Add delay to avoid rate limiting
-        time.sleep(2)  # Increased delay to avoid rate limiting
+        time.sleep(1)  # Reduced delay since authentication is working
         
         url = f"{self.api_url}{endpoint}"
         
