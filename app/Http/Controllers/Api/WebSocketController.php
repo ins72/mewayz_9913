@@ -26,8 +26,8 @@ class WebSocketController extends Controller
             return response()->json(['error' => 'Workspace ID is required'], 400);
         }
 
-        // Store user presence
-        $presenceKey = "workspace.{$workspaceId}.users";
+        // Store user presence in Redis
+        $presenceKey = "workspace.{$workspaceId}.users.{$user->id}";
         $userData = [
             'id' => $user->id,
             'name' => $user->name,
@@ -37,7 +37,7 @@ class WebSocketController extends Controller
             'last_activity' => now()->toISOString(),
         ];
 
-        Cache::put($presenceKey . ".{$user->id}", $userData, now()->addMinutes(30));
+        \Illuminate\Support\Facades\Redis::setex($presenceKey, 1800, json_encode($userData)); // 30 minutes TTL
 
         // Broadcast user joined event
         broadcast(new WorkspaceCollaboration(
