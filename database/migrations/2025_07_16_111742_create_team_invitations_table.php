@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('team_invitations', function (Blueprint $table) {
+        if (!Schema::hasTable('team_invitations')) {
+            Schema::create('team_invitations', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
             $table->char('workspace_id', 36);
@@ -33,6 +34,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('team_invitations');

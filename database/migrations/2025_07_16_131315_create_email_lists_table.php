@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_lists', function (Blueprint $table) {
+        if (!Schema::hasTable('email_lists')) {
+            Schema::create('email_lists', function (Blueprint $table) {
             $table->id();
             $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
@@ -31,7 +32,8 @@ return new class extends Migration
         });
         
         // Pivot table for subscriber-list relationships
-        Schema::create('email_list_subscribers', function (Blueprint $table) {
+        if (!Schema::hasTable('email_list_subscribers')) {
+            Schema::create('email_list_subscribers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('list_id');
             $table->unsignedBigInteger('subscriber_id');
@@ -50,6 +52,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('email_list_subscribers');

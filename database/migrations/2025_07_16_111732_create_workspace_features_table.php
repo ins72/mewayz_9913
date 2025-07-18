@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workspace_features', function (Blueprint $table) {
+        if (!Schema::hasTable('workspace_features')) {
+            Schema::create('workspace_features', function (Blueprint $table) {
             $table->id();
             $table->char('workspace_id', 36);
             $table->foreignId('feature_id')->constrained()->onDelete('cascade');
@@ -29,6 +30,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('workspace_features');

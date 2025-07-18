@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('shortened_links', function (Blueprint $table) {
+        if (!Schema::hasTable('shortened_links')) {
+            Schema::create('shortened_links', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_id');
             $table->char('workspace_id', 36);

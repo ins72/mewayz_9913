@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('link_clicks', function (Blueprint $table) {
+        if (!Schema::hasTable('link_clicks')) {
+            Schema::create('link_clicks', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('shortened_link_id');
             $table->string('ip_address', 45);

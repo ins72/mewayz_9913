@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_campaign_analytics', function (Blueprint $table) {
+        if (!Schema::hasTable('email_campaign_analytics')) {
+            Schema::create('email_campaign_analytics', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('campaign_id');
             $table->unsignedBigInteger('subscriber_id');
@@ -34,6 +35,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('email_campaign_analytics');

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instagram_hashtags', function (Blueprint $table) {
+        if (!Schema::hasTable('instagram_hashtags')) {
+            Schema::create('instagram_hashtags', function (Blueprint $table) {
             $table->id();
             $table->uuid('workspace_id');
             $table->string('hashtag');
@@ -32,6 +33,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('instagram_hashtags');

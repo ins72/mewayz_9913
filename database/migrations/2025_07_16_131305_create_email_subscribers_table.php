@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_subscribers', function (Blueprint $table) {
+        if (!Schema::hasTable('email_subscribers')) {
+            Schema::create('email_subscribers', function (Blueprint $table) {
             $table->id();
             $table->uuid('workspace_id');
             $table->string('email');
@@ -40,6 +41,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('email_subscribers');

@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('referral_rewards', function (Blueprint $table) {
+        if (!Schema::hasTable('referral_rewards')) {
+            Schema::create('referral_rewards', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('user_id');
             $table->uuid('referral_id');

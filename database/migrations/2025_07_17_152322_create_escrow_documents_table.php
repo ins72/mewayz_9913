@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('escrow_documents', function (Blueprint $table) {
+        if (!Schema::hasTable('escrow_documents')) {
+            Schema::create('escrow_documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('escrow_transaction_id')->constrained('escrow_transactions')->onDelete('cascade');
             $table->unsignedBigInteger('uploaded_by');

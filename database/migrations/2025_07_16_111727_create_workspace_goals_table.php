@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('workspace_goals', function (Blueprint $table) {
+        if (!Schema::hasTable('workspace_goals')) {
+            Schema::create('workspace_goals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -28,6 +29,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('workspace_goals');

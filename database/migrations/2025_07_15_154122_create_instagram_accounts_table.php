@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instagram_accounts', function (Blueprint $table) {
+        if (!Schema::hasTable('instagram_accounts')) {
+            Schema::create('instagram_accounts', function (Blueprint $table) {
             $table->id();
             $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
@@ -39,6 +40,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('instagram_accounts');

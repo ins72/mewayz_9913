@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('booking_calendars', function (Blueprint $table) {
+        if (!Schema::hasTable('booking_calendars')) {
+            Schema::create('booking_calendars', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('booking_services')->onDelete('cascade');

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('templates', function (Blueprint $table) {
+        if (!Schema::hasTable('templates')) {
+            Schema::create('templates', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('creator_id');
             $table->uuid('category_id');
@@ -47,6 +48,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('templates');

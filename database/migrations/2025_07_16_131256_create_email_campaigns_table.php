@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_campaigns', function (Blueprint $table) {
+        if (!Schema::hasTable('email_campaigns')) {
+            Schema::create('email_campaigns', function (Blueprint $table) {
             $table->id();
             $table->uuid('workspace_id');
             $table->unsignedBigInteger('user_id');
@@ -45,6 +46,9 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    }
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('email_campaigns');

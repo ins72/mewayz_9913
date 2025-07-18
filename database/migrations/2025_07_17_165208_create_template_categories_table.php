@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('template_categories', function (Blueprint $table) {
+        if (!Schema::hasTable('template_categories')) {
+            Schema::create('template_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
