@@ -14,8 +14,8 @@ class ProductionReadinessTest:
     def __init__(self, base_url="http://localhost:8001"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
-        # Use existing token from test_result.md
-        self.auth_token = "5|rpvwxCPPru4PP6xZLhyN7cIkpxfNfVoKubcxQILka00cb0e4"
+        # Use fresh token from registration
+        self.auth_token = "3|aTPWlxF1E6aVX2FO8TJJ1MC2gdvBwF6g5tSvHOI0b423232a"
         self.test_results = {}
         self.session = requests.Session()
         
