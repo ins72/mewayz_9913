@@ -891,7 +891,6 @@ Route::prefix('admin')->group(function () {
         Route::get('/metrics', [EnhancedAdminController::class, 'getMetrics']);
         Route::get('/health', [EnhancedAdminController::class, 'getSystemHealth']);
     });
-});
 
 // Use the updated controller imports
 use App\Http\Controllers\Api\RealTimeSubscriptionController;
