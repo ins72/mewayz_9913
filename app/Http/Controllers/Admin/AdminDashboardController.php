@@ -29,14 +29,14 @@ class AdminDashboardController extends Controller
                 'new_users_today' => User::whereDate('created_at', today())->count(),
                 'new_users_this_week' => User::where('created_at', '>=', now()->startOfWeek())->count(),
                 'new_users_this_month' => User::where('created_at', '>=', now()->startOfMonth())->count(),
-                'total_subscriptions' => SubscriptionPlan::count(),
-                'active_subscriptions' => SubscriptionPlan::where('status', 'active')->count(),
+                'total_subscriptions' => $this->safeCount(SubscriptionPlan::class),
+                'active_subscriptions' => $this->safeCount(SubscriptionPlan::class, ['status' => 'active']),
                 'total_revenue' => $this->getTotalRevenue(),
                 'monthly_revenue' => $this->getMonthlyRevenue(),
-                'total_gamification_users' => UserLevel::count(),
-                'total_achievements' => Achievement::count(),
-                'total_xp_awarded' => XpEvent::sum('final_xp'),
-                'admin_actions_today' => AdminActivityLog::whereDate('created_at', today())->count()
+                'total_gamification_users' => $this->safeCount(UserLevel::class),
+                'total_achievements' => $this->safeCount(Achievement::class),
+                'total_xp_awarded' => $this->safeSum(XpEvent::class, 'final_xp'),
+                'admin_actions_today' => $this->safeCount(AdminActivityLog::class, ['created_at' => today()])
             ];
 
             // Recent Activity
