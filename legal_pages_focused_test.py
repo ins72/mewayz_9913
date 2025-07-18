@@ -131,7 +131,7 @@ class LegalPagesAPITester:
                 "marketing": False,
                 "preferences": True
             }
-            response = self.make_request('POST', '/legal/cookie-consent', consent_data)
+            response = self.make_request('POST', '/legal/cookie-consent', consent_data, use_api=True)
             if response and response.status_code in [200, 201]:
                 self.log_test("Cookie Consent API", True, "Cookie consent saved successfully")
                 print("✅ Cookie Consent API working")
