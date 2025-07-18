@@ -15,7 +15,7 @@ class WebSocketCollaborationTester:
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         # Use a valid test token from the test_result.md
-        self.auth_token = "3|2tizxvYX1aqPpjgTN6rGz0QY2FMeWtHpnMts7GCY137499ef"
+        self.auth_token = "1|I6cvxtyszmwFWtzEQUaVgGJli6MlPBVgCMGNKCcB736a011f"
         self.test_results = {}
         self.session = requests.Session()
         self.workspace_id = "test-workspace-123"
