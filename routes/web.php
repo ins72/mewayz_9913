@@ -46,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/api/workspace-setup/calculate-pricing', [WorkspaceSetupController::class, 'calculatePricing'])->name('workspace-setup.calculate-pricing');
 });
 
+// Test route without auth
+Route::get('/test-dashboard', function () {
+    return view('pages.dashboard.index');
+})->name('test-dashboard');
+
 // Dashboard Routes (protected by auth middleware)
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
