@@ -199,4 +199,14 @@ Route::get('/cookie-policy', [LegalController::class, 'cookiePolicy'])->name('co
 Route::get('/refund-policy', [LegalController::class, 'refundPolicy'])->name('refund-policy');
 Route::get('/accessibility', [LegalController::class, 'accessibilityStatement'])->name('accessibility');
 
+// Account Removal Page
+Route::get('/account-removal', function () {
+    return view('pages.account-removal');
+})->name('account-removal');
+
+// Support Page
+Route::get('/support', function () {
+    return view('pages.support');
+})->name('support');
+
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
