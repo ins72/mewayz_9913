@@ -823,7 +823,7 @@ Route::middleware(\App\Http\Middleware\CustomSanctumAuth::class)->group(function
 // Add this to the end of the file before the closing PHP tag
 
 // Professional Payment System Routes
-Route::middleware(['custom.auth'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('payments')->group(function () {
         Route::post('/checkout/session', [PaymentManagementController::class, 'createCheckoutSession']);
         Route::get('/checkout/status/{session_id}', [PaymentManagementController::class, 'checkCheckoutStatus']);
