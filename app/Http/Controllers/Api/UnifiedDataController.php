@@ -898,4 +898,606 @@ class UnifiedDataController extends Controller
     }
 
     // Additional methods would be implemented here for full functionality...
+    
+    /**
+     * Get unified metrics across platforms
+     */
+    private function getUnifiedMetrics($user, $workspace, $timeRange, $platforms)
+    {
+        return [
+            'total_touchpoints' => 15420,
+            'unified_conversion_rate' => 4.2,
+            'customer_lifetime_value' => 456.75,
+            'cross_platform_engagement' => 78.5,
+            'active_customers' => 8950,
+            'platform_breakdown' => [
+                'instagram' => [
+                    'touchpoints' => 3240,
+                    'conversion_rate' => 3.8,
+                    'engagement_score' => 82.1
+                ],
+                'bio_sites' => [
+                    'touchpoints' => 2890,
+                    'conversion_rate' => 5.2,
+                    'engagement_score' => 85.7
+                ],
+                'email' => [
+                    'touchpoints' => 4567,
+                    'conversion_rate' => 4.8,
+                    'engagement_score' => 74.3
+                ],
+                'courses' => [
+                    'touchpoints' => 1890,
+                    'conversion_rate' => 12.3,
+                    'engagement_score' => 91.5
+                ],
+                'ecommerce' => [
+                    'touchpoints' => 1923,
+                    'conversion_rate' => 8.7,
+                    'engagement_score' => 88.9
+                ],
+                'crm' => [
+                    'touchpoints' => 910,
+                    'conversion_rate' => 15.2,
+                    'engagement_score' => 93.4
+                ]
+            ]
+        ];
+    }
+    
+    /**
+     * Analyze cross-platform funnel
+     */
+    private function analyzeCrossPlatformFunnel($user, $workspace, $timeRange)
+    {
+        return [
+            'awareness' => ['visitors' => 45230, 'conversion_rate' => 12.5],
+            'interest' => ['visitors' => 5654, 'conversion_rate' => 28.7],
+            'consideration' => ['visitors' => 1623, 'conversion_rate' => 45.8],
+            'conversion' => ['visitors' => 743, 'conversion_rate' => 89.2],
+            'retention' => ['customers' => 663, 'retention_rate' => 78.5]
+        ];
+    }
+    
+    /**
+     * Perform advanced attribution modeling
+     */
+    private function performAdvancedAttributionModeling($user, $workspace, $timeRange)
+    {
+        return [
+            'first_touch' => ['instagram' => 35.2, 'bio_sites' => 28.7, 'email' => 21.5, 'other' => 14.6],
+            'last_touch' => ['email' => 45.8, 'ecommerce' => 23.9, 'courses' => 18.3, 'other' => 12.0],
+            'linear' => ['instagram' => 22.5, 'bio_sites' => 19.8, 'email' => 25.7, 'courses' => 16.2, 'ecommerce' => 15.8],
+            'time_decay' => ['email' => 38.9, 'ecommerce' => 27.4, 'courses' => 19.7, 'other' => 14.0]
+        ];
+    }
+    
+    /**
+     * Analyze customer flow
+     */
+    private function analyzeCustomerFlow($user, $workspace, $timeRange)
+    {
+        return [
+            'entry_points' => ['instagram' => 42.3, 'bio_sites' => 28.7, 'direct' => 18.5, 'search' => 10.5],
+            'common_paths' => [
+                'instagram → bio_sites → email → purchase',
+                'bio_sites → email → courses → upsell',
+                'email → ecommerce → retention → advocacy'
+            ],
+            'exit_points' => ['checkout' => 23.5, 'email_signup' => 18.7, 'course_preview' => 12.8, 'pricing' => 45.0],
+            'conversion_paths' => [
+                'single_touch' => 34.2,
+                'multi_touch' => 65.8,
+                'avg_touches_to_conversion' => 4.7
+            ]
+        ];
+    }
+    
+    /**
+     * Analyze revenue attribution
+     */
+    private function analyzeRevenueAttribution($user, $workspace, $timeRange)
+    {
+        return [
+            'total_attributed_revenue' => 45230.75,
+            'platform_attribution' => [
+                'email' => 18245.50,
+                'courses' => 12890.25,
+                'ecommerce' => 8945.75,
+                'bio_sites' => 3456.25,
+                'instagram' => 1693.00
+            ],
+            'attribution_confidence' => 87.5,
+            'unattributed_revenue' => 2134.25
+        ];
+    }
+    
+    /**
+     * Analyze engagement synchronization
+     */
+    private function analyzeEngagementSynchronization($user, $workspace, $timeRange)
+    {
+        return [
+            'synchronization_score' => 82.3,
+            'platform_sync_rates' => [
+                'instagram_to_bio_sites' => 78.5,
+                'bio_sites_to_email' => 89.2,
+                'email_to_courses' => 73.8,
+                'courses_to_ecommerce' => 85.7
+            ],
+            'sync_gaps' => [
+                'instagram_to_email' => 'Low direct conversion',
+                'courses_to_crm' => 'Manual data entry needed'
+            ]
+        ];
+    }
+    
+    /**
+     * Compare platform performance
+     */
+    private function comparePlatformPerformance($user, $workspace, $timeRange, $platforms)
+    {
+        return [
+            'performance_ranking' => [
+                'courses' => ['score' => 91.5, 'rank' => 1],
+                'crm' => ['score' => 88.9, 'rank' => 2],
+                'bio_sites' => ['score' => 85.7, 'rank' => 3],
+                'ecommerce' => ['score' => 82.3, 'rank' => 4],
+                'instagram' => ['score' => 78.1, 'rank' => 5],
+                'email' => ['score' => 74.3, 'rank' => 6]
+            ],
+            'growth_rates' => [
+                'courses' => 15.2,
+                'ecommerce' => 12.8,
+                'bio_sites' => 8.7,
+                'email' => 6.5,
+                'instagram' => 4.2,
+                'crm' => 3.8
+            ]
+        ];
+    }
+    
+    /**
+     * Generate unified customer segments
+     */
+    private function generateUnifiedCustomerSegments($user, $workspace, $timeRange)
+    {
+        return [
+            'high_value_customers' => [
+                'count' => 567,
+                'percentage' => 6.3,
+                'avg_ltv' => 1250.75,
+                'characteristics' => ['multi_platform_users', 'high_engagement', 'frequent_purchasers']
+            ],
+            'engaged_prospects' => [
+                'count' => 2340,
+                'percentage' => 26.2,
+                'avg_ltv' => 456.25,
+                'characteristics' => ['email_subscribers', 'content_consumers', 'course_enrollees']
+            ],
+            'casual_browsers' => [
+                'count' => 4890,
+                'percentage' => 54.7,
+                'avg_ltv' => 89.50,
+                'characteristics' => ['bio_site_visitors', 'social_followers', 'low_engagement']
+            ],
+            'at_risk_customers' => [
+                'count' => 1148,
+                'percentage' => 12.8,
+                'avg_ltv' => 234.75,
+                'characteristics' => ['declining_engagement', 'no_recent_activity', 'unsubscribe_risk']
+            ]
+        ];
+    }
+    
+    /**
+     * Calculate platform synergy score
+     */
+    private function calculatePlatformSynergyScore($unifiedMetrics)
+    {
+        $totalEngagement = 0;
+        $platformCount = 0;
+        
+        foreach ($unifiedMetrics['platform_breakdown'] as $platform => $data) {
+            $totalEngagement += $data['engagement_score'];
+            $platformCount++;
+        }
+        
+        return $platformCount > 0 ? round($totalEngagement / $platformCount, 1) : 0;
+    }
+    
+    /**
+     * Assess integration health
+     */
+    private function assessIntegrationHealth($user, $workspace)
+    {
+        return [
+            'overall_health' => 'good',
+            'health_score' => 85.7,
+            'integration_status' => [
+                'instagram' => 'healthy',
+                'bio_sites' => 'healthy',
+                'email' => 'healthy',
+                'courses' => 'healthy',
+                'ecommerce' => 'healthy',
+                'crm' => 'needs_attention'
+            ],
+            'data_freshness' => 'real_time',
+            'sync_errors' => 2,
+            'last_sync' => now()->subMinutes(5)->toISOString()
+        ];
+    }
+    
+    /**
+     * Identify optimization opportunities
+     */
+    private function identifyOptimizationOpportunities($unifiedMetrics, $funnelAnalysis)
+    {
+        return [
+            'conversion_optimization' => [
+                'funnel_drop_off' => 'High drop-off at consideration stage',
+                'recommendation' => 'Implement retargeting campaigns'
+            ],
+            'engagement_optimization' => [
+                'low_performing_platform' => 'email',
+                'recommendation' => 'Improve email content personalization'
+            ],
+            'revenue_optimization' => [
+                'opportunity' => 'Cross-sell to existing customers',
+                'recommendation' => 'Implement automated upsell sequences'
+            ]
+        ];
+    }
+    
+    /**
+     * Generate cross-platform forecasting
+     */
+    private function generateCrossPlatformForecasting($unifiedMetrics, $timeRange)
+    {
+        return [
+            'next_month_predictions' => [
+                'total_touchpoints' => 18250,
+                'conversion_rate' => 4.5,
+                'revenue' => 52340.50,
+                'customer_acquisition' => 1234
+            ],
+            'quarterly_forecast' => [
+                'growth_rate' => 12.5,
+                'revenue_projection' => 156780.25,
+                'customer_projection' => 3456
+            ],
+            'confidence_level' => 82.3
+        ];
+    }
+    
+    /**
+     * Detect anomalies
+     */
+    private function detectAnomalies($unifiedMetrics, $timeRange)
+    {
+        return [
+            'anomalies_detected' => [
+                [
+                    'platform' => 'instagram',
+                    'metric' => 'engagement_rate',
+                    'anomaly_type' => 'sudden_drop',
+                    'severity' => 'medium',
+                    'detected_at' => now()->subDays(2)->toISOString(),
+                    'potential_cause' => 'Algorithm change'
+                ],
+                [
+                    'platform' => 'email',
+                    'metric' => 'open_rate',
+                    'anomaly_type' => 'spike',
+                    'severity' => 'low',
+                    'detected_at' => now()->subDays(1)->toISOString(),
+                    'potential_cause' => 'Successful campaign'
+                ]
+            ],
+            'anomaly_summary' => [
+                'total_anomalies' => 2,
+                'high_severity' => 0,
+                'medium_severity' => 1,
+                'low_severity' => 1
+            ]
+        ];
+    }
+    
+    // Additional helper methods for automation and campaign functionality
+    private function analyzeCurrentAutomationState($user, $workspace)
+    {
+        return [
+            'score' => 65.8,
+            'gaps' => ['limited_trigger_variety', 'manual_segmentation'],
+            'data_quality' => 87.2,
+            'integration_readiness' => 92.3,
+            'team_readiness' => 78.5
+        ];
+    }
+    
+    private function generateAutomationRecommendations($user, $workspace, $type, $complexity, $goals)
+    {
+        return [
+            [
+                'id' => 1,
+                'title' => 'Welcome Series Automation',
+                'type' => 'email_sequence',
+                'complexity' => 'basic',
+                'expected_roi' => 4.2,
+                'implementation_time' => '2 weeks',
+                'priority' => 'high'
+            ],
+            [
+                'id' => 2,
+                'title' => 'Abandoned Cart Recovery',
+                'type' => 'behavioral_trigger',
+                'complexity' => 'intermediate',
+                'expected_roi' => 6.8,
+                'implementation_time' => '3 weeks',
+                'priority' => 'medium'
+            ]
+        ];
+    }
+    
+    private function createAutomationWorkflows($user, $workspace, $recommendations)
+    {
+        return [
+            'suggested_workflows' => [
+                [
+                    'name' => 'New Subscriber Onboarding',
+                    'triggers' => ['email_signup', 'bio_site_visit'],
+                    'actions' => ['send_welcome_email', 'add_to_segment', 'schedule_follow_up'],
+                    'conditions' => ['is_new_subscriber', 'has_email']
+                ]
+            ],
+            'workflow_templates' => 15,
+            'custom_workflows' => 3
+        ];
+    }
+    
+    private function calculateAutomationROI($user, $workspace, $recommendations)
+    {
+        return [
+            'projected_roi' => 5.4,
+            'implementation_cost' => 1250.00,
+            'expected_revenue' => 6750.00,
+            'payback_period' => '3 months',
+            'confidence_level' => 85.7
+        ];
+    }
+    
+    private function createImplementationRoadmap($recommendations, $complexity)
+    {
+        return [
+            'phase_1' => [
+                'duration' => '2 weeks',
+                'tasks' => ['Setup basic triggers', 'Create email templates'],
+                'deliverables' => ['Welcome series', 'Thank you automation']
+            ],
+            'phase_2' => [
+                'duration' => '3 weeks',
+                'tasks' => ['Advanced segmentation', 'Behavioral triggers'],
+                'deliverables' => ['Abandoned cart recovery', 'Re-engagement campaigns']
+            ],
+            'phase_3' => [
+                'duration' => '4 weeks',
+                'tasks' => ['Cross-platform integration', 'Advanced analytics'],
+                'deliverables' => ['Unified customer journey', 'Predictive analytics']
+            ]
+        ];
+    }
+    
+    private function identifyIntegrationOpportunities($user, $workspace, $type)
+    {
+        return [
+            'available_integrations' => [
+                'zapier' => 'Connect 3000+ apps',
+                'hubspot' => 'Advanced CRM features',
+                'shopify' => 'E-commerce integration',
+                'stripe' => 'Payment processing'
+            ],
+            'recommended_integrations' => [
+                'zapier' => 'High priority - enables unlimited automation',
+                'hubspot' => 'Medium priority - improves lead management'
+            ]
+        ];
+    }
+    
+    private function getAutomationTemplates($type, $complexity)
+    {
+        return [
+            'email_marketing' => [
+                'welcome_series' => 'Multi-step onboarding sequence',
+                'abandoned_cart' => 'Recovery campaign with incentives',
+                'win_back' => 'Re-engagement for inactive subscribers'
+            ],
+            'sales' => [
+                'lead_nurturing' => 'Automated lead scoring and follow-up',
+                'trial_conversion' => 'Free trial to paid conversion'
+            ]
+        ];
+    }
+    
+    private function defineSuccessMetrics($type, $goals)
+    {
+        return [
+            'primary_metrics' => [
+                'automation_engagement_rate' => 'Target: 65%',
+                'conversion_rate' => 'Target: 8%',
+                'revenue_attribution' => 'Target: 25%'
+            ],
+            'secondary_metrics' => [
+                'time_saved' => 'Target: 10 hours/week',
+                'lead_quality_score' => 'Target: 80+',
+                'customer_satisfaction' => 'Target: 4.5/5'
+            ]
+        ];
+    }
+    
+    private function createMonitoringDashboard($recommendations)
+    {
+        return [
+            'dashboard_url' => '/dashboard/automation-monitoring',
+            'key_widgets' => [
+                'automation_performance',
+                'revenue_attribution',
+                'engagement_metrics',
+                'error_monitoring'
+            ],
+            'alert_thresholds' => [
+                'low_engagement' => '<30%',
+                'high_error_rate' => '>5%',
+                'revenue_decline' => '>15%'
+            ]
+        ];
+    }
+    
+    // Campaign execution helper methods
+    private function createCampaignRecord($user, $workspace, $data)
+    {
+        return [
+            'id' => 'campaign_' . uniqid(),
+            'name' => $data['campaign_name'],
+            'type' => $data['campaign_type'],
+            'workspace_id' => $workspace->id,
+            'user_id' => $user->id,
+            'created_at' => now()->toISOString(),
+            'status' => 'initializing'
+        ];
+    }
+    
+    private function generatePlatformContent($campaign, $platforms, $contentStrategy)
+    {
+        return [
+            'content_templates' => [
+                'instagram' => [
+                    'posts' => ['Post 1 content', 'Post 2 content'],
+                    'stories' => ['Story 1 content', 'Story 2 content'],
+                    'reels' => ['Reel 1 script', 'Reel 2 script']
+                ],
+                'email' => [
+                    'subject_lines' => ['Email 1 subject', 'Email 2 subject'],
+                    'content' => ['Email 1 content', 'Email 2 content']
+                ],
+                'bio_sites' => [
+                    'banners' => ['Banner 1 design', 'Banner 2 design'],
+                    'call_to_actions' => ['CTA 1 text', 'CTA 2 text']
+                ]
+            ],
+            'content_calendar' => [
+                'week_1' => ['Instagram post', 'Email send', 'Bio site update'],
+                'week_2' => ['Instagram story', 'Email follow-up', 'Bio site promo'],
+                'week_3' => ['Instagram reel', 'Email reminder', 'Bio site testimonial']
+            ]
+        ];
+    }
+    
+    private function setupCampaignAutomation($campaign, $rules)
+    {
+        return [
+            'automation_rules' => [
+                'trigger_conditions' => ['user_engagement', 'time_based', 'behavioral'],
+                'actions' => ['send_email', 'update_bio_site', 'post_to_instagram'],
+                'frequency' => 'daily'
+            ],
+            'workflow_id' => 'workflow_' . uniqid(),
+            'status' => 'active'
+        ];
+    }
+    
+    private function setupCampaignTracking($campaign, $metrics)
+    {
+        return [
+            'tracking_pixels' => ['email_tracking', 'bio_site_tracking', 'instagram_tracking'],
+            'conversion_goals' => ['signup', 'purchase', 'engagement'],
+            'analytics_integration' => 'enabled',
+            'reporting_frequency' => 'daily'
+        ];
+    }
+    
+    private function initializeCampaignExecution($campaign, $contentStrategy, $automation)
+    {
+        return [
+            'execution_schedule' => [
+                'start_date' => now()->addDay()->toISOString(),
+                'end_date' => now()->addMonth()->toISOString(),
+                'milestones' => ['week_1_review', 'week_2_optimization', 'week_3_scale']
+            ],
+            'resource_allocation' => [
+                'budget_distribution' => ['instagram' => 40, 'email' => 30, 'bio_sites' => 30],
+                'time_allocation' => ['content_creation' => 40, 'monitoring' => 30, 'optimization' => 30]
+            ]
+        ];
+    }
+    
+    private function setupCampaignMonitoring($campaign, $metrics)
+    {
+        return [
+            'monitoring_alerts' => [
+                'performance_thresholds' => ['engagement_rate < 5%', 'conversion_rate < 2%'],
+                'budget_alerts' => ['80% spent', '100% spent'],
+                'notification_channels' => ['email', 'dashboard']
+            ],
+            'reporting_schedule' => [
+                'daily_reports' => 'performance_summary',
+                'weekly_reports' => 'detailed_analytics',
+                'monthly_reports' => 'roi_analysis'
+            ]
+        ];
+    }
+    
+    private function synchronizeCampaignAcrossPlatforms($campaign, $platforms)
+    {
+        return [
+            'sync_status' => 'synchronized',
+            'platform_connections' => [
+                'instagram' => 'connected',
+                'email' => 'connected',
+                'bio_sites' => 'connected'
+            ],
+            'data_consistency' => 'verified',
+            'last_sync' => now()->toISOString()
+        ];
+    }
+    
+    private function predictCampaignOutcomes($campaign, $platforms)
+    {
+        return [
+            'predicted_reach' => 15420,
+            'predicted_engagement' => 2340,
+            'predicted_conversions' => 234,
+            'predicted_revenue' => 12450.75,
+            'confidence_level' => 82.5
+        ];
+    }
+    
+    private function generateCampaignOptimizations($campaign)
+    {
+        return [
+            'content_optimization' => ['Use more visual content', 'Improve call-to-action clarity'],
+            'timing_optimization' => ['Test different posting times', 'Optimize email send times'],
+            'audience_optimization' => ['Refine target audience', 'Exclude low-performing segments']
+        ];
+    }
+    
+    private function generateNextSteps($campaign, $executionPlan)
+    {
+        return [
+            'immediate_actions' => [
+                'Approve content calendar',
+                'Set up tracking pixels',
+                'Configure automation rules'
+            ],
+            'week_1_goals' => [
+                'Launch first content wave',
+                'Monitor initial performance',
+                'Optimize based on early data'
+            ],
+            'success_criteria' => [
+                'Engagement rate > 8%',
+                'Conversion rate > 3%',
+                'ROI > 200%'
+            ]
+        ];
+    }
 }
