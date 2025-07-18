@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\SocialMediaAccount;
 use App\Models\SocialMediaPost;
+use App\Models\InstagramPost;
+use App\Models\AnalyticsEvent;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 
