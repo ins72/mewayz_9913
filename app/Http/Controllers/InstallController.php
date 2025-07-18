@@ -609,7 +609,14 @@ class InstallController extends Controller
 
         foreach ($values as $key => $value) {
             $pattern = "/^{$key}=.*/m";
-            $replacement = "{$key}=" . (is_null($value) ? '' : $value);
+            
+            // Quote values that contain spaces or special characters
+            $formattedValue = is_null($value) ? '' : $value;
+            if (is_string($formattedValue) && (strpos($formattedValue, ' ') !== false || strpos($formattedValue, '#') !== false)) {
+                $formattedValue = '"' . $formattedValue . '"';
+            }
+            
+            $replacement = "{$key}=" . $formattedValue;
             
             if (preg_match($pattern, $envContent)) {
                 $envContent = preg_replace($pattern, $replacement, $envContent);
