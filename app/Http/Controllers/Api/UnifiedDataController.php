@@ -471,23 +471,68 @@ class UnifiedDataController extends Controller
 
     private function getBioSiteTouchpoints($customer, $timeRange)
     {
-        // Mock bio site touchpoints
-        return [
-            [
-                'platform' => 'bio_sites',
-                'type' => 'page_visit',
-                'timestamp' => now()->subDays(4)->toISOString(),
-                'data' => ['page' => 'main_bio', 'duration' => 120, 'links_clicked' => 2],
-                'engagement_score' => 5.8
-            ],
-            [
-                'platform' => 'bio_sites',
-                'type' => 'link_click',
-                'timestamp' => now()->subDays(2)->toISOString(),
-                'data' => ['link' => 'contact_form', 'conversion' => true],
-                'engagement_score' => 8.5
-            ]
-        ];
+        try {
+            $touchpoints = [];
+            
+            // Get bio sites owned by customer
+            $bioSites = BioSite::where('user_id', $customer->user_id)
+                ->where('is_active', true)
+                ->get();
+                
+            foreach ($bioSites as $bioSite) {
+                // Get page visits
+                $visits = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                    ->where('event_type', 'bio_site_visit')
+                    ->where('reference_id', $bioSite->id)
+                    ->whereBetween('created_at', $timeRange)
+                    ->get();
+                    
+                foreach ($visits as $visit) {
+                    $eventData = json_decode($visit->event_data, true) ?? [];
+                    $touchpoints[] = [
+                        'platform' => 'bio_sites',
+                        'type' => 'page_visit',
+                        'timestamp' => $visit->created_at->toISOString(),
+                        'data' => [
+                            'bio_site_id' => $bioSite->id,
+                            'duration' => $eventData['duration'] ?? 0,
+                            'page_views' => $eventData['page_views'] ?? 1,
+                            'referrer' => $eventData['referrer'] ?? 'direct'
+                        ],
+                        'engagement_score' => $this->calculatePageEngagementScore($eventData)
+                    ];
+                }
+                
+                // Get link clicks
+                $linkClicks = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                    ->where('event_type', 'bio_site_link_click')
+                    ->where('reference_id', $bioSite->id)
+                    ->whereBetween('created_at', $timeRange)
+                    ->get();
+                    
+                foreach ($linkClicks as $click) {
+                    $eventData = json_decode($click->event_data, true) ?? [];
+                    $touchpoints[] = [
+                        'platform' => 'bio_sites',
+                        'type' => 'link_click',
+                        'timestamp' => $click->created_at->toISOString(),
+                        'data' => [
+                            'bio_site_id' => $bioSite->id,
+                            'link_url' => $eventData['link_url'] ?? '',
+                            'link_title' => $eventData['link_title'] ?? '',
+                            'conversion' => $eventData['conversion'] ?? false
+                        ],
+                        'engagement_score' => $eventData['conversion'] ? 8.5 : 5.0
+                    ];
+                }
+            }
+            
+            return $touchpoints;
+            
+        } catch (\Exception $e) {
+            Log::error('Error fetching bio site touchpoints: ' . $e->getMessage());
+            return [];
+        }
     }
 
     private function getEmailTouchpoints($customer, $timeRange)
