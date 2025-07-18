@@ -220,6 +220,58 @@
         </div>
     </section>
     
+    <!-- Stats Section -->
+    <section class="py-20" style="background: var(--surface-secondary);">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-size: 2.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">
+                    Production-Ready Platform
+                </h2>
+                <p style="font-size: 1.125rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                    Built with enterprise-grade infrastructure and comprehensive feature set
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        62
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Database Tables
+                    </div>
+                </div>
+                
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        100%
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Legal Compliance
+                    </div>
+                </div>
+                
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        20+
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Core Features
+                    </div>
+                </div>
+                
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--accent-primary); margin-bottom: 0.5rem;">
+                        ∞
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Scalability
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="py-20">
         <div class="container">
