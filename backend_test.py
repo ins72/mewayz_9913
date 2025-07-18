@@ -1936,6 +1936,7 @@ class MewayzAPITester:
         self.test_advanced_booking_system()
         self.test_advanced_financial_management()
         self.test_enhanced_ai_features()
+        self.test_admin_dashboard_system()  # NEW: Ultra-Comprehensive Admin Dashboard System
         
         # PHASE 1 FEATURES TESTING (from review request)
         print("\n" + "=" * 80)
