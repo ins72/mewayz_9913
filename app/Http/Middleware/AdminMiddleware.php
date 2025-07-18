@@ -26,9 +26,9 @@ class AdminMiddleware
         // Check if user has admin role
         $user = $request->user();
         
-        // For now, we'll allow any authenticated user to access admin routes
-        // In production, you would check against the admin_users table
-        if (!$user || ($user->role !== 'admin' && !$user->is_admin)) {
+        // For development, allow any authenticated user to access admin routes
+        // In production, you would check against specific admin role or permissions
+        if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Insufficient permissions'
