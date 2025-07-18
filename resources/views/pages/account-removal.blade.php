@@ -201,7 +201,7 @@
                     <h3 class="font-semibold text-blue-900 mb-2">Need Help?</h3>
                     <p class="text-blue-800">
                         If you're having issues with our service, please consider 
-                        <a href="{{ route('business.contact') }}" class="underline">contacting our support team</a> 
+                        <a href="/contact" class="underline">contacting our support team</a> 
                         before deleting your account. We're here to help resolve any problems.
                     </p>
                 </div>
