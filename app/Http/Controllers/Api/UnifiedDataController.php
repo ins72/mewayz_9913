@@ -1052,26 +1052,195 @@ class UnifiedDataController extends Controller
     // Additional helper methods would continue here...
     // For brevity, I'll add placeholder methods that would be fully implemented
     
+    private function calculateEngagementScore($likes, $comments, $shares)
+    {
+        // Calculate engagement score based on interactions
+        $score = ($likes * 1) + ($comments * 2) + ($shares * 3);
+        return min(10, max(1, $score / 10));
+    }
+    
+    private function calculatePageEngagementScore($eventData)
+    {
+        $duration = $eventData['duration'] ?? 0;
+        $pageViews = $eventData['page_views'] ?? 1;
+        
+        // Calculate score based on time spent and page views
+        $score = ($duration / 60) + ($pageViews * 0.5);
+        return min(10, max(1, $score));
+    }
+    
+    private function calculateEmailEngagementScore($eventType, $eventData)
+    {
+        $scores = [
+            'email_open' => 4.0,
+            'email_click' => 7.0,
+            'email_reply' => 9.0,
+            'email_forward' => 8.5
+        ];
+        
+        return $scores[$eventType] ?? 3.0;
+    }
+    
     private function generateCustomerPredictions($customer, $touchpoints, $engagementPatterns)
     {
-        // Implementation for customer predictions
-        return [
-            'next_action_probability' => 0.78,
-            'churn_risk' => 0.23,
-            'upsell_opportunity' => 0.65,
-            'advocacy_potential' => 0.54
-        ];
+        try {
+            $totalEngagement = array_sum(array_column($touchpoints, 'engagement_score'));
+            $avgEngagement = count($touchpoints) > 0 ? $totalEngagement / count($touchpoints) : 0;
+            
+            // Calculate predictions based on actual data
+            $nextActionProb = min(1, $avgEngagement / 10);
+            $churnRisk = max(0, 1 - ($avgEngagement / 10));
+            $upsellOpp = $this->calculateUpsellOpportunity($customer, $touchpoints);
+            $advocacyPotential = $this->calculateAdvocacyPotential($customer, $touchpoints);
+            
+            return [
+                'next_action_probability' => round($nextActionProb, 2),
+                'churn_risk' => round($churnRisk, 2),
+                'upsell_opportunity' => round($upsellOpp, 2),
+                'advocacy_potential' => round($advocacyPotential, 2)
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error generating customer predictions: ' . $e->getMessage());
+            return [
+                'next_action_probability' => 0.5,
+                'churn_risk' => 0.3,
+                'upsell_opportunity' => 0.4,
+                'advocacy_potential' => 0.3
+            ];
+        }
+    }
+    
+    private function calculateUpsellOpportunity($customer, $touchpoints)
+    {
+        $purchaseCount = 0;
+        $totalValue = 0;
+        
+        foreach ($touchpoints as $touchpoint) {
+            if (in_array($touchpoint['type'], ['purchase', 'course_enrollment'])) {
+                $purchaseCount++;
+                $totalValue += $touchpoint['data']['payment_amount'] ?? $touchpoint['data']['price'] ?? 0;
+            }
+        }
+        
+        // Higher purchase history increases upsell opportunity
+        return min(1, ($purchaseCount * 0.2) + ($totalValue / 1000));
+    }
+    
+    private function calculateAdvocacyPotential($customer, $touchpoints)
+    {
+        $engagementSum = array_sum(array_column($touchpoints, 'engagement_score'));
+        $platformsUsed = count(array_unique(array_column($touchpoints, 'platform')));
+        
+        // More engaged customers across multiple platforms have higher advocacy potential
+        return min(1, ($engagementSum / 100) + ($platformsUsed * 0.1));
     }
 
     private function generateCustomerRecommendations($customer, $touchpoints, $customerInsights)
     {
-        // Implementation for customer recommendations
-        return [
-            'next_best_action' => 'Send personalized product recommendation',
-            'optimal_contact_time' => '2:00 PM - 4:00 PM',
-            'preferred_channel' => 'email',
-            'content_preferences' => ['educational', 'product_demos']
-        ];
+        try {
+            $recommendations = [];
+            
+            // Analyze touchpoint patterns
+            $platformCounts = [];
+            $recentActivity = [];
+            
+            foreach ($touchpoints as $touchpoint) {
+                $platform = $touchpoint['platform'];
+                $platformCounts[$platform] = ($platformCounts[$platform] ?? 0) + 1;
+                
+                if (Carbon::parse($touchpoint['timestamp'])->diffInDays(now()) <= 7) {
+                    $recentActivity[] = $touchpoint;
+                }
+            }
+            
+            // Find preferred platform
+            $preferredPlatform = !empty($platformCounts) ? array_keys($platformCounts, max($platformCounts))[0] : 'email';
+            
+            // Generate recommendations based on data
+            $nextBestAction = $this->determineNextBestAction($customer, $touchpoints, $recentActivity);
+            $optimalTime = $this->determineOptimalContactTime($touchpoints);
+            $contentPrefs = $this->analyzeContentPreferences($touchpoints);
+            
+            return [
+                'next_best_action' => $nextBestAction,
+                'optimal_contact_time' => $optimalTime,
+                'preferred_channel' => $preferredPlatform,
+                'content_preferences' => $contentPrefs
+            ];
+            
+        } catch (\Exception $e) {
+            Log::error('Error generating customer recommendations: ' . $e->getMessage());
+            return [
+                'next_best_action' => 'Send personalized follow-up',
+                'optimal_contact_time' => '2:00 PM - 4:00 PM',
+                'preferred_channel' => 'email',
+                'content_preferences' => ['educational', 'product_updates']
+            ];
+        }
+    }
+    
+    private function determineNextBestAction($customer, $touchpoints, $recentActivity)
+    {
+        if (empty($recentActivity)) {
+            return 'Re-engagement campaign';
+        }
+        
+        $hasRecentPurchase = false;
+        foreach ($recentActivity as $activity) {
+            if (in_array($activity['type'], ['purchase', 'course_enrollment'])) {
+                $hasRecentPurchase = true;
+                break;
+            }
+        }
+        
+        if ($hasRecentPurchase) {
+            return 'Upsell complementary products';
+        }
+        
+        $highEngagement = array_sum(array_column($recentActivity, 'engagement_score')) / count($recentActivity) > 6;
+        
+        return $highEngagement ? 'Send personalized product recommendation' : 'Educational content series';
+    }
+    
+    private function determineOptimalContactTime($touchpoints)
+    {
+        $hourCounts = [];
+        
+        foreach ($touchpoints as $touchpoint) {
+            $hour = Carbon::parse($touchpoint['timestamp'])->hour;
+            $hourCounts[$hour] = ($hourCounts[$hour] ?? 0) + 1;
+        }
+        
+        if (empty($hourCounts)) {
+            return '2:00 PM - 4:00 PM';
+        }
+        
+        $optimalHour = array_keys($hourCounts, max($hourCounts))[0];
+        return sprintf('%d:00 %s - %d:00 %s', 
+            $optimalHour > 12 ? $optimalHour - 12 : $optimalHour,
+            $optimalHour >= 12 ? 'PM' : 'AM',
+            ($optimalHour + 2) > 12 ? ($optimalHour + 2) - 12 : $optimalHour + 2,
+            ($optimalHour + 2) >= 12 ? 'PM' : 'AM'
+        );
+    }
+    
+    private function analyzeContentPreferences($touchpoints)
+    {
+        $preferences = [];
+        
+        foreach ($touchpoints as $touchpoint) {
+            if ($touchpoint['platform'] === 'courses') {
+                $preferences[] = 'educational';
+            } elseif ($touchpoint['platform'] === 'email') {
+                $preferences[] = 'newsletters';
+            } elseif ($touchpoint['platform'] === 'instagram') {
+                $preferences[] = 'visual_content';
+            } elseif ($touchpoint['platform'] === 'bio_sites') {
+                $preferences[] = 'product_info';
+            }
+        }
+        
+        return array_unique($preferences);
     }
 
     // Additional methods would be implemented here for full functionality...
