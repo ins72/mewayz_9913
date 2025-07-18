@@ -30,11 +30,14 @@ class LegalPagesAPITester:
             'timestamp': datetime.now().isoformat()
         }
         
-    def make_request(self, method, endpoint, data=None, headers=None, auth_required=True):
+    def make_request(self, method, endpoint, data=None, headers=None, auth_required=True, use_api=True):
         """Make HTTP request with proper headers"""
         time.sleep(0.1)  # Rate limiting
         
-        url = f"{self.api_url}{endpoint}"
+        if use_api:
+            url = f"{self.api_url}{endpoint}"
+        else:
+            url = f"{self.base_url}{endpoint}"
         
         default_headers = {
             'Content-Type': 'application/json',
