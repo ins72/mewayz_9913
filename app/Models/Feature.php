@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Feature extends Model
 {
@@ -20,71 +18,41 @@ class Feature extends Model
         'goals',
         'monthly_price',
         'yearly_price',
-        'is_active',
         'is_free',
         'sort_order',
-        'dependencies',
         'metadata',
+        'is_active'
     ];
 
     protected $casts = [
         'goals' => 'array',
-        'is_active' => 'boolean',
-        'is_free' => 'boolean',
-        'dependencies' => 'array',
-        'metadata' => 'array',
         'monthly_price' => 'decimal:2',
         'yearly_price' => 'decimal:2',
+        'is_free' => 'boolean',
+        'metadata' => 'array',
+        'is_active' => 'boolean'
     ];
+
+    /**
+     * Get the workspace goals this feature belongs to
+     */
+    public function workspaceGoals()
+    {
+        return $this->belongsToMany(WorkspaceGoal::class, 'goal_features', 'feature_id', 'goal_id');
+    }
 
     /**
      * Get workspaces that have this feature enabled
      */
-    public function workspaces(): BelongsToMany
+    public function workspaces()
     {
-        return $this->belongsToMany(Workspace::class, 'workspace_features')
-                    ->withPivot('is_enabled', 'configuration', 'enabled_at', 'disabled_at')
-                    ->withTimestamps();
+        return $this->belongsToMany(Workspace::class, 'workspace_features', 'feature_id', 'workspace_id')
+            ->withPivot('is_active', 'enabled_at', 'settings')
+            ->withTimestamps();
     }
 
     /**
-     * Get workspace features pivot records
-     */
-    public function workspaceFeatures(): HasMany
-    {
-        return $this->hasMany(WorkspaceFeature::class);
-    }
-
-    /**
-     * Check if feature supports a specific goal
-     */
-    public function supportsGoal(string $goalSlug): bool
-    {
-        return in_array($goalSlug, $this->goals ?? []);
-    }
-
-    /**
-     * Get features that this feature depends on
-     */
-    public function getDependentFeatures()
-    {
-        if (empty($this->dependencies)) {
-            return collect([]);
-        }
-
-        return static::whereIn('id', $this->dependencies)->get();
-    }
-
-    /**
-     * Get features that depend on this feature
-     */
-    public function getDependsOnFeatures()
-    {
-        return static::whereJsonContains('dependencies', $this->id)->get();
-    }
-
-    /**
-     * Scope to get active features
+     * Scope for active features
      */
     public function scopeActive($query)
     {
@@ -92,23 +60,7 @@ class Feature extends Model
     }
 
     /**
-     * Scope to get features by category
-     */
-    public function scopeByCategory($query, string $category)
-    {
-        return $query->where('category', $category);
-    }
-
-    /**
-     * Scope to get features by goal
-     */
-    public function scopeByGoal($query, string $goalSlug)
-    {
-        return $query->whereJsonContains('goals', $goalSlug);
-    }
-
-    /**
-     * Scope to get free features
+     * Scope for free features
      */
     public function scopeFree($query)
     {
@@ -116,19 +68,79 @@ class Feature extends Model
     }
 
     /**
-     * Get formatted price for display
+     * Scope for paid features
      */
-    public function getFormattedPrice(string $interval = 'monthly'): string
+    public function scopePaid($query)
     {
-        $price = $interval === 'yearly' ? $this->yearly_price : $this->monthly_price;
-        return '$' . number_format($price, 2);
+        return $query->where('is_free', false);
     }
 
     /**
-     * Get price for specific interval
+     * Scope for features by category
      */
-    public function getPrice(string $interval = 'monthly'): float
+    public function scopeByCategory($query, $category)
     {
-        return $interval === 'yearly' ? $this->yearly_price : $this->monthly_price;
+        return $query->where('category', $category);
+    }
+
+    /**
+     * Scope for features by goal
+     */
+    public function scopeByGoal($query, $goalId)
+    {
+        return $query->whereJsonContains('goals', $goalId);
+    }
+
+    /**
+     * Scope for ordered features
+     */
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('sort_order');
+    }
+
+    /**
+     * Get the yearly savings percentage
+     */
+    public function getYearlySavingsPercentageAttribute()
+    {
+        if ($this->monthly_price <= 0) {
+            return 0;
+        }
+
+        $yearlyEquivalent = $this->monthly_price * 12;
+        return round((($yearlyEquivalent - $this->yearly_price) / $yearlyEquivalent) * 100);
+    }
+
+    /**
+     * Get the price for a given billing cycle
+     */
+    public function getPriceFor($billingCycle)
+    {
+        return $billingCycle === 'yearly' ? $this->yearly_price : $this->monthly_price;
+    }
+
+    /**
+     * Check if feature is available for a specific goal
+     */
+    public function isAvailableForGoal($goalId)
+    {
+        return in_array($goalId, $this->goals ?? []);
+    }
+
+    /**
+     * Get the integration requirements from metadata
+     */
+    public function getIntegrationRequirementsAttribute()
+    {
+        return $this->metadata['integrations'] ?? [];
+    }
+
+    /**
+     * Get the feature limits from metadata
+     */
+    public function getLimitsAttribute()
+    {
+        return $this->metadata['limits'] ?? [];
     }
 }

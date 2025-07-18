@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WorkspaceFeature extends Model
 {
@@ -13,23 +12,25 @@ class WorkspaceFeature extends Model
     protected $fillable = [
         'workspace_id',
         'feature_id',
-        'is_enabled',
-        'configuration',
+        'is_active',
         'enabled_at',
         'disabled_at',
+        'settings',
+        'usage_data'
     ];
 
     protected $casts = [
-        'is_enabled' => 'boolean',
-        'configuration' => 'array',
+        'is_active' => 'boolean',
         'enabled_at' => 'datetime',
         'disabled_at' => 'datetime',
+        'settings' => 'array',
+        'usage_data' => 'array'
     ];
 
     /**
-     * Get the workspace that owns this feature
+     * Get the workspace this feature belongs to
      */
-    public function workspace(): BelongsTo
+    public function workspace()
     {
         return $this->belongsTo(Workspace::class);
     }
@@ -37,83 +38,67 @@ class WorkspaceFeature extends Model
     /**
      * Get the feature
      */
-    public function feature(): BelongsTo
+    public function feature()
     {
         return $this->belongsTo(Feature::class);
     }
 
     /**
-     * Enable the feature
+     * Scope for active features
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope for inactive features
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Enable this feature
      */
     public function enable()
     {
         $this->update([
-            'is_enabled' => true,
+            'is_active' => true,
             'enabled_at' => now(),
-            'disabled_at' => null,
+            'disabled_at' => null
         ]);
     }
 
     /**
-     * Disable the feature
+     * Disable this feature
      */
     public function disable()
     {
         $this->update([
-            'is_enabled' => false,
-            'disabled_at' => now(),
+            'is_active' => false,
+            'disabled_at' => now()
         ]);
     }
 
     /**
-     * Update feature configuration
+     * Get the usage statistics
      */
-    public function updateConfiguration(array $configuration)
+    public function getUsageStatsAttribute()
     {
-        $this->update([
-            'configuration' => array_merge($this->configuration ?? [], $configuration),
-        ]);
+        return $this->usage_data['stats'] ?? [];
     }
 
     /**
-     * Get configuration value
+     * Update usage data
      */
-    public function getConfiguration(string $key, $default = null)
+    public function updateUsage($data)
     {
-        return data_get($this->configuration, $key, $default);
-    }
+        $currentUsage = $this->usage_data ?? [];
+        $currentUsage['stats'] = array_merge($currentUsage['stats'] ?? [], $data);
+        $currentUsage['last_updated'] = now();
 
-    /**
-     * Set configuration value
-     */
-    public function setConfiguration(string $key, $value)
-    {
-        $configuration = $this->configuration ?? [];
-        data_set($configuration, $key, $value);
-        $this->update(['configuration' => $configuration]);
-    }
-
-    /**
-     * Check if feature is currently enabled
-     */
-    public function isEnabled(): bool
-    {
-        return $this->is_enabled;
-    }
-
-    /**
-     * Scope to get enabled features
-     */
-    public function scopeEnabled($query)
-    {
-        return $query->where('is_enabled', true);
-    }
-
-    /**
-     * Scope to get disabled features
-     */
-    public function scopeDisabled($query)
-    {
-        return $query->where('is_enabled', false);
+        $this->update(['usage_data' => $currentUsage]);
     }
 }

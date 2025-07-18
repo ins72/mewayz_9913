@@ -15,22 +15,22 @@ class WorkspaceGoal extends Model
         'description',
         'icon',
         'color',
-        'is_active',
         'sort_order',
         'metadata',
+        'is_active'
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'metadata' => 'array',
+        'is_active' => 'boolean'
     ];
 
     /**
-     * Get features that support this goal
+     * Get the features related to this goal
      */
     public function features()
     {
-        return Feature::active()->byGoal($this->slug)->orderBy('sort_order')->get();
+        return $this->belongsToMany(Feature::class, 'goal_features', 'goal_id', 'feature_id');
     }
 
     /**
@@ -38,11 +38,11 @@ class WorkspaceGoal extends Model
      */
     public function workspaces()
     {
-        return Workspace::whereJsonContains('selected_goals', $this->slug)->get();
+        return $this->belongsToMany(Workspace::class, 'workspace_goal_selections', 'goal_id', 'workspace_id');
     }
 
     /**
-     * Scope to get active goals
+     * Scope for active goals
      */
     public function scopeActive($query)
     {
@@ -50,7 +50,7 @@ class WorkspaceGoal extends Model
     }
 
     /**
-     * Scope to order by sort order
+     * Scope for ordered goals
      */
     public function scopeOrdered($query)
     {
@@ -58,25 +58,26 @@ class WorkspaceGoal extends Model
     }
 
     /**
-     * Get the icon HTML for display
+     * Get the features count for this goal
      */
-    public function getIconHtml(): string
+    public function getFeaturesCountAttribute()
     {
-        if (empty($this->icon)) {
-            return '<div class="w-6 h-6 bg-gray-400 rounded"></div>';
-        }
+        return $this->features()->count();
+    }
 
-        // If it's an SVG string, return it directly
-        if (str_starts_with($this->icon, '<svg')) {
-            return $this->icon;
-        }
+    /**
+     * Get the integrations from metadata
+     */
+    public function getIntegrationsAttribute()
+    {
+        return $this->metadata['integrations'] ?? [];
+    }
 
-        // If it's a CSS class (like Font Awesome), return as icon
-        if (str_starts_with($this->icon, 'fa-') || str_starts_with($this->icon, 'heroicon-')) {
-            return '<i class="' . $this->icon . '"></i>';
-        }
-
-        // Default SVG icon
-        return '<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>';
+    /**
+     * Get the goal features from metadata
+     */
+    public function getGoalFeaturesAttribute()
+    {
+        return $this->metadata['features'] ?? [];
     }
 }

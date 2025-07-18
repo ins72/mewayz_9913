@@ -4,49 +4,33 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 
 class TeamInvitation extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'uuid',
         'workspace_id',
-        'invited_by',
         'email',
         'role',
-        'permissions',
-        'status',
+        'invited_by',
+        'token',
         'expires_at',
         'accepted_at',
-        'rejected_at',
-        'token',
+        'declined_at',
+        'status'
     ];
 
     protected $casts = [
-        'permissions' => 'array',
         'expires_at' => 'datetime',
         'accepted_at' => 'datetime',
-        'rejected_at' => 'datetime',
+        'declined_at' => 'datetime'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($invitation) {
-            $invitation->uuid = $invitation->uuid ?: (string) Str::uuid();
-            $invitation->token = $invitation->token ?: Str::random(64);
-            $invitation->expires_at = $invitation->expires_at ?: now()->addDays(7);
-        });
-    }
-
     /**
-     * Get the workspace for this invitation
+     * Get the workspace this invitation belongs to
      */
-    public function workspace(): BelongsTo
+    public function workspace()
     {
         return $this->belongsTo(Workspace::class);
     }
@@ -54,149 +38,104 @@ class TeamInvitation extends Model
     /**
      * Get the user who sent the invitation
      */
-    public function invitedBy(): BelongsTo
+    public function invitedBy()
     {
         return $this->belongsTo(User::class, 'invited_by');
     }
 
     /**
-     * Accept the invitation
+     * Get the user who accepted the invitation
      */
-    public function accept()
+    public function acceptedBy()
     {
-        $this->update([
-            'status' => 'accepted',
-            'accepted_at' => now(),
-        ]);
+        return $this->belongsTo(User::class, 'accepted_by');
     }
 
     /**
-     * Reject the invitation
+     * Scope for pending invitations
      */
-    public function reject()
+    public function scopePending($query)
     {
-        $this->update([
-            'status' => 'rejected',
-            'rejected_at' => now(),
-        ]);
+        return $query->where('status', 'pending')
+            ->whereNull('accepted_at')
+            ->whereNull('declined_at')
+            ->where('expires_at', '>', now());
     }
 
     /**
-     * Check if invitation is pending
+     * Scope for expired invitations
      */
-    public function isPending(): bool
+    public function scopeExpired($query)
     {
-        return $this->status === 'pending';
+        return $query->where('expires_at', '<', now());
     }
 
     /**
-     * Check if invitation is accepted
+     * Scope for accepted invitations
      */
-    public function isAccepted(): bool
+    public function scopeAccepted($query)
     {
-        return $this->status === 'accepted';
+        return $query->whereNotNull('accepted_at');
     }
 
     /**
-     * Check if invitation is rejected
+     * Scope for declined invitations
      */
-    public function isRejected(): bool
+    public function scopeDeclined($query)
     {
-        return $this->status === 'rejected';
+        return $query->whereNotNull('declined_at');
     }
 
     /**
      * Check if invitation is expired
      */
-    public function isExpired(): bool
+    public function isExpired()
     {
-        return $this->status === 'expired' || $this->expires_at->isPast();
+        return $this->expires_at < now();
     }
 
     /**
-     * Mark invitation as expired
+     * Check if invitation is pending
      */
-    public function markAsExpired()
+    public function isPending()
     {
-        $this->update(['status' => 'expired']);
+        return $this->status === 'pending' && 
+               !$this->accepted_at && 
+               !$this->declined_at && 
+               !$this->isExpired();
     }
 
     /**
-     * Get invitation URL
+     * Accept the invitation
      */
-    public function getInvitationUrl(): string
+    public function accept($userId)
     {
-        return url('/team/invitation/' . $this->uuid . '?token=' . $this->token);
+        $this->update([
+            'accepted_at' => now(),
+            'accepted_by' => $userId,
+            'status' => 'accepted'
+        ]);
     }
 
     /**
-     * Scope to get pending invitations
+     * Decline the invitation
      */
-    public function scopePending($query)
+    public function decline()
     {
-        return $query->where('status', 'pending');
+        $this->update([
+            'declined_at' => now(),
+            'status' => 'declined'
+        ]);
     }
 
     /**
-     * Scope to get accepted invitations
+     * Regenerate the invitation token
      */
-    public function scopeAccepted($query)
+    public function regenerateToken()
     {
-        return $query->where('status', 'accepted');
-    }
-
-    /**
-     * Scope to get rejected invitations
-     */
-    public function scopeRejected($query)
-    {
-        return $query->where('status', 'rejected');
-    }
-
-    /**
-     * Scope to get expired invitations
-     */
-    public function scopeExpired($query)
-    {
-        return $query->where('status', 'expired')
-                    ->orWhere('expires_at', '<', now());
-    }
-
-    /**
-     * Scope to get invitations by workspace
-     */
-    public function scopeByWorkspace($query, $workspaceId)
-    {
-        return $query->where('workspace_id', $workspaceId);
-    }
-
-    /**
-     * Scope to get invitations by email
-     */
-    public function scopeByEmail($query, string $email)
-    {
-        return $query->where('email', $email);
-    }
-
-    /**
-     * Get available roles
-     */
-    public static function getAvailableRoles(): array
-    {
-        return [
-            'member' => 'Member',
-            'editor' => 'Editor',
-            'manager' => 'Manager',
-            'admin' => 'Admin',
-        ];
-    }
-
-    /**
-     * Get role display name
-     */
-    public function getRoleDisplayName(): string
-    {
-        $roles = static::getAvailableRoles();
-        return $roles[$this->role] ?? ucfirst($this->role);
+        $this->update([
+            'token' => Str::random(32),
+            'expires_at' => now()->addDays(7)
+        ]);
     }
 }
