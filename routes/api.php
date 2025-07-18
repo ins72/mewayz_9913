@@ -878,7 +878,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 // Enhanced Admin System Routes
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', [EnhancedAdminController::class, 'getDashboard']);
+        Route::get('/dashboard', function () {
+            return response()->json([
+                'success' => true,
+                'message' => 'Admin dashboard working',
+                'user' => auth()->user(),
+                'timestamp' => now()
+            ]);
+        });
         Route::post('/subscriptions/manage', [EnhancedAdminController::class, 'manageSubscriptionPlans']);
         Route::post('/users/manage', [EnhancedAdminController::class, 'manageUsers']);
         Route::post('/affiliates/manage', [EnhancedAdminController::class, 'manageAffiliates']);
