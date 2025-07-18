@@ -413,23 +413,60 @@ class UnifiedDataController extends Controller
 
     private function getInstagramTouchpoints($customer, $timeRange)
     {
-        // Mock Instagram touchpoints
-        return [
-            [
-                'platform' => 'instagram',
-                'type' => 'profile_visit',
-                'timestamp' => now()->subDays(5)->toISOString(),
-                'data' => ['source' => 'hashtag_search', 'duration' => 45],
-                'engagement_score' => 3.2
-            ],
-            [
-                'platform' => 'instagram',
-                'type' => 'post_engagement',
-                'timestamp' => now()->subDays(3)->toISOString(),
-                'data' => ['action' => 'like', 'post_id' => 'post_123'],
-                'engagement_score' => 4.1
-            ]
-        ];
+        try {
+            // Get Instagram interactions from database
+            $touchpoints = [];
+            
+            // Get Instagram accounts connected to customer
+            $instagramAccounts = SocialMediaAccount::where('user_id', $customer->user_id)
+                ->where('platform', 'instagram')
+                ->where('is_active', true)
+                ->get();
+                
+            foreach ($instagramAccounts as $account) {
+                // Get Instagram posts interactions
+                $posts = \App\Models\InstagramPost::where('account_id', $account->id)
+                    ->whereBetween('created_at', $timeRange)
+                    ->get();
+                    
+                foreach ($posts as $post) {
+                    $touchpoints[] = [
+                        'platform' => 'instagram',
+                        'type' => 'post_engagement',
+                        'timestamp' => $post->created_at->toISOString(),
+                        'data' => [
+                            'post_id' => $post->id,
+                            'likes' => $post->likes_count ?? 0,
+                            'comments' => $post->comments_count ?? 0,
+                            'shares' => $post->shares_count ?? 0
+                        ],
+                        'engagement_score' => $this->calculateEngagementScore($post->likes_count ?? 0, $post->comments_count ?? 0, $post->shares_count ?? 0)
+                    ];
+                }
+                
+                // Get profile visits if available
+                $profileVisits = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                    ->where('event_type', 'instagram_profile_visit')
+                    ->whereBetween('created_at', $timeRange)
+                    ->get();
+                    
+                foreach ($profileVisits as $visit) {
+                    $touchpoints[] = [
+                        'platform' => 'instagram',
+                        'type' => 'profile_visit',
+                        'timestamp' => $visit->created_at->toISOString(),
+                        'data' => json_decode($visit->event_data, true) ?? [],
+                        'engagement_score' => 3.0
+                    ];
+                }
+            }
+            
+            return $touchpoints;
+            
+        } catch (\Exception $e) {
+            Log::error('Error fetching Instagram touchpoints: ' . $e->getMessage());
+            return [];
+        }
     }
 
     private function getBioSiteTouchpoints($customer, $timeRange)
