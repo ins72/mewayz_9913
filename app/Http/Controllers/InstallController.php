@@ -550,9 +550,10 @@ class InstallController extends Controller
     {
         return [
             'app_name' => env('APP_NAME', 'Mewayz'),
-            'app_url' => env('APP_URL', 'http://localhost'),
+            'app_url' => env('APP_URL', 'https://yourdomain.com'),
             'app_env' => env('APP_ENV', 'production'),
             'app_debug' => env('APP_DEBUG', false),
+            'app_timezone' => env('APP_TIMEZONE', 'UTC'),
             'mail_driver' => env('MAIL_MAILER', 'smtp'),
             'mail_host' => env('MAIL_HOST', 'smtp.mailgun.org'),
             'mail_port' => env('MAIL_PORT', 587),
@@ -565,9 +566,13 @@ class InstallController extends Controller
             'cache_driver' => env('CACHE_DRIVER', 'redis'),
             'queue_connection' => env('QUEUE_CONNECTION', 'redis'),
             'session_driver' => env('SESSION_DRIVER', 'redis'),
+            'session_lifetime' => env('SESSION_LIFETIME', 120),
             'redis_host' => env('REDIS_HOST', '127.0.0.1'),
             'redis_port' => env('REDIS_PORT', 6379),
             'redis_password' => env('REDIS_PASSWORD'),
+            'log_channel' => env('LOG_CHANNEL', 'stack'),
+            'log_level' => env('LOG_LEVEL', 'warning'),
+            'filesystem_disk' => env('FILESYSTEM_DISK', 'local'),
         ];
     }
 
