@@ -637,6 +637,11 @@ class InstallController extends Controller
             'REDIS_HOST' => $config['redis_host'],
             'REDIS_PORT' => $config['redis_port'],
             'REDIS_PASSWORD' => $config['redis_password'],
+            // URL-dependent settings
+            'SANCTUM_STATEFUL_DOMAINS' => parse_url($config['app_url'], PHP_URL_HOST),
+            'ASSET_URL' => $config['app_url'],
+            'SESSION_SECURE_COOKIE' => $config['app_env'] === 'production' ? '1' : '0',
+            'SESSION_SAME_SITE' => $config['app_env'] === 'production' ? 'strict' : 'lax',
         ]);
 
         return response()->json([
