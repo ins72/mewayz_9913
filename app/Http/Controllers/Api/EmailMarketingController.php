@@ -1260,7 +1260,7 @@ class EmailMarketingController extends Controller
     /**
      * Send campaign using ElasticEmail
      */
-    public function sendCampaignWithElasticEmail($campaignId)
+    public function sendCampaignWithElasticEmail(Request $request, $campaignId)
     {
         try {
             $user = $request->user();
