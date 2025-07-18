@@ -153,7 +153,7 @@ class LegalPagesAPITester:
                 "reason": "No longer need the service",
                 "confirmation": True
             }
-            response = self.make_request('POST', '/legal/data-deletion', deletion_data)
+            response = self.make_request('POST', '/legal/data-deletion', deletion_data, use_api=True)
             if response and response.status_code in [200, 201]:
                 self.log_test("Data Deletion API", True, "Data deletion request successful")
                 print("✅ Data Deletion API working")
