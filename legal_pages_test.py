@@ -483,8 +483,8 @@ def main():
     print("Testing legal documents system, API endpoints, and page routes")
     print("-" * 80)
     
-    # Use production URL from environment
-    base_url = "https://mewayz.com"
+    # Use localhost URL
+    base_url = "http://localhost:8001"
     
     tester = LegalPagesAPITester(base_url)
     success = tester.run_comprehensive_test()
