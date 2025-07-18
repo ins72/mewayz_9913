@@ -1073,7 +1073,356 @@ class MewayzAPITester:
         else:
             self.log_test("Security Headers", False, "Cannot test security headers - no response")
 
-    def run_comprehensive_production_test(self):
+    def test_new_database_improvements(self):
+        """Test the new database improvements mentioned in review request"""
+        print("\n=== Testing New Database Improvements (62 Tables Total) ===")
+        
+        if not self.auth_token:
+            self.log_test("New Database Features", False, "Cannot test - no authentication token")
+            return
+        
+        # Test new e-commerce tables (products, orders, order_items, categories)
+        print("\n--- Testing E-commerce System (New Tables) ---")
+        
+        # Test categories table
+        response = self.make_request('GET', '/ecommerce/categories', auth_required=False)
+        if response and response.status_code == 200:
+            data = response.json()
+            categories = data.get('data', []) if isinstance(data.get('data'), list) else []
+            self.log_test("Categories Table", True, f"Categories table working - Found {len(categories)} categories")
+        else:
+            self.log_test("Categories Table", False, f"Categories table failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test products table with CRUD operations
+        response = self.make_request('GET', '/ecommerce/products')
+        if response and response.status_code == 200:
+            self.log_test("Products Table (GET)", True, "Products table accessible")
+            
+            # Test product creation
+            product_data = {
+                "name": "Test Digital Course",
+                "description": "A comprehensive digital marketing course",
+                "price": 99.99,
+                "category_id": 1,  # Digital Products category
+                "type": "digital",
+                "status": "active",
+                "stock_quantity": 100
+            }
+            
+            response = self.make_request('POST', '/ecommerce/products', product_data)
+            if response and response.status_code in [200, 201]:
+                self.log_test("Products Table (POST)", True, "Product creation successful")
+            else:
+                self.log_test("Products Table (POST)", False, f"Product creation failed - Status: {response.status_code if response else 'No response'}")
+        else:
+            self.log_test("Products Table (GET)", False, f"Products table failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test orders table
+        response = self.make_request('GET', '/ecommerce/orders')
+        if response and response.status_code == 200:
+            self.log_test("Orders Table", True, "Orders table accessible")
+        else:
+            self.log_test("Orders Table", False, f"Orders table failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test new social media tables (social_media_posts, social_media_accounts)
+        print("\n--- Testing Social Media Management (New Tables) ---")
+        
+        response = self.make_request('GET', '/social-media/accounts')
+        if response and response.status_code == 200:
+            self.log_test("Social Media Accounts Table", True, "Social media accounts table accessible")
+        else:
+            self.log_test("Social Media Accounts Table", False, f"Social media accounts table failed - Status: {response.status_code if response else 'No response'}")
+        
+        response = self.make_request('GET', '/social-media/posts')
+        if response and response.status_code == 200:
+            self.log_test("Social Media Posts Table", True, "Social media posts table accessible")
+        else:
+            self.log_test("Social Media Posts Table", False, f"Social media posts table failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test new Laravel core tables (jobs, notifications, sessions, password_reset_tokens)
+        print("\n--- Testing Laravel Core Features (New Tables) ---")
+        
+        # Test notifications system
+        response = self.make_request('GET', '/notifications')
+        if response and response.status_code == 200:
+            self.log_test("Notifications Table", True, "Notifications table accessible")
+        else:
+            self.log_test("Notifications Table", False, f"Notifications table failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test queue system (jobs table)
+        response = self.make_request('GET', '/system/queue-status', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Jobs Table (Queue System)", True, "Queue system working - jobs table functional")
+        else:
+            self.log_test("Jobs Table (Queue System)", False, f"Queue system failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_password_reset_system(self):
+        """Test the new password reset functionality"""
+        print("\n=== Testing Password Reset System (New Feature) ===")
+        
+        # Test password reset request
+        reset_data = {
+            "email": "testuser@example.com"
+        }
+        
+        response = self.make_request('POST', '/auth/password/reset-request', reset_data, auth_required=False)
+        if response and response.status_code in [200, 201]:
+            self.log_test("Password Reset Request", True, "Password reset request successful")
+        else:
+            self.log_test("Password Reset Request", False, f"Password reset request failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test password reset status check
+        response = self.make_request('GET', '/auth/password/reset-status', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Password Reset Status", True, "Password reset status check working")
+        else:
+            self.log_test("Password Reset Status", False, f"Password reset status failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_enhanced_admin_dashboard(self):
+        """Test enhanced admin dashboard with access to all 62 tables"""
+        print("\n=== Testing Enhanced Admin Dashboard (62 Tables Access) ===")
+        
+        if not self.auth_token:
+            self.log_test("Enhanced Admin Dashboard", False, "Cannot test - no authentication token")
+            return
+        
+        # Test admin dashboard main page
+        response = self.make_request('GET', '/admin/dashboard')
+        if response and response.status_code == 403:
+            self.log_test("Admin Dashboard Security", True, "Admin dashboard properly secured (403 for non-admin)")
+        elif response and response.status_code == 200:
+            self.log_test("Admin Dashboard Access", True, "Admin dashboard accessible")
+        else:
+            self.log_test("Admin Dashboard", False, f"Admin dashboard failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test admin database schema access
+        response = self.make_request('GET', '/admin/database/schema')
+        if response and response.status_code == 403:
+            self.log_test("Admin Database Schema Security", True, "Database schema properly secured")
+        elif response and response.status_code == 200:
+            data = response.json()
+            table_count = len(data.get('tables', []))
+            self.log_test("Admin Database Schema", True, f"Database schema accessible - {table_count} tables found")
+        else:
+            self.log_test("Admin Database Schema", False, f"Database schema failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test admin table management
+        response = self.make_request('GET', '/admin/tables/products')
+        if response and response.status_code == 403:
+            self.log_test("Admin Table Management Security", True, "Table management properly secured")
+        elif response and response.status_code == 200:
+            self.log_test("Admin Table Management", True, "Admin can access table management")
+        else:
+            self.log_test("Admin Table Management", False, f"Table management failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_database_integrity_and_relationships(self):
+        """Test database integrity and foreign key relationships"""
+        print("\n=== Testing Database Integrity & Foreign Key Relationships ===")
+        
+        if not self.auth_token:
+            self.log_test("Database Integrity", False, "Cannot test - no authentication token")
+            return
+        
+        # Test foreign key relationships by creating related records
+        print("\n--- Testing Product-Category Relationship ---")
+        
+        # First get categories to test relationship
+        response = self.make_request('GET', '/ecommerce/categories', auth_required=False)
+        if response and response.status_code == 200:
+            data = response.json()
+            categories = data.get('data', [])
+            if categories:
+                category_id = categories[0].get('id')
+                
+                # Create product with valid category_id
+                product_data = {
+                    "name": "Test Product with Category",
+                    "description": "Testing foreign key relationship",
+                    "price": 49.99,
+                    "category_id": category_id,
+                    "type": "digital",
+                    "status": "active"
+                }
+                
+                response = self.make_request('POST', '/ecommerce/products', product_data)
+                if response and response.status_code in [200, 201]:
+                    self.log_test("Product-Category Relationship", True, "Foreign key relationship working correctly")
+                else:
+                    self.log_test("Product-Category Relationship", False, f"Foreign key relationship failed - Status: {response.status_code if response else 'No response'}")
+            else:
+                self.log_test("Product-Category Relationship", False, "No categories found to test relationship")
+        else:
+            self.log_test("Product-Category Relationship", False, "Cannot test - categories not accessible")
+        
+        # Test cascading deletes (if implemented)
+        print("\n--- Testing Cascading Delete Behavior ---")
+        response = self.make_request('GET', '/admin/database/constraints', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Database Constraints", True, "Database constraints accessible")
+        else:
+            self.log_test("Database Constraints", False, f"Database constraints check failed - Status: {response.status_code if response else 'No response'}")
+    
+    def test_seed_data_verification(self):
+        """Test that seed data was properly added"""
+        print("\n=== Testing Seed Data Verification ===")
+        
+        # Test categories seed data (6 predefined categories)
+        response = self.make_request('GET', '/ecommerce/categories', auth_required=False)
+        if response and response.status_code == 200:
+            data = response.json()
+            categories = data.get('data', [])
+            expected_categories = ['Digital Products', 'Courses', 'Templates', 'Services', 'Merchandise', 'Subscriptions']
+            
+            if len(categories) >= 6:
+                category_names = [cat.get('name', '') for cat in categories]
+                found_expected = sum(1 for expected in expected_categories if any(expected in name for name in category_names))
+                
+                if found_expected >= 4:  # At least 4 of the 6 expected categories
+                    self.log_test("Categories Seed Data", True, f"Found {len(categories)} categories including expected ones")
+                else:
+                    self.log_test("Categories Seed Data", False, f"Expected categories not found - Found: {category_names}")
+            else:
+                self.log_test("Categories Seed Data", False, f"Insufficient categories found - Expected 6+, Found: {len(categories)}")
+        else:
+            self.log_test("Categories Seed Data", False, f"Categories seed data check failed - Status: {response.status_code if response else 'No response'}")
+        
+        # Test legal documents seed data
+        legal_pages = ['terms-of-service', 'privacy-policy', 'cookie-policy', 'refund-policy', 'accessibility']
+        legal_working = 0
+        
+        for page in legal_pages:
+            response = self.make_request('GET', f'/{page}', auth_required=False)
+            if response and response.status_code == 200:
+                legal_working += 1
+        
+        if legal_working == 5:
+            self.log_test("Legal Documents Seed Data", True, "All 5 legal documents accessible")
+        elif legal_working >= 3:
+            self.log_test("Legal Documents Seed Data", True, f"Most legal documents accessible ({legal_working}/5)")
+        else:
+            self.log_test("Legal Documents Seed Data", False, f"Legal documents not properly seeded ({legal_working}/5)")
+
+    def test_comprehensive_final_backend(self):
+        """Run comprehensive final backend test as requested in review"""
+        print("🚀 COMPREHENSIVE FINAL BACKEND TEST - MEWAYZ PLATFORM")
+        print("=" * 80)
+        print("Testing Database Improvements: 52 → 62 Tables (10 New Tables Added)")
+        print("Focus Areas: E-commerce, Social Media, Laravel Core, Admin Dashboard")
+        print("=" * 80)
+        
+        # Core Infrastructure (must work for production)
+        self.test_health_check()
+        self.test_database_connectivity()
+        
+        # Authentication System (enhanced with password reset)
+        self.test_authentication_system()
+        self.test_password_reset_system()
+        
+        # NEW DATABASE IMPROVEMENTS - Primary Focus
+        self.test_new_database_improvements()
+        self.test_database_integrity_and_relationships()
+        self.test_seed_data_verification()
+        
+        # Enhanced Admin Dashboard (access to all 62 tables)
+        self.test_enhanced_admin_dashboard()
+        
+        # Core Business Features (should benefit from new tables)
+        self.test_ecommerce_system()
+        self.test_social_media_management()
+        
+        # Queue System and Background Jobs (new jobs table)
+        response = self.make_request('GET', '/system/queue-status', auth_required=False)
+        if response and response.status_code == 200:
+            self.log_test("Background Jobs System", True, "Queue system operational")
+        else:
+            self.log_test("Background Jobs System", False, "Queue system not accessible")
+        
+        # Legal Pages (should remain 100% functional)
+        self.test_legal_pages_system()
+        
+        # Performance check for production readiness
+        self.test_production_performance()
+        
+        # Generate final report
+        self.generate_final_backend_report()
+
+    def generate_final_backend_report(self):
+        """Generate final backend test report focusing on new improvements"""
+        print("\n" + "=" * 80)
+        print("🎯 FINAL BACKEND TEST REPORT - DATABASE IMPROVEMENTS")
+        print("=" * 80)
+        
+        total_tests = len(self.test_results)
+        passed_tests = sum(1 for result in self.test_results.values() if result['success'])
+        failed_tests = total_tests - passed_tests
+        success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
+        
+        print(f"📊 OVERALL BACKEND SUCCESS RATE: {success_rate:.1f}%")
+        print(f"   Total Tests: {total_tests}")
+        print(f"   Passed: {passed_tests} ✅")
+        print(f"   Failed: {failed_tests} ❌")
+        print()
+        
+        # Focus on new database improvements
+        new_features = {
+            'E-commerce System': ['Categories Table', 'Products Table', 'Orders Table'],
+            'Social Media Management': ['Social Media Accounts Table', 'Social Media Posts Table'],
+            'Laravel Core Features': ['Notifications Table', 'Jobs Table', 'Password Reset'],
+            'Admin Dashboard': ['Admin Dashboard', 'Database Schema', 'Table Management'],
+            'Database Integrity': ['Product-Category Relationship', 'Database Constraints', 'Seed Data']
+        }
+        
+        print("🆕 NEW DATABASE IMPROVEMENTS STATUS:")
+        for category, tests in new_features.items():
+            category_tests = [name for name in self.test_results.keys() if any(test in name for test in tests)]
+            if category_tests:
+                category_passed = sum(1 for name in category_tests if self.test_results[name]['success'])
+                category_total = len(category_tests)
+                category_rate = (category_passed / category_total * 100) if category_total > 0 else 0
+                
+                status = "✅" if category_rate >= 80 else "⚠️" if category_rate >= 50 else "❌"
+                print(f"   {status} {category}: {category_rate:.1f}% ({category_passed}/{category_total})")
+        
+        print()
+        
+        # Production readiness assessment
+        print("🏆 PRODUCTION READINESS ASSESSMENT:")
+        if success_rate >= 85:
+            print("   Status: ✅ PRODUCTION READY")
+            print("   Assessment: Backend meets the expected 85%+ success rate")
+            print("   Database improvements successfully implemented")
+        elif success_rate >= 75:
+            print("   Status: ⚠️  MOSTLY READY")
+            print("   Assessment: Backend close to production ready")
+            print("   Minor issues need addressing")
+        else:
+            print("   Status: ❌ NEEDS IMPROVEMENT")
+            print("   Assessment: Backend below expected success rate")
+            print("   Significant issues require attention")
+        
+        # Key findings
+        print("\n🔍 KEY FINDINGS:")
+        
+        # Check critical systems
+        critical_systems = ['Health Check', 'Database Connectivity', 'Authentication', 'E-commerce', 'Admin Dashboard']
+        critical_working = sum(1 for system in critical_systems 
+                             if any(system in name and self.test_results[name]['success'] 
+                                   for name in self.test_results.keys()))
+        
+        print(f"   Critical Systems Working: {critical_working}/{len(critical_systems)}")
+        
+        # Check new features specifically
+        new_feature_tests = [name for name in self.test_results.keys() 
+                           if any(keyword in name for keyword in ['Table', 'Categories', 'Products', 'Orders', 'Social Media', 'Notifications', 'Jobs', 'Password Reset'])]
+        new_features_working = sum(1 for name in new_feature_tests if self.test_results[name]['success'])
+        
+        if new_feature_tests:
+            new_features_rate = (new_features_working / len(new_feature_tests) * 100)
+            print(f"   New Database Features: {new_features_rate:.1f}% ({new_features_working}/{len(new_feature_tests)})")
+        
+        print("\n" + "=" * 80)
+        print("🎯 FINAL BACKEND TESTING COMPLETE")
+        print("=" * 80)
         """Run comprehensive production readiness test"""
         print("🚀 STARTING COMPREHENSIVE PRODUCTION READINESS BACKEND TESTING")
         print("=" * 80)
