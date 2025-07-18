@@ -287,6 +287,7 @@ return new class extends Migration
         Schema::table('sites', function (Blueprint $table) {
             if (!Schema::hasColumn('sites', 'ai_generate')) {
                 $table->integer('ai_generate')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'ai_generate_prompt')) {
                 $table->longText('ai_generate_prompt')->after('settings')->nullable();
