@@ -37,15 +37,16 @@ return new class() extends Migration {
                 ->change()
             ;
         });
-
+    }
 
     public function down(): void
     {
         Schema::dropColumns($this->table(), ['uuid']);
-
+    }
 
     private function table(): string
     {
         return (new Wallet())->getTable();
+    }
 
 };
