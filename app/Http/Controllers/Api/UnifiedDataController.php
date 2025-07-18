@@ -445,9 +445,9 @@ class UnifiedDataController extends Controller
                 }
                 
                 // Get profile visits if available
-                $profileVisits = \App\Models\AnalyticsEvent::where('user_id', $customer->user_id)
+                $profileVisits = \App\Models\UnifiedAnalyticsEvent::where('user_id', $customer->user_id)
                     ->where('event_type', 'instagram_profile_visit')
-                    ->whereBetween('created_at', $timeRange)
+                    ->whereBetween('timestamp', $timeRange)
                     ->get();
                     
                 foreach ($profileVisits as $visit) {
