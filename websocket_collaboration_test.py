@@ -36,7 +36,7 @@ class WebSocketCollaborationTester:
         
     def make_request(self, method, endpoint, data=None, headers=None, auth_required=True):
         """Make HTTP request with proper headers"""
-        time.sleep(0.1)  # Rate limiting
+        time.sleep(2)  # Rate limiting
         
         url = f"{self.api_url}{endpoint}"
         
