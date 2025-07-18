@@ -139,6 +139,11 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('bio_pages');
+        Schema::dropIfExists('bio_sites_linker');
+        Schema::dropIfExists('bio_sites_linker_track');
+        Schema::dropIfExists('bio_sites_visitors');
+        Schema::dropIfExists('bio_sites_uploads');
         Schema::dropIfExists('bio_sites');
     }
 };
