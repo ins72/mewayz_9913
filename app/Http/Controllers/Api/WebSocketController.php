@@ -135,12 +135,14 @@ class WebSocketController extends Controller
             return response()->json(['error' => 'Workspace ID and cursor position are required'], 400);
         }
 
-        // Update user activity
+        // Update user activity in Redis
         $presenceKey = "workspace.{$workspaceId}.users.{$user->id}";
-        $userData = Cache::get($presenceKey);
+        $userData = \Illuminate\Support\Facades\Redis::get($presenceKey);
+        
         if ($userData) {
+            $userData = json_decode($userData, true);
             $userData['last_activity'] = now()->toISOString();
-            Cache::put($presenceKey, $userData, now()->addMinutes(30));
+            \Illuminate\Support\Facades\Redis::setex($presenceKey, 1800, json_encode($userData));
         }
 
         // Broadcast cursor movement
