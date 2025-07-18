@@ -229,7 +229,7 @@ class EnhancedControllersTest:
         """Test EmailMarketingController - fixed method and comprehensive analytics"""
         print("\n=== Testing EmailMarketingController (Phase 1 Fixes) ===")
         
-        # Test 1: POST /api/email-marketing/send-campaign-elastic/{campaignId}
+        # Test 1: POST /api/email-marketing/campaigns/{campaignId}/send-elastic-email
         print("\n--- Testing Send Campaign Elastic Email Endpoint ---")
         campaign_id = "test-campaign-123"
         elastic_email_data = {
@@ -246,7 +246,7 @@ class EnhancedControllersTest:
             }
         }
         
-        response = self.make_request('POST', f'/email-marketing/send-campaign-elastic/{campaign_id}', elastic_email_data)
+        response = self.make_request('POST', f'/email-marketing/campaigns/{campaign_id}/send-elastic-email', elastic_email_data)
         if response and response.status_code in [200, 201]:
             try:
                 data = response.json()
