@@ -299,15 +299,19 @@ return new class extends Migration
 
             if (!Schema::hasColumn('sites', 'published')) {
                 $table->integer('published')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'is_template')) {
                 $table->integer('is_template')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'is_admin')) {
                 $table->integer('is_admin')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'is_admin_selected')) {
                 $table->integer('is_admin_selected')->after('settings')->default(0);
+            }
 
             if (!Schema::hasColumn('sites', 'created_by')) {
                 $table->integer('created_by')->after('settings')->nullable();
