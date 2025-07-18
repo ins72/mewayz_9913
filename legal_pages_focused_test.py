@@ -86,7 +86,8 @@ class LegalPagesAPITester:
         
         for page in legal_pages:
             print(f"\n--- Testing {page} endpoint ---")
-            response = self.make_request('GET', f'/{page}', auth_required=False)
+            # Legal pages are web routes, not API routes
+            response = self.make_request('GET', f'/{page}', auth_required=False, use_api=False)
             
             if response and response.status_code == 200:
                 try:
