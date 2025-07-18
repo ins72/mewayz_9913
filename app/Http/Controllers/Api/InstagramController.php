@@ -362,42 +362,23 @@ class InstagramController extends Controller
                 ], 400);
             }
 
-            // For demo purposes, return mock analytics data
-            $mockAnalytics = [
-                'account_insights' => [
-                    'impressions' => 12450,
-                    'reach' => 8930,
-                    'profile_views' => 567,
-                    'website_clicks' => 234
-                ],
-                'posts_data' => [
-                    'total_posts' => 45,
-                    'average_engagement' => 5.2,
-                    'top_performing_post' => [
-                        'id' => 'mock_post_123',
-                        'caption' => 'Amazing sunset at the beach! 🌅',
-                        'likes' => 432,
-                        'comments' => 28,
-                        'shares' => 12
-                    ]
-                ],
-                'growth_metrics' => [
-                    'followers_gained' => 127,
-                    'followers_lost' => 23,
-                    'net_growth' => 104
-                ],
-                'best_posting_times' => [
-                    'weekday' => '18:00',
-                    'weekend' => '14:00'
-                ]
-            ];
-
+            // Get real Instagram analytics data
+            $realAnalytics = $this->getInstagramAnalyticsData($account);
+            
             return response()->json([
                 'success' => true,
-                'data' => $mockAnalytics,
+                'data' => $realAnalytics,
                 'account' => [
                     'id' => $account->id,
                     'username' => $account->username,
+                    'followers_count' => $account->followers_count ?? 0,
+                    'following_count' => $account->following_count ?? 0,
+                    'posts_count' => $account->posts_count ?? 0,
+                    'is_verified' => $account->is_verified ?? false,
+                    'account_type' => $account->account_type ?? 'personal',
+                    'last_sync' => $account->last_sync_at
+                ]
+            ]);
                     'platform' => $account->platform
                 ]
             ]);
