@@ -42,6 +42,7 @@ use App\Http\Controllers\Api\EnhancedAIController;
 use App\Http\Controllers\Api\InstagramDatabaseController;
 use App\Http\Controllers\Api\VisualBioBuilderController;
 use App\Http\Controllers\Api\WebSocketController;
+use App\Http\Controllers\Api\UnifiedDataController;
 
 /*
 |--------------------------------------------------------------------------
