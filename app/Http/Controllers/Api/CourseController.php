@@ -891,12 +891,36 @@ class CourseController extends Controller
 
     public function getCommunityGroups(Request $request)
     {
-        // TODO: Get community groups
-        $groups = [];
+        // Get community groups for courses
+        $groups = \App\Models\CommunityGroup::where('user_id', $request->user()->id)
+            ->where('type', 'course')
+            ->with(['members', 'discussions'])
+            ->get()
+            ->map(function ($group) {
+                return [
+                    'id' => $group->id,
+                    'name' => $group->name,
+                    'description' => $group->description,
+                    'type' => $group->type,
+                    'privacy' => $group->privacy ?? 'public',
+                    'member_count' => $group->members->count(),
+                    'discussion_count' => $group->discussions->count(),
+                    'created_at' => $group->created_at,
+                    'is_active' => $group->is_active ?? true,
+                    'course_id' => $group->course_id,
+                    'recent_activity' => $group->last_activity_at,
+                    'admin_info' => [
+                        'id' => $group->admin_id,
+                        'name' => $group->admin->name ?? 'Unknown'
+                    ]
+                ];
+            });
 
         return response()->json([
             'success' => true,
             'data' => $groups,
+            'total_groups' => $groups->count(),
+            'user_groups' => $groups->where('admin_id', $request->user()->id)->count()
         ]);
     }
 }
