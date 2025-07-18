@@ -353,7 +353,7 @@
             
             <!-- Content -->
             <div class="dashboard-content">
-                {{ $slot }}
+                @yield('content')
             </div>
         </div>
     </div>
