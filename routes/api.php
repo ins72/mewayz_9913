@@ -867,7 +867,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Admin-only subscription management
-Route::middleware(['custom.auth', 'admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::prefix('admin/subscriptions')->group(function () {
         Route::post('/plans', [RealTimeSubscriptionController::class, 'createPlan']);
         Route::put('/plans/{planId}', [RealTimeSubscriptionController::class, 'updatePlan']);
