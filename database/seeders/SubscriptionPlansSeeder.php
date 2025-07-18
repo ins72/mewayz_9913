@@ -18,71 +18,70 @@ class SubscriptionPlansSeeder extends Seeder
                 'name' => 'Free Plan',
                 'slug' => 'free',
                 'description' => 'Perfect for getting started with basic features and limited functionality.',
-                'monthly_price' => 0.00,
-                'yearly_price' => 0.00,
-                'features_limit' => 10,
-                'workspaces_limit' => 1,
-                'team_members_limit' => 3,
-                'storage_limit' => 1, // GB
-                'bandwidth_limit' => 10, // GB
-                'is_active' => true,
-                'is_popular' => false,
-                'sort_order' => 1,
+                'type' => 'free',
+                'base_price' => 0.00,
+                'feature_price_monthly' => 0.00,
+                'feature_price_yearly' => 0.00,
+                'max_features' => 10,
+                'has_branding' => 1,
+                'has_priority_support' => 0,
+                'has_custom_domain' => 0,
+                'has_api_access' => 0,
+                'included_features' => json_encode([
+                    'drag-drop-builder',
+                    'dashboard-analytics',
+                    'basic-templates',
+                    'community-support'
+                ]),
                 'metadata' => json_encode([
-                    'features_included' => [
-                        'drag-drop-builder',
-                        'dashboard-analytics',
-                        'basic-templates',
-                        'community-support'
-                    ],
                     'limitations' => [
                         'mewayz_branding' => true,
                         'limited_customization' => true,
                         'basic_support' => true
                     ],
                     'billing_cycle' => 'monthly'
-                ])
+                ]),
+                'is_active' => 1
             ],
             [
                 'name' => 'Professional Plan',
                 'slug' => 'professional',
                 'description' => 'Ideal for growing businesses and professionals who need advanced features.',
-                'monthly_price' => 1.00, // per feature
-                'yearly_price' => 10.00, // per feature
-                'features_limit' => null, // unlimited
-                'workspaces_limit' => 5,
-                'team_members_limit' => 10,
-                'storage_limit' => 100, // GB
-                'bandwidth_limit' => 1000, // GB
-                'is_active' => true,
-                'is_popular' => true,
-                'sort_order' => 2,
+                'type' => 'professional',
+                'base_price' => 0.00,
+                'feature_price_monthly' => 1.00,
+                'feature_price_yearly' => 10.00,
+                'max_features' => null,
+                'has_branding' => 0,
+                'has_priority_support' => 0,
+                'has_custom_domain' => 1,
+                'has_api_access' => 1,
+                'included_features' => json_encode('all_standard_features'),
                 'metadata' => json_encode([
-                    'features_included' => 'all_standard_features',
                     'limitations' => [
                         'no_white_label' => true,
                         'standard_support' => true
                     ],
                     'billing_cycle' => 'per_feature',
                     'pricing_model' => 'pay_per_feature'
-                ])
+                ]),
+                'is_active' => 1
             ],
             [
                 'name' => 'Enterprise Plan',
                 'slug' => 'enterprise',
                 'description' => 'Complete solution for large organizations with white-label options and priority support.',
-                'monthly_price' => 1.50, // per feature
-                'yearly_price' => 15.00, // per feature
-                'features_limit' => null, // unlimited
-                'workspaces_limit' => null, // unlimited
-                'team_members_limit' => null, // unlimited
-                'storage_limit' => null, // unlimited
-                'bandwidth_limit' => null, // unlimited
-                'is_active' => true,
-                'is_popular' => false,
-                'sort_order' => 3,
+                'type' => 'enterprise',
+                'base_price' => 0.00,
+                'feature_price_monthly' => 1.50,
+                'feature_price_yearly' => 15.00,
+                'max_features' => null,
+                'has_branding' => 0,
+                'has_priority_support' => 1,
+                'has_custom_domain' => 1,
+                'has_api_access' => 1,
+                'included_features' => json_encode('all_features_including_enterprise'),
                 'metadata' => json_encode([
-                    'features_included' => 'all_features_including_enterprise',
                     'benefits' => [
                         'white_label_solutions' => true,
                         'custom_branding' => true,
@@ -94,7 +93,8 @@ class SubscriptionPlansSeeder extends Seeder
                     ],
                     'billing_cycle' => 'per_feature',
                     'pricing_model' => 'pay_per_feature_premium'
-                ])
+                ]),
+                'is_active' => 1
             ]
         ];
 
