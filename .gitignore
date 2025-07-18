@@ -1,19 +1,125 @@
-/.phpunit.cache
+# Dependencies
 /node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
 /vendor
+composer.lock
+package-lock.json
+
+# Environment files
 .env
 .env.backup
 .env.production
+.env.local
+.env.*.local
+
+# Build outputs
+/public/build
+/public/hot
+/public/storage
+/public/mix-manifest.json
+
+# Laravel specific
+/bootstrap/cache/*.php
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/app/public/*
+
+# Testing
+/.phpunit.cache
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
+/coverage
+/tests/coverage
+
+# IDE files
 /.fleet
 /.idea
 /.vscode
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+/temp/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Docker
+/.docker
+docker-compose.override.yml
+
+# Local configuration
+Homestead.json
+Homestead.yaml
+auth.json
+
+# Generated files
+/public/css/
+/public/js/
+/public/fonts/
+/public/images/generated/
+
+# Cache
+.cache/
+*.cache
+
+# Development files
+.local
+.development
+/dev/
+
+# Sensitive files
+*.key
+*.pem
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# Database
+*.sqlite
+*.db
+*.sql.gz
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large files
+*.mov
+*.mp4
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
