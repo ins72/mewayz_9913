@@ -965,4 +965,237 @@ class InstagramController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get real Instagram analytics data from database
+     */
+    private function getInstagramAnalyticsData($account)
+    {
+        try {
+            // Get posts for this account
+            $posts = InstagramPost::where('account_id', $account->id)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->get();
+            
+            $totalPosts = $posts->count();
+            $totalLikes = $posts->sum('likes_count');
+            $totalComments = $posts->sum('comments_count');
+            $totalShares = $posts->sum('shares_count');
+            $averageEngagement = $totalPosts > 0 ? ($totalLikes + $totalComments) / $totalPosts : 0;
+            
+            // Get top performing post
+            $topPost = $posts->sortByDesc(function($post) {
+                return ($post->likes_count + $post->comments_count + $post->shares_count);
+            })->first();
+            
+            // Get follower growth data
+            $followersGained = AnalyticsEvent::where('user_id', $account->user_id)
+                ->where('event_type', 'instagram_follower_gained')
+                ->where('reference_id', $account->id)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->count();
+                
+            $followersLost = AnalyticsEvent::where('user_id', $account->user_id)
+                ->where('event_type', 'instagram_follower_lost')
+                ->where('reference_id', $account->id)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->count();
+            
+            // Get profile views
+            $profileViews = AnalyticsEvent::where('user_id', $account->user_id)
+                ->where('event_type', 'instagram_profile_view')
+                ->where('reference_id', $account->id)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->count();
+            
+            // Get website clicks
+            $websiteClicks = AnalyticsEvent::where('user_id', $account->user_id)
+                ->where('event_type', 'instagram_website_click')
+                ->where('reference_id', $account->id)
+                ->where('created_at', '>=', now()->subDays(30))
+                ->count();
+                
+            // Calculate best posting times
+            $bestTimes = $this->calculateBestPostingTimes($posts);
+            
+            return [
+                'account_insights' => [
+                    'impressions' => $posts->sum('impressions_count') ?? 0,
+                    'reach' => $posts->sum('reach_count') ?? 0,
+                    'profile_views' => $profileViews,
+                    'website_clicks' => $websiteClicks,
+                    'total_engagement' => $totalLikes + $totalComments + $totalShares,
+                    'engagement_rate' => $account->followers_count > 0 ? round(($totalLikes + $totalComments) / $account->followers_count * 100, 2) : 0
+                ],
+                'posts_data' => [
+                    'total_posts' => $totalPosts,
+                    'average_engagement' => round($averageEngagement, 1),
+                    'top_performing_post' => $topPost ? [
+                        'id' => $topPost->id,
+                        'caption' => $topPost->caption,
+                        'likes' => $topPost->likes_count,
+                        'comments' => $topPost->comments_count,
+                        'shares' => $topPost->shares_count,
+                        'engagement_rate' => $account->followers_count > 0 ? round(($topPost->likes_count + $topPost->comments_count) / $account->followers_count * 100, 2) : 0
+                    ] : null,
+                    'content_type_breakdown' => $this->getContentTypeBreakdown($posts),
+                    'posting_frequency' => $this->calculatePostingFrequency($posts)
+                ],
+                'growth_metrics' => [
+                    'followers_gained' => $followersGained,
+                    'followers_lost' => $followersLost,
+                    'net_growth' => $followersGained - $followersLost,
+                    'growth_rate' => $account->followers_count > 0 ? round(($followersGained - $followersLost) / $account->followers_count * 100, 2) : 0
+                ],
+                'best_posting_times' => $bestTimes,
+                'hashtag_performance' => $this->getHashtagPerformance($posts),
+                'audience_insights' => $this->getAudienceInsights($account)
+            ];
+            
+        } catch (\Exception $e) {
+            Log::error('Error getting Instagram analytics data: ' . $e->getMessage());
+            
+            // Return basic structure with zeros if data fetching fails
+            return [
+                'account_insights' => [
+                    'impressions' => 0,
+                    'reach' => 0,
+                    'profile_views' => 0,
+                    'website_clicks' => 0,
+                    'total_engagement' => 0,
+                    'engagement_rate' => 0
+                ],
+                'posts_data' => [
+                    'total_posts' => 0,
+                    'average_engagement' => 0,
+                    'top_performing_post' => null,
+                    'content_type_breakdown' => [],
+                    'posting_frequency' => 0
+                ],
+                'growth_metrics' => [
+                    'followers_gained' => 0,
+                    'followers_lost' => 0,
+                    'net_growth' => 0,
+                    'growth_rate' => 0
+                ],
+                'best_posting_times' => [
+                    'weekday' => '12:00',
+                    'weekend' => '14:00'
+                ],
+                'hashtag_performance' => [],
+                'audience_insights' => []
+            ];
+        }
+    }
+    
+    /**
+     * Calculate best posting times based on post performance
+     */
+    private function calculateBestPostingTimes($posts)
+    {
+        $weekdayPerformance = [];
+        $weekendPerformance = [];
+        
+        foreach ($posts as $post) {
+            $timestamp = Carbon::parse($post->created_at);
+            $hour = $timestamp->hour;
+            $isWeekend = $timestamp->isWeekend();
+            
+            $engagement = $post->likes_count + $post->comments_count + $post->shares_count;
+            
+            if ($isWeekend) {
+                $weekendPerformance[$hour] = ($weekendPerformance[$hour] ?? 0) + $engagement;
+            } else {
+                $weekdayPerformance[$hour] = ($weekdayPerformance[$hour] ?? 0) + $engagement;
+            }
+        }
+        
+        // Find best hours
+        $bestWeekdayHour = !empty($weekdayPerformance) ? array_keys($weekdayPerformance, max($weekdayPerformance))[0] : 12;
+        $bestWeekendHour = !empty($weekendPerformance) ? array_keys($weekendPerformance, max($weekendPerformance))[0] : 14;
+        
+        return [
+            'weekday' => sprintf('%02d:00', $bestWeekdayHour),
+            'weekend' => sprintf('%02d:00', $bestWeekendHour)
+        ];
+    }
+    
+    /**
+     * Get content type breakdown
+     */
+    private function getContentTypeBreakdown($posts)
+    {
+        $breakdown = [];
+        
+        foreach ($posts as $post) {
+            $type = $post->media_type ?? 'photo';
+            $breakdown[$type] = ($breakdown[$type] ?? 0) + 1;
+        }
+        
+        return $breakdown;
+    }
+    
+    /**
+     * Calculate posting frequency
+     */
+    private function calculatePostingFrequency($posts)
+    {
+        if ($posts->count() == 0) return 0;
+        
+        $firstPost = $posts->min('created_at');
+        $lastPost = $posts->max('created_at');
+        
+        $daysDiff = Carbon::parse($firstPost)->diffInDays(Carbon::parse($lastPost));
+        
+        return $daysDiff > 0 ? round($posts->count() / $daysDiff, 1) : 0;
+    }
+    
+    /**
+     * Get hashtag performance
+     */
+    private function getHashtagPerformance($posts)
+    {
+        $hashtags = [];
+        
+        foreach ($posts as $post) {
+            if (preg_match_all('/#([a-zA-Z0-9_]+)/', $post->caption, $matches)) {
+                foreach ($matches[1] as $hashtag) {
+                    $hashtag = strtolower($hashtag);
+                    if (!isset($hashtags[$hashtag])) {
+                        $hashtags[$hashtag] = [
+                            'count' => 0,
+                            'total_engagement' => 0
+                        ];
+                    }
+                    $hashtags[$hashtag]['count']++;
+                    $hashtags[$hashtag]['total_engagement'] += $post->likes_count + $post->comments_count + $post->shares_count;
+                }
+            }
+        }
+        
+        // Sort by engagement
+        uasort($hashtags, function($a, $b) {
+            return $b['total_engagement'] - $a['total_engagement'];
+        });
+        
+        return array_slice($hashtags, 0, 10, true);
+    }
+    
+    /**
+     * Get audience insights
+     */
+    private function getAudienceInsights($account)
+    {
+        // This would typically come from Instagram API
+        // For now, return structure with any available data
+        return [
+            'demographics' => [
+                'age_distribution' => [],
+                'gender_distribution' => [],
+                'location_distribution' => []
+            ],
+            'active_hours' => [],
+            'growth_trend' => 'stable'
+        ];
+    }
 }
