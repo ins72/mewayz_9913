@@ -45,21 +45,21 @@ return new class() extends Migration {
                 ->onDelete('cascade')
             ;
         });
-
+    }
 
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
         Schema::drop($this->table());
-
+    }
 
     private function table(): string
     {
         return (new Wallet())->getTable();
-
+    }
 
     private function transactionTable(): string
     {
         return (new Transaction())->getTable();
-
+    }
 };
