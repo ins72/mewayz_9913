@@ -174,6 +174,48 @@
                         </p>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #10b981, #059669); width: 3rem; height: 3rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                            <span style="font-size: 1.25rem; color: white;">🛒</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                            E-commerce Store
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                            Sell products, courses, and services directly through your personalized storefront.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 3rem; height: 3rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                            <span style="font-size: 1.25rem; color: white;">🎮</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                            Gamification System
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                            Engage your audience with achievements, leaderboards, and reward systems.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); width: 3rem; height: 3rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                            <span style="font-size: 1.25rem; color: white;">🔐</span>
+                        </div>
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">
+                            Enterprise Security
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                            Advanced security features with role-based access control and audit logging.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
