@@ -2261,6 +2261,106 @@ class MewayzAPITester:
         print("5. Database Schema Verification (admin tables, structure validation)")
         print("All admin endpoints tested with proper authentication and data validation.")
     
+    def test_dashboard_access(self):
+        """Test Dashboard Access functionality - Frontend routes with backend authentication"""
+        print("\n=== Testing Dashboard Access (Frontend + Backend Auth) ===")
+        
+        # Test dashboard routes without authentication (should redirect to login)
+        dashboard_routes = [
+            '/dashboard',
+            '/dashboard/linkinbio', 
+            '/dashboard/social',
+            '/dashboard/store',
+            '/dashboard/courses',
+            '/dashboard/email',
+            '/dashboard/analytics'
+        ]
+        
+        unauthenticated_redirects = 0
+        authenticated_access = 0
+        
+        print("\n--- Testing Unauthenticated Access (Should Redirect) ---")
+        for route in dashboard_routes:
+            url = f"{self.web_url}{route}"
+            try:
+                response = self.session.get(url, timeout=10, allow_redirects=False)
+                if response.status_code in [302, 301]:  # Redirect to login
+                    location = response.headers.get('Location', '')
+                    if 'login' in location.lower():
+                        unauthenticated_redirects += 1
+                        self.log_test(f"Dashboard Protection - {route}", True, f"Correctly redirects to login (Status: {response.status_code})")
+                    else:
+                        self.log_test(f"Dashboard Protection - {route}", False, f"Redirects but not to login: {location}")
+                elif response.status_code == 200:
+                    self.log_test(f"Dashboard Protection - {route}", False, f"SECURITY ISSUE: Dashboard accessible without auth (Status: 200)")
+                elif response.status_code == 500:
+                    self.log_test(f"Dashboard Protection - {route}", False, f"Server error (Status: 500) - middleware or view issue")
+                else:
+                    self.log_test(f"Dashboard Protection - {route}", False, f"Unexpected response: {response.status_code}")
+            except Exception as e:
+                self.log_test(f"Dashboard Protection - {route}", False, f"Request failed: {str(e)}")
+        
+        print(f"\n--- Authentication Protection Results ---")
+        print(f"Routes properly protected: {unauthenticated_redirects}/{len(dashboard_routes)}")
+        
+        # Test authenticated access to dashboard routes
+        print("\n--- Testing Authenticated Access (With Session) ---")
+        
+        # First, try to login and get session
+        login_data = {
+            'email': 'testcreator_1752814067@example.com',  # Use a test email
+            'password': 'SecurePassword123!'
+        }
+        
+        # Try to login via web form
+        login_url = f"{self.web_url}/login"
+        try:
+            # Get login page first to get CSRF token
+            login_page = self.session.get(login_url, timeout=10)
+            if login_page.status_code == 200:
+                self.log_test("Login Page Access", True, "Login page accessible")
+                
+                # Try to post login (this might not work without proper CSRF handling)
+                login_response = self.session.post(login_url, data=login_data, timeout=10, allow_redirects=False)
+                if login_response.status_code in [302, 301]:
+                    location = login_response.headers.get('Location', '')
+                    if 'dashboard' in location.lower():
+                        self.log_test("Web Login", True, f"Login successful, redirects to dashboard: {location}")
+                        
+                        # Now test dashboard access with session
+                        for route in dashboard_routes:
+                            url = f"{self.web_url}{route}"
+                            try:
+                                response = self.session.get(url, timeout=10)
+                                if response.status_code == 200:
+                                    authenticated_access += 1
+                                    self.log_test(f"Authenticated Dashboard - {route}", True, "Dashboard accessible when authenticated")
+                                elif response.status_code == 500:
+                                    self.log_test(f"Authenticated Dashboard - {route}", False, "500 Server Error - middleware or view issue")
+                                else:
+                                    self.log_test(f"Authenticated Dashboard - {route}", False, f"Unexpected status: {response.status_code}")
+                            except Exception as e:
+                                self.log_test(f"Authenticated Dashboard - {route}", False, f"Request failed: {str(e)}")
+                    else:
+                        self.log_test("Web Login", False, f"Login redirects to unexpected location: {location}")
+                else:
+                    self.log_test("Web Login", False, f"Login failed with status: {login_response.status_code}")
+            else:
+                self.log_test("Login Page Access", False, f"Login page not accessible: {login_page.status_code}")
+        except Exception as e:
+            self.log_test("Login Process", False, f"Login process failed: {str(e)}")
+        
+        print(f"\n--- Authenticated Access Results ---")
+        print(f"Dashboard routes accessible when authenticated: {authenticated_access}/{len(dashboard_routes)}")
+        
+        # Summary
+        if unauthenticated_redirects == len(dashboard_routes) and authenticated_access > 0:
+            self.log_test("Dashboard Access System", True, f"Dashboard properly protected ({unauthenticated_redirects}/{len(dashboard_routes)} protected) and accessible when authenticated ({authenticated_access}/{len(dashboard_routes)} working)")
+        elif unauthenticated_redirects == len(dashboard_routes):
+            self.log_test("Dashboard Access System", False, f"Dashboard properly protected but has authentication/view issues (0/{len(dashboard_routes)} accessible when authenticated)")
+        else:
+            self.log_test("Dashboard Access System", False, f"CRITICAL SECURITY ISSUE: Dashboard not properly protected ({unauthenticated_redirects}/{len(dashboard_routes)} protected)")
+    
     def run_all_tests(self):
         """Run all backend tests"""
         print("🚀 Starting Comprehensive Backend Testing for Mewayz Creator Economy Platform")
