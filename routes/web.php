@@ -99,43 +99,28 @@ Route::get('/test-dashboard', function () {
     return 'Dashboard test route working!';
 })->name('test-dashboard');
 
-// Essential Business Pages Routes
-Route::get('/about', [BusinessPagesController::class, 'aboutUs'])->name('about');
-Route::get('/pricing', [BusinessPagesController::class, 'pricing'])->name('pricing');
-Route::get('/features', [BusinessPagesController::class, 'features'])->name('features');
-Route::get('/contact', [BusinessPagesController::class, 'contactUs'])->name('contact');
-Route::post('/contact', [BusinessPagesController::class, 'submitContact'])->name('contact.submit');
-Route::get('/blog', [BusinessPagesController::class, 'blog'])->name('blog');
-Route::get('/case-studies', [BusinessPagesController::class, 'caseStudies'])->name('case-studies');
-Route::get('/testimonials', [BusinessPagesController::class, 'testimonials'])->name('testimonials');
-Route::get('/careers', [BusinessPagesController::class, 'careers'])->name('careers');
-Route::get('/partners', [BusinessPagesController::class, 'partners'])->name('partners');
-Route::get('/security', [BusinessPagesController::class, 'security'])->name('security');
+// Use the controllers
+use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\LegalController;
 
-// Legal & Compliance Pages
-Route::get('/terms-of-service', [LegalComplianceController::class, 'termsOfService'])->name('terms-of-service');
-Route::get('/privacy-policy', [LegalComplianceController::class, 'privacyPolicy'])->name('privacy-policy');
-Route::get('/cookie-policy', [LegalComplianceController::class, 'cookiePolicy'])->name('cookie-policy');
-Route::get('/refund-policy', [LegalComplianceController::class, 'refundPolicy'])->name('refund-policy');
-Route::get('/sla', [LegalComplianceController::class, 'sla'])->name('sla');
-Route::get('/accessibility', [LegalComplianceController::class, 'accessibilityStatement'])->name('accessibility');
-Route::post('/cookie-consent', [LegalComplianceController::class, 'manageCookieConsent'])->name('cookie-consent');
-Route::post('/gdpr-request', [LegalComplianceController::class, 'gdprDataRequest'])->name('gdpr-request');
+// Essential Business Pages Routes (using BusinessController)
+Route::get('/about', [BusinessController::class, 'about'])->name('about');
+Route::get('/pricing', [BusinessController::class, 'pricing'])->name('pricing');
+Route::get('/features', [BusinessController::class, 'features'])->name('features');
+Route::get('/contact', [BusinessController::class, 'contact'])->name('contact');
+Route::post('/contact', [BusinessController::class, 'submitContact'])->name('contact.submit');
+Route::get('/blog', [BusinessController::class, 'blog'])->name('blog');
+Route::get('/case-studies', [BusinessController::class, 'caseStudies'])->name('case-studies');
+Route::get('/testimonials', [BusinessController::class, 'testimonials'])->name('testimonials');
+Route::get('/careers', [BusinessController::class, 'careers'])->name('careers');
+Route::get('/partners', [BusinessController::class, 'partners'])->name('partners');
+Route::get('/security', [BusinessController::class, 'security'])->name('security');
 
-// Status Page
-Route::get('/status', [StatusPageController::class, 'index'])->name('status');
-Route::get('/status/api', [StatusPageController::class, 'apiStatus'])->name('status.api');
-
-// Help Center
-Route::get('/help', [HelpCenterController::class, 'index'])->name('help.index');
-Route::get('/help/search', [HelpCenterController::class, 'search'])->name('help.search');
-Route::get('/help/category/{slug}', [HelpCenterController::class, 'category'])->name('help.category');
-Route::get('/help/{slug}', [HelpCenterController::class, 'article'])->name('help.article');
-
-// Use the new controllers
-use App\Http\Controllers\BusinessPagesController;
-use App\Http\Controllers\LegalComplianceController;
-use App\Http\Controllers\StatusPageController;
-use App\Http\Controllers\HelpCenterController;
+// Legal & Compliance Pages (using LegalController)
+Route::get('/terms-of-service', [LegalController::class, 'termsOfService'])->name('terms-of-service');
+Route::get('/privacy-policy', [LegalController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/cookie-policy', [LegalController::class, 'cookiePolicy'])->name('cookie-policy');
+Route::get('/refund-policy', [LegalController::class, 'refundPolicy'])->name('refund-policy');
+Route::get('/accessibility', [LegalController::class, 'accessibilityStatement'])->name('accessibility');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
