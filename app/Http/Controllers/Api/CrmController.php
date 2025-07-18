@@ -1150,7 +1150,7 @@ class CrmController extends Controller
     }
 
     /**
-     * Get single contact
+     * Get single contact with unified data from all platforms
      */
     public function getContact(Request $request, $contactId)
     {
@@ -1171,14 +1171,377 @@ class CrmController extends Controller
                 return response()->json(['error' => 'Contact not found'], 404);
             }
 
+            // Get unified data from all platforms
+            $unifiedData = $this->getUnifiedContactData($contact, $user);
+
             return response()->json([
                 'success' => true,
-                'data' => $contact,
+                'data' => array_merge($contact->toArray(), $unifiedData),
             ]);
         } catch (\Exception $e) {
             Log::error('Error getting contact: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to get contact'], 500);
         }
+    }
+
+    /**
+     * Get unified contact data from all platforms
+     */
+    private function getUnifiedContactData($contact, $user)
+    {
+        $unifiedData = [
+            'platform_activity' => [],
+            'engagement_timeline' => [],
+            'revenue_attribution' => [],
+            'interaction_summary' => [],
+            'predictive_insights' => [],
+            'cross_platform_score' => 0
+        ];
+
+        // Instagram activity
+        $instagramData = $this->getInstagramContactData($contact, $user);
+        if ($instagramData) {
+            $unifiedData['platform_activity']['instagram'] = $instagramData;
+            $unifiedData['engagement_timeline'] = array_merge($unifiedData['engagement_timeline'], $instagramData['timeline']);
+        }
+
+        // Bio site activity
+        $bioSiteData = $this->getBioSiteContactData($contact, $user);
+        if ($bioSiteData) {
+            $unifiedData['platform_activity']['bio_sites'] = $bioSiteData;
+            $unifiedData['engagement_timeline'] = array_merge($unifiedData['engagement_timeline'], $bioSiteData['timeline']);
+        }
+
+        // Email activity
+        $emailData = $this->getEmailContactData($contact, $user);
+        if ($emailData) {
+            $unifiedData['platform_activity']['email'] = $emailData;
+            $unifiedData['engagement_timeline'] = array_merge($unifiedData['engagement_timeline'], $emailData['timeline']);
+        }
+
+        // Course activity
+        $courseData = $this->getCourseContactData($contact, $user);
+        if ($courseData) {
+            $unifiedData['platform_activity']['courses'] = $courseData;
+            $unifiedData['engagement_timeline'] = array_merge($unifiedData['engagement_timeline'], $courseData['timeline']);
+        }
+
+        // E-commerce activity
+        $ecommerceData = $this->getEcommerceContactData($contact, $user);
+        if ($ecommerceData) {
+            $unifiedData['platform_activity']['ecommerce'] = $ecommerceData;
+            $unifiedData['engagement_timeline'] = array_merge($unifiedData['engagement_timeline'], $ecommerceData['timeline']);
+            $unifiedData['revenue_attribution'] = $ecommerceData['revenue_data'];
+        }
+
+        // Sort timeline by date
+        usort($unifiedData['engagement_timeline'], function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+
+        // Generate interaction summary
+        $unifiedData['interaction_summary'] = $this->generateInteractionSummary($unifiedData['platform_activity']);
+
+        // Generate predictive insights
+        $unifiedData['predictive_insights'] = $this->generatePredictiveInsights($contact, $unifiedData['platform_activity']);
+
+        // Calculate cross-platform score
+        $unifiedData['cross_platform_score'] = $this->calculateCrossPlatformScore($unifiedData['platform_activity']);
+
+        return $unifiedData;
+    }
+
+    /**
+     * Get Instagram contact data
+     */
+    private function getInstagramContactData($contact, $user)
+    {
+        // Mock Instagram data - in real implementation, this would fetch from Instagram API
+        return [
+            'profile_visits' => 15,
+            'post_engagements' => 8,
+            'story_views' => 12,
+            'dm_conversations' => 2,
+            'last_interaction' => '2 days ago',
+            'engagement_rate' => 4.2,
+            'follower_status' => 'following',
+            'timeline' => [
+                ['date' => '2025-01-16', 'action' => 'Liked post', 'platform' => 'instagram'],
+                ['date' => '2025-01-15', 'action' => 'Viewed story', 'platform' => 'instagram'],
+                ['date' => '2025-01-14', 'action' => 'Profile visit', 'platform' => 'instagram'],
+            ]
+        ];
+    }
+
+    /**
+     * Get bio site contact data
+     */
+    private function getBioSiteContactData($contact, $user)
+    {
+        // Mock bio site data
+        return [
+            'total_visits' => 7,
+            'unique_visits' => 5,
+            'links_clicked' => 3,
+            'time_spent' => 450, // seconds
+            'conversion_actions' => 1,
+            'favorite_links' => ['Contact Form', 'Services'],
+            'last_visit' => '1 day ago',
+            'timeline' => [
+                ['date' => '2025-01-17', 'action' => 'Clicked Contact Form', 'platform' => 'bio_site'],
+                ['date' => '2025-01-16', 'action' => 'Visited bio page', 'platform' => 'bio_site'],
+                ['date' => '2025-01-15', 'action' => 'Clicked Services link', 'platform' => 'bio_site'],
+            ]
+        ];
+    }
+
+    /**
+     * Get email contact data
+     */
+    private function getEmailContactData($contact, $user)
+    {
+        // Mock email data
+        return [
+            'subscription_status' => 'active',
+            'campaigns_received' => 12,
+            'emails_opened' => 8,
+            'links_clicked' => 5,
+            'open_rate' => 66.7,
+            'click_rate' => 41.7,
+            'last_opened' => '3 days ago',
+            'preferred_content' => ['Educational', 'Product Updates'],
+            'timeline' => [
+                ['date' => '2025-01-15', 'action' => 'Opened email: Product Launch', 'platform' => 'email'],
+                ['date' => '2025-01-14', 'action' => 'Clicked link in newsletter', 'platform' => 'email'],
+                ['date' => '2025-01-13', 'action' => 'Opened welcome email', 'platform' => 'email'],
+            ]
+        ];
+    }
+
+    /**
+     * Get course contact data
+     */
+    private function getCourseContactData($contact, $user)
+    {
+        // Mock course data
+        return [
+            'enrolled_courses' => 2,
+            'completed_courses' => 1,
+            'completion_rate' => 75,
+            'total_watch_time' => 840, // minutes
+            'certificates_earned' => 1,
+            'forum_posts' => 5,
+            'last_activity' => '1 day ago',
+            'favorite_topics' => ['Digital Marketing', 'Social Media Strategy'],
+            'timeline' => [
+                ['date' => '2025-01-17', 'action' => 'Completed lesson: Advanced Analytics', 'platform' => 'courses'],
+                ['date' => '2025-01-16', 'action' => 'Posted in forum', 'platform' => 'courses'],
+                ['date' => '2025-01-15', 'action' => 'Watched video lesson', 'platform' => 'courses'],
+            ]
+        ];
+    }
+
+    /**
+     * Get e-commerce contact data
+     */
+    private function getEcommerceContactData($contact, $user)
+    {
+        // Mock e-commerce data
+        return [
+            'total_orders' => 3,
+            'total_spent' => 247.97,
+            'average_order_value' => 82.66,
+            'last_purchase' => '1 week ago',
+            'favorite_products' => ['Professional Plan', 'Advanced Analytics'],
+            'cart_abandonments' => 2,
+            'wishlist_items' => 1,
+            'loyalty_points' => 248,
+            'timeline' => [
+                ['date' => '2025-01-11', 'action' => 'Purchased Professional Plan', 'platform' => 'ecommerce'],
+                ['date' => '2025-01-10', 'action' => 'Added to cart', 'platform' => 'ecommerce'],
+                ['date' => '2025-01-09', 'action' => 'Viewed product page', 'platform' => 'ecommerce'],
+            ],
+            'revenue_data' => [
+                'total_revenue' => 247.97,
+                'attributed_platforms' => [
+                    'instagram' => 89.99,
+                    'bio_site' => 99.99,
+                    'email' => 57.99
+                ],
+                'conversion_path' => ['instagram', 'bio_site', 'email', 'ecommerce']
+            ]
+        ];
+    }
+
+    /**
+     * Generate interaction summary
+     */
+    private function generateInteractionSummary($platformActivity)
+    {
+        $summary = [
+            'total_interactions' => 0,
+            'most_active_platform' => '',
+            'engagement_trend' => 'stable',
+            'interaction_frequency' => 'regular',
+            'preferred_touchpoints' => [],
+            'conversion_indicators' => []
+        ];
+
+        $platformCounts = [];
+        foreach ($platformActivity as $platform => $data) {
+            $interactions = $this->countPlatformInteractions($data);
+            $platformCounts[$platform] = $interactions;
+            $summary['total_interactions'] += $interactions;
+        }
+
+        if (!empty($platformCounts)) {
+            $summary['most_active_platform'] = array_keys($platformCounts, max($platformCounts))[0];
+        }
+
+        // Analyze engagement trend
+        $summary['engagement_trend'] = $this->analyzeEngagementTrend($platformActivity);
+
+        // Identify preferred touchpoints
+        $summary['preferred_touchpoints'] = $this->identifyPreferredTouchpoints($platformActivity);
+
+        // Identify conversion indicators
+        $summary['conversion_indicators'] = $this->identifyConversionIndicators($platformActivity);
+
+        return $summary;
+    }
+
+    /**
+     * Generate predictive insights
+     */
+    private function generatePredictiveInsights($contact, $platformActivity)
+    {
+        return [
+            'next_action_probability' => [
+                'email_open' => 0.78,
+                'bio_site_visit' => 0.65,
+                'course_enrollment' => 0.42,
+                'purchase' => 0.38,
+                'social_engagement' => 0.71
+            ],
+            'churn_risk' => [
+                'score' => 0.23,
+                'risk_level' => 'low',
+                'key_factors' => ['consistent_engagement', 'recent_purchase', 'active_learner']
+            ],
+            'upsell_opportunities' => [
+                'products' => ['Enterprise Plan', 'Advanced Analytics'],
+                'probability' => 0.67,
+                'recommended_approach' => 'educational_content'
+            ],
+            'optimal_contact_strategy' => [
+                'preferred_channel' => 'email',
+                'best_time' => '2:00 PM - 4:00 PM',
+                'frequency' => 'weekly',
+                'content_type' => 'educational'
+            ],
+            'lifetime_value_prediction' => [
+                'predicted_ltv' => 1250.00,
+                'confidence' => 0.82,
+                'time_horizon' => '12 months'
+            ]
+        ];
+    }
+
+    /**
+     * Calculate cross-platform score
+     */
+    private function calculateCrossPlatformScore($platformActivity)
+    {
+        $totalScore = 0;
+        $platformCount = count($platformActivity);
+
+        foreach ($platformActivity as $platform => $data) {
+            $platformScore = $this->calculatePlatformScore($platform, $data);
+            $totalScore += $platformScore;
+        }
+
+        if ($platformCount > 0) {
+            $averageScore = $totalScore / $platformCount;
+            // Bonus for multi-platform engagement
+            $multiPlatformBonus = ($platformCount - 1) * 5;
+            return min(100, round($averageScore + $multiPlatformBonus, 1));
+        }
+
+        return 0;
+    }
+
+    /**
+     * Calculate platform-specific score
+     */
+    private function calculatePlatformScore($platform, $data)
+    {
+        switch ($platform) {
+            case 'instagram':
+                return min(100, $data['profile_visits'] * 2 + $data['post_engagements'] * 3 + $data['dm_conversations'] * 10);
+            case 'bio_sites':
+                return min(100, $data['total_visits'] * 5 + $data['links_clicked'] * 8 + $data['conversion_actions'] * 20);
+            case 'email':
+                return min(100, $data['emails_opened'] * 3 + $data['links_clicked'] * 5 + ($data['open_rate'] / 10));
+            case 'courses':
+                return min(100, $data['enrolled_courses'] * 15 + $data['completed_courses'] * 25 + $data['forum_posts'] * 5);
+            case 'ecommerce':
+                return min(100, $data['total_orders'] * 20 + ($data['total_spent'] / 10));
+            default:
+                return 0;
+        }
+    }
+
+    // Additional helper methods for interaction analysis
+    private function countPlatformInteractions($data)
+    {
+        return count($data['timeline'] ?? []);
+    }
+
+    private function analyzeEngagementTrend($platformActivity)
+    {
+        // Simplified trend analysis
+        $recentActivity = 0;
+        foreach ($platformActivity as $platform => $data) {
+            if (isset($data['timeline'])) {
+                foreach ($data['timeline'] as $event) {
+                    if (strtotime($event['date']) > strtotime('-7 days')) {
+                        $recentActivity++;
+                    }
+                }
+            }
+        }
+        
+        return $recentActivity > 5 ? 'increasing' : ($recentActivity > 2 ? 'stable' : 'decreasing');
+    }
+
+    private function identifyPreferredTouchpoints($platformActivity)
+    {
+        $touchpoints = [];
+        foreach ($platformActivity as $platform => $data) {
+            if (isset($data['timeline']) && count($data['timeline']) > 0) {
+                $touchpoints[] = $platform;
+            }
+        }
+        return $touchpoints;
+    }
+
+    private function identifyConversionIndicators($platformActivity)
+    {
+        $indicators = [];
+        
+        if (isset($platformActivity['ecommerce']['total_orders']) && $platformActivity['ecommerce']['total_orders'] > 0) {
+            $indicators[] = 'active_purchaser';
+        }
+        
+        if (isset($platformActivity['courses']['enrolled_courses']) && $platformActivity['courses']['enrolled_courses'] > 0) {
+            $indicators[] = 'learning_engaged';
+        }
+        
+        if (isset($platformActivity['email']['click_rate']) && $platformActivity['email']['click_rate'] > 20) {
+            $indicators[] = 'email_engaged';
+        }
+        
+        return $indicators;
     }
 
     /**
