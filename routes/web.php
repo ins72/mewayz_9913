@@ -16,7 +16,13 @@ use App\Http\Controllers\WorkspaceSetupController;
 
 Route::get('/', function () {
     return view('pages.index');
-});
+})->name('home');
+
+// Include legal routes
+require __DIR__.'/legal.php';
+
+// Include business routes
+require __DIR__.'/business.php';
 
 Route::get('/landing', function () {
     return view('pages.landing');
