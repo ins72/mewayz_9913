@@ -86,7 +86,7 @@ class BusinessController extends Controller
             ]
         ];
 
-        return view('business.about', compact('teamMembers', 'stats', 'values'));
+        return view('pages.business.about-us', compact('teamMembers', 'stats', 'values'));
     }
 
     /**
