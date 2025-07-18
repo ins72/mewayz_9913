@@ -31,7 +31,7 @@ return new class extends Migration
             $table->index(['user_id', 'platform']);
             $table->index(['user_id', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -39,5 +39,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('social_media_accounts');
-    }
+
 };

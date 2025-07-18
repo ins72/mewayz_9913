@@ -22,10 +22,10 @@ return new class extends Migration
             
             $table->unique(['department_id', 'user_id']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('department_users');
-    }
+
 };

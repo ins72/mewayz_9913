@@ -24,10 +24,10 @@ return new class extends Migration
             $table->index(['type', 'is_active']);
             $table->index(['provider']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('ai_models');
-    }
+
 };

@@ -38,16 +38,16 @@ return new class extends Migration
             $table->index(['status']);
             $table->index(['completed_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('template_purchases');
-    }
+
 };

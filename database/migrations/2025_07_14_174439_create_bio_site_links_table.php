@@ -28,7 +28,7 @@ return new class extends Migration
             $table->index(['bio_site_id', 'is_active']);
             $table->index(['bio_site_id', 'sort_order']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -36,5 +36,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('bio_site_links');
-    }
+
 };

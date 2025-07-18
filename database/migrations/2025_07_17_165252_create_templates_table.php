@@ -43,16 +43,16 @@ return new class extends Migration
             $table->index(['average_rating']);
             $table->index(['download_count']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('templates');
-    }
+
 };

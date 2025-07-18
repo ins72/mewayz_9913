@@ -17,7 +17,7 @@ return new class extends Migration
             $table->boolean('is_primary')->default(false)->after('user_id');
             $table->index(['user_id', 'is_primary']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -30,5 +30,5 @@ return new class extends Migration
             $table->dropIndex(['user_id', 'is_primary']);
             $table->dropColumn('is_primary');
         });
-    }
+
 };

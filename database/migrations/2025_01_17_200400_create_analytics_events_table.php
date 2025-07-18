@@ -35,7 +35,7 @@ return new class extends Migration
             $table->index(['event_type', 'event_name']);
             $table->index('event_time');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -43,5 +43,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('analytics_events');
-    }
+
 };

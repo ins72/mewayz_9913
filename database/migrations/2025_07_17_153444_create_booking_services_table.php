@@ -40,7 +40,7 @@ return new class extends Migration
             $table->index(['user_id', 'is_active']);
             $table->index(['category', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -50,5 +50,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('booking_services');
-    }
+
 };

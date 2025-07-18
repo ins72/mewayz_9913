@@ -37,16 +37,16 @@ return new class extends Migration
             $table->index(['user_id', 'status']);
             $table->index(['email']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('audiences');
-    }
+
 };

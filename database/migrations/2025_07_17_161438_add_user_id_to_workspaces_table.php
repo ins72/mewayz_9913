@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['user_id']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -32,5 +32,5 @@ return new class extends Migration
             $table->dropIndex(['user_id']);
             $table->dropColumn('user_id');
         });
-    }
+
 };

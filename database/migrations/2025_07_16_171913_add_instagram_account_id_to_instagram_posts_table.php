@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('instagram_account_id')->after('user_id')->nullable();
             $table->foreign('instagram_account_id')->references('id')->on('instagram_accounts')->onDelete('cascade');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -26,5 +26,5 @@ return new class extends Migration
             $table->dropForeign(['instagram_account_id']);
             $table->dropColumn('instagram_account_id');
         });
-    }
+
 };

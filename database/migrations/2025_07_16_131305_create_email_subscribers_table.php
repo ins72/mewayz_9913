@@ -36,16 +36,16 @@ return new class extends Migration
             $table->index(['email', 'status']);
             $table->index(['workspace_id', 'created_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('email_subscribers');
-    }
+
 };

@@ -47,17 +47,17 @@ return new class extends Migration
             $table->unique(['list_id', 'subscriber_id']);
             $table->index(['list_id', 'subscribed_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('email_list_subscribers');
         Schema::dropIfExists('email_lists');
-    }
+
 };

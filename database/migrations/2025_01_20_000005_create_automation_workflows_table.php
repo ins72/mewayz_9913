@@ -32,10 +32,10 @@ return new class extends Migration
             $table->index(['trigger_type']);
             $table->index(['next_execution_at']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('automation_workflows');
-    }
+
 };

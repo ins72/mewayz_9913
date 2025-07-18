@@ -42,7 +42,7 @@ return new class extends Migration
             $table->index(['status']);
             $table->index(['completed_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -52,5 +52,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('referrals');
-    }
+
 };

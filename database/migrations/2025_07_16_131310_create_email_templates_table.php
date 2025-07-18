@@ -35,16 +35,16 @@ return new class extends Migration
             $table->index(['workspace_id', 'category']);
             $table->index(['workspace_id', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('email_templates');
-    }
+
 };

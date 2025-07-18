@@ -29,16 +29,16 @@ return new class extends Migration
             
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('team_invitations');
-    }
+
 };

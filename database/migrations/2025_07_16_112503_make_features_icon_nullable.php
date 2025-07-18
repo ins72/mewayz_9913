@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('features', function (Blueprint $table) {
             $table->text('icon')->nullable()->change();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -24,5 +24,5 @@ return new class extends Migration
         Schema::table('features', function (Blueprint $table) {
             $table->text('icon')->nullable(false)->change();
         });
-    }
+
 };

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->index(['user_id', 'subscribed_at']);
             $table->unique(['user_id', 'endpoint']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -37,5 +37,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('push_notification_subscriptions');
-    }
+
 };

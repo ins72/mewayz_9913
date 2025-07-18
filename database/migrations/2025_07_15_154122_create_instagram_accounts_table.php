@@ -35,8 +35,8 @@ return new class extends Migration
                 $table->index(['workspace_id', 'is_connected']);
                 $table->index(['user_id', 'is_primary']);
             });
-        }
-    }
+    
+
 
     /**
      * Reverse the migrations.
@@ -45,5 +45,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('instagram_accounts');
-    }
+
 };

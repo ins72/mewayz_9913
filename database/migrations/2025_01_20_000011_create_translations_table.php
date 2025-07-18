@@ -21,10 +21,10 @@ return new class extends Migration
             $table->unique(['language_id', 'key', 'namespace']);
             $table->index(['language_id', 'namespace']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('translations');
-    }
+
 };

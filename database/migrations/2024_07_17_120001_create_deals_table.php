@@ -33,10 +33,10 @@ return new class extends Migration
             $table->index(['workspace_id', 'assigned_to']);
             $table->index('expected_close_date');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('deals');
-    }
+
 };

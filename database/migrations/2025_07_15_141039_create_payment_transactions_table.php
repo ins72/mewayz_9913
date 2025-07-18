@@ -29,7 +29,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->index(['session_id', 'payment_status']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -37,5 +37,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('payment_transactions');
-    }
+
 };

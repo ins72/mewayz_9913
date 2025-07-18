@@ -34,7 +34,7 @@ return new class extends Migration
             $table->index(['channel_name']);
             $table->index(['user_id']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -42,5 +42,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('real_time_sessions');
-    }
+
 };

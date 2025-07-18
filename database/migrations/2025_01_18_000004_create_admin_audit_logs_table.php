@@ -33,7 +33,7 @@ return new class extends Migration
             $table->index(['created_at']);
             $table->index(['severity']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -41,5 +41,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('admin_audit_logs');
-    }
+
 };

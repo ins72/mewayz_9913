@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('instagram_accounts', function (Blueprint $table) {
             $table->string('display_name')->nullable()->after('username');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -24,5 +24,5 @@ return new class extends Migration
         Schema::table('instagram_accounts', function (Blueprint $table) {
             $table->dropColumn('display_name');
         });
-    }
+
 };

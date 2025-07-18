@@ -34,8 +34,8 @@ return new class extends Migration
                 $table->index(['workspace_id', 'status']);
                 $table->index(['user_id', 'scheduled_at']);
             });
-        }
-    }
+    
+
 
     /**
      * Reverse the migrations.
@@ -43,5 +43,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('instagram_posts');
-    }
+
 };

@@ -24,10 +24,10 @@ return new class extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->index(['workspace_id', 'is_active']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('sso_providers');
-    }
+
 };

@@ -29,7 +29,7 @@ return new class extends Migration
             $table->index(['service_id', 'date']);
             $table->index(['date', 'is_available']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -39,5 +39,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('booking_calendars');
-    }
+
 };

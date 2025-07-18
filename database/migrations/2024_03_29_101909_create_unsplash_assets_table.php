@@ -21,7 +21,7 @@ class CreateUnsplashAssetsTable extends Migration
             $table->string('author_link');
             $table->timestamps();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -31,5 +31,5 @@ class CreateUnsplashAssetsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('unsplash_assets');
-    }
+
 }

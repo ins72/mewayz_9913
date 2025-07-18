@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('instagram_accounts', function (Blueprint $table) {
             $table->boolean('is_active')->default(true)->after('is_connected');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -24,5 +24,5 @@ return new class extends Migration
         Schema::table('instagram_accounts', function (Blueprint $table) {
             $table->dropColumn('is_active');
         });
-    }
+
 };

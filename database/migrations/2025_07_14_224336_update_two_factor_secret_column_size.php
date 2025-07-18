@@ -15,9 +15,9 @@ return new class extends Migration
             // Only modify the column if it exists
             if (Schema::hasColumn('users', 'two_factor_secret')) {
                 $table->text('two_factor_secret')->nullable()->change();
-            }
+        
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -28,7 +28,7 @@ return new class extends Migration
             // Only modify the column if it exists
             if (Schema::hasColumn('users', 'two_factor_secret')) {
                 $table->string('two_factor_secret', 191)->nullable()->change();
-            }
+        
         });
-    }
+
 };

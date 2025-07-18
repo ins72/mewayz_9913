@@ -29,10 +29,10 @@ return new class extends Migration
             $table->index(['contact_id', 'type']);
             $table->index('due_date');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('activities');
-    }
+
 };

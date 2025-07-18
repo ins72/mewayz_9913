@@ -34,7 +34,7 @@ return new class extends Migration
             $table->index(['user_id', 'status']);
             $table->index(['status', 'published_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -42,5 +42,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('websites');
-    }
+
 };

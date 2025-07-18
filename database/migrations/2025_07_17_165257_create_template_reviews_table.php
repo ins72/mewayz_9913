@@ -31,16 +31,16 @@ return new class extends Migration
             $table->index(['is_verified']);
             $table->index(['helpful_count']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('template_reviews');
-    }
+
 };

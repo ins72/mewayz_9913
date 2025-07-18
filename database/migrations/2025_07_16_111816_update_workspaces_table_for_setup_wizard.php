@@ -21,7 +21,7 @@ return new class extends Migration
             $table->boolean('setup_completed')->default(false);
             $table->timestamp('setup_completed_at')->nullable();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -40,5 +40,5 @@ return new class extends Migration
                 'setup_completed_at'
             ]);
         });
-    }
+
 };

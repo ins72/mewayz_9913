@@ -26,10 +26,10 @@ return new class extends Migration
             $table->index(['workspace_id', 'report_type']);
             $table->index(['status']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('compliance_reports');
-    }
+
 };

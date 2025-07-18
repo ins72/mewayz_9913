@@ -32,10 +32,10 @@ return new class extends Migration
             $table->index(['workspace_id', 'is_resolved']);
             $table->index(['created_at']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('security_events');
-    }
+
 };

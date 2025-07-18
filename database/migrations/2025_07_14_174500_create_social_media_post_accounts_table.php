@@ -25,7 +25,7 @@ return new class extends Migration
             $table->index(['social_media_post_id']);
             $table->index(['social_media_account_id']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -33,5 +33,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('social_media_post_accounts');
-    }
+
 };

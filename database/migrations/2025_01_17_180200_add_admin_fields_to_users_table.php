@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'is_admin')) {
                 $table->boolean('is_admin')->default(false)->after('email_verified_at');
-            }
+        
             if (!Schema::hasColumn('users', 'status')) {
                 $table->enum('status', ['active', 'inactive', 'suspended'])->default('active')->after('is_admin');
-            }
+        
             if (!Schema::hasColumn('users', 'last_login_at')) {
                 $table->timestamp('last_login_at')->nullable()->after('status');
-            }
+        
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -32,5 +32,5 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['is_admin', 'status', 'last_login_at']);
         });
-    }
+
 };

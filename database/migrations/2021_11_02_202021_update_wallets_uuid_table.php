@@ -14,7 +14,7 @@ return new class() extends Migration {
     {
         if (Schema::hasColumn($this->table(), 'uuid')) {
             return;
-        }
+    
 
         // upgrade from 6.x
         Schema::table($this->table(), static function (Blueprint $table) {
@@ -37,15 +37,15 @@ return new class() extends Migration {
                 ->change()
             ;
         });
-    }
+
 
     public function down(): void
     {
         Schema::dropColumns($this->table(), ['uuid']);
-    }
+
 
     private function table(): string
     {
         return (new Wallet())->getTable();
-    }
+
 };

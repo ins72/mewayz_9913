@@ -33,7 +33,7 @@ return new class extends Migration
             $table->index(['category', 'is_active']);
             $table->index(['is_free', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -41,5 +41,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('website_templates');
-    }
+
 };

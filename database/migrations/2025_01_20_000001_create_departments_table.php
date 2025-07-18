@@ -33,10 +33,10 @@ return new class extends Migration
         Schema::table('departments', function (Blueprint $table) {
             $table->foreign('parent_department_id')->references('id')->on('departments')->onDelete('cascade');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('departments');
-    }
+
 };

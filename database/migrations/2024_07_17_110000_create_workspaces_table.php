@@ -24,10 +24,10 @@ return new class extends Migration
             $table->index('slug');
             $table->index('plan');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('workspaces');
-    }
+
 };

@@ -39,27 +39,27 @@ return new class extends Migration
                 // Only add foreign key if subscription_plans table exists
                 if (Schema::hasTable('subscription_plans')) {
                     $table->foreign('subscription_plan_id')->references('id')->on('subscription_plans')->onDelete('restrict');
-                }
+            
                 
                 $table->index(['workspace_id', 'status']);
                 $table->index(['subscription_plan_id']);
                 $table->index(['status']);
             });
-        }
+    
         
         // Add foreign key constraint after subscription_plans table is created
         if (Schema::hasTable('subscription_plans') && !$this->foreignKeyExists('workspace_subscriptions', 'workspace_subscriptions_subscription_plan_id_foreign')) {
             Schema::table('workspace_subscriptions', function (Blueprint $table) {
                 $table->foreign('subscription_plan_id')->references('id')->on('subscription_plans')->onDelete('restrict');
             });
-        }
-    }
+    
+
     
     private function foreignKeyExists($table, $constraintName)
     {
         $constraints = \DB::select("SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND CONSTRAINT_NAME = ?", [$table, $constraintName]);
         return !empty($constraints);
-    }
+
 
     /**
      * Reverse the migrations.
@@ -67,5 +67,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('workspace_subscriptions');
-    }
+
 };

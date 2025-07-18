@@ -32,7 +32,7 @@ return new class extends Migration
             $table->json('metadata')->nullable(); // Additional template metadata
             $table->timestamps();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -40,5 +40,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('templates');
-    }
+
 };

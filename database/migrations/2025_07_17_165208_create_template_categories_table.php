@@ -28,7 +28,7 @@ return new class extends Migration
             
             $table->index(['is_active', 'sort_order']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -38,5 +38,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('template_categories');
-    }
+
 };

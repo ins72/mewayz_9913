@@ -27,7 +27,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -35,5 +35,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-    }
+
 };

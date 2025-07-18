@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::table('features', function (Blueprint $table) {
             $table->text('icon')->change(); // Change from string to text
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -32,5 +32,5 @@ return new class extends Migration
         Schema::table('features', function (Blueprint $table) {
             $table->string('icon')->change();
         });
-    }
+
 };

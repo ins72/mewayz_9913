@@ -19,7 +19,7 @@ return new class extends Migration
 
             // $table->unique(['provider_id', 'provider_name']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -30,5 +30,5 @@ return new class extends Migration
             $table->dropUnique(['provider_id', 'provider_name']);
             $table->dropColumn(['provider_id', 'provider_name']);
         });
-    }
+
 };

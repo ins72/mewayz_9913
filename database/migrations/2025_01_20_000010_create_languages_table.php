@@ -21,10 +21,10 @@ return new class extends Migration
             
             $table->index(['is_active', 'sort_order']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('languages');
-    }
+
 };

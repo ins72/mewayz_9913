@@ -29,16 +29,16 @@ return new class extends Migration
             $table->json('metadata')->nullable(); // Additional feature configuration
             $table->timestamps();
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('features');
-    }
+
 };

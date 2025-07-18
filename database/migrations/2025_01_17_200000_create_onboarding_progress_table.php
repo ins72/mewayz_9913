@@ -27,7 +27,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['user_id', 'created_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -35,5 +35,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('onboarding_progress');
-    }
+
 };

@@ -34,7 +34,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique('user_id');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -42,5 +42,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('user_preferences');
-    }
+
 };

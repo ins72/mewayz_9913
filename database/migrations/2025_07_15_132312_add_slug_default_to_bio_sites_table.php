@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('bio_sites', function (Blueprint $table) {
             $table->string('slug')->default('default-slug')->change();
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -24,5 +24,5 @@ return new class extends Migration
         Schema::table('bio_sites', function (Blueprint $table) {
             //
         });
-    }
+
 };

@@ -28,16 +28,16 @@ return new class extends Migration
             $table->unique(['workspace_id', 'hashtag']);
             $table->index(['workspace_id', 'is_trending']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('instagram_hashtags');
-    }
+
 };

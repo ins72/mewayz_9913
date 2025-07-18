@@ -38,7 +38,7 @@ return new class extends Migration
             $table->index(['device_type']);
             $table->index(['clicked_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -48,5 +48,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('link_clicks');
-    }
+
 };

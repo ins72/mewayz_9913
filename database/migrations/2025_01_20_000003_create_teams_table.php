@@ -28,10 +28,10 @@ return new class extends Migration
             $table->index(['workspace_id', 'status']);
             $table->index(['department_id']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('teams');
-    }
+
 };

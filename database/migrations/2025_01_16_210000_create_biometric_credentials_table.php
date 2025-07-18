@@ -29,7 +29,7 @@ return new class extends Migration
             $table->index(['user_id', 'is_active']);
             $table->index(['credential_id', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -37,5 +37,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('biometric_credentials');
-    }
+
 };

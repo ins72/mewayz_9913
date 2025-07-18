@@ -73,7 +73,7 @@ return new class extends Migration
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             // $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -81,5 +81,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('unified_analytics_events');
-    }
+
 };

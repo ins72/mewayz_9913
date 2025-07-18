@@ -20,10 +20,10 @@ return new class extends Migration
             
             $table->index(['is_active']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('currencies');
-    }
+
 };

@@ -25,16 +25,16 @@ return new class extends Migration
             $table->foreign('workspace_id')->references('id')->on('workspaces')->onDelete('cascade');
             $table->unique(['workspace_id', 'feature_id']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('workspace_features');
-    }
+
 };

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unique(['service_name', 'api_key_name']);
             $table->index(['service_name', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -32,5 +32,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('admin_api_keys');
-    }
+
 };

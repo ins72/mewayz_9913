@@ -30,7 +30,7 @@ return new class extends Migration
             $table->index(['user_id', 'session_start']);
             $table->index(['platform', 'device_type']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -38,5 +38,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('mobile_sessions');
-    }
+
 };

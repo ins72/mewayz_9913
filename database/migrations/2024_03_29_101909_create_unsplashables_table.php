@@ -18,7 +18,7 @@ class CreateUnsplashablesTable extends Migration
             $table->unsignedBigInteger('unsplashables_id');
             $table->string('unsplashables_type');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -28,5 +28,5 @@ class CreateUnsplashablesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('unsplashables');
-    }
+
 }

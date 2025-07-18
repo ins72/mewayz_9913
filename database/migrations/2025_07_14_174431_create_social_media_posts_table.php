@@ -30,7 +30,7 @@ return new class extends Migration
             $table->index(['user_id', 'scheduled_at']);
             $table->index(['status', 'scheduled_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -38,5 +38,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('social_media_posts');
-    }
+
 };

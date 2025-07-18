@@ -22,7 +22,7 @@ return new class extends Migration
 
             $table->index(['setting_key', 'is_public']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -30,5 +30,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('admin_settings');
-    }
+
 };

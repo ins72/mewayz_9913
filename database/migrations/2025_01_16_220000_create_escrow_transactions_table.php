@@ -50,7 +50,7 @@ return new class extends Migration
             $table->index(['seller_id', 'status']);
             $table->index(['status', 'created_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -58,5 +58,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('escrow_transactions');
-    }
+
 };

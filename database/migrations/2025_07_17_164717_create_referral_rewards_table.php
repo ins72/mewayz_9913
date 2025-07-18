@@ -37,7 +37,7 @@ return new class extends Migration
             $table->index(['status']);
             $table->index(['paid_at']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -47,5 +47,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('referral_rewards');
-    }
+
 };

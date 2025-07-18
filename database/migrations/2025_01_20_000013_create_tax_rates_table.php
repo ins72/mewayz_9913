@@ -22,10 +22,10 @@ return new class extends Migration
             
             $table->index(['country_code', 'state_code', 'is_active']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('tax_rates');
-    }
+
 };

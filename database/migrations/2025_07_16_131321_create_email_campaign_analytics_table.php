@@ -30,16 +30,16 @@ return new class extends Migration
             $table->index(['subscriber_id', 'event_type']);
             $table->index(['campaign_id', 'event_timestamp']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
      */
-    }
-    }
+
+
 
     public function down(): void
     {
         Schema::dropIfExists('email_campaign_analytics');
-    }
+
 };

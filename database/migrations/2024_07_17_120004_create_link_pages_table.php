@@ -33,10 +33,10 @@ return new class extends Migration
             $table->index('slug');
             $table->index('custom_domain');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('link_pages');
-    }
+
 };

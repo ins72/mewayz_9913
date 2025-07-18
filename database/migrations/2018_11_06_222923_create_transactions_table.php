@@ -30,15 +30,15 @@ return new class() extends Migration {
             $table->index(['payable_type', 'payable_id', 'confirmed'], 'payable_confirmed_ind');
             $table->index(['payable_type', 'payable_id', 'type', 'confirmed'], 'payable_type_confirmed_ind');
         });
-    }
+
 
     public function down(): void
     {
         Schema::drop($this->table());
-    }
+
 
     private function table(): string
     {
         return (new Transaction())->getTable();
-    }
+
 };

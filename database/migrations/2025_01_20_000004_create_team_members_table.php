@@ -22,10 +22,10 @@ return new class extends Migration
             
             $table->unique(['team_id', 'user_id']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('team_members');
-    }
+
 };

@@ -37,10 +37,10 @@ return new class extends Migration
             $table->index(['workspace_id', 'email']);
             $table->index('lead_score');
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('contacts');
-    }
+
 };

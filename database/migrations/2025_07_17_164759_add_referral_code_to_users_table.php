@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('referral_code', 50)->nullable()->unique()->after('email');
             $table->index(['referral_code']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -30,5 +30,5 @@ return new class extends Migration
             $table->dropIndex(['referral_code']);
             $table->dropColumn('referral_code');
         });
-    }
+
 };

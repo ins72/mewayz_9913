@@ -32,7 +32,7 @@ return new class extends Migration
             $table->index(['website_id', 'type']);
             $table->index(['page_id', 'is_active']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -40,5 +40,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('website_components');
-    }
+
 };

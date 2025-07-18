@@ -43,7 +43,7 @@ return new class extends Migration
             $table->index(['expires_at']);
             $table->index(['is_active', 'is_public']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -53,5 +53,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('shortened_links');
-    }
+
 };

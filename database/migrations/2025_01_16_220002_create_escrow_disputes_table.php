@@ -32,7 +32,7 @@ return new class extends Migration
             $table->index(['escrow_transaction_id', 'status']);
             $table->index(['initiated_by', 'status']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -40,5 +40,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('escrow_disputes');
-    }
+
 };

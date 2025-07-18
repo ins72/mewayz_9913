@@ -30,7 +30,7 @@ return new class extends Migration
             
             $table->index(['escrow_transaction_id', 'document_type']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -40,5 +40,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('escrow_documents');
-    }
+
 };

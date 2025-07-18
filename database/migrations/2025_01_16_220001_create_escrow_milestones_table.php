@@ -29,7 +29,7 @@ return new class extends Migration
             $table->index(['escrow_transaction_id', 'order']);
             $table->index(['escrow_transaction_id', 'status']);
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -37,5 +37,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('escrow_milestones');
-    }
+
 };

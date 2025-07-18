@@ -30,10 +30,10 @@ return new class extends Migration
             $table->index(['resource_type', 'resource_id']);
             $table->index(['action']);
         });
-    }
+
 
     public function down()
     {
         Schema::dropIfExists('audit_logs');
-    }
+
 };

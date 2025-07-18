@@ -24,7 +24,7 @@ class CreateSessionsTable extends Migration
             $table->longText('tracking')->nullable();
             $table->integer('last_activity');
         });
-    }
+
 
     /**
      * Reverse the migrations.
@@ -34,5 +34,5 @@ class CreateSessionsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('sessions');
-    }
+
 }
