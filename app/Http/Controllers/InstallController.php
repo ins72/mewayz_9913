@@ -466,7 +466,7 @@ class InstallController extends Controller
             $timezone = $stmt->fetchColumn();
             
             // Check database charset
-            $stmt = $pdo->query('SELECT DEFAULT_CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?');
+            $stmt = $pdo->prepare('SELECT DEFAULT_CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?');
             $stmt->execute([$config['database']]);
             $charset = $stmt->fetchColumn();
             
