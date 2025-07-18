@@ -43,7 +43,7 @@
     @livewireStyles
 </head>
 <body class="font-sans antialiased">
-    {{ $slot }}
+    @yield('content')
     
     <!-- PWA Install Banner -->
     <div id="pwa-install-banner" class="fixed bottom-4 left-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 hidden">
