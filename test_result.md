@@ -394,11 +394,11 @@ backend:
 
   - task: "Bio Sites & Link-in-Bio"
     implemented: true
-    working: true
+    working: false
     file: "app/Http/Controllers/Api/BioSiteController.php"
     stuck_count: 2
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -415,6 +415,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ PASS - FINAL VERIFICATION: Bio Sites fully functional after model fixes! Fixed BioSite model fillable array to include 'title', 'slug', 'description', 'theme_config' fields. GET /bio-sites/ returns proper site listings, POST /bio-sites/ creates sites successfully, GET /bio-sites/themes works perfectly. Authentication working with token '4|6AHqx0qtn59SBkCoejV1tsh7M9RDpyQRWMaBxR3R352c7ba3'. Bio Sites system is 100% operational."
+      - working: false
+        agent: "testing"
+        comment: "❌ PARTIAL FUNCTIONALITY - Production testing reveals Bio Sites system has mixed results: Bio Site Themes endpoint (✅ working perfectly), but main Bio Sites GET endpoint returns 500 error indicating controller implementation issues. Authentication middleware working correctly. Theme functionality operational but core bio sites CRUD needs fixes. System partially ready - themes work but main functionality failing."
 
   - task: "Social Media Management"
     implemented: true
