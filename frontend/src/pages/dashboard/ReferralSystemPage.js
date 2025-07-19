@@ -206,7 +206,7 @@ const ReferralSystemPage = () => {
                 {copied ? (
                   <CheckCircleIcon className="h-5 w-5" />
                 ) : (
-                  <CopyIcon className="h-5 w-5" />
+                  <ClipboardIcon className="h-5 w-5" />
                 )}
               </button>
             </div>
