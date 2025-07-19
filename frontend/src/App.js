@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 // Public pages
 import LandingPage from './pages/LandingPage';
@@ -9,6 +10,7 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Legal pages
 import TermsOfServicePage from './pages/legal/TermsOfServicePage';
@@ -35,6 +37,7 @@ import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
 import RealtimeCollaborationPage from './pages/dashboard/RealtimeCollaborationPage';
 import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
 import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
+import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 
 // Admin pages
 // AdminDashboard now imported from dashboard folder
@@ -51,6 +54,7 @@ import AdvancedAnalytics from './components/analytics/AdvancedAnalytics';
 import RealtimeCollaboration from './components/realtime/RealtimeCollaboration';
 import IntegrationHub from './components/integrations/IntegrationHub';
 import ReferralSystem from './components/growth/ReferralSystem';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const { theme } = useTheme();
