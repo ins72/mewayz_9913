@@ -61,6 +61,7 @@ import UltraAdvancedAIFeaturesPage from './pages/dashboard/UltraAdvancedAIFeatur
 import UltraAdvancedWorkspaceManagement from './pages/dashboard/UltraAdvancedWorkspaceManagement';
 import UltraAdvancedSubscriptionManager from './pages/dashboard/UltraAdvancedSubscriptionManager';
 import UltraAdvancedInstagramManager from './pages/dashboard/UltraAdvancedInstagramManager';
+import UltraAdvancedSocialMediaScheduler from './pages/dashboard/UltraAdvancedSocialMediaScheduler';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
