@@ -1276,6 +1276,334 @@ async def create_workspace(
         }
     }
 
+# ===== LINK SHORTENER ENDPOINTS =====
+@app.get("/api/link-shortener/links")
+async def get_short_links(current_user: dict = Depends(get_current_user)):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"links": []}}
+    
+    links = await short_links_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).sort("created_at", -1).to_list(length=100)
+    
+    for link in links:
+        link["id"] = str(link["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "links": [
+                {
+                    "id": link["id"],
+                    "original_url": link["original_url"],
+                    "short_code": link["short_code"],
+                    "short_url": f"https://mwz.to/{link['short_code']}",
+                    "clicks": link.get("clicks", 0),
+                    "status": link.get("status", "active"),
+                    "created_at": link["created_at"].isoformat()
+                } for link in links
+            ]
+        }
+    }
+
+@app.post("/api/link-shortener/create")
+async def create_short_link(
+    link_data: ShortLinkCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Generate short code if not provided
+    short_code = link_data.custom_code or secrets.token_urlsafe(8).replace('_', '').replace('-', '')[:8]
+    
+    # Check if code already exists
+    existing_link = await short_links_collection.find_one({"short_code": short_code})
+    if existing_link:
+        raise HTTPException(status_code=400, detail="Short code already exists")
+    
+    link_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "original_url": link_data.original_url,
+        "short_code": short_code,
+        "clicks": 0,
+        "status": "active",
+        "expires_at": link_data.expires_at,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    await short_links_collection.insert_one(link_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "link": {
+                "id": link_doc["_id"],
+                "original_url": link_doc["original_url"],
+                "short_code": link_doc["short_code"],
+                "short_url": f"https://mwz.to/{link_doc['short_code']}",
+                "created_at": link_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+@app.get("/api/link-shortener/stats")
+async def get_link_shortener_stats(current_user: dict = Depends(get_current_user)):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"stats": {}}}
+    
+    total_links = await short_links_collection.count_documents({"workspace_id": str(workspace["_id"])})
+    active_links = await short_links_collection.count_documents({"workspace_id": str(workspace["_id"]), "status": "active"})
+    
+    # Calculate total clicks
+    links_cursor = short_links_collection.find({"workspace_id": str(workspace["_id"])})
+    total_clicks = 0
+    async for link in links_cursor:
+        total_clicks += link.get("clicks", 0)
+    
+    return {
+        "success": True,
+        "data": {
+            "stats": {
+                "total_links": total_links,
+                "active_links": active_links,
+                "total_clicks": total_clicks,
+                "click_rate": round((total_clicks / max(total_links, 1)) * 100, 1)
+            }
+        }
+    }
+
+# ===== TEAM MANAGEMENT ENDPOINTS =====
+@app.get("/api/team/members")
+async def get_team_members(current_user: dict = Depends(get_current_user)):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"members": []}}
+    
+    members = await team_members_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).to_list(length=100)
+    
+    for member in members:
+        member["id"] = str(member["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "members": [
+                {
+                    "id": member["id"],
+                    "name": member["name"],
+                    "email": member["email"],
+                    "role": member["role"],
+                    "status": member.get("status", "active"),
+                    "last_active": member.get("last_active", "Never"),
+                    "joined_at": member["created_at"].isoformat()
+                } for member in members
+            ]
+        }
+    }
+
+@app.post("/api/team/invite")
+async def invite_team_member(
+    invite_data: TeamMemberInvite,
+    current_user: dict = Depends(get_current_user)
+):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Check if user already exists in team
+    existing_member = await team_members_collection.find_one({
+        "workspace_id": str(workspace["_id"]),
+        "email": invite_data.email
+    })
+    if existing_member:
+        raise HTTPException(status_code=400, detail="User already in team")
+    
+    member_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "email": invite_data.email,
+        "name": invite_data.email.split('@')[0],
+        "role": invite_data.role,
+        "status": "pending",
+        "invited_by": current_user["id"],
+        "last_active": "Never",
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    await team_members_collection.insert_one(member_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "member": {
+                "id": member_doc["_id"],
+                "email": member_doc["email"],
+                "role": member_doc["role"],
+                "status": member_doc["status"],
+                "created_at": member_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== FORM TEMPLATES ENDPOINTS =====
+@app.get("/api/form-templates")
+async def get_form_templates(current_user: dict = Depends(get_current_user)):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"templates": []}}
+    
+    templates = await form_templates_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).to_list(length=100)
+    
+    for template in templates:
+        template["id"] = str(template["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "templates": [
+                {
+                    "id": template["id"],
+                    "name": template["name"],
+                    "description": template.get("description"),
+                    "category": template["category"],
+                    "fields": template["fields"],
+                    "submissions": template.get("submissions", 0),
+                    "is_published": template.get("is_published", False),
+                    "created_at": template["created_at"].isoformat()
+                } for template in templates
+            ]
+        }
+    }
+
+@app.post("/api/form-templates")
+async def create_form_template(
+    template_data: FormTemplateCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    template_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "name": template_data.name,
+        "description": template_data.description,
+        "category": template_data.category,
+        "fields": template_data.fields,
+        "submissions": 0,
+        "is_published": False,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    await form_templates_collection.insert_one(template_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "template": {
+                "id": template_doc["_id"],
+                "name": template_doc["name"],
+                "category": template_doc["category"],
+                "created_at": template_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== DISCOUNT CODES ENDPOINTS =====
+@app.get("/api/discount-codes")
+async def get_discount_codes(current_user: dict = Depends(get_current_user)):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"codes": []}}
+    
+    codes = await discount_codes_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).sort("created_at", -1).to_list(length=100)
+    
+    for code in codes:
+        code["id"] = str(code["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "codes": [
+                {
+                    "id": code["id"],
+                    "code": code["code"],
+                    "description": code.get("description"),
+                    "type": code["type"],
+                    "value": code["value"],
+                    "usage_limit": code.get("usage_limit"),
+                    "used_count": code.get("used_count", 0),
+                    "is_active": code.get("is_active", True),
+                    "expires_at": code.get("expires_at").isoformat() if code.get("expires_at") else None,
+                    "created_at": code["created_at"].isoformat()
+                } for code in codes
+            ]
+        }
+    }
+
+@app.post("/api/discount-codes")
+async def create_discount_code(
+    code_data: DiscountCodeCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Check if code already exists
+    existing_code = await discount_codes_collection.find_one({"code": code_data.code})
+    if existing_code:
+        raise HTTPException(status_code=400, detail="Discount code already exists")
+    
+    code_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "code": code_data.code,
+        "description": code_data.description,
+        "type": code_data.type,
+        "value": code_data.value,
+        "usage_limit": code_data.usage_limit,
+        "used_count": 0,
+        "is_active": True,
+        "expires_at": code_data.expires_at,
+        "applicable_products": code_data.applicable_products,
+        "created_at": datetime.utcnow(),
+        "updated_at": datetime.utcnow()
+    }
+    
+    await discount_codes_collection.insert_one(code_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "code": {
+                "id": code_doc["_id"],
+                "code": code_doc["code"],
+                "type": code_doc["type"],
+                "value": code_doc["value"],
+                "created_at": code_doc["created_at"].isoformat()
+            }
+        }
+    }
+
 # Health check
 @app.get("/api/health")
 async def health_check():
