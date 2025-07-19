@@ -636,6 +636,21 @@ const AdvancedBookingPage = () => {
         </div>
       )}
     </div>
+
+    {/* Modals */}
+    <CreateServiceModal
+      isOpen={showCreateServiceModal}
+      onClose={() => setShowCreateServiceModal(false)}
+      onSuccess={handleCreateService}
+    />
+    
+    <CreateAppointmentModal
+      isOpen={showCreateAppointmentModal}
+      onClose={() => setShowCreateAppointmentModal(false)}
+      onSuccess={handleCreateAppointment}
+      services={services}
+    />
+  </>
   );
 };
 
