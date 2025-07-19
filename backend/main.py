@@ -42,6 +42,9 @@ STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 if STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
 
+# Import social media and email integrations
+from social_media_email_integrations import integration_manager
+
 # MongoDB client
 client = AsyncIOMotorClient(MONGO_URL)
 database = client.get_database()
