@@ -688,7 +688,7 @@ class Notification(Base):
     action_url = Column(String(500), nullable=True)
     is_read = Column(Boolean, default=False)
     is_pushed = Column(Boolean, default=False)
-    metadata = Column(JSON, default=dict)
+    meta_data = Column(JSON, default=dict)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 # ===== AI ASSISTANT SYSTEM =====
