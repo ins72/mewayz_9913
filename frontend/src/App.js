@@ -45,6 +45,9 @@ import WorkspaceManager from './components/workspace/WorkspaceManager';
 import SubscriptionManager from './components/subscription/SubscriptionManager';
 import TemplateMarketplace from './components/templates/TemplateMarketplace';
 import AdvancedAnalytics from './components/analytics/AdvancedAnalytics';
+import RealtimeCollaboration from './components/realtime/RealtimeCollaboration';
+import IntegrationHub from './components/integrations/IntegrationHub';
+import ReferralSystem from './components/growth/ReferralSystem';
 
 function App() {
   const { theme } = useTheme();
