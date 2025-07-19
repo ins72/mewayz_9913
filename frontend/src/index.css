@@ -309,27 +309,27 @@ code {
    NAVIGATION STYLES
    ================================ */
 .nav-bg {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #DEE2E6;
-  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid #E2E8F0;
+  backdrop-filter: blur(12px);
 }
 
 .dark .nav-bg {
-  background-color: #191919;
+  background-color: rgba(25, 25, 25, 0.95);
   border-bottom: 1px solid #282828;
 }
 
 .nav-active {
-  background-color: #F8F9FA;
-  color: #4F46E5;
-  border-right: 3px solid #4F46E5;
+  background: linear-gradient(135deg, #EBF4FF 0%, #E6FFFA 100%);
+  color: #667EEA;
+  border-right: 3px solid #667EEA;
   font-weight: 600;
 }
 
 .dark .nav-active {
-  background-color: #282828;
-  color: #6366F1;
-  border-right: 3px solid #6366F1;
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%);
+  color: #818CF8;
+  border-right: 3px solid #818CF8;
 }
 
 /* ================================
