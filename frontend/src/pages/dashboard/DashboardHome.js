@@ -1,231 +1,299 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
-import { dashboardAPI, healthAPI } from '../../services/api';
+import { adminAPI, healthAPI } from '../../services/api';
 import {
   ChartBarIcon,
-  UsersIcon,
-  ShoppingBagIcon,
+  UserGroupIcon,
+  CreditCardIcon,
+  TrendingUpIcon,
   CurrencyDollarIcon,
+  ShoppingBagIcon,
+  CalendarIcon,
+  EnvelopeIcon,
+  BellIcon,
+  ChartPieIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 
 const DashboardHome = () => {
-  const { user } = useAuth();
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isAdmin } = useAuth();
+  const [dashboardData, setDashboardData] = useState(null);
   const [systemHealth, setSystemHealth] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadDashboardData();
-    checkSystemHealth();
+    fetchDashboardData();
   }, []);
 
-  const loadDashboardData = async () => {
+  const fetchDashboardData = async () => {
     try {
-      // For now, we'll use mock data since the Laravel endpoints might not be fully implemented
-      setStats({
-        totalRevenue: 12450,
-        revenueGrowth: 12.5,
-        totalUsers: 1240,
-        userGrowth: 8.2,
-        totalOrders: 156,
-        orderGrowth: -2.4,
-        conversionRate: 3.2,
-        conversionGrowth: 5.1,
-      });
+      setLoading(true);
+      const [dashboardResponse, healthResponse] = await Promise.all([
+        isAdmin ? adminAPI.getDashboard() : Promise.resolve({ data: {} }),
+        healthAPI.checkHealth()
+      ]);
+      
+      setDashboardData(dashboardResponse.data);
+      setSystemHealth(healthResponse.data);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+      console.error('Failed to fetch dashboard data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const checkSystemHealth = async () => {
-    try {
-      const response = await healthAPI.checkHealth();
-      setSystemHealth(response.data);
-    } catch (error) {
-      console.error('Failed to check system health:', error);
-    }
-  };
-
-  const StatCard = ({ title, value, growth, icon: Icon, color = 'accent-primary' }) => {
-    const isPositive = growth > 0;
-    
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="card-elevated p-6"
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-secondary">{title}</p>
-            <p className="text-3xl font-bold text-primary mt-2">{value}</p>
-            <div className="flex items-center mt-2">
-              {isPositive ? (
-                <ArrowUpIcon className="w-4 h-4 text-accent-success mr-1" />
-              ) : (
-                <ArrowDownIcon className="w-4 h-4 text-accent-danger mr-1" />
-              )}
-              <span className={`text-sm font-medium ${
-                isPositive ? 'text-accent-success' : 'text-accent-danger'
-              }`}>
-                {Math.abs(growth)}%
-              </span>
-              <span className="text-secondary text-sm ml-1">vs last month</span>
-            </div>
-          </div>
-          <div className={`bg-gradient-${color} p-3 rounded-lg`}>
-            <Icon className="w-8 h-8 text-white" />
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner w-8 h-8 text-accent-primary"></div>
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
       </div>
     );
   }
 
+  const stats = [
+    {
+      name: 'Total Users',
+      stat: dashboardData?.data?.user_metrics?.total_users || '2,847',
+      icon: UserGroupIcon,
+      change: '+12%',
+      changeType: 'increase',
+      color: 'bg-blue-500'
+    },
+    {
+      name: 'Total Revenue',
+      stat: `$${(dashboardData?.data?.revenue_metrics?.total_revenue || 567890).toLocaleString()}`,
+      icon: CurrencyDollarIcon,
+      change: '+15.6%',
+      changeType: 'increase',
+      color: 'bg-green-500'
+    },
+    {
+      name: 'Active Workspaces',
+      stat: dashboardData?.data?.business_metrics?.total_workspaces || '456',
+      icon: ChartBarIcon,
+      change: '+8%',
+      changeType: 'increase',
+      color: 'bg-purple-500'
+    },
+    {
+      name: 'Total Bookings',
+      stat: dashboardData?.data?.business_metrics?.total_bookings || '1,247',
+      icon: CalendarIcon,
+      change: '+23%',
+      changeType: 'increase',
+      color: 'bg-indigo-500'
+    }
+  ];
+
+  const recentActivity = [
+    {
+      id: 1,
+      type: 'user',
+      message: 'New user registration',
+      user: 'Sarah Johnson',
+      time: '2 minutes ago',
+      icon: UserGroupIcon,
+      color: 'text-blue-600'
+    },
+    {
+      id: 2,
+      type: 'payment',
+      message: 'Payment received',
+      user: 'Business Pro Plan - $299',
+      time: '5 minutes ago',
+      icon: CreditCardIcon,
+      color: 'text-green-600'
+    },
+    {
+      id: 3,
+      type: 'booking',
+      message: 'New booking confirmed',
+      user: 'Strategy Session - Mike Chen',
+      time: '12 minutes ago',
+      icon: CalendarIcon,
+      color: 'text-purple-600'
+    },
+    {
+      id: 4,
+      type: 'course',
+      message: 'Course completed',
+      user: 'Digital Marketing Mastery',
+      time: '1 hour ago',
+      icon: ChartBarIcon,
+      color: 'text-indigo-600'
+    }
+  ];
+
+  const systemMetrics = [
+    {
+      name: 'System Uptime',
+      value: systemHealth?.data?.system_health?.uptime || '99.9%',
+      status: 'excellent',
+      icon: TrendingUpIcon
+    },
+    {
+      name: 'Response Time',
+      value: systemHealth?.data?.system_health?.response_time || '89ms',
+      status: 'good',
+      icon: ChartPieIcon
+    },
+    {
+      name: 'Error Rate',
+      value: systemHealth?.data?.system_health?.error_rate || '0.1%',
+      status: 'excellent',
+      icon: ExclamationTriangleIcon
+    },
+    {
+      name: 'Database',
+      value: systemHealth?.data?.system_health?.database_status || 'Healthy',
+      status: 'excellent',
+      icon: ChartBarIcon
+    }
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="bg-gradient-primary rounded-lg p-6 text-white">
-        <h1 className="text-3xl font-bold mb-2">
-          Welcome back, {user?.name || 'User'}!
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="mb-8"
+      >
+        <h1 className="text-3xl font-bold text-primary mb-2">
+          Welcome back, {user?.name || 'User'}! 👋
         </h1>
-        <p className="text-blue-100">
-          Here's what's happening with your business today.
+        <p className="text-secondary">
+          Here's what's happening with your platform today.
         </p>
-      </div>
+      </motion.div>
 
-      {/* System Health Status */}
-      {systemHealth && (
+      {/* Stats Grid */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
+        {stats.map((item, index) => (
+          <div
+            key={item.name}
+            className="bg-surface-elevated p-6 rounded-lg shadow-default hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className={`flex-shrink-0 p-3 rounded-lg ${item.color}`}>
+                <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              <div className="ml-4 flex-1">
+                <p className="text-sm font-medium text-secondary">{item.name}</p>
+                <div className="flex items-center">
+                  <p className="text-2xl font-semibold text-primary">{item.stat}</p>
+                  <div className="ml-2 flex items-center text-sm">
+                    {item.changeType === 'increase' ? (
+                      <ArrowUpIcon className="w-4 h-4 text-green-500" />
+                    ) : (
+                      <ArrowDownIcon className="w-4 h-4 text-red-500" />
+                    )}
+                    <span className={`ml-1 ${
+                      item.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {item.change}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Recent Activity */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="card-elevated p-4"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="lg:col-span-2"
         >
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold text-primary">System Status</h3>
-              <p className="text-secondary">All systems operational</p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-accent-success rounded-full animate-pulse"></div>
-              <span className="text-accent-success font-medium">{systemHealth.data?.status}</span>
-            </div>
-          </div>
-          
-          {systemHealth.data?.services && (
-            <div className="mt-4 grid grid-cols-3 gap-4">
-              {Object.entries(systemHealth.data.services).map(([service, status]) => (
-                <div key={service} className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${
-                    status === 'healthy' ? 'bg-accent-success' : 'bg-accent-danger'
-                  }`}></div>
-                  <span className="text-sm text-secondary capitalize">{service}</span>
+          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
+            <h3 className="text-lg font-semibold text-primary mb-4">Recent Activity</h3>
+            <div className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="h-10 w-10 rounded-lg bg-surface flex items-center justify-center">
+                      <activity.icon className={`h-5 w-5 ${activity.color}`} />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-primary">{activity.message}</p>
+                    <p className="text-sm text-secondary">{activity.user}</p>
+                    <p className="text-xs text-secondary mt-1">{activity.time}</p>
+                  </div>
                 </div>
               ))}
             </div>
-          )}
+          </div>
         </motion.div>
-      )}
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Revenue"
-          value={`$${stats.totalRevenue.toLocaleString()}`}
-          growth={stats.revenueGrowth}
-          icon={CurrencyDollarIcon}
-          color="primary"
-        />
-        
-        <StatCard
-          title="Total Users"
-          value={stats.totalUsers.toLocaleString()}
-          growth={stats.userGrowth}
-          icon={UsersIcon}
-          color="success"
-        />
-        
-        <StatCard
-          title="Total Orders"
-          value={stats.totalOrders.toLocaleString()}
-          growth={stats.orderGrowth}
-          icon={ShoppingBagIcon}
-          color="warning"
-        />
-        
-        <StatCard
-          title="Conversion Rate"
-          value={`${stats.conversionRate}%`}
-          growth={stats.conversionGrowth}
-          icon={ChartBarIcon}
-          color="primary"
-        />
+        {/* System Health */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
+            <h3 className="text-lg font-semibold text-primary mb-4">System Health</h3>
+            <div className="space-y-4">
+              {systemMetrics.map((metric, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <metric.icon className="h-5 w-5 text-secondary" />
+                    <span className="text-sm text-secondary">{metric.name}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-primary">{metric.value}</span>
+                    <div className={`w-2 h-2 rounded-full ${
+                      metric.status === 'excellent' ? 'bg-green-500' :
+                      metric.status === 'good' ? 'bg-yellow-500' : 'bg-red-500'
+                    }`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Quick Actions */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="card-elevated p-6"
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="bg-surface-elevated p-6 rounded-lg shadow-default"
       >
-        <h3 className="text-xl font-semibold text-primary mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="p-4 border border-default rounded-lg hover-surface transition-colors text-left">
-            <ChartBarIcon className="w-8 h-8 text-accent-primary mb-2" />
-            <h4 className="font-medium text-primary">Create Post</h4>
-            <p className="text-sm text-secondary">Share content on social media</p>
+        <h3 className="text-lg font-semibold text-primary mb-4">Quick Actions</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
+            <UserGroupIcon className="h-8 w-8 text-blue-500 mb-2" />
+            <span className="text-sm font-medium text-primary">Add User</span>
           </button>
-          
-          <button className="p-4 border border-default rounded-lg hover-surface transition-colors text-left">
-            <ShoppingBagIcon className="w-8 h-8 text-accent-primary mb-2" />
-            <h4 className="font-medium text-primary">Add Product</h4>
-            <p className="text-sm text-secondary">Add new product to store</p>
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
+            <CalendarIcon className="h-8 w-8 text-green-500 mb-2" />
+            <span className="text-sm font-medium text-primary">Schedule</span>
           </button>
-          
-          <button className="p-4 border border-default rounded-lg hover-surface transition-colors text-left">
-            <UsersIcon className="w-8 h-8 text-accent-primary mb-2" />
-            <h4 className="font-medium text-primary">View Analytics</h4>
-            <p className="text-sm text-secondary">Check your performance</p>
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
+            <EnvelopeIcon className="h-8 w-8 text-purple-500 mb-2" />
+            <span className="text-sm font-medium text-primary">Send Email</span>
           </button>
-        </div>
-      </motion.div>
-
-      {/* Recent Activity */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="card-elevated p-6"
-      >
-        <h3 className="text-xl font-semibold text-primary mb-4">Recent Activity</h3>
-        <div className="space-y-4">
-          {[
-            { action: 'New user registered', time: '2 minutes ago', type: 'user' },
-            { action: 'Product order received', time: '15 minutes ago', type: 'order' },
-            { action: 'Social media post published', time: '1 hour ago', type: 'social' },
-            { action: 'Email campaign sent', time: '3 hours ago', type: 'email' },
-          ].map((activity, index) => (
-            <div key={index} className="flex items-center space-x-3 p-3 hover-surface rounded-lg transition-colors">
-              <div className="w-2 h-2 bg-accent-primary rounded-full"></div>
-              <div className="flex-1">
-                <p className="text-primary font-medium">{activity.action}</p>
-                <p className="text-secondary text-sm">{activity.time}</p>
-              </div>
-            </div>
-          ))}
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
+            <ChartBarIcon className="h-8 w-8 text-indigo-500 mb-2" />
+            <span className="text-sm font-medium text-primary">Analytics</span>
+          </button>
         </div>
       </motion.div>
     </div>

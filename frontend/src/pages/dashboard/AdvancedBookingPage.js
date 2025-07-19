@@ -1,657 +1,470 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  CalendarDaysIcon, 
-  PlusIcon, 
+import { useAuth } from '../../contexts/AuthContext';
+import { bookingAPI } from '../../services/api';
+import {
+  CalendarIcon,
   ClockIcon,
-  UserIcon,
-  DocumentTextIcon,
-  CheckCircleIcon,
-  XCircleIcon,
+  UserGroupIcon,
+  CurrencyDollarIcon,
+  ChartBarIcon,
+  PlusIcon,
+  EyeIcon,
   PencilIcon,
   TrashIcon,
-  EyeIcon,
-  CurrencyDollarIcon,
   PhoneIcon,
-  EnvelopeIcon,
-  MapPinIcon,
-  StarIcon
+  VideoCallIcon,
+  MapPinIcon
 } from '@heroicons/react/24/outline';
-import Button from '../../components/Button';
-import CreateAppointmentModal from '../../components/CreateAppointmentModal';
-import CreateServiceModal from '../../components/CreateServiceModal';
-import { bookingAPI } from '../../services/api';
 import toast from 'react-hot-toast';
+import { format, startOfWeek, addDays, isSameDay, parseISO } from 'date-fns';
 
 const AdvancedBookingPage = () => {
+  const { user } = useAuth();
+  const [bookingData, setBookingData] = useState(null);
   const [services, setServices] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [selectedService, setSelectedService] = useState(null);
-  const [showCreateServiceModal, setShowCreateServiceModal] = useState(false);
-  const [showCreateAppointmentModal, setShowCreateAppointmentModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [viewMode, setViewMode] = useState('dashboard'); // dashboard, calendar, services, appointments
 
   useEffect(() => {
-    loadBookingData();
+    fetchBookingData();
   }, []);
 
-  const loadBookingData = async () => {
+  const fetchBookingData = async () => {
     try {
-      // Try to load from API first, fall back to mock data
-      try {
-        const servicesResponse = await bookingAPI.getServices();
-        const appointmentsResponse = await bookingAPI.getAppointments();
-        const analyticsResponse = await bookingAPI.getAnalytics();
-        
-        setServices(servicesResponse.data.services || []);
-        setAppointments(appointmentsResponse.data.appointments || []);
-        setAnalytics(analyticsResponse.data);
-      } catch (apiError) {
-        console.log('API not available, using mock data:', apiError.message);
-        // Fall back to mock data
-        setServices([
-          {
-            id: 1,
-            name: 'Business Consultation',
-            description: 'One-on-one business strategy consultation',
-            duration: 60,
-            price: 150,
-            category: 'Consultation',
-            status: 'active',
-            bookings: 23,
-            availability: 'Available'
-          },
-          {
-            id: 2,
-            name: 'Digital Marketing Strategy',
-            description: 'Comprehensive digital marketing planning session',
-            duration: 90,
-            price: 200,
-            category: 'Marketing',
-            status: 'active',
-            bookings: 18,
-            availability: 'Available'
-          },
-          {
-            id: 3,
-            name: 'Technical Support',
-            description: 'Technical assistance and troubleshooting',
-            duration: 30,
-            price: 75,
-            category: 'Support',
-            status: 'active',
-            bookings: 41,
-            availability: 'Busy'
-          }
-        ]);
-
-        setAppointments([
-          {
-            id: 1,
-            service: 'Business Consultation',
-            client: 'John Smith',
-            clientEmail: 'john@example.com',
-            clientPhone: '+1-555-0123',
-            date: '2025-07-20',
-            time: '10:00',
-            duration: 60,
-            status: 'confirmed',
-            amount: 150,
-            notes: 'First-time consultation for startup planning'
-          },
-          {
-            id: 2,
-            service: 'Digital Marketing Strategy',
-            client: 'Sarah Johnson',
-            clientEmail: 'sarah@company.com',
-            clientPhone: '+1-555-0456',
-            date: '2025-07-20',
-            time: '14:30',
-            duration: 90,
-            status: 'pending',
-            amount: 200,
-            notes: 'E-commerce marketing strategy review'
-          },
-          {
-            id: 3,
-            service: 'Technical Support',
-            client: 'Mike Wilson',
-            clientEmail: 'mike@tech.com',
-            clientPhone: '+1-555-0789',
-            date: '2025-07-19',
-            time: '16:00',
-            duration: 30,
-            status: 'completed',
-            amount: 75,
-            notes: 'WordPress website issues resolved'
-          }
-        ]);
-
-        setAnalytics({
-          totalBookings: 82,
-          totalRevenue: 12340,
-          averageRating: 4.8,
-          completionRate: 94.5,
-          upcomingAppointments: 7,
-          monthlyGrowth: 23.5
-        });
-      }
+      setLoading(true);
+      const [dashboardResponse, servicesResponse, appointmentsResponse] = await Promise.all([
+        fetch('/api/bookings/dashboard').then(res => res.json()).catch(() => ({ data: mockDashboardData })),
+        bookingAPI.getServices(),
+        bookingAPI.getAppointments()
+      ]);
+      
+      setBookingData(dashboardResponse.data || mockDashboardData);
+      setServices(servicesResponse.data.data.services || []);
+      setAppointments(appointmentsResponse.data.data.appointments || []);
     } catch (error) {
-      console.error('Failed to load booking data:', error);
+      console.error('Failed to fetch booking data:', error);
+      // Set mock data on error
+      setBookingData(mockDashboardData);
       toast.error('Failed to load booking data');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateService = (newService) => {
-    setServices(prev => [newService, ...prev]);
-    toast.success('Service created successfully!');
+  // Mock data for demonstration
+  const mockDashboardData = {
+    booking_metrics: {
+      total_bookings: 847,
+      upcoming_bookings: 23,
+      confirmed_bookings: 89,
+      completed_bookings: 720,
+      cancelled_bookings: 15,
+      no_show_rate: 3.2,
+      revenue_generated: 45670.25,
+      avg_booking_value: 53.87
+    },
+    calendar_overview: {
+      today_appointments: 5,
+      this_week: 28,
+      next_week: 31,
+      utilization_rate: 78.3,
+      peak_hours: ["10:00-11:00", "14:00-15:00", "16:00-17:00"],
+      available_slots: 156
+    },
+    service_performance: [
+      { name: "Business Consultation", bookings: 245, revenue: 18375, avg_duration: 60 },
+      { name: "Strategy Session", bookings: 189, revenue: 14175, avg_duration: 90 },
+      { name: "Quick Review", bookings: 156, revenue: 4680, avg_duration: 30 }
+    ]
   };
-
-  const handleCreateAppointment = (newAppointment) => {
-    setAppointments(prev => [newAppointment, ...prev]);
-    toast.success('Appointment created successfully!');
-  };
-
-  const handleServiceAction = (action, service) => {
-    switch (action) {
-      case 'view':
-        setSelectedService(service);
-        break;
-      case 'edit':
-        // Open edit modal
-        toast.info('Edit functionality coming soon');
-        break;
-      case 'delete':
-        if (window.confirm('Are you sure you want to delete this service?')) {
-          setServices(prev => prev.filter(s => s.id !== service.id));
-          toast.success('Service deleted successfully');
-        }
-        break;
-      case 'book':
-        setShowCreateAppointmentModal(true);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleAppointmentAction = (action, appointment) => {
-    switch (action) {
-      case 'view':
-        toast.info('View appointment details coming soon');
-        break;
-      case 'edit':
-        toast.info('Edit appointment coming soon');
-        break;
-      case 'confirm':
-        setAppointments(prev => 
-          prev.map(apt => 
-            apt.id === appointment.id 
-              ? { ...apt, status: 'confirmed' }
-              : apt
-          )
-        );
-        toast.success('Appointment confirmed');
-        break;
-      case 'cancel':
-        if (window.confirm('Are you sure you want to cancel this appointment?')) {
-          setAppointments(prev => 
-            prev.map(apt => 
-              apt.id === appointment.id 
-                ? { ...apt, status: 'cancelled' }
-                : apt
-            )
-          );
-          toast.success('Appointment cancelled');
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
-  const StatCard = ({ title, value, change, icon: Icon, color = 'primary', suffix = '' }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="card-elevated p-6"
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-secondary">{title}</p>
-          <p className="text-3xl font-bold text-primary mt-2">{value}{suffix}</p>
-          {change && (
-            <p className={`text-sm mt-2 ${change > 0 ? 'text-accent-success' : 'text-accent-danger'}`}>
-              {change > 0 ? '+' : ''}{change}% from last month
-            </p>
-          )}
-        </div>
-        <div className={`bg-gradient-${color} p-3 rounded-lg`}>
-          <Icon className="w-8 h-8 text-white" />
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  const ServiceCard = ({ service }) => (
-    <div className="card-elevated p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <CalendarDaysIcon className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-primary">{service.name}</h3>
-            <p className="text-sm text-secondary">{service.category}</p>
-          </div>
-        </div>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-          service.availability === 'Available'
-            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-        }`}>
-          {service.availability}
-        </span>
-      </div>
-
-      <p className="text-secondary text-sm mb-4">{service.description}</p>
-
-      <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
-        <div>
-          <p className="text-secondary">Duration</p>
-          <p className="font-medium text-primary">{service.duration} min</p>
-        </div>
-        <div>
-          <p className="text-secondary">Price</p>
-          <p className="font-medium text-primary">${service.price}</p>
-        </div>
-        <div>
-          <p className="text-secondary">Bookings</p>
-          <p className="font-medium text-primary">{service.bookings}</p>
-        </div>
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Button 
-          variant="primary" 
-          size="small" 
-          className="flex-1"
-          onClick={() => handleServiceAction('book', service)}
-        >
-          <CalendarDaysIcon className="w-4 h-4 mr-1" />
-          Book Now
-        </Button>
-        <button 
-          className="p-2 text-secondary hover:text-primary"
-          onClick={() => handleServiceAction('view', service)}
-        >
-          <EyeIcon className="w-4 h-4" />
-        </button>
-        <button 
-          className="p-2 text-secondary hover:text-primary"
-          onClick={() => handleServiceAction('edit', service)}
-        >
-          <PencilIcon className="w-4 h-4" />
-        </button>
-      </div>
-    </div>
-  );
-
-  const AppointmentCard = ({ appointment }) => (
-    <div className="card p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <h3 className="font-semibold text-primary">{appointment.service}</h3>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-              appointment.status === 'confirmed'
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                : appointment.status === 'pending'
-                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                : appointment.status === 'completed'
-                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-            }`}>
-              {appointment.status}
-            </span>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-secondary">
-                <UserIcon className="w-4 h-4" />
-                <span>{appointment.client}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-secondary">
-                <EnvelopeIcon className="w-4 h-4" />
-                <span>{appointment.clientEmail}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-secondary">
-                <PhoneIcon className="w-4 h-4" />
-                <span>{appointment.clientPhone}</span>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-secondary">
-                <CalendarDaysIcon className="w-4 h-4" />
-                <span>{appointment.date}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-secondary">
-                <ClockIcon className="w-4 h-4" />
-                <span>{appointment.time} ({appointment.duration} min)</span>
-              </div>
-              <div className="flex items-center space-x-2 text-secondary">
-                <CurrencyDollarIcon className="w-4 h-4" />
-                <span>${appointment.amount}</span>
-              </div>
-            </div>
-          </div>
-          
-          {appointment.notes && (
-            <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <p className="text-sm text-secondary">{appointment.notes}</p>
-            </div>
-          )}
-        </div>
-        
-        <div className="flex items-center space-x-2 ml-4">
-          <button className="p-2 text-secondary hover:text-primary">
-            <EyeIcon className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-secondary hover:text-primary">
-            <PencilIcon className="w-4 h-4" />
-          </button>
-          {appointment.status === 'pending' && (
-            <>
-              <button className="p-2 text-accent-success hover:text-green-700">
-                <CheckCircleIcon className="w-4 h-4" />
-              </button>
-              <button className="p-2 text-accent-danger hover:text-red-700">
-                <XCircleIcon className="w-4 h-4" />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner w-8 h-8 text-accent-primary"></div>
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
       </div>
     );
   }
 
+  const stats = [
+    {
+      name: 'Total Bookings',
+      value: bookingData?.booking_metrics?.total_bookings || 0,
+      change: '+12%',
+      changeType: 'increase',
+      icon: CalendarIcon,
+      color: 'bg-blue-500'
+    },
+    {
+      name: 'Revenue Generated',
+      value: `$${(bookingData?.booking_metrics?.revenue_generated || 0).toLocaleString()}`,
+      change: '+18%',
+      changeType: 'increase',
+      icon: CurrencyDollarIcon,
+      color: 'bg-green-500'
+    },
+    {
+      name: 'Upcoming Bookings',
+      value: bookingData?.booking_metrics?.upcoming_bookings || 0,
+      change: '+5%',
+      changeType: 'increase',
+      icon: ClockIcon,
+      color: 'bg-purple-500'
+    },
+    {
+      name: 'Utilization Rate',
+      value: `${bookingData?.calendar_overview?.utilization_rate || 0}%`,
+      change: '+3%',
+      changeType: 'increase',
+      icon: ChartBarIcon,
+      color: 'bg-indigo-500'
+    }
+  ];
+
+  const renderDashboard = () => (
+    <div className="space-y-6">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <motion.div
+            key={stat.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            className="bg-surface-elevated p-6 rounded-lg shadow-default"
+          >
+            <div className="flex items-center">
+              <div className={`flex-shrink-0 p-3 rounded-lg ${stat.color}`}>
+                <stat.icon className="h-6 w-6 text-white" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-secondary">{stat.name}</p>
+                <p className="text-2xl font-semibold text-primary">{stat.value}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Calendar Overview & Service Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Today's Schedule */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Today's Schedule</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-surface rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                <div>
+                  <p className="font-medium text-primary">Strategy Session</p>
+                  <p className="text-sm text-secondary">with Sarah Johnson</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-primary">10:00 AM</p>
+                <p className="text-xs text-secondary">90 min</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-surface rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <div>
+                  <p className="font-medium text-primary">Business Consultation</p>
+                  <p className="text-sm text-secondary">with Mike Chen</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-primary">2:00 PM</p>
+                <p className="text-xs text-secondary">60 min</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-surface rounded-lg">
+              <div className="flex items-center space-x-3">
+                <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                <div>
+                  <p className="font-medium text-primary">Quick Review</p>
+                  <p className="text-sm text-secondary">with Lisa Rodriguez</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-medium text-primary">4:30 PM</p>
+                <p className="text-xs text-secondary">30 min</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Service Performance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Service Performance</h3>
+          <div className="space-y-4">
+            {bookingData?.service_performance?.map((service, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-primary">{service.name}</p>
+                  <p className="text-sm text-secondary">{service.bookings} bookings</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-medium text-green-500">${service.revenue.toLocaleString()}</p>
+                  <p className="text-sm text-secondary">{service.avg_duration} min avg</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Peak Hours & Available Slots */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Peak Booking Hours</h3>
+          <div className="space-y-3">
+            {bookingData?.calendar_overview?.peak_hours?.map((hour, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-surface rounded-lg">
+                <span className="text-primary font-medium">{hour}</span>
+                <div className="w-20 bg-surface-hover rounded-full h-2">
+                  <div 
+                    className="h-2 bg-accent-primary rounded-full"
+                    style={{ width: `${80 - (index * 15)}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Quick Actions</h3>
+          <div className="space-y-3">
+            <button className="w-full flex items-center justify-center p-3 bg-accent-primary hover:bg-accent-primary/90 text-white rounded-lg transition-colors">
+              <PlusIcon className="h-5 w-5 mr-2" />
+              New Booking
+            </button>
+            <button className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors">
+              <CalendarIcon className="h-5 w-5 mr-2" />
+              View Calendar
+            </button>
+            <button className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors">
+              <ChartBarIcon className="h-5 w-5 mr-2" />
+              Analytics Report
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+
   return (
-    <>
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex items-center justify-between"
+      >
         <div>
-          <h1 className="text-3xl font-bold text-primary">Advanced Booking System</h1>
-          <p className="text-secondary mt-1">Manage your services, appointments, and availability</p>
+          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center">
+            <CalendarIcon className="h-8 w-8 text-accent-primary mr-3" />
+            Advanced Booking System
+          </h1>
+          <p className="text-secondary">
+            Manage your appointments, services, and booking analytics.
+          </p>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="secondary" onClick={() => setShowCreateServiceModal(true)}>
-            <PlusIcon className="w-4 h-4 mr-2" />
-            New Service
-          </Button>
-          <Button onClick={() => setShowCreateAppointmentModal(true)}>
-            <CalendarDaysIcon className="w-4 h-4 mr-2" />
-            New Appointment
-          </Button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview' },
-            { id: 'appointments', name: 'Appointments' },
-            { id: 'services', name: 'Services' },
-            { id: 'calendar', name: 'Calendar' },
-            { id: 'analytics', name: 'Analytics' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-accent-primary text-accent-primary'
-                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
-              }`}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Analytics Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Bookings"
-              value={analytics.totalBookings.toString()}
-              change={analytics.monthlyGrowth}
-              icon={CalendarDaysIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Total Revenue"
-              value={`$${analytics.totalRevenue.toLocaleString()}`}
-              change={18.5}
-              icon={CurrencyDollarIcon}
-              color="success"
-            />
-            <StatCard
-              title="Average Rating"
-              value={analytics.averageRating.toString()}
-              icon={StarIcon}
-              color="warning"
-            />
-            <StatCard
-              title="Completion Rate"
-              value={analytics.completionRate.toString()}
-              icon={CheckCircleIcon}
-              color="primary"
-              suffix="%"
-            />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <CalendarDaysIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Schedule Appointment</h3>
-              <p className="text-secondary">Book a new appointment for a client</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <DocumentTextIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Manage Services</h3>
-              <p className="text-secondary">Configure your available services and pricing</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <ClockIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Set Availability</h3>
-              <p className="text-secondary">Update your schedule and working hours</p>
-            </button>
-          </div>
-
-          {/* Recent Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
-              <h2 className="text-xl font-semibold text-primary mb-4">Upcoming Appointments</h2>
-              <div className="space-y-4">
-                {appointments.filter(apt => apt.status === 'confirmed').slice(0, 3).map((appointment) => (
-                  <div key={appointment.id} className="card p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-primary">{appointment.service}</h4>
-                        <p className="text-sm text-secondary">{appointment.client} • {appointment.date} at {appointment.time}</p>
-                      </div>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-xs font-medium">
-                        {appointment.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-primary mb-4">Popular Services</h2>
-              <div className="space-y-4">
-                {services.sort((a, b) => b.bookings - a.bookings).slice(0, 3).map((service) => (
-                  <div key={service.id} className="card p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-primary">{service.name}</h4>
-                        <p className="text-sm text-secondary">{service.bookings} bookings • ${service.price}</p>
-                      </div>
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-xs font-medium">
-                        {service.availability}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'appointments' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">All Appointments</h2>
-            <div className="flex items-center space-x-3">
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Status</option>
-                <option>Confirmed</option>
-                <option>Pending</option>
-                <option>Completed</option>
-                <option>Cancelled</option>
-              </select>
-              <Button onClick={() => setShowCreateAppointmentModal(true)}>
-                <PlusIcon className="w-4 h-4 mr-2" />
-                New Appointment
-              </Button>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            {appointments.map((appointment) => (
-              <AppointmentCard key={appointment.id} appointment={appointment} />
+        
+        <div className="flex items-center space-x-4">
+          <div className="flex bg-surface rounded-lg p-1">
+            {['dashboard', 'calendar', 'services', 'appointments'].map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className={`px-4 py-2 text-sm font-medium capitalize rounded-md transition-colors ${
+                  viewMode === mode
+                    ? 'bg-accent-primary text-white'
+                    : 'text-secondary hover:text-primary'
+                }`}
+              >
+                {mode}
+              </button>
             ))}
           </div>
         </div>
+      </motion.div>
+
+      {/* Content based on view mode */}
+      {viewMode === 'dashboard' && renderDashboard()}
+      
+      {viewMode === 'calendar' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Calendar View</h3>
+          <div className="text-center text-secondary py-12">
+            <CalendarIcon className="h-16 w-16 mx-auto mb-4 opacity-50" />
+            <p>Calendar integration coming soon...</p>
+          </div>
+        </motion.div>
       )}
 
-      {activeTab === 'services' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Services</h2>
-            <Button onClick={() => setShowCreateServiceModal(true)}>
-              <PlusIcon className="w-4 h-4 mr-2" />
-              Create Service
-            </Button>
+      {viewMode === 'services' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-6"
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-primary">Services</h3>
+            <button className="btn-primary flex items-center">
+              <PlusIcon className="h-5 w-5 mr-2" />
+              Add Service
+            </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+            {services.length > 0 ? services.map((service, index) => (
+              <div key={service.id} className="bg-surface-elevated p-6 rounded-lg shadow-default">
+                <h4 className="font-semibold text-primary mb-2">{service.name}</h4>
+                <p className="text-sm text-secondary mb-4">{service.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-accent-primary">${service.price}</span>
+                  <span className="text-sm text-secondary">{service.duration} min</span>
+                </div>
+              </div>
+            )) : (
+              <div className="col-span-full text-center py-12">
+                <UserGroupIcon className="h-16 w-16 mx-auto mb-4 opacity-50 text-secondary" />
+                <p className="text-secondary">No services found. Create your first service!</p>
+              </div>
+            )}
           </div>
-        </div>
+        </motion.div>
       )}
 
-      {activeTab === 'calendar' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Calendar View</h2>
-          <div className="card-elevated p-8 text-center">
-            <CalendarDaysIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Calendar Integration</h3>
-            <p className="text-secondary mb-4">Interactive calendar view for managing appointments and availability</p>
-            <Button>
-              View Full Calendar
-            </Button>
+      {viewMode === 'appointments' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-6"
+        >
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-primary">Appointments</h3>
+            <button className="btn-primary flex items-center">
+              <PlusIcon className="h-5 w-5 mr-2" />
+              New Appointment
+            </button>
           </div>
-        </div>
-      )}
-
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Booking Analytics</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Monthly Revenue"
-              value={`$${analytics.totalRevenue.toLocaleString()}`}
-              change={15.3}
-              icon={CurrencyDollarIcon}
-              color="success"
-            />
-            <StatCard
-              title="Booking Rate"
-              value="73.2"
-              change={8.7}
-              icon={CalendarDaysIcon}
-              color="primary"
-              suffix="%"
-            />
-            <StatCard
-              title="Client Retention"
-              value="68.5"
-              change={12.1}
-              icon={UserIcon}
-              color="warning"
-              suffix="%"
-            />
-            <StatCard
-              title="Average Session"
-              value="67"
-              icon={ClockIcon}
-              color="primary"
-              suffix=" min"
-            />
+          <div className="bg-surface-elevated rounded-lg shadow-default overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-default">
+                <thead className="bg-surface">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                      Client
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                      Service
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                      Date & Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-surface-elevated divide-y divide-default">
+                  {appointments.length > 0 ? appointments.map((appointment, index) => (
+                    <tr key={appointment.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-primary">{appointment.client_name}</div>
+                          <div className="text-sm text-secondary">{appointment.client_email}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-primary">{appointment.service_name}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-primary">
+                          {format(parseISO(appointment.scheduled_at), 'MMM dd, yyyy')}
+                        </div>
+                        <div className="text-sm text-secondary">
+                          {format(parseISO(appointment.scheduled_at), 'h:mm a')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                          appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {appointment.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center space-x-2">
+                          <button className="text-blue-600 hover:text-blue-900">
+                            <EyeIcon className="h-4 w-4" />
+                          </button>
+                          <button className="text-green-600 hover:text-green-900">
+                            <PencilIcon className="h-4 w-4" />
+                          </button>
+                          <button className="text-red-600 hover:text-red-900">
+                            <TrashIcon className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan="5" className="px-6 py-12 text-center">
+                        <ClockIcon className="h-16 w-16 mx-auto mb-4 opacity-50 text-secondary" />
+                        <p className="text-secondary">No appointments found.</p>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          <div className="card-elevated p-8 text-center">
-            <DocumentTextIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Detailed Analytics</h3>
-            <p className="text-secondary mb-4">Comprehensive booking analytics and performance metrics</p>
-            <Button>
-              View Detailed Reports
-            </Button>
-          </div>
-        </div>
+        </motion.div>
       )}
     </div>
-
-    {/* Modals */}
-    <CreateServiceModal
-      isOpen={showCreateServiceModal}
-      onClose={() => setShowCreateServiceModal(false)}
-      onSuccess={handleCreateService}
-    />
-    
-    <CreateAppointmentModal
-      isOpen={showCreateAppointmentModal}
-      onClose={() => setShowCreateAppointmentModal(false)}
-      onSuccess={handleCreateAppointment}
-      services={services}
-    />
-  </>
   );
 };
 
