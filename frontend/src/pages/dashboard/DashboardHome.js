@@ -249,10 +249,12 @@ const DashboardHome = () => {
           <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
             <h3 className="text-lg font-semibold text-primary mb-4">System Health</h3>
             <div className="space-y-4">
-              {systemMetrics.map((metric, index) => (
+              {systemMetrics.map((metric, index) => {
+                const IconComponent = metric.icon;
+                return (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <metric.icon className="h-5 w-5 text-secondary" />
+                    <IconComponent className="h-5 w-5 text-secondary" />
                     <span className="text-sm text-secondary">{metric.name}</span>
                   </div>
                   <div className="flex items-center space-x-2">
