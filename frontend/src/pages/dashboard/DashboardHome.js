@@ -281,26 +281,48 @@ const DashboardHome = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
         className="bg-surface-elevated p-6 rounded-lg shadow-default"
       >
-        <h3 className="text-lg font-semibold text-primary mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button 
-            className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors"
-            onClick={() => setShowCreateUserModal(true)}
-          >
-            <UserGroupIcon className="h-8 w-8 text-blue-500 mb-2" />
-            <span className="text-sm font-medium text-primary">Add User</span>
+        <h3 className="text-lg font-semibold text-primary mb-4">Main Goals & Quick Actions</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <ChartBarIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">Instagram</span>
           </button>
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
-            <CalendarIcon className="h-8 w-8 text-green-500 mb-2" />
-            <span className="text-sm font-medium text-primary">Schedule</span>
+          
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <ArrowTrendingUpIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">Link in Bio</span>
           </button>
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
-            <EnvelopeIcon className="h-8 w-8 text-purple-500 mb-2" />
-            <span className="text-sm font-medium text-primary">Send Email</span>
+          
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <ChartPieIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">Courses</span>
           </button>
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
-            <ChartBarIcon className="h-8 w-8 text-indigo-500 mb-2" />
-            <span className="text-sm font-medium text-primary">Analytics</span>
+          
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <ShoppingBagIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">E-commerce</span>
+          </button>
+          
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <UserGroupIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">CRM</span>
+          </button>
+          
+          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+              <EnvelopeIcon className="h-6 w-6 text-white" />
+            </div>
+            <span className="text-sm font-medium text-primary text-center">Marketing</span>
           </button>
         </div>
       </motion.div>
