@@ -83,6 +83,12 @@ function App() {
           <Route path="advanced-booking" element={<AdvancedBookingPage />} />
           <Route path="financial-management" element={<FinancialManagementPage />} />
           <Route path="escrow-system" element={<EscrowSystemPage />} />
+          
+          {/* Admin Routes */}
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/users" element={<div className="p-8 text-center">User management coming soon...</div>} />
+          <Route path="admin/system" element={<div className="p-8 text-center">System settings coming soon...</div>} />
+          <Route path="admin/security" element={<div className="p-8 text-center">Security center coming soon...</div>} />
         </Route>
 
         {/* Admin Routes */}
