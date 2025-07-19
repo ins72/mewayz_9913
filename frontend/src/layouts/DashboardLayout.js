@@ -28,6 +28,7 @@ import {
   ShieldCheckIcon,
   BanknotesIcon,
   WrenchScrewdriverIcon,
+  LockClosedIcon,
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = ({ isAdmin = false }) => {
