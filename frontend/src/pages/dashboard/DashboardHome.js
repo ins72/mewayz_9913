@@ -234,19 +234,19 @@ const DashboardHome = () => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             System Status
           </h2>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+          <div className="card-elevated rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+                <h3 className="text-lg font-medium text-primary">
                   Platform Health
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-secondary">
                   All systems operational
                 </p>
               </div>
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                <span className="text-sm text-green-600 dark:text-green-400 font-medium">
+                <span className="text-sm text-green-600 font-medium">
                   {healthData.data?.status}
                 </span>
               </div>
