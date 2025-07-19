@@ -24,6 +24,26 @@ const EscrowSystemPage = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [showCreateEscrowModal, setShowCreateEscrowModal] = useState(false);
+
+  const handleCreateEscrow = () => {
+    setShowCreateEscrowModal(true);
+  };
+
+  const handleExportTransactions = () => {
+    const csvContent = "data:text/csv;charset=utf-8," + 
+      "Transaction ID,Client,Vendor,Amount,Status,Created Date,Type\n" +
+      transactions.map(t => `${t.id},${t.client},${t.vendor},$${t.amount},${t.status},${t.created_at},${t.type}`).join('\n');
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "escrow_transactions.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success('Transactions exported successfully!');
+  };
 
   useEffect(() => {
     fetchEscrowData();
