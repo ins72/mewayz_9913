@@ -19,6 +19,7 @@ import {
   SparklesIcon,
   UserGroupIcon,
   BuildingOfficeIcon,
+  BuildingOffice2Icon,
   Bars3Icon,
   XMarkIcon,
   SunIcon,
