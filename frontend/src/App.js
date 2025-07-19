@@ -34,7 +34,7 @@ import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
 import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
 
 // Admin pages
-import AdminDashboard from './pages/admin/AdminDashboard';
+// AdminDashboard now imported from dashboard folder
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
