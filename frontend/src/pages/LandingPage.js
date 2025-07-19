@@ -258,32 +258,32 @@ const LandingPage = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Features</h4>
-              <ul className="space-y-2 text-gray-600 dark:text-gray-300">
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Social Media</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">E-commerce</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Courses</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Analytics</Link></li>
+              <h4 className="font-semibold text-primary mb-4">Features</h4>
+              <ul className="space-y-2 text-secondary">
+                <li><Link to="#" className="hover:text-primary">Social Media</Link></li>
+                <li><Link to="#" className="hover:text-primary">E-commerce</Link></li>
+                <li><Link to="#" className="hover:text-primary">Courses</Link></li>
+                <li><Link to="#" className="hover:text-primary">Analytics</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-600 dark:text-gray-300">
-                <li><Link to="/about" className="hover:text-indigo-600 dark:hover:text-indigo-400">About</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Blog</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Careers</Link></li>
-                <li><Link to="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Contact</Link></li>
+              <h4 className="font-semibold text-primary mb-4">Company</h4>
+              <ul className="space-y-2 text-secondary">
+                <li><Link to="/about" className="hover:text-primary">About</Link></li>
+                <li><Link to="#" className="hover:text-primary">Blog</Link></li>
+                <li><Link to="#" className="hover:text-primary">Careers</Link></li>
+                <li><Link to="#" className="hover:text-primary">Contact</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-600 dark:text-gray-300">
-                <li><Link to="/terms-of-service" className="hover:text-indigo-600 dark:hover:text-indigo-400">Terms of Service</Link></li>
-                <li><Link to="/privacy-policy" className="hover:text-indigo-600 dark:hover:text-indigo-400">Privacy Policy</Link></li>
-                <li><Link to="/cookie-policy" className="hover:text-indigo-600 dark:hover:text-indigo-400">Cookie Policy</Link></li>
-                <li><Link to="/accessibility" className="hover:text-indigo-600 dark:hover:text-indigo-400">Accessibility</Link></li>
+              <h4 className="font-semibold text-primary mb-4">Legal</h4>
+              <ul className="space-y-2 text-secondary">
+                <li><Link to="/terms-of-service" className="hover:text-primary">Terms of Service</Link></li>
+                <li><Link to="/privacy-policy" className="hover:text-primary">Privacy Policy</Link></li>
+                <li><Link to="/cookie-policy" className="hover:text-primary">Cookie Policy</Link></li>
+                <li><Link to="/accessibility" className="hover:text-primary">Accessibility</Link></li>
               </ul>
             </div>
           </div>
