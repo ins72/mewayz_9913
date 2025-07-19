@@ -630,7 +630,7 @@ const AIFeaturesPageV2 = () => {
             )}
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Recent Generations */}
       <motion.div
