@@ -233,8 +233,25 @@ const DashboardLayout = ({ isAdmin = false }) => {
 
             <div className="flex items-center space-x-4">
               <button
+                onClick={() => setSearchOpen(true)}
+                className="p-2 text-secondary hover:text-primary transition-colors"
+                title="Search"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </button>
+
+              <button
+                onClick={() => setHelpOpen(true)}
+                className="p-2 text-secondary hover:text-primary transition-colors"
+                title="Help & Support"
+              >
+                <QuestionMarkCircleIcon className="w-5 h-5" />
+              </button>
+
+              <button
                 onClick={toggleTheme}
                 className="p-2 text-secondary hover:text-primary transition-colors"
+                title="Toggle Theme"
               >
                 {theme === 'dark' ? (
                   <SunIcon className="w-5 h-5" />
@@ -243,7 +260,10 @@ const DashboardLayout = ({ isAdmin = false }) => {
                 )}
               </button>
 
-              <button className="p-2 text-secondary hover:text-primary transition-colors relative">
+              <button 
+                className="p-2 text-secondary hover:text-primary transition-colors relative"
+                title="Notifications"
+              >
                 <BellIcon className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
@@ -259,10 +279,11 @@ const DashboardLayout = ({ isAdmin = false }) => {
                 </div>
 
                 <Link
-                  to="/dashboard/profile"
+                  to="/dashboard/settings"
                   className="flex-shrink-0 w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center shadow-default"
+                  title="User Settings"
                 >
-                  <UserIcon className="w-4 h-4 text-white" />
+                  <UserCircleIcon className="w-4 h-4 text-white" />
                 </Link>
 
                 <button
@@ -270,7 +291,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
                   className="p-2 text-secondary hover:text-primary transition-colors"
                   title="Logout"
                 >
-                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                  <XMarkIcon className="w-5 h-5" />
                 </button>
               </div>
             </div>
