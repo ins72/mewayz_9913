@@ -492,6 +492,34 @@ const AdvancedBookingPage = () => {
           </div>
         </motion.div>
       )}
+
+      {/* Modals */}
+      {showCreateBookingModal && (
+        <CreateAppointmentModal
+          isOpen={showCreateBookingModal}
+          onClose={() => setShowCreateBookingModal(false)}
+        />
+      )}
+      
+      {showCreateServiceModal && (
+        <CreateServiceModal
+          isOpen={showCreateServiceModal}
+          onClose={() => setShowCreateServiceModal(false)}
+        />
+      )}
+      
+      {showViewModal && selectedItem && (
+        <ViewDetailsModal
+          isOpen={showViewModal}
+          onClose={() => {
+            setShowViewModal(false);
+            setSelectedItem(null);
+          }}
+          title="Appointment Details"
+          data={selectedItem}
+          type="booking"
+        />
+      )}
     </div>
   );
 };
