@@ -17,6 +17,7 @@ import NotFoundPage from './pages/NotFoundPage';
 // Legal pages
 import TermsOfServicePage from './pages/legal/TermsOfServicePage';
 import PrivacyPolicyPage from './pages/legal/PrivacyPolicyPage';
+import CookiePolicyPage from './pages/legal/CookiePolicyPage';
 
 // Protected pages
 import DashboardLayout from './layouts/DashboardLayout';
