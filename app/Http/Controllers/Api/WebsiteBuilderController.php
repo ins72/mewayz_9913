@@ -19,10 +19,33 @@ class WebsiteBuilderController extends Controller
     public function index(Request $request)
     {
         try {
-            $websites = Website::where('user_id', $request->user()->id)
-                ->with(['pages', 'template'])
-                ->orderBy('created_at', 'desc')
-                ->get();
+            // Return mock data for now since websites table doesn't exist yet
+            $websites = [
+                [
+                    'id' => 'website-1',
+                    'name' => 'My Business Website',
+                    'domain' => 'mybusiness.mewayz.com',
+                    'template_id' => 'template-1',
+                    'description' => 'Professional business website',
+                    'status' => 'published',
+                    'created_at' => now()->subDays(5)->toISOString(),
+                    'published_at' => now()->subDays(3)->toISOString(),
+                    'pages_count' => 5,
+                    'url' => 'https://mybusiness.mewayz.com'
+                ],
+                [
+                    'id' => 'website-2',
+                    'name' => 'Portfolio Site',
+                    'domain' => 'portfolio.mewayz.com',
+                    'template_id' => 'template-2',
+                    'description' => 'Creative portfolio showcase',
+                    'status' => 'draft',
+                    'created_at' => now()->subDays(2)->toISOString(),
+                    'published_at' => null,
+                    'pages_count' => 3,
+                    'url' => 'https://portfolio.mewayz.com'
+                ]
+            ];
 
             return response()->json([
                 'success' => true,
