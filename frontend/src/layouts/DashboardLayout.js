@@ -73,7 +73,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Marketplace & Stores', href: '/dashboard/ecommerce', icon: ShoppingBagIcon, description: 'E-commerce Platform' },
     { name: 'Template Library', href: '/dashboard/template-marketplace', icon: DocumentTextIcon, description: 'Template Marketplace' },
     { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon, description: 'Secure Transactions' },
-    { name: 'Analytics & Reporting', href: '/dashboard/analytics', icon: ChartBarIcon, description: 'Business Intelligence' },
+    { name: 'Analytics & Reporting', href: '/dashboard/gamified-analytics', icon: ChartBarIcon, description: 'Business Intelligence' },
     
     // Additional Features
     { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon, description: 'AI Tools' },
