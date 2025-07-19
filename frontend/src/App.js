@@ -7,6 +7,7 @@ import { NotificationProvider } from './contexts/NotificationContext';
 // Public pages
 import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
+import ContactUsPage from './pages/ContactUsPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
@@ -39,8 +40,11 @@ import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
 import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 
-// Admin pages
-// AdminDashboard now imported from dashboard folder
+// New pages
+import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
+import TeamManagementPage from './pages/dashboard/TeamManagementPage';
+import FormTemplatesPage from './pages/dashboard/FormTemplatesPage';
+import DiscountCodesPage from './pages/dashboard/DiscountCodesPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
