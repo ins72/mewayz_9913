@@ -42,6 +42,7 @@ import AdminRoute from './components/AdminRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 import AdvancedAIFeatures from './components/ai/AdvancedAIFeatures';
 import WorkspaceManager from './components/workspace/WorkspaceManager';
+import SubscriptionManager from './components/subscription/SubscriptionManager';
 
 function App() {
   const { theme } = useTheme();
