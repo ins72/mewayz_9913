@@ -48,6 +48,7 @@ import EnhancedTemplateMarketplace from './pages/dashboard/EnhancedTemplateMarke
 import GamifiedAnalyticsPage from './pages/dashboard/GamifiedAnalyticsPage';
 import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
 import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
+import ComprehensiveAdminDashboard from './pages/dashboard/ComprehensiveAdminDashboard';
 import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
 import ProfessionalCourseBuilder from './pages/dashboard/ProfessionalCourseBuilder';
 import EnhancedSocialMediaManager from './pages/dashboard/EnhancedSocialMediaManager';
