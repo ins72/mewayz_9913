@@ -429,7 +429,7 @@ code {
 }
 
 /* ================================
-   PROFESSIONAL GRADIENTS
+   PROFESSIONAL GRADIENTS - FIXED
    ================================ */
 .bg-gradient-primary {
   background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
@@ -452,7 +452,7 @@ code {
 }
 
 .bg-gradient-hero {
-  background: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+  background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
 }
 
 .dark .bg-gradient-hero {
