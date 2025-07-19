@@ -229,7 +229,7 @@ const InstagramManagementPage = () => {
       language: 'English',
       niche: 'Travel & Adventure'
     }
-    {
+  ]);
       id: 'ig_1',
       username: 'fitness_guru_miami',
       displayName: 'Miami Fitness Guru',
