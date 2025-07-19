@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mewayz:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+    container_name: mewayz-app
+    ports:
+      - "80:80"
+    environment:
+      - LANG=en_US.UTF-8
+    restart: unless-stopped
+    volumes:
+      - mewayz_data:/var/www/html/storage
+    networks:
+      - mewayz-network
+
+networks:
+  mewayz-network:
+    driver: bridge
+
+volumes:
+  mewayz_data:
