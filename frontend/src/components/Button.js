@@ -20,10 +20,12 @@ const Button = ({
   const variants = {
     primary: 'btn-primary focus-ring shadow-sm hover:opacity-90',
     secondary: 'btn-secondary focus-ring shadow-sm hover:opacity-90',
+    accent: 'btn-accent focus-ring shadow-sm hover:opacity-90',
+    'accent-secondary': 'btn-accent-secondary focus-ring shadow-sm hover:opacity-90',
     outline: 'btn-secondary focus-ring',
     ghost: 'hover-surface text-primary focus-ring',
-    danger: 'bg-red-600 hover:bg-red-700 text-white focus-ring shadow-sm',
-    success: 'bg-green-600 hover:bg-green-700 text-white focus-ring shadow-sm',
+    danger: 'bg-accent-red hover:opacity-90 text-white focus-ring shadow-sm',
+    success: 'bg-accent-emerald hover:opacity-90 text-white focus-ring shadow-sm',
   };
 
   const sizes = {
