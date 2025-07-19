@@ -418,7 +418,7 @@ const InstagramManagementPage = () => {
           
           <div className="flex items-center space-x-3">
             <button 
-              onClick={handleExportSelected}
+              onClick={handleBulkExport}
               disabled={selectedAccounts.length === 0 || loading}
               className="btn btn-secondary flex items-center space-x-2 disabled:opacity-50"
             >
