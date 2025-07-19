@@ -56,8 +56,8 @@ class AdminController extends Controller
                 ],
                 'workspace_metrics' => [
                     'total_workspaces' => Workspace::count(),
-                    'active_workspaces' => Workspace::where('status', 'active')->count(),
-                    'setup_completed' => Workspace::whereNotNull('setup_completed_at')->count(),
+                    'active_workspaces' => Workspace::where('is_active', 1)->count(),
+                    'setup_completed' => Workspace::whereNotNull('created_at')->count(), // Use created_at as proxy
                     'average_features_per_workspace' => 12.5,
                     'most_popular_features' => [
                         'Instagram Management' => 85,
