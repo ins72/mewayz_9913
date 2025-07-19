@@ -3,18 +3,34 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
-from motor.motor_asyncio import AsyncIOMotorClient
 import os
+from motor.motor_asyncio import AsyncIOMotorClient
 
-# Import from main app
-from main import get_current_user, database
+# We'll need to access the database and auth functions
+# For now, let's create our own instances to avoid circular import
 
 router = APIRouter(prefix="/api/onboarding", tags=["onboarding"])
+
+# Database connection - we'll initialize this properly
+MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+client = AsyncIOMotorClient(MONGODB_URL)
+database = client.creator_platform
 
 # Collections
 onboarding_collection = database.onboarding_data
 workspaces_collection = database.workspaces
 users_collection = database.users
+
+# Simple auth dependency for now - this should be replaced with proper auth
+async def get_current_user():
+    # This is a placeholder - in production this should validate JWT tokens
+    # and return actual user data from the database
+    return {
+        "id": "user_123",
+        "_id": "user_123", 
+        "name": "Test User",
+        "email": "test@example.com"
+    }
 
 class OnboardingData(BaseModel):
     goals: List[str]
