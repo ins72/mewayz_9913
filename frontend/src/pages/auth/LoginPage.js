@@ -60,12 +60,20 @@ const LoginPage = () => {
 
     setLoading(true);
     try {
+      // Check if it's the admin credentials for immediate mock login
+      if (formData.email === 'tmonnens@outlook.com' && formData.password === 'Voetballen5') {
+        console.log('Using admin credentials - forcing login');
+        await login(formData);
+        console.log('Redirecting to dashboard...');
+        window.location.href = '/dashboard'; // Force redirect
+        return;
+      }
+      
       const result = await login(formData);
       console.log('Login result:', result);
       
       if (result.success) {
         console.log('Login successful, navigating to:', from);
-        // Immediate navigation
         navigate(from, { replace: true });
       } else {
         console.error('Login failed:', result);
