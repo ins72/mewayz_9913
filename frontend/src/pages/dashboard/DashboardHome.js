@@ -207,7 +207,7 @@ const DashboardHome = () => {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-surface-elevated rounded-lg p-4 shadow-sm hover:shadow-md transition-all cursor-pointer"
+                className="card-elevated rounded-lg p-4 hover:shadow-default transition-all cursor-pointer"
               >
                 <div className={`${action.color} w-10 h-10 rounded-lg flex items-center justify-center mb-3`}>
                   <action.icon className="w-5 h-5 text-white" />
