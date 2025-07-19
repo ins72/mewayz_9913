@@ -176,6 +176,31 @@ class ContactCreate(BaseModel):
     company: Optional[str] = None
     job_title: Optional[str] = None
 
+class ShortLinkCreate(BaseModel):
+    original_url: str
+    custom_code: Optional[str] = None
+    expires_at: Optional[datetime] = None
+
+class TeamMemberInvite(BaseModel):
+    email: str
+    role: str = "viewer"
+    workspace_id: str
+
+class FormTemplateCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    category: str
+    fields: List[Dict[str, Any]]
+
+class DiscountCodeCreate(BaseModel):
+    code: str
+    description: Optional[str] = None
+    type: str = "percentage"  # percentage or fixed
+    value: float
+    usage_limit: Optional[int] = None
+    expires_at: Optional[datetime] = None
+    applicable_products: List[str] = ["all"]
+
 # Password utilities
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
