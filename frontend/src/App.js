@@ -86,6 +86,8 @@ function App() {
           <Route path="ai-features" element={<AdvancedAIFeatures />} />
           <Route path="workspaces" element={<WorkspaceManager />} />
           <Route path="subscription" element={<SubscriptionManager />} />
+          <Route path="templates" element={<TemplateMarketplace />} />
+          <Route path="advanced-analytics" element={<AdvancedAnalytics />} />
           <Route path="workspace" element={<WorkspacePage />} />
           <Route path="website-builder" element={<WebsiteBuilderPage />} />
           <Route path="advanced-booking" element={<AdvancedBookingPage />} />
