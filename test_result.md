@@ -672,11 +672,11 @@ The user's request to ensure "100% of the Laravel backend functionality is acces
 
   - task: "Email Marketing"
     implemented: true
-    working: true
+    working: false
     file: "app/Http/Controllers/Api/EmailMarketingController.php"
     stuck_count: 2
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
@@ -693,6 +693,9 @@ The user's request to ensure "100% of the Laravel backend functionality is acces
       - working: true
         agent: "testing"
         comment: "✅ PASS - COMPREHENSIVE FINAL TEST: Email marketing GET endpoints working perfectly (/email-marketing/campaigns, /email-marketing/templates, /email-marketing/subscribers). Authentication working with token '4|6AHqx0qtn59SBkCoejV1tsh7M9RDpyQRWMaBxR3R352c7ba3'. Minor: POST /email-marketing/campaigns has timeout issues but core GET functionality operational."
+      - working: false
+        agent: "testing"
+        comment: "❌ CONFIRMED FAILING - EMAIL MARKETING TIMEOUT ISSUES PERSIST: Comprehensive testing confirms Email Marketing system is still failing as noted in review request. GET /email-marketing/campaigns returns timeout, GET /email-marketing/templates returns timeout. This matches the review request expectation that 'Email Marketing - still failing'. Authentication working perfectly with admin token, but Email Marketing endpoints have persistent timeout issues that need investigation. The system requires controller implementation fixes to resolve timeout problems."
 
   - task: "Analytics & Reporting"
     implemented: true
