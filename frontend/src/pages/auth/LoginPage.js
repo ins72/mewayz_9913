@@ -61,13 +61,14 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const result = await login(formData);
+      console.log('Login result:', result);
       
       if (result.success) {
-        // Add a small delay to ensure state is updated, then navigate
-        setTimeout(() => {
-          navigate(from, { replace: true });
-        }, 100);
+        console.log('Login successful, navigating to:', from);
+        // Immediate navigation
+        navigate(from, { replace: true });
       } else {
+        console.error('Login failed:', result);
         setErrors({ general: result.message || result.error || 'Login failed' });
       }
     } catch (error) {
