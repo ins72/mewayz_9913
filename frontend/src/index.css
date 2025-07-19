@@ -478,35 +478,35 @@ code {
    STATUS INDICATORS
    ================================ */
 .status-success {
-  color: #059669;
+  color: #48BB78;
 }
 
 .dark .status-success {
-  color: #10B981;
+  color: #68D391;
 }
 
 .status-warning {
-  color: #D97706;
+  color: #ED8936;
 }
 
 .dark .status-warning {
-  color: #F59E0B;
+  color: #F6AD55;
 }
 
 .status-error {
-  color: #DC2626;
+  color: #F56565;
 }
 
 .dark .status-error {
-  color: #EF4444;
+  color: #FC8181;
 }
 
 .status-info {
-  color: #4F46E5;
+  color: #667EEA;
 }
 
 .dark .status-info {
-  color: #6366F1;
+  color: #818CF8;
 }
 
 /* ================================
