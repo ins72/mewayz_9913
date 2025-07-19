@@ -84,16 +84,6 @@ class EmailMarketingController extends Controller
             ], 500);
         }
     }
-                    'total_pages' => $campaigns->lastPage(),
-                    'total_items' => $campaigns->total(),
-                    'per_page' => $campaigns->perPage()
-                ]
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error fetching campaigns: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to fetch campaigns'], 500);
-        }
-    }
 
     /**
      * Create a new email campaign
