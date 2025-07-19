@@ -336,7 +336,9 @@ class EnhancedNewFeaturesBackendTester:
             
             if workspaces and len(workspaces) > 0:
                 sample_workspace = workspaces[0]
-                print(f"    Sample workspace: {sample_workspace.get('name', 'N/A')} (ID: {sample_workspace.get('id', 'N/A')[:8]}...)")
+                workspace_id = sample_workspace.get('id', 'N/A')
+                workspace_name = sample_workspace.get('name', 'N/A')
+                print(f"    Sample workspace: {workspace_name} (ID: {workspace_id[:8] if len(workspace_id) > 8 else workspace_id}...)")
         else:
             self.log_test("Workspace Integration - Get Workspaces", False, f"Status: {response.status_code if response else 'timeout'}", response_time)
     
