@@ -341,7 +341,7 @@ const TemplateMarketplace = () => {
                   <span>({template.reviews})</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <DownloadIcon className="h-4 w-4" />
+                  <ArrowDownTrayIcon className="h-4 w-4" />
                   <span>{template.downloads}</span>
                 </div>
               </div>
