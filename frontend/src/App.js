@@ -80,6 +80,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -92,27 +93,36 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<SocialMediaPage />} />
-              <Route path="ecommerce" element={<EcommercePage />} />
-              <Route path="courses" element={<CoursesPage />} />
-              <Route path="crm" element={<CRMPage />} />
-              <Route path="analytics" element={<AnalyticsPage />} />
               <Route path="bio-sites" element={<BioSitesPage />} />
-              <Route path="email-marketing" element={<EmailMarketingPage />} />
-              <Route path="payments" element={<PaymentsPage />} />
-              <Route path="ai-features" element={<AdvancedAIFeatures />} />
-              <Route path="workspaces" element={<WorkspaceManager />} />
-              <Route path="subscription" element={<SubscriptionManager />} />
-              <Route path="templates" element={<TemplateMarketplace />} />
-              <Route path="advanced-analytics" element={<AdvancedAnalytics />} />
-              <Route path="workspace" element={<WorkspacePage />} />
+              <Route path="crm" element={<CRMPage />} />
+              <Route path="link-shortener" element={<LinkShortenerPage />} />
+              <Route path="referrals" element={<ReferralSystemPage />} />
+              
               <Route path="website-builder" element={<WebsiteBuilderPage />} />
-              <Route path="advanced-booking" element={<AdvancedBookingPage />} />
+              <Route path="team-management" element={<TeamManagementPage />} />
+              <Route path="form-templates" element={<FormTemplatesPage />} />
+              <Route path="discount-codes" element={<DiscountCodesPage />} />
               <Route path="financial-management" element={<FinancialManagementPage />} />
+              
+              <Route path="courses" element={<CoursesPage />} />
+              <Route path="ecommerce" element={<EcommercePage />} />
+              <Route path="templates" element={<TemplateMarketplace />} />
               <Route path="escrow-system" element={<EscrowSystemPage />} />
+              <Route path="analytics" element={<AdvancedAnalytics />} />
+              
+              <Route path="ai-features" element={<AdvancedAIFeatures />} />
+              <Route path="email-marketing" element={<EmailMarketingPage />} />
+              <Route path="advanced-booking" element={<AdvancedBookingPage />} />
               <Route path="realtime-collaboration" element={<RealtimeCollaborationPage />} />
               <Route path="integrations" element={<IntegrationHubPage />} />
-              <Route path="referrals" element={<ReferralSystemPage />} />
+              <Route path="workspaces" element={<WorkspaceManager />} />
+              <Route path="subscription" element={<SubscriptionManager />} />
               <Route path="settings" element={<UserSettingsPage />} />
+              
+              {/* Legacy routes for backward compatibility */}
+              <Route path="workspace" element={<WorkspacePage />} />
+              <Route path="payments" element={<PaymentsPage />} />
+              <Route path="advanced-analytics" element={<AnalyticsPage />} />
               
               {/* Admin Routes */}
               <Route path="admin" element={<AdminDashboard />} />
