@@ -44,8 +44,10 @@ import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
 import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
+import EnhancedTemplateMarketplace from './pages/dashboard/EnhancedTemplateMarketplace';
 import SimpleGamifiedAnalyticsPage from './pages/dashboard/SimpleGamifiedAnalyticsPage';
 import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
+import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
