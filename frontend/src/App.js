@@ -44,6 +44,7 @@ import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
 import GamifiedAnalyticsPage from './pages/dashboard/GamifiedAnalyticsPage';
+import ComprehensiveAdminDashboard from './pages/dashboard/ComprehensiveAdminDashboard';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
