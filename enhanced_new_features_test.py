@@ -334,7 +334,7 @@ class EnhancedNewFeaturesBackendTester:
             workspaces = data.get('data', [])
             self.log_test("Workspace Integration - Get Workspaces", True, f"Workspaces retrieved: {len(workspaces)} workspaces", response_time)
             
-            if workspaces:
+            if workspaces and len(workspaces) > 0:
                 sample_workspace = workspaces[0]
                 print(f"    Sample workspace: {sample_workspace.get('name', 'N/A')} (ID: {sample_workspace.get('id', 'N/A')[:8]}...)")
         else:
