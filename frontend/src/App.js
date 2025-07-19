@@ -119,7 +119,7 @@ function App() {
                   <div className="text-sm space-y-1">
                     <div><strong>Version:</strong> {healthStatus.data?.version}</div>
                     <div><strong>Environment:</strong> {healthStatus.data?.environment}</div>
-                    <div><strong>Backend URL:</strong> {BACKEND_URL}/health</div>
+                    <div><strong>Backend URL:</strong> {backendUrl}/health</div>
                   </div>
                 </div>
               </div>
