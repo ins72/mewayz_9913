@@ -276,8 +276,8 @@ code {
    ================================ */
 .input {
   background-color: #FFFFFF;
-  border: 1px solid #DEE2E6;
-  color: #212529;
+  border: 1px solid #E2E8F0;
+  color: #2D3748;
   font-weight: 400;
 }
 
@@ -288,17 +288,17 @@ code {
 }
 
 .input:focus {
-  border-color: #4F46E5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #667EEA;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .dark .input:focus {
-  border-color: #6366F1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  border-color: #818CF8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
 }
 
 .input::placeholder {
-  color: #6C757D;
+  color: #718096;
 }
 
 .dark .input::placeholder {
