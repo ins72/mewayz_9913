@@ -15,6 +15,7 @@ import {
   FunnelIcon,
   CurrencyDollarIcon,
   ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   RocketLaunchIcon,
   UserGroupIcon,
   LightBulbIcon
