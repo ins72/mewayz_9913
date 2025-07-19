@@ -27,8 +27,6 @@ import {
   ShieldCheckIcon,
   CogIcon,
   LockClosedIcon,
-  WrenchScrewdriverIcon,
-  LockClosedIcon,
   ChatBubbleLeftRightIcon,
   PuzzlePieceIcon,
   UserPlusIcon,
