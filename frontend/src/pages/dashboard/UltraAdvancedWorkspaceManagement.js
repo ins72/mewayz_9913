@@ -28,7 +28,8 @@ import {
   ArrowRightIcon,
   StarIcon,
   LightBulbIcon,
-  RocketLaunchIcon
+  RocketLaunchIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
 import {
   BuildingOfficeIcon as BuildingOfficeIconSolid,
