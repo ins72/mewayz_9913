@@ -187,6 +187,25 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+class GoogleOAuthRequest(BaseModel):
+    credential: str
+
+class OAuthUserResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    role: str
+    email_verified: bool
+    phone: Optional[str]
+    avatar: Optional[str]
+    timezone: str
+    language: str
+    subscription_plan: str
+    api_key: str
+    created_at: datetime
+    token: str
+    oauth_provider: str
+
 class UserResponse(BaseModel):
     id: str
     name: str
