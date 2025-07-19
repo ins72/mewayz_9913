@@ -370,7 +370,7 @@ const FinancialManagementPage = () => {
               title="Net Profit"
               value={financialData.netProfit.toLocaleString()}
               change={financialData.monthlyGrowth}
-              icon={TrendingUpIcon}
+              icon={ArrowTrendingUpIcon}
               color="primary"
               prefix="$"
             />
