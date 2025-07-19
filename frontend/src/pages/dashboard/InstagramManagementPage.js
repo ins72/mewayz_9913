@@ -46,8 +46,189 @@ const InstagramManagementPage = () => {
     lastActiveHours: ''
   });
 
+  // Advanced feature states
+  const [automationEnabled, setAutomationEnabled] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useState([]);
+  const [exportFormat, setExportFormat] = useState('csv');
+  const [contentAnalysis, setContentAnalysis] = useState({});
+
   // Mock Instagram database with comprehensive data
   const [instagramAccounts, setInstagramAccounts] = useState([
+    {
+      id: '1',
+      username: 'fashion_influencer_nyc',
+      displayName: 'NYC Fashion Queen',
+      followers: 125000,
+      following: 1580,
+      posts: 1247,
+      engagementRate: 6.8,
+      avgLikes: 8500,
+      avgComments: 245,
+      accountType: 'creator',
+      verified: true,
+      profilePicture: 'https://ui-avatars.com/api/?name=NYC+Fashion&background=ec4899&color=fff',
+      bio: '✨ Fashion & Lifestyle | NYC | Brand collaborations: info@fashionqueen.com',
+      location: 'New York, NY',
+      email: 'collabs@fashionqueen.com',
+      website: 'www.fashionqueennyc.com',
+      phone: '+1-555-0123',
+      lastActive: '1 hour ago',
+      contentCategories: ['Fashion', 'Lifestyle', 'Beauty'],
+      bestPostingTimes: ['9:00 AM', '12:00 PM', '6:00 PM'],
+      audienceDemographics: {
+        ageGroups: { '18-24': 35, '25-34': 45, '35-44': 15, '45+': 5 },
+        gender: { female: 78, male: 22 },
+        topLocations: ['New York', 'Los Angeles', 'Miami', 'Chicago', 'Atlanta']
+      },
+      recentPosts: [
+        { date: '2024-01-15', likes: 9200, comments: 287, reach: 45000, impressions: 62000 },
+        { date: '2024-01-14', likes: 7800, comments: 198, reach: 38000, impressions: 51000 }
+      ],
+      collaborationStatus: 'open',
+      averageRate: 2500,
+      language: 'English',
+      niche: 'Fashion & Lifestyle'
+    },
+    {
+      id: '2', 
+      username: 'tech_reviewer_sf',
+      displayName: 'Silicon Valley Tech Reviews',
+      followers: 89000,
+      following: 890,
+      posts: 567,
+      engagementRate: 5.2,
+      avgLikes: 4600,
+      avgComments: 189,
+      accountType: 'business',
+      verified: false,
+      profilePicture: 'https://ui-avatars.com/api/?name=Tech+Reviews&background=3b82f6&color=fff',
+      bio: '🚀 Latest tech reviews & unboxing | SF Bay Area | Contact: hello@techreviews.io',
+      location: 'San Francisco, CA',
+      email: 'partnerships@techreviews.io',
+      website: 'www.sftechreviews.com',
+      phone: '+1-555-0456',
+      lastActive: '3 hours ago',
+      contentCategories: ['Technology', 'Reviews', 'Gadgets'],
+      bestPostingTimes: ['8:00 AM', '2:00 PM', '7:00 PM'],
+      audienceDemographics: {
+        ageGroups: { '18-24': 25, '25-34': 55, '35-44': 15, '45+': 5 },
+        gender: { female: 32, male: 68 },
+        topLocations: ['San Francisco', 'Seattle', 'Austin', 'Boston', 'Denver']
+      },
+      recentPosts: [
+        { date: '2024-01-15', likes: 5200, comments: 203, reach: 28000, impressions: 39000 },
+        { date: '2024-01-13', likes: 4100, comments: 156, reach: 25000, impressions: 34000 }
+      ],
+      collaborationStatus: 'selective',
+      averageRate: 1800,
+      language: 'English',
+      niche: 'Technology'
+    },
+    {
+      id: '3',
+      username: 'fitness_coach_miami',
+      displayName: 'Miami Fitness Pro',
+      followers: 67000,
+      following: 2100,
+      posts: 892,
+      engagementRate: 7.1,
+      avgLikes: 4750,
+      avgComments: 298,
+      accountType: 'creator',
+      verified: false,
+      profilePicture: 'https://ui-avatars.com/api/?name=Fitness+Pro&background=10b981&color=fff',
+      bio: '💪 Certified personal trainer | Nutrition expert | Miami Beach | Transform your body!',
+      location: 'Miami, FL',
+      email: 'coach@miamifit.com',
+      website: 'www.miamifitnesspro.com',
+      phone: '+1-555-0789',
+      lastActive: '30 minutes ago',
+      contentCategories: ['Fitness', 'Nutrition', 'Wellness'],
+      bestPostingTimes: ['6:00 AM', '12:00 PM', '8:00 PM'],
+      audienceDemographics: {
+        ageGroups: { '18-24': 30, '25-34': 40, '35-44': 25, '45+': 5 },
+        gender: { female: 55, male: 45 },
+        topLocations: ['Miami', 'Fort Lauderdale', 'Orlando', 'Tampa', 'Jacksonville']
+      },
+      recentPosts: [
+        { date: '2024-01-15', likes: 5400, comments: 312, reach: 32000, impressions: 41000 },
+        { date: '2024-01-14', likes: 4200, comments: 267, reach: 28000, impressions: 36000 }
+      ],
+      collaborationStatus: 'open',
+      averageRate: 1200,
+      language: 'English',
+      niche: 'Fitness & Health'
+    },
+    {
+      id: '4',
+      username: 'food_blogger_la',
+      displayName: 'LA Foodie Adventures',
+      followers: 145000,
+      following: 3200,
+      posts: 1456,
+      engagementRate: 4.9,
+      avgLikes: 7100,
+      avgComments: 234,
+      accountType: 'creator',
+      verified: true,
+      profilePicture: 'https://ui-avatars.com/api/?name=LA+Foodie&background=f59e0b&color=fff',
+      bio: '🍕 Food blogger & restaurant critic | LA dining scene | Food photography | 📧: hello@lafoodie.com',
+      location: 'Los Angeles, CA',
+      email: 'collabs@lafoodie.com',
+      website: 'www.lafoodieadventures.com',
+      phone: '+1-555-0321',
+      lastActive: '2 hours ago',
+      contentCategories: ['Food', 'Restaurants', 'Cooking'],
+      bestPostingTimes: ['11:00 AM', '1:00 PM', '7:00 PM'],
+      audienceDemographics: {
+        ageGroups: { '18-24': 20, '25-34': 50, '35-44': 25, '45+': 5 },
+        gender: { female: 65, male: 35 },
+        topLocations: ['Los Angeles', 'San Diego', 'San Francisco', 'Las Vegas', 'Phoenix']
+      },
+      recentPosts: [
+        { date: '2024-01-15', likes: 8200, comments: 276, reach: 52000, impressions: 68000 },
+        { date: '2024-01-14', likes: 6800, comments: 198, reach: 45000, impressions: 59000 }
+      ],
+      collaborationStatus: 'open',
+      averageRate: 3200,
+      language: 'English',
+      niche: 'Food & Dining'
+    },
+    {
+      id: '5',
+      username: 'travel_couple_world',
+      displayName: 'World Wanderers',
+      followers: 198000,
+      following: 1890,
+      posts: 2134,
+      engagementRate: 5.8,
+      avgLikes: 11500,
+      avgComments: 445,
+      accountType: 'creator',
+      verified: true,
+      profilePicture: 'https://ui-avatars.com/api/?name=World+Wanderers&background=6366f1&color=fff',
+      bio: '✈️ Travel couple | 60+ countries | Adventure & culture | Travel guides & tips | 📧: hello@worldwanderers.com',
+      location: 'Worldwide',
+      email: 'partnerships@worldwanderers.com',
+      website: 'www.worldwanderers.travel',
+      phone: '+1-555-0654',
+      lastActive: '4 hours ago',
+      contentCategories: ['Travel', 'Adventure', 'Culture'],
+      bestPostingTimes: ['9:00 AM', '3:00 PM', '8:00 PM'],
+      audienceDemographics: {
+        ageGroups: { '18-24': 25, '25-34': 45, '35-44': 20, '45+': 10 },
+        gender: { female: 58, male: 42 },
+        topLocations: ['New York', 'Los Angeles', 'London', 'Toronto', 'Sydney']
+      },
+      recentPosts: [
+        { date: '2024-01-15', likes: 13200, comments: 487, reach: 78000, impressions: 95000 },
+        { date: '2024-01-13', likes: 10800, comments: 356, reach: 65000, impressions: 82000 }
+      ],
+      collaborationStatus: 'selective',
+      averageRate: 4500,
+      language: 'English',
+      niche: 'Travel & Adventure'
+    }
     {
       id: 'ig_1',
       username: 'fitness_guru_miami',
