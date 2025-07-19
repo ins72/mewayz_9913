@@ -967,15 +967,6 @@ Route::get('/auth/password/reset-status', function () {
 
 // Enhanced Admin System Routes
 Route::middleware(['auth:sanctum', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
-// Simple test route
-Route::get('/admin/dashboard', function () {
-    return response()->json([
-        'success' => true,
-        'message' => 'Admin dashboard working',
-        'timestamp' => now()
-    ]);
-});
-
 Route::prefix('admin')->group(function () {
         Route::post('/subscriptions/manage', [EnhancedAdminController::class, 'manageSubscriptionPlans']);
         Route::get('/metrics', [EnhancedAdminController::class, 'getMetrics']);
