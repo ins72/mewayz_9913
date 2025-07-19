@@ -2,33 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --toast-bg: #FFFFFF;
-  --toast-color: #1A1A1A;
-  --toast-border: #E5E5E5;
-  
-  /* Professional accent colors */
-  --accent-primary: #10B981; /* Emerald green */
-  --accent-secondary: #8B5CF6; /* Purple */
-  --accent-tertiary: #F59E0B; /* Amber */
-  --accent-quaternary: #EF4444; /* Red */
-  --gradient-primary: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
-  --gradient-dark: linear-gradient(135deg, #374151 0%, #1F2937 100%);
-}
-
-[data-theme="dark"] {
-  --toast-bg: #191919;
-  --toast-color: #F1F1F1;
-  --toast-border: #282828;
-  
-  /* Dark theme gradients */
-  --gradient-primary: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
-  --gradient-dark: linear-gradient(135deg, #282828 0%, #191919 100%);
-  --gradient-surface: linear-gradient(135deg, #242424 0%, #191919 100%);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -44,12 +17,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Light theme (default) */
 body {
   background-color: #FAFAFA;
   color: #1A1A1A;
   transition: background-color 0.2s, color 0.2s;
 }
 
+/* Dark theme - Very dark, clean, and professional */
 .dark body {
   background-color: #101010;
   color: #F1F1F1;
@@ -69,7 +44,7 @@ code {
 }
 
 .dark ::-webkit-scrollbar-track {
-  background-color: #282828;
+  background-color: #101010;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -100,10 +75,9 @@ code {
   to { transform: translateX(0); }
 }
 
-@keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .animate-fade-in {
@@ -112,11 +86,6 @@ code {
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-out;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 8s ease infinite;
 }
 
 /* Dark mode utilities */
@@ -132,12 +101,7 @@ code {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Custom component styles using the exact color scheme */
+/* App Backgrounds */
 .bg-app {
   background-color: #FAFAFA;
 }
@@ -146,6 +110,7 @@ code {
   background-color: #101010;
 }
 
+/* Surface/Card Backgrounds */
 .bg-surface {
   background-color: #FFFFFF;
 }
@@ -154,16 +119,7 @@ code {
   background-color: #191919;
 }
 
-.bg-surface-elevated {
-  background-color: #FFFFFF;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.dark .bg-surface-elevated {
-  background: var(--gradient-surface);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-}
-
+/* Text Colors */
 .text-primary {
   color: #1A1A1A;
 }
@@ -180,14 +136,7 @@ code {
   color: #7B7B7B;
 }
 
-.text-accent {
-  color: var(--accent-primary);
-}
-
-.text-accent-secondary {
-  color: var(--accent-secondary);
-}
-
+/* Button Styles */
 .btn-primary {
   background-color: #1A1A1A;
   color: #FFFFFF;
@@ -211,61 +160,7 @@ code {
   border: 1px solid #282828;
 }
 
-.btn-accent {
-  background: var(--gradient-primary);
-  color: #FFFFFF;
-  border: none;
-}
-
-.btn-accent-secondary {
-  background: var(--gradient-secondary);
-  color: #FFFFFF;
-  border: none;
-}
-
-/* Professional gradient backgrounds */
-.bg-gradient-brand {
-  background: var(--gradient-primary);
-}
-
-.bg-gradient-secondary {
-  background: var(--gradient-secondary);
-}
-
-.bg-gradient-dark {
-  background: var(--gradient-dark);
-}
-
-.dark .bg-gradient-welcome {
-  background: linear-gradient(135deg, #374151 0%, #1F2937 50%, #111827 100%);
-}
-
-.bg-gradient-welcome {
-  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 50%, #D1D5DB 100%);
-}
-
-/* Card styles */
-.card {
-  background-color: #FFFFFF;
-  border: 1px solid #E5E5E5;
-}
-
-.dark .card {
-  background-color: #191919;
-  border: 1px solid #282828;
-}
-
-.card-gradient {
-  background-color: #FFFFFF;
-  border: 1px solid #E5E5E5;
-}
-
-.dark .card-gradient {
-  background: var(--gradient-surface);
-  border: 1px solid #282828;
-}
-
-/* Input styles */
+/* Input Styles */
 .input {
   background-color: #FFFFFF;
   border: 1px solid #E5E5E5;
@@ -286,7 +181,7 @@ code {
   color: #7B7B7B;
 }
 
-/* Navigation styles */
+/* Navigation */
 .nav-bg {
   background-color: #FFFFFF;
   border-bottom: 1px solid #E5E5E5;
@@ -297,63 +192,20 @@ code {
   border-bottom: 1px solid #282828;
 }
 
-/* Focus states without blue */
-.focus-ring {
-  outline: none;
-}
-
-.focus-ring:focus {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-}
-
-/* Remove all blue/indigo colors in dark mode */
-.dark .text-indigo-600,
-.dark .text-indigo-700,
-.dark .text-indigo-400,
-.dark .text-indigo-300,
-.dark .text-blue-600,
-.dark .text-blue-500,
-.dark .text-blue-400 {
-  color: #F1F1F1 !important;
-}
-
-.dark .bg-indigo-50,
-.dark .bg-indigo-900,
-.dark .bg-indigo-600,
-.dark .bg-indigo-800,
-.dark .bg-blue-50,
-.dark .bg-blue-100 {
-  background-color: #191919 !important;
-}
-
-.dark .border-indigo-700,
-.dark .border-indigo-300,
-.dark .border-blue-500 {
-  border-color: #282828 !important;
-}
-
-.dark .hover\:text-indigo-600:hover,
-.dark .hover\:text-indigo-400:hover,
-.dark .hover\:text-indigo-500:hover,
-.dark .hover\:text-indigo-300:hover {
-  color: #F1F1F1 !important;
-}
-
-/* Active states for navigation */
+/* Navigation Active State */
 .nav-active {
-  background: var(--gradient-primary);
-  color: #FFFFFF;
-  border-right: 2px solid var(--accent-primary);
+  background-color: #E5E5E5;
+  color: #1A1A1A;
+  border-right: 2px solid #1A1A1A;
 }
 
 .dark .nav-active {
-  background: linear-gradient(135deg, #282828 0%, #242424 100%);
+  background-color: #282828;
   color: #F1F1F1;
-  border-right: 2px solid var(--accent-primary);
+  border-right: 2px solid #F1F1F1;
 }
 
-/* Hover states */
+/* Hover States */
 .hover-surface:hover {
   background-color: #F5F5F5;
 }
@@ -362,35 +214,102 @@ code {
   background-color: #282828;
 }
 
-/* Professional accent utilities */
-.accent-emerald {
-  color: #10B981;
+/* Focus States */
+.focus-ring {
+  outline: none;
 }
 
-.accent-purple {
-  color: #8B5CF6;
+.focus-ring:focus {
+  outline: 2px solid #7B7B7B;
+  outline-offset: 2px;
 }
 
-.accent-amber {
-  color: #F59E0B;
+.dark .focus-ring:focus {
+  outline: 2px solid #F1F1F1;
+  outline-offset: 2px;
 }
 
-.accent-red {
-  color: #EF4444;
+/* Borders */
+.border-default {
+  border-color: #E5E5E5;
 }
 
-.bg-accent-emerald {
-  background-color: #10B981;
+.dark .border-default {
+  border-color: #282828;
 }
 
-.bg-accent-purple {
-  background-color: #8B5CF6;
+/* Shadows */
+.shadow-default {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
-.bg-accent-amber {
-  background-color: #F59E0B;
+.dark .shadow-default {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
 }
 
-.bg-accent-red {
-  background-color: #EF4444;
+/* Toast notifications */
+:root {
+  --toast-bg: #FFFFFF;
+  --toast-color: #1A1A1A;
+  --toast-border: #E5E5E5;
+}
+
+.dark {
+  --toast-bg: #191919;
+  --toast-color: #F1F1F1;
+  --toast-border: #282828;
+}
+
+/* Remove ALL non-specified colors in dark mode */
+.dark .text-blue-500,
+.dark .text-blue-600,
+.dark .text-indigo-500,
+.dark .text-indigo-600,
+.dark .text-indigo-400,
+.dark .text-purple-500,
+.dark .text-green-500,
+.dark .text-red-500,
+.dark .text-orange-500,
+.dark .text-amber-500,
+.dark .text-yellow-500 {
+  color: #F1F1F1 !important;
+}
+
+.dark .bg-blue-500,
+.dark .bg-blue-600,
+.dark .bg-indigo-500,
+.dark .bg-indigo-600,
+.dark .bg-purple-500,
+.dark .bg-green-500,
+.dark .bg-red-500,
+.dark .bg-orange-500,
+.dark .bg-amber-500,
+.dark .bg-yellow-500 {
+  background-color: #191919 !important;
+}
+
+.dark .border-blue-500,
+.dark .border-indigo-500,
+.dark .border-purple-500,
+.dark .border-green-500,
+.dark .border-red-500 {
+  border-color: #282828 !important;
+}
+
+/* Clean professional spacing */
+.space-clean > * + * {
+  margin-top: 1rem;
+}
+
+/* Professional card elevation */
+.card-elevated {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-elevated {
+  background-color: #191919;
+  border: 1px solid #282828;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
