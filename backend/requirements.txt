@@ -12,3 +12,4 @@ websockets>=12.0authlib
 itsdangerous
 jinja2
 tweepy
+openai
