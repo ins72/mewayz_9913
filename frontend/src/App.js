@@ -32,6 +32,9 @@ import AdminDashboard from './pages/dashboard/AdminDashboard';
 import AdvancedBookingPage from './pages/dashboard/AdvancedBookingPage';
 import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
 import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
+import RealtimeCollaborationPage from './pages/dashboard/RealtimeCollaborationPage';
+import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
+import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 
 // Admin pages
 // AdminDashboard now imported from dashboard folder
