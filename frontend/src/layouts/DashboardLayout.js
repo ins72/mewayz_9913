@@ -217,6 +217,25 @@ const DashboardLayout = ({ isAdmin = false }) => {
                 })}
               </>
             )}
+
+            {/* Support Section */}
+            <div className="pt-6 pb-2">
+              <h3 className="px-3 text-xs font-semibold text-secondary uppercase tracking-wide">
+                Support
+              </h3>
+            </div>
+            {supportNavigation.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                className="flex items-center px-4 py-3 text-sm font-medium text-secondary hover:bg-surface-hover hover:text-primary transition-colors"
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+              >
+                <item.icon className="w-5 h-5 mr-3" />
+                {item.name}
+              </a>
+            ))}
           </nav>
         </div>
       </div>
