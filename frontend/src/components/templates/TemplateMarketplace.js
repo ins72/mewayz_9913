@@ -8,7 +8,7 @@ import {
   FunnelIcon,
   StarIcon,
   EyeIcon,
-  DownloadIcon,
+  ArrowDownTrayIcon,
   ShoppingCartIcon,
   TagIcon,
   UserIcon,
