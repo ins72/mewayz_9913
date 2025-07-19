@@ -1,0 +1,56 @@
+FROM php:8.2-fpm-alpine
+
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apk add --no-cache \
+    nginx \
+    supervisor \
+    nodejs \
+    npm \
+    git \
+    curl \
+    libpng-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    mysql-client \
+    openssl \
+    bash
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy application files
+COPY . .
+
+# Install dependencies
+RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs || true
+RUN npm ci && npm run build || true
+
+# Create directories
+RUN mkdir -p resources/views/livewire storage/app/public storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache public/storage /var/log/supervisor
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Create nginx config
+RUN echo 'user www-data; worker_processes auto; events { worker_connections 1024; } http { include /etc/nginx/mime.types; server { listen 80; root /var/www/html/public; index index.php; location / { try_files $uri $uri/ /index.php?$query_string; } location ~ \.php$ { fastcgi_pass 127.0.0.1:9000; fastcgi_index index.php; fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; include fastcgi_params; } } }' > /etc/nginx/nginx.conf
+
+# Create supervisor config
+RUN echo '[supervisord] nodaemon=true [program:php-fpm] command=php-fpm --nodaemonize autostart=true autorestart=true [program:nginx] command=nginx -g "daemon off;" autostart=true autorestart=true' > /etc/supervisord.conf
+
+# Create startup script
+RUN echo '#!/bin/bash' > /start.sh && \
+    echo 'echo "🚀 Mewayz v2 Setup Ready"' >> /start.sh && \
+    echo 'echo "Access: http://YOUR_SERVER_IP"' >> /start.sh && \
+    echo 'supervisord -c /etc/supervisord.conf' >> /start.sh && \
+    chmod +x /start.sh
+
+EXPOSE 80
+
+CMD ["/start.sh"]
