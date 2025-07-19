@@ -24,6 +24,7 @@ const DashboardHome = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [systemHealth, setSystemHealth] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showCreateUserModal, setShowCreateUserModal] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
