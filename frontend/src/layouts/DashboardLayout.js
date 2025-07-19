@@ -122,8 +122,8 @@ const DashboardLayout = ({ isAdmin = false }) => {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-surface shadow-sm">
-          <div className="flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col flex-grow bg-surface shadow-default border-default">
+          <div className="flex items-center h-16 px-4 border-b border-default">
             <h1 className="text-xl font-bold text-primary">
               {isAdmin ? 'Admin Panel' : 'Mewayz'}
             </h1>
