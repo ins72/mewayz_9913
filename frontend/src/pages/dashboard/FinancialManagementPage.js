@@ -179,6 +179,13 @@ const FinancialManagementPage = () => {
         </div>
         
         <div className="flex items-center space-x-4">
+          <button
+            onClick={handleExportFinancialReport}
+            className="btn-secondary flex items-center"
+          >
+            <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+            Export Report
+          </button>
           <select
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
