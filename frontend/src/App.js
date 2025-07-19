@@ -80,9 +80,10 @@ function App() {
   }
 
   return (
-    <div className={theme} data-theme={theme}>
-      <ErrorBoundary>
-        <NotificationProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <div className={theme} data-theme={theme}>
+        <ErrorBoundary>
+          <NotificationProvider>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
