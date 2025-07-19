@@ -36,33 +36,8 @@ security = HTTPBearer()
 
 router = APIRouter(prefix="/api/ai", tags=["ai-generation"])
 
-# Auth dependency
-async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication credentials"
-            )
-        return email
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials"
-        )
-
-async def get_current_user(email: str = Depends(verify_token)):
-    user = await users_collection.find_one({"email": email})
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found"
-        )
-    # Convert ObjectId to string for JSON serialization
-    user["id"] = str(user["_id"])
-    return user
+# Import auth functions from main
+from main import verify_token, get_current_user, users_collection
 
 class AIGenerationRequest(BaseModel):
     tool: str
