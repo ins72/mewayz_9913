@@ -19,7 +19,8 @@ import {
   Cog6ToothIcon,
   UserPlusIcon,
   CloudIcon,
-  DatabaseIcon
+  DatabaseIcon,
+  DocumentTextIcon
 } from '@heroicons/react/24/outline';
 
 const ComprehensiveAdminDashboard = () => {
