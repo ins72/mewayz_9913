@@ -94,6 +94,11 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Security Center', href: '/dashboard/admin/security', icon: LockClosedIcon, isAdmin: true },
   ] : [];
 
+  // Support navigation items
+  const supportNavigation = [
+    { name: 'Contact Us', href: '/contact', icon: EnvelopeIcon, external: true },
+  ];
+
   const handleLogout = () => {
     logout();
     navigate('/');
