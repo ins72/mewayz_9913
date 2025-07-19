@@ -108,7 +108,7 @@ const RegisterPage = () => {
         className="sm:mx-auto sm:w-full sm:max-w-md"
       >
         <div className="text-center">
-          <Link to="/" className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+          <Link to="/" className="text-3xl font-bold text-primary">
             Mewayz
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
