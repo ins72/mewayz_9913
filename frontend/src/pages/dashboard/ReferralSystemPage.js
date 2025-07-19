@@ -12,7 +12,8 @@ import {
   TrophyIcon,
   UsersIcon,
   EnvelopeIcon,
-  TagIcon
+  TagIcon,
+  ClipboardIcon
 } from '@heroicons/react/24/outline';
 import ReferralSystem from '../../components/growth/ReferralSystem';
 
