@@ -302,11 +302,28 @@ const DashboardLayout = ({ isAdmin = false }) => {
         <main className="flex-1">
           <div className="py-6">
             <div className="px-4 sm:px-6 lg:px-8">
+              {/* Breadcrumb */}
+              <div className="mb-6">
+                <Breadcrumb />
+              </div>
+              
               <Outlet />
             </div>
           </div>
         </main>
       </div>
+      
+      {/* Global Search Modal */}
+      <GlobalSearch 
+        isOpen={searchOpen} 
+        onClose={() => setSearchOpen(false)} 
+      />
+      
+      {/* Help & Support Modal */}
+      <HelpSupportCenter 
+        isOpen={helpOpen} 
+        onClose={() => setHelpOpen(false)} 
+      />
     </div>
   );
 };
