@@ -477,9 +477,6 @@ class MewayzAIBackendTester:
         self.test_subscription_system()
         self.test_google_oauth_integration()
         self.test_stripe_payment_integration()
-        
-        # Generate summary
-        self.generate_summary()
     
     def generate_summary(self):
         """Generate test summary"""
