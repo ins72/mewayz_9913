@@ -1919,7 +1919,10 @@ def create_admin_user():
 try:
     from comprehensive_features import *
     from advanced_systems import *
+    from enterprise_features import *
     print("✅ Comprehensive features loaded successfully")
+    print("✅ Advanced systems loaded successfully") 
+    print("✅ Enterprise features loaded successfully")
 except Exception as e:
     print(f"⚠️ Could not load comprehensive features: {e}")
 
