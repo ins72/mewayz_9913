@@ -47,7 +47,6 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Analytics', href: '/dashboard/analytics', icon: ChartBarIcon },
     { name: 'Bio Sites', href: '/dashboard/bio-sites', icon: GlobeAltIcon },
     { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon },
-    { name: 'Booking', href: '/dashboard/booking', icon: CalendarIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
   ];
 
