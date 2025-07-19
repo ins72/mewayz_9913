@@ -34,11 +34,11 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-indigo-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="absolute top-4 right-4">
         <button
           onClick={toggleTheme}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          className="p-2 text-secondary hover:text-primary transition-colors"
         >
           {theme === 'dark' ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
         </button>
@@ -51,7 +51,7 @@ const ForgotPasswordPage = () => {
         className="sm:mx-auto sm:w-full sm:max-w-md"
       >
         <div className="text-center">
-          <Link to="/" className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+          <Link to="/" className="text-3xl font-bold text-primary">
             Mewayz
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
