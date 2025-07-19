@@ -27,7 +27,8 @@ import {
   GlobeAltIcon,
   DevicePhoneMobileIcon,
   EnvelopeIcon,
-  LinkIcon
+  LinkIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import {
   StarIcon as StarIconSolid
