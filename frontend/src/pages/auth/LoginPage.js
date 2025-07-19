@@ -83,6 +83,53 @@ const LoginPage = () => {
     }
   };
 
+  // Google OAuth Success Handler
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    try {
+      console.log('Google OAuth response:', credentialResponse);
+      
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/google/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+        }),
+      });
+
+      const result = await response.json();
+      console.log('Google OAuth verify result:', result);
+
+      if (result.success && result.token) {
+        // Store the token
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', JSON.stringify(result.user));
+        
+        // Update auth context (this should trigger a re-render)
+        console.log('Google OAuth login successful, navigating to:', from);
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 100);
+      } else {
+        console.error('Google OAuth failed:', result);
+        setErrors({ general: result.message || 'Google login failed' });
+      }
+    } catch (error) {
+      console.error('Google OAuth error:', error);
+      setErrors({ general: 'Google login failed. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Google OAuth Error Handler
+  const handleGoogleError = (error) => {
+    console.error('Google OAuth error:', error);
+    setErrors({ general: 'Google login failed. Please try again.' });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       {/* Theme toggle */}
