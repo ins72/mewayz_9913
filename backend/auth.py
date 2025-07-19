@@ -5,7 +5,7 @@ from typing import Optional, List, Dict, Any
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
-from pymongo import MongoClient
+from motor.motor_asyncio import AsyncIOMotorClient
 
 # Environment variables
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017")
@@ -14,7 +14,7 @@ ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))  # 24 hours
 
 # MongoDB setup
-client = MongoClient(MONGO_URL)
+client = AsyncIOMotorClient(MONGO_URL)
 db = client.mewayz
 users_collection = db.users
 
