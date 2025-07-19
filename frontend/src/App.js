@@ -45,7 +45,7 @@ import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
 import EnhancedTemplateMarketplace from './pages/dashboard/EnhancedTemplateMarketplace';
-import SimpleGamifiedAnalyticsPage from './pages/dashboard/SimpleGamifiedAnalyticsPage';
+import GamifiedAnalyticsPage from './pages/dashboard/GamifiedAnalyticsPage';
 import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
 import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
 import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
