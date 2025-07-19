@@ -276,14 +276,25 @@ const AdvancedBookingPage = () => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <Button variant="primary" size="small" className="flex-1">
+        <Button 
+          variant="primary" 
+          size="small" 
+          className="flex-1"
+          onClick={() => handleServiceAction('book', service)}
+        >
           <CalendarDaysIcon className="w-4 h-4 mr-1" />
           Book Now
         </Button>
-        <button className="p-2 text-secondary hover:text-primary">
+        <button 
+          className="p-2 text-secondary hover:text-primary"
+          onClick={() => handleServiceAction('view', service)}
+        >
           <EyeIcon className="w-4 h-4" />
         </button>
-        <button className="p-2 text-secondary hover:text-primary">
+        <button 
+          className="p-2 text-secondary hover:text-primary"
+          onClick={() => handleServiceAction('edit', service)}
+        >
           <PencilIcon className="w-4 h-4" />
         </button>
       </div>
