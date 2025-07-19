@@ -277,6 +277,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return false;
     }
 
+    /**
+     * Get the is_admin attribute using the isAdmin method
+     */
+    public function getIsAdminAttribute()
+    {
+        return $this->isAdmin();
+    }
+
     public function paymentMethod(){
         return config('app.wallet.defaultMethod');
     }
