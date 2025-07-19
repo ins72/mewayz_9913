@@ -18,6 +18,10 @@ import {
   StarIcon
 } from '@heroicons/react/24/outline';
 import Button from '../../components/Button';
+import CreateAppointmentModal from '../../components/CreateAppointmentModal';
+import CreateServiceModal from '../../components/CreateServiceModal';
+import { bookingAPI } from '../../services/api';
+import toast from 'react-hot-toast';
 
 const AdvancedBookingPage = () => {
   const [services, setServices] = useState([]);
