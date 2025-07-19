@@ -63,6 +63,9 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Advanced Booking', href: '/dashboard/advanced-booking', icon: CalendarIcon },
     { name: 'Financial Management', href: '/dashboard/financial-management', icon: BanknotesIcon },
     { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon },
+    { name: 'Realtime Collaboration', href: '/dashboard/realtime-collaboration', icon: ChatBubbleLeftRightIcon },
+    { name: 'Integrations', href: '/dashboard/integrations', icon: PuzzlePieceIcon },
+    { name: 'Referral Program', href: '/dashboard/referrals', icon: UserPlusIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
   ];
 
