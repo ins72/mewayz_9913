@@ -63,7 +63,7 @@ const FormTemplatesPage = () => {
       submissions: 67,
       lastModified: '5 days ago',
       isPublished: true,
-      createdBy: user?.name || 'You'
+      createdBy: 'You'
     }
   ];
 
