@@ -140,9 +140,14 @@ function App() {
               <Route path="advanced-analytics" element={<AnalyticsPage />} />
               
               {/* Admin Routes */}
-              <Route path="admin" element={<SimpleAdminDashboard />} />
+              <Route path="admin" element={<AdvancedAdminDashboard />} />
+              <Route path="admin/simple" element={<SimpleAdminDashboard />} />
               <Route path="admin/users" element={<div className="p-8 text-center">User management coming soon...</div>} />
               <Route path="admin/system" element={<div className="p-8 text-center">System settings coming soon...</div>} />
+              
+              {/* Enhanced Template Marketplace */}
+              <Route path="marketplace" element={<EnhancedTemplateMarketplace />} />
+              <Route path="marketplace/enhanced" element={<EnhancedTemplateMarketplace />} />
               <Route path="admin/security" element={<div className="p-8 text-center">Security center coming soon...</div>} />
             </Route>
 
