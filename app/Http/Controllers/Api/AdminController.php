@@ -47,12 +47,12 @@ class AdminController extends Controller
                 ],
                 'user_metrics' => [
                     'total_users' => User::count(),
-                    'active_users' => User::where('last_login_at', '>', now()->subDays(30))->count(),
+                    'active_users' => User::where('status', 1)->count(), // Use status column instead
                     'new_users_today' => User::whereDate('created_at', today())->count(),
                     'new_users_this_week' => User::where('created_at', '>=', now()->startOfWeek())->count(),
                     'new_users_this_month' => User::where('created_at', '>=', now()->startOfMonth())->count(),
-                    'premium_users' => User::whereNotNull('subscription_plan')->count(),
-                    'free_users' => User::whereNull('subscription_plan')->count(),
+                    'premium_users' => User::where('role', '>', 0)->count(), // Use role as proxy for premium
+                    'free_users' => User::where('role', 0)->count(),
                 ],
                 'workspace_metrics' => [
                     'total_workspaces' => Workspace::count(),
