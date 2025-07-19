@@ -155,6 +155,7 @@ function App() {
               {/* Advanced Builders */}
               <Route path="bio-builder" element={<AdvancedLinkInBioBuilder />} />
               <Route path="course-builder" element={<ProfessionalCourseBuilder />} />
+              <Route path="social-enhanced" element={<EnhancedSocialMediaManager />} />
               <Route path="admin/security" element={<div className="p-8 text-center">Security center coming soon...</div>} />
             </Route>
 
