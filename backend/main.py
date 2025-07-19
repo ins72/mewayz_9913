@@ -28,11 +28,21 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    create_admin_user()
+    yield
+    # Shutdown (if needed)
+
 # FastAPI app
 app = FastAPI(
     title="Mewayz Professional Platform API", 
     version="3.0.0", 
-    description="Enterprise-Grade Multi-Platform Business Management System"
+    description="Enterprise-Grade Multi-Platform Business Management System",
+    lifespan=lifespan
 )
 
 # CORS middleware
