@@ -43,8 +43,8 @@ import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
 import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
 import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
-import GamifiedAnalyticsPage from './pages/dashboard/GamifiedAnalyticsPage';
-import ComprehensiveAdminDashboard from './pages/dashboard/ComprehensiveAdminDashboard';
+import SimpleGamifiedAnalyticsPage from './pages/dashboard/SimpleGamifiedAnalyticsPage';
+import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
