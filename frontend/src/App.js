@@ -99,6 +99,9 @@ function App() {
           <Route path="advanced-booking" element={<AdvancedBookingPage />} />
           <Route path="financial-management" element={<FinancialManagementPage />} />
           <Route path="escrow-system" element={<EscrowSystemPage />} />
+          <Route path="realtime-collaboration" element={<RealtimeCollaborationPage />} />
+          <Route path="integrations" element={<IntegrationHubPage />} />
+          <Route path="referrals" element={<ReferralSystemPage />} />
           
           {/* Admin Routes */}
           <Route path="admin" element={<AdminDashboard />} />
