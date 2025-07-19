@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 import {
   BanknotesIcon,
   ChartBarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   ArrowUpIcon,
   ArrowDownIcon,
   CreditCardIcon,
