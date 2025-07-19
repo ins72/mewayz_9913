@@ -32,6 +32,9 @@ import {
   BanknotesIcon,
   WrenchScrewdriverIcon,
   LockClosedIcon,
+  ChatBubbleLeftRightIcon,
+  PuzzlePieceIcon,
+  UserPlusIcon,
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = ({ isAdmin = false }) => {
