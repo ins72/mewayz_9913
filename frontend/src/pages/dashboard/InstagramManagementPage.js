@@ -1,0 +1,586 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import {
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  ArrowDownTrayIcon,
+  PlusIcon,
+  EyeIcon,
+  HeartIcon,
+  ShareIcon,
+  CheckCircleIcon,
+  ChartBarIcon,
+  UsersIcon,
+  CalendarIcon,
+  SparklesIcon,
+  ClockIcon,
+  MapPinIcon,
+  GlobeAltIcon,
+  AtSymbolIcon,
+  HashtagIcon,
+  CameraIcon,
+  VideoIcon
+} from '@heroicons/react/24/outline';
+
+const InstagramManagementPage = () => {
+  const { user } = useAuth();
+  const { success, error } = useNotification();
+  const [activeTab, setActiveTab] = useState('database');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [selectedAccounts, setSelectedAccounts] = useState([]);
+
+  // Advanced filtering state
+  const [filters, setFilters] = useState({
+    followerMin: '',
+    followerMax: '',
+    engagementMin: '',
+    engagementMax: '',
+    accountType: 'all',
+    verified: 'all',
+    location: '',
+    hashtags: '',
+    niche: 'all',
+    lastActiveHours: ''
+  });
+
+  // Mock Instagram database with comprehensive data
+  const [instagramAccounts, setInstagramAccounts] = useState([
+    {
+      id: 'ig_1',
+      username: 'fitness_guru_miami',
+      displayName: 'Miami Fitness Guru',
+      followers: 245000,
+      following: 1850,
+      posts: 1245,
+      engagementRate: 4.8,
+      avgLikes: 8500,
+      avgComments: 420,
+      accountType: 'business',
+      verified: true,
+      category: 'Health & Fitness',
+      profilePicture: null,
+      bio: '💪 Certified Personal Trainer | 🥗 Nutrition Expert | 📍 Miami, FL | 💌 DM for coaching',
+      location: 'Miami, Florida',
+      email: 'coach@fitnessguru.com',
+      phoneNumber: '+1-305-555-0123',
+      website: 'www.miamifitnessguru.com',
+      lastActive: '2 hours ago',
+      recentHashtags: ['#fitness', '#miami', '#personaltrainer', '#nutrition', '#wellness'],
+      collaborationInterest: 'high',
+      avgPostsPerWeek: 5.2,
+      bestPostingTime: '6:00 PM',
+      audienceGender: '65% Female, 35% Male',
+      audienceAgeRange: '25-34 (42%)',
+      topCountries: ['US (78%)', 'Canada (12%)', 'UK (6%)']
+    },
+    {
+      id: 'ig_2',
+      username: 'tech_startup_nyc',
+      displayName: 'TechStartup NYC',
+      followers: 98000,
+      following: 850,
+      posts: 567,
+      engagementRate: 7.2,
+      avgLikes: 3200,
+      avgComments: 180,
+      accountType: 'business',
+      verified: true,
+      category: 'Technology',
+      profilePicture: null,
+      bio: '🚀 Building the future of technology | 🏢 NYC-based startup | 📈 Series A funded | 💡 Innovation daily',
+      location: 'New York, New York',
+      email: 'media@techstartup.com',
+      phoneNumber: '+1-212-555-0456',
+      website: 'www.techstartup.co',
+      lastActive: '4 hours ago',
+      recentHashtags: ['#tech', '#startup', '#innovation', '#nyc', '#entrepreneur'],
+      collaborationInterest: 'medium',
+      avgPostsPerWeek: 3.8,
+      bestPostingTime: '2:00 PM',
+      audienceGender: '52% Male, 48% Female',
+      audienceAgeRange: '25-34 (55%)',
+      topCountries: ['US (85%)', 'Canada (8%)', 'Germany (4%)']
+    },
+    {
+      id: 'ig_3',
+      username: 'travel_blogger_global',
+      displayName: 'Global Wanderer',
+      followers: 567000,
+      following: 4200,
+      posts: 2180,
+      engagementRate: 3.9,
+      avgLikes: 15400,
+      avgComments: 890,
+      accountType: 'creator',
+      verified: true,
+      category: 'Travel',
+      profilePicture: null,
+      bio: '✈️ Travel Content Creator | 📸 Photographer | 🌍 Visited 87 countries | 📧 hello@globalwanderer.com',
+      location: 'Worldwide',
+      email: 'hello@globalwanderer.com',
+      phoneNumber: '+44-20-7946-0958',
+      website: 'www.globalwanderer.com',
+      lastActive: '1 hour ago',
+      recentHashtags: ['#travel', '#wanderlust', '#photography', '#adventure', '#explore'],
+      collaborationInterest: 'very high',
+      avgPostsPerWeek: 4.5,
+      bestPostingTime: '8:00 AM',
+      audienceGender: '58% Female, 42% Male',
+      audienceAgeRange: '25-34 (38%)',
+      topCountries: ['US (32%)', 'UK (18%)', 'Australia (12%)']
+    },
+    {
+      id: 'ig_4',
+      username: 'food_blogger_la',
+      displayName: 'LA Food Explorer',
+      followers: 189000,
+      following: 2850,
+      posts: 1456,
+      engagementRate: 5.1,
+      avgLikes: 7800,
+      avgComments: 320,
+      accountType: 'creator',
+      verified: false,
+      category: 'Food & Drink',
+      profilePicture: null,
+      bio: '🍕 LA Food Scene Expert | 🥘 Restaurant Reviews | 👨‍🍳 Chef Collaborations | 📍 Los Angeles',
+      location: 'Los Angeles, California',
+      email: 'collab@lafoodexplorer.com',
+      phoneNumber: '+1-323-555-0789',
+      website: 'www.lafoodscene.blog',
+      lastActive: '30 minutes ago',
+      recentHashtags: ['#lafood', '#foodie', '#restaurant', '#foodblogger', '#la'],
+      collaborationInterest: 'high',
+      avgPostsPerWeek: 6.1,
+      bestPostingTime: '7:30 PM',
+      audienceGender: '62% Female, 38% Male',
+      audienceAgeRange: '25-34 (45%)',
+      topCountries: ['US (91%)', 'Canada (5%)', 'Mexico (2%)']
+    }
+  ]);
+
+  const formatNumber = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+  };
+
+  const getAccountTypeColor = (type) => {
+    switch (type) {
+      case 'business': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'creator': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
+    }
+  };
+
+  const getCollaborationInterestColor = (interest) => {
+    switch (interest) {
+      case 'very high': return 'bg-green-500';
+      case 'high': return 'bg-green-400';
+      case 'medium': return 'bg-yellow-400';
+      case 'low': return 'bg-red-400';
+      default: return 'bg-gray-400';
+    }
+  };
+
+  const handleAccountSelect = (accountId) => {
+    setSelectedAccounts(prev => 
+      prev.includes(accountId) 
+        ? prev.filter(id => id !== accountId)
+        : [...prev, accountId]
+    );
+  };
+
+  const handleExportSelected = async () => {
+    if (selectedAccounts.length === 0) {
+      error('Please select at least one account to export');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      success(`Exported ${selectedAccounts.length} accounts to CSV successfully!`);
+      setSelectedAccounts([]);
+    } catch (err) {
+      error('Failed to export accounts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderInstagramDatabase = () => (
+    <div className="space-y-6">
+      {/* Advanced Search & Filters */}
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-primary">Instagram Database Search</h3>
+          <div className="text-sm text-secondary">
+            <span className="font-medium">{instagramAccounts.length.toLocaleString()}</span> accounts in database
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          <div className="lg:col-span-2">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by username, bio, location, hashtags..."
+                className="input w-full pl-10"
+              />
+            </div>
+          </div>
+          
+          <button 
+            className="btn btn-secondary flex items-center justify-center space-x-2"
+            onClick={() => setActiveTab('filters')}
+          >
+            <FunnelIcon className="h-4 w-4" />
+            <span>Advanced Filters</span>
+          </button>
+        </div>
+
+        {/* Quick Filter Buttons */}
+        <div className="flex flex-wrap gap-3 mb-4">
+          {[
+            { label: 'Verified Only', filter: 'verified', value: true },
+            { label: 'Business Accounts', filter: 'accountType', value: 'business' },
+            { label: 'High Engagement (5%+)', filter: 'engagementHigh', value: true },
+            { label: 'Recently Active (24h)', filter: 'recentlyActive', value: true }
+          ].map((quickFilter) => (
+            <button
+              key={quickFilter.label}
+              className="px-3 py-1 text-sm rounded-full border border-default hover:bg-surface-hover transition-colors"
+            >
+              {quickFilter.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Export & Actions */}
+        <div className="flex items-center justify-between pt-4 border-t border-default">
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-secondary">
+              {selectedAccounts.length} account{selectedAccounts.length !== 1 ? 's' : ''} selected
+            </span>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <button 
+              onClick={handleExportSelected}
+              disabled={selectedAccounts.length === 0 || loading}
+              className="btn btn-secondary flex items-center space-x-2 disabled:opacity-50"
+            >
+              <ArrowDownTrayIcon className="h-4 w-4" />
+              <span>{loading ? 'Exporting...' : 'Export CSV'}</span>
+            </button>
+            <button className="btn btn-primary flex items-center space-x-2">
+              <PlusIcon className="h-4 w-4" />
+              <span>Create Campaign</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Instagram Accounts Grid */}
+      <div className="grid grid-cols-1 gap-6">
+        {instagramAccounts.map((account) => (
+          <motion.div
+            key={account.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-surface-elevated p-6 rounded-xl shadow-default hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start space-x-4">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedAccounts.includes(account.id)}
+                    onChange={() => handleAccountSelect(account.id)}
+                    className="mr-3 rounded"
+                  />
+                </label>
+                
+                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 rounded-full flex items-center justify-center shadow-default">
+                  <span className="text-white font-bold text-xl">
+                    {account.displayName.charAt(0)}
+                  </span>
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h4 className="text-xl font-bold text-primary">@{account.username}</h4>
+                    {account.verified && (
+                      <CheckCircleIcon className="h-5 w-5 text-blue-500" />
+                    )}
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getAccountTypeColor(account.accountType)}`}>
+                      {account.accountType}
+                    </span>
+                    <div className={`w-3 h-3 rounded-full ${getCollaborationInterestColor(account.collaborationInterest)}`} 
+                         title={`Collaboration Interest: ${account.collaborationInterest}`} />
+                  </div>
+                  
+                  <p className="text-lg font-semibold text-primary mb-2">{account.displayName}</p>
+                  <p className="text-sm text-secondary mb-4 line-clamp-2">{account.bio}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                  <EyeIcon className="h-5 w-5" />
+                </button>
+                <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                  <HeartIcon className="h-5 w-5" />
+                </button>
+                <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                  <ShareIcon className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div className="text-center p-3 bg-surface rounded-lg">
+                <p className="text-lg font-bold text-primary">{formatNumber(account.followers)}</p>
+                <p className="text-xs text-secondary">Followers</p>
+              </div>
+              <div className="text-center p-3 bg-surface rounded-lg">
+                <p className="text-lg font-bold text-primary">{account.engagementRate}%</p>
+                <p className="text-xs text-secondary">Engagement</p>
+              </div>
+              <div className="text-center p-3 bg-surface rounded-lg">
+                <p className="text-lg font-bold text-primary">{formatNumber(account.avgLikes)}</p>
+                <p className="text-xs text-secondary">Avg Likes</p>
+              </div>
+              <div className="text-center p-3 bg-surface rounded-lg">
+                <p className="text-lg font-bold text-primary">{account.posts}</p>
+                <p className="text-xs text-secondary">Posts</p>
+              </div>
+            </div>
+
+            {/* Detailed Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm">
+                  <MapPinIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">{account.location}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <GlobeAltIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">{account.website}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <AtSymbolIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">{account.email}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <ClockIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">Active {account.lastActive}</span>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm">
+                  <ChartBarIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">{account.avgPostsPerWeek} posts/week</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <ClockIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">Best time: {account.bestPostingTime}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <UsersIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">{account.audienceGender}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm">
+                  <UsersIcon className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary">Age: {account.audienceAgeRange}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Hashtags */}
+            <div className="mb-4">
+              <p className="text-sm font-medium text-secondary mb-2">Recent Hashtags:</p>
+              <div className="flex flex-wrap gap-2">
+                {account.recentHashtags.map((hashtag) => (
+                  <span key={hashtag} className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs">
+                    {hashtag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-3">
+              <button className="btn btn-sm btn-primary">Add to Campaign</button>
+              <button className="btn btn-sm btn-secondary">View Profile</button>
+              <button className="btn btn-sm btn-secondary">Contact Info</button>
+              <button className="btn btn-sm btn-secondary">Analytics</button>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const renderContentScheduler = () => (
+    <div className="space-y-6">
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <h3 className="text-xl font-semibold text-primary mb-6">Content Scheduler</h3>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-secondary mb-2">Post Caption</label>
+            <textarea
+              rows={6}
+              placeholder="Write your Instagram post caption here... ✨"
+              className="input w-full resize-none"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">Media Upload</label>
+              <div className="border-2 border-dashed border-default rounded-lg p-6 text-center">
+                <CameraIcon className="h-12 w-12 text-secondary mx-auto mb-2" />
+                <p className="text-secondary">Drop images or videos here</p>
+                <button className="btn btn-sm btn-secondary mt-2">Browse Files</button>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">Schedule Time</label>
+              <input type="datetime-local" className="input w-full" />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">Hashtags</label>
+              <input 
+                type="text" 
+                placeholder="#hashtag1 #hashtag2 #hashtag3"
+                className="input w-full" 
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-default">
+          <div className="flex items-center space-x-4">
+            <button className="btn btn-secondary">Save as Draft</button>
+            <button className="btn btn-secondary">Preview</button>
+          </div>
+          <button className="btn btn-primary">Schedule Post</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAnalytics = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { label: 'Total Reach', value: '2.4M', change: '+18.2%', icon: ChartBarIcon },
+          { label: 'Engagement Rate', value: '6.8%', change: '+2.1%', icon: HeartIcon },
+          { label: 'New Followers', value: '12.5K', change: '+24.6%', icon: UsersIcon },
+          { label: 'Profile Visits', value: '89.2K', change: '+15.3%', icon: EyeIcon }
+        ].map((stat, index) => (
+          <div key={index} className="bg-surface-elevated p-6 rounded-xl shadow-default">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-secondary">{stat.label}</p>
+                <p className="text-2xl font-bold text-primary mt-1">{stat.value}</p>
+              </div>
+              <div className="text-right">
+                <stat.icon className="h-6 w-6 text-secondary mb-1" />
+                <p className="text-sm font-medium text-green-600">{stat.change}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <h3 className="text-xl font-semibold text-primary mb-6">Performance Analytics</h3>
+        <div className="h-64 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg flex items-center justify-center">
+          <p className="text-secondary">Advanced analytics charts would be rendered here</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-primary mb-2">Instagram Management</h1>
+            <p className="text-secondary">Advanced Instagram database, lead generation, and content management</p>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button className="btn btn-secondary flex items-center space-x-2">
+              <SparklesIcon className="h-4 w-4" />
+              <span>AI Assistant</span>
+            </button>
+            <button className="btn btn-primary flex items-center space-x-2">
+              <PlusIcon className="h-4 w-4" />
+              <span>New Campaign</span>
+            </button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Tabs */}
+      <div className="border-b border-default">
+        <nav className="flex space-x-8">
+          {[
+            { id: 'database', name: 'Instagram Database', icon: UsersIcon },
+            { id: 'scheduler', name: 'Content Scheduler', icon: CalendarIcon },
+            { id: 'analytics', name: 'Analytics', icon: ChartBarIcon }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === tab.id
+                  ? 'border-blue-500 text-blue-500'
+                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
+              }`}
+            >
+              <tab.icon className="h-4 w-4" />
+              <span>{tab.name}</span>
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Tab Content */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {activeTab === 'database' && renderInstagramDatabase()}
+        {activeTab === 'scheduler' && renderContentScheduler()}
+        {activeTab === 'analytics' && renderAnalytics()}
+      </motion.div>
+    </div>
+  );
+};
+
+export default InstagramManagementPage;
