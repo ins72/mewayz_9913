@@ -304,6 +304,12 @@ const DashboardHome = () => {
           </button>
         </div>
       </motion.div>
+
+      {/* Create User Modal */}
+      <CreateUserModal 
+        isOpen={showCreateUserModal}
+        onClose={() => setShowCreateUserModal(false)}
+      />
     </div>
   );
 };
