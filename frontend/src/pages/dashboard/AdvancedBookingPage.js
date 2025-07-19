@@ -268,7 +268,10 @@ const AdvancedBookingPage = () => {
         >
           <h3 className="text-lg font-semibold text-primary mb-4">Quick Actions</h3>
           <div className="space-y-3">
-            <button className="w-full flex items-center justify-center p-3 bg-accent-primary hover:bg-accent-primary/90 text-white rounded-lg transition-colors">
+            <button 
+              className="w-full flex items-center justify-center p-3 bg-accent-primary hover:bg-accent-primary/90 text-white rounded-lg transition-colors"
+              onClick={() => setShowCreateBookingModal(true)}
+            >
               <PlusIcon className="h-5 w-5 mr-2" />
               New Booking
             </button>
