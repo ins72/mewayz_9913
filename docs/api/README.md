@@ -1,476 +1,383 @@
-# Mewayz Platform API Reference
+# Mewayz Platform API Documentation
+**Version 3.0.0** | *July 20, 2025*
 
-*Version: 2.0 | Last Updated: July 19, 2025*
+## API Overview
 
-## 🌟 Overview
+The Mewayz Platform API is built with FastAPI and provides comprehensive REST endpoints for all platform features. All API endpoints require authentication unless otherwise specified.
 
-The Mewayz Platform API provides programmatic access to all platform features, enabling developers to build custom integrations, automate workflows, and extend functionality.
+**Base URL**: `/api`  
+**Authentication**: Bearer token (JWT)  
+**Content Type**: `application/json`
 
-### API Characteristics
-- **RESTful Design**: Standard HTTP methods and status codes
-- **JSON Format**: All requests and responses use JSON
-- **Rate Limited**: Prevents abuse and ensures fair usage
-- **Versioned**: Maintains backward compatibility
-- **Secure**: OAuth 2.0 and API key authentication
+### Quick Reference
 
----
-
-## 🚀 Quick Start
-
-### 1. Authentication
 ```bash
-# Get access token
-curl -X POST https://api.mewayz.com/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "your@email.com",
-    "password": "your_password"
-  }'
+# Authentication
+POST /api/auth/login
+POST /api/auth/register
+GET  /api/auth/me
 
-# Response
+# Link Shortener
+GET  /api/link-shortener/links
+POST /api/link-shortener/create
+GET  /api/link-shortener/stats
+
+# Team Management
+GET  /api/team/members
+POST /api/team/invite
+
+# Form Templates
+GET  /api/form-templates
+POST /api/form-templates
+
+# Discount Codes
+GET  /api/discount-codes
+POST /api/discount-codes
+
+# Business Features
+GET  /api/bio-sites
+GET  /api/ecommerce/dashboard
+GET  /api/bookings/dashboard
+GET  /api/analytics/overview
+
+# System
+GET  /api/health
+```
+
+## Authentication
+
+### Login
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+```
+
+**Response:**
+```json
 {
   "success": true,
-  "data": {
-    "token": "1|eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-    "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "your@email.com"
-    }
+  "message": "Login successful",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": "uuid",
+    "name": "User Name",
+    "email": "user@example.com",
+    "role": "user"
   }
 }
 ```
 
-### 2. Making API Calls
-```bash
-# Use token in subsequent requests
-curl -X GET https://api.mewayz.com/workspaces \
-  -H "Authorization: Bearer {your_token}" \
-  -H "Accept: application/json"
+### Register
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Full Name",
+  "email": "user@example.com",
+  "password": "password"
+}
 ```
 
-### 3. Response Format
-All API responses follow this consistent format:
+## Link Shortener API
+
+### Get All Links
+```http
+GET /api/link-shortener/links
+Authorization: Bearer {token}
+```
+
+**Response:**
 ```json
 {
   "success": true,
   "data": {
-    // Response data here
-  },
-  "message": "Operation completed successfully",
-  "meta": {
-    "timestamp": "2025-07-19T10:30:00Z",
-    "version": "2.0.0",
-    "rate_limit": {
-      "remaining": 999,
-      "reset_at": "2025-07-19T11:00:00Z"
+    "links": [
+      {
+        "id": "uuid",
+        "original_url": "https://example.com/long-url",
+        "short_code": "abc123",
+        "short_url": "https://mwz.to/abc123",
+        "clicks": 245,
+        "status": "active",
+        "created_at": "2025-07-20T10:30:00Z"
+      }
+    ]
+  }
+}
+```
+
+### Create Short Link
+```http
+POST /api/link-shortener/create
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "original_url": "https://example.com/very-long-url",
+  "custom_code": "my-code"  // optional
+}
+```
+
+### Get Link Statistics
+```http
+GET /api/link-shortener/stats
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "stats": {
+      "total_links": 127,
+      "active_links": 95,
+      "total_clicks": 5834,
+      "click_rate": 78.5
     }
   }
 }
 ```
 
----
+## Team Management API
 
-## 🔐 Authentication
-
-### Methods Available
-1. **API Token** (Recommended for integrations)
-2. **OAuth 2.0** (For third-party applications)
-3. **Session-based** (For web applications)
-
-### API Token Authentication
-```bash
-# Include in header
-Authorization: Bearer {your_api_token}
-
-# Or as query parameter
-?api_token={your_api_token}
+### Get Team Members
+```http
+GET /api/team/members
+Authorization: Bearer {token}
 ```
 
-### OAuth 2.0 Flow
-```bash
-# 1. Authorization URL
-GET /oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope=read+write
-
-# 2. Exchange code for token
-POST /oauth/token
+**Response:**
+```json
 {
-  "grant_type": "authorization_code",
-  "client_id": "{client_id}",
-  "client_secret": "{client_secret}",
-  "code": "{authorization_code}",
-  "redirect_uri": "{redirect_uri}"
+  "success": true,
+  "data": {
+    "members": [
+      {
+        "id": "uuid",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "role": "admin",
+        "status": "active",
+        "last_active": "2 minutes ago",
+        "joined_at": "2025-01-15T00:00:00Z"
+      }
+    ]
+  }
 }
 ```
 
----
+### Invite Team Member
+```http
+POST /api/team/invite
+Authorization: Bearer {token}
+Content-Type: application/json
 
-## 📋 Core Endpoints
-
-### System Health
-```bash
-GET /api/health
-# Check system status and availability
+{
+  "email": "newmember@example.com",
+  "role": "editor",
+  "workspace_id": "workspace-uuid"
+}
 ```
 
-### Authentication
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/login` | POST | User authentication |
-| `/api/auth/register` | POST | User registration |
-| `/api/auth/logout` | POST | Logout current session |
-| `/api/auth/me` | GET | Get current user info |
-| `/api/auth/refresh` | POST | Refresh authentication token |
+## Form Templates API
 
-### Workspace Management
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/workspaces` | GET | List all workspaces |
-| `/api/workspaces` | POST | Create new workspace |
-| `/api/workspaces/{id}` | GET | Get specific workspace |
-| `/api/workspaces/{id}` | PUT | Update workspace |
-| `/api/workspaces/{id}` | DELETE | Delete workspace |
+### Get Form Templates
+```http
+GET /api/form-templates
+Authorization: Bearer {token}
+```
 
-### Social Media Management
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/social-media/accounts` | GET | List connected accounts |
-| `/api/social-media/accounts` | POST | Connect new account |
-| `/api/social-media/posts` | GET | List scheduled posts |
-| `/api/social-media/posts` | POST | Create/schedule new post |
-| `/api/social-media/analytics` | GET | Get social media analytics |
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "templates": [
+      {
+        "id": "uuid",
+        "name": "Contact Form",
+        "description": "Basic contact form",
+        "category": "contact",
+        "fields": ["name", "email", "message"],
+        "submissions": 142,
+        "is_published": true,
+        "created_at": "2025-07-01T00:00:00Z"
+      }
+    ]
+  }
+}
+```
 
-### Link in Bio
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/bio-sites` | GET | List bio sites |
-| `/api/bio-sites` | POST | Create new bio site |
-| `/api/bio-sites/{slug}` | GET | Get bio site by slug |
-| `/api/bio-sites/{id}/analytics` | GET | Get bio site analytics |
+### Create Form Template
+```http
+POST /api/form-templates
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "name": "Newsletter Signup",
+  "description": "Email collection form",
+  "category": "marketing",
+  "fields": [
+    {"name": "email", "type": "email", "required": true},
+    {"name": "firstName", "type": "text", "required": false}
+  ]
+}
+```
+
+## Discount Codes API
+
+### Get Discount Codes
+```http
+GET /api/discount-codes
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "codes": [
+      {
+        "id": "uuid",
+        "code": "WELCOME20",
+        "description": "Welcome discount",
+        "type": "percentage",
+        "value": 20,
+        "usage_limit": 100,
+        "used_count": 45,
+        "is_active": true,
+        "expires_at": "2025-12-31T23:59:59Z",
+        "created_at": "2025-06-01T00:00:00Z"
+      }
+    ]
+  }
+}
+```
+
+### Create Discount Code
+```http
+POST /api/discount-codes
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "code": "SUMMER25",
+  "description": "Summer sale discount",
+  "type": "percentage",
+  "value": 25,
+  "usage_limit": 500,
+  "expires_at": "2025-09-01T00:00:00Z",
+  "applicable_products": ["all"]
+}
+```
+
+## Business Features API
+
+### Bio Sites
+```http
+GET /api/bio-sites
+GET /api/bio-sites/themes
+POST /api/bio-sites
+```
 
 ### E-commerce
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/ecommerce/products` | GET | List products |
-| `/api/ecommerce/products` | POST | Create product |
-| `/api/ecommerce/orders` | GET | List orders |
-| `/api/ecommerce/orders/{id}` | GET | Get order details |
+```http
+GET /api/ecommerce/products
+GET /api/ecommerce/orders
+GET /api/ecommerce/dashboard
+```
 
-### Course Management
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/courses` | GET | List courses |
-| `/api/courses` | POST | Create course |
-| `/api/courses/{id}/lessons` | GET | Get course lessons |
-| `/api/courses/{id}/students` | GET | Get enrolled students |
+### Advanced Booking
+```http
+GET /api/bookings/services
+GET /api/bookings/appointments
+GET /api/bookings/dashboard
+```
 
-### CRM & Email Marketing
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/crm/contacts` | GET | List contacts |
-| `/api/crm/contacts` | POST | Create contact |
-| `/api/email-marketing/campaigns` | GET | List campaigns |
-| `/api/email-marketing/campaigns` | POST | Create campaign |
+### Financial Management
+```http
+GET /api/financial/invoices
+GET /api/financial/dashboard/comprehensive
+```
 
 ### Analytics
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/analytics/overview` | GET | Platform overview stats |
-| `/api/analytics/social-media` | GET | Social media analytics |
-| `/api/analytics/ecommerce` | GET | E-commerce analytics |
-| `/api/analytics/reports` | GET | Custom reports |
-
----
-
-## 📊 Request & Response Examples
-
-### Create Workspace
-**Request:**
-```bash
-POST /api/workspaces
-Content-Type: application/json
-Authorization: Bearer {token}
-
-{
-  "name": "My Business",
-  "description": "My awesome business workspace",
-  "goals": ["instagram", "ecommerce", "courses"]
-}
+```http
+GET /api/analytics/overview
+GET /api/analytics/business-intelligence/advanced
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": 123,
-    "name": "My Business",
-    "description": "My awesome business workspace",
-    "slug": "my-business",
-    "goals": ["instagram", "ecommerce", "courses"],
-    "created_at": "2025-07-19T10:30:00Z",
-    "updated_at": "2025-07-19T10:30:00Z"
-  },
-  "message": "Workspace created successfully"
-}
-```
+## Error Handling
 
-### Schedule Social Media Post
-**Request:**
-```bash
-POST /api/social-media/posts
-Content-Type: application/json
-Authorization: Bearer {token}
+All API endpoints return consistent error responses:
 
-{
-  "accounts": ["instagram_123", "facebook_456"],
-  "content": "Check out our latest product! 🚀",
-  "media": ["https://example.com/image.jpg"],
-  "scheduled_for": "2025-07-20T14:00:00Z",
-  "hashtags": ["#product", "#launch", "#awesome"]
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "id": 789,
-    "content": "Check out our latest product! 🚀",
-    "accounts": [
-      {
-        "id": "instagram_123",
-        "platform": "instagram",
-        "username": "@mybusiness"
-      },
-      {
-        "id": "facebook_456",
-        "platform": "facebook",
-        "name": "My Business Page"
-      }
-    ],
-    "scheduled_for": "2025-07-20T14:00:00Z",
-    "status": "scheduled",
-    "created_at": "2025-07-19T10:30:00Z"
-  },
-  "message": "Post scheduled successfully"
-}
-```
-
----
-
-## ⚠️ Error Handling
-
-### HTTP Status Codes
-| Code | Meaning | Description |
-|------|---------|-------------|
-| 200 | OK | Request successful |
-| 201 | Created | Resource created successfully |
-| 400 | Bad Request | Invalid request data |
-| 401 | Unauthorized | Authentication required |
-| 403 | Forbidden | Insufficient permissions |
-| 404 | Not Found | Resource not found |
-| 422 | Validation Error | Invalid input data |
-| 429 | Rate Limited | Too many requests |
-| 500 | Server Error | Internal server error |
-
-### Error Response Format
 ```json
 {
   "success": false,
-  "message": "Validation failed",
-  "errors": {
-    "email": ["The email field is required."],
-    "password": ["The password must be at least 8 characters."]
-  },
-  "meta": {
-    "timestamp": "2025-07-19T10:30:00Z",
-    "version": "2.0.0"
-  }
+  "message": "Error description",
+  "detail": "Detailed error information",
+  "status_code": 400
 }
 ```
 
----
+### Common Status Codes
 
-## 🔒 Rate Limiting
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Validation Error
+- `500` - Internal Server Error
 
-### Limits by Plan
-| Plan | Requests/Hour | Burst Limit |
-|------|---------------|-------------|
-| Free | 100 | 10/minute |
-| Professional | 1,000 | 50/minute |
-| Enterprise | 10,000 | 200/minute |
+## Authentication Headers
 
-### Rate Limit Headers
+Include the JWT token in all authenticated requests:
+
 ```http
-X-RateLimit-Limit: 1000
-X-RateLimit-Remaining: 999
-X-RateLimit-Reset: 1642678800
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+Content-Type: application/json
 ```
 
-### Handling Rate Limits
-```bash
-# Check remaining requests
-curl -I https://api.mewayz.com/workspaces \
-  -H "Authorization: Bearer {token}"
+## Rate Limiting
 
-# Implement exponential backoff
-if [ "$response_code" -eq 429 ]; then
-  sleep_time=$((2 ** retry_count))
-  sleep $sleep_time
-fi
-```
+- **Free Plan**: 100 requests/hour per endpoint
+- **Pro Plan**: 1,000 requests/hour per endpoint  
+- **Enterprise Plan**: Unlimited requests
 
----
+## Webhooks
 
-## 📝 Pagination
+Subscribe to real-time events:
 
-### Standard Pagination
-```bash
-GET /api/workspaces?page=2&per_page=25
-```
+- `user.created` - New user registration
+- `workspace.created` - New workspace creation
+- `payment.completed` - Successful payment
+- `team.member_invited` - Team member invitation
+- `link.clicked` - Short link clicked
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": [...],
-  "meta": {
-    "current_page": 2,
-    "last_page": 5,
-    "per_page": 25,
-    "total": 123
-  },
-  "links": {
-    "first": "https://api.mewayz.com/workspaces?page=1",
-    "last": "https://api.mewayz.com/workspaces?page=5",
-    "prev": "https://api.mewayz.com/workspaces?page=1",
-    "next": "https://api.mewayz.com/workspaces?page=3"
-  }
-}
-```
+## SDKs and Libraries
 
----
+Official SDKs available for:
 
-## 🔍 Filtering & Searching
-
-### Query Parameters
-```bash
-# Filter by status
-GET /api/social-media/posts?status=scheduled
-
-# Search by keyword
-GET /api/crm/contacts?search=john
-
-# Sort results
-GET /api/ecommerce/products?sort=price&order=asc
-
-# Date range filtering
-GET /api/analytics/overview?from=2025-01-01&to=2025-01-31
-
-# Multiple filters
-GET /api/crm/contacts?status=active&tag=customer&sort=created_at&order=desc
-```
-
----
-
-## 🎯 Webhooks
-
-### Available Events
-- `workspace.created`
-- `social_media.post.published`
-- `ecommerce.order.created`
-- `course.enrollment.completed`
-- `payment.received`
-
-### Webhook Configuration
-```bash
-POST /api/webhooks
-{
-  "url": "https://yoursite.com/webhook/mewayz",
-  "events": ["ecommerce.order.created", "payment.received"],
-  "secret": "your_webhook_secret"
-}
-```
-
-### Webhook Payload Example
-```json
-{
-  "event": "ecommerce.order.created",
-  "data": {
-    "id": 456,
-    "total": 99.99,
-    "customer_email": "customer@example.com",
-    "created_at": "2025-07-19T10:30:00Z"
-  },
-  "timestamp": "2025-07-19T10:30:00Z"
-}
-```
-
----
-
-## 🛠️ SDKs & Libraries
-
-### Official SDKs
-- **PHP**: `composer require mewayz/php-sdk`
-- **JavaScript**: `npm install @mewayz/js-sdk`
 - **Python**: `pip install mewayz-sdk`
+- **JavaScript**: `npm install @mewayz/sdk`
+- **PHP**: `composer require mewayz/php-sdk`
 
-### PHP SDK Example
-```php
-use Mewayz\SDK\Client;
+## Support
 
-$client = new Client('your_api_token');
-
-// Create workspace
-$workspace = $client->workspaces()->create([
-    'name' => 'My Business',
-    'goals' => ['instagram', 'ecommerce']
-]);
-
-// Schedule social post
-$post = $client->socialMedia()->schedulePost([
-    'content' => 'Hello world!',
-    'accounts' => ['instagram_123'],
-    'scheduled_for' => '2025-07-20T14:00:00Z'
-]);
-```
-
-### JavaScript SDK Example
-```javascript
-import MewayzSDK from '@mewayz/js-sdk';
-
-const client = new MewayzSDK('your_api_token');
-
-// Get workspaces
-const workspaces = await client.workspaces.list();
-
-// Create product
-const product = await client.ecommerce.products.create({
-  name: 'Awesome Product',
-  price: 29.99,
-  description: 'This is an awesome product'
-});
-```
+- **API Issues**: api-support@mewayz.com
+- **Documentation**: docs.mewayz.com
+- **Status Page**: status.mewayz.com
 
 ---
 
-## 📞 Support
-
-### Getting Help
-- **Documentation**: [https://docs.mewayz.com](https://docs.mewayz.com)
-- **API Status**: [https://status.mewayz.com](https://status.mewayz.com)
-- **Support Email**: api-support@mewayz.com
-- **Developer Community**: [Discord Server](https://discord.gg/mewayz)
-
-### API Support Levels
-| Plan | Support Level | Response Time |
-|------|---------------|---------------|
-| Free | Community | Best effort |
-| Professional | Email | 24-48 hours |
-| Enterprise | Priority + Phone | 4-8 hours |
-
----
-
-**Ready to build something amazing?** Start with our **[Quick Start Guide](quick-start.md)** or explore the **[Code Examples](examples/)**.
+*Mewayz Platform API v3.0.0 - Complete business platform API*
