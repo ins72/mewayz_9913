@@ -360,7 +360,10 @@ const AdvancedBookingPage = () => {
         >
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold text-primary">Services</h3>
-            <button className="btn-primary flex items-center">
+            <button 
+              className="btn-primary flex items-center"
+              onClick={() => setShowCreateServiceModal(true)}
+            >
               <PlusIcon className="h-5 w-5 mr-2" />
               Add Service
             </button>
