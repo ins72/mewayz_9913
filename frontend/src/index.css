@@ -211,7 +211,7 @@ code {
    BUTTON STYLES - Your Exact Specifications
    ================================ */
 .btn-primary {
-  background-color: #212529;
+  background-color: #2D3748;
   color: #FFFFFF;
   border: none;
   font-weight: 500;
@@ -224,8 +224,8 @@ code {
 
 .btn-secondary {
   background-color: #FFFFFF;
-  color: #212529;
-  border: 1px solid #DEE2E6;
+  color: #2D3748;
+  border: 1px solid #E2E8F0;
   font-weight: 500;
 }
 
@@ -236,38 +236,38 @@ code {
 }
 
 .btn-accent {
-  background-color: #4F46E5;
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
   color: #FFFFFF;
   border: none;
   font-weight: 500;
 }
 
 .dark .btn-accent {
-  background-color: #6366F1;
+  background: linear-gradient(135deg, #818CF8 0%, #A78BFA 100%);
   color: #FFFFFF;
 }
 
 .btn-success {
-  background-color: #059669;
+  background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
   color: #FFFFFF;
   border: none;
   font-weight: 500;
 }
 
 .dark .btn-success {
-  background-color: #10B981;
+  background: linear-gradient(135deg, #68D391 0%, #4FD1C7 100%);
   color: #FFFFFF;
 }
 
 .btn-danger {
-  background-color: #DC2626;
+  background: linear-gradient(135deg, #F56565 0%, #E53E3E 100%);
   color: #FFFFFF;
   border: none;
   font-weight: 500;
 }
 
 .dark .btn-danger {
-  background-color: #EF4444;
+  background: linear-gradient(135deg, #FC8181 0%, #F687B3 100%);
   color: #FFFFFF;
 }
 
