@@ -61,7 +61,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-app">
       {/* Mobile sidebar backdrop */}
       <AnimatePresence>
         {sidebarOpen && (
@@ -83,15 +83,15 @@ const DashboardLayout = ({ isAdmin = false }) => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-xl lg:hidden"
+            className="fixed inset-y-0 left-0 z-50 w-64 bg-surface shadow-xl lg:hidden"
           >
             <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-xl font-bold text-primary">
                 {isAdmin ? 'Admin' : 'Mewayz'}
               </h1>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="p-2 text-secondary hover:text-primary"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
@@ -107,7 +107,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
                     className={`flex items-center px-4 py-3 text-sm font-medium transition-colors ${
                       isActive
                         ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-r-2 border-indigo-700 dark:border-indigo-300'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        : 'text-secondary hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary'
                     }`}
                   >
                     <item.icon className="w-5 h-5 mr-3" />
@@ -122,9 +122,9 @@ const DashboardLayout = ({ isAdmin = false }) => {
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex flex-col flex-grow bg-white dark:bg-gray-800 shadow-sm">
+        <div className="flex flex-col flex-grow bg-surface shadow-sm">
           <div className="flex items-center h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-xl font-bold text-primary">
               {isAdmin ? 'Admin Panel' : 'Mewayz'}
             </h1>
           </div>
@@ -138,7 +138,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
                   className={`flex items-center px-4 py-3 text-sm font-medium transition-colors ${
                     isActive
                       ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-r-2 border-indigo-700 dark:border-indigo-300'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      : 'text-secondary hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary'
                   }`}
                 >
                   <item.icon className="w-5 h-5 mr-3" />
@@ -153,23 +153,23 @@ const DashboardLayout = ({ isAdmin = false }) => {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <header className="nav-bg shadow-sm">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 lg:hidden"
+                className="p-2 text-secondary hover:text-primary lg:hidden"
               >
                 <Bars3Icon className="w-5 h-5" />
               </button>
               
               <div className="flex-1 max-w-md ml-4">
                 <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
                   <input
                     type="text"
                     placeholder="Search..."
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 text-sm input rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleTheme}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="p-2 text-secondary hover:text-primary transition-colors"
               >
                 {theme === 'dark' ? (
                   <SunIcon className="w-5 h-5" />
@@ -187,17 +187,17 @@ const DashboardLayout = ({ isAdmin = false }) => {
                 )}
               </button>
 
-              <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors relative">
+              <button className="p-2 text-secondary hover:text-primary transition-colors relative">
                 <BellIcon className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
 
               <div className="flex items-center space-x-3">
                 <div className="hidden sm:block text-right">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  <p className="text-sm font-medium text-primary">
                     {user?.name || 'User'}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-secondary">
                     {user?.email}
                   </p>
                 </div>
@@ -211,7 +211,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
 
                 <button
                   onClick={handleLogout}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                  className="p-2 text-secondary hover:text-primary transition-colors"
                   title="Logout"
                 >
                   <ArrowRightOnRectangleIcon className="w-5 h-5" />
