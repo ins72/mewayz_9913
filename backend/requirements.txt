@@ -11,3 +11,4 @@ stripe>=12.0.0
 websockets>=12.0authlib
 itsdangerous
 jinja2
+tweepy
