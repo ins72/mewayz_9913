@@ -9,6 +9,24 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Determine the correct backend URL based on environment
+  const getBackendUrl = () => {
+    // If we have a custom backend URL from env, use it
+    if (process.env.REACT_APP_BACKEND_URL && process.env.REACT_APP_BACKEND_URL !== '/api') {
+      return process.env.REACT_APP_BACKEND_URL;
+    }
+    
+    // For production or emergent preview, use relative URL
+    if (window.location.hostname !== 'localhost') {
+      return '/api';
+    }
+    
+    // For local development, use proxy
+    return '/api';
+  };
+
+  const backendUrl = getBackendUrl();
+
   useEffect(() => {
     checkHealth();
   }, []);
