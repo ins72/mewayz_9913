@@ -274,97 +274,288 @@ const SocialMediaPage = () => {
 
   const renderPostScheduling = () => (
     <div className="space-y-6">
-      {/* Create New Post */}
-      <div className="bg-surface p-6 rounded-lg shadow-default">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-primary">Schedule New Post</h3>
-          <button className="btn btn-primary flex items-center space-x-2">
-            <PlusIcon className="h-4 w-4" />
-            <span>Create Post</span>
-          </button>
+      {/* Platform Selection & Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-surface-elevated p-4 rounded-xl shadow-default">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-secondary">Instagram</p>
+              <p className="text-2xl font-bold text-primary">47</p>
+              <p className="text-xs text-green-500">+12 this week</p>
+            </div>
+            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold">IG</span>
+            </div>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <label className="block text-sm font-medium text-secondary mb-2">Caption</label>
+        <div className="bg-surface-elevated p-4 rounded-xl shadow-default">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-secondary">Facebook</p>
+              <p className="text-2xl font-bold text-primary">23</p>
+              <p className="text-xs text-blue-500">+5 this week</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold">FB</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-surface-elevated p-4 rounded-xl shadow-default">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-secondary">Twitter</p>
+              <p className="text-2xl font-bold text-primary">89</p>
+              <p className="text-xs text-green-500">+34 this week</p>
+            </div>
+            <div className="w-12 h-12 bg-sky-400 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold">TW</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-surface-elevated p-4 rounded-xl shadow-default">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-secondary">LinkedIn</p>
+              <p className="text-2xl font-bold text-primary">12</p>
+              <p className="text-xs text-blue-500">+3 this week</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-700 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold">LI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Create New Post Section */}
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-semibold text-primary">Create New Post</h3>
+          <div className="flex space-x-3">
+            <button className="btn btn-secondary flex items-center space-x-2">
+              <ClockIcon className="h-4 w-4" />
+              <span>Schedule Later</span>
+            </button>
+            <button className="btn btn-primary flex items-center space-x-2">
+              <PlusIcon className="h-4 w-4" />
+              <span>Post Now</span>
+            </button>
+          </div>
+        </div>
+        
+        {/* Platform Selection */}
+        <div className="mb-6">
+          <p className="text-sm font-medium text-primary mb-3">Select Platforms</p>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { name: 'Instagram', color: 'from-pink-500 to-yellow-500', checked: true },
+              { name: 'Facebook', color: 'from-blue-600 to-blue-700', checked: false },
+              { name: 'Twitter', color: 'from-sky-400 to-sky-500', checked: true },
+              { name: 'LinkedIn', color: 'from-blue-700 to-blue-800', checked: false },
+              { name: 'TikTok', color: 'from-black to-gray-800', checked: false },
+              { name: 'YouTube', color: 'from-red-600 to-red-700', checked: false }
+            ].map((platform) => (
+              <label key={platform.name} className="flex items-center cursor-pointer">
+                <input type="checkbox" defaultChecked={platform.checked} className="sr-only" />
+                <div className={`w-4 h-4 bg-gradient-to-r ${platform.color} rounded mr-2 ${platform.checked ? 'opacity-100' : 'opacity-50'}`}></div>
+                <span className="text-sm text-primary">{platform.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        
+        {/* Content Creation */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-primary mb-2">Post Content</label>
             <textarea
-              rows={4}
-              placeholder="What's happening? Write your post caption here..."
-              className="input w-full resize-none"
-            />
+              className="input w-full h-32 resize-none"
+              placeholder="What would you like to share?"
+            ></textarea>
           </div>
           
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-secondary mb-2">Platforms</label>
-              <div className="space-y-2">
-                {['Instagram', 'Facebook', 'Twitter', 'LinkedIn'].map((platform) => (
-                  <label key={platform} className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span className="text-sm text-primary">{platform}</span>
-                  </label>
-                ))}
+              <label className="block text-sm font-medium text-primary mb-2">Media Upload</label>
+              <div className="border-2 border-dashed border-default rounded-lg p-6 text-center hover:bg-surface-hover transition-colors">
+                <div className="mx-auto w-12 h-12 bg-surface-elevated rounded-full flex items-center justify-center mb-4">
+                  <PlusIcon className="h-6 w-6 text-secondary" />
+                </div>
+                <p className="text-sm text-secondary mb-2">Drop images or videos here</p>
+                <button className="text-sm text-blue-500 hover:text-blue-600">Browse files</button>
               </div>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-secondary mb-2">Schedule Date</label>
-              <input type="datetime-local" className="input w-full" />
+              <label className="block text-sm font-medium text-primary mb-2">Schedule Settings</label>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <input type="radio" id="now" name="schedule" className="text-blue-500" defaultChecked />
+                  <label htmlFor="now" className="text-sm text-primary">Post now</label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input type="radio" id="schedule" name="schedule" className="text-blue-500" />
+                  <label htmlFor="schedule" className="text-sm text-primary">Schedule for later</label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input type="radio" id="optimal" name="schedule" className="text-blue-500" />
+                  <label htmlFor="optimal" className="text-sm text-primary">AI optimal time</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Hashtag Suggestions */}
+          <div>
+            <label className="block text-sm font-medium text-primary mb-2">Hashtag Suggestions</label>
+            <div className="flex flex-wrap gap-2">
+              {[
+                '#socialmedia', '#marketing', '#business', '#growth', '#content',
+                '#engagement', '#brand', '#digital', '#strategy', '#trending'
+              ].map((hashtag) => (
+                <button
+                  key={hashtag}
+                  className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-sm rounded-full hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                >
+                  {hashtag}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
       {/* Scheduled Posts */}
-      <div className="bg-surface rounded-lg shadow-default overflow-hidden">
-        <div className="p-6 border-b border-default">
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-primary">Scheduled Posts</h3>
+          <div className="flex items-center space-x-3">
+            <div className="text-sm text-secondary">
+              <span className="font-medium">23</span> posts scheduled this week
+            </div>
+            <button className="btn btn-secondary btn-sm">
+              <CalendarIcon className="h-4 w-4 mr-1" />
+              Calendar View
+            </button>
+          </div>
         </div>
         
-        <div className="divide-y divide-default">
-          {scheduledPosts.map((post) => (
-            <div key={post.id} className="p-6 hover:bg-surface-hover transition-colors">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-primary mb-2 line-clamp-2">{post.caption}</p>
-                  
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <CalendarIcon className="h-4 w-4 text-secondary" />
-                      <span className="text-sm text-secondary">
-                        {new Date(post.scheduledDate).toLocaleString()}
-                      </span>
+        <div className="space-y-4">
+          {[
+            {
+              id: 1,
+              content: "🚀 Excited to announce our new product launch! Check out the amazing features we've built for you...",
+              platforms: ['Instagram', 'Facebook', 'Twitter'],
+              scheduledFor: 'Today, 3:00 PM',
+              status: 'scheduled',
+              image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100'
+            },
+            {
+              id: 2,
+              content: "Behind the scenes: Our team working hard to bring you the best experience. #teamwork #innovation",
+              platforms: ['Instagram', 'LinkedIn'],
+              scheduledFor: 'Tomorrow, 9:00 AM',
+              status: 'scheduled',
+              image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=100'
+            },
+            {
+              id: 3,
+              content: "Customer success story: How Sarah increased her business revenue by 300% using our platform! 📈",
+              platforms: ['Facebook', 'LinkedIn', 'Twitter'],
+              scheduledFor: 'Jan 20, 2:30 PM',
+              status: 'draft',
+              image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=100'
+            }
+          ].map((post) => (
+            <div key={post.id} className="border border-default rounded-lg p-4 hover:shadow-default transition-shadow">
+              <div className="flex items-start space-x-4">
+                <img
+                  src={post.image}
+                  alt="Post preview"
+                  className="w-16 h-16 rounded-lg object-cover"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-primary mb-2 line-clamp-2">{post.content}</p>
+                  <div className="flex items-center space-x-4 text-sm text-secondary mb-2">
+                    <div className="flex items-center space-x-1">
+                      <CalendarIcon className="h-4 w-4" />
+                      <span>{post.scheduledFor}</span>
                     </div>
-                    
                     <div className="flex items-center space-x-2">
-                      {post.platforms.map((platform) => (
-                        <span key={platform} className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs">
+                      {post.platforms.map((platform, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-surface rounded text-xs">
                           {platform}
                         </span>
                       ))}
                     </div>
-                    
-                    <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs">
+                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      post.status === 'scheduled' 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                    }`}>
                       {post.status}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 text-sm text-secondary">
-                    {post.hashtags.map((hashtag) => (
-                      <span key={hashtag} className="text-blue-500">{hashtag}</span>
-                    ))}
+                    </div>
                   </div>
                 </div>
-                
-                <div className="flex items-center space-x-2 ml-4">
-                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
-                    <EyeIcon className="h-5 w-5" />
+                <div className="flex items-center space-x-2">
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                    <EyeIcon className="h-4 w-4" />
                   </button>
-                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
-                    <FilterIcon className="h-5 w-5" />
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                    <AdjustmentsHorizontalIcon className="h-4 w-4" />
+                  </button>
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors">
+                    <ShareIcon className="h-4 w-4" />
                   </button>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* AI Content Suggestions */}
+      <div className="bg-surface-elevated p-6 rounded-xl shadow-default">
+        <h3 className="text-xl font-semibold text-primary mb-4">AI Content Suggestions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {
+              type: 'Trending Topic',
+              title: 'AI in Social Media Marketing',
+              description: 'Create content about the latest AI trends in marketing',
+              engagement: '+45% expected engagement'
+            },
+            {
+              type: 'User-Generated Content',
+              title: 'Customer Success Stories',
+              description: 'Share testimonials and success stories from your customers',
+              engagement: '+32% expected engagement'
+            },
+            {
+              type: 'Educational Content',
+              title: 'How-to Guide Series',
+              description: 'Create step-by-step tutorials for your audience',
+              engagement: '+28% expected engagement'
+            },
+            {
+              type: 'Behind the Scenes',
+              title: 'Team & Culture Content',
+              description: 'Show your company culture and team dynamics',
+              engagement: '+51% expected engagement'
+            }
+          ].map((suggestion, idx) => (
+            <div key={idx} className="border border-default rounded-lg p-4 hover:shadow-default transition-shadow">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <span className="text-xs text-blue-500 font-medium">{suggestion.type}</span>
+                  <h4 className="font-semibold text-primary">{suggestion.title}</h4>
+                </div>
+                <button className="btn btn-primary btn-sm">Use</button>
+              </div>
+              <p className="text-sm text-secondary mb-2">{suggestion.description}</p>
+              <p className="text-sm text-green-500 font-medium">{suggestion.engagement}</p>
             </div>
           ))}
         </div>
