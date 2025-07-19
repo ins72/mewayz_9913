@@ -2403,6 +2403,292 @@ async def get_subscription_status(current_user: dict = Depends(get_current_user)
         "subscription": subscription_info
     }
 
+# ===== SOCIAL MEDIA & EMAIL INTEGRATION ENDPOINTS =====
+
+# Pydantic models for social media integrations
+class SocialMediaAuthRequest(BaseModel):
+    platform: str  # x, tiktok
+    callback_url: Optional[str] = None
+    redirect_uri: Optional[str] = None
+
+class SocialMediaPostRequest(BaseModel):
+    platform: str
+    content: Dict[str, Any]
+    access_token: str
+    access_token_secret: Optional[str] = None
+
+class EmailCampaignRequest(BaseModel):
+    recipients: List[str]
+    subject: str
+    body: str
+    sender_email: Optional[str] = None
+    sender_name: Optional[str] = None
+
+class EmailContactRequest(BaseModel):
+    email: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    custom_fields: Optional[Dict[str, str]] = None
+
+@app.get("/api/integrations/available")
+async def get_available_integrations():
+    """Get list of available integrations"""
+    try:
+        available = integration_manager.get_available_integrations()
+        return {
+            "success": True,
+            "integrations": available,
+            "details": {
+                "x_twitter": "Post tweets, get user data, upload media" if available["x_twitter"] else "Not configured",
+                "tiktok": "Get user info, list videos" if available["tiktok"] else "Not configured", 
+                "elasticmail": "Send emails, manage contacts, create lists" if available["elasticmail"] else "Not configured"
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get integrations: {str(e)}"
+        )
+
+@app.post("/api/integrations/social/auth")
+async def authenticate_social_platform(
+    auth_request: SocialMediaAuthRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Initiate social media platform authentication"""
+    try:
+        if auth_request.platform == "x":
+            result = integration_manager.authenticate_platform(
+                "x", 
+                callback_url=auth_request.callback_url or f"{os.getenv('REACT_APP_BACKEND_URL', 'http://localhost:8001')}/api/integrations/social/callback/x"
+            )
+        elif auth_request.platform == "tiktok":
+            result = integration_manager.authenticate_platform(
+                "tiktok",
+                redirect_uri=auth_request.redirect_uri or f"{os.getenv('REACT_APP_BACKEND_URL', 'http://localhost:8001')}/api/integrations/social/callback/tiktok"  
+            )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Unsupported platform: {auth_request.platform}"
+            )
+        
+        if result["success"]:
+            return result
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result["error"]
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Authentication initiation failed: {str(e)}"
+        )
+
+@app.post("/api/integrations/social/post")
+async def post_to_social_platform(
+    post_request: SocialMediaPostRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Post content to social media platform"""
+    try:
+        credentials = {
+            "access_token": post_request.access_token,
+            "access_token_secret": post_request.access_token_secret
+        }
+        
+        result = integration_manager.post_content(
+            post_request.platform,
+            post_request.content,
+            credentials
+        )
+        
+        if result["success"]:
+            # Log the social media activity
+            await social_media_activities_collection.insert_one({
+                "user_id": current_user["id"],
+                "platform": post_request.platform,
+                "activity_type": "post",
+                "content": post_request.content,
+                "post_id": result.get("tweet_id"),
+                "post_url": result.get("tweet_url"),
+                "created_at": datetime.utcnow()
+            })
+            
+            return result
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result["error"]
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Social media posting failed: {str(e)}"
+        )
+
+@app.post("/api/integrations/email/send")
+async def send_email_campaign(
+    email_request: EmailCampaignRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Send email campaign using ElasticMail"""
+    try:
+        sender_info = None
+        if email_request.sender_email or email_request.sender_name:
+            sender_info = {
+                "email": email_request.sender_email,
+                "name": email_request.sender_name
+            }
+        
+        result = integration_manager.send_email_campaign(
+            email_request.recipients,
+            email_request.subject,
+            email_request.body,
+            sender_info
+        )
+        
+        if result["success"]:
+            # Log the email campaign
+            await email_campaigns_collection.insert_one({
+                "user_id": current_user["id"],
+                "subject": email_request.subject,
+                "recipients_count": len(email_request.recipients),
+                "message_id": result.get("message_id"),
+                "transaction_id": result.get("transaction_id"),
+                "status": "sent",
+                "created_at": datetime.utcnow()
+            })
+            
+            return result
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result["error"]
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Email campaign failed: {str(e)}"
+        )
+
+@app.post("/api/integrations/email/contact")
+async def create_email_contact(
+    contact_request: EmailContactRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Add contact to ElasticMail"""
+    try:
+        if not integration_manager.email_integration:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Email integration not configured"
+            )
+        
+        result = integration_manager.email_integration.create_contact(
+            contact_request.email,
+            contact_request.first_name,
+            contact_request.last_name,
+            contact_request.custom_fields
+        )
+        
+        if result["success"]:
+            # Store contact in our database too
+            await email_contacts_collection.insert_one({
+                "user_id": current_user["id"],
+                "email": contact_request.email,
+                "first_name": contact_request.first_name,
+                "last_name": contact_request.last_name,
+                "custom_fields": contact_request.custom_fields or {},
+                "elasticmail_contact_id": result.get("contact_id"),
+                "created_at": datetime.utcnow()
+            })
+            
+            return result
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result["error"]
+            )
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Contact creation failed: {str(e)}"
+        )
+
+@app.get("/api/integrations/email/stats")
+async def get_email_stats(current_user: dict = Depends(get_current_user)):
+    """Get email campaign statistics"""
+    try:
+        if not integration_manager.email_integration:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Email integration not configured"
+            )
+        
+        # Get account stats from ElasticMail
+        elasticmail_stats = integration_manager.email_integration.get_account_stats()
+        
+        # Get user's campaign stats from database
+        user_campaigns = await email_campaigns_collection.find({"user_id": current_user["id"]}).to_list(length=None)
+        user_contacts = await email_contacts_collection.count_documents({"user_id": current_user["id"]})
+        
+        total_sent = sum(campaign.get("recipients_count", 0) for campaign in user_campaigns)
+        
+        return {
+            "success": True,
+            "user_stats": {
+                "total_campaigns": len(user_campaigns),
+                "total_emails_sent": total_sent,
+                "total_contacts": user_contacts
+            },
+            "account_stats": elasticmail_stats.get("account_info", {}) if elasticmail_stats["success"] else {}
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Email stats retrieval failed: {str(e)}"
+        )
+
+@app.get("/api/integrations/social/activities")
+async def get_social_media_activities(current_user: dict = Depends(get_current_user)):
+    """Get user's social media activities"""
+    try:
+        activities = await social_media_activities_collection.find(
+            {"user_id": current_user["id"]}
+        ).sort("created_at", -1).limit(50).to_list(length=50)
+        
+        # Convert ObjectId to string for JSON serialization
+        for activity in activities:
+            activity["_id"] = str(activity["_id"])
+        
+        return {
+            "success": True,
+            "activities": activities
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get social media activities: {str(e)}"
+        )
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
