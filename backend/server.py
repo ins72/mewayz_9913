@@ -43,4 +43,4 @@ async def proxy_to_laravel(path: str, request):
         raise HTTPException(status_code=502, detail=f"Error proxying to Laravel: {str(e)}")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8002)
