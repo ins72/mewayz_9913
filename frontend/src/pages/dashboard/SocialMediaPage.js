@@ -14,7 +14,8 @@ import {
   ChatBubbleOvalLeftIcon,
   ShareIcon,
   AdjustmentsHorizontalIcon,
-  CheckIcon
+  CheckIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 const SocialMediaPage = () => {
