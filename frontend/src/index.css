@@ -21,8 +21,8 @@ html {
    PROFESSIONAL LIGHT THEME (Default)
    ================================ */
 body {
-  background-color: #F8F9FA;
-  color: #212529;
+  background-color: #FAFBFC;
+  color: #1A202C;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
