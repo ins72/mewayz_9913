@@ -528,7 +528,8 @@ def main():
     print(f"🔍 Testing Mewayz Backend at: {backend_url}")
     
     tester = MewayzAIBackendTester(backend_url)
-    summary = tester.run_comprehensive_test()
+    tester.run_comprehensive_test()
+    summary = tester.generate_summary()
     
     return summary
 
