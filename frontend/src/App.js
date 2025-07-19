@@ -55,6 +55,8 @@ function App() {
           <Route path="crm" element={<CRMPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="bio-sites" element={<BioSitesPage />} />
+          <Route path="email-marketing" element={<EmailMarketingPage />} />
+          <Route path="payments" element={<PaymentsPage />} />
         </Route>
 
         {/* Catch all - redirect to home */}
