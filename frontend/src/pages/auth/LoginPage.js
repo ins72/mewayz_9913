@@ -73,7 +73,7 @@ const LoginPage = () => {
       <div className="absolute top-4 right-4">
         <button
           onClick={toggleTheme}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          className="p-2 text-secondary hover:text-primary transition-colors"
         >
           {theme === 'dark' ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
         </button>
@@ -89,10 +89,10 @@ const LoginPage = () => {
           <Link to="/" className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
             Mewayz
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 className="mt-6 text-3xl font-bold text-primary">
             Welcome back
           </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm text-secondary">
             Don't have an account?{' '}
             <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
               Sign up here
@@ -107,10 +107,10 @@ const LoginPage = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl rounded-lg sm:px-10">
+        <div className="bg-surface py-8 px-4 shadow-xl rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="email" className="block text-sm font-medium text-primary">
                 Email address
               </label>
               <div className="mt-1">
@@ -121,10 +121,10 @@ const LoginPage = () => {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                  className={`appearance-none block w-full px-3 py-2 input rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors ${
                     errors.email 
                       ? 'border-red-300 dark:border-red-600' 
-                      : 'border-gray-300 dark:border-gray-600'
+                      : ''
                   }`}
                   placeholder="Enter your email"
                 />
