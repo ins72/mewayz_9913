@@ -220,7 +220,10 @@ const EscrowSystemPage = () => {
           </p>
         </div>
         
-        <button className="btn-primary flex items-center">
+        <button 
+          className="btn-primary flex items-center"
+          onClick={handleCreateEscrow}
+        >
           <PlusIcon className="h-5 w-5 mr-2" />
           Create Escrow
         </button>
