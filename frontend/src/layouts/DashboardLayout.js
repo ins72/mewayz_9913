@@ -43,9 +43,12 @@ import {
 const DashboardLayout = ({ isAdmin = false }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { success } = useNotification();
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
@@ -70,6 +73,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Integrations', href: '/dashboard/integrations', icon: PuzzlePieceIcon },
     { name: 'Referral Program', href: '/dashboard/referrals', icon: UserPlusIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
+    { name: 'Settings', href: '/dashboard/settings', icon: CogIcon },
   ];
 
   // Admin-only navigation items
