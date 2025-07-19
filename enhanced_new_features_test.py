@@ -438,7 +438,7 @@ class EnhancedNewFeaturesBackendTester:
 def main():
     """Main function to run the enhanced new features tests"""
     # Get backend URL from environment
-    backend_url = "https://f80883a1-24ea-40ee-9b91-716d4f4201dd.preview.emergentagent.com"
+    backend_url = "https://eec801d8-7de8-42e4-9e18-56e2a6c528cf.preview.emergentagent.com"
     
     print(f"🔍 Backend URL: {backend_url}")
     print(f"🔐 Admin Credentials: tmonnens@outlook.com / Voetballen5")
