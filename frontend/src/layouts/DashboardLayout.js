@@ -135,7 +135,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
               </h1>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 text-secondary hover:text-primary"
+                className="p-2 text-secondary hover:text-primary rounded-lg hover:bg-surface-hover"
               >
                 <XMarkIcon className="w-5 h-5" />
               </button>
