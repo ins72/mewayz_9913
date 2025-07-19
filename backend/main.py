@@ -56,17 +56,53 @@ team_members_collection = database.team_members
 form_templates_collection = database.form_templates
 discount_codes_collection = database.discount_codes
 
-# Import centralized auth functions
-from auth import (
-    create_access_token, 
-    verify_token, 
-    get_current_user, 
-    get_current_admin_user,
-    security
-)
-
+# Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+
+# JWT utilities
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials"
+            )
+        return email
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials"
+        )
+
+async def get_current_user(email: str = Depends(verify_token)):
+    user = await users_collection.find_one({"email": email})
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found"
+        )
+    # Convert ObjectId to string for JSON serialization
+    user["id"] = str(user["_id"])
+    return user
+
+async def get_current_admin_user(current_user: dict = Depends(get_current_user)):
+    if current_user.get("role") not in [UserRole.ADMIN, UserRole.SUPER_ADMIN]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required"
+        )
+    return current_user
 
 # Enums for better data integrity
 class UserRole(str, enum.Enum):
