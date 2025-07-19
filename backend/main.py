@@ -1069,7 +1069,6 @@ def update_user_role(
             "role": user.role
         }
     }
-@app.on_event("startup")
 def create_admin_user():
     db = SessionLocal()
     try:
@@ -1081,7 +1080,7 @@ def create_admin_user():
                 name="Admin User",
                 email="tmonnens@outlook.com",
                 password=get_password_hash("Voetballen5"),
-                role=1,  # Admin role
+                role=UserRole.ADMIN,  # Use enum instead of integer
                 email_verified_at=datetime.utcnow()
             )
             db.add(admin_user)
