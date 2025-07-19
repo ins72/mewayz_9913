@@ -40,6 +40,8 @@ import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
 import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
 import RealtimeCollaborationPage from './pages/dashboard/RealtimeCollaborationPage';
 import IntegrationHubPage from './pages/dashboard/IntegrationHubPage';
+import ReferralSystemPage from './pages/dashboard/ReferralSystemPage';
+import UserSettingsPage from './pages/dashboard/UserSettingsPage';
 import TemplateMarketplaceV2Page from './pages/dashboard/TemplateMarketplaceV2Page';
 
 // New pages
