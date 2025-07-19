@@ -396,6 +396,238 @@ async def register(user_data: UserCreate):
         "user": user_response
     }
 
+# ===== GOOGLE OAUTH ENDPOINTS =====
+@app.get("/api/auth/google/login")
+async def google_oauth_login(request: Request):
+    """Initiate Google OAuth login"""
+    if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Google OAuth not configured"
+        )
+    
+    redirect_uri = str(request.url_for("google_oauth_callback"))
+    return await oauth.google.authorize_redirect(request, redirect_uri)
+
+@app.get("/api/auth/google/callback")
+async def google_oauth_callback(request: Request):
+    """Handle Google OAuth callback"""
+    try:
+        token = await oauth.google.authorize_access_token(request)
+        user_info = token.get('userinfo')
+        
+        if not user_info:
+            # Try to get user info from ID token
+            user_info = await oauth.google.parse_id_token(request, token)
+            
+        if not user_info:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Failed to get user information from Google"
+            )
+        
+        email = user_info.get('email')
+        name = user_info.get('name', email.split('@')[0])
+        avatar = user_info.get('picture')
+        
+        # Check if user already exists
+        user = await users_collection.find_one({"email": email})
+        
+        if user:
+            # Update existing user with Google info
+            await users_collection.update_one(
+                {"email": email},
+                {
+                    "$set": {
+                        "avatar": avatar,
+                        "oauth_provider": "google",
+                        "oauth_id": user_info.get('sub'),
+                        "email_verified_at": datetime.utcnow(),
+                        "last_login_at": datetime.utcnow(),
+                        "updated_at": datetime.utcnow()
+                    }
+                }
+            )
+        else:
+            # Create new user
+            user_doc = {
+                "_id": str(uuid.uuid4()),
+                "name": name,
+                "email": email,
+                "password": None,  # No password for OAuth users
+                "phone": None,
+                "timezone": "UTC",
+                "language": "en",
+                "role": UserRole.USER,
+                "email_verified_at": datetime.utcnow(),
+                "avatar": avatar,
+                "oauth_provider": "google",
+                "oauth_id": user_info.get('sub'),
+                "status": True,
+                "last_login_at": datetime.utcnow(),
+                "login_attempts": 0,
+                "locked_until": None,
+                "two_factor_enabled": False,
+                "two_factor_secret": None,
+                "api_key": secrets.token_urlsafe(48),
+                "subscription_plan": "free",
+                "subscription_expires_at": None,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            await users_collection.insert_one(user_doc)
+            user = user_doc
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": email})
+        
+        # Return user data with token
+        user_response = OAuthUserResponse(
+            id=str(user["_id"]),
+            name=user["name"],
+            email=user["email"],
+            role=user["role"],
+            email_verified=bool(user.get("email_verified_at")),
+            phone=user.get("phone"),
+            avatar=user.get("avatar"),
+            timezone=user.get("timezone", "UTC"),
+            language=user.get("language", "en"),
+            subscription_plan=user.get("subscription_plan", "free"),
+            api_key=user.get("api_key", secrets.token_urlsafe(48)),
+            created_at=user["created_at"],
+            token=access_token,
+            oauth_provider="google"
+        )
+        
+        # Redirect to frontend with token (in real implementation, you might want to redirect to frontend)
+        return {
+            "success": True,
+            "message": "Google OAuth login successful",
+            "token": access_token,
+            "user": user_response
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Google OAuth failed: {str(e)}"
+        )
+
+@app.post("/api/auth/google/verify")
+async def google_verify_token(oauth_request: GoogleOAuthRequest):
+    """Verify Google OAuth credential (for client-side OAuth)"""
+    try:
+        # Verify the credential with Google
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"https://oauth2.googleapis.com/tokeninfo?id_token={oauth_request.credential}"
+            )
+            
+            if response.status_code != 200:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid Google credential"
+                )
+            
+            user_info = response.json()
+            
+            if user_info.get('aud') != GOOGLE_CLIENT_ID:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid token audience"
+                )
+        
+        email = user_info.get('email')
+        name = user_info.get('name', email.split('@')[0])
+        avatar = user_info.get('picture')
+        
+        # Check if user already exists
+        user = await users_collection.find_one({"email": email})
+        
+        if user:
+            # Update existing user with Google info
+            await users_collection.update_one(
+                {"email": email},
+                {
+                    "$set": {
+                        "avatar": avatar,
+                        "oauth_provider": "google",
+                        "oauth_id": user_info.get('sub'),
+                        "email_verified_at": datetime.utcnow(),
+                        "last_login_at": datetime.utcnow(),
+                        "updated_at": datetime.utcnow()
+                    }
+                }
+            )
+            user = await users_collection.find_one({"email": email})
+        else:
+            # Create new user
+            user_doc = {
+                "_id": str(uuid.uuid4()),
+                "name": name,
+                "email": email,
+                "password": None,  # No password for OAuth users
+                "phone": None,
+                "timezone": "UTC",
+                "language": "en",
+                "role": UserRole.USER,
+                "email_verified_at": datetime.utcnow(),
+                "avatar": avatar,
+                "oauth_provider": "google",
+                "oauth_id": user_info.get('sub'),
+                "status": True,
+                "last_login_at": datetime.utcnow(),
+                "login_attempts": 0,
+                "locked_until": None,
+                "two_factor_enabled": False,
+                "two_factor_secret": None,
+                "api_key": secrets.token_urlsafe(48),
+                "subscription_plan": "free",
+                "subscription_expires_at": None,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            await users_collection.insert_one(user_doc)
+            user = user_doc
+        
+        # Create access token
+        access_token = create_access_token(data={"sub": email})
+        
+        # Return user data with token
+        user_response = OAuthUserResponse(
+            id=str(user["_id"]),
+            name=user["name"],
+            email=user["email"],
+            role=user["role"],
+            email_verified=bool(user.get("email_verified_at")),
+            phone=user.get("phone"),
+            avatar=user.get("avatar"),
+            timezone=user.get("timezone", "UTC"),
+            language=user.get("language", "en"),
+            subscription_plan=user.get("subscription_plan", "free"),
+            api_key=user.get("api_key", secrets.token_urlsafe(48)),
+            created_at=user["created_at"],
+            token=access_token,
+            oauth_provider="google"
+        )
+        
+        return {
+            "success": True,
+            "message": "Google OAuth verification successful",
+            "token": access_token,
+            "user": user_response
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to verify Google token: {str(e)}"
+        )
+
 @app.get("/api/auth/me")
 async def get_current_user_profile(current_user: dict = Depends(get_current_user)):
     user_response = UserResponse(
