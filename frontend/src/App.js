@@ -5,6 +5,7 @@ import { useAuth } from './contexts/AuthContext';
 
 // Public pages
 import LandingPage from './pages/LandingPage';
+import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
