@@ -432,23 +432,31 @@ code {
    PROFESSIONAL GRADIENTS
    ================================ */
 .bg-gradient-primary {
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
 }
 
 .bg-gradient-success {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
 }
 
 .bg-gradient-warning {
-  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  background: linear-gradient(135deg, #ED8936 0%, #DD6B20 100%);
 }
 
 .bg-gradient-surface {
-  background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+  background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
 }
 
 .dark .bg-gradient-surface {
-  background: linear-gradient(135deg, #282828 0%, #191919 100%);
+  background: linear-gradient(135deg, #2A2A2A 0%, #191919 100%);
+}
+
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #F093FB 100%);
+}
+
+.dark .bg-gradient-hero {
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 50%, #4A5568 100%);
 }
 
 /* ================================
