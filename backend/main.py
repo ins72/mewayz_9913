@@ -80,6 +80,9 @@ social_media_activities_collection = database.social_media_activities
 email_campaigns_collection = database.email_campaigns_integration
 email_contacts_collection = database.email_contacts
 
+# AI usage tracking collection
+ai_usage_collection = database.ai_usage
+
 # Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
