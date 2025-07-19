@@ -8,7 +8,7 @@ import {
   ShieldCheckIcon,
   LightningBoltIcon
 } from '@heroicons/react/24/outline';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const SubscriptionManager = () => {
   const { user } = useContext(AuthContext);
