@@ -250,7 +250,7 @@ const DashboardHome = () => {
             <h3 className="text-lg font-semibold text-primary mb-4">System Health</h3>
             <div className="space-y-4">
               {systemMetrics.map((metric, index) => {
-                const IconComponent = metric.icon;
+                const IconComponent = metric.icon || ChartBarIcon;
                 return (
                 <div key={index} className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
