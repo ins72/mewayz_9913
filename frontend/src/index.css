@@ -356,11 +356,11 @@ code {
    ================================ */
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .dark .focus-ring:focus {
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
 }
 
 /* ================================
