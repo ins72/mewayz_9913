@@ -50,6 +50,7 @@ import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
 import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
 import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
 import ProfessionalCourseBuilder from './pages/dashboard/ProfessionalCourseBuilder';
+import EnhancedSocialMediaManager from './pages/dashboard/EnhancedSocialMediaManager';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
