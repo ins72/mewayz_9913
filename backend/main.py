@@ -1357,6 +1357,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
 
-# Include routers
-app.include_router(onboarding_router)
-app.include_router(subscription_router)
