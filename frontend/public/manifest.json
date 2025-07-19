@@ -1,15 +1,102 @@
 {
+  "name": "Mewayz - Complete Creator Economy Platform",
   "short_name": "Mewayz",
-  "name": "Mewayz Creator Economy Platform",
+  "description": "All-in-one platform for creators to build, manage, and monetize their digital presence",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1f2937",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity", "social"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#1f2937",
-  "background_color": "#111827"
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Mewayz Dashboard Overview"
+    },
+    {
+      "src": "/screenshot-narrow.png", 
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mewayz Mobile Experience"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard", 
+      "description": "Open main dashboard",
+      "url": "/dashboard",
+      "icons": [{"src": "/dashboard-icon.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "AI Features",
+      "short_name": "AI Tools",
+      "description": "Access AI generation tools", 
+      "url": "/dashboard/ai-features",
+      "icons": [{"src": "/ai-icon.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "Bio Sites",
+      "short_name": "Bio Sites",
+      "description": "Manage link-in-bio pages",
+      "url": "/dashboard/bio-sites", 
+      "icons": [{"src": "/bio-icon.png", "sizes": "96x96"}]
+    }
+  ],
+  "share_target": {
+    "action": "/dashboard/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text", 
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["image/*", "video/*", "audio/*", ".pdf", ".doc", ".docx"]
+        }
+      ]
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+mewayz",
+      "url": "/handle?url=%s"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://mewayz.com/manifest.json"
+    }
+  ],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
