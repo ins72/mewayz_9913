@@ -48,6 +48,8 @@ import EnhancedTemplateMarketplace from './pages/dashboard/EnhancedTemplateMarke
 import SimpleGamifiedAnalyticsPage from './pages/dashboard/SimpleGamifiedAnalyticsPage';
 import SimpleAdminDashboard from './pages/dashboard/SimpleAdminDashboard';
 import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
+import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
+import ProfessionalCourseBuilder from './pages/dashboard/ProfessionalCourseBuilder';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
