@@ -239,6 +239,126 @@ const InstagramManagementPage = () => {
 
   const getAccountTypeColor = (type) => {
     switch (type) {
+      case 'business':
+        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+      case 'creator':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+    }
+  };
+
+  const getCollaborationInterestColor = (interest) => {
+    switch (interest) {
+      case 'open':
+        return 'bg-green-500';
+      case 'selective':
+        return 'bg-yellow-500';
+      default:
+        return 'bg-red-500';
+    }
+  };
+
+  const handleAccountSelect = (accountId) => {
+    setSelectedAccounts(prev => 
+      prev.includes(accountId) 
+        ? prev.filter(id => id !== accountId)
+        : [...prev, accountId]
+    );
+  };
+
+  const handleBulkExport = async () => {
+    if (selectedAccounts.length === 0) {
+      error('Please select at least one account to export');
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const selectedAccountsData = instagramAccounts.filter(acc => 
+        selectedAccounts.includes(acc.id)
+      );
+      
+      // Create CSV data
+      const csvHeaders = [
+        'Username', 'Display Name', 'Followers', 'Following', 'Posts',
+        'Engagement Rate', 'Account Type', 'Verified', 'Location', 
+        'Email', 'Website', 'Phone', 'Avg Likes', 'Avg Comments',
+        'Best Posting Time', 'Niche', 'Collaboration Status'
+      ];
+      
+      const csvData = selectedAccountsData.map(acc => [
+        acc.username, acc.displayName, acc.followers, acc.following, acc.posts,
+        acc.engagementRate + '%', acc.accountType, acc.verified ? 'Yes' : 'No',
+        acc.location, acc.email, acc.website, acc.phone, acc.avgLikes,
+        acc.avgComments, acc.bestPostingTimes?.[0] || 'N/A', acc.niche,
+        acc.collaborationStatus
+      ]);
+      
+      const csvContent = [
+        csvHeaders.join(','),
+        ...csvData.map(row => row.join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `instagram-accounts-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      success(`Successfully exported ${selectedAccounts.length} accounts`);
+      setSelectedAccounts([]);
+    } catch (err) {
+      error('Failed to export accounts');
+    }
+    setLoading(false);
+  };
+
+  const generateAIRecommendations = async () => {
+    setLoading(true);
+    try {
+      // Simulate AI analysis
+      const recommendations = [
+        {
+          id: 1,
+          type: 'collaboration',
+          title: 'High-Value Collaboration Opportunity',
+          description: 'NYC Fashion Queen shows 6.8% engagement with 125K followers in fashion niche - excellent ROI potential',
+          priority: 'high',
+          estimatedROI: '320%'
+        },
+        {
+          id: 2,
+          type: 'timing',
+          title: 'Optimal Posting Schedule',
+          description: 'Analysis shows 9 AM, 12 PM, and 6 PM are peak engagement times across selected accounts',
+          priority: 'medium',
+          estimatedROI: '85%'
+        },
+        {
+          id: 3,
+          type: 'content',
+          title: 'Content Strategy Insight',
+          description: 'Travel and lifestyle content performs 40% better than product-focused posts for your target audience',
+          priority: 'high',
+          estimatedROI: '210%'
+        }
+      ];
+      
+      setAiRecommendations(recommendations);
+      success('AI recommendations generated successfully');
+    } catch (err) {
+      error('Failed to generate AI recommendations');
+    }
+    setLoading(false);
+  };
+
+  const getAccountTypeColor = (type) => {
+    switch (type) {
       case 'business': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
       case 'creator': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
       case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
