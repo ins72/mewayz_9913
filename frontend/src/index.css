@@ -464,8 +464,8 @@ code {
    ================================ */
 :root {
   --toast-bg: #FFFFFF;
-  --toast-color: #212529;
-  --toast-border: #DEE2E6;
+  --toast-color: #2D3748;
+  --toast-border: #E2E8F0;
 }
 
 .dark {
