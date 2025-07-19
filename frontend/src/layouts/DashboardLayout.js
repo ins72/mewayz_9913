@@ -47,7 +47,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Workspaces', href: '/dashboard/workspaces', icon: BuildingOffice2Icon },
     { name: 'Subscription', href: '/dashboard/subscription', icon: CreditCardIcon },
     { name: 'Templates', href: '/dashboard/templates', icon: DocumentTextIcon },
-    { name: 'Analytics', href: '/dashboard/advanced-analytics', icon: ChartBarIcon },
+    { name: 'Advanced Analytics', href: '/dashboard/advanced-analytics', icon: ChartBarIcon },
     { name: 'Workspace', href: '/dashboard/workspace', icon: BuildingOfficeIcon },
     { name: 'Website Builder', href: '/dashboard/website-builder', icon: WrenchScrewdriverIcon },
     { name: 'Social Media', href: '/dashboard/social-media', icon: ChartBarIcon },
