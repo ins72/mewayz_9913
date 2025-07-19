@@ -293,6 +293,34 @@ class DiscountCodeCreate(BaseModel):
     expires_at: Optional[datetime] = None
     applicable_products: List[str] = ["all"]
 
+# ===== STRIPE/SUBSCRIPTION MODELS =====
+class SubscriptionPlan(BaseModel):
+    plan_id: str
+    name: str
+    description: str
+    price_monthly: float
+    price_yearly: float
+    features: List[str]
+    max_features: int
+    is_popular: bool = False
+
+class CreateSubscriptionRequest(BaseModel):
+    plan_id: str
+    payment_method_id: str
+    billing_cycle: str  # monthly or yearly
+
+class StripeWebhookEvent(BaseModel):
+    id: str
+    object: str
+    type: str
+    data: Dict[str, Any]
+
+class PaymentIntentRequest(BaseModel):
+    amount: int  # in cents
+    currency: str = "usd"
+    description: str
+    metadata: Optional[Dict[str, Any]] = None
+
 # Password utilities
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
