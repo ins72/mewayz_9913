@@ -610,7 +610,7 @@ const FinancialManagementPage = () => {
               <p className="text-secondary">Track money in and out of your business</p>
             </button>
             <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <ArrowTrendingUpIcon className="w-8 h-8 text-accent-primary mb-4" />
+              <ReceiptPercentIcon className="w-8 h-8 text-accent-primary mb-4" />
               <h3 className="font-semibold text-primary mb-2">Tax Reports</h3>
               <p className="text-secondary">Generate tax-ready financial reports</p>
             </button>
