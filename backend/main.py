@@ -2695,6 +2695,301 @@ async def get_social_media_activities(current_user: dict = Depends(get_current_u
             detail=f"Failed to get social media activities: {str(e)}"
         )
 
+# ===== COMPREHENSIVE AI ENDPOINTS =====
+
+# Pydantic models for AI requests
+class ContentGenerationRequest(BaseModel):
+    prompt: str
+    content_type: str = "social_post"
+    tone: str = "professional"
+    max_tokens: int = 500
+
+class ContentAnalysisRequest(BaseModel):
+    content: str
+    analysis_type: str = "sentiment"
+
+class HashtagGenerationRequest(BaseModel):
+    content: str
+    platform: str = "instagram"
+    count: int = 10
+
+class ContentImprovementRequest(BaseModel):
+    content: str
+    improvement_type: str = "engagement"
+
+class CourseContentRequest(BaseModel):
+    topic: str
+    lesson_title: str
+    difficulty: str = "beginner"
+    duration: int = 15
+
+class EmailSequenceRequest(BaseModel):
+    purpose: str
+    audience: str
+    sequence_length: int = 5
+
+class ContentIdeasRequest(BaseModel):
+    industry: str
+    content_type: str
+    count: int = 10
+
+@app.post("/api/ai/generate-content")
+async def generate_ai_content(
+    request: ContentGenerationRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate content using AI"""
+    try:
+        result = await ai_system.generate_content(
+            prompt=request.prompt,
+            content_type=request.content_type,
+            tone=request.tone,
+            max_tokens=request.max_tokens
+        )
+        
+        # Log AI usage for analytics
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "content_generation",
+            "content_type": request.content_type,
+            "tokens_used": result.get("tokens_used", 0),
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI content generation failed: {str(e)}")
+
+@app.post("/api/ai/analyze-content")
+async def analyze_ai_content(
+    request: ContentAnalysisRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Analyze content using AI"""
+    try:
+        result = await ai_system.analyze_content(
+            content=request.content,
+            analysis_type=request.analysis_type
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "content_analysis",
+            "analysis_type": request.analysis_type,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI content analysis failed: {str(e)}")
+
+@app.post("/api/ai/generate-hashtags")
+async def generate_ai_hashtags(
+    request: HashtagGenerationRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate hashtags using AI"""
+    try:
+        result = await ai_system.generate_hashtags(
+            content=request.content,
+            platform=request.platform,
+            count=request.count
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "hashtag_generation",
+            "platform": request.platform,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI hashtag generation failed: {str(e)}")
+
+@app.post("/api/ai/improve-content")
+async def improve_ai_content(
+    request: ContentImprovementRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Improve content using AI"""
+    try:
+        result = await ai_system.improve_content(
+            content=request.content,
+            improvement_type=request.improvement_type
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "content_improvement",
+            "improvement_type": request.improvement_type,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI content improvement failed: {str(e)}")
+
+@app.post("/api/ai/generate-course-content")
+async def generate_ai_course_content(
+    request: CourseContentRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate course content using AI"""
+    try:
+        result = await ai_system.generate_course_content(
+            topic=request.topic,
+            lesson_title=request.lesson_title,
+            difficulty=request.difficulty,
+            duration=request.duration
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "course_content_generation",
+            "topic": request.topic,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI course content generation failed: {str(e)}")
+
+@app.post("/api/ai/generate-email-sequence")
+async def generate_ai_email_sequence(
+    request: EmailSequenceRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate email sequence using AI"""
+    try:
+        result = await ai_system.generate_email_sequence(
+            purpose=request.purpose,
+            audience=request.audience,
+            sequence_length=request.sequence_length
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "email_sequence_generation",
+            "purpose": request.purpose,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI email sequence generation failed: {str(e)}")
+
+@app.post("/api/ai/get-content-ideas")
+async def get_ai_content_ideas(
+    request: ContentIdeasRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get content ideas using AI"""
+    try:
+        result = await ai_system.get_content_ideas(
+            industry=request.industry,
+            content_type=request.content_type,
+            count=request.count
+        )
+        
+        # Log AI usage
+        usage_log = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "feature": "content_ideas_generation",
+            "industry": request.industry,
+            "timestamp": datetime.utcnow(),
+            "success": result["success"]
+        }
+        await ai_usage_collection.insert_one(usage_log)
+        
+        return {"success": True, "data": result}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI content ideas generation failed: {str(e)}")
+
+@app.get("/api/ai/usage-analytics")
+async def get_ai_usage_analytics(current_user: dict = Depends(get_current_user)):
+    """Get AI usage analytics for the current user"""
+    try:
+        # Get usage statistics for the last 30 days
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        
+        usage_logs = await ai_usage_collection.find({
+            "user_id": current_user["id"],
+            "timestamp": {"$gte": thirty_days_ago}
+        }).to_list(length=1000)
+        
+        # Calculate analytics
+        total_requests = len(usage_logs)
+        successful_requests = len([log for log in usage_logs if log.get("success", False)])
+        total_tokens = sum([log.get("tokens_used", 0) for log in usage_logs])
+        
+        # Feature usage breakdown
+        feature_usage = {}
+        for log in usage_logs:
+            feature = log.get("feature", "unknown")
+            feature_usage[feature] = feature_usage.get(feature, 0) + 1
+        
+        # Daily usage for the last 7 days
+        seven_days_ago = datetime.utcnow() - timedelta(days=7)
+        recent_logs = [log for log in usage_logs if log["timestamp"] >= seven_days_ago]
+        
+        daily_usage = {}
+        for i in range(7):
+            date = (datetime.utcnow() - timedelta(days=i)).strftime("%Y-%m-%d")
+            daily_usage[date] = 0
+            
+        for log in recent_logs:
+            date = log["timestamp"].strftime("%Y-%m-%d")
+            if date in daily_usage:
+                daily_usage[date] += 1
+        
+        return {
+            "success": True,
+            "data": {
+                "total_requests": total_requests,
+                "successful_requests": successful_requests,
+                "success_rate": (successful_requests / total_requests * 100) if total_requests > 0 else 0,
+                "total_tokens_used": total_tokens,
+                "feature_usage": feature_usage,
+                "daily_usage": daily_usage,
+                "period": "last_30_days"
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get AI analytics: {str(e)}")
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
