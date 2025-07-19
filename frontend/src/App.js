@@ -18,6 +18,8 @@ import CoursesPage from './pages/dashboard/CoursesPage';
 import CRMPage from './pages/dashboard/CRMPage';
 import AnalyticsPage from './pages/dashboard/AnalyticsPage';
 import BioSitesPage from './pages/dashboard/BioSitesPage';
+import EmailMarketingPage from './pages/dashboard/EmailMarketingPage';
+import PaymentsPage from './pages/dashboard/PaymentsPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
