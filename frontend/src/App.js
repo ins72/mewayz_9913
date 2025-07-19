@@ -16,6 +16,8 @@ import SocialMediaPage from './pages/dashboard/SocialMediaPage';
 import EcommercePage from './pages/dashboard/EcommercePage';
 import CoursesPage from './pages/dashboard/CoursesPage';
 import CRMPage from './pages/dashboard/CRMPage';
+import AnalyticsPage from './pages/dashboard/AnalyticsPage';
+import BioSitesPage from './pages/dashboard/BioSitesPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
