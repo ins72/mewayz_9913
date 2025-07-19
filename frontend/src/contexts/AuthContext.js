@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
-  };
 
   const register = async (userData) => {
     try {
