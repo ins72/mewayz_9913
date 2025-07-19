@@ -28,6 +28,7 @@ import PaymentsPage from './pages/dashboard/PaymentsPage';
 import AIFeaturesPage from './pages/dashboard/AIFeaturesPage';
 import WorkspacePage from './pages/dashboard/WorkspacePage';
 import WebsiteBuilderPage from './pages/dashboard/WebsiteBuilderPage';
+import AdminDashboard from './pages/dashboard/AdminDashboard';
 import AdvancedBookingPage from './pages/dashboard/AdvancedBookingPage';
 import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
 import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
