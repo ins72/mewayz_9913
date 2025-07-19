@@ -233,7 +233,7 @@ const TemplateMarketplace = () => {
           </select>
           
           <button className="btn btn-secondary flex items-center justify-center">
-            <FilterIcon className="h-4 w-4 mr-2" />
+            <FunnelIcon className="h-4 w-4 mr-2" />
             Filters
           </button>
         </div>
