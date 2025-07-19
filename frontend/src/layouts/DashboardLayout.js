@@ -106,8 +106,8 @@ const DashboardLayout = ({ isAdmin = false }) => {
                     onClick={() => setSidebarOpen(false)}
                     className={`flex items-center px-4 py-3 text-sm font-medium transition-colors ${
                       isActive
-                        ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 border-r-2 border-indigo-700 dark:border-indigo-300'
-                        : 'text-secondary hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary'
+                        ? 'nav-active'
+                        : 'text-secondary hover-surface hover:text-primary'
                     }`}
                   >
                     <item.icon className="w-5 h-5 mr-3" />
