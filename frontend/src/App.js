@@ -98,6 +98,7 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<SocialMediaPage />} />
+              <Route path="instagram" element={<InstagramManagementPage />} />
               <Route path="bio-sites" element={<BioSitesPage />} />
               <Route path="crm" element={<CRMPage />} />
               <Route path="link-shortener" element={<LinkShortenerPage />} />
