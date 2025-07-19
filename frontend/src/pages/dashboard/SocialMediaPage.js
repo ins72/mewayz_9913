@@ -1,344 +1,454 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  ChartBarIcon, 
-  PlusIcon, 
-  PencilIcon, 
-  TrashIcon,
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  ChartBarIcon,
+  UserGroupIcon,
   CalendarIcon,
-  HashtagIcon,
-  PhotoIcon,
-  FilmIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+  FilterIcon,
+  ArrowDownTrayIcon,
   EyeIcon,
   HeartIcon,
-  ChatBubbleLeftIcon,
-  ShareIcon
+  ChatBubbleOvalLeftIcon,
+  ShareIcon,
+  AdjustmentsHorizontalIcon
 } from '@heroicons/react/24/outline';
-import Button from '../../components/Button';
 
 const SocialMediaPage = () => {
-  const [accounts, setAccounts] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('database');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({
+    followerRange: 'all',
+    engagementRate: 'all',
+    accountType: 'all',
+    location: '',
+    hashtags: ''
+  });
 
-  useEffect(() => {
-    loadSocialMediaData();
-  }, []);
+  // Mock Instagram database data
+  const [instagramAccounts, setInstagramAccounts] = useState([
+    {
+      id: '1',
+      username: 'fitness_guru_miami',
+      displayName: 'Miami Fitness Guru',
+      followers: 45000,
+      following: 2300,
+      posts: 892,
+      engagementRate: 4.2,
+      accountType: 'business',
+      verified: false,
+      profilePicture: null,
+      bio: '💪 Fitness coach in Miami | Personal training | Nutrition tips | DM for coaching',
+      location: 'Miami, FL',
+      email: 'contact@fitnessguru.com',
+      website: 'www.fitnessguru.com',
+      lastActive: '2 hours ago'
+    },
+    {
+      id: '2',
+      username: 'tech_startup_nyc',
+      displayName: 'TechStartup NYC',
+      followers: 15000,
+      following: 1200,
+      posts: 456,
+      engagementRate: 6.8,
+      accountType: 'business',
+      verified: true,
+      profilePicture: null,
+      bio: '🚀 Building the future of tech | NYC-based startup | Join our journey',
+      location: 'New York, NY',
+      email: 'hello@techstartup.com',
+      website: 'www.techstartup.com',
+      lastActive: '1 day ago'
+    },
+    {
+      id: '3',
+      username: 'food_blogger_la',
+      displayName: 'LA Food Explorer',
+      followers: 85000,
+      following: 3400,
+      posts: 1240,
+      engagementRate: 3.9,
+      accountType: 'creator',
+      verified: true,
+      profilePicture: null,
+      bio: '🍕 Exploring LA\'s best eats | Food reviews | Restaurant recommendations',
+      location: 'Los Angeles, CA',
+      email: 'collab@lafoodie.com',
+      website: 'www.lafoodexplorer.com',
+      lastActive: '30 minutes ago'
+    }
+  ]);
 
-  const loadSocialMediaData = async () => {
-    try {
-      // Mock data for now - replace with actual API calls
-      setAccounts([
-        { id: 1, platform: 'Instagram', username: '@mybusiness', followers: 15420, connected: true },
-        { id: 2, platform: 'Facebook', username: 'My Business Page', followers: 8950, connected: true },
-        { id: 3, platform: 'Twitter', username: '@mybusiness', followers: 3200, connected: false },
-        { id: 4, platform: 'LinkedIn', username: 'My Business', followers: 1890, connected: true },
-      ]);
+  const [scheduledPosts, setScheduledPosts] = useState([
+    {
+      id: '1',
+      caption: 'New product launch coming soon! 🚀 Stay tuned for something amazing...',
+      platforms: ['instagram', 'facebook', 'twitter'],
+      media: ['image1.jpg'],
+      scheduledDate: '2025-07-21T14:00:00Z',
+      status: 'scheduled',
+      hashtags: ['#launch', '#product', '#amazing']
+    },
+    {
+      id: '2',
+      caption: 'Behind the scenes of our latest project. The team is working hard! 💪',
+      platforms: ['instagram', 'linkedin'],
+      media: ['video1.mp4'],
+      scheduledDate: '2025-07-22T10:30:00Z',
+      status: 'scheduled',
+      hashtags: ['#behindthescenes', '#team', '#work']
+    }
+  ]);
 
-      setPosts([
-        {
-          id: 1,
-          content: 'Just launched our new product line! 🚀 #newproduct #launch',
-          platform: 'Instagram',
-          scheduled: '2025-07-20 10:00',
-          status: 'scheduled',
-          engagement: { likes: 0, comments: 0, shares: 0 }
-        },
-        {
-          id: 2,
-          content: 'Behind the scenes at our office today! Working hard to bring you the best experience.',
-          platform: 'Facebook',
-          published: '2025-07-19 14:30',
-          status: 'published',
-          engagement: { likes: 45, comments: 12, shares: 8 }
-        }
-      ]);
+  const formatNumber = (num) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+  };
 
-      setAnalytics({
-        totalFollowers: 29460,
-        totalEngagement: 1250,
-        reachThisWeek: 15670,
-        topPerformingPost: 'Product launch announcement',
-        engagementRate: 4.2
-      });
-    } catch (error) {
-      console.error('Failed to load social media data:', error);
-    } finally {
-      setLoading(false);
+  const getAccountTypeColor = (type) => {
+    switch (type) {
+      case 'business': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
+      case 'creator': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
+      case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
     }
   };
 
-  const StatCard = ({ title, value, change, icon: Icon, color = 'primary' }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="card-elevated p-6"
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-secondary">{title}</p>
-          <p className="text-3xl font-bold text-primary mt-2">{value}</p>
-          {change && (
-            <p className={`text-sm mt-2 ${change > 0 ? 'text-accent-success' : 'text-accent-danger'}`}>
-              {change > 0 ? '+' : ''}{change}% vs last week
-            </p>
-          )}
+  const renderInstagramDatabase = () => (
+    <div className="space-y-6">
+      {/* Search and Filters */}
+      <div className="bg-surface p-6 rounded-lg shadow-default">
+        <h3 className="text-lg font-semibold text-primary mb-4">Instagram Database Search</h3>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+          <div className="lg:col-span-2">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by username, hashtags, or keywords..."
+                className="input w-full pl-10"
+              />
+            </div>
+          </div>
+          
+          <select
+            value={filters.followerRange}
+            onChange={(e) => setFilters(prev => ({ ...prev, followerRange: e.target.value }))}
+            className="input"
+          >
+            <option value="all">All Followers</option>
+            <option value="1k-10k">1K - 10K</option>
+            <option value="10k-50k">10K - 50K</option>
+            <option value="50k-100k">50K - 100K</option>
+            <option value="100k+">100K+</option>
+          </select>
+          
+          <select
+            value={filters.accountType}
+            onChange={(e) => setFilters(prev => ({ ...prev, accountType: e.target.value }))}
+            className="input"
+          >
+            <option value="all">All Account Types</option>
+            <option value="business">Business</option>
+            <option value="creator">Creator</option>
+            <option value="personal">Personal</option>
+          </select>
         </div>
-        <div className={`bg-gradient-${color} p-3 rounded-lg`}>
-          <Icon className="w-8 h-8 text-white" />
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <button className="btn btn-secondary flex items-center space-x-2">
+              <AdjustmentsHorizontalIcon className="h-4 w-4" />
+              <span>Advanced Filters</span>
+            </button>
+            <span className="text-sm text-secondary">
+              {instagramAccounts.length} accounts found
+            </span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <button className="btn btn-secondary flex items-center space-x-2">
+              <ArrowDownTrayIcon className="h-4 w-4" />
+              <span>Export CSV</span>
+            </button>
+            <button className="btn btn-primary flex items-center space-x-2">
+              <PlusIcon className="h-4 w-4" />
+              <span>Add to Campaign</span>
+            </button>
+          </div>
         </div>
       </div>
-    </motion.div>
-  );
 
-  const AccountCard = ({ account }) => (
-    <div className="card-elevated p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold">{account.platform[0]}</span>
-          </div>
-          <div>
-            <h3 className="font-semibold text-primary">{account.platform}</h3>
-            <p className="text-secondary">{account.username}</p>
-          </div>
+      {/* Instagram Accounts List */}
+      <div className="bg-surface rounded-lg shadow-default overflow-hidden">
+        <div className="p-6 border-b border-default">
+          <h3 className="text-xl font-semibold text-primary">Instagram Accounts Database</h3>
         </div>
-        <div className={`w-3 h-3 rounded-full ${account.connected ? 'bg-accent-success' : 'bg-accent-danger'}`}></div>
-      </div>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-secondary">Followers</p>
-          <p className="text-xl font-bold text-primary">{account.followers.toLocaleString()}</p>
+        
+        <div className="divide-y divide-default">
+          {instagramAccounts.map((account) => (
+            <div key={account.id} className="p-6 hover:bg-surface-hover transition-colors">
+              <div className="flex items-start justify-between">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-semibold text-lg">
+                      {account.displayName.charAt(0)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <h4 className="text-lg font-semibold text-primary">@{account.username}</h4>
+                      {account.verified && (
+                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                          <CheckIcon className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getAccountTypeColor(account.accountType)}`}>
+                        {account.accountType}
+                      </span>
+                    </div>
+                    
+                    <p className="text-lg font-medium text-primary mb-2">{account.displayName}</p>
+                    <p className="text-sm text-secondary mb-4 line-clamp-2">{account.bio}</p>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-primary">{formatNumber(account.followers)}</p>
+                        <p className="text-xs text-secondary">Followers</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-primary">{formatNumber(account.following)}</p>
+                        <p className="text-xs text-secondary">Following</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-primary">{account.posts}</p>
+                        <p className="text-xs text-secondary">Posts</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-lg font-bold text-primary">{account.engagementRate}%</p>
+                        <p className="text-xs text-secondary">Engagement</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-4 text-sm text-secondary">
+                      <span>📍 {account.location}</span>
+                      <span>🌐 {account.website}</span>
+                      <span>📧 {account.email}</span>
+                      <span>🕐 {account.lastActive}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <EyeIcon className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <HeartIcon className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <ChatBubbleOvalLeftIcon className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <ShareIcon className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-        <Button variant={account.connected ? 'secondary' : 'primary'} size="small">
-          {account.connected ? 'Manage' : 'Connect'}
-        </Button>
       </div>
     </div>
   );
 
-  const PostCard = ({ post }) => (
-    <div className="card-elevated p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span className="text-white text-sm font-bold">{post.platform[0]}</span>
-          </div>
-          <div>
-            <h4 className="font-medium text-primary">{post.platform}</h4>
-            <p className="text-sm text-secondary">
-              {post.status === 'scheduled' ? `Scheduled for ${post.scheduled}` : `Published ${post.published}`}
-            </p>
-          </div>
+  const renderPostScheduling = () => (
+    <div className="space-y-6">
+      {/* Create New Post */}
+      <div className="bg-surface p-6 rounded-lg shadow-default">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-primary">Schedule New Post</h3>
+          <button className="btn btn-primary flex items-center space-x-2">
+            <PlusIcon className="h-4 w-4" />
+            <span>Create Post</span>
+          </button>
         </div>
-        <div className="flex items-center space-x-2">
-          <button className="p-2 text-secondary hover:text-primary">
-            <EyeIcon className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-secondary hover:text-primary">
-            <PencilIcon className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-secondary hover:text-accent-danger">
-            <TrashIcon className="w-4 h-4" />
-          </button>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <label className="block text-sm font-medium text-secondary mb-2">Caption</label>
+            <textarea
+              rows={4}
+              placeholder="What's happening? Write your post caption here..."
+              className="input w-full resize-none"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">Platforms</label>
+              <div className="space-y-2">
+                {['Instagram', 'Facebook', 'Twitter', 'LinkedIn'].map((platform) => (
+                  <label key={platform} className="flex items-center">
+                    <input type="checkbox" className="mr-2" />
+                    <span className="text-sm text-primary">{platform}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-secondary mb-2">Schedule Date</label>
+              <input type="datetime-local" className="input w-full" />
+            </div>
+          </div>
         </div>
       </div>
-      
-      <p className="text-primary mb-4">{post.content}</p>
-      
-      <div className="flex items-center justify-between pt-4 border-t border-default">
-        <div className="flex items-center space-x-4 text-sm text-secondary">
-          <div className="flex items-center space-x-1">
-            <HeartIcon className="w-4 h-4" />
-            <span>{post.engagement.likes}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <ChatBubbleLeftIcon className="w-4 h-4" />
-            <span>{post.engagement.comments}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <ShareIcon className="w-4 h-4" />
-            <span>{post.engagement.shares}</span>
-          </div>
+
+      {/* Scheduled Posts */}
+      <div className="bg-surface rounded-lg shadow-default overflow-hidden">
+        <div className="p-6 border-b border-default">
+          <h3 className="text-xl font-semibold text-primary">Scheduled Posts</h3>
         </div>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-          post.status === 'scheduled' 
-            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-        }`}>
-          {post.status}
-        </span>
+        
+        <div className="divide-y divide-default">
+          {scheduledPosts.map((post) => (
+            <div key={post.id} className="p-6 hover:bg-surface-hover transition-colors">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <p className="text-primary mb-2 line-clamp-2">{post.caption}</p>
+                  
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <CalendarIcon className="h-4 w-4 text-secondary" />
+                      <span className="text-sm text-secondary">
+                        {new Date(post.scheduledDate).toLocaleString()}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      {post.platforms.map((platform) => (
+                        <span key={platform} className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs">
+                          {platform}
+                        </span>
+                      ))}
+                    </div>
+                    
+                    <span className="px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 rounded-full text-xs">
+                      {post.status}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 text-sm text-secondary">
+                    {post.hashtags.map((hashtag) => (
+                      <span key={hashtag} className="text-blue-500">{hashtag}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2 ml-4">
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <EyeIcon className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                    <FilterIcon className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner w-8 h-8 text-accent-primary"></div>
+  const renderAnalytics = () => (
+    <div className="space-y-6">
+      {/* Analytics Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { label: 'Total Reach', value: '127K', change: '+12.5%', color: 'text-green-500' },
+          { label: 'Engagement', value: '8.9K', change: '+5.2%', color: 'text-blue-500' },
+          { label: 'New Followers', value: '2.1K', change: '+8.7%', color: 'text-purple-500' },
+          { label: 'Post Performance', value: '94%', change: '+3.1%', color: 'text-orange-500' }
+        ].map((stat, index) => (
+          <div key={index} className="bg-surface p-6 rounded-lg shadow-default">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-secondary">{stat.label}</p>
+                <p className="text-2xl font-bold text-primary">{stat.value}</p>
+              </div>
+              <span className={`text-sm font-medium ${stat.color}`}>{stat.change}</span>
+            </div>
+          </div>
+        ))}
       </div>
-    );
-  }
+
+      {/* Charts would go here */}
+      <div className="bg-surface p-6 rounded-lg shadow-default">
+        <h3 className="text-lg font-semibold text-primary mb-4">Performance Analytics</h3>
+        <div className="h-64 bg-surface-hover rounded-lg flex items-center justify-center">
+          <p className="text-secondary">Analytics charts would be implemented here</p>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">Social Media Management</h1>
-          <p className="text-secondary mt-1">Manage all your social media accounts from one place</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="secondary">
-            <CalendarIcon className="w-4 h-4 mr-2" />
-            Schedule Post
-          </Button>
-          <Button>
-            <PlusIcon className="w-4 h-4 mr-2" />
-            Create Post
-          </Button>
-        </div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8"
+      >
+        <h1 className="text-3xl font-bold text-primary mb-2">Social Media Management</h1>
+        <p className="text-secondary">Manage your social media presence with advanced tools and analytics</p>
+      </motion.div>
 
       {/* Tabs */}
       <div className="border-b border-default">
-        <nav className="-mb-px flex space-x-8">
+        <nav className="flex space-x-8">
           {[
-            { id: 'overview', name: 'Overview' },
-            { id: 'posts', name: 'Posts' },
-            { id: 'analytics', name: 'Analytics' },
-            { id: 'accounts', name: 'Accounts' }
+            { id: 'database', name: 'Instagram Database', icon: UserGroupIcon },
+            { id: 'scheduling', name: 'Post Scheduling', icon: CalendarIcon },
+            { id: 'analytics', name: 'Analytics', icon: ChartBarIcon }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
                 activeTab === tab.id
-                  ? 'border-accent-primary text-accent-primary'
+                  ? 'border-blue-500 text-blue-500'
                   : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
               }`}
             >
-              {tab.name}
+              <tab.icon className="h-4 w-4" />
+              <span>{tab.name}</span>
             </button>
           ))}
         </nav>
       </div>
 
-      {/* Content based on active tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Analytics Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Followers"
-              value={analytics.totalFollowers.toLocaleString()}
-              change={5.2}
-              icon={ChartBarIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Total Engagement"
-              value={analytics.totalEngagement.toLocaleString()}
-              change={12.8}
-              icon={HeartIcon}
-              color="success"
-            />
-            <StatCard
-              title="Reach This Week"
-              value={analytics.reachThisWeek.toLocaleString()}
-              change={-2.1}
-              icon={EyeIcon}
-              color="warning"
-            />
-            <StatCard
-              title="Engagement Rate"
-              value={`${analytics.engagementRate}%`}
-              change={1.3}
-              icon={ShareIcon}
-              color="primary"
-            />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <PhotoIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Create Image Post</h3>
-              <p className="text-secondary">Share photos with your audience</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <FilmIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Create Video Post</h3>
-              <p className="text-secondary">Share videos and stories</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <HashtagIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Hashtag Research</h3>
-              <p className="text-secondary">Find trending hashtags</p>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'posts' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Recent Posts</h2>
-            <div className="flex items-center space-x-3">
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Platforms</option>
-                <option>Instagram</option>
-                <option>Facebook</option>
-                <option>Twitter</option>
-                <option>LinkedIn</option>
-              </select>
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Status</option>
-                <option>Published</option>
-                <option>Scheduled</option>
-                <option>Draft</option>
-              </select>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'accounts' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Connected Accounts</h2>
-            <Button>
-              <PlusIcon className="w-4 h-4 mr-2" />
-              Connect Account
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {accounts.map((account) => (
-              <AccountCard key={account.id} account={account} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Analytics Dashboard</h2>
-          <div className="card-elevated p-8 text-center">
-            <ChartBarIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Detailed Analytics Coming Soon</h3>
-            <p className="text-secondary">We're building comprehensive analytics to help you understand your social media performance.</p>
-          </div>
-        </div>
-      )}
+      {/* Tab Content */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {activeTab === 'database' && renderInstagramDatabase()}
+        {activeTab === 'scheduling' && renderPostScheduling()}
+        {activeTab === 'analytics' && renderAnalytics()}
+      </motion.div>
     </div>
   );
 };
