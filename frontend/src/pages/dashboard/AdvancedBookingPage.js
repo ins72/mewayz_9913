@@ -275,11 +275,17 @@ const AdvancedBookingPage = () => {
               <PlusIcon className="h-5 w-5 mr-2" />
               New Booking
             </button>
-            <button className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors">
+            <button 
+              className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors"
+              onClick={() => setViewMode('calendar')}
+            >
               <CalendarIcon className="h-5 w-5 mr-2" />
               View Calendar
             </button>
-            <button className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors">
+            <button 
+              className="w-full flex items-center justify-center p-3 bg-surface hover:bg-surface-hover text-primary rounded-lg transition-colors"
+              onClick={() => setViewMode('appointments')}
+            >
               <ChartBarIcon className="h-5 w-5 mr-2" />
               Analytics Report
             </button>
