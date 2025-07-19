@@ -72,6 +72,11 @@ team_members_collection = database.team_members
 form_templates_collection = database.form_templates
 discount_codes_collection = database.discount_codes
 
+# Social media and email integration collections
+social_media_activities_collection = database.social_media_activities
+email_campaigns_collection = database.email_campaigns_integration
+email_contacts_collection = database.email_contacts
+
 # Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
