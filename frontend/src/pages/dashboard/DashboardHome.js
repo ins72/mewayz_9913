@@ -134,7 +134,7 @@ const DashboardHome = () => {
       name: 'System Uptime',
       value: systemHealth?.data?.system_health?.uptime || '99.9%',
       status: 'excellent',
-      icon: TrendingUpIcon
+      icon: ArrowTrendingUpIcon
     },
     {
       name: 'Response Time',
