@@ -123,7 +123,7 @@ const LandingPage = () => {
               className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6"
             >
               Complete Creator
-              <span className="block text-indigo-600 dark:text-indigo-400">
+              <span className="block text-primary">
                 Economy Platform
               </span>
             </motion.h1>
