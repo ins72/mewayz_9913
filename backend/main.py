@@ -1,10 +1,12 @@
 # FastAPI Backend - Professional Mewayz Platform
-from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, Form, Query, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File, Form, Query, BackgroundTasks, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel, EmailStr
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
+from authlib.integrations.starlette_client import OAuth
 import os
 from dotenv import load_dotenv
 from passlib.context import CryptContext
@@ -16,6 +18,7 @@ from typing import Optional, List, Dict, Any
 import enum
 from decimal import Decimal
 from contextlib import asynccontextmanager
+import httpx
 
 # Load environment variables
 load_dotenv()
@@ -28,6 +31,11 @@ MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professiona
 SECRET_KEY = os.getenv("SECRET_KEY", "mewayz-professional-secret-key-2025-ultra-secure")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))  # 24 hours
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY", "super-secret-session-key")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 
 # MongoDB client
 client = AsyncIOMotorClient(MONGO_URL)
