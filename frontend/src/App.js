@@ -23,6 +23,7 @@ import CookiePolicyPage from './pages/legal/CookiePolicyPage';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardHome from './pages/dashboard/DashboardHome';
 import SocialMediaPage from './pages/dashboard/SocialMediaPage';
+import InstagramManagementPage from './pages/dashboard/InstagramManagementPage';
 import EcommercePage from './pages/dashboard/EcommercePage';
 import CoursesPage from './pages/dashboard/CoursesPage';
 import CRMPage from './pages/dashboard/CRMPage';
