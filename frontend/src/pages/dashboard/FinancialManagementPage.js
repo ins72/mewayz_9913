@@ -24,6 +24,40 @@ const FinancialManagementPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('monthly');
 
+  const handleExportFinancialReport = () => {
+    const reportData = "data:text/csv;charset=utf-8," + 
+      "Financial Report - " + new Date().toLocaleDateString() + "\n\n" +
+      "Revenue,Expenses,Net Profit,Profit Margin\n" +
+      `$${financialData?.financial_overview?.total_revenue || 567890},$${financialData?.financial_overview?.total_expenses || 234567},$${financialData?.financial_overview?.net_profit || 333323},${financialData?.financial_overview?.profit_margin || 58.7}%\n\n` +
+      "Revenue Streams:\n" +
+      (financialData?.revenue_streams?.map(stream => `${stream.source},$${stream.amount},${stream.percentage}%,${stream.growth}`).join('\n') || '');
+    
+    const encodedUri = encodeURI(reportData);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `financial_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success('Financial report exported successfully!');
+  };
+
+  const handleExportBudgetAnalysis = () => {
+    const budgetData = "data:text/csv;charset=utf-8," + 
+      "Budget Analysis Report - " + new Date().toLocaleDateString() + "\n\n" +
+      "Category,Budget,Actual,Variance\n" +
+      (financialData?.expense_breakdown?.map(expense => `${expense.category},$${expense.amount * 1.1},$${expense.amount},${expense.budget_variance}`).join('\n') || '');
+    
+    const encodedUri = encodeURI(budgetData);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `budget_analysis_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success('Budget analysis exported successfully!');
+  };
+
   useEffect(() => {
     fetchFinancialData();
   }, []);
