@@ -120,15 +120,15 @@ const DashboardHome = () => {
         >
           <div className="card-elevated rounded-lg p-6">
             <div className="flex items-center">
-              <CurrencyDollarIcon className="w-8 h-8 text-green-500" />
+              <CurrencyDollarIcon className="w-8 h-8 status-success" />
               <div className="ml-4">
-                <p className="text-sm text-secondary">Total Revenue</p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-sm text-secondary text-caption">Total Revenue</p>
+                <p className="text-2xl font-bold text-primary text-heading">
                   ${stats.totalRevenue.toLocaleString()}
                 </p>
                 <div className="flex items-center mt-1">
-                  <ArrowUpIcon className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-green-500 ml-1">
+                  <ArrowUpIcon className="w-4 h-4 status-success" />
+                  <span className="text-sm status-success ml-1 font-medium">
                     +{stats.revenueChange}%
                   </span>
                 </div>
@@ -138,15 +138,15 @@ const DashboardHome = () => {
 
           <div className="card-elevated rounded-lg p-6">
             <div className="flex items-center">
-              <UsersIcon className="w-8 h-8 text-purple-500" />
+              <UsersIcon className="w-8 h-8 status-info" />
               <div className="ml-4">
-                <p className="text-sm text-secondary">Total Users</p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-sm text-secondary text-caption">Total Users</p>
+                <p className="text-2xl font-bold text-primary text-heading">
                   {stats.totalUsers.toLocaleString()}
                 </p>
                 <div className="flex items-center mt-1">
-                  <ArrowUpIcon className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-green-500 ml-1">
+                  <ArrowUpIcon className="w-4 h-4 status-success" />
+                  <span className="text-sm status-success ml-1 font-medium">
                     +{stats.usersChange}%
                   </span>
                 </div>
@@ -156,15 +156,15 @@ const DashboardHome = () => {
 
           <div className="card-elevated rounded-lg p-6">
             <div className="flex items-center">
-              <ShoppingBagIcon className="w-8 h-8 text-orange-500" />
+              <ShoppingBagIcon className="w-8 h-8 status-warning" />
               <div className="ml-4">
-                <p className="text-sm text-secondary">Total Orders</p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-sm text-secondary text-caption">Total Orders</p>
+                <p className="text-2xl font-bold text-primary text-heading">
                   {stats.totalOrders}
                 </p>
                 <div className="flex items-center mt-1">
-                  <ArrowDownIcon className="w-4 h-4 text-red-500" />
-                  <span className="text-sm text-red-500 ml-1">
+                  <ArrowDownIcon className="w-4 h-4 status-error" />
+                  <span className="text-sm status-error ml-1 font-medium">
                     {stats.ordersChange}%
                   </span>
                 </div>
@@ -174,15 +174,15 @@ const DashboardHome = () => {
 
           <div className="card-elevated rounded-lg p-6">
             <div className="flex items-center">
-              <ChartBarIcon className="w-8 h-8 text-blue-500" />
+              <ChartBarIcon className="w-8 h-8 status-warning" />
               <div className="ml-4">
-                <p className="text-sm text-secondary">Conversion Rate</p>
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-sm text-secondary text-caption">Conversion Rate</p>
+                <p className="text-2xl font-bold text-primary text-heading">
                   {stats.conversionRate}%
                 </p>
                 <div className="flex items-center mt-1">
-                  <ArrowUpIcon className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-green-500 ml-1">
+                  <ArrowUpIcon className="w-4 h-4 status-success" />
+                  <span className="text-sm status-success ml-1 font-medium">
                     +{stats.conversionChange}%
                   </span>
                 </div>
