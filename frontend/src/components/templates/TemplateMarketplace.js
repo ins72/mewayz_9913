@@ -382,7 +382,7 @@ const TemplateMarketplace = () => {
                 <button className="btn btn-primary text-sm py-2 flex items-center justify-center">
                   {template.price === 0 ? (
                     <>
-                      <DownloadIcon className="h-4 w-4 mr-1" />
+                      <ArrowDownTrayIcon className="h-4 w-4 mr-1" />
                       Download
                     </>
                   ) : (
