@@ -41,7 +41,7 @@ const FormTemplatesPage = () => {
       submissions: 89,
       lastModified: '1 week ago',
       isPublished: true,
-      createdBy: user?.name || 'You'
+      createdBy: 'You'
     },
     {
       id: '3',
