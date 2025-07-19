@@ -7,7 +7,7 @@ import {
   ChartBarIcon,
   UserGroupIcon,
   CreditCardIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   CurrencyDollarIcon,
   ShoppingBagIcon,
   CalendarIcon,
