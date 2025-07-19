@@ -206,13 +206,13 @@ const FinancialManagementPage = () => {
               : 'bg-red-100 dark:bg-red-900'
           }`}>
             {transaction.type === 'income' ? (
-              <TrendingUpIcon className={`w-5 h-5 ${
+              <ArrowTrendingUpIcon className={`w-5 h-5 ${
                 transaction.type === 'income' 
                   ? 'text-green-600 dark:text-green-400' 
                   : 'text-red-600 dark:text-red-400'
               }`} />
             ) : (
-              <TrendingDownIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <ArrowTrendingDownIcon className="w-5 h-5 text-red-600 dark:text-red-400" />
             )}
           </div>
           <div>
