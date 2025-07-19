@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const FormTemplatesPage = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth(); // Temporarily disable auth to prevent errors
   const [templates, setTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
