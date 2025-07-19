@@ -1360,7 +1360,10 @@ if __name__ == "__main__":
 from onboarding_system import router as onboarding_router
 from subscription_system import router as subscription_router
 from ai_generation_system import router as ai_generation_router
+collaboration_router = get_collaboration_routes()
+
 app.include_router(onboarding_router)
 app.include_router(subscription_router)
 app.include_router(ai_generation_router)
+app.include_router(collaboration_router)
 
