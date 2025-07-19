@@ -1,33 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
 import {
   ChartBarIcon,
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-  EyeIcon,
-  UserGroupIcon,
-  CurrencyDollarIcon,
-  ClockIcon,
-  CalendarIcon,
-  FunnelIcon,
-  DevicePhoneMobileIcon,
-  ComputerDesktopIcon,
-  GlobeAltIcon,
   TrophyIcon,
-  FireIcon,
   StarIcon,
+  FireIcon,
+  CrownIcon,
   BoltIcon,
   ShieldIcon,
-  CrownIcon,
-  SparklesIcon,
+  EyeIcon,
   HeartIcon,
-  LightBulbIcon,
-  RocketLaunchIcon,
-  BeakerIcon,
-  AcademicCapIcon,
-  GiftIcon
+  FunnelIcon,
+  CurrencyDollarIcon,
+  ArrowTrendingUpIcon
 } from '@heroicons/react/24/outline';
 import {
   TrophyIcon as TrophyIconSolid,
