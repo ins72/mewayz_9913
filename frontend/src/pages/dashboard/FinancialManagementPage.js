@@ -138,7 +138,7 @@ const FinancialManagementPage = () => {
       value: `$${financialData?.financial_overview?.net_profit?.toLocaleString()}`,
       change: '+23.4%',
       changeType: 'positive',
-      icon: TrendingUpIcon,
+      icon: ArrowTrendingUpIcon,
       color: 'bg-blue-500'
     },
     {
