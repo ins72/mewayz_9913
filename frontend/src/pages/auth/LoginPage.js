@@ -59,13 +59,22 @@ const LoginPage = () => {
     if (!validateForm()) return;
 
     setLoading(true);
-    const result = await login(formData);
-    setLoading(false);
-
-    if (result.success) {
-      navigate(from, { replace: true });
-    } else {
-      setErrors({ general: result.error || 'Login failed' });
+    try {
+      const result = await login(formData);
+      
+      if (result.success) {
+        // Add a small delay to ensure state is updated, then navigate
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 100);
+      } else {
+        setErrors({ general: result.message || result.error || 'Login failed' });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({ general: 'Login failed. Please try again.' });
+    } finally {
+      setLoading(false);
     }
   };
 
