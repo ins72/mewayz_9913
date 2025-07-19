@@ -85,7 +85,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed inset-y-0 left-0 z-50 w-64 bg-surface shadow-xl lg:hidden"
           >
-            <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center h-16 px-4 border-b border-default">
               <h1 className="text-xl font-bold text-primary">
                 {isAdmin ? 'Admin' : 'Mewayz'}
               </h1>
