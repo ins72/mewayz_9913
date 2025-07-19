@@ -37,11 +37,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const navigation = isAdmin ? [
-    { name: 'Dashboard', href: '/admin', icon: HomeIcon },
-    { name: 'Users', href: '/admin/users', icon: UsersIcon },
-    { name: 'Settings', href: '/admin/settings', icon: CogIcon },
-  ] : [
+  const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
     { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon },
     { name: 'Workspace', href: '/dashboard/workspace', icon: BuildingOfficeIcon },
@@ -58,6 +54,14 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
   ];
+
+  // Admin-only navigation items
+  const adminNavigation = user?.role === 'admin' ? [
+    { name: 'Admin Dashboard', href: '/dashboard/admin', icon: ShieldCheckIcon, isAdmin: true },
+    { name: 'User Management', href: '/dashboard/admin/users', icon: UsersIcon, isAdmin: true },
+    { name: 'System Settings', href: '/dashboard/admin/system', icon: CogIcon, isAdmin: true },
+    { name: 'Security Center', href: '/dashboard/admin/security', icon: LockClosedIcon, isAdmin: true },
+  ] : [];
 
   const handleLogout = () => {
     logout();
