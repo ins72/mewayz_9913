@@ -357,6 +357,13 @@ const EscrowSystemPage = () => {
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-primary">Recent Transactions</h3>
             <div className="flex items-center space-x-4">
+              <button
+                onClick={handleExportTransactions}
+                className="btn-secondary flex items-center"
+              >
+                <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+                Export
+              </button>
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
