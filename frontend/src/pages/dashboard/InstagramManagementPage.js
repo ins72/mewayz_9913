@@ -357,52 +357,6 @@ const InstagramManagementPage = () => {
     setLoading(false);
   };
 
-  const getAccountTypeColor = (type) => {
-    switch (type) {
-      case 'business': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300';
-      case 'creator': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300';
-      case 'personal': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300';
-    }
-  };
-
-  const getCollaborationInterestColor = (interest) => {
-    switch (interest) {
-      case 'very high': return 'bg-green-500';
-      case 'high': return 'bg-green-400';
-      case 'medium': return 'bg-yellow-400';
-      case 'low': return 'bg-red-400';
-      default: return 'bg-gray-400';
-    }
-  };
-
-  const handleAccountSelect = (accountId) => {
-    setSelectedAccounts(prev => 
-      prev.includes(accountId) 
-        ? prev.filter(id => id !== accountId)
-        : [...prev, accountId]
-    );
-  };
-
-  const handleExportSelected = async () => {
-    if (selectedAccounts.length === 0) {
-      error('Please select at least one account to export');
-      return;
-    }
-    
-    setLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      success(`Exported ${selectedAccounts.length} accounts to CSV successfully!`);
-      setSelectedAccounts([]);
-    } catch (err) {
-      error('Failed to export accounts');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const renderInstagramDatabase = () => (
     <div className="space-y-6">
       {/* Advanced Search & Filters */}
