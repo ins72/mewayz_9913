@@ -1,36 +1,66 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 import uuid
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
-# We'll need to access the database and auth functions
-# For now, let's create our own instances to avoid circular import
+# Load environment variables
+load_dotenv()
 
-router = APIRouter(prefix="/api/onboarding", tags=["onboarding"])
+# Database setup
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
+SECRET_KEY = os.getenv("SECRET_KEY", "mewayz-professional-secret-key-2025-ultra-secure")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
-# Database connection - we'll initialize this properly
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-client = AsyncIOMotorClient(MONGODB_URL)
-database = client.creator_platform
+# MongoDB client
+client = AsyncIOMotorClient(MONGO_URL)
+database = client.get_database()
 
 # Collections
 onboarding_collection = database.onboarding_data
 workspaces_collection = database.workspaces
 users_collection = database.users
+team_invitations_collection = database.team_invitations
 
-# Simple auth dependency for now - this should be replaced with proper auth
-async def get_current_user():
-    # This is a placeholder - in production this should validate JWT tokens
-    # and return actual user data from the database
-    return {
-        "id": "user_123",
-        "_id": "user_123", 
-        "name": "Test User",
-        "email": "test@example.com"
-    }
+# Security setup
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+
+router = APIRouter(prefix="/api/onboarding", tags=["onboarding"])
+
+# Auth dependency
+async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials"
+            )
+        return email
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials"
+        )
+
+async def get_current_user(email: str = Depends(verify_token)):
+    user = await users_collection.find_one({"email": email})
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found"
+        )
+    # Convert ObjectId to string for JSON serialization
+    user["id"] = str(user["_id"])
+    return user
 
 class OnboardingData(BaseModel):
     goals: List[str]
