@@ -1,558 +1,424 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  ShieldCheckIcon, 
-  PlusIcon, 
-  LockClosedIcon,
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  ShieldCheckIcon,
   CurrencyDollarIcon,
-  DocumentTextIcon,
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
   ExclamationTriangleIcon,
-  HandRaisedIcon,
-  UserIcon,
+  DocumentTextIcon,
+  UserGroupIcon,
+  ChartBarIcon,
+  PlusIcon,
   EyeIcon,
-  PencilIcon,
-  ArrowPathIcon,
-  BanknotesIcon,
-  TruckIcon,
-  FlagIcon
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
-import Button from '../../components/Button';
+import toast from 'react-hot-toast';
 
 const EscrowSystemPage = () => {
-  const [escrowTransactions, setEscrowTransactions] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
+  const { user } = useAuth();
+  const [escrowData, setEscrowData] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
-    loadEscrowData();
+    fetchEscrowData();
   }, []);
 
-  const loadEscrowData = async () => {
+  const fetchEscrowData = async () => {
     try {
-      // Mock data for now - will be replaced with actual API calls
-      setEscrowTransactions([
-        {
-          id: 1,
-          transactionId: 'ESC-2025-001',
-          buyer: 'John Smith',
-          seller: 'Tech Solutions Inc',
-          amount: 2500,
-          description: 'Custom Website Development',
-          status: 'funded',
-          createdDate: '2025-07-15',
-          fundedDate: '2025-07-16',
-          milestones: [
-            { id: 1, description: 'Initial Design Mockups', amount: 750, status: 'completed', completedDate: '2025-07-17' },
-            { id: 2, description: 'Frontend Development', amount: 1000, status: 'in_progress' },
-            { id: 3, description: 'Backend Integration', amount: 500, status: 'pending' },
-            { id: 4, description: 'Testing & Deployment', amount: 250, status: 'pending' }
-          ],
-          dispute: null
+      setLoading(true);
+      // Mock comprehensive escrow data
+      const mockData = {
+        transaction_overview: {
+          total_transactions: 234,
+          active_transactions: 45,
+          completed_transactions: 189,
+          disputed_transactions: 3,
+          total_value: 456789.50,
+          platform_fees_earned: 12456.78,
+          avg_transaction_value: 1950.38
         },
-        {
-          id: 2,
-          transactionId: 'ESC-2025-002',
-          buyer: 'Digital Marketing Co',
-          seller: 'Creative Agency Ltd',
-          amount: 1800,
-          description: 'Brand Identity Package',
-          status: 'in_delivery',
-          createdDate: '2025-07-10',
-          fundedDate: '2025-07-11',
-          deliveryDate: '2025-07-18',
-          milestones: [
-            { id: 1, description: 'Logo Design', amount: 800, status: 'completed', completedDate: '2025-07-14' },
-            { id: 2, description: 'Brand Guidelines', amount: 600, status: 'completed', completedDate: '2025-07-17' },
-            { id: 3, description: 'Marketing Materials', amount: 400, status: 'delivered', deliveredDate: '2025-07-18' }
-          ],
-          dispute: null
+        escrow_metrics: {
+          completion_rate: 96.8,
+          dispute_rate: 1.3,
+          avg_escrow_duration: "7.2 days",
+          fastest_completion: "2 hours",
+          release_accuracy: 99.2,
+          customer_satisfaction: 4.8
         },
-        {
-          id: 3,
-          transactionId: 'ESC-2025-003',
-          buyer: 'StartupXYZ',
-          seller: 'Mobile Dev Studio',
-          amount: 5000,
-          description: 'Mobile App Development',
-          status: 'disputed',
-          createdDate: '2025-06-25',
-          fundedDate: '2025-06-26',
-          milestones: [
-            { id: 1, description: 'App Wireframes', amount: 1000, status: 'completed', completedDate: '2025-07-01' },
-            { id: 2, description: 'iOS Development', amount: 2000, status: 'disputed' },
-            { id: 3, description: 'Android Development', amount: 2000, status: 'pending' }
-          ],
-          dispute: {
-            id: 1,
-            reason: 'Delivered work does not match specifications',
-            filedBy: 'buyer',
-            filedDate: '2025-07-15',
-            status: 'under_review',
-            mediator: 'Escrow Mediation Team'
-          }
-        },
-        {
-          id: 4,
-          transactionId: 'ESC-2025-004',
-          buyer: 'E-commerce Plus',
-          seller: 'Web Design Pro',
-          amount: 3200,
-          description: 'E-commerce Website Build',
-          status: 'completed',
-          createdDate: '2025-06-01',
-          fundedDate: '2025-06-02',
-          completedDate: '2025-07-10',
-          milestones: [
-            { id: 1, description: 'Design & Layout', amount: 800, status: 'completed', completedDate: '2025-06-15' },
-            { id: 2, description: 'Product Catalog Setup', amount: 1200, status: 'completed', completedDate: '2025-06-28' },
-            { id: 3, description: 'Payment Integration', amount: 800, status: 'completed', completedDate: '2025-07-05' },
-            { id: 4, description: 'Testing & Launch', amount: 400, status: 'completed', completedDate: '2025-07-10' }
-          ],
-          dispute: null,
-          rating: 5
+        transaction_types: [
+          { type: "Service Payment", count: 156, value: 234567, percentage: 66.7 },
+          { type: "Product Purchase", count: 45, value: 123456, percentage: 25.3 },
+          { type: "Digital Asset", count: 23, value: 67890, percentage: 8.0 }
+        ],
+        dispute_resolution: {
+          total_disputes: 8,
+          resolved_disputes: 5,
+          pending_disputes: 3,
+          avg_resolution_time: "3.2 days",
+          customer_favor: 62.5,
+          vendor_favor: 37.5
         }
-      ]);
-
-      setAnalytics({
-        totalTransactions: 47,
-        totalVolume: 156780,
-        activeTransactions: 12,
-        completedTransactions: 31,
-        disputeRate: 4.2,
-        averageCompletionTime: 18,
-        successRate: 95.8,
-        securedFunds: 48500
-      });
-
+      };
+      
+      const mockTransactions = [
+        {
+          id: "ESC001",
+          client: "John Doe",
+          vendor: "TechService Co",
+          amount: 2500.00,
+          status: "active",
+          created_at: "2025-01-15",
+          type: "Service Payment",
+          milestone: "50% complete",
+          due_date: "2025-01-25"
+        },
+        {
+          id: "ESC002", 
+          client: "Sarah Wilson",
+          vendor: "DesignStudio",
+          amount: 1800.00,
+          status: "completed",
+          created_at: "2025-01-12",
+          type: "Digital Asset",
+          milestone: "Delivered",
+          due_date: "2025-01-20"
+        },
+        {
+          id: "ESC003",
+          client: "Mike Chen",
+          vendor: "DevTeam Pro",
+          amount: 4500.00,
+          status: "disputed",
+          created_at: "2025-01-10",
+          type: "Service Payment",
+          milestone: "Under review",
+          due_date: "2025-01-30"
+        }
+      ];
+      
+      setEscrowData(mockData);
+      setTransactions(mockTransactions);
     } catch (error) {
-      console.error('Failed to load escrow data:', error);
+      console.error('Failed to fetch escrow data:', error);
+      toast.error('Failed to load escrow data');
     } finally {
       setLoading(false);
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'created': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-      case 'funded': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'in_progress': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'in_delivery': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
-      case 'disputed': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
-  };
-
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'funded': return <LockClosedIcon className="w-4 h-4" />;
-      case 'in_progress': return <ArrowPathIcon className="w-4 h-4" />;
-      case 'in_delivery': return <TruckIcon className="w-4 h-4" />;
-      case 'disputed': return <ExclamationTriangleIcon className="w-4 h-4" />;
-      case 'completed': return <CheckCircleIcon className="w-4 h-4" />;
-      default: return <ClockIcon className="w-4 h-4" />;
+      case 'completed':
+        return <CheckCircleIcon className="h-5 w-5 text-green-500" />;
+      case 'disputed':
+        return <ExclamationTriangleIcon className="h-5 w-5 text-red-500" />;
+      case 'active':
+        return <ClockIcon className="h-5 w-5 text-yellow-500" />;
+      default:
+        return <ClockIcon className="h-5 w-5 text-gray-500" />;
     }
   };
 
-  const StatCard = ({ title, value, change, icon: Icon, color = 'primary', suffix = '', prefix = '' }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="card-elevated p-6"
-    >
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-secondary">{title}</p>
-          <p className="text-3xl font-bold text-primary mt-2">{prefix}{value}{suffix}</p>
-          {change !== undefined && (
-            <p className={`text-sm mt-2 ${change > 0 ? 'text-accent-success' : 'text-accent-danger'}`}>
-              {change > 0 ? '+' : ''}{change}% from last month
-            </p>
-          )}
-        </div>
-        <div className={`bg-gradient-${color} p-3 rounded-lg`}>
-          <Icon className="w-8 h-8 text-white" />
-        </div>
-      </div>
-    </motion.div>
-  );
-
-  const TransactionCard = ({ transaction }) => (
-    <div className="card-elevated p-6">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <div className="flex items-center space-x-2 mb-2">
-            <h3 className="font-semibold text-primary">{transaction.transactionId}</h3>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${getStatusColor(transaction.status)}`}>
-              {getStatusIcon(transaction.status)}
-              <span>{transaction.status.replace('_', ' ')}</span>
-            </span>
-          </div>
-          <p className="text-secondary text-sm mb-3">{transaction.description}</p>
-          
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-secondary">Buyer</p>
-              <p className="font-medium text-primary">{transaction.buyer}</p>
-            </div>
-            <div>
-              <p className="text-secondary">Seller</p>
-              <p className="font-medium text-primary">{transaction.seller}</p>
-            </div>
-            <div>
-              <p className="text-secondary">Amount</p>
-              <p className="font-medium text-primary">${transaction.amount.toLocaleString()}</p>
-            </div>
-            <div>
-              <p className="text-secondary">Created</p>
-              <p className="font-medium text-primary">{transaction.createdDate}</p>
-            </div>
-          </div>
-
-          {/* Milestones Progress */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-secondary">Progress</p>
-              <p className="text-xs text-secondary">
-                {transaction.milestones.filter(m => m.status === 'completed').length} / {transaction.milestones.length} milestones
-              </p>
-            </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-accent-primary h-2 rounded-full transition-all duration-300"
-                style={{ 
-                  width: `${(transaction.milestones.filter(m => m.status === 'completed').length / transaction.milestones.length) * 100}%` 
-                }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Dispute Information */}
-          {transaction.dispute && (
-            <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="flex items-center space-x-2 mb-2">
-                <FlagIcon className="w-4 h-4 text-accent-danger" />
-                <span className="text-sm font-medium text-accent-danger">Dispute Active</span>
-              </div>
-              <p className="text-xs text-secondary">{transaction.dispute.reason}</p>
-              <p className="text-xs text-secondary mt-1">
-                Filed by {transaction.dispute.filedBy} on {transaction.dispute.filedDate}
-              </p>
-            </div>
-          )}
-
-        </div>
-        
-        <div className="flex items-center space-x-2 ml-4">
-          <button 
-            className="p-2 text-secondary hover:text-primary"
-            onClick={() => setSelectedTransaction(transaction)}
-          >
-            <EyeIcon className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-secondary hover:text-primary">
-            <PencilIcon className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'disputed':
+        return 'bg-red-100 text-red-800';
+      case 'active':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="spinner w-8 h-8 text-accent-primary"></div>
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
       </div>
     );
   }
 
+  const overviewCards = [
+    {
+      title: 'Total Value Secured',
+      value: `$${escrowData?.transaction_overview?.total_value?.toLocaleString()}`,
+      subtitle: `${escrowData?.transaction_overview?.total_transactions} transactions`,
+      icon: ShieldCheckIcon,
+      color: 'bg-blue-500'
+    },
+    {
+      title: 'Active Transactions',
+      value: escrowData?.transaction_overview?.active_transactions,
+      subtitle: 'Currently in escrow',
+      icon: ClockIcon,
+      color: 'bg-yellow-500'
+    },
+    {
+      title: 'Completion Rate',
+      value: `${escrowData?.escrow_metrics?.completion_rate}%`,
+      subtitle: 'Successful releases',
+      icon: CheckCircleIcon,
+      color: 'bg-green-500'
+    },
+    {
+      title: 'Platform Fees',
+      value: `$${escrowData?.transaction_overview?.platform_fees_earned?.toLocaleString()}`,
+      subtitle: 'Total earned',
+      icon: CurrencyDollarIcon,
+      color: 'bg-purple-500'
+    }
+  ];
+
+  const filteredTransactions = selectedFilter === 'all' 
+    ? transactions 
+    : transactions.filter(t => t.status === selectedFilter);
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex items-center justify-between"
+      >
         <div>
-          <h1 className="text-3xl font-bold text-primary">Escrow System</h1>
-          <p className="text-secondary mt-1">Secure payment protection for all transactions</p>
+          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center">
+            <ShieldCheckIcon className="h-8 w-8 text-accent-primary mr-3" />
+            Escrow System
+          </h1>
+          <p className="text-secondary">
+            Secure transaction management with milestone-based payments.
+          </p>
         </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="secondary">
-            <DocumentTextIcon className="w-4 h-4 mr-2" />
-            Guidelines
-          </Button>
-          <Button>
-            <PlusIcon className="w-4 h-4 mr-2" />
-            Create Escrow
-          </Button>
-        </div>
+        
+        <button className="btn-primary flex items-center">
+          <PlusIcon className="h-5 w-5 mr-2" />
+          Create Escrow
+        </button>
+      </motion.div>
+
+      {/* Overview Cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
+        {overviewCards.map((card, index) => (
+          <div key={card.title} className="bg-surface-elevated p-6 rounded-lg shadow-default">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-secondary mb-1">{card.title}</p>
+                <p className="text-2xl font-bold text-primary">{card.value}</p>
+                <p className="text-sm text-secondary mt-1">{card.subtitle}</p>
+              </div>
+              <div className={`p-3 rounded-lg ${card.color}`}>
+                <card.icon className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Transaction Types */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Transaction Types</h3>
+          <div className="space-y-4">
+            {escrowData?.transaction_types?.map((type, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-primary">{type.type}</p>
+                  <p className="text-sm text-secondary">{type.count} transactions</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold text-accent-primary">${type.value.toLocaleString()}</p>
+                  <p className="text-sm text-secondary">{type.percentage}%</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Performance Metrics */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Performance Metrics</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Avg Duration</span>
+              <span className="font-semibold text-primary">{escrowData?.escrow_metrics?.avg_escrow_duration}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Fastest Completion</span>
+              <span className="font-semibold text-green-500">{escrowData?.escrow_metrics?.fastest_completion}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Release Accuracy</span>
+              <span className="font-semibold text-blue-500">{escrowData?.escrow_metrics?.release_accuracy}%</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Customer Satisfaction</span>
+              <span className="font-semibold text-purple-500">{escrowData?.escrow_metrics?.customer_satisfaction}/5</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Dispute Rate</span>
+              <span className="font-semibold text-red-500">{escrowData?.escrow_metrics?.dispute_rate}%</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Dispute Resolution */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="bg-surface-elevated p-6 rounded-lg shadow-default"
+        >
+          <h3 className="text-lg font-semibold text-primary mb-4">Dispute Resolution</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Total Disputes</span>
+              <span className="font-semibold text-primary">{escrowData?.dispute_resolution?.total_disputes}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Resolved</span>
+              <span className="font-semibold text-green-500">{escrowData?.dispute_resolution?.resolved_disputes}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Pending</span>
+              <span className="font-semibold text-yellow-500">{escrowData?.dispute_resolution?.pending_disputes}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-secondary">Avg Resolution Time</span>
+              <span className="font-semibold text-primary">{escrowData?.dispute_resolution?.avg_resolution_time}</span>
+            </div>
+            <div className="mt-4 pt-4 border-t border-default">
+              <p className="text-sm text-secondary mb-2">Resolution Outcomes</p>
+              <div className="flex justify-between text-sm">
+                <span>Customer Favor: {escrowData?.dispute_resolution?.customer_favor}%</span>
+                <span>Vendor Favor: {escrowData?.dispute_resolution?.vendor_favor}%</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview' },
-            { id: 'active', name: 'Active Transactions' },
-            { id: 'completed', name: 'Completed' },
-            { id: 'disputed', name: 'Disputes' },
-            { id: 'analytics', name: 'Analytics' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-accent-primary text-accent-primary'
-                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
-              }`}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Analytics Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Volume"
-              value={analytics.totalVolume.toLocaleString()}
-              change={24.7}
-              icon={CurrencyDollarIcon}
-              color="success"
-              prefix="$"
-            />
-            <StatCard
-              title="Active Transactions"
-              value={analytics.activeTransactions.toString()}
-              icon={ArrowPathIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Success Rate"
-              value={analytics.successRate.toString()}
-              change={2.1}
-              icon={CheckCircleIcon}
-              color="success"
-              suffix="%"
-            />
-            <StatCard
-              title="Secured Funds"
-              value={analytics.securedFunds.toLocaleString()}
-              icon={ShieldCheckIcon}
-              color="primary"
-              prefix="$"
-            />
-          </div>
-
-          {/* How It Works */}
-          <div className="card-elevated p-6">
-            <h2 className="text-xl font-semibold text-primary mb-6">How Escrow Protection Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <PlusIcon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-primary mb-2">1. Create</h3>
-                <p className="text-sm text-secondary">Create an escrow transaction with agreed terms and milestones</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <LockClosedIcon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-primary mb-2">2. Fund</h3>
-                <p className="text-sm text-secondary">Buyer securely funds the escrow account</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <TruckIcon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-primary mb-2">3. Deliver</h3>
-                <p className="text-sm text-secondary">Seller delivers work according to milestones</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-success rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <CheckCircleIcon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-primary mb-2">4. Release</h3>
-                <p className="text-sm text-secondary">Funds are released upon buyer approval</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Recent Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div>
-              <h2 className="text-xl font-semibold text-primary mb-4">Recent Transactions</h2>
-              <div className="space-y-4">
-                {escrowTransactions.slice(0, 3).map((transaction) => (
-                  <div key={transaction.id} className="card p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="font-medium text-primary">{transaction.transactionId}</h4>
-                        <p className="text-sm text-secondary">{transaction.description}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-primary">${transaction.amount.toLocaleString()}</p>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
-                          {transaction.status.replace('_', ' ')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-primary mb-4">Key Metrics</h2>
-              <div className="space-y-4">
-                <div className="card p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                        <ClockIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-primary">Average Completion</p>
-                        <p className="text-sm text-secondary">Time to complete transactions</p>
-                      </div>
-                    </div>
-                    <p className="font-semibold text-primary">{analytics.averageCompletionTime} days</p>
-                  </div>
-                </div>
-                
-                <div className="card p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-                        <ExclamationTriangleIcon className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-primary">Dispute Rate</p>
-                        <p className="text-sm text-secondary">Percentage of disputed transactions</p>
-                      </div>
-                    </div>
-                    <p className="font-semibold text-primary">{analytics.disputeRate}%</p>
-                  </div>
-                </div>
-                
-                <div className="card p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                        <CheckCircleIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-primary">Completed</p>
-                        <p className="text-sm text-secondary">Successfully completed transactions</p>
-                      </div>
-                    </div>
-                    <p className="font-semibold text-primary">{analytics.completedTransactions}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'active' && (
-        <div className="space-y-6">
+      {/* Transactions Table */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="bg-surface-elevated rounded-lg shadow-default"
+      >
+        <div className="p-6 border-b border-default">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Active Transactions</h2>
-            <Button>
-              <PlusIcon className="w-4 h-4 mr-2" />
-              Create New Escrow
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {escrowTransactions.filter(t => ['funded', 'in_progress', 'in_delivery'].includes(t.status)).map((transaction) => (
-              <TransactionCard key={transaction.id} transaction={transaction} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'completed' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Completed Transactions</h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {escrowTransactions.filter(t => t.status === 'completed').map((transaction) => (
-              <TransactionCard key={transaction.id} transaction={transaction} />
-            ))}
+            <h3 className="text-lg font-semibold text-primary">Recent Transactions</h3>
+            <div className="flex items-center space-x-4">
+              <select
+                value={selectedFilter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+                className="input rounded-lg focus-ring"
+              >
+                <option value="all">All Transactions</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="disputed">Disputed</option>
+              </select>
+            </div>
           </div>
         </div>
-      )}
-
-      {activeTab === 'disputed' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Disputed Transactions</h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {escrowTransactions.filter(t => t.status === 'disputed').map((transaction) => (
-              <TransactionCard key={transaction.id} transaction={transaction} />
-            ))}
-          </div>
+        
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-default">
+            <thead className="bg-surface">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Transaction
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Parties
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Progress
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-surface-elevated divide-y divide-default">
+              {filteredTransactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-primary">{transaction.id}</div>
+                      <div className="text-sm text-secondary">{transaction.type}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm text-primary">Client: {transaction.client}</div>
+                      <div className="text-sm text-secondary">Vendor: {transaction.vendor}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-primary">
+                      ${transaction.amount.toLocaleString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      {getStatusIcon(transaction.status)}
+                      <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(transaction.status)}`}>
+                        {transaction.status}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-primary">{transaction.milestone}</div>
+                    <div className="text-sm text-secondary">Due: {transaction.due_date}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex items-center space-x-2">
+                      <button className="text-blue-600 hover:text-blue-900">
+                        <EyeIcon className="h-4 w-4" />
+                      </button>
+                      <button className="text-green-600 hover:text-green-900">
+                        <ArrowPathIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      )}
-
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Escrow Analytics</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Transactions"
-              value={analytics.totalTransactions.toString()}
-              change={18.5}
-              icon={DocumentTextIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Monthly Volume"
-              value={analytics.totalVolume.toLocaleString()}
-              change={32.1}
-              icon={BanknotesIcon}
-              color="success"
-              prefix="$"
-            />
-            <StatCard
-              title="Success Rate"
-              value={analytics.successRate.toString()}
-              change={1.5}
-              icon={CheckCircleIcon}
-              color="success"
-              suffix="%"
-            />
-            <StatCard
-              title="Dispute Resolution"
-              value="96.8"
-              icon={HandRaisedIcon}
-              color="warning"
-              suffix="%"
-            />
-          </div>
-
-          <div className="card-elevated p-8 text-center">
-            <DocumentTextIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Detailed Analytics</h3>
-            <p className="text-secondary mb-4">Comprehensive escrow transaction analytics and performance reports</p>
-            <Button>
-              Generate Full Report
-            </Button>
-          </div>
-        </div>
-      )}
+      </motion.div>
     </div>
   );
 };
