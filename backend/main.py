@@ -1920,9 +1920,15 @@ try:
     from comprehensive_features import *
     from advanced_systems import *
     from enterprise_features import *
+    from workspace_system import *
     print("✅ Comprehensive features loaded successfully")
     print("✅ Advanced systems loaded successfully") 
     print("✅ Enterprise features loaded successfully")
+    print("✅ Workspace system loaded successfully")
+    
+    # Initialize default data
+    init_default_goals_and_features(get_db().__next__())
+    print("✅ Default goals and features initialized")
 except Exception as e:
     print(f"⚠️ Could not load comprehensive features: {e}")
 
