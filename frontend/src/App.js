@@ -25,9 +25,19 @@ import AnalyticsPage from './pages/dashboard/AnalyticsPage';
 import BioSitesPage from './pages/dashboard/BioSitesPage';
 import EmailMarketingPage from './pages/dashboard/EmailMarketingPage';
 import PaymentsPage from './pages/dashboard/PaymentsPage';
+import AIFeaturesPage from './pages/dashboard/AIFeaturesPage';
+import WorkspacePage from './pages/dashboard/WorkspacePage';
+import WebsiteBuilderPage from './pages/dashboard/WebsiteBuilderPage';
+import AdvancedBookingPage from './pages/dashboard/AdvancedBookingPage';
+import FinancialManagementPage from './pages/dashboard/FinancialManagementPage';
+import EscrowSystemPage from './pages/dashboard/EscrowSystemPage';
+
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
@@ -67,6 +77,17 @@ function App() {
           <Route path="bio-sites" element={<BioSitesPage />} />
           <Route path="email-marketing" element={<EmailMarketingPage />} />
           <Route path="payments" element={<PaymentsPage />} />
+          <Route path="ai-features" element={<AIFeaturesPage />} />
+          <Route path="workspace" element={<WorkspacePage />} />
+          <Route path="website-builder" element={<WebsiteBuilderPage />} />
+          <Route path="advanced-booking" element={<AdvancedBookingPage />} />
+          <Route path="financial-management" element={<FinancialManagementPage />} />
+          <Route path="escrow-system" element={<EscrowSystemPage />} />
+        </Route>
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminRoute><DashboardLayout /></AdminRoute>}>
+          <Route index element={<AdminDashboard />} />
         </Route>
 
         {/* Catch all - redirect to home */}
