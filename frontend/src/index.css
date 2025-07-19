@@ -367,7 +367,7 @@ code {
    BORDERS
    ================================ */
 .border-default {
-  border-color: #DEE2E6;
+  border-color: #E2E8F0;
 }
 
 .dark .border-default {
@@ -375,11 +375,11 @@ code {
 }
 
 .border-accent {
-  border-color: #4F46E5;
+  border-color: #667EEA;
 }
 
 .dark .border-accent {
-  border-color: #6366F1;
+  border-color: #818CF8;
 }
 
 /* ================================
