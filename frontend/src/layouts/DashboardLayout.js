@@ -37,7 +37,9 @@ import {
   MagnifyingGlassIcon,
   QuestionMarkCircleIcon,
   BellIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  LinkIcon,
+  TicketIcon
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = ({ isAdmin = false }) => {
