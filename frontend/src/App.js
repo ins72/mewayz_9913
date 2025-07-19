@@ -118,6 +118,7 @@ function App() {
               <Route path="template-marketplace" element={<TemplateMarketplaceV2Page />} />
               <Route path="escrow-system" element={<EscrowSystemPage />} />
               <Route path="analytics" element={<AdvancedAnalytics />} />
+              <Route path="gamified-analytics" element={<GamifiedAnalyticsPage />} />
               
               <Route path="ai-features" element={<AdvancedAIFeatures />} />
               <Route path="email-marketing" element={<EmailMarketingPage />} />
