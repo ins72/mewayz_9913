@@ -689,7 +689,7 @@ class MewayzBackendTester:
 def main():
     """Main function to run the tests"""
     # Get backend URL from environment or use default
-    backend_url = "https://dd20d8a8-3c50-4132-b471-627675927b69.preview.emergentagent.com"
+    backend_url = "https://e107cad4-3d22-4637-abcc-f9a12ee9c7de.preview.emergentagent.com"
     
     print(f"🔍 Backend URL: {backend_url}")
     
