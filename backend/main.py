@@ -1915,6 +1915,14 @@ def create_admin_user():
     finally:
         db.close()
 
+# Import comprehensive features
+try:
+    from comprehensive_features import *
+    from advanced_systems import *
+    print("✅ Comprehensive features loaded successfully")
+except Exception as e:
+    print(f"⚠️ Could not load comprehensive features: {e}")
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
