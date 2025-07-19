@@ -336,19 +336,19 @@ code {
    HOVER STATES
    ================================ */
 .hover-surface:hover {
-  background-color: #F8F9FA;
+  background-color: #F7FAFC;
 }
 
 .dark .hover-surface:hover {
-  background-color: #282828;
+  background-color: #2A2A2A;
 }
 
 .hover-accent:hover {
-  background-color: #4338CA;
+  background: linear-gradient(135deg, #5A67D8 0%, #667EEA 100%);
 }
 
 .dark .hover-accent:hover {
-  background-color: #5B21B6;
+  background: linear-gradient(135deg, #6B46C1 0%, #805AD5 100%);
 }
 
 /* ================================
