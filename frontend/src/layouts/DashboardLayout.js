@@ -58,14 +58,14 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Socials', href: '/dashboard/social-media', icon: ChartBarIcon, description: 'Social Media Management' },
     { name: 'Link in Bio', href: '/dashboard/bio-sites', icon: GlobeAltIcon, description: 'Bio Link Pages' },
     { name: 'Leads', href: '/dashboard/crm', icon: UsersIcon, description: 'CRM & Email Marketing' },
-    { name: 'Link Shortener', href: '/dashboard/link-shortener', icon: GlobeAltIcon, description: 'URL Shortening Service' },
+    { name: 'Link Shortener', href: '/dashboard/link-shortener', icon: LinkIcon, description: 'URL Shortening Service' },
     { name: 'Referral System', href: '/dashboard/referrals', icon: UserPlusIcon, description: 'Referral Program' },
     
     // Business Tools
     { name: 'Website Builder', href: '/dashboard/website-builder', icon: WrenchScrewdriverIcon, description: 'Build Websites' },
     { name: 'Users', href: '/dashboard/team-management', icon: UsersIcon, description: 'Team Management' },
     { name: 'Form Templates', href: '/dashboard/form-templates', icon: DocumentTextIcon, description: 'Form Builder' },
-    { name: 'Discount Codes', href: '/dashboard/discount-codes', icon: CreditCardIcon, description: 'Promotional Codes' },
+    { name: 'Discount Codes', href: '/dashboard/discount-codes', icon: TicketIcon, description: 'Promotional Codes' },
     { name: 'Finance', href: '/dashboard/financial-management', icon: BanknotesIcon, description: 'Payments & Invoicing' },
     
     // Content & Education
