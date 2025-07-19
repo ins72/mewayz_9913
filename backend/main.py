@@ -1353,3 +1353,7 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
 
+# Include routers
+from onboarding_system import router as onboarding_router
+app.include_router(onboarding_router)
+
