@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from authlib.integrations.starlette_client import OAuth
+import stripe
 import os
 from dotenv import load_dotenv
 from passlib.context import CryptContext
