@@ -3,38 +3,43 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useNotification } from '../contexts/NotificationContext';
 import WorkspaceSelector from '../components/WorkspaceSelector';
+import GlobalSearch from '../components/GlobalSearch';
+import HelpSupportCenter from '../components/HelpSupportCenter';
+import Breadcrumb from '../components/Breadcrumb';
 import {
   HomeIcon,
-  UserIcon,
-  CogIcon,
+  SparklesIcon,
+  BuildingOffice2Icon,
+  BuildingOfficeIcon,
+  CreditCardIcon,
+  DocumentTextIcon,
   ChartBarIcon,
+  GlobeAltIcon,
   ShoppingBagIcon,
   AcademicCapIcon,
   UsersIcon,
   EnvelopeIcon,
+  WrenchScrewdriverIcon,
   CalendarIcon,
-  CreditCardIcon,
-  GlobeAltIcon,
-  SparklesIcon,
-  UserGroupIcon,
-  BuildingOfficeIcon,
-  DocumentTextIcon,
-  BuildingOffice2Icon,
-  Bars3Icon,
-  XMarkIcon,
-  SunIcon,
-  MoonIcon,
-  ArrowRightOnRectangleIcon,
-  BellIcon,
-  MagnifyingGlassIcon,
-  ShieldCheckIcon,
   BanknotesIcon,
+  ShieldCheckIcon,
+  CogIcon,
+  LockClosedIcon,
   WrenchScrewdriverIcon,
   LockClosedIcon,
   ChatBubbleLeftRightIcon,
   PuzzlePieceIcon,
   UserPlusIcon,
+  Bars3Icon,
+  XMarkIcon,
+  SunIcon,
+  MoonIcon,
+  MagnifyingGlassIcon,
+  QuestionMarkCircleIcon,
+  BellIcon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = ({ isAdmin = false }) => {
