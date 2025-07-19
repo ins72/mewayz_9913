@@ -283,7 +283,10 @@ const DashboardHome = () => {
       >
         <h3 className="text-lg font-semibold text-primary mb-4">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors">
+          <button 
+            className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors"
+            onClick={() => setShowCreateUserModal(true)}
+          >
             <UserGroupIcon className="h-8 w-8 text-blue-500 mb-2" />
             <span className="text-sm font-medium text-primary">Add User</span>
           </button>
