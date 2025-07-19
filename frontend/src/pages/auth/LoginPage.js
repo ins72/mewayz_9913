@@ -68,7 +68,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-hero flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       {/* Theme toggle */}
       <div className="absolute top-4 right-4">
         <button
@@ -135,7 +135,7 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="password" className="block text-sm font-medium text-primary text-body">
                 Password
               </label>
               <div className="mt-1 relative">
@@ -146,10 +146,10 @@ const LoginPage = () => {
                   autoComplete="current-password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 ${
+                  className={`appearance-none block w-full px-3 py-2 input rounded-md focus-ring sm:text-sm transition-all ${
                     errors.password 
-                      ? 'border-red-300 dark:border-red-600' 
-                      : 'border-gray-300 dark:border-gray-600'
+                      ? 'border-accent-danger' 
+                      : ''
                   }`}
                   placeholder="Enter your password"
                 />
@@ -159,13 +159,13 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-400" />
+                    <EyeSlashIcon className="h-5 w-5 text-secondary" />
                   ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-400" />
+                    <EyeIcon className="h-5 w-5 text-secondary" />
                   )}
                 </button>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.password}</p>
+                  <p className="mt-1 text-sm status-error text-caption">{errors.password}</p>
                 )}
               </div>
             </div>
@@ -176,9 +176,9 @@ const LoginPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600 rounded"
+                  className="h-4 w-4 text-accent-primary focus-ring border-default rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-primary">
                   Remember me
                 </label>
               </div>
@@ -186,7 +186,7 @@ const LoginPage = () => {
               <div className="text-sm">
                 <Link
                   to="/forgot-password"
-                  className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  className="font-medium text-accent-primary hover:opacity-80 transition-opacity"
                 >
                   Forgot your password?
                 </Link>
@@ -208,20 +208,20 @@ const LoginPage = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+                <div className="w-full border-t border-default" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                <span className="px-2 bg-surface text-secondary">
                   Or continue with
                 </span>
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+              <button className="w-full inline-flex justify-center py-2 px-4 border border-default rounded-md shadow-sm bg-surface text-sm font-medium text-secondary hover-surface transition-colors focus-ring">
                 <span>Google</span>
               </button>
-              <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+              <button className="w-full inline-flex justify-center py-2 px-4 border border-default rounded-md shadow-sm bg-surface text-sm font-medium text-secondary hover-surface transition-colors focus-ring">
                 <span>GitHub</span>
               </button>
             </div>
