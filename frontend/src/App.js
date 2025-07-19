@@ -118,7 +118,7 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<SocialMediaPage />} />
-              <Route path="instagram" element={<InstagramManagementPage />} />
+              <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
               <Route path="bio-sites" element={<BioSitesPage />} />
               <Route path="crm" element={<CRMPage />} />
               <Route path="link-shortener" element={<LinkShortenerPage />} />
@@ -138,13 +138,13 @@ function App() {
               <Route path="analytics" element={<AdvancedAnalytics />} />
               <Route path="gamified-analytics" element={<GamifiedAnalyticsPage />} />
               
-              <Route path="ai-features" element={<AdvancedAIFeatures />} />
+              <Route path="ai-features" element={<UltraAdvancedAIFeaturesPage />} />
               <Route path="email-marketing" element={<EmailMarketingPage />} />
               <Route path="advanced-booking" element={<AdvancedBookingPage />} />
               <Route path="realtime-collaboration" element={<RealtimeCollaborationPage />} />
               <Route path="integrations" element={<IntegrationHubPage />} />
-              <Route path="workspaces" element={<WorkspaceManager />} />
-              <Route path="subscription" element={<SubscriptionManager />} />
+              <Route path="workspaces" element={<UltraAdvancedWorkspaceManagement />} />
+              <Route path="subscription" element={<UltraAdvancedSubscriptionManager />} />
               <Route path="settings" element={<UserSettingsPage />} />
               
               {/* Legacy routes for backward compatibility */}
