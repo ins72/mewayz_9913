@@ -25,7 +25,7 @@ import AnalyticsPage from './pages/dashboard/AnalyticsPage';
 import BioSitesPage from './pages/dashboard/BioSitesPage';
 import EmailMarketingPage from './pages/dashboard/EmailMarketingPage';
 import PaymentsPage from './pages/dashboard/PaymentsPage';
-import AIFeaturesPage from './pages/dashboard/AIFeaturesPage';
+import AIFeaturesPageV2 from './pages/dashboard/AIFeaturesPageV2';
 import WorkspacePage from './pages/dashboard/WorkspacePage';
 import WebsiteBuilderPage from './pages/dashboard/WebsiteBuilderPage';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
