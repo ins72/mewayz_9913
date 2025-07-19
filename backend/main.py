@@ -17,6 +17,10 @@ import enum
 from decimal import Decimal
 from contextlib import asynccontextmanager
 
+# Import routers
+from onboarding_system import router as onboarding_router
+from subscription_system import router as subscription_router
+
 # Load environment variables
 load_dotenv()
 
