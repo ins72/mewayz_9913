@@ -94,7 +94,7 @@ const LoginPage = () => {
           </h2>
           <p className="mt-2 text-sm text-secondary">
             Don't have an account?{' '}
-            <Link to="/register" className="font-medium text-accent hover:opacity-80">
+            <Link to="/register" className="font-medium text-primary hover:opacity-80">
               Sign up here
             </Link>
           </p>
