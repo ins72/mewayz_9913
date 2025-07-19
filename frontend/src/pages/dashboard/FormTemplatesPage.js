@@ -7,7 +7,7 @@ import {
   EyeIcon,
   PencilIcon,
   TrashIcon,
-  DuplicateIcon,
+  DocumentDuplicateIcon,
   FolderIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
