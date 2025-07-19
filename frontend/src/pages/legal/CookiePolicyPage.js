@@ -58,4 +58,4 @@ const CookiePolicyPage = () => {
       </div>
     </div>
   );
-};
+export default CookiePolicyPage;
