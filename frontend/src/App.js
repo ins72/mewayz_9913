@@ -118,7 +118,7 @@ function App() {
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<DashboardHome />} />
-              <Route path="social-media" element={<SocialMediaPage />} />
+              <Route path="social-media" element={<UltraAdvancedSocialMediaScheduler />} />
               <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
               <Route path="bio-sites" element={<BioSitesPage />} />
               <Route path="crm" element={<CRMPage />} />
