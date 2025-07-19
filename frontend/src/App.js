@@ -56,6 +56,12 @@ import InstagramDatabasePage from './pages/dashboard/InstagramDatabasePage';
 import AdvancedWebsiteBuilder from './pages/dashboard/AdvancedWebsiteBuilder';
 import ComprehensiveBookingSystem from './pages/dashboard/ComprehensiveBookingSystem';
 
+// New enhanced pages
+import UltraAdvancedAIFeaturesPage from './pages/dashboard/UltraAdvancedAIFeaturesPage';
+import UltraAdvancedWorkspaceManagement from './pages/dashboard/UltraAdvancedWorkspaceManagement';
+import UltraAdvancedSubscriptionManager from './pages/dashboard/UltraAdvancedSubscriptionManager';
+import UltraAdvancedInstagramManager from './pages/dashboard/UltraAdvancedInstagramManager';
+
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
 import TeamManagementPage from './pages/dashboard/TeamManagementPage';
