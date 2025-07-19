@@ -49,10 +49,6 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon },
     { name: 'Booking', href: '/dashboard/booking', icon: CalendarIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
-    { name: 'Website Builder', href: '/dashboard/website-builder', icon: GlobeAltIcon },
-    { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon },
-    { name: 'Team', href: '/dashboard/team', icon: UserGroupIcon },
-    { name: 'Workspace', href: '/dashboard/workspace', icon: BuildingOfficeIcon },
   ];
 
   const handleLogout = () => {
