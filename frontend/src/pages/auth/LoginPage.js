@@ -60,27 +60,22 @@ const LoginPage = () => {
 
     setLoading(true);
     try {
-      // Check if it's the admin credentials for immediate mock login
-      if (formData.email === 'tmonnens@outlook.com' && formData.password === 'Voetballen5') {
-        console.log('Using admin credentials - forcing login');
-        await login(formData);
-        console.log('Redirecting to dashboard...');
-        window.location.href = '/dashboard'; // Force redirect
-        return;
-      }
-      
+      console.log('LoginPage: Starting login for:', formData.email);
       const result = await login(formData);
-      console.log('Login result:', result);
+      console.log('LoginPage: Login result:', result);
       
       if (result.success) {
-        console.log('Login successful, navigating to:', from);
-        navigate(from, { replace: true });
+        console.log('LoginPage: Login successful, redirecting to:', from);
+        // Use a small delay to ensure state is updated
+        setTimeout(() => {
+          navigate(from, { replace: true });
+        }, 100);
       } else {
-        console.error('Login failed:', result);
+        console.error('LoginPage: Login failed:', result);
         setErrors({ general: result.message || result.error || 'Login failed' });
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('LoginPage: Login error:', error);
       setErrors({ general: 'Login failed. Please try again.' });
     } finally {
       setLoading(false);
