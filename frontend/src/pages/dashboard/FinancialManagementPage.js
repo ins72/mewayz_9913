@@ -383,6 +383,22 @@ const FinancialManagementPage = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Additional Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.7 }}
+        className="flex justify-center"
+      >
+        <button
+          onClick={handleExportBudgetAnalysis}
+          className="btn-secondary flex items-center"
+        >
+          <DocumentArrowDownIcon className="h-5 w-5 mr-2" />
+          Export Budget Analysis
+        </button>
+      </motion.div>
     </div>
   );
 };
