@@ -153,6 +153,7 @@ function App() {
         </NotificationProvider>
       </ErrorBoundary>
     </div>
+    </GoogleOAuthProvider>
   );
 }
 
