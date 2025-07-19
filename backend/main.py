@@ -20,6 +20,9 @@ from contextlib import asynccontextmanager
 # Load environment variables
 load_dotenv()
 
+# Import collaboration system
+from realtime_collaboration_system import get_collaboration_routes
+
 # Database setup
 MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
 SECRET_KEY = os.getenv("SECRET_KEY", "mewayz-professional-secret-key-2025-ultra-secure")
