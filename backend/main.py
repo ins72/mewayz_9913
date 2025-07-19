@@ -1625,7 +1625,11 @@ async def health_check():
             "Real-time Notifications",
             "Financial Management & Invoicing",
             "Workspace & Team Collaboration",
-            "Payment Processing & Escrow"
+            "Payment Processing & Escrow",
+            "Link Shortener & URL Management",
+            "Team Management & Invitations",
+            "Form Templates & Builder", 
+            "Discount Codes & Promotions"
         ],
         "timestamp": datetime.utcnow().isoformat()
     }
