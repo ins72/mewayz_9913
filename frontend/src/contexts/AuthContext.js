@@ -78,11 +78,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
-    } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
-      toast.error(message);
-      return { success: false, error: message };
-    }
   };
 
   const register = async (userData) => {
