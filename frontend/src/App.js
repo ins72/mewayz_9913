@@ -91,11 +91,6 @@ function App() {
           <Route path="admin/security" element={<div className="p-8 text-center">Security center coming soon...</div>} />
         </Route>
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<AdminRoute><DashboardLayout /></AdminRoute>}>
-          <Route index element={<AdminDashboard />} />
-        </Route>
-
         {/* Catch all - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
