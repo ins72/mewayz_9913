@@ -13,7 +13,8 @@ import {
   HeartIcon,
   ChatBubbleOvalLeftIcon,
   ShareIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
+  CheckIcon
 } from '@heroicons/react/24/outline';
 
 const SocialMediaPage = () => {
