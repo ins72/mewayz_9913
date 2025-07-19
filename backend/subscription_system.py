@@ -1,23 +1,69 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import uuid
 import os
+from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 import stripe
 
-# Import from main app  
-from main import get_current_user, database
+# Load environment variables
+load_dotenv()
 
-router = APIRouter(prefix="/api/subscriptions", tags=["subscriptions"])
+# Database setup
+MONGO_URL = os.getenv("MONGO_URL", "mongodb://localhost:27017/mewayz_professional")
+SECRET_KEY = os.getenv("SECRET_KEY", "mewayz-professional-secret-key-2025-ultra-secure")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 # Configure Stripe (you'll need to add Stripe keys to .env)
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_dummy_key")
+
+# MongoDB client
+client = AsyncIOMotorClient(MONGO_URL)
+database = client.get_database()
 
 # Collections
 subscriptions_collection = database.subscriptions
 users_collection = database.users
 workspaces_collection = database.workspaces
+
+# Security setup
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+
+router = APIRouter(prefix="/api/subscriptions", tags=["subscriptions"])
+
+# Auth dependency
+async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid authentication credentials"
+            )
+        return email
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials"
+        )
+
+async def get_current_user(email: str = Depends(verify_token)):
+    user = await users_collection.find_one({"email": email})
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found"
+        )
+    # Convert ObjectId to string for JSON serialization
+    user["id"] = str(user["_id"])
+    return user
 
 class SubscriptionPlan(BaseModel):
     id: str
@@ -206,71 +252,45 @@ async def upgrade_subscription(
                 "message": "Downgraded to free plan successfully"
             }
         
-        # For paid plans, create Stripe checkout session
-        if not target_plan["stripe_price_id"]:
-            raise HTTPException(status_code=400, detail="Plan not available for purchase")
+        # For paid plans, create mock subscription for development
+        subscription_doc = {
+            "_id": str(uuid.uuid4()),
+            "user_id": current_user["id"],
+            "plan_id": upgrade_request.plan_id,
+            "status": "active",
+            "amount": target_plan["price"],
+            "currency": "usd",
+            "interval": target_plan["interval"],
+            "current_period_start": datetime.utcnow(),
+            "current_period_end": datetime.utcnow() + timedelta(days=30),
+            "stripe_subscription_id": None,
+            "created_at": datetime.utcnow()
+        }
         
-        try:
-            # Create Stripe checkout session
-            checkout_session = stripe.checkout.Session.create(
-                customer_email=current_user["email"],
-                payment_method_types=['card'],
-                line_items=[{
-                    'price': target_plan["stripe_price_id"],
-                    'quantity': 1,
-                }],
-                mode='subscription',
-                success_url=f"{os.getenv('FRONTEND_URL', 'http://localhost:3000')}/dashboard/subscription?success=true",
-                cancel_url=f"{os.getenv('FRONTEND_URL', 'http://localhost:3000')}/dashboard/subscription?cancelled=true",
-                metadata={
-                    'user_id': current_user["id"],
-                    'plan_id': upgrade_request.plan_id
-                }
-            )
-            
-            return {
-                "success": True,
-                "checkout_url": checkout_session.url,
-                "session_id": checkout_session.id
+        # Cancel existing subscriptions
+        await subscriptions_collection.update_many(
+            {"user_id": current_user["id"], "status": "active"},
+            {"$set": {"status": "cancelled", "cancelled_at": datetime.utcnow()}}
+        )
+        
+        # Create new subscription
+        await subscriptions_collection.insert_one(subscription_doc)
+        
+        # Update user subscription plan
+        await users_collection.update_one(
+            {"_id": current_user["_id"]},
+            {"$set": {"subscription_plan": upgrade_request.plan_id}}
+        )
+        
+        return {
+            "success": True,
+            "message": f"Successfully upgraded to {target_plan['name']}",
+            "data": {
+                "plan": target_plan["name"],
+                "price": target_plan["price"],
+                "features": target_plan["features"]
             }
-            
-        except stripe.error.StripeError as e:
-            # If Stripe is not configured, create a mock subscription for development
-            print(f"Stripe error (likely development): {e}")
-            
-            # Create mock subscription for development
-            subscription_doc = {
-                "_id": str(uuid.uuid4()),
-                "user_id": current_user["id"],
-                "plan_id": upgrade_request.plan_id,
-                "status": "active",
-                "amount": target_plan["price"],
-                "currency": "usd",
-                "interval": target_plan["interval"],
-                "current_period_start": datetime.utcnow(),
-                "current_period_end": datetime.utcnow() + timedelta(days=30),
-                "created_at": datetime.utcnow()
-            }
-            
-            # Cancel existing subscriptions
-            await subscriptions_collection.update_many(
-                {"user_id": current_user["id"], "status": "active"},
-                {"$set": {"status": "cancelled", "cancelled_at": datetime.utcnow()}}
-            )
-            
-            # Create new subscription
-            await subscriptions_collection.insert_one(subscription_doc)
-            
-            # Update user subscription plan
-            await users_collection.update_one(
-                {"_id": current_user["_id"]},
-                {"$set": {"subscription_plan": upgrade_request.plan_id}}
-            )
-            
-            return {
-                "success": True,
-                "message": f"Successfully upgraded to {target_plan['name']} (development mode)"
-            }
+        }
         
     except Exception as e:
         raise HTTPException(
@@ -291,16 +311,6 @@ async def cancel_subscription(current_user: dict = Depends(get_current_user)):
         
         if not current_subscription:
             raise HTTPException(status_code=404, detail="No active subscription found")
-        
-        # If it's a Stripe subscription, cancel it
-        if current_subscription.get("stripe_subscription_id"):
-            try:
-                stripe.Subscription.modify(
-                    current_subscription["stripe_subscription_id"],
-                    cancel_at_period_end=True
-                )
-            except stripe.error.StripeError as e:
-                print(f"Stripe cancellation error: {e}")
         
         # Update subscription status
         await subscriptions_collection.update_one(
@@ -324,14 +334,6 @@ async def cancel_subscription(current_user: dict = Depends(get_current_user)):
             status_code=500,
             detail=f"Failed to cancel subscription: {str(e)}"
         )
-
-@router.post("/webhooks/stripe")
-async def stripe_webhook(request):
-    """Handle Stripe webhooks for subscription events"""
-    
-    # This would handle Stripe webhooks for subscription updates
-    # For now, returning success to avoid errors
-    return {"received": True}
 
 @router.get("/usage")
 async def get_usage_statistics(current_user: dict = Depends(get_current_user)):
