@@ -114,6 +114,7 @@ function App() {
               <Route path="courses" element={<CoursesPage />} />
               <Route path="ecommerce" element={<EcommercePage />} />
               <Route path="templates" element={<TemplateMarketplace />} />
+              <Route path="template-marketplace" element={<TemplateMarketplaceV2Page />} />
               <Route path="escrow-system" element={<EscrowSystemPage />} />
               <Route path="analytics" element={<AdvancedAnalytics />} />
               
