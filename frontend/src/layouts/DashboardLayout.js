@@ -25,6 +25,9 @@ import {
   ArrowRightOnRectangleIcon,
   BellIcon,
   MagnifyingGlassIcon,
+  ShieldCheckIcon,
+  BanknotesIcon,
+  WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 
 const DashboardLayout = ({ isAdmin = false }) => {
@@ -40,13 +43,19 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Settings', href: '/admin/settings', icon: CogIcon },
   ] : [
     { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
+    { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon },
+    { name: 'Workspace', href: '/dashboard/workspace', icon: BuildingOfficeIcon },
+    { name: 'Website Builder', href: '/dashboard/website-builder', icon: WrenchScrewdriverIcon },
     { name: 'Social Media', href: '/dashboard/social-media', icon: ChartBarIcon },
+    { name: 'Bio Sites', href: '/dashboard/bio-sites', icon: GlobeAltIcon },
     { name: 'E-commerce', href: '/dashboard/ecommerce', icon: ShoppingBagIcon },
     { name: 'Courses', href: '/dashboard/courses', icon: AcademicCapIcon },
     { name: 'CRM', href: '/dashboard/crm', icon: UsersIcon },
-    { name: 'Analytics', href: '/dashboard/analytics', icon: ChartBarIcon },
-    { name: 'Bio Sites', href: '/dashboard/bio-sites', icon: GlobeAltIcon },
     { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon },
+    { name: 'Analytics', href: '/dashboard/analytics', icon: ChartBarIcon },
+    { name: 'Advanced Booking', href: '/dashboard/advanced-booking', icon: CalendarIcon },
+    { name: 'Financial Management', href: '/dashboard/financial-management', icon: BanknotesIcon },
+    { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon },
     { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
   ];
 
