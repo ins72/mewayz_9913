@@ -117,7 +117,7 @@ code {
    APP BACKGROUNDS
    ================================ */
 .bg-app {
-  background-color: #F8F9FA;
+  background-color: #FAFBFC;
 }
 
 .dark .bg-app {
@@ -137,19 +137,19 @@ code {
 
 .bg-surface-elevated {
   background-color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .dark .bg-surface-elevated {
   background-color: #191919;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 /* ================================
    TEXT COLORS
    ================================ */
 .text-primary {
-  color: #212529;
+  color: #1A202C;
 }
 
 .dark .text-primary {
@@ -157,7 +157,7 @@ code {
 }
 
 .text-secondary {
-  color: #6C757D;
+  color: #718096;
 }
 
 .dark .text-secondary {
@@ -165,7 +165,7 @@ code {
 }
 
 .text-muted {
-  color: #ADB5BD;
+  color: #A0AEC0;
 }
 
 .dark .text-muted {
