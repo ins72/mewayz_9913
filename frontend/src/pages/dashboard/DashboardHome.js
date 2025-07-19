@@ -100,11 +100,11 @@ const DashboardHome = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="bg-gradient-to-r from-gray-600 to-gray-800 rounded-lg p-6 text-white dark:from-gray-700 dark:to-gray-900">
+        <div className="bg-gradient-welcome rounded-lg p-6 text-primary border border-gray-200 dark:border-gray-700 shadow-lg">
           <h1 className="text-2xl font-bold mb-2">
             Welcome back, {user?.name || 'Creator'}! 👋
           </h1>
-          <p className="text-gray-100 dark:text-gray-300">
+          <p className="text-secondary">
             Here's what's happening with your business today.
           </p>
         </div>
