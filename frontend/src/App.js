@@ -11,6 +11,7 @@ import ContactUsPage from './pages/ContactUsPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import OnboardingWizard from './pages/OnboardingWizard';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Legal pages
