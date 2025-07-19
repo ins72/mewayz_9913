@@ -1706,6 +1706,65 @@ async def create_admin_user():
             await workspaces_collection.insert_one(workspace_doc)
             print(f"✅ Default workspace created: {workspace_doc['name']}")
             
+            # Create sample short links
+            sample_links = [
+                {
+                    "_id": str(uuid.uuid4()),
+                    "workspace_id": workspace_doc["_id"],
+                    "user_id": admin_doc["_id"],
+                    "original_url": "https://example.com/very-long-url-that-needs-shortening",
+                    "short_code": "abc123",
+                    "clicks": 245,
+                    "status": "active",
+                    "expires_at": None,
+                    "created_at": datetime.utcnow() - timedelta(days=2),
+                    "updated_at": datetime.utcnow() - timedelta(days=2)
+                },
+                {
+                    "_id": str(uuid.uuid4()),
+                    "workspace_id": workspace_doc["_id"],
+                    "user_id": admin_doc["_id"],
+                    "original_url": "https://mystore.com/product/amazing-course",
+                    "short_code": "course1",
+                    "clicks": 89,
+                    "status": "active",
+                    "expires_at": None,
+                    "created_at": datetime.utcnow() - timedelta(days=7),
+                    "updated_at": datetime.utcnow() - timedelta(days=7)
+                }
+            ]
+            await short_links_collection.insert_many(sample_links)
+            
+            # Create sample team members
+            sample_members = [
+                {
+                    "_id": str(uuid.uuid4()),
+                    "workspace_id": workspace_doc["_id"],
+                    "email": "john@example.com",
+                    "name": "John Doe",
+                    "role": "admin",
+                    "status": "active",
+                    "invited_by": admin_doc["_id"],
+                    "last_active": "2 minutes ago",
+                    "created_at": datetime.utcnow() - timedelta(days=30),
+                    "updated_at": datetime.utcnow()
+                },
+                {
+                    "_id": str(uuid.uuid4()),
+                    "workspace_id": workspace_doc["_id"],
+                    "email": "sarah@example.com",
+                    "name": "Sarah Wilson",
+                    "role": "editor",
+                    "status": "active",
+                    "invited_by": admin_doc["_id"],
+                    "last_active": "1 hour ago",
+                    "created_at": datetime.utcnow() - timedelta(days=15),
+                    "updated_at": datetime.utcnow()
+                }
+            ]
+            await team_members_collection.insert_many(sample_members)
+            print(f"✅ Sample data created for workspace")
+            
         else:
             print(f"✅ Admin user already exists: {admin_user['email']}")
     except Exception as e:
