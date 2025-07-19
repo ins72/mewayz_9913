@@ -18,12 +18,13 @@ const Button = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
-    primary: 'btn-primary focus-ring shadow-default hover:opacity-90',
-    secondary: 'btn-secondary focus-ring shadow-default hover:opacity-90',
-    outline: 'btn-secondary focus-ring',
-    ghost: 'hover-surface text-primary focus-ring',
-    danger: 'bg-red-600 hover:opacity-90 text-white focus-ring shadow-default',
-    success: 'bg-green-600 hover:opacity-90 text-white focus-ring shadow-default',
+    primary: 'btn-primary focus-ring shadow-default hover:opacity-90 transition-all duration-200',
+    secondary: 'btn-secondary focus-ring shadow-default hover:opacity-90 transition-all duration-200',
+    accent: 'btn-accent focus-ring shadow-default hover:opacity-90 transition-all duration-200',
+    success: 'btn-success focus-ring shadow-default hover:opacity-90 transition-all duration-200',
+    danger: 'btn-danger focus-ring shadow-default hover:opacity-90 transition-all duration-200',
+    outline: 'btn-secondary focus-ring hover:opacity-90 transition-all duration-200',
+    ghost: 'hover-surface text-primary focus-ring transition-all duration-200',
   };
 
   const sizes = {
