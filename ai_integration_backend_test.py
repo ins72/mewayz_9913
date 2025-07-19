@@ -107,8 +107,9 @@ class MewayzAIBackendTester:
         if response and response.status_code == 200:
             try:
                 data = response.json()
-                if data.get('success') and 'access_token' in data:
-                    self.auth_token = data['access_token']
+                if data.get('success') and ('access_token' in data or 'token' in data):
+                    # Handle both token formats
+                    self.auth_token = data.get('access_token') or data.get('token')
                     user_info = data.get('user', {})
                     self.log_test(
                         "Admin Authentication", 
