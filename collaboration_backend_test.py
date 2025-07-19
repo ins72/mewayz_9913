@@ -461,7 +461,7 @@ class CollaborationBackendTester:
 def main():
     # Get backend URL from environment or use default
     import os
-    backend_url = os.getenv('REACT_APP_BACKEND_URL', 'https://c231d264-b140-4556-b515-9a9bf3fb6c1d.preview.emergentagent.com')
+    backend_url = os.getenv('REACT_APP_BACKEND_URL', 'https://925bcaf0-3b9a-4a33-9e67-e13c6b60e2d6.preview.emergentagent.com')
     
     print(f"🎯 Testing Realtime Collaboration Backend at: {backend_url}")
     
