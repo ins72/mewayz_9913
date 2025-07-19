@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { bookingAPI } from '../../services/api';
+import CreateAppointmentModal from '../../components/CreateAppointmentModal';
+import CreateServiceModal from '../../components/CreateServiceModal';
+import ViewDetailsModal from '../../components/modals/ViewDetailsModal';
 import {
   CalendarIcon,
   ClockIcon,
