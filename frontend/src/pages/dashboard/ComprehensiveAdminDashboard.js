@@ -1,46 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotification } from '../../contexts/NotificationContext';
-import { adminAPI } from '../../services/api';
 import {
   ShieldCheckIcon,
   UsersIcon,
   ServerIcon,
   ChartBarIcon,
-  ExclamationTriangleIcon,
   CheckCircleIcon,
-  ClockIcon,
   ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-  EyeIcon,
-  PencilIcon,
-  TrashIcon,
-  PlusIcon,
-  DocumentArrowDownIcon,
-  Cog6ToothIcon,
-  BellIcon,
+  CurrencyDollarIcon,
+  GlobeAltIcon,
   CreditCardIcon,
   BanknotesIcon,
-  GlobeAltIcon,
-  DevicePhoneMobileIcon,
-  ComputerDesktopIcon,
-  CurrencyDollarIcon,
-  UserPlusIcon,
-  UserMinusIcon,
-  DocumentTextIcon,
-  FolderOpenIcon,
-  DatabaseIcon,
-  CloudIcon,
-  WifiIcon,
-  CpuChipIcon,
-  CircleStackIcon,
   ShoppingBagIcon,
-  AcademicCapIcon,
-  EnvelopeIcon,
-  ChatBubbleLeftRightIcon,
-  PhotoIcon,
-  VideoCameraIcon
+  DocumentArrowDownIcon,
+  PlusIcon,
+  Cog6ToothIcon,
+  UserPlusIcon,
+  CloudIcon,
+  DatabaseIcon
 } from '@heroicons/react/24/outline';
 
 const ComprehensiveAdminDashboard = () => {
