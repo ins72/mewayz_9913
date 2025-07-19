@@ -183,11 +183,11 @@ const LandingPage = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
               >
-                <feature.icon className="w-12 h-12 text-indigo-600 dark:text-indigo-400 mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                <feature.icon className="w-12 h-12 text-accent mb-4" />
+                <h3 className="text-xl font-semibold text-primary mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-secondary">
                   {feature.description}
                 </p>
               </motion.div>
