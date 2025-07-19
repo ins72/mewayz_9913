@@ -225,7 +225,7 @@ const FormTemplatesPage = () => {
                     <PencilIcon className="h-4 w-4" />
                   </button>
                   <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg transition-colors" title="Duplicate">
-                    <DuplicateIcon className="h-4 w-4" />
+                    <DocumentDuplicateIcon className="h-4 w-4" />
                   </button>
                 </div>
                 <button className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors" title="Delete">
