@@ -68,19 +68,19 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Navigation */}
-      <nav className="relative bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+      <nav className="relative nav-bg backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-primary">
+              <Link to="/" className="text-2xl font-bold text-primary">
                 Mewayz
-              </h1>
+              </Link>
             </div>
             
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleTheme}
-                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                className="p-2 text-secondary hover:text-primary transition-colors"
               >
                 {theme === 'dark' ? (
                   <SunIcon className="w-5 h-5" />
