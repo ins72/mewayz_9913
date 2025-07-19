@@ -45,6 +45,9 @@ if STRIPE_SECRET_KEY:
 # Import social media and email integrations
 from social_media_email_integrations import integration_manager
 
+# Import AI system
+from ai_system import ai_system
+
 # MongoDB client
 client = AsyncIOMotorClient(MONGO_URL)
 database = client.get_database()
