@@ -16,7 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const OnboardingWizard = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedGoals, setSelectedGoals] = useState([]);
