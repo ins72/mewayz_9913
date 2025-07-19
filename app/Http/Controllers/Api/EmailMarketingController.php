@@ -24,22 +24,8 @@ class EmailMarketingController extends Controller
     {
         try {
             $user = $request->user();
-            $workspace = $user->workspaces()->where('is_active', 1)->first();
             
-            if (!$workspace) {
-                // Create a default workspace if none exists
-                $workspace = new \App\Models\Workspace([
-                    'id' => (string) \Illuminate\Support\Str::uuid(),
-                    'user_id' => $user->id,
-                    'name' => 'Default Workspace',
-                    'slug' => 'default-workspace-' . $user->id,
-                    'is_active' => 1,
-                    'description' => 'Default workspace for user'
-                ]);
-                $workspace->save();
-            }
-            
-            // Return mock campaigns for now since EmailCampaign table might not exist
+            // Skip workspace logic for now and return mock campaigns directly
             $campaigns = [
                 [
                     'id' => 'campaign-1',
