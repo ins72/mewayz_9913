@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 :root {
-  --toast-bg: #374151;
-  --toast-color: #f9fafb;
-  --toast-border: #4b5563;
+  --toast-bg: #FFFFFF;
+  --toast-color: #1A1A1A;
+  --toast-border: #E5E5E5;
 }
 
-[data-theme="light"] {
-  --toast-bg: #ffffff;
-  --toast-color: #111827;
-  --toast-border: #e5e7eb;
+[data-theme="dark"] {
+  --toast-bg: #191919;
+  --toast-color: #F1F1F1;
+  --toast-border: #282828;
 }
 
 * {
@@ -111,7 +111,7 @@ code {
   100% { transform: rotate(360deg); }
 }
 
-/* Custom component styles using the new color scheme */
+/* Custom component styles using the exact color scheme */
 .bg-app {
   background-color: #FAFAFA;
 }
@@ -208,4 +208,58 @@ code {
 .dark .nav-bg {
   background-color: #191919;
   border-bottom: 1px solid #282828;
+}
+
+/* Focus states without blue */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus {
+  outline: 2px solid #7B7B7B;
+  outline-offset: 2px;
+}
+
+.dark .focus-ring:focus {
+  outline: 2px solid #F1F1F1;
+}
+
+/* Remove all blue/indigo colors in dark mode */
+.dark .text-indigo-600,
+.dark .text-indigo-700,
+.dark .text-indigo-400,
+.dark .text-indigo-300 {
+  color: #F1F1F1 !important;
+}
+
+.dark .bg-indigo-50,
+.dark .bg-indigo-900 {
+  background-color: #191919 !important;
+}
+
+.dark .border-indigo-700,
+.dark .border-indigo-300 {
+  border-color: #282828 !important;
+}
+
+/* Active states for navigation */
+.nav-active {
+  background-color: #E5E5E5;
+  color: #1A1A1A;
+  border-right: 2px solid #1A1A1A;
+}
+
+.dark .nav-active {
+  background-color: #282828;
+  color: #F1F1F1;
+  border-right: 2px solid #F1F1F1;
+}
+
+/* Hover states */
+.hover-surface:hover {
+  background-color: #F5F5F5;
+}
+
+.dark .hover-surface:hover {
+  background-color: #282828;
 }
