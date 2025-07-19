@@ -89,6 +89,8 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     token,
+    currentWorkspace,
+    setCurrentWorkspace,
     loading,
     login,
     register,
