@@ -73,7 +73,7 @@ const LoginPage = () => {
       <div className="absolute top-4 right-4">
         <button
           onClick={toggleTheme}
-          className="p-2 text-secondary hover:text-primary transition-colors"
+          className="p-2 text-secondary hover:text-primary transition-colors focus-ring rounded-lg"
         >
           {theme === 'dark' ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
         </button>
@@ -86,15 +86,15 @@ const LoginPage = () => {
         className="sm:mx-auto sm:w-full sm:max-w-md"
       >
         <div className="text-center">
-          <Link to="/" className="text-3xl font-bold text-primary">
+          <Link to="/" className="text-3xl font-bold text-accent-primary text-display">
             Mewayz
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-primary">
+          <h2 className="mt-6 text-3xl font-bold text-primary text-heading">
             Welcome back
           </h2>
-          <p className="mt-2 text-sm text-secondary">
+          <p className="mt-2 text-sm text-secondary text-body">
             Don't have an account?{' '}
-            <Link to="/register" className="font-medium text-primary hover:opacity-80">
+            <Link to="/register" className="font-medium text-accent-primary hover:opacity-80 transition-opacity">
               Sign up here
             </Link>
           </p>
@@ -107,10 +107,10 @@ const LoginPage = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
       >
-        <div className="bg-surface py-8 px-4 shadow-default rounded-lg sm:px-10 border border-default">
+        <div className="bg-surface-elevated py-8 px-4 rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-primary">
+              <label htmlFor="email" className="block text-sm font-medium text-primary text-body">
                 Email address
               </label>
               <div className="mt-1">
@@ -121,15 +121,15 @@ const LoginPage = () => {
                   autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`appearance-none block w-full px-3 py-2 input rounded-md shadow-default focus-ring sm:text-sm transition-colors ${
+                  className={`appearance-none block w-full px-3 py-2 input rounded-md focus-ring sm:text-sm transition-all ${
                     errors.email 
-                      ? 'border-red-300' 
+                      ? 'border-accent-danger' 
                       : ''
                   }`}
                   placeholder="Enter your email"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                  <p className="mt-1 text-sm status-error text-caption">{errors.email}</p>
                 )}
               </div>
             </div>
