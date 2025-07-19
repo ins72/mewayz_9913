@@ -100,11 +100,11 @@ const DashboardHome = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="bg-surface border border-default rounded-lg p-6 text-primary shadow-default">
-          <h1 className="text-2xl font-bold mb-2">
+        <div className="bg-surface-elevated rounded-lg p-6 text-primary">
+          <h1 className="text-2xl font-bold text-display mb-2">
             Welcome back, {user?.name || 'Creator'}! 👋
           </h1>
-          <p className="text-secondary">
+          <p className="text-secondary text-body">
             Here's what's happening with your business today.
           </p>
         </div>
