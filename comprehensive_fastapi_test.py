@@ -577,9 +577,9 @@ def main():
                     backend_url = line.split('=', 1)[1].strip()
                     break
             else:
-                backend_url = "https://925bcaf0-3b9a-4a33-9e67-e13c6b60e2d6.preview.emergentagent.com"
+                backend_url = "https://ff62574f-1eb9-4423-9341-e402e15fa0aa.preview.emergentagent.com"
     except:
-        backend_url = "https://925bcaf0-3b9a-4a33-9e67-e13c6b60e2d6.preview.emergentagent.com"
+        backend_url = "https://ff62574f-1eb9-4423-9341-e402e15fa0aa.preview.emergentagent.com"
     
     print(f"🔗 Testing FastAPI Backend at: {backend_url}")
     
