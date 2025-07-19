@@ -50,6 +50,12 @@ ai_conversations_collection = database.ai_conversations
 analytics_events_collection = database.analytics_events
 websites_collection = database.websites
 
+# New collections for enhanced features
+short_links_collection = database.short_links
+team_members_collection = database.team_members
+form_templates_collection = database.form_templates
+discount_codes_collection = database.discount_codes
+
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
