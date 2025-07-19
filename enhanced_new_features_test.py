@@ -331,7 +331,7 @@ class EnhancedNewFeaturesBackendTester:
         response, response_time = self.make_request('GET', '/workspaces')
         if response and response.status_code == 200:
             data = response.json()
-            workspaces = data.get('data', [])
+            workspaces = data.get('data', {}).get('workspaces', [])
             self.log_test("Workspace Integration - Get Workspaces", True, f"Workspaces retrieved: {len(workspaces)} workspaces", response_time)
             
             if workspaces and len(workspaces) > 0:
