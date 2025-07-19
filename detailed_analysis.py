@@ -109,7 +109,7 @@ class DetailedResponseAnalyzer:
         print("✅ Analysis Complete")
 
 def main():
-    backend_url = "https://eec801d8-7de8-42e4-9e18-56e2a6c528cf.preview.emergentagent.com"
+    backend_url = "https://c231d264-b140-4556-b515-9a9bf3fb6c1d.preview.emergentagent.com"
     analyzer = DetailedResponseAnalyzer(backend_url)
     analyzer.run_analysis()
 
