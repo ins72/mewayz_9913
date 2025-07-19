@@ -51,29 +51,37 @@ const DashboardLayout = ({ isAdmin = false }) => {
   const [helpOpen, setHelpOpen] = useState(false);
 
   const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
-    { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon },
-    { name: 'Workspaces', href: '/dashboard/workspaces', icon: BuildingOffice2Icon },
-    { name: 'Subscription', href: '/dashboard/subscription', icon: CreditCardIcon },
-    { name: 'Templates', href: '/dashboard/templates', icon: DocumentTextIcon },
-    { name: 'Advanced Analytics', href: '/dashboard/advanced-analytics', icon: ChartBarIcon },
-    { name: 'Workspace', href: '/dashboard/workspace', icon: BuildingOfficeIcon },
-    { name: 'Website Builder', href: '/dashboard/website-builder', icon: WrenchScrewdriverIcon },
-    { name: 'Social Media', href: '/dashboard/social-media', icon: ChartBarIcon },
-    { name: 'Bio Sites', href: '/dashboard/bio-sites', icon: GlobeAltIcon },
-    { name: 'E-commerce', href: '/dashboard/ecommerce', icon: ShoppingBagIcon },
-    { name: 'Courses', href: '/dashboard/courses', icon: AcademicCapIcon },
-    { name: 'CRM', href: '/dashboard/crm', icon: UsersIcon },
-    { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon },
-    { name: 'Analytics', href: '/dashboard/analytics', icon: ChartBarIcon },
-    { name: 'Advanced Booking', href: '/dashboard/advanced-booking', icon: CalendarIcon },
-    { name: 'Financial Management', href: '/dashboard/financial-management', icon: BanknotesIcon },
-    { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon },
-    { name: 'Realtime Collaboration', href: '/dashboard/realtime-collaboration', icon: ChatBubbleLeftRightIcon },
-    { name: 'Integrations', href: '/dashboard/integrations', icon: PuzzlePieceIcon },
-    { name: 'Referral Program', href: '/dashboard/referrals', icon: UserPlusIcon },
-    { name: 'Payments', href: '/dashboard/payments', icon: CreditCardIcon },
-    { name: 'Settings', href: '/dashboard/settings', icon: CogIcon },
+    // Core Navigation
+    { name: 'Console', href: '/dashboard', icon: HomeIcon, description: 'Dashboard Overview' },
+    { name: 'Socials', href: '/dashboard/social-media', icon: ChartBarIcon, description: 'Social Media Management' },
+    { name: 'Link in Bio', href: '/dashboard/bio-sites', icon: GlobeAltIcon, description: 'Bio Link Pages' },
+    { name: 'Leads', href: '/dashboard/crm', icon: UsersIcon, description: 'CRM & Email Marketing' },
+    { name: 'Link Shortener', href: '/dashboard/link-shortener', icon: GlobeAltIcon, description: 'URL Shortening Service' },
+    { name: 'Referral System', href: '/dashboard/referrals', icon: UserPlusIcon, description: 'Referral Program' },
+    
+    // Business Tools
+    { name: 'Website Builder', href: '/dashboard/website-builder', icon: WrenchScrewdriverIcon, description: 'Build Websites' },
+    { name: 'Users', href: '/dashboard/team-management', icon: UsersIcon, description: 'Team Management' },
+    { name: 'Form Templates', href: '/dashboard/form-templates', icon: DocumentTextIcon, description: 'Form Builder' },
+    { name: 'Discount Codes', href: '/dashboard/discount-codes', icon: CreditCardIcon, description: 'Promotional Codes' },
+    { name: 'Finance', href: '/dashboard/financial-management', icon: BanknotesIcon, description: 'Payments & Invoicing' },
+    
+    // Content & Education
+    { name: 'Courses & Community', href: '/dashboard/courses', icon: AcademicCapIcon, description: 'Education Platform' },
+    { name: 'Marketplace & Stores', href: '/dashboard/ecommerce', icon: ShoppingBagIcon, description: 'E-commerce Platform' },
+    { name: 'Template Library', href: '/dashboard/templates', icon: DocumentTextIcon, description: 'Template Marketplace' },
+    { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon, description: 'Secure Transactions' },
+    { name: 'Analytics & Reporting', href: '/dashboard/analytics', icon: ChartBarIcon, description: 'Business Intelligence' },
+    
+    // Additional Features
+    { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon, description: 'AI Tools' },
+    { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon, description: 'Email Campaigns' },
+    { name: 'Advanced Booking', href: '/dashboard/advanced-booking', icon: CalendarIcon, description: 'Appointment Scheduling' },
+    { name: 'Realtime Collaboration', href: '/dashboard/realtime-collaboration', icon: ChatBubbleLeftRightIcon, description: 'Team Collaboration' },
+    { name: 'Integrations', href: '/dashboard/integrations', icon: PuzzlePieceIcon, description: 'Third-party Integrations' },
+    { name: 'Workspaces', href: '/dashboard/workspaces', icon: BuildingOffice2Icon, description: 'Workspace Management' },
+    { name: 'Subscription', href: '/dashboard/subscription', icon: CreditCardIcon, description: 'Billing & Plans' },
+    { name: 'Settings', href: '/dashboard/settings', icon: CogIcon, description: 'Account Settings' },
   ];
 
   // Admin-only navigation items
