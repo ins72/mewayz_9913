@@ -30,6 +30,10 @@ const AdvancedBookingPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('dashboard'); // dashboard, calendar, services, appointments
+  const [showCreateBookingModal, setShowCreateBookingModal] = useState(false);
+  const [showCreateServiceModal, setShowCreateServiceModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     fetchBookingData();
