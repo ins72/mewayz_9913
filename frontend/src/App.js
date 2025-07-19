@@ -78,7 +78,7 @@ function App() {
           <Route path="bio-sites" element={<BioSitesPage />} />
           <Route path="email-marketing" element={<EmailMarketingPage />} />
           <Route path="payments" element={<PaymentsPage />} />
-          <Route path="ai-features" element={<AIFeaturesPage />} />
+          <Route path="ai-features" element={<AIFeaturesPageV2 />} />
           <Route path="workspace" element={<WorkspacePage />} />
           <Route path="website-builder" element={<WebsiteBuilderPage />} />
           <Route path="advanced-booking" element={<AdvancedBookingPage />} />
