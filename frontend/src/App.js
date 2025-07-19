@@ -163,7 +163,7 @@ function App() {
           <div className="text-center mt-8 text-gray-500">
             <p>🏆 Your Mewayz platform is now ready for preview and deployment!</p>
             <p className="text-sm mt-2">
-              Backend API: <code className="bg-gray-200 px-2 py-1 rounded">{BACKEND_URL}/api/health</code>
+              Backend API: <code className="bg-gray-200 px-2 py-1 rounded">{BACKEND_URL}/health</code>
             </p>
           </div>
         </div>
