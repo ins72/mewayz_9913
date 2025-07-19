@@ -597,7 +597,7 @@ class FastAPIBackendTester:
 def main():
     """Main function to run the tests"""
     # Get backend URL from environment or use default
-    backend_url = "https://a647fc73-10e4-498f-8ae8-6d85330ad2a0.preview.emergentagent.com"
+    backend_url = "https://f80883a1-24ea-40ee-9b91-716d4f4201dd.preview.emergentagent.com"
     
     print(f"🔍 FastAPI Backend URL: {backend_url}")
     
