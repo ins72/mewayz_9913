@@ -318,14 +318,14 @@ def get_collaboration_routes():
     router = APIRouter(prefix="/api/collaboration", tags=["collaboration"])
     
     @router.post("/rooms")
-    async def create_room(request: CreateRoomRequest, current_user: dict = None):
+    async def create_room(request: CreateRoomRequest):
         """Create a new collaboration room"""
         room = CollaborationRoom(
             id=str(uuid.uuid4()),
             document_id=request.document_id,
             document_type=request.document_type,
             title=request.title,
-            created_by=current_user.get('id') if current_user else 'anonymous',
+            created_by='anonymous',  # For now, not requiring authentication
             max_participants=request.max_participants
         )
         
