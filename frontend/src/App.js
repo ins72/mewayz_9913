@@ -45,6 +45,10 @@ function App() {
         {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           <Route index element={<DashboardHome />} />
+          <Route path="social-media" element={<SocialMediaPage />} />
+          <Route path="ecommerce" element={<EcommercePage />} />
+          <Route path="courses" element={<CoursesPage />} />
+          <Route path="crm" element={<CRMPage />} />
         </Route>
 
         {/* Catch all - redirect to home */}
