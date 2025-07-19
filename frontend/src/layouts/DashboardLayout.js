@@ -71,7 +71,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
     // Content & Education
     { name: 'Courses & Community', href: '/dashboard/courses', icon: AcademicCapIcon, description: 'Education Platform' },
     { name: 'Marketplace & Stores', href: '/dashboard/ecommerce', icon: ShoppingBagIcon, description: 'E-commerce Platform' },
-    { name: 'Template Library', href: '/dashboard/templates', icon: DocumentTextIcon, description: 'Template Marketplace' },
+    { name: 'Template Library', href: '/dashboard/template-marketplace', icon: DocumentTextIcon, description: 'Template Marketplace' },
     { name: 'Escrow System', href: '/dashboard/escrow-system', icon: ShieldCheckIcon, description: 'Secure Transactions' },
     { name: 'Analytics & Reporting', href: '/dashboard/analytics', icon: ChartBarIcon, description: 'Business Intelligence' },
     
