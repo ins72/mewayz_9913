@@ -12,6 +12,10 @@ import RegisterPage from './pages/auth/RegisterPage';
 // Protected pages
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardHome from './pages/dashboard/DashboardHome';
+import SocialMediaPage from './pages/dashboard/SocialMediaPage';
+import EcommercePage from './pages/dashboard/EcommercePage';
+import CoursesPage from './pages/dashboard/CoursesPage';
+import CRMPage from './pages/dashboard/CRMPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
