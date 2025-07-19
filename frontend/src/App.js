@@ -16,7 +16,7 @@ function App() {
   const checkHealth = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BACKEND_URL}/api/health`);
+      const response = await axios.get(`${BACKEND_URL}/health`);
       setHealthStatus(response.data);
       setError(null);
     } catch (err) {
