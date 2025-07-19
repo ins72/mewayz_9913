@@ -5,7 +5,7 @@ import {
   DocumentTextIcon,
   PlusIcon,
   MagnifyingGlassIcon,
-  FilterIcon,
+  FunnelIcon,
   StarIcon,
   EyeIcon,
   DownloadIcon,
