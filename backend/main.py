@@ -56,9 +56,17 @@ team_members_collection = database.team_members
 form_templates_collection = database.form_templates
 discount_codes_collection = database.discount_codes
 
+# Import centralized auth functions
+from auth import (
+    create_access_token, 
+    verify_token, 
+    get_current_user, 
+    get_current_admin_user,
+    security
+)
+
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
 
 # Enums for better data integrity
 class UserRole(str, enum.Enum):
