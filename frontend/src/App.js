@@ -51,6 +51,9 @@ import AdvancedAdminDashboard from './pages/dashboard/AdvancedAdminDashboard';
 import AdvancedLinkInBioBuilder from './pages/dashboard/AdvancedLinkInBioBuilder';
 import ProfessionalCourseBuilder from './pages/dashboard/ProfessionalCourseBuilder';
 import EnhancedSocialMediaManager from './pages/dashboard/EnhancedSocialMediaManager';
+import InstagramDatabasePage from './pages/dashboard/InstagramDatabasePage';
+import AdvancedWebsiteBuilder from './pages/dashboard/AdvancedWebsiteBuilder';
+import ComprehensiveBookingSystem from './pages/dashboard/ComprehensiveBookingSystem';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
