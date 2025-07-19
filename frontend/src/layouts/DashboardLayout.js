@@ -153,6 +153,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
                         ? 'nav-active'
                         : 'text-secondary hover-surface hover:text-primary'
                     }`}
+                    title={item.description}
                   >
                     <item.icon className="w-5 h-5 mr-3" />
                     {item.name}
