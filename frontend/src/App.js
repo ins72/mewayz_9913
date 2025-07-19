@@ -34,11 +34,29 @@ function App() {
   const checkHealth = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${backendUrl}/health`);
+      console.log('Attempting to connect to:', `${backendUrl}/health`);
+      console.log('Current window location:', window.location.href);
+      
+      const response = await axios.get(`${backendUrl}/health`, {
+        timeout: 10000, // 10 second timeout
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Backend response:', response.data);
       setHealthStatus(response.data);
       setError(null);
     } catch (err) {
-      setError(`Failed to connect to backend: ${err.message}`);
+      console.error('Backend connection error:', err);
+      const errorMessage = err.response 
+        ? `Server error: ${err.response.status} - ${err.response.statusText}`
+        : err.request 
+          ? `Network error: Unable to reach ${backendUrl}/health. Check if backend is running.`
+          : `Request error: ${err.message}`;
+      
+      setError(errorMessage);
       setHealthStatus(null);
     } finally {
       setLoading(false);
