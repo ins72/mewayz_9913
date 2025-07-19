@@ -39,98 +39,178 @@ const AdvancedBookingPage = () => {
 
   const loadBookingData = async () => {
     try {
-      // Mock data for now - will be replaced with actual API calls
-      setServices([
-        {
-          id: 1,
-          name: 'Business Consultation',
-          description: 'One-on-one business strategy consultation',
-          duration: 60,
-          price: 150,
-          category: 'Consultation',
-          status: 'active',
-          bookings: 23,
-          availability: 'Available'
-        },
-        {
-          id: 2,
-          name: 'Digital Marketing Strategy',
-          description: 'Comprehensive digital marketing planning session',
-          duration: 90,
-          price: 200,
-          category: 'Marketing',
-          status: 'active',
-          bookings: 18,
-          availability: 'Available'
-        },
-        {
-          id: 3,
-          name: 'Technical Support',
-          description: 'Technical assistance and troubleshooting',
-          duration: 30,
-          price: 75,
-          category: 'Support',
-          status: 'active',
-          bookings: 41,
-          availability: 'Busy'
-        }
-      ]);
+      // Try to load from API first, fall back to mock data
+      try {
+        const servicesResponse = await bookingAPI.getServices();
+        const appointmentsResponse = await bookingAPI.getAppointments();
+        const analyticsResponse = await bookingAPI.getAnalytics();
+        
+        setServices(servicesResponse.data.services || []);
+        setAppointments(appointmentsResponse.data.appointments || []);
+        setAnalytics(analyticsResponse.data);
+      } catch (apiError) {
+        console.log('API not available, using mock data:', apiError.message);
+        // Fall back to mock data
+        setServices([
+          {
+            id: 1,
+            name: 'Business Consultation',
+            description: 'One-on-one business strategy consultation',
+            duration: 60,
+            price: 150,
+            category: 'Consultation',
+            status: 'active',
+            bookings: 23,
+            availability: 'Available'
+          },
+          {
+            id: 2,
+            name: 'Digital Marketing Strategy',
+            description: 'Comprehensive digital marketing planning session',
+            duration: 90,
+            price: 200,
+            category: 'Marketing',
+            status: 'active',
+            bookings: 18,
+            availability: 'Available'
+          },
+          {
+            id: 3,
+            name: 'Technical Support',
+            description: 'Technical assistance and troubleshooting',
+            duration: 30,
+            price: 75,
+            category: 'Support',
+            status: 'active',
+            bookings: 41,
+            availability: 'Busy'
+          }
+        ]);
 
-      setAppointments([
-        {
-          id: 1,
-          service: 'Business Consultation',
-          client: 'John Smith',
-          clientEmail: 'john@example.com',
-          clientPhone: '+1-555-0123',
-          date: '2025-07-20',
-          time: '10:00',
-          duration: 60,
-          status: 'confirmed',
-          amount: 150,
-          notes: 'First-time consultation for startup planning'
-        },
-        {
-          id: 2,
-          service: 'Digital Marketing Strategy',
-          client: 'Sarah Johnson',
-          clientEmail: 'sarah@company.com',
-          clientPhone: '+1-555-0456',
-          date: '2025-07-20',
-          time: '14:30',
-          duration: 90,
-          status: 'pending',
-          amount: 200,
-          notes: 'E-commerce marketing strategy review'
-        },
-        {
-          id: 3,
-          service: 'Technical Support',
-          client: 'Mike Wilson',
-          clientEmail: 'mike@tech.com',
-          clientPhone: '+1-555-0789',
-          date: '2025-07-19',
-          time: '16:00',
-          duration: 30,
-          status: 'completed',
-          amount: 75,
-          notes: 'WordPress website issues resolved'
-        }
-      ]);
+        setAppointments([
+          {
+            id: 1,
+            service: 'Business Consultation',
+            client: 'John Smith',
+            clientEmail: 'john@example.com',
+            clientPhone: '+1-555-0123',
+            date: '2025-07-20',
+            time: '10:00',
+            duration: 60,
+            status: 'confirmed',
+            amount: 150,
+            notes: 'First-time consultation for startup planning'
+          },
+          {
+            id: 2,
+            service: 'Digital Marketing Strategy',
+            client: 'Sarah Johnson',
+            clientEmail: 'sarah@company.com',
+            clientPhone: '+1-555-0456',
+            date: '2025-07-20',
+            time: '14:30',
+            duration: 90,
+            status: 'pending',
+            amount: 200,
+            notes: 'E-commerce marketing strategy review'
+          },
+          {
+            id: 3,
+            service: 'Technical Support',
+            client: 'Mike Wilson',
+            clientEmail: 'mike@tech.com',
+            clientPhone: '+1-555-0789',
+            date: '2025-07-19',
+            time: '16:00',
+            duration: 30,
+            status: 'completed',
+            amount: 75,
+            notes: 'WordPress website issues resolved'
+          }
+        ]);
 
-      setAnalytics({
-        totalBookings: 82,
-        totalRevenue: 12340,
-        averageRating: 4.8,
-        completionRate: 94.5,
-        upcomingAppointments: 7,
-        monthlyGrowth: 23.5
-      });
-
+        setAnalytics({
+          totalBookings: 82,
+          totalRevenue: 12340,
+          averageRating: 4.8,
+          completionRate: 94.5,
+          upcomingAppointments: 7,
+          monthlyGrowth: 23.5
+        });
+      }
     } catch (error) {
       console.error('Failed to load booking data:', error);
+      toast.error('Failed to load booking data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateService = (newService) => {
+    setServices(prev => [newService, ...prev]);
+    toast.success('Service created successfully!');
+  };
+
+  const handleCreateAppointment = (newAppointment) => {
+    setAppointments(prev => [newAppointment, ...prev]);
+    toast.success('Appointment created successfully!');
+  };
+
+  const handleServiceAction = (action, service) => {
+    switch (action) {
+      case 'view':
+        setSelectedService(service);
+        break;
+      case 'edit':
+        // Open edit modal
+        toast.info('Edit functionality coming soon');
+        break;
+      case 'delete':
+        if (window.confirm('Are you sure you want to delete this service?')) {
+          setServices(prev => prev.filter(s => s.id !== service.id));
+          toast.success('Service deleted successfully');
+        }
+        break;
+      case 'book':
+        setShowCreateAppointmentModal(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleAppointmentAction = (action, appointment) => {
+    switch (action) {
+      case 'view':
+        toast.info('View appointment details coming soon');
+        break;
+      case 'edit':
+        toast.info('Edit appointment coming soon');
+        break;
+      case 'confirm':
+        setAppointments(prev => 
+          prev.map(apt => 
+            apt.id === appointment.id 
+              ? { ...apt, status: 'confirmed' }
+              : apt
+          )
+        );
+        toast.success('Appointment confirmed');
+        break;
+      case 'cancel':
+        if (window.confirm('Are you sure you want to cancel this appointment?')) {
+          setAppointments(prev => 
+            prev.map(apt => 
+              apt.id === appointment.id 
+                ? { ...apt, status: 'cancelled' }
+                : apt
+            )
+          );
+          toast.success('Appointment cancelled');
+        }
+        break;
+      default:
+        break;
     }
   };
 
