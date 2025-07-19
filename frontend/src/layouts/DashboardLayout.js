@@ -204,9 +204,9 @@ const DashboardLayout = ({ isAdmin = false }) => {
 
                 <Link
                   to="/dashboard/profile"
-                  className="flex-shrink-0 w-8 h-8 bg-surface border border-default rounded-full flex items-center justify-center"
+                  className="flex-shrink-0 w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center shadow-default"
                 >
-                  <UserIcon className="w-4 h-4 text-primary" />
+                  <UserIcon className="w-4 h-4 text-white" />
                 </Link>
 
                 <button
