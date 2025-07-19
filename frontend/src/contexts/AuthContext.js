@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('auth_token'));
+  const [currentWorkspace, setCurrentWorkspace] = useState(null);
 
   useEffect(() => {
     if (token) {
