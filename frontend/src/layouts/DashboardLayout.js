@@ -138,6 +138,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
             </h1>
           </div>
           <nav className="flex-1 mt-4">
+            {/* Regular Navigation */}
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -155,6 +156,34 @@ const DashboardLayout = ({ isAdmin = false }) => {
                 </Link>
               );
             })}
+            
+            {/* Admin Section */}
+            {user?.role === 'admin' && adminNavigation.length > 0 && (
+              <>
+                <div className="pt-6 pb-2">
+                  <h3 className="px-3 text-xs font-semibold text-secondary uppercase tracking-wide">
+                    Admin Panel
+                  </h3>
+                </div>
+                {adminNavigation.map((item) => {
+                  const isActive = location.pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={`flex items-center px-4 py-3 text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-red-500/10 text-red-400 border-l-4 border-red-400'
+                          : 'text-secondary hover:bg-red-500/5 hover:text-red-300'
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5 mr-3" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </>
+            )}
           </nav>
         </div>
       </div>
