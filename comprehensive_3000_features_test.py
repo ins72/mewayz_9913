@@ -72,13 +72,18 @@ class Ultimate3000FeaturesTester:
             
             if response.status_code == 200:
                 data = response.json()
-                self.auth_token = data.get('access_token')
-                self.session.headers.update({
-                    'Authorization': f'Bearer {self.auth_token}'
-                })
-                self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
-                            f"Admin authentication successful", len(response.text))
-                return True
+                self.auth_token = data.get('access_token') or data.get('token')
+                if self.auth_token:
+                    self.session.headers.update({
+                        'Authorization': f'Bearer {self.auth_token}'
+                    })
+                    self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
+                                f"Admin authentication successful - Token: {self.auth_token[:20]}...", len(response.text))
+                    return True
+                else:
+                    self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
+                                f"No token in response: {data}")
+                    return False
             else:
                 self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
                             f"Authentication failed: {response.text}")
