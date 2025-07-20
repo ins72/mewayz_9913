@@ -4614,6 +4614,611 @@ async def get_ai_usage_analytics(current_user: dict = Depends(get_current_user))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get AI analytics: {str(e)}")
 
+# ===== PHASE 4: ADDITIONAL MISSING FEATURES =====
+
+# Advanced Collections for new features
+template_marketplace_collection = database.template_marketplace
+template_versions_collection = database.template_versions
+course_certificates_collection = database.course_certificates
+multi_vendor_commissions_collection = database.multi_vendor_commissions
+advanced_analytics_collection = database.advanced_analytics
+webhook_configurations_collection = database.webhook_configurations
+white_label_settings_collection = database.white_label_settings
+
+# ===== ADVANCED TEMPLATE MARKETPLACE ENDPOINTS =====
+@app.get("/api/templates/marketplace")
+async def get_template_marketplace(
+    category: Optional[str] = None,
+    sort_by: str = "popular",
+    current_user: dict = Depends(get_current_user)
+):
+    """Enhanced template marketplace with advanced filtering"""
+    filter_query = {}
+    if category:
+        filter_query["category"] = category
+    
+    # Sort options
+    sort_options = {
+        "popular": {"downloads": -1},
+        "newest": {"created_at": -1},
+        "rating": {"average_rating": -1},
+        "price_low": {"price": 1},
+        "price_high": {"price": -1}
+    }
+    
+    templates = await template_marketplace_collection.find(filter_query).sort(
+        list(sort_options.get(sort_by, {"created_at": -1}).items())[0]
+    ).limit(50).to_list(length=50)
+    
+    for template in templates:
+        template["id"] = str(template["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "templates": [
+                {
+                    "id": template["id"],
+                    "name": template["name"],
+                    "description": template.get("description"),
+                    "category": template["category"],
+                    "price": template.get("price", 0),
+                    "is_premium": template.get("is_premium", False),
+                    "creator": template["creator"],
+                    "downloads": template.get("downloads", 0),
+                    "average_rating": template.get("average_rating", 0),
+                    "preview_image": template.get("preview_image"),
+                    "tags": template.get("tags", []),
+                    "created_at": template["created_at"].isoformat(),
+                    "last_updated": template.get("last_updated", template["created_at"]).isoformat()
+                } for template in templates
+            ],
+            "total": len(templates),
+            "categories": ["link_bio", "email", "social_media", "website", "course", "form"],
+            "sort_options": list(sort_options.keys())
+        }
+    }
+
+@app.post("/api/templates/create")
+async def create_template(
+    name: str = Form(...),
+    description: str = Form(...),
+    category: str = Form(...),
+    price: float = Form(0),
+    template_data: str = Form(...),
+    tags: List[str] = Form([]),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new template for marketplace"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    template_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "creator_id": current_user["id"],
+        "creator": current_user["name"],
+        "name": name,
+        "description": description,
+        "category": category,
+        "price": price,
+        "is_premium": price > 0,
+        "template_data": json.loads(template_data),
+        "tags": tags,
+        "downloads": 0,
+        "rating_count": 0,
+        "rating_total": 0,
+        "average_rating": 0,
+        "preview_image": None,
+        "status": "pending_review",
+        "created_at": datetime.utcnow(),
+        "last_updated": datetime.utcnow()
+    }
+    
+    await template_marketplace_collection.insert_one(template_doc)
+    
+    # Create initial version
+    version_doc = {
+        "_id": str(uuid.uuid4()),
+        "template_id": template_doc["_id"],
+        "version": "1.0.0",
+        "template_data": template_doc["template_data"],
+        "changelog": "Initial version",
+        "created_at": datetime.utcnow()
+    }
+    await template_versions_collection.insert_one(version_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "template": {
+                "id": template_doc["_id"],
+                "name": template_doc["name"],
+                "category": template_doc["category"],
+                "status": template_doc["status"],
+                "created_at": template_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+@app.post("/api/templates/{template_id}/purchase")
+async def purchase_template(
+    template_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Purchase premium template"""
+    template = await template_marketplace_collection.find_one({"_id": template_id})
+    if not template:
+        raise HTTPException(status_code=404, detail="Template not found")
+    
+    if template["price"] == 0:
+        # Free template - just track download
+        await template_marketplace_collection.update_one(
+            {"_id": template_id},
+            {"$inc": {"downloads": 1}}
+        )
+    else:
+        # Premium template - would integrate with Stripe here
+        # For now, simulate purchase
+        await template_marketplace_collection.update_one(
+            {"_id": template_id},
+            {"$inc": {"downloads": 1}}
+        )
+    
+    return {
+        "success": True,
+        "data": {
+            "template_id": template_id,
+            "purchase_status": "completed",
+            "download_url": f"/api/templates/{template_id}/download"
+        }
+    }
+
+# ===== ADVANCED COURSE FEATURES =====
+@app.get("/api/courses/{course_id}/certificates")
+async def get_course_certificates(
+    course_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get certificates for course completions"""
+    certificates = await course_certificates_collection.find(
+        {"course_id": course_id}
+    ).to_list(length=100)
+    
+    for cert in certificates:
+        cert["id"] = str(cert["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "certificates": [
+                {
+                    "id": cert["id"],
+                    "student_name": cert["student_name"],
+                    "completion_date": cert["completion_date"].isoformat(),
+                    "certificate_url": cert.get("certificate_url"),
+                    "grade": cert.get("grade"),
+                    "skills_earned": cert.get("skills_earned", [])
+                } for cert in certificates
+            ]
+        }
+    }
+
+@app.post("/api/courses/{course_id}/generate-certificate")
+async def generate_certificate(
+    course_id: str,
+    student_id: str = Form(...),
+    grade: Optional[str] = Form("Pass"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate completion certificate for student"""
+    course = await courses_collection.find_one({"_id": course_id})
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    student = await users_collection.find_one({"_id": student_id})
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    
+    certificate_doc = {
+        "_id": str(uuid.uuid4()),
+        "course_id": course_id,
+        "student_id": student_id,
+        "student_name": student["name"],
+        "course_title": course["title"],
+        "completion_date": datetime.utcnow(),
+        "grade": grade,
+        "certificate_url": f"/certificates/{str(uuid.uuid4())}.pdf",
+        "skills_earned": course.get("skills", []),
+        "instructor": current_user["name"],
+        "created_at": datetime.utcnow()
+    }
+    
+    await course_certificates_collection.insert_one(certificate_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "certificate": {
+                "id": certificate_doc["_id"],
+                "certificate_url": certificate_doc["certificate_url"],
+                "completion_date": certificate_doc["completion_date"].isoformat()
+            }
+        }
+    }
+
+# ===== ADVANCED E-COMMERCE FEATURES =====
+@app.get("/api/ecommerce/vendors/dashboard")
+async def get_vendor_dashboard(current_user: dict = Depends(get_current_user)):
+    """Advanced vendor dashboard with commission tracking"""
+    # Get vendor's products and sales
+    vendor_products = await marketplace_products_collection.count_documents({"vendor_id": current_user["id"]})
+    
+    # Calculate commissions (mock data for now)
+    commission_data = {
+        "total_sales": 12450.50,
+        "platform_commission": 1245.05,  # 10%
+        "net_earnings": 11205.45,
+        "pending_payouts": 5602.75,
+        "commission_rate": 10.0
+    }
+    
+    return {
+        "success": True,
+        "data": {
+            "vendor_metrics": {
+                "total_products": vendor_products,
+                "active_products": vendor_products,
+                "total_sales": commission_data["total_sales"],
+                "orders_this_month": 45,
+                "rating": 4.8
+            },
+            "commission_breakdown": commission_data,
+            "recent_sales": [
+                {"product": "Digital Course", "amount": 99.99, "commission": 9.99, "date": "2025-07-20"},
+                {"product": "Template Pack", "amount": 49.99, "commission": 4.99, "date": "2025-07-19"}
+            ]
+        }
+    }
+
+@app.post("/api/ecommerce/products/compare")
+async def compare_products(
+    product_ids: List[str],
+    current_user: dict = Depends(get_current_user)
+):
+    """Advanced product comparison feature"""
+    products = await marketplace_products_collection.find(
+        {"_id": {"$in": product_ids}}
+    ).to_list(length=10)
+    
+    comparison_data = []
+    for product in products:
+        comparison_data.append({
+            "id": str(product["_id"]),
+            "name": product["name"],
+            "price": product["price"],
+            "rating": product.get("rating", 0),
+            "features": product.get("features", []),
+            "category": product.get("category"),
+            "vendor": product.get("vendor_name"),
+            "reviews_count": product.get("reviews_count", 0)
+        })
+    
+    return {
+        "success": True,
+        "data": {
+            "comparison": comparison_data,
+            "comparison_matrix": {
+                "price_range": {"min": min([p["price"] for p in comparison_data]), "max": max([p["price"] for p in comparison_data])},
+                "rating_range": {"min": min([p["rating"] for p in comparison_data]), "max": max([p["rating"] for p in comparison_data])},
+                "common_features": []  # Would calculate common features
+            }
+        }
+    }
+
+# ===== ADVANCED ANALYTICS FEATURES =====
+@app.get("/api/analytics/custom-reports")
+async def get_custom_reports(current_user: dict = Depends(get_current_user)):
+    """Custom report builder data"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Available metrics for custom reporting
+    available_metrics = {
+        "user_metrics": ["total_users", "active_users", "new_signups", "user_retention"],
+        "revenue_metrics": ["total_revenue", "mrr", "arr", "conversion_rate"],
+        "engagement_metrics": ["page_views", "session_duration", "bounce_rate"],
+        "product_metrics": ["product_views", "cart_additions", "purchases"]
+    }
+    
+    # Sample custom reports
+    saved_reports = [
+        {
+            "id": str(uuid.uuid4()),
+            "name": "Monthly Revenue Analysis",
+            "metrics": ["total_revenue", "mrr", "conversion_rate"],
+            "date_range": "last_30_days",
+            "chart_type": "line",
+            "created_at": datetime.utcnow().isoformat()
+        }
+    ]
+    
+    return {
+        "success": True,
+        "data": {
+            "available_metrics": available_metrics,
+            "saved_reports": saved_reports,
+            "report_templates": [
+                {"name": "Revenue Dashboard", "type": "financial"},
+                {"name": "User Engagement", "type": "engagement"},
+                {"name": "Product Performance", "type": "ecommerce"}
+            ]
+        }
+    }
+
+@app.post("/api/analytics/reports/create")
+async def create_custom_report(
+    name: str = Form(...),
+    metrics: List[str] = Form(...),
+    date_range: str = Form("last_30_days"),
+    chart_type: str = Form("line"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create custom analytics report"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    report_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "name": name,
+        "metrics": metrics,
+        "date_range": date_range,
+        "chart_type": chart_type,
+        "filters": {},
+        "schedule": None,
+        "created_at": datetime.utcnow(),
+        "last_generated": None
+    }
+    
+    await advanced_analytics_collection.insert_one(report_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "report": {
+                "id": report_doc["_id"],
+                "name": report_doc["name"],
+                "metrics": report_doc["metrics"],
+                "created_at": report_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== ADVANCED INTEGRATION FEATURES =====
+@app.get("/api/integrations/webhooks")
+async def get_webhook_configurations(current_user: dict = Depends(get_current_user)):
+    """Get webhook configurations for workspace"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    webhooks = await webhook_configurations_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).to_list(length=50)
+    
+    for webhook in webhooks:
+        webhook["id"] = str(webhook["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "webhooks": [
+                {
+                    "id": webhook["id"],
+                    "name": webhook["name"],
+                    "url": webhook["url"],
+                    "events": webhook["events"],
+                    "status": webhook.get("status", "active"),
+                    "last_triggered": webhook.get("last_triggered"),
+                    "success_count": webhook.get("success_count", 0),
+                    "failure_count": webhook.get("failure_count", 0)
+                } for webhook in webhooks
+            ],
+            "available_events": [
+                "user.created", "order.completed", "payment.received",
+                "course.completed", "template.purchased", "booking.created"
+            ]
+        }
+    }
+
+@app.post("/api/integrations/webhooks/create")
+async def create_webhook(
+    name: str = Form(...),
+    url: str = Form(...),
+    events: List[str] = Form(...),
+    secret: Optional[str] = Form(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new webhook configuration"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    webhook_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "name": name,
+        "url": url,
+        "events": events,
+        "secret": secret or secrets.token_urlsafe(32),
+        "status": "active",
+        "success_count": 0,
+        "failure_count": 0,
+        "created_at": datetime.utcnow(),
+        "last_triggered": None
+    }
+    
+    await webhook_configurations_collection.insert_one(webhook_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "webhook": {
+                "id": webhook_doc["_id"],
+                "name": webhook_doc["name"],
+                "url": webhook_doc["url"],
+                "events": webhook_doc["events"],
+                "secret": webhook_doc["secret"],
+                "created_at": webhook_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== WHITE-LABEL & CUSTOMIZATION FEATURES =====
+@app.get("/api/admin/white-label/settings")
+async def get_white_label_settings(current_admin: dict = Depends(get_current_admin_user)):
+    """Get white-label customization settings"""
+    settings = await white_label_settings_collection.find_one({"is_default": True})
+    
+    if not settings:
+        # Create default settings
+        settings = {
+            "_id": str(uuid.uuid4()),
+            "is_default": True,
+            "branding": {
+                "platform_name": "Mewayz",
+                "logo_url": None,
+                "favicon_url": None,
+                "primary_color": "#3B82F6",
+                "secondary_color": "#1F2937"
+            },
+            "custom_domain": None,
+            "email_branding": {
+                "sender_name": "Mewayz Platform",
+                "sender_email": "noreply@mewayz.com",
+                "email_footer": "Powered by Mewayz Platform"
+            },
+            "features": {
+                "hide_powered_by": False,
+                "custom_login_page": False,
+                "custom_dashboard": False
+            },
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+        await white_label_settings_collection.insert_one(settings)
+    
+    settings["id"] = str(settings["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "settings": settings,
+            "customization_options": {
+                "branding": ["logo", "colors", "favicon", "platform_name"],
+                "features": ["hide_powered_by", "custom_login", "custom_dashboard"],
+                "email": ["sender_info", "templates", "footer_text"],
+                "domain": ["custom_domain", "ssl_certificate"]
+            }
+        }
+    }
+
+@app.post("/api/admin/white-label/update")
+async def update_white_label_settings(
+    settings: dict,
+    current_admin: dict = Depends(get_current_admin_user)
+):
+    """Update white-label settings"""
+    await white_label_settings_collection.update_one(
+        {"is_default": True},
+        {
+            "$set": {
+                **settings,
+                "updated_at": datetime.utcnow()
+            }
+        },
+        upsert=True
+    )
+    
+    return {
+        "success": True,
+        "data": {
+            "message": "White-label settings updated successfully",
+            "updated_at": datetime.utcnow().isoformat()
+        }
+    }
+
+# ===== ADVANCED FINANCIAL FEATURES =====
+@app.get("/api/financial/multi-currency")
+async def get_multi_currency_settings(current_user: dict = Depends(get_current_user)):
+    """Get multi-currency configuration"""
+    supported_currencies = [
+        {"code": "USD", "name": "US Dollar", "symbol": "$"},
+        {"code": "EUR", "name": "Euro", "symbol": "€"},
+        {"code": "GBP", "name": "British Pound", "symbol": "£"},
+        {"code": "CAD", "name": "Canadian Dollar", "symbol": "C$"},
+        {"code": "AUD", "name": "Australian Dollar", "symbol": "A$"},
+        {"code": "JPY", "name": "Japanese Yen", "symbol": "¥"}
+    ]
+    
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    workspace_currency = workspace.get("currency", "USD") if workspace else "USD"
+    
+    return {
+        "success": True,
+        "data": {
+            "supported_currencies": supported_currencies,
+            "workspace_currency": workspace_currency,
+            "currency_rates": {
+                "USD": 1.0,
+                "EUR": 0.85,
+                "GBP": 0.73,
+                "CAD": 1.25,
+                "AUD": 1.35,
+                "JPY": 110.0
+            },
+            "auto_conversion": True,
+            "last_updated": datetime.utcnow().isoformat()
+        }
+    }
+
+@app.post("/api/financial/tax/calculate")
+async def calculate_tax(
+    amount: float = Form(...),
+    tax_region: str = Form("US"),
+    product_type: str = Form("digital"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Advanced tax calculation"""
+    # Mock tax calculation logic
+    tax_rates = {
+        "US": {"digital": 0.06, "physical": 0.08},
+        "EU": {"digital": 0.20, "physical": 0.19},
+        "UK": {"digital": 0.20, "physical": 0.20},
+        "CA": {"digital": 0.05, "physical": 0.13}
+    }
+    
+    rate = tax_rates.get(tax_region, {"digital": 0.06, "physical": 0.08}).get(product_type, 0.06)
+    tax_amount = amount * rate
+    total_amount = amount + tax_amount
+    
+    return {
+        "success": True,
+        "data": {
+            "subtotal": amount,
+            "tax_rate": rate,
+            "tax_amount": round(tax_amount, 2),
+            "total_amount": round(total_amount, 2),
+            "tax_region": tax_region,
+            "tax_jurisdiction": "State/Federal" if tax_region == "US" else "VAT"
+        }
+    }
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)
