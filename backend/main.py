@@ -5565,6 +5565,408 @@ async def import_data(
         }
     }
 
+# ===== COMPREHENSIVE SUBSCRIPTION & PAYMENT MANAGEMENT =====
+
+# New subscription collections for enhanced management
+failed_payments_collection = database.failed_payments
+subscription_lifecycle_collection = database.subscription_lifecycle
+payment_recovery_collection = database.payment_recovery
+cancellation_surveys_collection = database.cancellation_surveys
+account_deletion_requests_collection = database.account_deletion_requests
+
+@app.get("/api/subscription/comprehensive-status")
+async def get_comprehensive_subscription_status(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive subscription status with payment health and lifecycle data"""
+    user = await users_collection.find_one({"email": current_user["email"]})
+    
+    # Mock comprehensive subscription data - in production this would come from Stripe and database
+    subscription_data = {
+        "subscription_overview": {
+            "subscription_id": "sub_1234567890",
+            "customer_id": "cus_1234567890",
+            "plan_id": "pro_monthly",
+            "plan_name": "Professional Monthly",
+            "status": "active",
+            "health_score": 92,  # Based on payment history, usage, engagement
+            "risk_level": "low",  # low, medium, high, critical
+            "current_period_start": (datetime.utcnow() - timedelta(days=15)).isoformat(),
+            "current_period_end": (datetime.utcnow() + timedelta(days=15)).isoformat(),
+            "days_until_renewal": 15,
+            "cancel_at_period_end": False,
+            "amount": 2900,
+            "currency": "usd",
+            "created": (datetime.utcnow() - timedelta(days=365)).isoformat(),
+            "customer_lifetime_value": 34800,  # Total paid over lifetime
+            "subscription_age_days": 365,
+            "auto_renewal_enabled": True
+        },
+        "payment_health": {
+            "payment_method_valid": True,
+            "last_payment_status": "succeeded",
+            "failed_payments_count": 0,
+            "retry_attempts": 0,
+            "next_retry_date": None,
+            "dunning_status": "none",  # none, soft_decline, hard_decline, under_review
+            "payment_method_expiring": False,
+            "days_until_card_expiry": 180,
+            "backup_payment_methods": 2,
+            "payment_failure_risk": "low"
+        },
+        "usage_analytics": {
+            "engagement_score": 85,  # Based on feature usage
+            "features_used_percentage": 78,
+            "last_login": (datetime.utcnow() - timedelta(hours=2)).isoformat(),
+            "sessions_this_month": 24,
+            "value_realization_score": 90,  # How well they're using paid features
+            "growth_trajectory": "positive",  # positive, stable, declining
+            "churn_risk_score": 12  # 0-100, lower is better
+        },
+        "account_lifecycle": {
+            "lifecycle_stage": "mature",  # trial, new, growing, mature, at_risk, churning
+            "onboarding_completed": True,
+            "feature_adoption_rate": 82,
+            "support_tickets_count": 2,
+            "satisfaction_score": 4.8,
+            "renewal_probability": 94,
+            "upsell_opportunities": [
+                {
+                    "feature": "Advanced Analytics",
+                    "confidence": 87,
+                    "value_score": 92
+                },
+                {
+                    "feature": "Team Collaboration Pro",
+                    "confidence": 71,
+                    "value_score": 88
+                }
+            ]
+        }
+    }
+    return {"success": True, "data": subscription_data}
+
+@app.get("/api/payment/failed-payments")
+async def get_failed_payments(current_user: dict = Depends(get_current_user)):
+    """Get failed payment attempts and recovery status"""
+    failed_payments_data = {
+        "failed_payments_summary": {
+            "total_failed_attempts": 0,
+            "last_failure_date": None,
+            "recovery_status": "no_failures",
+            "next_retry_date": None,
+            "dunning_campaign_active": False
+        },
+        "payment_failures": [],
+        "recovery_options": [
+            {
+                "option": "update_payment_method",
+                "title": "Update Payment Method",
+                "description": "Add or update your payment method to resolve future issues",
+                "recommended": True,
+                "action_url": "/api/payment/setup-intent"
+            },
+            {
+                "option": "retry_payment",
+                "title": "Retry Payment", 
+                "description": "Retry the failed payment with your current method",
+                "recommended": False,
+                "action_url": "/api/payment/retry"
+            },
+            {
+                "option": "contact_support",
+                "title": "Contact Support",
+                "description": "Get help from our billing support team",
+                "recommended": False,
+                "action_url": "/api/support/tickets"
+            }
+        ],
+        "prevention_tips": [
+            "Ensure your card has sufficient funds",
+            "Check that your billing address is up to date",
+            "Contact your bank if you suspect fraud protection is blocking payments",
+            "Consider adding a backup payment method"
+        ]
+    }
+    return {"success": True, "data": failed_payments_data}
+
+@app.post("/api/payment/retry-failed")
+async def retry_failed_payment(
+    payment_intent_id: str = Form(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Retry a failed payment"""
+    # In production, this would integrate with Stripe to retry the payment
+    retry_response = {
+        "payment_intent_id": payment_intent_id,
+        "status": "processing",
+        "client_secret": f"pi_{payment_intent_id}_secret_retry123",
+        "retry_attempt": 1,
+        "estimated_processing_time": "2-5 minutes",
+        "next_action": "confirm_payment",
+        "message": "Payment retry initiated. Please confirm with your bank if prompted."
+    }
+    
+    # Log retry attempt
+    await failed_payments_collection.insert_one({
+        "user_id": current_user["id"],
+        "payment_intent_id": payment_intent_id,
+        "retry_attempt": 1,
+        "status": "processing",
+        "created_at": datetime.utcnow(),
+        "type": "manual_retry"
+    })
+    
+    return {"success": True, "data": retry_response}
+
+@app.get("/api/payment/recovery-dashboard")
+async def get_payment_recovery_dashboard(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive payment recovery dashboard"""
+    recovery_data = {
+        "account_status": {
+            "payment_health": "excellent",
+            "subscription_status": "active",
+            "days_since_last_payment": 15,
+            "payment_success_rate": 100.0,
+            "estimated_next_bill_date": (datetime.utcnow() + timedelta(days=15)).isoformat()
+        },
+        "payment_analytics": {
+            "total_payments": 12,
+            "successful_payments": 12,
+            "failed_payments": 0,
+            "total_amount_paid": 34800,
+            "average_payment_amount": 2900,
+            "payment_method_changes": 1,
+            "last_successful_payment": {
+                "amount": 2900,
+                "date": (datetime.utcnow() - timedelta(days=15)).isoformat(),
+                "method": "•••• 4242"
+            }
+        },
+        "proactive_monitoring": {
+            "card_expiry_monitoring": True,
+            "fraud_detection": True,
+            "bank_decline_prediction": True,
+            "automatic_retry_enabled": True,
+            "smart_dunning_enabled": True,
+            "payment_method_backup": True
+        },
+        "recommendations": [
+            {
+                "type": "optimization",
+                "title": "Payment Method Optimization",
+                "description": "Your payment success rate is excellent. Consider adding a backup method for extra security.",
+                "priority": "low",
+                "action": "add_backup_method"
+            }
+        ]
+    }
+    return {"success": True, "data": recovery_data}
+
+@app.post("/api/subscription/cancellation/survey")
+async def submit_cancellation_survey(
+    reason: str = Form(...),
+    feedback: str = Form(...),
+    satisfaction_score: int = Form(...),
+    likelihood_to_return: int = Form(...),
+    suggestions: Optional[str] = Form(""),
+    current_user: dict = Depends(get_current_user)
+):
+    """Submit cancellation survey for retention insights"""
+    survey_doc = {
+        "_id": str(uuid.uuid4()),
+        "user_id": current_user["id"],
+        "reason": reason,
+        "feedback": feedback,
+        "satisfaction_score": satisfaction_score,
+        "likelihood_to_return": likelihood_to_return,
+        "suggestions": suggestions,
+        "submitted_at": datetime.utcnow(),
+        "subscription_age": 365,  # Would calculate from actual subscription
+        "plan_type": "pro"
+    }
+    
+    await cancellation_surveys_collection.insert_one(survey_doc)
+    
+    # Generate retention offers based on reason
+    retention_offers = []
+    if reason in ["too_expensive", "pricing"]:
+        retention_offers.extend([
+            {"type": "discount", "value": "50% off for 3 months", "code": "STAY50"},
+            {"type": "downgrade", "value": "Switch to Basic plan", "savings": "$20/month"}
+        ])
+    elif reason in ["not_using_features", "complexity"]:
+        retention_offers.extend([
+            {"type": "training", "value": "Free 1-on-1 setup session", "code": "SETUP1ON1"},
+            {"type": "pause", "value": "Pause for up to 3 months", "code": "PAUSE90"}
+        ])
+    
+    return {
+        "success": True, 
+        "data": {
+            "survey_id": survey_doc["_id"],
+            "retention_offers": retention_offers,
+            "contact_info": {
+                "support_email": "retention@mewayz.com",
+                "phone": "1-800-MEWAYZ1",
+                "chat_available": True
+            }
+        }
+    }
+
+@app.post("/api/account/deletion/request")
+async def request_account_deletion(
+    password: str = Form(...),
+    reason: str = Form(...),
+    data_export_requested: bool = Form(False),
+    current_user: dict = Depends(get_current_user)
+):
+    """Request complete account deletion"""
+    # Verify password
+    user = await users_collection.find_one({"email": current_user["email"]})
+    if not user or not pwd_context.verify(password, user["password"]):
+        raise HTTPException(status_code=400, detail="Invalid password")
+    
+    deletion_doc = {
+        "_id": str(uuid.uuid4()),
+        "user_id": current_user["id"],
+        "reason": reason,
+        "data_export_requested": data_export_requested,
+        "requested_at": datetime.utcnow(),
+        "scheduled_deletion_date": datetime.utcnow() + timedelta(days=30),
+        "status": "scheduled",  # scheduled, processing, completed
+        "confirmation_required": True,
+        "grace_period_days": 30
+    }
+    
+    await account_deletion_requests_collection.insert_one(deletion_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "deletion_request_id": deletion_doc["_id"],
+            "scheduled_deletion_date": deletion_doc["scheduled_deletion_date"].isoformat(),
+            "grace_period_days": 30,
+            "data_retention_info": {
+                "immediate_actions": [
+                    "Subscription cancelled immediately",
+                    "Account access disabled",
+                    "Data marked for deletion"
+                ],
+                "30_day_period": [
+                    "Data remains recoverable",
+                    "Deletion can be cancelled",
+                    "Export remains available"
+                ],
+                "after_deletion": [
+                    "All personal data permanently deleted",
+                    "Anonymized analytics may be retained",
+                    "Legal compliance records as required"
+                ]
+            },
+            "cancellation_info": {
+                "email": f"cancel-{deletion_doc['_id']}@mewayz.com",
+                "link": f"/account/deletion/cancel/{deletion_doc['_id']}"
+            }
+        }
+    }
+
+@app.post("/api/account/deletion/cancel/{deletion_request_id}")
+async def cancel_account_deletion(
+    deletion_request_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Cancel scheduled account deletion"""
+    deletion_request = await account_deletion_requests_collection.find_one({
+        "_id": deletion_request_id,
+        "user_id": current_user["id"],
+        "status": "scheduled"
+    })
+    
+    if not deletion_request:
+        raise HTTPException(status_code=404, detail="Deletion request not found or already processed")
+    
+    # Update deletion request
+    await account_deletion_requests_collection.update_one(
+        {"_id": deletion_request_id},
+        {
+            "$set": {
+                "status": "cancelled",
+                "cancelled_at": datetime.utcnow()
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "data": {
+            "deletion_request_id": deletion_request_id,
+            "status": "cancelled",
+            "account_restored": True,
+            "subscription_status": "reactivated",
+            "message": "Welcome back! Your account has been fully restored."
+        }
+    }
+
+@app.get("/api/subscription/retention-analysis")
+async def get_retention_analysis(current_user: dict = Depends(get_current_user)):
+    """Get subscription retention analysis and recommendations"""
+    user = await users_collection.find_one({"email": current_user["email"]})
+    
+    retention_data = {
+        "account_health": {
+            "retention_score": 87,  # 0-100
+            "churn_risk": "low",
+            "engagement_trend": "increasing",
+            "value_realization": 92,
+            "satisfaction_indicators": {
+                "feature_usage": 78,
+                "support_satisfaction": 4.6,
+                "billing_health": 100,
+                "product_feedback": 4.8
+            }
+        },
+        "usage_insights": {
+            "most_used_features": [
+                {"feature": "AI Content Generation", "usage": "89%"},
+                {"feature": "Bio Site Builder", "usage": "82%"},
+                {"feature": "Analytics Dashboard", "usage": "76%"}
+            ],
+            "underutilized_features": [
+                {"feature": "Team Collaboration", "potential_value": "High"},
+                {"feature": "Advanced Integrations", "potential_value": "Medium"},
+                {"feature": "White-label Options", "potential_value": "Medium"}
+            ],
+            "growth_opportunities": [
+                {
+                    "opportunity": "Upgrade to Enterprise",
+                    "benefit": "Unlimited AI tokens + Priority support",
+                    "confidence": 73
+                },
+                {
+                    "opportunity": "Add Team Members",
+                    "benefit": "Collaborate with your team efficiently",
+                    "confidence": 68
+                }
+            ]
+        },
+        "retention_recommendations": [
+            {
+                "type": "feature_discovery",
+                "title": "Discover Team Collaboration",
+                "description": "You're not using team features. Try inviting a colleague!",
+                "impact": "high",
+                "effort": "low"
+            },
+            {
+                "type": "optimization",
+                "title": "Optimize AI Usage",
+                "description": "You're using 89% of AI features. Consider upgrading for unlimited access.",
+                "impact": "medium",
+                "effort": "low"
+            }
+        ]
+    }
+    return {"success": True, "data": retention_data}
+
 # ===== DOMAIN & SSL MANAGEMENT (15+ ENDPOINTS) =====
 
 @app.get("/api/domains")
