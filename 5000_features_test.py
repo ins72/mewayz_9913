@@ -214,7 +214,13 @@ class Historic5000FeaturesTester:
         
         # AI-human collaboration chat
         self.test_endpoint("/support/omnichannel-chat/session", "POST",
-                         data={"user_id": "test_user", "issue_type": "technical", "priority": "high"},
+                         data={
+                             "user_id": "test_user", 
+                             "channel": "web_chat",
+                             "initial_message": "I need help with the 5000 features platform",
+                             "issue_type": "technical", 
+                             "priority": "high"
+                         },
                          description="AI-human collaboration chat", phase="Phase 8")
         
         # Omni-channel content creation
