@@ -181,65 +181,19 @@ class BackendTester:
         # 5. Marketing Automation - Workflow Creation
         print(f"\n⚙️ Testing Marketing Automation...")
         workflow_data = {
-            "name": "Welcome Series Automation",
-            "description": "Automated welcome series for new subscribers",
-            "trigger": {
-                "type": "contact_added",
-                "conditions": {
-                    "list": "new_subscribers",
-                    "tags": ["new_user"]
+            "workflow_name": "Welcome Series Automation",
+            "trigger_type": "contact_added",
+            "workflow_steps": [
+                {
+                    "step_type": "delay",
+                    "delay_duration": "1 hour"
+                },
+                {
+                    "step_type": "email",
+                    "email_template": "welcome_email_1",
+                    "email_subject": "Welcome to Our Platform!"
                 }
-            },
-            "steps": [
-                {
-                    "type": "delay",
-                    "duration": "1 hour",
-                    "description": "Wait 1 hour after subscription"
-                },
-                {
-                    "type": "email",
-                    "template_id": "welcome_email_1",
-                    "subject": "Welcome to Our Platform!",
-                    "description": "Send welcome email"
-                },
-                {
-                    "type": "delay",
-                    "duration": "3 days",
-                    "description": "Wait 3 days"
-                },
-                {
-                    "type": "email",
-                    "template_id": "getting_started_email",
-                    "subject": "Getting Started Guide",
-                    "description": "Send getting started guide"
-                },
-                {
-                    "type": "condition",
-                    "condition": "email_opened",
-                    "true_path": [
-                        {
-                            "type": "email",
-                            "template_id": "advanced_features_email",
-                            "subject": "Unlock Advanced Features",
-                            "description": "Send advanced features email"
-                        }
-                    ],
-                    "false_path": [
-                        {
-                            "type": "email",
-                            "template_id": "re_engagement_email",
-                            "subject": "We Miss You!",
-                            "description": "Send re-engagement email"
-                        }
-                    ]
-                }
-            ],
-            "settings": {
-                "active": True,
-                "send_time": "optimal",
-                "timezone": "user_timezone",
-                "frequency_cap": "1_per_day"
-            }
+            ]
         }
         self.test_endpoint("/marketing/automation/workflow/create", "POST",
                          data=workflow_data,
