@@ -88,6 +88,12 @@ workspace_tokens_collection = database.workspace_tokens
 token_transactions_collection = database.token_transactions
 token_packages_collection = database.token_packages
 
+# Onboarding collection
+onboarding_collection = database.onboarding_progress
+
+# System metrics collection
+system_metrics_collection = database.system_metrics
+
 # Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
