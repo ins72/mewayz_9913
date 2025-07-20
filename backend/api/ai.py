@@ -48,7 +48,7 @@ async def get_ai_services(current_user: dict = Depends(get_current_active_user))
             "image_generation": {
                 "name": "Image Generation", 
                 "description": "AI-powered image creation and editing",
-                "features": ["Custom images", "Logo design", "Social media graphics", "Product mockups"],
+                "features": ["Custom images", "Logo design", "Social media graphics", "Product designs"],
                 "available": plan_features.get("premium_features", False),
                 "usage_limit": plan_features.get("ai_requests_monthly", 100),
                 "usage_used": ai_requests_used,
