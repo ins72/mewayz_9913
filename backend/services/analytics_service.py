@@ -100,6 +100,32 @@ class AnalyticsService:
         
         return analytics_data
 
+    async def get_bio_site_analytics(self, bio_site_id: str) -> Dict[str, Any]:
+        """Get bio site analytics with real database calculations"""
+        self._ensure_collections()
+        
+        # Get events for this bio site
+        bio_site_events = await self.analytics_collection.find({
+            "bio_site_id": bio_site_id
+        }).to_list(length=None)
+        
+        # Calculate metrics
+        total_views = sum(1 for event in bio_site_events if event.get("event_type") == "bio_site_view")
+        total_clicks = sum(1 for event in bio_site_events if event.get("event_type") == "link_click")
+        
+        # Get this month's data
+        start_of_month = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        views_this_month = sum(1 for event in bio_site_events 
+                             if event.get("event_type") == "bio_site_view" 
+                             and event.get("timestamp", datetime.min) >= start_of_month)
+        
+        return {
+            "total_views": total_views,
+            "total_clicks": total_clicks,
+            "views_this_month": views_this_month,
+            "click_through_rate": round((total_clicks / max(total_views, 1)) * 100, 2)
+        }
+
     async def get_workspace_analytics(self, workspace_id: str, days: int = 30) -> Dict[str, Any]:
         """Get real workspace analytics from database"""
         start_date = datetime.utcnow() - timedelta(days=days)
