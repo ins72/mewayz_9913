@@ -14,10 +14,21 @@ from core.database import (
 
 class AnalyticsService:
     def __init__(self):
-        self.analytics_collection = get_analytics_collection()
-        self.users_collection = get_users_collection()
-        self.workspaces_collection = get_workspaces_collection()
-        self.bio_sites_collection = get_bio_sites_collection()
+        self.analytics_collection = None
+        self.users_collection = None
+        self.workspaces_collection = None
+        self.bio_sites_collection = None
+    
+    def _ensure_collections(self):
+        """Ensure collections are initialized"""
+        if self.analytics_collection is None:
+            self.analytics_collection = get_analytics_collection()
+        if self.users_collection is None:
+            self.users_collection = get_users_collection()
+        if self.workspaces_collection is None:
+            self.workspaces_collection = get_workspaces_collection()
+        if self.bio_sites_collection is None:
+            self.bio_sites_collection = get_bio_sites_collection()
 
     async def track_event(self, event_data: Dict[str, Any]) -> str:
         """Track analytics event with real database operations"""
