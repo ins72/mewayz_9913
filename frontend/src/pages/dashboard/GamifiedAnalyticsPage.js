@@ -501,7 +501,7 @@ const GamifiedAnalyticsPage = () => {
               { id: 'leaderboard', name: 'Leaderboard', icon: TrophyIcon },
               { id: 'challenges', name: 'Active Challenges', icon: BoltIcon },
               { id: 'achievements', name: 'Achievements', icon: StarIcon },
-              { id: 'badges', name: 'Badge Collection', icon: ShieldIcon }
+              { id: 'badges', name: 'Badge Collection', icon: ShieldCheckIcon }
             ].map((tab) => (
               <button
                 key={tab.id}
