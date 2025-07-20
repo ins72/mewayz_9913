@@ -235,5 +235,6 @@ class UserService:
         
         return features.get(plan, features["free"])
 
-# Create service instance
-user_service = UserService()
+# Create service instance function (dependency injection)
+def get_user_service() -> UserService:
+    return UserService()
