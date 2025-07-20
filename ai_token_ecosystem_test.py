@@ -251,10 +251,17 @@ class AITokenEcosystemTester:
         try:
             start_time = time.time()
             settings_data = {
-                "daily_limit": 100,
-                "member_limit": 50,
-                "auto_refill": True,
-                "notifications": True
+                "workspace_id": self.workspace_id,
+                "monthly_token_allowance": 1000,
+                "auto_purchase_enabled": True,
+                "auto_purchase_threshold": 100,
+                "auto_purchase_package_id": "starter",
+                "user_limits": {},
+                "feature_costs": {
+                    "content_generation": 5,
+                    "content_analysis": 3,
+                    "hashtag_generation": 2
+                }
             }
             
             response = requests.post(
