@@ -3377,6 +3377,28 @@ async def generate_ai_hashtags(
 ):
     """Generate hashtags using AI"""
     try:
+        # Get user's workspace
+        workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+        if not workspace:
+            raise HTTPException(status_code=404, detail="Workspace not found")
+        
+        # Get token cost for this feature
+        workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": str(workspace["_id"])})
+        tokens_needed = workspace_tokens.get("feature_costs", {}).get("hashtag_generation", 2) if workspace_tokens else 2
+        
+        # Consume tokens
+        try:
+            await consume_tokens(str(workspace["_id"]), "hashtag_generation", tokens_needed, current_user)
+        except HTTPException as e:
+            if e.status_code == 402:
+                return {
+                    "success": False,
+                    "error": "insufficient_tokens",
+                    "message": e.detail,
+                    "tokens_needed": tokens_needed
+                }
+            raise e
+        
         result = await ai_system.generate_hashtags(
             content=request.content,
             platform=request.platform,
@@ -3387,14 +3409,16 @@ async def generate_ai_hashtags(
         usage_log = {
             "_id": str(uuid.uuid4()),
             "user_id": current_user["id"],
+            "workspace_id": str(workspace["_id"]),
             "feature": "hashtag_generation",
             "platform": request.platform,
+            "tokens_consumed": tokens_needed,
             "timestamp": datetime.utcnow(),
             "success": result["success"]
         }
         await ai_usage_collection.insert_one(usage_log)
         
-        return {"success": True, "data": result}
+        return {"success": True, "data": result, "tokens_consumed": tokens_needed}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI hashtag generation failed: {str(e)}")
