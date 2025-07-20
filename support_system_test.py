@@ -176,30 +176,30 @@ class SupportSystemTester:
         """Test Live Chat System"""
         print(f"\n💬 TESTING LIVE CHAT SYSTEM")
         
-        # Agent connect to live chat
+        # Generate session ID for testing
+        test_session_id = str(uuid.uuid4())
+        test_agent_id = self.agent_id or str(uuid.uuid4())
+        
+        # Agent connect to live chat - using Form data format
         connect_data = {
-            "agent_id": self.agent_id or str(uuid.uuid4()),
-            "status": "available",
-            "max_concurrent_chats": 5
+            "session_id": test_session_id,
+            "agent_id": test_agent_id
         }
         
-        success, response = self.test_endpoint("/support/live-chat/agent/connect", "POST", data=connect_data,
-                                             description="Agent connect to live chat system")
+        success, response = self.test_endpoint_form("/support/live-chat/agent/connect", "POST", data=connect_data,
+                                                   description="Agent connect to live chat system")
         
-        # Generate session ID for testing if not provided
-        test_session_id = self.session_id or str(uuid.uuid4())
-        
-        # Send message in live chat
+        # Send message in live chat - using Form data format
         message_data = {
             "session_id": test_session_id,
-            "sender_type": "agent",
-            "sender_id": self.agent_id or str(uuid.uuid4()),
             "message": "Hello! How can I help you today?",
+            "sender_type": "agent",
+            "sender_id": test_agent_id,
             "message_type": "text"
         }
         
-        self.test_endpoint("/support/live-chat/message/send", "POST", data=message_data,
-                         description="Send message in live chat session")
+        self.test_endpoint_form("/support/live-chat/message/send", "POST", data=message_data,
+                               description="Send message in live chat session")
         
         # Get chat messages
         self.test_endpoint(f"/support/live-chat/{test_session_id}/messages", "GET",
