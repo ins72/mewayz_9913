@@ -91,7 +91,7 @@ const ProfessionalLinkInBioBuilder = () => {
     { id: 'url', name: 'Website Link', icon: LinkIcon, description: 'Add any external link' },
     { id: 'social', name: 'Social Media', icon: UserGroupIcon, description: 'Link to social profiles' },
     { id: 'video', name: 'Video', icon: VideoCameraIcon, description: 'YouTube, TikTok, or other videos' },
-    { id: 'music', name: 'Music', icon: MusicIcon, description: 'Spotify, Apple Music, etc.' },
+    { id: 'music', name: 'Music', icon: MusicalNoteIcon, description: 'Spotify, Apple Music, etc.' },
     { id: 'shop', name: 'Shop', icon: ShoppingBagIcon, description: 'E-commerce product or store' },
     { id: 'booking', name: 'Booking', icon: CalendarIcon, description: 'Appointment scheduling' },
     { id: 'contact', name: 'Contact', icon: PhoneIcon, description: 'Contact information' },
