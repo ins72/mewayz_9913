@@ -172,7 +172,11 @@ class Historic5000FeaturesTester:
         
         # AI journey optimization
         self.test_endpoint("/ux/user-journey/optimization", "POST",
-                         data={"user_id": "test_user", "current_step": "dashboard", "completion_rate": 0.75},
+                         data={
+                             "user_id": "test_user", 
+                             "current_workflow": "dashboard_navigation",
+                             "completion_rate": 0.75
+                         },
                          description="AI journey optimization", phase="Phase 6")
 
     def test_phase_7_subscription_business_management(self):
