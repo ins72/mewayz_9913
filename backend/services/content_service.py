@@ -26,6 +26,8 @@ class ContentService:
 
     async def create_blog_post(self, post_data: Dict[str, Any], author_id: str) -> Dict[str, Any]:
         """Create blog post with real database operations"""
+        self._ensure_collections()
+        
         # Generate slug from title
         slug = self._generate_slug(post_data["title"])
         
