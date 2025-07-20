@@ -33,7 +33,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuration
-BACKEND_URL = "https://ff62574f-1eb9-4423-9341-e402e15fa0aa.preview.emergentagent.com"
+BACKEND_URL = "https://fbc7fbea-2d99-4296-9b80-a854dcdd044d.preview.emergentagent.com"
 ADMIN_EMAIL = "tmonnens@outlook.com"
 ADMIN_PASSWORD = "Voetballen5"
 

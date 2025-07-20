@@ -412,7 +412,7 @@ class MewayzV3ComprehensiveTester:
 def main():
     """Main function to run the comprehensive v3.0.0 tests"""
     # Backend URL from environment
-    backend_url = "https://ff62574f-1eb9-4423-9341-e402e15fa0aa.preview.emergentagent.com"
+    backend_url = "https://fbc7fbea-2d99-4296-9b80-a854dcdd044d.preview.emergentagent.com"
     
     print(f"🔍 Backend URL: {backend_url}")
     print(f"🔐 Authentication: tmonnens@outlook.com / Voetballen5")

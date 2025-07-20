@@ -10,7 +10,7 @@ import time
 
 def test_specific_review_endpoints():
     """Test the exact endpoints mentioned in the review request"""
-    base_url = "https://ff62574f-1eb9-4423-9341-e402e15fa0aa.preview.emergentagent.com"
+    base_url = "https://fbc7fbea-2d99-4296-9b80-a854dcdd044d.preview.emergentagent.com"
     api_url = f"{base_url}/api"
     
     session = requests.Session()
