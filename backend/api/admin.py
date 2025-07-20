@@ -134,7 +134,8 @@ async def get_all_users(
         skip = (page - 1) * limit
         
         # Get users
-        users_collection = user_service.users_collection if user_service.users_collection else user_service._ensure_collections() or user_service.users_collection
+        user_service._ensure_collections()
+        users_collection = user_service.users_collection
         
         users = await users_collection.find(
             query,
