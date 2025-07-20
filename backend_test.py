@@ -128,76 +128,95 @@ class BackendTester:
             self.log_test(endpoint, method, 0, 0, False, f"{description} - Error: {str(e)}")
             return False, None
 
-    def test_phase_4_features(self):
-        """Test Phase 4 Features - Missing Features Implementation"""
-        print(f"\n🚀 TESTING PHASE 4 FEATURES - MISSING FEATURES IMPLEMENTATION")
+    def test_enhanced_onboarding_system(self):
+        """Test Enhanced Guided Tour and Interactive Onboarding System - Phase 4"""
+        print(f"\n🚀 TESTING ENHANCED GUIDED TOUR AND INTERACTIVE ONBOARDING SYSTEM")
         
-        # Template marketplace and creation
-        self.test_endpoint("/templates/marketplace", "GET", description="Advanced template marketplace")
-        self.test_endpoint("/templates/create", "POST", 
-                         data={"name": "Test Template", "category": "business", "content": "Template content"},
-                         description="Template creation")
+        # 1. Enhanced Onboarding Dashboard
+        print(f"\n📊 Testing Enhanced Onboarding Dashboard...")
+        self.test_endpoint("/onboarding/enhanced/dashboard", "GET", 
+                         description="Enhanced onboarding dashboard with comprehensive data")
         
-        # Certificate system
-        self.test_endpoint("/courses/test-course-id/certificates", "GET", description="Certificate system")
+        # 2. Interactive Tour System - Get detailed tour
+        print(f"\n🎯 Testing Interactive Tour System...")
+        tour_id = "getting-started-tour"
+        self.test_endpoint(f"/onboarding/tours/{tour_id}/detailed", "GET",
+                         description="Interactive tour detailed content")
         
-        # Vendor dashboard
-        self.test_endpoint("/ecommerce/vendors/dashboard", "GET", description="Vendor dashboard")
+        # 3. Complete tour step
+        step_number = 1
+        self.test_endpoint(f"/onboarding/tours/{tour_id}/step/{step_number}/complete", "POST",
+                         data={"completed_at": "2025-07-20T10:00:00Z", "time_spent": 30},
+                         description="Complete tour step with tracking")
         
-        # Product comparison
-        self.test_endpoint("/ecommerce/products/compare", "POST",
-                         data={"product_ids": ["prod1", "prod2"]},
-                         description="Product comparison")
+        # 4. Tutorial Management - Create interactive tutorial
+        print(f"\n📚 Testing Tutorial Management...")
+        tutorial_data = {
+            "title": "Advanced Features Tutorial",
+            "description": "Learn how to use advanced platform features",
+            "category": "advanced",
+            "steps": [
+                {
+                    "title": "Step 1: Dashboard Overview",
+                    "content": "Navigate to your dashboard and explore the main features",
+                    "action_type": "click",
+                    "target_element": "#dashboard-nav"
+                },
+                {
+                    "title": "Step 2: Create Your First Project",
+                    "content": "Click the 'New Project' button to get started",
+                    "action_type": "click",
+                    "target_element": "#new-project-btn"
+                }
+            ],
+            "difficulty": "intermediate",
+            "estimated_time": 15
+        }
+        self.test_endpoint("/onboarding/interactive-tutorial/create", "POST",
+                         data=tutorial_data,
+                         description="Create interactive tutorial with steps")
         
-        # Custom report builder
-        self.test_endpoint("/analytics/custom-reports", "GET", description="Custom report builder")
+        # 5. Analytics & Tracking - Feature adoption analytics
+        print(f"\n📈 Testing Analytics & Tracking...")
+        self.test_endpoint("/onboarding/feature-adoption/analytics", "GET",
+                         description="Feature adoption analytics and insights")
         
-        # Webhook configurations
-        self.test_endpoint("/integrations/webhooks", "GET", description="Webhook configurations")
+        # 6. Smart Hints System - Request contextual hints
+        print(f"\n💡 Testing Smart Hints System...")
+        hints_data = {
+            "current_page": "/dashboard",
+            "user_context": {
+                "experience_level": "beginner",
+                "last_action": "login",
+                "features_used": ["dashboard", "profile"],
+                "time_on_platform": 300
+            },
+            "request_type": "contextual"
+        }
+        self.test_endpoint("/onboarding/smart-hints/request", "POST",
+                         data=hints_data,
+                         description="Request smart contextual hints")
         
-        # White-label customization
-        self.test_endpoint("/admin/white-label/settings", "GET", description="White-label customization")
-        
-        # Multi-currency support
-        self.test_endpoint("/financial/multi-currency", "GET", description="Multi-currency support")
+        # 7. Achievement System - Completion certificate
+        print(f"\n🏆 Testing Achievement System...")
+        self.test_endpoint("/onboarding/completion/certificate", "GET",
+                         description="Generate completion certificate")
 
-    def test_phase_5_features(self):
-        """Test Phase 5 Features - Valuable Expansions"""
-        print(f"\n🚀 TESTING PHASE 5 FEATURES - VALUABLE EXPANSIONS")
+    def test_core_system_health(self):
+        """Test core system health and integration"""
+        print(f"\n🔍 TESTING CORE SYSTEM HEALTH")
         
-        # Automation workflows
-        self.test_endpoint("/automation/workflows", "GET", description="Automation workflows")
-        self.test_endpoint("/automation/workflows/create", "POST",
-                         data={"name": "Test Workflow", "triggers": ["email_signup"], "actions": ["send_welcome"]},
-                         description="Workflow creation")
+        # System health check
+        self.test_endpoint("/health", "GET", description="System health check")
         
-        # Advanced social analytics
-        self.test_endpoint("/social/analytics/comprehensive", "GET", description="Advanced social analytics")
+        # Admin dashboard
+        self.test_endpoint("/admin/dashboard", "GET", description="Admin dashboard access")
         
-        # Competitor tracking
-        self.test_endpoint("/social/competitors/track", "POST",
-                         data={"competitor_url": "https://example.com", "platforms": ["instagram", "twitter"]},
-                         description="Competitor tracking")
+        # User profile
+        self.test_endpoint("/users/profile", "GET", description="User profile access")
         
-        # Smart AI notifications
-        self.test_endpoint("/notifications/smart", "GET", description="Smart AI notifications")
-        
-        # Affiliate program
-        self.test_endpoint("/affiliate/program/overview", "GET", description="Affiliate program")
-        
-        # Global search system
-        self.test_endpoint("/search/global", "GET", description="Global search system")
-        
-        # Bulk operations
-        self.test_endpoint("/bulk/contacts/import", "POST",
-                         data={"contacts": [{"name": "Test Contact", "email": "test@example.com"}]},
-                         description="Bulk operations")
-
-    def test_phase_6_features(self):
-        """Test Phase 6 Features - Additional Valuable Features"""
-        print(f"\n🚀 TESTING PHASE 6 FEATURES - ADDITIONAL VALUABLE FEATURES")
-        
-        # AI business intelligence
+        # Workspace management
+        self.test_endpoint("/workspaces", "GET", description="Workspace management")
         self.test_endpoint("/ai/business-insights", "GET", description="AI business intelligence")
         
         # Smart recommendations
