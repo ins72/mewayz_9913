@@ -242,5 +242,6 @@ class AnalyticsService:
         
         return analytics_data
 
-# Create service instance
-analytics_service = AnalyticsService()
+# Create service instance function (dependency injection)
+def get_analytics_service() -> AnalyticsService:
+    return AnalyticsService()
