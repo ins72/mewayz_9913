@@ -51,7 +51,7 @@ const GamifiedAnalyticsPage = () => {
   const [leaderboard, setLeaderboard] = useState(null);
   const [challenges, setChallenges] = useState(null);
 
-  // Enhanced user gamification profile with real analytics integration
+  // Enhanced user gamification profile
   const [userProfile, setUserProfile] = useState({
     level: 1,
     currentXP: 0,
