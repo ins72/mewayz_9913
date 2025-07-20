@@ -9,7 +9,7 @@ import uvicorn
 
 from core.config import settings
 from core.database import connect_to_mongo, close_mongo_connection
-from api import auth, users, analytics, dashboard, workspaces, blog, admin, ai, bio_sites
+from api import auth, users, analytics, dashboard, workspaces, blog, admin, ai, bio_sites, ecommerce, bookings
 
 # Application lifespan management
 @asynccontextmanager
