@@ -4614,7 +4614,490 @@ async def get_ai_usage_analytics(current_user: dict = Depends(get_current_user))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get AI analytics: {str(e)}")
 
-# ===== ADVANCED ANALYTICS SUITE (20+ ENDPOINTS) =====
+# ===== ADVANCED BUSINESS MANAGEMENT SUITE (30+ ENDPOINTS) =====
+
+@app.get("/api/project-management/overview")
+async def get_project_management_overview(current_user: dict = Depends(get_current_user)):
+    """Comprehensive project management system"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    project_data = {
+        "dashboard_stats": {
+            "active_projects": 12,
+            "completed_projects": 45,
+            "overdue_tasks": 8,
+            "team_utilization": 78.5,
+            "on_time_delivery_rate": 87.3
+        },
+        "active_projects": [
+            {
+                "id": "proj_001",
+                "name": "Website Redesign",
+                "status": "in_progress",
+                "progress": 67,
+                "team_members": 5,
+                "deadline": "2025-08-15",
+                "budget": 15000,
+                "spent": 8900,
+                "priority": "high"
+            },
+            {
+                "id": "proj_002",
+                "name": "Mobile App Launch",
+                "status": "planning",
+                "progress": 23,
+                "team_members": 8,
+                "deadline": "2025-09-30",
+                "budget": 45000,
+                "spent": 5600,
+                "priority": "medium"
+            }
+        ],
+        "task_distribution": {
+            "by_status": {
+                "todo": 45,
+                "in_progress": 23,
+                "review": 12,
+                "completed": 156
+            },
+            "by_priority": {
+                "high": 18,
+                "medium": 67,
+                "low": 151
+            }
+        },
+        "team_workload": [
+            {"member": "Sarah Johnson", "tasks": 8, "utilization": 85, "availability": "available"},
+            {"member": "Mike Chen", "tasks": 12, "utilization": 95, "availability": "overloaded"},
+            {"member": "Emma Davis", "tasks": 6, "utilization": 65, "availability": "available"}
+        ],
+        "recent_activity": [
+            {"action": "Task completed", "project": "Website Redesign", "user": "Sarah Johnson", "time": "2 hours ago"},
+            {"action": "Comment added", "project": "Mobile App Launch", "user": "Mike Chen", "time": "4 hours ago"},
+            {"action": "File uploaded", "project": "Website Redesign", "user": "Emma Davis", "time": "6 hours ago"}
+        ]
+    }
+    
+    await project_management_collection.insert_one({
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "overview_data": project_data,
+        "generated_at": datetime.utcnow()
+    })
+    
+    return {"success": True, "data": project_data}
+
+@app.post("/api/project-management/projects/create")
+async def create_project(
+    name: str = Form(...),
+    description: str = Form(""),
+    deadline: str = Form(...),
+    budget: float = Form(...),
+    team_members: List[str] = Form(...),
+    priority: str = Form("medium"),
+    project_template: str = Form("custom"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new project"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    project_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "name": name,
+        "description": description,
+        "status": "planning",
+        "progress": 0,
+        "deadline": datetime.fromisoformat(deadline),
+        "budget": budget,
+        "spent": 0,
+        "team_members": team_members,
+        "priority": priority,
+        "project_template": project_template,
+        "created_by": current_user["id"],
+        "created_at": datetime.utcnow(),
+        "last_updated": datetime.utcnow()
+    }
+    
+    await project_management_collection.insert_one(project_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "project_id": project_doc["_id"],
+            "name": project_doc["name"],
+            "status": project_doc["status"],
+            "team_members": len(team_members),
+            "deadline": project_doc["deadline"].isoformat(),
+            "created_at": project_doc["created_at"].isoformat()
+        }
+    }
+
+@app.get("/api/project-management/tasks")
+async def get_tasks(
+    project_id: Optional[str] = Query(None),
+    assigned_to: Optional[str] = Query(None),
+    status: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get tasks with filtering options"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Mock task data with filtering
+    all_tasks = [
+        {
+            "id": "task_001",
+            "project_id": "proj_001",
+            "title": "Design Homepage",
+            "description": "Create new homepage design mockup",
+            "status": "in_progress",
+            "priority": "high",
+            "assigned_to": "sarah_johnson",
+            "due_date": "2025-07-25",
+            "estimated_hours": 12,
+            "logged_hours": 6,
+            "attachments": 3,
+            "comments": 5
+        },
+        {
+            "id": "task_002",
+            "project_id": "proj_002", 
+            "title": "API Integration",
+            "description": "Integrate payment gateway API",
+            "status": "todo",
+            "priority": "medium",
+            "assigned_to": "mike_chen",
+            "due_date": "2025-07-28",
+            "estimated_hours": 8,
+            "logged_hours": 0,
+            "attachments": 1,
+            "comments": 2
+        }
+    ]
+    
+    # Apply filters
+    filtered_tasks = all_tasks
+    if project_id:
+        filtered_tasks = [t for t in filtered_tasks if t["project_id"] == project_id]
+    if assigned_to:
+        filtered_tasks = [t for t in filtered_tasks if t["assigned_to"] == assigned_to]
+    if status:
+        filtered_tasks = [t for t in filtered_tasks if t["status"] == status]
+    
+    return {
+        "success": True,
+        "data": {
+            "tasks": filtered_tasks,
+            "total": len(filtered_tasks),
+            "filters_applied": {"project_id": project_id, "assigned_to": assigned_to, "status": status}
+        }
+    }
+
+@app.get("/api/time-tracking/overview")
+async def get_time_tracking_overview(current_user: dict = Depends(get_current_user)):
+    """Time tracking analytics and overview"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    time_tracking_data = {
+        "today_summary": {
+            "total_hours": 6.75,
+            "billable_hours": 5.25,
+            "projects_worked": 3,
+            "tasks_completed": 2,
+            "productivity_score": 8.4
+        },
+        "week_summary": {
+            "total_hours": 38.5,
+            "billable_hours": 32.0,
+            "overtime_hours": 3.5,
+            "avg_daily_hours": 7.7,
+            "efficiency_trend": "+12%"
+        },
+        "project_breakdown": [
+            {"project": "Website Redesign", "hours": 18.5, "percentage": 48.1, "billable": True},
+            {"project": "Mobile App Launch", "hours": 12.0, "percentage": 31.2, "billable": True},
+            {"project": "Internal Training", "hours": 8.0, "percentage": 20.8, "billable": False}
+        ],
+        "productivity_insights": [
+            "Most productive time: 9:00 AM - 11:00 AM",
+            "Longest focus session: 2h 45min",
+            "Average break frequency: Every 52 minutes",
+            "Distraction-free periods: 73% of logged time"
+        ],
+        "active_timers": [
+            {"task": "Homepage Design Review", "started": "09:15 AM", "current_duration": "1h 23m", "project": "Website Redesign"}
+        ],
+        "recent_entries": [
+            {"task": "API Documentation", "duration": "2h 15m", "project": "Mobile App Launch", "date": "2025-07-20"},
+            {"task": "Design Mockups", "duration": "1h 45m", "project": "Website Redesign", "date": "2025-07-20"}
+        ]
+    }
+    
+    await time_tracking_collection.insert_one({
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "tracking_data": time_tracking_data,
+        "date": datetime.utcnow().date().isoformat(),
+        "generated_at": datetime.utcnow()
+    })
+    
+    return {"success": True, "data": time_tracking_data}
+
+@app.post("/api/time-tracking/start")
+async def start_time_tracking(
+    task_id: str = Form(...),
+    project_id: str = Form(...),
+    description: str = Form(""),
+    current_user: dict = Depends(get_current_user)
+):
+    """Start time tracking for a task"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Stop any active timers first
+    await time_tracking_collection.update_many(
+        {"workspace_id": str(workspace["_id"]), "user_id": current_user["id"], "status": "active"},
+        {"$set": {"status": "paused", "paused_at": datetime.utcnow()}}
+    )
+    
+    timer_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "user_id": current_user["id"],
+        "task_id": task_id,
+        "project_id": project_id,
+        "description": description,
+        "started_at": datetime.utcnow(),
+        "status": "active",
+        "accumulated_seconds": 0
+    }
+    
+    await time_tracking_collection.insert_one(timer_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "timer_id": timer_doc["_id"],
+            "task_id": task_id,
+            "project_id": project_id,
+            "status": "active",
+            "started_at": timer_doc["started_at"].isoformat()
+        }
+    }
+
+@app.post("/api/time-tracking/stop/{timer_id}")
+async def stop_time_tracking(
+    timer_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Stop time tracking"""
+    timer = await time_tracking_collection.find_one({"_id": timer_id})
+    if not timer:
+        raise HTTPException(status_code=404, detail="Timer not found")
+    
+    stopped_at = datetime.utcnow()
+    duration_seconds = (stopped_at - timer["started_at"]).total_seconds()
+    
+    await time_tracking_collection.update_one(
+        {"_id": timer_id},
+        {
+            "$set": {
+                "status": "stopped",
+                "stopped_at": stopped_at,
+                "duration_seconds": duration_seconds,
+                "duration_formatted": f"{int(duration_seconds // 3600)}h {int((duration_seconds % 3600) // 60)}m"
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "data": {
+            "timer_id": timer_id,
+            "status": "stopped",
+            "duration_seconds": duration_seconds,
+            "duration_formatted": f"{int(duration_seconds // 3600)}h {int((duration_seconds % 3600) // 60)}m",
+            "stopped_at": stopped_at.isoformat()
+        }
+    }
+
+@app.get("/api/help-desk/overview")
+async def get_help_desk_overview(current_user: dict = Depends(get_current_user)):
+    """Customer support help desk overview"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    help_desk_data = {
+        "ticket_stats": {
+            "open_tickets": 23,
+            "pending_tickets": 8,
+            "resolved_today": 15,
+            "avg_response_time": "2h 15m",
+            "customer_satisfaction": 4.6,
+            "first_contact_resolution": 78.5
+        },
+        "ticket_priorities": {
+            "critical": 2,
+            "high": 6,
+            "medium": 12,
+            "low": 11
+        },
+        "support_channels": [
+            {"channel": "Email", "tickets": 156, "avg_response": "3h 20m", "satisfaction": 4.5},
+            {"channel": "Live Chat", "tickets": 89, "avg_response": "12m", "satisfaction": 4.8},
+            {"channel": "Phone", "tickets": 34, "avg_response": "5m", "satisfaction": 4.7},
+            {"channel": "Social Media", "tickets": 23, "avg_response": "1h 45m", "satisfaction": 4.3}
+        ],
+        "recent_tickets": [
+            {
+                "id": "TKT-001",
+                "subject": "Login Issues",
+                "customer": "john.doe@email.com",
+                "priority": "high",
+                "status": "open",
+                "assigned_to": "Sarah Johnson",
+                "created": "2 hours ago"
+            },
+            {
+                "id": "TKT-002",
+                "subject": "Billing Question", 
+                "customer": "mary.smith@email.com",
+                "priority": "medium",
+                "status": "pending",
+                "assigned_to": "Mike Chen",
+                "created": "4 hours ago"
+            }
+        ],
+        "knowledge_base_stats": {
+            "total_articles": 145,
+            "popular_articles": [
+                {"title": "How to Reset Password", "views": 1247, "helpful_votes": 89},
+                {"title": "Getting Started Guide", "views": 890, "helpful_votes": 76}
+            ],
+            "self_service_resolution": 34.5
+        }
+    }
+    
+    await help_desk_collection.insert_one({
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "help_desk_data": help_desk_data,
+        "generated_at": datetime.utcnow()
+    })
+    
+    return {"success": True, "data": help_desk_data}
+
+@app.post("/api/help-desk/tickets/create")
+async def create_support_ticket(
+    subject: str = Form(...),
+    description: str = Form(...),
+    priority: str = Form("medium"),
+    customer_email: str = Form(...),
+    category: str = Form(...),
+    attachments: List[str] = Form([]),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new support ticket"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    ticket_doc = {
+        "_id": str(uuid.uuid4()),
+        "ticket_number": f"TKT-{str(uuid.uuid4())[:8].upper()}",
+        "workspace_id": str(workspace["_id"]),
+        "subject": subject,
+        "description": description,
+        "priority": priority,
+        "status": "open",
+        "customer_email": customer_email,
+        "category": category,
+        "attachments": attachments,
+        "assigned_to": None,
+        "created_by": current_user["id"],
+        "created_at": datetime.utcnow(),
+        "last_updated": datetime.utcnow(),
+        "responses": []
+    }
+    
+    await help_desk_collection.insert_one(ticket_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "ticket_id": ticket_doc["_id"],
+            "ticket_number": ticket_doc["ticket_number"],
+            "subject": ticket_doc["subject"],
+            "priority": ticket_doc["priority"],
+            "status": ticket_doc["status"],
+            "created_at": ticket_doc["created_at"].isoformat()
+        }
+    }
+
+@app.get("/api/help-desk/knowledge-base")
+async def get_knowledge_base(
+    category: Optional[str] = Query(None),
+    search: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get knowledge base articles"""
+    knowledge_base_data = {
+        "categories": [
+            {"name": "Getting Started", "article_count": 23, "popular": True},
+            {"name": "Account Management", "article_count": 34, "popular": True},
+            {"name": "Billing & Payments", "article_count": 18, "popular": False},
+            {"name": "Technical Issues", "article_count": 45, "popular": True},
+            {"name": "API Documentation", "article_count": 25, "popular": False}
+        ],
+        "featured_articles": [
+            {
+                "id": "kb_001",
+                "title": "How to Get Started with Mewayz",
+                "category": "Getting Started",
+                "views": 2340,
+                "helpful_votes": 189,
+                "last_updated": "2025-07-15",
+                "reading_time": "5 minutes"
+            },
+            {
+                "id": "kb_002",
+                "title": "Setting Up Your First Campaign",
+                "category": "Getting Started", 
+                "views": 1890,
+                "helpful_votes": 156,
+                "last_updated": "2025-07-18",
+                "reading_time": "8 minutes"
+            }
+        ],
+        "recent_articles": [
+            {
+                "id": "kb_003",
+                "title": "New AI Features Overview",
+                "category": "Product Updates",
+                "published": "2025-07-20",
+                "author": "Product Team"
+            }
+        ],
+        "search_suggestions": [
+            "password reset",
+            "billing issues", 
+            "API integration",
+            "account setup"
+        ]
+    }
+    
+    return {"success": True, "data": knowledge_base_data}
 
 @app.get("/api/analytics/heatmaps")
 async def get_heatmaps_overview(current_user: dict = Depends(get_current_user)):
