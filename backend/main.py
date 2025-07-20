@@ -1830,6 +1830,382 @@ async def get_team_members(current_user: dict = Depends(get_current_user)):
         }
     }
 
+# Instagram Lead Generation System
+import logging
+from uuid import uuid4
+
+# Set up logger
+logger = logging.getLogger(__name__)
+
+# Instagram collections
+instagram_accounts_collection = database.instagram_accounts
+instagram_searches_collection = database.instagram_searches
+instagram_exports_collection = database.instagram_exports
+
+@app.post("/instagram/search")
+async def search_instagram_accounts(request: dict = None, current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = request.get("workspace_id", current_user.get("current_workspace_id"))
+        query = request.get("query", "")
+        filters = request.get("filters", {})
+        page = request.get("page", 1)
+        limit = request.get("limit", 50)
+        sort_by = request.get("sortBy", "followers")
+        sort_order = request.get("sortOrder", "desc")
+        
+        if not query.strip():
+            raise HTTPException(status_code=400, detail="Search query is required")
+        
+        # Build MongoDB query
+        mongo_query = {"workspace_id": workspace_id}
+        
+        # Add text search
+        if query:
+            mongo_query["$or"] = [
+                {"username": {"$regex": query, "$options": "i"}},
+                {"display_name": {"$regex": query, "$options": "i"}},
+                {"bio": {"$regex": query, "$options": "i"}},
+                {"location": {"$regex": query, "$options": "i"}},
+                {"hashtags": {"$regex": query, "$options": "i"}}
+            ]
+        
+        # Apply filters
+        if filters.get("minFollowers"):
+            mongo_query["followers"] = {"$gte": int(filters["minFollowers"])}
+        if filters.get("maxFollowers"):
+            if "followers" in mongo_query:
+                mongo_query["followers"]["$lte"] = int(filters["maxFollowers"])
+            else:
+                mongo_query["followers"] = {"$lte": int(filters["maxFollowers"])}
+                
+        if filters.get("minFollowing"):
+            mongo_query["following"] = {"$gte": int(filters["minFollowing"])}
+        if filters.get("maxFollowing"):
+            if "following" in mongo_query:
+                mongo_query["following"]["$lte"] = int(filters["maxFollowing"])
+            else:
+                mongo_query["following"] = {"$lte": int(filters["maxFollowing"])}
+                
+        if filters.get("minEngagementRate"):
+            mongo_query["engagement_rate"] = {"$gte": float(filters["minEngagementRate"])}
+            
+        if filters.get("location"):
+            mongo_query["location"] = {"$regex": filters["location"], "$options": "i"}
+            
+        if filters.get("accountType"):
+            mongo_query["account_type"] = filters["accountType"]
+            
+        if filters.get("language"):
+            mongo_query["language"] = filters["language"]
+            
+        if filters.get("verified") == "true":
+            mongo_query["verified"] = True
+        elif filters.get("verified") == "false":
+            mongo_query["verified"] = False
+            
+        if filters.get("bioKeywords"):
+            keywords = filters["bioKeywords"].split(",")
+            keyword_regex = "|".join([kw.strip() for kw in keywords])
+            mongo_query["bio"] = {"$regex": keyword_regex, "$options": "i"}
+            
+        if filters.get("hashtags"):
+            hashtags = filters["hashtags"].split(",")
+            hashtag_regex = "|".join([ht.strip().replace("#", "") for ht in hashtags])
+            mongo_query["hashtags"] = {"$regex": hashtag_regex, "$options": "i"}
+        
+        # Count total results
+        total = await instagram_accounts_collection.count_documents(mongo_query)
+        
+        # Apply sorting
+        sort_field = sort_by
+        if sort_by == "followers":
+            sort_field = "followers"
+        elif sort_by == "engagement":
+            sort_field = "engagement_rate"
+        elif sort_by == "posts":
+            sort_field = "post_count"
+        
+        sort_direction = -1 if sort_order == "desc" else 1
+        
+        # Execute query with pagination
+        skip = (page - 1) * limit
+        cursor = instagram_accounts_collection.find(mongo_query).sort(sort_field, sort_direction).skip(skip).limit(limit)
+        accounts = await cursor.to_list(length=limit)
+        
+        # Save search to history
+        search_record = {
+            "id": str(uuid4()),
+            "workspace_id": workspace_id,
+            "user_id": current_user["id"],
+            "query": query,
+            "filters": filters,
+            "results_count": total,
+            "timestamp": datetime.utcnow(),
+            "created_at": datetime.utcnow()
+        }
+        await instagram_searches_collection.insert_one(search_record)
+        
+        # Format results
+        formatted_accounts = []
+        for account in accounts:
+            formatted_account = {
+                "id": account["id"],
+                "username": account["username"],
+                "displayName": account.get("display_name"),
+                "bio": account.get("bio"),
+                "followers": account.get("followers", 0),
+                "following": account.get("following", 0),
+                "postCount": account.get("post_count", 0),
+                "engagementRate": account.get("engagement_rate", 0),
+                "profilePicture": account.get("profile_picture"),
+                "verified": account.get("verified", False),
+                "accountType": account.get("account_type", "personal"),
+                "location": account.get("location"),
+                "email": account.get("email"),
+                "contactInfo": account.get("contact_info"),
+                "lastPostDate": account.get("last_post_date"),
+                "language": account.get("language", "en"),
+                "businessCategory": account.get("business_category")
+            }
+            formatted_accounts.append(formatted_account)
+        
+        return {
+            "success": True,
+            "data": {
+                "accounts": formatted_accounts,
+                "total": total,
+                "page": page,
+                "limit": limit,
+                "pages": (total + limit - 1) // limit
+            }
+        }
+    except Exception as e:
+        logger.error(f"Instagram search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Search failed")
+
+@app.post("/instagram/export")
+async def export_instagram_accounts(request: dict = None, current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = request.get("workspace_id", current_user.get("current_workspace_id"))
+        account_ids = request.get("accounts", [])
+        export_format = request.get("format", "csv")
+        include_emails = request.get("includeEmails", True)
+        include_contact_info = request.get("includeContactInfo", True)
+        include_analytics = request.get("includeAnalytics", True)
+        
+        if not account_ids:
+            raise HTTPException(status_code=400, detail="No accounts selected for export")
+        
+        # Fetch selected accounts
+        accounts = await instagram_accounts_collection.find({
+            "id": {"$in": account_ids},
+            "workspace_id": workspace_id
+        }).to_list(length=None)
+        
+        if not accounts:
+            raise HTTPException(status_code=404, detail="No accounts found")
+        
+        # Prepare export data
+        export_data = []
+        for account in accounts:
+            row = {
+                "Username": account["username"],
+                "Display Name": account.get("display_name", ""),
+                "Bio": account.get("bio", ""),
+                "Followers": account.get("followers", 0),
+                "Following": account.get("following", 0),
+                "Posts": account.get("post_count", 0),
+                "Engagement Rate": f"{account.get('engagement_rate', 0)}%",
+                "Verified": "Yes" if account.get("verified") else "No",
+                "Account Type": account.get("account_type", "personal"),
+                "Location": account.get("location", ""),
+                "Language": account.get("language", ""),
+                "Profile URL": f"https://instagram.com/{account['username']}",
+                "Profile Picture": account.get("profile_picture", "")
+            }
+            
+            if include_emails:
+                row["Email"] = account.get("email", "")
+                
+            if include_contact_info:
+                contact_info = account.get("contact_info", {})
+                row["Phone"] = contact_info.get("phone", "")
+                row["Website"] = contact_info.get("website", "")
+                
+            if include_analytics:
+                row["Last Post Date"] = account.get("last_post_date", "")
+                row["Average Likes"] = account.get("avg_likes", 0)
+                row["Average Comments"] = account.get("avg_comments", 0)
+                row["Business Category"] = account.get("business_category", "")
+            
+            export_data.append(row)
+        
+        # Record export
+        export_record = {
+            "id": str(uuid4()),
+            "workspace_id": workspace_id,
+            "user_id": current_user["id"],
+            "accounts_count": len(account_ids),
+            "format": export_format,
+            "timestamp": datetime.utcnow(),
+            "created_at": datetime.utcnow()
+        }
+        await instagram_exports_collection.insert_one(export_record)
+        
+        # Return CSV data (frontend will handle file download)
+        if export_format == "csv":
+            import csv
+            import io
+            output = io.StringIO()
+            
+            if export_data:
+                writer = csv.DictWriter(output, fieldnames=export_data[0].keys())
+                writer.writeheader()
+                writer.writerows(export_data)
+            
+            return {
+                "success": True,
+                "data": output.getvalue(),
+                "filename": f"instagram_leads_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            }
+        
+        return {
+            "success": True,
+            "data": export_data
+        }
+        
+    except Exception as e:
+        logger.error(f"Instagram export failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Export failed")
+
+@app.get("/instagram/search-history")
+async def get_search_history(current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = current_user.get("current_workspace_id")
+        
+        searches = await instagram_searches_collection.find({
+            "workspace_id": workspace_id,
+            "user_id": current_user["id"]
+        }).sort("timestamp", -1).limit(10).to_list(length=10)
+        
+        for search in searches:
+            search["_id"] = str(search["_id"])
+            search["timestamp"] = search["timestamp"].isoformat()
+        
+        return {"success": True, "data": searches}
+    except Exception as e:
+        logger.error(f"Failed to get search history: {str(e)}")
+        return {"success": False, "data": []}
+
+@app.post("/instagram/save-search")
+async def save_search(request: dict = None, current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = request.get("workspace_id", current_user.get("current_workspace_id"))
+        name = request.get("name", "")
+        query = request.get("query", "")
+        filters = request.get("filters", {})
+        
+        if not name.strip():
+            raise HTTPException(status_code=400, detail="Search name is required")
+        
+        saved_search = {
+            "id": str(uuid4()),
+            "workspace_id": workspace_id,
+            "user_id": current_user["id"],
+            "name": name,
+            "query": query,
+            "filters": filters,
+            "created_at": datetime.utcnow()
+        }
+        
+        # Use a separate collection for saved searches
+        saved_searches_collection = database.instagram_saved_searches
+        await saved_searches_collection.insert_one(saved_search)
+        
+        return {"success": True, "data": saved_search}
+    except Exception as e:
+        logger.error(f"Failed to save search: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to save search")
+
+@app.get("/instagram/saved-searches")
+async def get_saved_searches(current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = current_user.get("current_workspace_id")
+        saved_searches_collection = database.instagram_saved_searches
+        
+        searches = await saved_searches_collection.find({
+            "workspace_id": workspace_id,
+            "user_id": current_user["id"]
+        }).sort("created_at", -1).to_list(length=None)
+        
+        for search in searches:
+            search["_id"] = str(search["_id"])
+            search["created_at"] = search["created_at"].isoformat()
+        
+        return {"success": True, "data": searches}
+    except Exception as e:
+        logger.error(f"Failed to get saved searches: {str(e)}")
+        return {"success": False, "data": []}
+
+@app.get("/instagram/search-stats")
+async def get_search_stats(current_user: dict = Depends(get_current_user)):
+    try:
+        workspace_id = current_user.get("current_workspace_id")
+        
+        # Count total searches
+        total_searches = await instagram_searches_collection.count_documents({
+            "workspace_id": workspace_id
+        })
+        
+        # Count total accounts found
+        total_accounts = await instagram_accounts_collection.count_documents({
+            "workspace_id": workspace_id
+        })
+        
+        # Calculate average engagement rate
+        pipeline = [
+            {"$match": {"workspace_id": workspace_id}},
+            {"$group": {
+                "_id": None,
+                "avg_engagement": {"$avg": "$engagement_rate"}
+            }}
+        ]
+        result = await instagram_accounts_collection.aggregate(pipeline).to_list(length=1)
+        avg_engagement = result[0]["avg_engagement"] if result else 0
+        
+        # Get top categories
+        pipeline = [
+            {"$match": {"workspace_id": workspace_id}},
+            {"$group": {
+                "_id": "$business_category",
+                "count": {"$sum": 1}
+            }},
+            {"$sort": {"count": -1}},
+            {"$limit": 5}
+        ]
+        top_categories = await instagram_accounts_collection.aggregate(pipeline).to_list(length=5)
+        
+        return {
+            "success": True,
+            "data": {
+                "totalSearches": total_searches,
+                "totalAccountsFound": total_accounts,
+                "averageEngagementRate": round(avg_engagement, 2) if avg_engagement else 0,
+                "topCategories": top_categories
+            }
+        }
+    except Exception as e:
+        logger.error(f"Failed to get search stats: {str(e)}")
+        return {
+            "success": False,
+            "data": {
+                "totalSearches": 0,
+                "totalAccountsFound": 0,
+                "averageEngagementRate": 0,
+                "topCategories": []
+            }
+        }
+
 @app.post("/api/team/invite")
 async def invite_team_member(
     invite_data: TeamMemberInvite,
