@@ -158,10 +158,10 @@ class BusinessOptimizationTester:
         
         # AI-powered feedback collection and analysis
         feedback_data = {
+            "feedback_type": "user_experience",
+            "page_context": "dashboard_navigation",
             "feedback_text": "The platform is amazing but could use better navigation for the 6000+ features",
-            "rating": 4,
-            "category": "user_experience",
-            "user_id": "test-user-123"
+            "user_satisfaction": 4
         }
         
         self.test_endpoint("/ux/user-feedback/optimization", "POST", data=feedback_data,
