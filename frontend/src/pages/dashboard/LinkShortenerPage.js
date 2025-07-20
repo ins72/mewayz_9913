@@ -141,10 +141,10 @@ const LinkShortenerPage = () => {
         className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8"
       >
         {[
-          { label: 'Total Links', value: '127', icon: LinkIcon, color: 'bg-blue-500' },
-          { label: 'Total Clicks', value: '5,834', icon: EyeIcon, color: 'bg-green-500' },
-          { label: 'Click Rate', value: '78.5%', icon: ChartBarIcon, color: 'bg-purple-500' },
-          { label: 'Active Links', value: '95', icon: GlobeAltIcon, color: 'bg-orange-500' }
+          { label: 'Total Links', value: stats.total_links || '0', icon: LinkIcon, color: 'bg-blue-500' },
+          { label: 'Total Clicks', value: stats.total_clicks || '0', icon: EyeIcon, color: 'bg-green-500' },
+          { label: 'Click Rate', value: `${stats.click_rate || 0}%`, icon: ChartBarIcon, color: 'bg-purple-500' },
+          { label: 'Active Links', value: stats.active_links || '0', icon: GlobeAltIcon, color: 'bg-orange-500' }
         ].map((stat, index) => (
           <div key={index} className="bg-surface p-6 rounded-lg shadow-default">
             <div className="flex items-center">
