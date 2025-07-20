@@ -190,10 +190,10 @@ class BackendTester:
         
         # 5. Marketing Automation - Workflow Creation
         print(f"\n⚙️ Testing Marketing Automation...")
-        workflow_data = {
+        workflow_form_data = {
             "workflow_name": "Welcome Series Automation",
-            "trigger_type": "contact_added",
-            "workflow_steps": [
+            "trigger_type": "signup",
+            "workflow_steps": json.dumps([
                 {
                     "step_type": "delay",
                     "delay_duration": "1 hour"
@@ -203,10 +203,11 @@ class BackendTester:
                     "email_template": "welcome_email_1",
                     "email_subject": "Welcome to Our Platform!"
                 }
-            ]
+            ]),
+            "workflow_settings": "{}"
         }
         self.test_endpoint("/marketing/automation/workflow/create", "POST",
-                         data=workflow_data,
+                         form_data=workflow_form_data,
                          description="Create marketing automation workflow")
         
         # 6. Lead Scoring
