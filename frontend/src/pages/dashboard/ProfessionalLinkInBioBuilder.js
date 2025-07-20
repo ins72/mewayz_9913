@@ -31,7 +31,7 @@ import {
   DevicePhoneMobileIcon,
   ComputerDesktopIcon,
   ArrowTopRightOnSquareIcon,
-  DuplicateIcon,
+  DocumentDuplicateIcon,
   TrashIcon,
   StarIcon,
   FireIcon,
