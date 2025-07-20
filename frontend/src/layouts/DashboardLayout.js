@@ -84,8 +84,9 @@ const DashboardLayout = ({ isAdmin = false }) => {
     { name: 'Realtime Collaboration', href: '/dashboard/realtime-collaboration', icon: ChatBubbleLeftRightIcon, description: 'Team Collaboration' },
     { name: 'Integrations', href: '/dashboard/integrations', icon: PuzzlePieceIcon, description: 'Third-party Integrations' },
     { name: 'Workspaces', href: '/dashboard/workspaces', icon: BuildingOffice2Icon, description: 'Workspace Management' },
+    { name: 'Workspace Settings', href: '/dashboard/workspace-settings', icon: CogIcon, description: 'Team & Configuration' },
     { name: 'Subscription', href: '/dashboard/subscription', icon: CreditCardIcon, description: 'Billing & Plans' },
-    { name: 'Settings', href: '/dashboard/settings', icon: CogIcon, description: 'Account Settings' },
+    { name: 'Settings', href: '/dashboard/settings', icon: UserCircleIcon, description: 'Account Settings' },
   ];
 
   // Admin-only navigation items
