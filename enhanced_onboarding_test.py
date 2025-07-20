@@ -143,10 +143,10 @@ class EnhancedOnboardingTester:
         self.test_endpoint(f"/onboarding/tours/{tour_id}/detailed", "GET",
                          description="Interactive tour detailed content")
         
-        # 3. Complete tour step
+        # 3. Complete tour step - Fix validation
         step_number = 1
         self.test_endpoint(f"/onboarding/tours/{tour_id}/step/{step_number}/complete", "POST",
-                         data={"completed_at": "2025-07-20T10:00:00Z", "time_spent": 30},
+                         data={"time_spent": 30, "completed_at": "2025-07-20T10:00:00Z"},
                          description="Complete tour step with tracking")
         
         # 4. Tutorial Management - Create interactive tutorial
