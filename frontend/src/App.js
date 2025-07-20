@@ -71,6 +71,8 @@ import AdvancedWorkspaceSettings from './pages/dashboard/AdvancedWorkspaceSettin
 import ProfessionalOnboardingWizard from './pages/onboarding/ProfessionalOnboardingWizard';
 import UltraAdvancedAdminDashboard from './pages/dashboard/UltraAdvancedAdminDashboard';
 import ComprehensiveCRMSystem from './pages/dashboard/ComprehensiveCRMSystem';
+import ComprehensiveCoursesSystem from './pages/dashboard/ComprehensiveCoursesSystem';
+import AmazonStyleMarketplace from './pages/dashboard/AmazonStyleMarketplace';
 
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
