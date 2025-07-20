@@ -163,7 +163,8 @@ function App() {
               <Route path="advanced-analytics" element={<AnalyticsPage />} />
               
               {/* Admin Routes */}
-              <Route path="admin" element={<ComprehensiveAdminDashboard />} />
+              <Route path="admin" element={<UltraAdvancedAdminDashboard />} />
+              <Route path="admin/comprehensive" element={<ComprehensiveAdminDashboard />} />
               <Route path="admin/simple" element={<SimpleAdminDashboard />} />
               <Route path="admin/users" element={<div className="p-8 text-center">User management coming soon...</div>} />
               <Route path="admin/system" element={<div className="p-8 text-center">System settings coming soon...</div>} />
