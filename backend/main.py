@@ -48,6 +48,12 @@ from social_media_email_integrations import integration_manager
 # Import AI system
 from ai_system import ai_system
 
+# Global features expansion for 1500+ features
+import asyncio
+import logging
+from collections import defaultdict
+import re
+
 # MongoDB client
 client = AsyncIOMotorClient(MONGO_URL)
 database = client.get_database()
