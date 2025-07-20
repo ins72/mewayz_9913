@@ -65,8 +65,17 @@ class AIBlogAdminTester:
                 self.auth_token = data.get('access_token')
                 self.session.headers.update({'Authorization': f'Bearer {self.auth_token}'})
                 
-                self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
-                            f"Admin authenticated successfully")
+                # Test the token by getting user profile
+                profile_response = self.session.get(f"{API_BASE}/auth/me")
+                if profile_response.status_code == 200:
+                    profile_data = profile_response.json()
+                    user_role = profile_data.get('role', 'unknown')
+                    self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
+                                f"Admin authenticated successfully - Role: {user_role}")
+                else:
+                    self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
+                                f"Token validation failed: {profile_response.text}")
+                    return False
                 return True
             else:
                 self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
