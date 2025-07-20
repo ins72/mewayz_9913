@@ -132,6 +132,7 @@ function App() {
               <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
               <Route path="bio-sites" element={<ProfessionalLinkInBioBuilder />} />
               <Route path="crm" element={<ComprehensiveCRMSystem />} />
+              <Route path="workspace-settings" element={<AdvancedWorkspaceSettings />} />
               <Route path="link-shortener" element={<LinkShortenerPage />} />
               <Route path="referrals" element={<ReferralSystemPage />} />
               
