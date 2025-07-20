@@ -176,15 +176,16 @@ class Comprehensive1500FeaturesTester:
                 "priority": "medium",
                 "category": "technical"
             }
-            response = self.session.post(f"{API_BASE}/support/tickets", json=ticket_data, timeout=30)
+            response = self.session.post(f"{API_BASE}/support/tickets", data=ticket_data, timeout=30)
             response_time = time.time() - start_time
             
             if response.status_code == 200 or response.status_code == 201:
                 data = response.json()
                 data_size = len(response.text)
-                ticket_id = data.get('ticket_id', 'unknown')
+                ticket_id = data.get('data', {}).get('ticket', {}).get('id', 'unknown')
+                ticket_number = data.get('data', {}).get('ticket', {}).get('ticket_number', 'unknown')
                 self.log_test("/support/tickets", "POST", response.status_code, response_time, True, 
-                            f"Support ticket created successfully - ID: {ticket_id}", data_size)
+                            f"Support ticket created successfully - ID: {ticket_id}, Number: {ticket_number}", data_size)
             else:
                 self.log_test("/support/tickets", "POST", response.status_code, response_time, False, 
                             f"HTTP {response.status_code} - {response.text[:200]}")
