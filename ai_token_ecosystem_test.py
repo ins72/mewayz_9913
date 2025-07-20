@@ -101,6 +101,8 @@ class AITokenEcosystemTester:
         except Exception as e:
             self.log_test("Create Workspace", False, f"Error creating workspace: {str(e)}")
             return False
+
+    def get_workspace_id(self):
         """Get a workspace ID for testing"""
         try:
             start_time = time.time()
