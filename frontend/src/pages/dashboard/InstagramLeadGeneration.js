@@ -23,7 +23,9 @@ import {
   AdjustmentsHorizontalIcon,
   GlobeAltIcon,
   SparklesIcon,
-  BoltIcon
+  BoltIcon,
+  ChevronRightIcon,
+  ArrowPathIcon
 } from '@heroicons/react/24/outline';
 
 const InstagramLeadGeneration = () => {
