@@ -209,20 +209,16 @@ class SupportSystemTester:
         """Test AI-Powered Support Guidance"""
         print(f"\n🤖 TESTING AI-POWERED SUPPORT GUIDANCE")
         
-        # AI guidance suggestion
+        # AI guidance suggestion - using Form data format with correct field name
         guidance_data = {
-            "customer_query": "I'm having trouble with my subscription billing",
-            "context": {
-                "customer_id": str(uuid.uuid4()),
-                "subscription_status": "active",
-                "previous_interactions": 2,
-                "urgency": "medium"
-            },
-            "agent_id": self.agent_id or str(uuid.uuid4())
+            "customer_message": "I'm having trouble with my subscription billing",
+            "context": "billing",
+            "ticket_id": str(uuid.uuid4()),
+            "session_id": str(uuid.uuid4())
         }
         
-        self.test_endpoint("/support/ai-guidance/suggest", "POST", data=guidance_data,
-                         description="AI-powered support guidance and suggestions")
+        self.test_endpoint_form("/support/ai-guidance/suggest", "POST", data=guidance_data,
+                               description="AI-powered support guidance and suggestions")
 
     def test_knowledge_base(self):
         """Test Knowledge Base"""
