@@ -9,7 +9,7 @@ import {
   StarIcon,
   FireIcon,
   BoltIcon,
-  ShieldIcon,
+  ShieldCheckIcon,
   EyeIcon,
   HeartIcon,
   FunnelIcon,
