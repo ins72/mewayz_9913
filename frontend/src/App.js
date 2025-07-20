@@ -63,6 +63,12 @@ import UltraAdvancedSubscriptionManager from './pages/dashboard/UltraAdvancedSub
 import UltraAdvancedInstagramManager from './pages/dashboard/UltraAdvancedInstagramManager';
 import UltraAdvancedSocialMediaScheduler from './pages/dashboard/UltraAdvancedSocialMediaScheduler';
 
+// Professional comprehensive pages
+import ProfessionalLinkInBioBuilder from './pages/dashboard/ProfessionalLinkInBioBuilder';
+import ComprehensiveMarketplace from './pages/dashboard/ComprehensiveMarketplace';
+import ProfessionalBookingSystem from './pages/dashboard/ProfessionalBookingSystem';
+import ComprehensiveCRMSystem from './pages/dashboard/ComprehensiveCRMSystem';
+
 // New pages
 import LinkShortenerPage from './pages/dashboard/LinkShortenerPage';
 import TeamManagementPage from './pages/dashboard/TeamManagementPage';
