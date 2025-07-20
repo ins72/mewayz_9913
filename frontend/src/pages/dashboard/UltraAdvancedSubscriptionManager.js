@@ -119,7 +119,7 @@ const UltraAdvancedSubscriptionManager = () => {
     {
       id: 'enterprise',
       name: 'Enterprise',
-      icon: CrownIcon,
+      icon: TrophyIcon,
       price: 1.5,
       billing: 'per feature/month',
       yearlyPrice: 15,
