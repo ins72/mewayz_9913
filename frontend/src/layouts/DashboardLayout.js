@@ -78,6 +78,7 @@ const DashboardLayout = ({ isAdmin = false }) => {
     
     // Additional Features
     { name: 'AI Features', href: '/dashboard/ai-features', icon: SparklesIcon, description: 'AI Tools' },
+    { name: 'Token Management', href: '/dashboard/token-management', icon: BoltIcon, description: 'AI Token System' },
     { name: 'Email Marketing', href: '/dashboard/email-marketing', icon: EnvelopeIcon, description: 'Email Campaigns' },
     { name: 'Advanced Booking', href: '/dashboard/advanced-booking', icon: CalendarIcon, description: 'Appointment Scheduling' },
     { name: 'Realtime Collaboration', href: '/dashboard/realtime-collaboration', icon: ChatBubbleLeftRightIcon, description: 'Team Collaboration' },
