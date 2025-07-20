@@ -292,4 +292,4 @@ class BackendTester:
 
 if __name__ == "__main__":
     tester = BackendTester()
-    tester.run_marketing_automation_test()
+    tester.run_ultimate_value_test()
