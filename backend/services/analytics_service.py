@@ -32,6 +32,8 @@ class AnalyticsService:
 
     async def track_event(self, event_data: Dict[str, Any]) -> str:
         """Track analytics event with real database operations"""
+        self._ensure_collections()
+        
         event_doc = {
             "_id": str(uuid.uuid4()),
             "event_type": event_data.get("event_type"),
