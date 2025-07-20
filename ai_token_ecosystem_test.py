@@ -73,7 +73,8 @@ class AITokenEcosystemTester:
             workspace_data = {
                 "name": "AI Token Test Workspace",
                 "description": "Workspace for testing AI token ecosystem",
-                "goals": ["ai_features", "content_creation"]
+                "industry": "Technology",
+                "website": "https://example.com"
             }
             
             response = requests.post(
@@ -86,7 +87,7 @@ class AITokenEcosystemTester:
             
             if response.status_code == 200:
                 data = response.json()
-                workspace = data.get("workspace", {})
+                workspace = data.get("data", {}).get("workspace", {})
                 self.workspace_id = workspace.get("id")
                 self.log_test("Create Workspace", True, 
                             f"Created workspace: {workspace.get('name')}, ID: {self.workspace_id}", 
