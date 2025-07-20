@@ -126,8 +126,8 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<UltraAdvancedSocialMediaScheduler />} />
               <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
-              <Route path="bio-sites" element={<BioSitesPage />} />
-              <Route path="crm" element={<CRMPage />} />
+              <Route path="bio-sites" element={<ProfessionalLinkInBioBuilder />} />
+              <Route path="crm" element={<ComprehensiveCRMSystem />} />
               <Route path="link-shortener" element={<LinkShortenerPage />} />
               <Route path="referrals" element={<ReferralSystemPage />} />
               
@@ -138,7 +138,7 @@ function App() {
               <Route path="financial-management" element={<FinancialManagementPage />} />
               
               <Route path="courses" element={<CoursesPage />} />
-              <Route path="ecommerce" element={<EcommercePage />} />
+              <Route path="ecommerce" element={<ComprehensiveMarketplace />} />
               <Route path="templates" element={<TemplateMarketplace />} />
               <Route path="template-marketplace" element={<TemplateMarketplaceV2Page />} />
               <Route path="escrow-system" element={<EscrowSystemPage />} />
@@ -147,7 +147,7 @@ function App() {
               
               <Route path="ai-features" element={<UltraAdvancedAIFeaturesPage />} />
               <Route path="email-marketing" element={<EmailMarketingPage />} />
-              <Route path="advanced-booking" element={<AdvancedBookingPage />} />
+              <Route path="advanced-booking" element={<ProfessionalBookingSystem />} />
               <Route path="realtime-collaboration" element={<RealtimeCollaborationPage />} />
               <Route path="integrations" element={<IntegrationHubPage />} />
               <Route path="workspaces" element={<UltraAdvancedWorkspaceManagement />} />
