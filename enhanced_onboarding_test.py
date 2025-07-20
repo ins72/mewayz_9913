@@ -149,13 +149,14 @@ class EnhancedOnboardingTester:
                          data={"time_spent": 30, "completed_at": "2025-07-20T10:00:00Z"},
                          description="Complete tour step with tracking")
         
-        # 4. Tutorial Management - Create interactive tutorial
+        # 4. Tutorial Management - Create interactive tutorial - Fix validation
         print(f"\n📚 Testing Tutorial Management...")
         tutorial_data = {
             "title": "Advanced Features Tutorial",
             "description": "Learn how to use advanced platform features",
             "category": "advanced",
-            "steps": [
+            "difficulty": "intermediate",
+            "steps_json": json.dumps([
                 {
                     "title": "Step 1: Dashboard Overview",
                     "content": "Navigate to your dashboard and explore the main features",
@@ -168,8 +169,7 @@ class EnhancedOnboardingTester:
                     "action_type": "click",
                     "target_element": "#new-project-btn"
                 }
-            ],
-            "difficulty": "intermediate",
+            ]),
             "estimated_time": 15
         }
         self.test_endpoint("/onboarding/interactive-tutorial/create", "POST",
