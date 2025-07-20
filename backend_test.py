@@ -143,14 +143,11 @@ class BackendTester:
         # 2. Campaign Management - Create Campaign
         print(f"\n📧 Testing Campaign Management...")
         campaign_form_data = {
-            "campaign_name": "Phase 6 Marketing Launch Campaign",
-            "campaign_type": "email",
-            "target_segments": ["new_users", "active_users"],
-            "objectives": ["engagement", "conversion"],
-            "budget": "5000.00",
-            "start_date": "2025-07-20T10:00:00Z",
-            "end_date": "2025-08-20T10:00:00Z",
-            "campaign_settings": "{}"
+            "name": "Phase 6 Marketing Launch Campaign",
+            "type": "one_time",
+            "template": "marketing_launch_template",
+            "target_audience": "all",
+            "send_immediately": "false"
         }
         self.test_endpoint("/marketing/campaigns/create", "POST",
                          form_data=campaign_form_data,
