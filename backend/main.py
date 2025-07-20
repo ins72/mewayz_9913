@@ -94,6 +94,9 @@ onboarding_collection = database.onboarding_progress
 # System metrics collection
 system_metrics_collection = database.system_metrics
 
+# Team invitations collection
+team_invitations_collection = database.team_invitations
+
 # Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
