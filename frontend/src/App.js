@@ -130,6 +130,7 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="social-media" element={<UltraAdvancedSocialMediaScheduler />} />
               <Route path="instagram" element={<UltraAdvancedInstagramManager />} />
+              <Route path="instagram-leads" element={<InstagramLeadGeneration />} />
               <Route path="bio-sites" element={<ProfessionalLinkInBioBuilder />} />
               <Route path="crm" element={<ComprehensiveCRMSystem />} />
               <Route path="workspace-settings" element={<AdvancedWorkspaceSettings />} />
