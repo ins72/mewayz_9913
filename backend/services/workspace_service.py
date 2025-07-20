@@ -10,8 +10,15 @@ from core.database import get_workspaces_collection, get_users_collection
 
 class WorkspaceService:
     def __init__(self):
-        self.workspaces_collection = get_workspaces_collection()
-        self.users_collection = get_users_collection()
+        self.workspaces_collection = None
+        self.users_collection = None
+    
+    def _ensure_collections(self):
+        """Ensure collections are initialized"""
+        if self.workspaces_collection is None:
+            self.workspaces_collection = get_workspaces_collection()
+        if self.users_collection is None:
+            self.users_collection = get_users_collection()
 
     async def create_workspace(self, name: str, owner_id: str, description: str = "") -> Dict[str, Any]:
         """Create a new workspace with real database operations"""
