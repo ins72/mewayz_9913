@@ -155,7 +155,11 @@ class Historic5000FeaturesTester:
         
         # AI-powered feature discovery
         self.test_endpoint("/ux/smart-feature-discovery/recommendation", "POST",
-                         data={"user_level": "beginner", "business_type": "e-commerce", "goals": ["increase_sales"]},
+                         data={
+                             "current_usage_level": "beginner", 
+                             "business_goals": ["increase_sales", "improve_efficiency"], 
+                             "time_available": "2-4 hours per week"
+                         },
                          description="AI-powered feature discovery", phase="Phase 6")
         
         # Multi-path onboarding journeys
