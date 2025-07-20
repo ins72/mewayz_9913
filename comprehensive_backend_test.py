@@ -51,14 +51,15 @@ class ComprehensiveBackendTester:
         print(f"\n🔐 AUTHENTICATING WITH ADMIN CREDENTIALS...")
         print(f"Email: {ADMIN_EMAIL}")
         
+        # OAuth2PasswordRequestForm expects form data with username/password
         login_data = {
-            "email": ADMIN_EMAIL,
+            "username": ADMIN_EMAIL,  # OAuth2 uses 'username' field for email
             "password": ADMIN_PASSWORD
         }
         
         try:
             start_time = time.time()
-            response = self.session.post(f"{API_BASE}/auth/login", json=login_data, timeout=30)
+            response = self.session.post(f"{API_BASE}/auth/login", data=login_data, timeout=30)
             response_time = time.time() - start_time
             
             if response.status_code == 200:
