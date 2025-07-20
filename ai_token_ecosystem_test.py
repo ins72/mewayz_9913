@@ -47,7 +47,7 @@ class AITokenEcosystemTester:
             
             if response.status_code == 200:
                 data = response.json()
-                self.token = data.get("access_token")
+                self.token = data.get("token")
                 self.log_test("Admin Authentication", True, 
                             f"Successfully authenticated admin user, token length: {len(self.token) if self.token else 0}", 
                             response_time)
