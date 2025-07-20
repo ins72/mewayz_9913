@@ -8,7 +8,7 @@ import {
   XMarkIcon,
   StarIcon,
   SparklesIcon,
-  CrownIcon,
+  TrophyIcon,
   ShieldCheckIcon,
   BoltIcon,
   PlusIcon,
