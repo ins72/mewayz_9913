@@ -156,6 +156,7 @@ const UltraAdvancedAIFeaturesPage = () => {
           const tokensConsumed = data.tokens_consumed;
           success(`AI request completed successfully! ${tokensConsumed ? `(${tokensConsumed} tokens consumed)` : ''}`);
           fetchAIAnalytics(); // Refresh analytics
+          fetchTokenBalance(); // Refresh token balance
         } else {
           // Handle insufficient tokens error
           if (data.error === 'insufficient_tokens') {
