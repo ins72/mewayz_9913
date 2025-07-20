@@ -1,0 +1,73 @@
+{
+  "test_results": [
+    {
+      "test": "Admin Authentication",
+      "success": true,
+      "details": "Successfully authenticated as Admin User (admin)",
+      "response_time": 1.3459320068359375,
+      "timestamp": "2025-07-20T07:00:51.794569"
+    },
+    {
+      "test": "Comprehensive Subscription Status",
+      "success": true,
+      "details": "Comprehensive subscription data retrieved - Plan: Professional Monthly, Health Score: 92, Risk Level: low, Engagement Score: 85, Lifecycle Stage: mature",
+      "response_time": 0.014128923416137695,
+      "timestamp": "2025-07-20T07:00:51.808818"
+    },
+    {
+      "test": "Failed Payments Data",
+      "success": true,
+      "details": "Failed payments data retrieved - Total Failed: 0, Recovery Status: no_failures, Recovery Options: 3",
+      "response_time": 0.009495735168457031,
+      "timestamp": "2025-07-20T07:00:51.818396"
+    },
+    {
+      "test": "Payment Recovery Dashboard",
+      "success": true,
+      "details": "Recovery dashboard data retrieved - Payment Health: excellent, Success Rate: 100.0%, Total Payments: 12, Monitoring Features: 6",
+      "response_time": 0.011244535446166992,
+      "timestamp": "2025-07-20T07:00:51.829732"
+    },
+    {
+      "test": "Retry Failed Payment",
+      "success": true,
+      "details": "Payment retry initiated - Intent ID: pi_test_1234567890, Status: processing, Retry Attempt: 1, Next Action: confirm_payment",
+      "response_time": 0.01970982551574707,
+      "timestamp": "2025-07-20T07:00:51.849520"
+    },
+    {
+      "test": "Cancellation Survey",
+      "success": true,
+      "details": "Cancellation survey submitted - Survey ID: a2c6d6ae-054b-46dd-a061-a4511345046f, Retention Offers: 2, Contact Support Available: True",
+      "response_time": 0.029399394989013672,
+      "timestamp": "2025-07-20T07:00:51.878998"
+    },
+    {
+      "test": "Account Deletion Request",
+      "success": true,
+      "details": "Account deletion requested - Request ID: 2a3b8b6d-7731-4018-9889-5d206daa3b52, Grace Period: 30 days, Data Export: Requested, Cancellation Link Available: True",
+      "response_time": 0.25676608085632324,
+      "timestamp": "2025-07-20T07:00:52.135851"
+    },
+    {
+      "test": "Cancel Account Deletion",
+      "success": true,
+      "details": "Account deletion cancelled - Request ID: 2a3b8b6d-7731-4018-9889-5d206daa3b52, Status: cancelled, Account Restored: True, Subscription: reactivated",
+      "response_time": 0.011538267135620117,
+      "timestamp": "2025-07-20T07:00:52.147499"
+    },
+    {
+      "test": "Retention Analysis",
+      "success": true,
+      "details": "Retention analysis retrieved - Retention Score: 87, Churn Risk: low, Engagement Trend: increasing, Most Used Features: 3, Growth Opportunities: 2",
+      "response_time": 0.014870882034301758,
+      "timestamp": "2025-07-20T07:00:52.162470"
+    }
+  ],
+  "summary": {
+    "total_tests": 9,
+    "passed_tests": 9,
+    "success_rate": 100.0,
+    "test_completed_at": "2025-07-20T07:00:52.162722"
+  }
+}
