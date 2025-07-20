@@ -142,20 +142,25 @@ class BackendTester:
         
         # 2. Campaign Management - Create Campaign
         print(f"\n📧 Testing Campaign Management...")
-        campaign_data = {
-            "name": "Phase 6 Marketing Launch Campaign",
-            "type": "email",
-            "template": "marketing_launch_template"
+        campaign_form_data = {
+            "campaign_name": "Phase 6 Marketing Launch Campaign",
+            "campaign_type": "email",
+            "target_segments": ["new_users", "active_users"],
+            "objectives": ["engagement", "conversion"],
+            "budget": "5000.00",
+            "start_date": "2025-07-20T10:00:00Z",
+            "end_date": "2025-08-20T10:00:00Z",
+            "campaign_settings": "{}"
         }
         self.test_endpoint("/marketing/campaigns/create", "POST",
-                         data=campaign_data,
+                         form_data=campaign_form_data,
                          description="Create comprehensive marketing campaign")
         
         # 3. Contact Management - Bulk Import
         print(f"\n👥 Testing Contact Management...")
-        contacts_data = {
+        contacts_form_data = {
             "import_source": "csv",
-            "contact_data": [
+            "contact_data": json.dumps([
                 {
                     "email": "john.doe@example.com",
                     "first_name": "John",
@@ -170,10 +175,12 @@ class BackendTester:
                     "company": "Marketing Pro LLC",
                     "phone": "+1-555-0124"
                 }
-            ]
+            ]),
+            "duplicate_handling": "merge",
+            "validation_level": "standard"
         }
         self.test_endpoint("/marketing/bulk-import/contacts", "POST",
-                         data=contacts_data,
+                         form_data=contacts_form_data,
                          description="Bulk import marketing contacts")
         
         # 4. Customer Segmentation
