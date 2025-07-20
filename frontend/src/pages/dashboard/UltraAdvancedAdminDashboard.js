@@ -396,7 +396,7 @@ const UltraAdvancedAdminDashboard = () => {
               title="Active Workspaces"
               value={adminData?.workspaces?.active_count || workspaceList.length || '0'}
               change={adminData?.workspaces?.growth_rate || 18.7}
-              icon={DatabaseIcon}
+              icon={CircleStackIcon}
               color="green"
             />
             <StatCard
