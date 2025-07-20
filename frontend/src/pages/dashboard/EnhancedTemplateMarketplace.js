@@ -6,7 +6,7 @@ import {
   HeartIcon,
   StarIcon,
   EyeIcon,
-  DownloadIcon,
+  ArrowDownTrayIcon,
   CreditCardIcon,
   TagIcon,
   UserIcon,
