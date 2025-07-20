@@ -85,6 +85,60 @@ class SupportSystemTester:
             self.log_test("/auth/login", "POST", 0, 0, False, f"Authentication error: {str(e)}")
             return False
     
+    def test_endpoint(self, endpoint, method="GET", data=None, expected_status=200, description=""):
+        """Test a single endpoint with JSON data"""
+        url = f"{API_BASE}{endpoint}"
+        
+        try:
+            start_time = time.time()
+            
+            if method == "GET":
+                response = self.session.get(url, timeout=30)
+            elif method == "POST":
+                response = self.session.post(url, json=data, timeout=30)
+            elif method == "PUT":
+                response = self.session.put(url, json=data, timeout=30)
+            elif method == "DELETE":
+                response = self.session.delete(url, timeout=30)
+            else:
+                raise ValueError(f"Unsupported method: {method}")
+                
+            response_time = time.time() - start_time
+            
+            # Check if response is successful
+            success = response.status_code == expected_status
+            
+            # Get response details
+            try:
+                response_data = response.json()
+                data_size = len(json.dumps(response_data))
+                details = f"{description} - Response size: {data_size} chars"
+                if not success:
+                    details += f" - Error: {response_data.get('detail', 'Unknown error')}"
+                
+                # Store important IDs for subsequent tests
+                if success and 'data' in response_data:
+                    if 'session_id' in response_data['data']:
+                        self.session_id = response_data['data']['session_id']
+                    if 'agent_id' in response_data['data']:
+                        self.agent_id = response_data['data']['agent_id']
+                    
+            except:
+                data_size = len(response.text)
+                details = f"{description} - Response size: {data_size} chars"
+                if not success:
+                    details += f" - Error: {response.text[:100]}"
+            
+            self.log_test(endpoint, method, response.status_code, response_time, success, details, data_size)
+            return success, response
+            
+        except requests.exceptions.Timeout:
+            self.log_test(endpoint, method, 0, 30.0, False, f"{description} - Request timeout")
+            return False, None
+        except Exception as e:
+            self.log_test(endpoint, method, 0, 0, False, f"{description} - Error: {str(e)}")
+            return False, None
+
     def test_endpoint_form(self, endpoint, method="GET", data=None, expected_status=200, description=""):
         """Test a single endpoint with form data"""
         url = f"{API_BASE}{endpoint}"
