@@ -30,7 +30,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {
   StarIcon as StarIconSolid,
-  CrownIcon as CrownIconSolid,
+  TrophyIcon as TrophyIconSolid,
   BoltIcon as BoltIconSolid,
   ShieldCheckIcon as ShieldCheckIconSolid
 } from '@heroicons/react/24/solid';
