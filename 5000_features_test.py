@@ -189,7 +189,11 @@ class Historic5000FeaturesTester:
         
         # Predictive churn prevention
         self.test_endpoint("/subscription/smart-cancellation-prevention", "POST",
-                         data={"user_id": "test_user", "risk_factors": ["payment_failed", "low_usage"]},
+                         data={
+                             "user_id": "test_user", 
+                             "cancellation_reason": "cost_concerns",
+                             "risk_factors": ["payment_failed", "low_usage"]
+                         },
                          description="Predictive churn prevention", phase="Phase 7")
         
         # Complete lifecycle management
