@@ -212,33 +212,14 @@ class BackendTester:
         # 8. A/B Testing
         print(f"\n🧪 Testing A/B Testing...")
         ab_test_data = {
-            "name": "Subject Line A/B Test",
-            "description": "Test different subject lines for email campaign",
-            "type": "email_subject",
-            "campaign_id": "test_campaign_123",
-            "variants": [
-                {
-                    "name": "Variant A",
-                    "subject": "Discover Our New Features",
-                    "weight": 50
-                },
-                {
-                    "name": "Variant B", 
-                    "subject": "Revolutionary Features Await You",
-                    "weight": 50
-                }
-            ],
-            "test_settings": {
-                "sample_size": 1000,
-                "confidence_level": 95,
-                "test_duration": "24 hours",
-                "winning_metric": "open_rate"
-            },
-            "auto_winner": {
-                "enabled": True,
-                "threshold": 5.0,
-                "action": "send_to_remaining"
-            }
+            "test_name": "Subject Line A/B Test",
+            "test_type": "email_subject",
+            "variable_to_test": "subject_line",
+            "variant_a": "Discover Our New Features",
+            "variant_b": "Revolutionary Features Await You",
+            "audience_size": 1000,
+            "test_duration_days": 1,
+            "success_metric": "open_rate"
         }
         self.test_endpoint("/marketing/ab-testing/create", "POST",
                          data=ab_test_data,
