@@ -358,7 +358,7 @@ const UltraAdvancedAdminDashboard = () => {
         {[
           { id: 'overview', name: 'Overview', icon: ChartBarIcon },
           { id: 'users', name: 'User Management', icon: UsersIcon },
-          { id: 'workspaces', name: 'Workspaces', icon: DatabaseIcon },
+          { id: 'workspaces', name: 'Workspaces', icon: CircleStackIcon },
           { id: 'subscriptions', name: 'Subscriptions', icon: CreditCardIcon },
           { id: 'tokens', name: 'Token Packages', icon: BoltIcon },
           { id: 'system', name: 'System Health', icon: ServerIcon },
