@@ -67,6 +67,7 @@ import UltraAdvancedSocialMediaScheduler from './pages/dashboard/UltraAdvancedSo
 import ProfessionalLinkInBioBuilder from './pages/dashboard/ProfessionalLinkInBioBuilder';
 import ComprehensiveMarketplace from './pages/dashboard/ComprehensiveMarketplace';
 import ProfessionalBookingSystem from './pages/dashboard/ProfessionalBookingSystem';
+import ProfessionalOnboardingWizard from './pages/onboarding/ProfessionalOnboardingWizard';
 import UltraAdvancedAdminDashboard from './pages/dashboard/UltraAdvancedAdminDashboard';
 import ComprehensiveCRMSystem from './pages/dashboard/ComprehensiveCRMSystem';
 
