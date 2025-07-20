@@ -246,7 +246,15 @@ class Historic5000FeaturesTester:
         
         # Cultural adaptation engine
         self.test_endpoint("/global/cultural-intelligence/business-adaptation", "POST",
-                         data={"target_country": "Japan", "business_type": "e-commerce", "content_type": "marketing"},
+                         data={
+                             "target_country": "Japan",
+                             "business_type": "e-commerce",
+                             "target_audience": "young_professionals",
+                             "products_services": ["business_software", "productivity_tools"],
+                             "budget_range": "10000-50000",
+                             "timeline": "3-6 months",
+                             "content_type": "marketing"
+                         },
                          description="Cultural adaptation engine", phase="Phase 9")
 
     def test_phase_10_enterprise_marketing_growth(self):
