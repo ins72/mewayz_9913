@@ -718,18 +718,37 @@ const UltraAdvancedAIFeaturesPage = () => {
             </div>
             <p className="text-white/80 text-lg">Harness the power of OpenAI GPT-4 to supercharge your content creation and business growth</p>
           </div>
-          {analytics && (
-            <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1">{analytics.total_requests}</div>
-                <div className="text-sm text-white/70">AI Requests</div>
+          <div className="flex space-x-4">
+            {tokenBalance && (
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
+                <div className="text-center">
+                  <div className="flex items-center justify-center mb-2">
+                    <BoltIconSolid className="h-6 w-6 mr-2 text-yellow-400" />
+                    <div className="text-3xl font-bold">{(tokenBalance.balance || 0)}</div>
+                  </div>
+                  <div className="text-sm text-white/70">Available Tokens</div>
+                </div>
+                <div className="text-center mt-4">
+                  <div className="text-lg font-semibold mb-1">
+                    {tokenBalance.allowance_remaining || 0} / {tokenBalance.monthly_allowance || 0}
+                  </div>
+                  <div className="text-xs text-white/70">Monthly Allowance</div>
+                </div>
               </div>
-              <div className="text-center mt-4">
-                <div className="text-2xl font-bold mb-1">{analytics.success_rate.toFixed(1)}%</div>
-                <div className="text-sm text-white/70">Success Rate</div>
+            )}
+            {analytics && (
+              <div className="bg-white/10 rounded-xl p-6 backdrop-blur-sm">
+                <div className="text-center">
+                  <div className="text-3xl font-bold mb-1">{analytics.total_requests}</div>
+                  <div className="text-sm text-white/70">AI Requests</div>
+                </div>
+                <div className="text-center mt-4">
+                  <div className="text-2xl font-bold mb-1">{analytics.success_rate.toFixed(1)}%</div>
+                  <div className="text-sm text-white/70">Success Rate</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
       
