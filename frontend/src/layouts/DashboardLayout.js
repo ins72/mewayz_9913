@@ -58,9 +58,9 @@ const DashboardLayout = ({ isAdmin = false }) => {
     // Core Navigation
     { name: 'Console', href: '/dashboard', icon: HomeIcon, description: 'Dashboard Overview' },
     { name: 'Socials', href: '/dashboard/social-media', icon: ChartBarIcon, description: 'Social Media Management' },
-    { name: 'Instagram Leads', href: '/dashboard/instagram-leads', icon: UsersIcon, description: 'Instagram Lead Generation' },
+    { name: 'Instagram Leads', href: '/dashboard/instagram-leads', icon: UserIcon, description: 'Instagram Lead Generation' },
     { name: 'Link in Bio', href: '/dashboard/bio-sites', icon: GlobeAltIcon, description: 'Bio Link Pages' },
-    { name: 'Leads', href: '/dashboard/crm', icon: UsersIcon, description: 'CRM & Email Marketing' },
+    { name: 'Leads', href: '/dashboard/crm', icon: EnvelopeIcon, description: 'CRM & Email Marketing' },
     { name: 'Link Shortener', href: '/dashboard/link-shortener', icon: LinkIcon, description: 'URL Shortening Service' },
     { name: 'Referral System', href: '/dashboard/referrals', icon: UserPlusIcon, description: 'Referral Program' },
     
