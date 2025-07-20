@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import uuid
 
-from ..core.database import (
+from core.database import (
     get_analytics_collection, get_users_collection, 
     get_workspaces_collection, get_bio_sites_collection
 )
