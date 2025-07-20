@@ -641,7 +641,7 @@ const SubscriptionManagementPage = () => {
 
             {plan.id === 'enterprise' && (
               <div className="absolute -top-3 right-4">
-                <CrownIconSolid className="h-6 w-6 text-yellow-500" />
+                <TrophyIconSolid className="h-6 w-6 text-yellow-500" />
               </div>
             )}
 
