@@ -3052,7 +3052,16 @@ async def get_onboarding_progress(
         if not progress:
             return {"success": True, "data": None}
         
+        # Convert ObjectId and datetime objects for JSON serialization
         progress["id"] = str(progress["_id"])
+        progress.pop("_id", None)
+        
+        # Convert datetime objects to ISO strings
+        if "updated_at" in progress and progress["updated_at"]:
+            progress["updated_at"] = progress["updated_at"].isoformat()
+        if "completed_at" in progress and progress["completed_at"]:
+            progress["completed_at"] = progress["completed_at"].isoformat()
+        
         return {"success": True, "data": progress}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get onboarding progress: {str(e)}")
