@@ -247,7 +247,7 @@ class Phase2MigrationTester:
         service_data = {
             "name": "Migration Test Service",
             "description": "Testing service creation after migration",
-            "duration": 60,
+            "duration_minutes": 60,
             "price": 99.99,
             "category": "consultation"
         }
