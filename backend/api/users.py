@@ -6,11 +6,14 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 
-from ..core.auth import get_current_active_user
-from ..services.user_service import user_service
-from ..services.analytics_service import analytics_service
+from core.auth import get_current_active_user
+from services.user_service import get_user_service
+from services.analytics_service import analytics_service
 
 router = APIRouter()
+
+# Initialize service instances
+user_service = get_user_service()
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
