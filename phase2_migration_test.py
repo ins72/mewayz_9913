@@ -258,8 +258,11 @@ class Phase2MigrationTester:
         """Test core system health and integration"""
         print(f"\n🔍 TESTING CORE SYSTEM HEALTH")
         
-        # System health check
-        self.test_endpoint("/health", "GET", description="System health check")
+        # System health check (try both /health and /api/health)
+        success, _ = self.test_endpoint("/health", "GET", description="System health check")
+        if not success:
+            # Try with /api prefix
+            self.test_endpoint("/../health", "GET", description="System health check (root level)")
         
         # User profile
         self.test_endpoint("/users/profile", "GET", description="User profile access")
