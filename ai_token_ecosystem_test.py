@@ -540,9 +540,11 @@ class AITokenEcosystemTester:
             print("❌ Authentication failed - cannot proceed with testing")
             return
         
-        # Get workspace ID
+        # Get workspace ID or create one
         if not self.get_workspace_id():
-            print("❌ Failed to get workspace ID - some tests will be skipped")
+            print("⚠️ No existing workspace found, creating new one...")
+            if not self.create_workspace():
+                print("❌ Failed to create workspace - some tests will be skipped")
         
         # Test all token endpoints
         print("\n📦 TESTING TOKEN MANAGEMENT ENDPOINTS:")
