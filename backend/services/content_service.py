@@ -381,5 +381,6 @@ class ContentService:
                 upsert=True
             )
 
-# Create service instance
-content_service = ContentService()
+# Create service instance function (dependency injection)
+def get_content_service() -> ContentService:
+    return ContentService()
