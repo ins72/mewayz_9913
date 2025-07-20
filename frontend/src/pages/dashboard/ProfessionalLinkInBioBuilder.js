@@ -355,7 +355,7 @@ const ProfessionalLinkInBioBuilder = () => {
                 onClick={() => duplicateLink(link)}
                 className="p-1 rounded text-green-600 hover:bg-green-100 dark:hover:bg-green-900"
               >
-                <DuplicateIcon className="h-4 w-4" />
+                <DocumentDuplicateIcon className="h-4 w-4" />
               </button>
               <button
                 onClick={() => deleteLink(link.id)}
