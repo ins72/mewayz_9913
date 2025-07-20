@@ -56,7 +56,7 @@ async def create_workspace(
             detail="Failed to create workspace"
         )
 
-@router.get("/list")
+@router.get("")
 async def get_user_workspaces(current_user: dict = Depends(get_current_active_user)):
     """Get all user workspaces with real database operations"""
     try:
