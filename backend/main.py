@@ -2856,7 +2856,8 @@ async def consume_tokens(
         raise HTTPException(status_code=403, detail=f"User token limit exceeded. Limit: {user_limit}, Needed: {tokens_needed}")
     
     # Check if workspace has enough tokens
-    total_available = workspace_tokens["balance"] + max(0, workspace_tokens["monthly_allowance"] - workspace_tokens.get("allowance_used_this_month", 0))
+    current_balance = workspace_tokens.get("balance", workspace_tokens.get("current_tokens", 0))
+    total_available = current_balance + max(0, workspace_tokens["monthly_allowance"] - workspace_tokens.get("allowance_used_this_month", 0))
     
     if total_available < tokens_needed:
         # Auto-purchase if enabled
