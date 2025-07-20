@@ -2449,6 +2449,496 @@ async def get_subscription_status(current_user: dict = Depends(get_current_user)
         "subscription": subscription_info
     }
 
+# ===== AI TOKEN ECOSYSTEM ENDPOINTS =====
+
+@app.get("/api/tokens/packages")
+async def get_token_packages():
+    """Get available token packages for purchase"""
+    packages = await token_packages_collection.find({}).to_list(length=100)
+    
+    # If no packages exist, create default ones
+    if not packages:
+        default_packages = [
+            {
+                "_id": str(uuid.uuid4()),
+                "name": "Starter Pack",
+                "tokens": 100,
+                "price": 9.99,
+                "currency": "USD",
+                "bonus_tokens": 10,
+                "description": "Perfect for getting started with AI features",
+                "is_popular": False,
+                "created_at": datetime.utcnow()
+            },
+            {
+                "_id": str(uuid.uuid4()),
+                "name": "Professional Pack",
+                "tokens": 500,
+                "price": 39.99,
+                "currency": "USD",
+                "bonus_tokens": 75,
+                "description": "Great for professional use and small teams",
+                "is_popular": True,
+                "created_at": datetime.utcnow()
+            },
+            {
+                "_id": str(uuid.uuid4()),
+                "name": "Enterprise Pack",
+                "tokens": 1500,
+                "price": 99.99,
+                "currency": "USD",
+                "bonus_tokens": 300,
+                "description": "Maximum value for heavy AI users and large teams",
+                "is_popular": False,
+                "created_at": datetime.utcnow()
+            }
+        ]
+        
+        await token_packages_collection.insert_many(default_packages)
+        packages = default_packages
+    
+    for package in packages:
+        package["id"] = str(package["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "packages": [
+                {
+                    "id": pkg["id"],
+                    "name": pkg["name"],
+                    "tokens": pkg["tokens"],
+                    "price": pkg["price"],
+                    "currency": pkg["currency"],
+                    "bonus_tokens": pkg["bonus_tokens"],
+                    "total_tokens": pkg["tokens"] + pkg["bonus_tokens"],
+                    "description": pkg.get("description"),
+                    "is_popular": pkg.get("is_popular", False),
+                    "per_token_price": round(pkg["price"] / pkg["tokens"], 4)
+                } for pkg in packages
+            ]
+        }
+    }
+
+@app.get("/api/tokens/workspace/{workspace_id}")
+async def get_workspace_tokens(
+    workspace_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get token balance and settings for a workspace"""
+    # Verify user has access to workspace
+    workspace = await workspaces_collection.find_one({"_id": workspace_id})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Check if user is workspace owner or member
+    is_owner = workspace.get("owner_id") == current_user["id"]
+    team_member = await team_members_collection.find_one({
+        "workspace_id": workspace_id,
+        "email": current_user["email"],
+        "status": "active"
+    })
+    
+    if not (is_owner or team_member):
+        raise HTTPException(status_code=403, detail="Access denied to workspace")
+    
+    # Get workspace token data
+    workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": workspace_id})
+    if not workspace_tokens:
+        # Create default token data for workspace
+        workspace_tokens = {
+            "_id": str(uuid.uuid4()),
+            "workspace_id": workspace_id,
+            "balance": 0,
+            "total_purchased": 0,
+            "total_used": 0,
+            "monthly_allowance": 50,  # Free tier gets 50 tokens per month
+            "allowance_used_this_month": 0,
+            "allowance_reset_date": datetime.utcnow().replace(day=1) + timedelta(days=32),
+            "auto_purchase_enabled": False,
+            "auto_purchase_threshold": 10,
+            "user_limits": {},
+            "feature_costs": {
+                "content_generation": 5,
+                "image_generation": 10,
+                "seo_analysis": 3,
+                "content_analysis": 2,
+                "course_generation": 15,
+                "email_sequence": 8,
+                "hashtag_generation": 2,
+                "content_improvement": 4
+            },
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+        await workspace_tokens_collection.insert_one(workspace_tokens)
+    
+    # Get recent transactions
+    recent_transactions = await token_transactions_collection.find(
+        {"workspace_id": workspace_id}
+    ).sort("created_at", -1).limit(10).to_list(length=10)
+    
+    for transaction in recent_transactions:
+        transaction["id"] = str(transaction["_id"])
+    
+    # Calculate monthly usage
+    current_month_start = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    monthly_usage = await token_transactions_collection.count_documents({
+        "workspace_id": workspace_id,
+        "type": "usage",
+        "created_at": {"$gte": current_month_start}
+    })
+    
+    # Get user's individual limit if set
+    user_limit = workspace_tokens.get("user_limits", {}).get(current_user["id"], None)
+    
+    return {
+        "success": True,
+        "data": {
+            "workspace_id": workspace_id,
+            "balance": workspace_tokens["balance"],
+            "monthly_allowance": workspace_tokens["monthly_allowance"],
+            "allowance_used_this_month": workspace_tokens.get("allowance_used_this_month", 0),
+            "allowance_remaining": max(0, workspace_tokens["monthly_allowance"] - workspace_tokens.get("allowance_used_this_month", 0)),
+            "total_purchased": workspace_tokens["total_purchased"],
+            "total_used": workspace_tokens["total_used"],
+            "monthly_usage": monthly_usage,
+            "auto_purchase_enabled": workspace_tokens.get("auto_purchase_enabled", False),
+            "auto_purchase_threshold": workspace_tokens.get("auto_purchase_threshold", 10),
+            "feature_costs": workspace_tokens["feature_costs"],
+            "user_limit": user_limit,
+            "is_owner": is_owner,
+            "recent_transactions": [
+                {
+                    "id": tx["id"],
+                    "type": tx["type"],
+                    "tokens": tx["tokens"],
+                    "feature": tx.get("feature"),
+                    "description": tx.get("description"),
+                    "created_at": tx["created_at"].isoformat()
+                } for tx in recent_transactions
+            ]
+        }
+    }
+
+@app.post("/api/tokens/purchase")
+async def purchase_tokens(
+    purchase_request: TokenPurchaseRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Purchase tokens for a workspace"""
+    # Verify workspace access
+    workspace = await workspaces_collection.find_one({"_id": purchase_request.workspace_id})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    if workspace.get("owner_id") != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Only workspace owners can purchase tokens")
+    
+    # Get token package
+    package = await token_packages_collection.find_one({"_id": purchase_request.package_id})
+    if not package:
+        raise HTTPException(status_code=404, detail="Token package not found")
+    
+    try:
+        # Create Stripe payment intent
+        payment_intent = stripe.PaymentIntent.create(
+            amount=int(package["price"] * 100),  # Convert to cents
+            currency=package["currency"].lower(),
+            payment_method=purchase_request.payment_method_id,
+            confirmation_method="manual",
+            confirm=True,
+            description=f"Token Purchase: {package['name']}",
+            metadata={
+                "workspace_id": purchase_request.workspace_id,
+                "user_id": current_user["id"],
+                "package_id": purchase_request.package_id,
+                "tokens": package["tokens"],
+                "bonus_tokens": package["bonus_tokens"]
+            }
+        )
+        
+        if payment_intent.status == "succeeded":
+            # Add tokens to workspace
+            total_tokens = package["tokens"] + package["bonus_tokens"]
+            
+            await workspace_tokens_collection.update_one(
+                {"workspace_id": purchase_request.workspace_id},
+                {
+                    "$inc": {
+                        "balance": total_tokens,
+                        "total_purchased": total_tokens
+                    },
+                    "$set": {
+                        "updated_at": datetime.utcnow()
+                    }
+                },
+                upsert=True
+            )
+            
+            # Record transaction
+            transaction_doc = {
+                "_id": str(uuid.uuid4()),
+                "workspace_id": purchase_request.workspace_id,
+                "user_id": current_user["id"],
+                "type": "purchase",
+                "tokens": total_tokens,
+                "cost": package["price"],
+                "description": f"Purchased {package['name']} - {package['tokens']} tokens + {package['bonus_tokens']} bonus",
+                "payment_intent_id": payment_intent.id,
+                "created_at": datetime.utcnow()
+            }
+            await token_transactions_collection.insert_one(transaction_doc)
+            
+            return {
+                "success": True,
+                "data": {
+                    "tokens_added": total_tokens,
+                    "payment_intent_id": payment_intent.id,
+                    "transaction_id": transaction_doc["_id"]
+                }
+            }
+        else:
+            return {
+                "success": False,
+                "error": "Payment failed",
+                "payment_status": payment_intent.status
+            }
+            
+    except stripe.error.CardError as e:
+        return {
+            "success": False,
+            "error": f"Card error: {e.user_message}"
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Token purchase failed: {str(e)}"
+        )
+
+@app.post("/api/tokens/workspace/{workspace_id}/settings")
+async def update_workspace_token_settings(
+    workspace_id: str,
+    settings: WorkspaceTokenSettings,
+    current_user: dict = Depends(get_current_user)
+):
+    """Update token settings for a workspace (owner only)"""
+    # Verify workspace ownership
+    workspace = await workspaces_collection.find_one({"_id": workspace_id})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    if workspace.get("owner_id") != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Only workspace owners can update token settings")
+    
+    # Update workspace token settings
+    await workspace_tokens_collection.update_one(
+        {"workspace_id": workspace_id},
+        {
+            "$set": {
+                "monthly_allowance": settings.monthly_token_allowance,
+                "auto_purchase_enabled": settings.auto_purchase_enabled,
+                "auto_purchase_threshold": settings.auto_purchase_threshold,
+                "auto_purchase_package_id": settings.auto_purchase_package_id,
+                "user_limits": settings.user_limits,
+                "feature_costs": settings.feature_costs,
+                "updated_at": datetime.utcnow()
+            }
+        },
+        upsert=True
+    )
+    
+    return {
+        "success": True,
+        "message": "Token settings updated successfully"
+    }
+
+@app.post("/api/tokens/consume")
+async def consume_tokens(
+    workspace_id: str,
+    feature: str,
+    tokens_needed: int,
+    current_user: dict = Depends(get_current_user)
+):
+    """Internal endpoint to consume tokens for AI features"""
+    # Get workspace tokens
+    workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": workspace_id})
+    if not workspace_tokens:
+        raise HTTPException(status_code=404, detail="Workspace tokens not found")
+    
+    # Check user limits
+    user_limit = workspace_tokens.get("user_limits", {}).get(current_user["id"])
+    if user_limit is not None and user_limit < tokens_needed:
+        raise HTTPException(status_code=403, detail=f"User token limit exceeded. Limit: {user_limit}, Needed: {tokens_needed}")
+    
+    # Check if workspace has enough tokens
+    total_available = workspace_tokens["balance"] + max(0, workspace_tokens["monthly_allowance"] - workspace_tokens.get("allowance_used_this_month", 0))
+    
+    if total_available < tokens_needed:
+        # Auto-purchase if enabled
+        if workspace_tokens.get("auto_purchase_enabled") and workspace_tokens["balance"] <= workspace_tokens.get("auto_purchase_threshold", 10):
+            # Trigger auto-purchase (simplified for now)
+            pass
+        
+        raise HTTPException(
+            status_code=402,
+            detail=f"Insufficient tokens. Available: {total_available}, Needed: {tokens_needed}"
+        )
+    
+    # Consume tokens (prefer monthly allowance first, then purchased balance)
+    allowance_remaining = max(0, workspace_tokens["monthly_allowance"] - workspace_tokens.get("allowance_used_this_month", 0))
+    
+    if allowance_remaining >= tokens_needed:
+        # Use monthly allowance
+        await workspace_tokens_collection.update_one(
+            {"workspace_id": workspace_id},
+            {
+                "$inc": {
+                    "allowance_used_this_month": tokens_needed,
+                    "total_used": tokens_needed
+                }
+            }
+        )
+        token_source = "monthly_allowance"
+    else:
+        # Use combination of allowance and purchased tokens
+        purchased_tokens_used = tokens_needed - allowance_remaining
+        await workspace_tokens_collection.update_one(
+            {"workspace_id": workspace_id},
+            {
+                "$inc": {
+                    "allowance_used_this_month": allowance_remaining,
+                    "balance": -purchased_tokens_used,
+                    "total_used": tokens_needed
+                }
+            }
+        )
+        token_source = "mixed"
+    
+    # Record transaction
+    transaction_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": workspace_id,
+        "user_id": current_user["id"],
+        "type": "usage",
+        "tokens": -tokens_needed,
+        "feature": feature,
+        "description": f"Used {tokens_needed} tokens for {feature.replace('_', ' ').title()}",
+        "token_source": token_source,
+        "created_at": datetime.utcnow()
+    }
+    await token_transactions_collection.insert_one(transaction_doc)
+    
+    return {
+        "success": True,
+        "tokens_consumed": tokens_needed,
+        "token_source": token_source
+    }
+
+@app.get("/api/tokens/analytics/{workspace_id}")
+async def get_token_analytics(
+    workspace_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get token usage analytics for a workspace"""
+    # Verify workspace access
+    workspace = await workspaces_collection.find_one({"_id": workspace_id})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Check access
+    is_owner = workspace.get("owner_id") == current_user["id"]
+    team_member = await team_members_collection.find_one({
+        "workspace_id": workspace_id,
+        "email": current_user["email"],
+        "status": "active"
+    })
+    
+    if not (is_owner or team_member):
+        raise HTTPException(status_code=403, detail="Access denied to workspace")
+    
+    # Get analytics data
+    current_month_start = datetime.utcnow().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    last_month_start = (current_month_start - timedelta(days=1)).replace(day=1)
+    
+    # Usage by feature (current month)
+    feature_usage = await token_transactions_collection.aggregate([
+        {
+            "$match": {
+                "workspace_id": workspace_id,
+                "type": "usage",
+                "created_at": {"$gte": current_month_start}
+            }
+        },
+        {
+            "$group": {
+                "_id": "$feature",
+                "tokens_used": {"$sum": {"$abs": "$tokens"}},
+                "usage_count": {"$sum": 1}
+            }
+        },
+        {"$sort": {"tokens_used": -1}}
+    ]).to_list(length=100)
+    
+    # Daily usage trend (last 30 days)
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    daily_usage = await token_transactions_collection.aggregate([
+        {
+            "$match": {
+                "workspace_id": workspace_id,
+                "type": "usage",
+                "created_at": {"$gte": thirty_days_ago}
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "$dateToString": {
+                        "format": "%Y-%m-%d",
+                        "date": "$created_at"
+                    }
+                },
+                "tokens_used": {"$sum": {"$abs": "$tokens"}},
+                "usage_count": {"$sum": 1}
+            }
+        },
+        {"$sort": {"_id": 1}}
+    ]).to_list(length=100)
+    
+    # Get workspace token data
+    workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": workspace_id})
+    
+    return {
+        "success": True,
+        "data": {
+            "current_balance": workspace_tokens.get("balance", 0),
+            "monthly_allowance": workspace_tokens.get("monthly_allowance", 0),
+            "allowance_used": workspace_tokens.get("allowance_used_this_month", 0),
+            "total_purchased": workspace_tokens.get("total_purchased", 0),
+            "total_used": workspace_tokens.get("total_used", 0),
+            "feature_usage": [
+                {
+                    "feature": usage["_id"],
+                    "feature_name": usage["_id"].replace("_", " ").title() if usage["_id"] else "Unknown",
+                    "tokens_used": usage["tokens_used"],
+                    "usage_count": usage["usage_count"]
+                } for usage in feature_usage
+            ],
+            "daily_usage": [
+                {
+                    "date": usage["_id"],
+                    "tokens_used": usage["tokens_used"],
+                    "usage_count": usage["usage_count"]
+                } for usage in daily_usage
+            ],
+            "efficiency_metrics": {
+                "avg_tokens_per_use": round(sum([u["tokens_used"] for u in feature_usage]) / max(sum([u["usage_count"] for u in feature_usage]), 1), 2),
+                "most_used_feature": feature_usage[0]["_id"].replace("_", " ").title() if feature_usage else "None",
+                "cost_per_month": round(sum([u["tokens_used"] for u in feature_usage]) * 0.01, 2)  # Assuming $0.01 per token
+            }
+        }
+    }
+
 # ===== SOCIAL MEDIA & EMAIL INTEGRATION ENDPOINTS =====
 
 # Pydantic models for social media integrations
