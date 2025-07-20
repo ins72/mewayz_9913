@@ -8,7 +8,6 @@ import {
   TrophyIcon,
   StarIcon,
   FireIcon,
-  TrophyIcon,
   BoltIcon,
   ShieldIcon,
   EyeIcon,
