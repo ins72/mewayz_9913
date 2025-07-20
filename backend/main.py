@@ -94,6 +94,48 @@ onboarding_collection = database.onboarding_progress
 # System metrics collection
 system_metrics_collection = database.system_metrics
 
+# Link shortener collections
+short_links_collection = database.short_links
+link_analytics_collection = database.link_analytics
+
+# Referral system collections
+referral_programs_collection = database.referral_programs
+referral_codes_collection = database.referral_codes
+referral_tracking_collection = database.referral_tracking
+
+# Form templates collections
+form_templates_collection = database.form_templates
+form_submissions_collection = database.form_submissions
+
+# Discount codes collections
+discount_codes_collection = database.discount_codes
+discount_usage_collection = database.discount_usage
+
+# Website builder collections
+websites_collection = database.websites
+website_pages_collection = database.website_pages
+
+# Instagram database collections  
+instagram_accounts_collection = database.instagram_accounts
+instagram_analytics_collection = database.instagram_analytics
+
+# Content calendar collections
+content_calendar_collection = database.content_calendar
+social_posts_collection = database.social_posts
+
+# Email marketing collections
+email_campaigns_collection = database.email_campaigns
+email_lists_collection = database.email_lists
+email_templates_collection = database.email_templates
+
+# Escrow system collections
+escrow_transactions_collection = database.escrow_transactions
+escrow_disputes_collection = database.escrow_disputes
+
+# Marketplace collections
+marketplace_products_collection = database.marketplace_products
+marketplace_vendors_collection = database.marketplace_vendors
+
 # Team invitations collection
 team_invitations_collection = database.team_invitations
 
