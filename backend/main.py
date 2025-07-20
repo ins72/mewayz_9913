@@ -71,6 +71,9 @@ app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 app.include_router(bio_sites.router, prefix="/api/bio-sites", tags=["Bio Sites"])
 app.include_router(ecommerce.router, prefix="/api/ecommerce", tags=["E-commerce"])
 app.include_router(bookings.router, prefix="/api/bookings", tags=["Booking System"])
+app.include_router(social_media.router, prefix="/api/social-media", tags=["Social Media"])
+app.include_router(marketing.router, prefix="/api/marketing", tags=["Marketing & Email"])
+app.include_router(integrations.router, prefix="/api/integrations", tags=["Integrations"])
 
 if __name__ == "__main__":
     uvicorn.run(
