@@ -66,7 +66,41 @@ class AITokenEcosystemTester:
         """Get authentication headers"""
         return {"Authorization": f"Bearer {self.token}"} if self.token else {}
     
-    def get_workspace_id(self):
+    def create_workspace(self):
+        """Create a workspace for testing"""
+        try:
+            start_time = time.time()
+            workspace_data = {
+                "name": "AI Token Test Workspace",
+                "description": "Workspace for testing AI token ecosystem",
+                "goals": ["ai_features", "content_creation"]
+            }
+            
+            response = requests.post(
+                f"{self.base_url}/api/workspaces",
+                headers=self.get_headers(),
+                json=workspace_data,
+                timeout=30
+            )
+            response_time = time.time() - start_time
+            
+            if response.status_code == 200:
+                data = response.json()
+                workspace = data.get("workspace", {})
+                self.workspace_id = workspace.get("id")
+                self.log_test("Create Workspace", True, 
+                            f"Created workspace: {workspace.get('name')}, ID: {self.workspace_id}", 
+                            response_time)
+                return True
+            else:
+                self.log_test("Create Workspace", False, 
+                            f"Failed to create workspace: {response.status_code} - {response.text}", 
+                            response_time)
+                return False
+                
+        except Exception as e:
+            self.log_test("Create Workspace", False, f"Error creating workspace: {str(e)}")
+            return False
         """Get a workspace ID for testing"""
         try:
             start_time = time.time()
