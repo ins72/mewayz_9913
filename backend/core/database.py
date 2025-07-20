@@ -64,5 +64,8 @@ def get_campaigns_collection():
 def get_ai_conversations_collection():
     return db.database.ai_conversations
 
-def get_notifications_collection():
-    return db.database.notifications
+def get_ai_conversations_collection():
+    return db.database.ai_conversations
+
+def get_bio_sites_collection():
+    return db.database.bio_sites
