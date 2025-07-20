@@ -217,54 +217,62 @@ const LinkShortenerPage = () => {
           <h2 className="text-xl font-semibold text-primary">Your Short Links</h2>
         </div>
         <div className="divide-y divide-default">
-          {shortLinks.map((link) => (
-            <div key={link.id} className="p-6 hover:bg-surface-hover transition-colors">
-              <div className="flex items-start justify-between">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <h3 className="text-lg font-medium text-primary truncate">
-                      {link.shortUrl}
-                    </h3>
-                    <button
-                      onClick={() => copyToClipboard(link.shortUrl)}
-                      className="p-1 text-secondary hover:text-primary"
-                      title="Copy to clipboard"
-                    >
-                      <ClipboardDocumentIcon className="h-4 w-4" />
+          {shortLinks.length === 0 ? (
+            <div className="p-12 text-center">
+              <LinkIcon className="h-16 w-16 text-secondary mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-primary mb-2">No short links yet</h3>
+              <p className="text-secondary">Create your first short link to get started</p>
+            </div>
+          ) : (
+            shortLinks.map((link) => (
+              <div key={link.id} className="p-6 hover:bg-surface-hover transition-colors">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <h3 className="text-lg font-medium text-primary truncate">
+                        {link.short_url}
+                      </h3>
+                      <button
+                        onClick={() => copyToClipboard(link.short_url)}
+                        className="p-1 text-secondary hover:text-primary"
+                        title="Copy to clipboard"
+                      >
+                        <ClipboardDocumentIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <p className="text-sm text-secondary mb-2 truncate">
+                      {link.original_url}
+                    </p>
+                    <div className="flex items-center space-x-4 text-sm text-secondary">
+                      <span className="flex items-center">
+                        <EyeIcon className="h-4 w-4 mr-1" />
+                        {link.clicks} clicks
+                      </span>
+                      <span className="flex items-center">
+                        <CalendarIcon className="h-4 w-4 mr-1" />
+                        {formatDate(link.created_at)}
+                      </span>
+                      <span className={`px-2 py-1 rounded-full text-xs ${
+                        link.status === 'active' 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
+                      }`}>
+                        {link.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 ml-4">
+                    <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                      <ChartBarIcon className="h-5 w-5" />
+                    </button>
+                    <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
+                      <QrCodeIcon className="h-5 w-5" />
                     </button>
                   </div>
-                  <p className="text-sm text-secondary mb-2 truncate">
-                    {link.originalUrl}
-                  </p>
-                  <div className="flex items-center space-x-4 text-sm text-secondary">
-                    <span className="flex items-center">
-                      <EyeIcon className="h-4 w-4 mr-1" />
-                      {link.clicks} clicks
-                    </span>
-                    <span className="flex items-center">
-                      <CalendarIcon className="h-4 w-4 mr-1" />
-                      {link.created}
-                    </span>
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      link.status === 'active' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
-                    }`}>
-                      {link.status}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2 ml-4">
-                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
-                    <ChartBarIcon className="h-5 w-5" />
-                  </button>
-                  <button className="p-2 text-secondary hover:text-primary hover:bg-surface-hover rounded-lg">
-                    <QrCodeIcon className="h-5 w-5" />
-                  </button>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </motion.div>
     </div>
