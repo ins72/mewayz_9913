@@ -163,9 +163,9 @@ class Phase2MigrationTester:
         
         # Create new AI conversation
         conversation_data = {
-            "title": "Test Migration Conversation",
-            "type": "general",
-            "initial_message": "Testing the migrated AI conversation system"
+            "message": "Testing the migrated AI conversation system",
+            "context": {"test": "migration"},
+            "conversation_type": "chat"
         }
         self.test_endpoint("/ai/conversations", "POST", data=conversation_data,
                          expected_status=201, description="Create new AI conversation")
@@ -173,7 +173,7 @@ class Phase2MigrationTester:
         # Content analysis
         content_data = {
             "content": "This is a test content for analysis during migration testing",
-            "analysis_type": "sentiment"
+            "analysis_type": ["sentiment", "keywords", "readability"]
         }
         self.test_endpoint("/ai/analyze-content", "POST", data=content_data,
                          description="Content analysis (sentiment, SEO, readability)")
