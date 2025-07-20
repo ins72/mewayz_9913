@@ -6,10 +6,13 @@ from fastapi import APIRouter, HTTPException, Depends, status, Query
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 
-from ..core.auth import get_current_active_user
-from ..services.content_service import content_service
+from core.auth import get_current_active_user
+from services.content_service import get_content_service
 
 router = APIRouter()
+
+# Initialize service instance
+content_service = get_content_service()
 
 class BlogPostCreate(BaseModel):
     title: str
