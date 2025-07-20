@@ -138,6 +138,8 @@ class UserService:
 
     async def update_user_profile(self, user_id: str, update_data: Dict[str, Any]) -> Dict[str, Any]:
         """Update user profile with real database operations"""
+        self._ensure_collections()
+        
         # Prepare update document
         update_doc = {
             "$set": {
