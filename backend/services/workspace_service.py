@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any, List
 from datetime import datetime
 import uuid
 
-from ..core.database import get_workspaces_collection, get_users_collection
+from core.database import get_workspaces_collection, get_users_collection
 
 class WorkspaceService:
     def __init__(self):
