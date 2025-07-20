@@ -24,7 +24,7 @@ import {
   MapPinIcon,
   EnvelopeIcon,
   PlayIcon,
-  MusicIcon,
+  MusicalNoteIcon,
   BookmarkIcon,
   CreditCardIcon,
   UserGroupIcon,
