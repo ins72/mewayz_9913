@@ -263,7 +263,14 @@ class Historic5000FeaturesTester:
         
         # Advanced user acquisition
         self.test_endpoint("/marketing/user-acquisition/bulk-import-campaign", "POST",
-                         data={"campaign_name": "5000 Features Launch", "target_audience": "business_owners", "channels": ["email", "social"]},
+                         data={
+                             "user_data_file": "5000_features_users.csv",
+                             "campaign_name": "5000 Features Launch Campaign",
+                             "segmentation_strategy": "business_size_and_industry",
+                             "outreach_sequence": ["welcome_email", "feature_demo", "trial_offer"],
+                             "target_audience": "business_owners", 
+                             "channels": ["email", "social"]
+                         },
                          description="Advanced user acquisition", phase="Phase 10")
         
         # Viral marketing automation
