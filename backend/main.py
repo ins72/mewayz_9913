@@ -348,6 +348,11 @@ class TokenTransaction(BaseModel):
     cost: Optional[float] = None
     description: Optional[str] = None
 
+class TokenConsumptionRequest(BaseModel):
+    workspace_id: str
+    feature: str
+    tokens_needed: int
+
 # ===== STRIPE/SUBSCRIPTION MODELS =====
 class SubscriptionPlan(BaseModel):
     plan_id: str
