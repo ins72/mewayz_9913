@@ -3270,6 +3270,28 @@ async def generate_ai_content(
 ):
     """Generate content using AI"""
     try:
+        # Get user's workspace
+        workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+        if not workspace:
+            raise HTTPException(status_code=404, detail="Workspace not found")
+        
+        # Get token cost for this feature
+        workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": str(workspace["_id"])})
+        tokens_needed = workspace_tokens.get("feature_costs", {}).get("content_generation", 5) if workspace_tokens else 5
+        
+        # Consume tokens
+        try:
+            await consume_tokens(str(workspace["_id"]), "content_generation", tokens_needed, current_user)
+        except HTTPException as e:
+            if e.status_code == 402:
+                return {
+                    "success": False,
+                    "error": "insufficient_tokens",
+                    "message": e.detail,
+                    "tokens_needed": tokens_needed
+                }
+            raise e
+        
         result = await ai_system.generate_content(
             prompt=request.prompt,
             content_type=request.content_type,
@@ -3281,15 +3303,17 @@ async def generate_ai_content(
         usage_log = {
             "_id": str(uuid.uuid4()),
             "user_id": current_user["id"],
+            "workspace_id": str(workspace["_id"]),
             "feature": "content_generation",
             "content_type": request.content_type,
             "tokens_used": result.get("tokens_used", 0),
+            "tokens_consumed": tokens_needed,
             "timestamp": datetime.utcnow(),
             "success": result["success"]
         }
         await ai_usage_collection.insert_one(usage_log)
         
-        return {"success": True, "data": result}
+        return {"success": True, "data": result, "tokens_consumed": tokens_needed}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI content generation failed: {str(e)}")
