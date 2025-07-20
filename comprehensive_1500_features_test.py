@@ -118,16 +118,17 @@ class Comprehensive1500FeaturesTester:
         start_time = time.time()
         try:
             detect_data = {
-                "text": "Hello, this is a test message for language detection. Bonjour, ceci est un message de test."
+                "text": "Hello, this is a test message for language detection. Bonjour, ceci est un message de test.",
+                "browser_language": "en-US"
             }
-            response = self.session.post(f"{API_BASE}/languages/detect", json=detect_data, timeout=30)
+            response = self.session.post(f"{API_BASE}/languages/detect", data=detect_data, timeout=30)
             response_time = time.time() - start_time
             
             if response.status_code == 200:
                 data = response.json()
                 data_size = len(response.text)
-                detected_lang = data.get('detected_language', 'unknown')
-                confidence = data.get('confidence', 0)
+                detected_lang = data.get('data', {}).get('detected_language', 'unknown')
+                confidence = data.get('data', {}).get('confidence', 0)
                 self.log_test("/languages/detect", "POST", response.status_code, response_time, True, 
                             f"Language detected: {detected_lang} (confidence: {confidence})", data_size)
             else:
