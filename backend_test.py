@@ -128,79 +128,216 @@ class BackendTester:
             self.log_test(endpoint, method, 0, 0, False, f"{description} - Error: {str(e)}")
             return False, None
 
-    def test_enhanced_onboarding_system(self):
-        """Test Enhanced Guided Tour and Interactive Onboarding System - Phase 4"""
-        print(f"\n🚀 TESTING ENHANCED GUIDED TOUR AND INTERACTIVE ONBOARDING SYSTEM")
+    def test_marketing_automation_system(self):
+        """Test Marketing Automation and Campaign Management System - Phase 6"""
+        print(f"\n🚀 TESTING MARKETING AUTOMATION AND CAMPAIGN MANAGEMENT SYSTEM")
         
-        # 1. Enhanced Onboarding Dashboard
-        print(f"\n📊 Testing Enhanced Onboarding Dashboard...")
-        self.test_endpoint("/onboarding/enhanced/dashboard", "GET", 
-                         description="Enhanced onboarding dashboard with comprehensive data")
+        # 1. Marketing Dashboard
+        print(f"\n📊 Testing Marketing Dashboard...")
+        self.test_endpoint("/marketing/dashboard/comprehensive", "GET", 
+                         description="Comprehensive marketing dashboard with analytics")
         
-        # 2. Interactive Tour System - Get detailed tour
-        print(f"\n🎯 Testing Interactive Tour System...")
-        tour_id = "getting-started-tour"
-        self.test_endpoint(f"/onboarding/tours/{tour_id}/detailed", "GET",
-                         description="Interactive tour detailed content")
+        # 2. Campaign Management - Create Campaign
+        print(f"\n📧 Testing Campaign Management...")
+        campaign_data = {
+            "name": "Phase 6 Marketing Launch Campaign",
+            "type": "email",
+            "description": "Comprehensive marketing campaign for Phase 6 launch",
+            "target_audience": {
+                "segments": ["new_users", "active_users"],
+                "demographics": {
+                    "age_range": "25-45",
+                    "interests": ["business", "technology", "marketing"]
+                }
+            },
+            "content": {
+                "subject": "Discover Our Revolutionary Marketing Automation Features",
+                "template_id": "marketing_launch_template",
+                "personalization": {
+                    "use_name": True,
+                    "use_company": True,
+                    "dynamic_content": True
+                }
+            },
+            "schedule": {
+                "type": "immediate",
+                "timezone": "UTC"
+            },
+            "goals": {
+                "primary": "engagement",
+                "target_open_rate": 25.0,
+                "target_click_rate": 5.0,
+                "target_conversion_rate": 2.0
+            }
+        }
+        self.test_endpoint("/marketing/campaigns/create", "POST",
+                         data=campaign_data,
+                         description="Create comprehensive marketing campaign")
         
-        # 3. Complete tour step
-        step_number = 1
-        self.test_endpoint(f"/onboarding/tours/{tour_id}/step/{step_number}/complete", "POST",
-                         data={"completed_at": "2025-07-20T10:00:00Z", "time_spent": 30},
-                         description="Complete tour step with tracking")
-        
-        # 4. Tutorial Management - Create interactive tutorial
-        print(f"\n📚 Testing Tutorial Management...")
-        tutorial_data = {
-            "title": "Advanced Features Tutorial",
-            "description": "Learn how to use advanced platform features",
-            "category": "advanced",
-            "steps": [
+        # 3. Contact Management - Bulk Import
+        print(f"\n👥 Testing Contact Management...")
+        contacts_data = {
+            "import_type": "csv",
+            "contacts": [
                 {
-                    "title": "Step 1: Dashboard Overview",
-                    "content": "Navigate to your dashboard and explore the main features",
-                    "action_type": "click",
-                    "target_element": "#dashboard-nav"
+                    "email": "john.doe@example.com",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "company": "Tech Solutions Inc",
+                    "phone": "+1-555-0123",
+                    "tags": ["prospect", "technology"],
+                    "custom_fields": {
+                        "industry": "Technology",
+                        "company_size": "50-100",
+                        "lead_source": "website"
+                    }
                 },
                 {
-                    "title": "Step 2: Create Your First Project",
-                    "content": "Click the 'New Project' button to get started",
-                    "action_type": "click",
-                    "target_element": "#new-project-btn"
+                    "email": "jane.smith@example.com",
+                    "first_name": "Jane",
+                    "last_name": "Smith",
+                    "company": "Marketing Pro LLC",
+                    "phone": "+1-555-0124",
+                    "tags": ["customer", "marketing"],
+                    "custom_fields": {
+                        "industry": "Marketing",
+                        "company_size": "10-50",
+                        "lead_source": "referral"
+                    }
                 }
             ],
-            "difficulty": "intermediate",
-            "estimated_time": 15
+            "list_name": "Phase 6 Marketing Contacts",
+            "duplicate_handling": "skip",
+            "validation": {
+                "email_validation": True,
+                "phone_validation": True
+            }
         }
-        self.test_endpoint("/onboarding/interactive-tutorial/create", "POST",
-                         data=tutorial_data,
-                         description="Create interactive tutorial with steps")
+        self.test_endpoint("/marketing/bulk-import/contacts", "POST",
+                         data=contacts_data,
+                         description="Bulk import marketing contacts")
         
-        # 5. Analytics & Tracking - Feature adoption analytics
-        print(f"\n📈 Testing Analytics & Tracking...")
-        self.test_endpoint("/onboarding/feature-adoption/analytics", "GET",
-                         description="Feature adoption analytics and insights")
+        # 4. Customer Segmentation
+        print(f"\n🎯 Testing Customer Segmentation...")
+        self.test_endpoint("/marketing/segments/intelligent", "GET",
+                         description="Intelligent customer segmentation system")
         
-        # 6. Smart Hints System - Request contextual hints
-        print(f"\n💡 Testing Smart Hints System...")
-        hints_data = {
-            "current_page": "/dashboard",
-            "user_context": {
-                "experience_level": "beginner",
-                "last_action": "login",
-                "features_used": ["dashboard", "profile"],
-                "time_on_platform": 300
+        # 5. Marketing Automation - Workflow Creation
+        print(f"\n⚙️ Testing Marketing Automation...")
+        workflow_data = {
+            "name": "Welcome Series Automation",
+            "description": "Automated welcome series for new subscribers",
+            "trigger": {
+                "type": "contact_added",
+                "conditions": {
+                    "list": "new_subscribers",
+                    "tags": ["new_user"]
+                }
             },
-            "request_type": "contextual"
+            "steps": [
+                {
+                    "type": "delay",
+                    "duration": "1 hour",
+                    "description": "Wait 1 hour after subscription"
+                },
+                {
+                    "type": "email",
+                    "template_id": "welcome_email_1",
+                    "subject": "Welcome to Our Platform!",
+                    "description": "Send welcome email"
+                },
+                {
+                    "type": "delay",
+                    "duration": "3 days",
+                    "description": "Wait 3 days"
+                },
+                {
+                    "type": "email",
+                    "template_id": "getting_started_email",
+                    "subject": "Getting Started Guide",
+                    "description": "Send getting started guide"
+                },
+                {
+                    "type": "condition",
+                    "condition": "email_opened",
+                    "true_path": [
+                        {
+                            "type": "email",
+                            "template_id": "advanced_features_email",
+                            "subject": "Unlock Advanced Features",
+                            "description": "Send advanced features email"
+                        }
+                    ],
+                    "false_path": [
+                        {
+                            "type": "email",
+                            "template_id": "re_engagement_email",
+                            "subject": "We Miss You!",
+                            "description": "Send re-engagement email"
+                        }
+                    ]
+                }
+            ],
+            "settings": {
+                "active": True,
+                "send_time": "optimal",
+                "timezone": "user_timezone",
+                "frequency_cap": "1_per_day"
+            }
         }
-        self.test_endpoint("/onboarding/smart-hints/request", "POST",
-                         data=hints_data,
-                         description="Request smart contextual hints")
+        self.test_endpoint("/marketing/automation/workflow/create", "POST",
+                         data=workflow_data,
+                         description="Create marketing automation workflow")
         
-        # 7. Achievement System - Completion certificate
-        print(f"\n🏆 Testing Achievement System...")
-        self.test_endpoint("/onboarding/completion/certificate", "GET",
-                         description="Generate completion certificate")
+        # 6. Lead Scoring
+        print(f"\n🏆 Testing Lead Scoring...")
+        self.test_endpoint("/marketing/lead-scoring/advanced", "GET",
+                         description="Advanced lead scoring system")
+        
+        # 7. Campaign Analytics
+        print(f"\n📈 Testing Campaign Analytics...")
+        self.test_endpoint("/marketing/campaign-analytics/comprehensive", "GET",
+                         description="Comprehensive campaign analytics")
+        
+        # 8. A/B Testing
+        print(f"\n🧪 Testing A/B Testing...")
+        ab_test_data = {
+            "name": "Subject Line A/B Test",
+            "description": "Test different subject lines for email campaign",
+            "type": "email_subject",
+            "campaign_id": "test_campaign_123",
+            "variants": [
+                {
+                    "name": "Variant A",
+                    "subject": "Discover Our New Features",
+                    "weight": 50
+                },
+                {
+                    "name": "Variant B", 
+                    "subject": "Revolutionary Features Await You",
+                    "weight": 50
+                }
+            ],
+            "test_settings": {
+                "sample_size": 1000,
+                "confidence_level": 95,
+                "test_duration": "24 hours",
+                "winning_metric": "open_rate"
+            },
+            "auto_winner": {
+                "enabled": True,
+                "threshold": 5.0,
+                "action": "send_to_remaining"
+            }
+        }
+        self.test_endpoint("/marketing/ab-testing/create", "POST",
+                         data=ab_test_data,
+                         description="Create A/B testing campaign")
+        
+        # 9. Customer Lifecycle Analytics
+        print(f"\n🔄 Testing Customer Lifecycle Analytics...")
+        self.test_endpoint("/marketing/customer-lifecycle/analytics", "GET",
+                         description="Customer lifecycle analytics and insights")
 
     def test_core_system_health(self):
         """Test core system health and integration"""
