@@ -8,12 +8,13 @@ from typing import Optional, Dict, Any
 
 from core.auth import get_current_active_user
 from services.user_service import get_user_service
-from services.analytics_service import analytics_service
+from services.analytics_service import get_analytics_service
 
 router = APIRouter()
 
 # Initialize service instances
 user_service = get_user_service()
+analytics_service = get_analytics_service()
 
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
