@@ -648,7 +648,7 @@ const UltraAdvancedSocialMediaScheduler = () => {
           {/* Performance Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="bg-surface-elevated rounded-xl p-6 text-center">
-              <TrendingUpIcon className="h-8 w-8 mx-auto mb-3 text-blue-600" />
+              <ArrowTrendingUpIcon className="h-8 w-8 mx-auto mb-3 text-blue-600" />
               <div className="text-2xl font-bold text-primary">{analytics.totalReach.toLocaleString()}</div>
               <div className="text-sm text-secondary">Total Reach</div>
             </div>
