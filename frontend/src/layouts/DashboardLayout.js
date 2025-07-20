@@ -19,6 +19,7 @@ import {
   GlobeAltIcon,
   ShoppingBagIcon,
   AcademicCapIcon,
+  UserIcon,
   UsersIcon,
   EnvelopeIcon,
   WrenchScrewdriverIcon,
