@@ -65,8 +65,8 @@ class Comprehensive1500FeaturesTester:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get("success") and "access_token" in data:
-                    self.auth_token = data["access_token"]
+                if data.get("success") and ("access_token" in data or "token" in data):
+                    self.auth_token = data.get("access_token") or data.get("token")
                     self.session.headers.update({"Authorization": f"Bearer {self.auth_token}"})
                     self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
                                 f"Admin authentication successful - Token: {self.auth_token[:20]}...")
