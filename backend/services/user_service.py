@@ -97,6 +97,8 @@ class UserService:
 
     async def authenticate_user(self, email: str, password: str) -> Optional[Dict[str, Any]]:
         """Authenticate user with real database operations"""
+        self._ensure_collections()
+        
         user = await self.users_collection.find_one({"email": email})
         if not user:
             return None
