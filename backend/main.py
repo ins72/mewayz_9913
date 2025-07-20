@@ -83,6 +83,11 @@ email_contacts_collection = database.email_contacts
 # AI usage tracking collection
 ai_usage_collection = database.ai_usage
 
+# Token management collections
+workspace_tokens_collection = database.workspace_tokens
+token_transactions_collection = database.token_transactions
+token_packages_collection = database.token_packages
+
 # Remove centralized auth import and restore local JWT functions
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
