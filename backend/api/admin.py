@@ -235,7 +235,8 @@ async def get_system_metrics(current_user: dict = Depends(verify_admin_user)):
     """Get system performance metrics - admin only"""
     try:
         # Database collection sizes
-        users_collection = user_service.users_collection if user_service.users_collection else user_service._ensure_collections() or user_service.users_collection
+        user_service._ensure_collections()
+        users_collection = user_service.users_collection
         workspaces_collection = workspace_service.workspaces_collection if workspace_service.workspaces_collection else workspace_service._ensure_collections() or workspace_service.workspaces_collection
         analytics_collection = analytics_service.analytics_collection if analytics_service.analytics_collection else analytics_service._ensure_collections() or analytics_service.analytics_collection
         
