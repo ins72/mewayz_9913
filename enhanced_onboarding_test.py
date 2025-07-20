@@ -192,9 +192,9 @@ class EnhancedOnboardingTester:
                          data=hints_data,
                          description="Request smart contextual hints")
         
-        # 7. Achievement System - Completion certificate
+        # 7. Achievement System - Completion certificate - Fix validation
         print(f"\n🏆 Testing Achievement System...")
-        self.test_endpoint("/onboarding/completion/certificate", "GET",
+        self.test_endpoint("/onboarding/completion/certificate?achievement_type=onboarding_complete", "GET",
                          description="Generate completion certificate")
 
     def test_core_system_health(self):
