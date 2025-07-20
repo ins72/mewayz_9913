@@ -7,7 +7,7 @@ from datetime import datetime
 import uuid
 import re
 
-from ..core.database import get_database
+from core.database import get_database
 
 class ContentService:
     def __init__(self):
