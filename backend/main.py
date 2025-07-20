@@ -2137,6 +2137,89 @@ async def create_admin_user():
     except Exception as e:
         print(f"❌ Error creating admin user: {e}")
 
+# Initialize token system
+async def initialize_token_system():
+    """Initialize the token system with default packages and settings"""
+    try:
+        # Check if token packages already exist
+        existing_packages = await token_packages_collection.count_documents({})
+        if existing_packages == 0:
+            # Create default token packages
+            default_packages = [
+                {
+                    "_id": str(uuid.uuid4()),
+                    "name": "Starter Pack",
+                    "tokens": 1000,
+                    "price": 9.99,
+                    "currency": "USD",
+                    "bonus_tokens": 100,
+                    "description": "Perfect for small businesses getting started",
+                    "is_popular": False,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                },
+                {
+                    "_id": str(uuid.uuid4()),
+                    "name": "Professional Pack",
+                    "tokens": 5000,
+                    "price": 39.99,
+                    "currency": "USD",
+                    "bonus_tokens": 1000,
+                    "description": "Ideal for growing businesses",
+                    "is_popular": True,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                },
+                {
+                    "_id": str(uuid.uuid4()),
+                    "name": "Enterprise Pack",
+                    "tokens": 15000,
+                    "price": 99.99,
+                    "currency": "USD",
+                    "bonus_tokens": 5000,
+                    "description": "For large organizations with high usage",
+                    "is_popular": False,
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+            ]
+            await token_packages_collection.insert_many(default_packages)
+            print(f"✅ Token packages initialized: {len(default_packages)} packages created")
+        else:
+            print(f"✅ Token packages already exist: {existing_packages} packages found")
+            
+        # Initialize workspace token settings for admin workspace
+        admin_workspace = await workspaces_collection.find_one({"slug": "admin-workspace"})
+        if admin_workspace:
+            existing_settings = await workspace_tokens_collection.find_one({"workspace_id": str(admin_workspace["_id"])})
+            if not existing_settings:
+                token_settings = {
+                    "_id": str(uuid.uuid4()),
+                    "workspace_id": str(admin_workspace["_id"]),
+                    "current_tokens": 10000,  # Start with generous amount for admin
+                    "monthly_token_allowance": 5000,
+                    "auto_purchase_enabled": False,
+                    "auto_purchase_threshold": 100,
+                    "auto_purchase_package_id": None,
+                    "user_limits": {},
+                    "feature_costs": {
+                        "ai_content_generation": 10,
+                        "ai_image_generation": 25,
+                        "seo_optimization": 5,
+                        "email_campaign": 2,
+                        "analytics_report": 1
+                    },
+                    "created_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+                await workspace_tokens_collection.insert_one(token_settings)
+                print(f"✅ Token settings initialized for admin workspace")
+            else:
+                print(f"✅ Token settings already exist for admin workspace")
+                
+    except Exception as e:
+        print(f"❌ Error initializing token system: {e}")
+
 # ===== STRIPE/SUBSCRIPTION ENDPOINTS =====
 @app.get("/api/subscription/plans")
 async def get_subscription_plans():
