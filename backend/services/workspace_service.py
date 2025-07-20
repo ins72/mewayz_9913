@@ -323,5 +323,6 @@ class WorkspaceService:
         
         return features.get(plan, features["free"])
 
-# Create service instance
-workspace_service = WorkspaceService()
+# Create service instance function (dependency injection)
+def get_workspace_service() -> WorkspaceService:
+    return WorkspaceService()
