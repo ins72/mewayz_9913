@@ -312,6 +312,41 @@ class DiscountCodeCreate(BaseModel):
     expires_at: Optional[datetime] = None
     applicable_products: List[str] = ["all"]
 
+# ===== TOKEN ECOSYSTEM MODELS =====
+class TokenPackage(BaseModel):
+    id: Optional[str] = None
+    name: str
+    tokens: int
+    price: float
+    currency: str = "USD"
+    bonus_tokens: int = 0
+    description: Optional[str] = None
+    is_popular: bool = False
+
+class TokenPurchaseRequest(BaseModel):
+    package_id: str
+    payment_method_id: str
+    workspace_id: str
+
+class WorkspaceTokenSettings(BaseModel):
+    workspace_id: str
+    monthly_token_allowance: int
+    auto_purchase_enabled: bool = False
+    auto_purchase_threshold: int = 100
+    auto_purchase_package_id: Optional[str] = None
+    user_limits: Dict[str, int] = {}  # user_id -> token limit
+    feature_costs: Dict[str, int] = {}  # feature -> token cost
+
+class TokenTransaction(BaseModel):
+    id: Optional[str] = None
+    workspace_id: str
+    user_id: str
+    type: str  # "purchase", "usage", "refund", "grant", "subscription_allowance"
+    tokens: int
+    feature: Optional[str] = None
+    cost: Optional[float] = None
+    description: Optional[str] = None
+
 # ===== STRIPE/SUBSCRIPTION MODELS =====
 class SubscriptionPlan(BaseModel):
     plan_id: str
