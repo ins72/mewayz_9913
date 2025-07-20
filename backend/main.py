@@ -162,6 +162,7 @@ class PaymentStatus(str, enum.Enum):
 async def lifespan(app: FastAPI):
     # Startup
     await create_admin_user()
+    await initialize_token_system()
     yield
     # Shutdown (if needed)
 
