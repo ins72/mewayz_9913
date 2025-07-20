@@ -22,6 +22,28 @@ class EventData(BaseModel):
     user_agent: Optional[str] = None
     referrer: Optional[str] = None
 
+@router.get("/overview")
+async def get_analytics_overview(
+    days: int = 7,
+    current_user: dict = Depends(get_current_active_user)
+):
+    """Get analytics overview with real database calculations"""
+    try:
+        overview = await analytics_service.get_user_analytics_overview(
+            current_user["_id"], days
+        )
+        
+        return {
+            "success": True,
+            "data": overview
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch analytics overview: {str(e)}"
+        )
+
 @router.post("/track")
 async def track_event(
     event_data: EventData,
