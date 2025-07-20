@@ -188,10 +188,10 @@ class BackendTester:
         # User profile
         self.test_endpoint("/users/profile", "GET", description="User profile access")
         
-    def run_marketing_automation_test(self):
-        """Run marketing automation system testing"""
-        print(f"🎯 MARKETING AUTOMATION AND CAMPAIGN MANAGEMENT SYSTEM TESTING")
-        print(f"Phase 6 Marketing Automation and Campaign Management System")
+    def run_ultimate_value_test(self):
+        """Run ultimate value maximization system testing"""
+        print(f"🌟 ULTIMATE VALUE MAXIMIZATION SYSTEM TESTING")
+        print(f"Testing the Ultimate 10,000+ Features Platform with Maximum Business Value")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
@@ -203,8 +203,8 @@ class BackendTester:
         # Step 2: Test core system health
         self.test_core_system_health()
         
-        # Step 3: Test marketing automation system
-        self.test_marketing_automation_system()
+        # Step 3: Test ultimate value maximization system
+        self.test_ultimate_value_maximization_system()
         
         # Generate final report
         self.generate_final_report()
