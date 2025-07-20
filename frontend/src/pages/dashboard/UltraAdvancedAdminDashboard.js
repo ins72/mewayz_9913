@@ -20,7 +20,7 @@ import {
   Cog6ToothIcon,
   UserPlusIcon,
   CloudIcon,
-  DatabaseIcon,
+  CircleStackIcon,
   DocumentTextIcon,
   BoltIcon,
   ExclamationTriangleIcon,
