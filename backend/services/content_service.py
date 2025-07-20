@@ -20,8 +20,11 @@ class ContentService:
         """Ensure collections are initialized"""
         if self.db is None:
             self.db = get_database()
+        if self.blog_posts_collection is None:
             self.blog_posts_collection = self.db.blog_posts
+        if self.categories_collection is None:
             self.categories_collection = self.db.blog_categories
+        if self.tags_collection is None:
             self.tags_collection = self.db.blog_tags
 
     async def create_blog_post(self, post_data: Dict[str, Any], author_id: str) -> Dict[str, Any]:
