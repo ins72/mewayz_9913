@@ -227,22 +227,22 @@ class Comprehensive1500FeaturesTester:
         try:
             blog_data = {
                 "topic": "The Future of AI in Business Automation",
-                "category": "technology",
                 "target_audience": "business_professionals",
                 "tone": "professional",
-                "length": "medium",
-                "keywords": ["AI", "automation", "business", "efficiency", "technology"]
+                "word_count": "800",
+                "include_images": "true"
             }
-            response = self.session.post(f"{API_BASE}/ai-blog/generate", json=blog_data, timeout=30)
+            response = self.session.post(f"{API_BASE}/ai-blog/generate", data=blog_data, timeout=30)
             response_time = time.time() - start_time
             
             if response.status_code == 200 or response.status_code == 201:
                 data = response.json()
                 data_size = len(response.text)
-                blog_id = data.get('blog_id', 'unknown')
-                title = data.get('title', 'No title')
+                blog_id = data.get('data', {}).get('generation_id', 'unknown')
+                topic = data.get('data', {}).get('topic', 'No topic')
+                status = data.get('data', {}).get('status', 'unknown')
                 self.log_test("/ai-blog/generate", "POST", response.status_code, response_time, True, 
-                            f"AI blog generated successfully - ID: {blog_id}, Title: {title[:50]}...", data_size)
+                            f"AI blog generated successfully - ID: {blog_id}, Status: {status}, Topic: {topic[:50]}...", data_size)
             else:
                 self.log_test("/ai-blog/generate", "POST", response.status_code, response_time, False, 
                             f"HTTP {response.status_code} - {response.text[:200]}")
