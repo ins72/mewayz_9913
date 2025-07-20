@@ -181,17 +181,12 @@ class EnhancedOnboardingTester:
         self.test_endpoint("/onboarding/feature-adoption/analytics", "GET",
                          description="Feature adoption analytics and insights")
         
-        # 6. Smart Hints System - Request contextual hints
+        # 6. Smart Hints System - Request contextual hints - Fix validation
         print(f"\n💡 Testing Smart Hints System...")
         hints_data = {
             "current_page": "/dashboard",
-            "user_context": {
-                "experience_level": "beginner",
-                "last_action": "login",
-                "features_used": ["dashboard", "profile"],
-                "time_on_platform": 300
-            },
-            "request_type": "contextual"
+            "user_action": "login",
+            "feature_context": "dashboard_navigation"
         }
         self.test_endpoint("/onboarding/smart-hints/request", "POST",
                          data=hints_data,
