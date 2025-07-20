@@ -352,10 +352,10 @@ class BackendTester:
         # User profile
         self.test_endpoint("/users/profile", "GET", description="User profile access")
         
-    def run_enhanced_onboarding_test(self):
-        """Run enhanced onboarding system testing"""
-        print(f"🎯 ENHANCED GUIDED TOUR AND INTERACTIVE ONBOARDING SYSTEM TESTING")
-        print(f"Phase 4 Enhanced User Experience and Onboarding System")
+    def run_marketing_automation_test(self):
+        """Run marketing automation system testing"""
+        print(f"🎯 MARKETING AUTOMATION AND CAMPAIGN MANAGEMENT SYSTEM TESTING")
+        print(f"Phase 6 Marketing Automation and Campaign Management System")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
@@ -367,8 +367,8 @@ class BackendTester:
         # Step 2: Test core system health
         self.test_core_system_health()
         
-        # Step 3: Test enhanced onboarding system
-        self.test_enhanced_onboarding_system()
+        # Step 3: Test marketing automation system
+        self.test_marketing_automation_system()
         
         # Generate final report
         self.generate_final_report()
