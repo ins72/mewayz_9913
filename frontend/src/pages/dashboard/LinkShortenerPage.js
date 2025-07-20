@@ -15,58 +15,80 @@ import {
 
 const LinkShortenerPage = () => {
   const { user } = useAuth();
+  const { success, error } = useNotification();
   const [longUrl, setLongUrl] = useState('');
   const [shortCode, setShortCode] = useState('');
   const [shortLinks, setShortLinks] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // Mock data for demonstration
-  const mockLinks = [
-    {
-      id: '1',
-      originalUrl: 'https://example.com/very-long-url-that-needs-shortening',
-      shortCode: 'abc123',
-      shortUrl: 'https://mwz.to/abc123',
-      clicks: 245,
-      created: '2 days ago',
-      status: 'active'
-    },
-    {
-      id: '2',
-      originalUrl: 'https://mystore.com/product/amazing-course',
-      shortCode: 'course1',
-      shortUrl: 'https://mwz.to/course1',
-      clicks: 89,
-      created: '1 week ago',
-      status: 'active'
-    }
-  ];
+  const [stats, setStats] = useState({
+    total_links: 0,
+    active_links: 0,
+    total_clicks: 0,
+    click_rate: 0
+  });
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    setShortLinks(mockLinks);
+    loadData();
   }, []);
+
+  const loadData = async () => {
+    try {
+      await Promise.all([loadLinks(), loadStats()]);
+    } catch (err) {
+      console.error('Failed to load data:', err);
+      error('Failed to load link shortener data');
+    } finally {
+      setInitialLoading(false);
+    }
+  };
+
+  const loadLinks = async () => {
+    try {
+      const response = await api.get('/link-shortener/links');
+      if (response.data.success) {
+        setShortLinks(response.data.data.links);
+      }
+    } catch (err) {
+      console.error('Failed to load links:', err);
+    }
+  };
+
+  const loadStats = async () => {
+    try {
+      const response = await api.get('/link-shortener/stats');
+      if (response.data.success) {
+        setStats(response.data.data.stats);
+      }
+    } catch (err) {
+      console.error('Failed to load stats:', err);
+    }
+  };
 
   const handleCreateShortLink = async (e) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const newLink = {
-        id: Date.now().toString(),
-        originalUrl: longUrl,
-        shortCode: shortCode || Math.random().toString(36).substr(2, 8),
-        shortUrl: `https://mwz.to/${shortCode || Math.random().toString(36).substr(2, 8)}`,
-        clicks: 0,
-        created: 'Just now',
-        status: 'active'
-      };
+    try {
+      const response = await api.post('/link-shortener/create', {
+        original_url: longUrl,
+        custom_code: shortCode || null
+      });
       
-      setShortLinks([newLink, ...shortLinks]);
-      setLongUrl('');
-      setShortCode('');
+      if (response.data.success) {
+        success('Short link created successfully!');
+        setLongUrl('');
+        setShortCode('');
+        await loadData(); // Reload both links and stats
+      } else {
+        error('Failed to create short link');
+      }
+    } catch (err) {
+      console.error('Failed to create short link:', err);
+      error(err.response?.data?.detail || 'Failed to create short link');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const copyToClipboard = (url) => {
