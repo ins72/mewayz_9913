@@ -708,7 +708,7 @@ const ComprehensiveCRMSystem = () => {
         <nav className="flex space-x-8">
           {[
             { id: 'contacts', name: 'Contacts', icon: UserGroupIcon },
-            { id: 'pipeline', name: 'Sales Pipeline', icon: TrendingUpIcon },
+            { id: 'pipeline', name: 'Sales Pipeline', icon: ArrowTrendingUpIcon },
             { id: 'deals', name: 'Deals', icon: CurrencyDollarIcon },
             { id: 'activities', name: 'Activities', icon: CalendarIcon },
             { id: 'email', name: 'Email Campaigns', icon: EnvelopeIcon },
