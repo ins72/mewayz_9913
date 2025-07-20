@@ -12,7 +12,7 @@ from datetime import datetime
 import uuid
 
 # Backend URL from frontend .env
-BACKEND_URL = "https://5bde9595-e877-4e2b-9a14-404677567ffb.preview.emergentagent.com"
+BACKEND_URL = "https://103abd44-b775-4f5e-a8eb-da07eca9d699.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 # Admin credentials from review request
