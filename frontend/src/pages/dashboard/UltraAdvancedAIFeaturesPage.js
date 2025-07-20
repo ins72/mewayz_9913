@@ -77,10 +77,46 @@ const UltraAdvancedAIFeaturesPage = () => {
   
   // AI usage analytics
   const [analytics, setAnalytics] = useState(null);
+  const [tokenBalance, setTokenBalance] = useState(null);
   
   useEffect(() => {
     fetchAIAnalytics();
+    fetchTokenBalance();
   }, []);
+  
+  const fetchTokenBalance = async () => {
+    try {
+      // Get workspace first
+      const workspacesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+      if (workspacesResponse.ok) {
+        const workspacesData = await workspacesResponse.json();
+        if (workspacesData.success && workspacesData.data.workspaces.length > 0) {
+          const workspaceId = workspacesData.data.workspaces[0].id;
+          
+          // Get token balance
+          const tokenResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/tokens/workspace/${workspaceId}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          
+          if (tokenResponse.ok) {
+            const tokenData = await tokenResponse.json();
+            if (tokenData.success) {
+              setTokenBalance(tokenData.data);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch token balance:', err);
+    }
+  };
   
   const fetchAIAnalytics = async () => {
     try {
