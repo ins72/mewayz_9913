@@ -20,7 +20,7 @@ import {
   DocumentArrowDownIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ChartBarIcon,
   CurrencyDollarIcon,
   ClockIcon,
