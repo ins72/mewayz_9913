@@ -287,15 +287,6 @@ const GamifiedAnalyticsPage = () => {
     // This would be more sophisticated in a real implementation
   };
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'hard': return 'bg-red-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'easy': return 'bg-green-500';
-      default: return 'bg-gray-500';
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
