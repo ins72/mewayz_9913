@@ -215,42 +215,10 @@ class BackendTester:
         # User profile
         self.test_endpoint("/users/profile", "GET", description="User profile access")
         
-        # Workspace management
-        self.test_endpoint("/workspaces", "GET", description="Workspace management")
-        self.test_endpoint("/ai/business-insights", "GET", description="AI business intelligence")
-        
-        # Smart recommendations
-        self.test_endpoint("/recommendations/smart", "GET", description="Smart recommendations")
-        
-        # Performance optimization
-        self.test_endpoint("/performance/optimization-center", "GET", description="Performance optimization")
-        
-        # Market intelligence
-        self.test_endpoint("/trends/market-intelligence", "GET", description="Market intelligence")
-        
-        # Customer journey analytics
-        self.test_endpoint("/analytics/customer-journey", "GET", description="Customer journey analytics")
-        
-        # Predictive analytics
-        self.test_endpoint("/analytics/predictive", "GET", description="Predictive analytics")
-        
-        # Team productivity
-        self.test_endpoint("/team/productivity-insights", "GET", description="Team productivity")
-
-    def test_core_system_health(self):
-        """Test Core System Health"""
-        print(f"\n🏥 TESTING CORE SYSTEM HEALTH")
-        
-        # System health check
-        self.test_endpoint("/health", "GET", description="System health check")
-        
-        # Multi-workspace system
-        self.test_endpoint("/workspaces", "GET", description="Multi-workspace system")
-
-    def run_comprehensive_test(self):
-        """Run comprehensive testing of all phases"""
-        print(f"🎯 COMPREHENSIVE BACKEND TESTING - MEWAYZ PLATFORM V3.0.0")
-        print(f"Testing ALL 6 PHASES (Phases 4-6) New Features")
+    def run_enhanced_onboarding_test(self):
+        """Run enhanced onboarding system testing"""
+        print(f"🎯 ENHANCED GUIDED TOUR AND INTERACTIVE ONBOARDING SYSTEM TESTING")
+        print(f"Phase 4 Enhanced User Experience and Onboarding System")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
@@ -262,14 +230,8 @@ class BackendTester:
         # Step 2: Test core system health
         self.test_core_system_health()
         
-        # Step 3: Test Phase 4 features
-        self.test_phase_4_features()
-        
-        # Step 4: Test Phase 5 features  
-        self.test_phase_5_features()
-        
-        # Step 5: Test Phase 6 features
-        self.test_phase_6_features()
+        # Step 3: Test enhanced onboarding system
+        self.test_enhanced_onboarding_system()
         
         # Generate final report
         self.generate_final_report()
