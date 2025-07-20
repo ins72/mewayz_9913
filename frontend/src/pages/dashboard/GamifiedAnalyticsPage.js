@@ -498,7 +498,7 @@ const GamifiedAnalyticsPage = () => {
             {[
               { id: 'dashboard', name: 'Performance Dashboard', icon: ChartBarIcon },
               { id: 'goals', name: 'Goals & Objectives', icon: TrophyIcon },
-              { id: 'leaderboard', name: 'Leaderboard', icon: CrownIcon },
+              { id: 'leaderboard', name: 'Leaderboard', icon: TrophyIcon },
               { id: 'challenges', name: 'Active Challenges', icon: BoltIcon },
               { id: 'achievements', name: 'Achievements', icon: StarIcon },
               { id: 'badges', name: 'Badge Collection', icon: ShieldIcon }
