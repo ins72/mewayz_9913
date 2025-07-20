@@ -33,7 +33,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {
   BuildingOfficeIcon as BuildingOfficeIconSolid,
-  CrownIcon as CrownIconSolid,
+  TrophyIcon as TrophyIconSolid,
   StarIcon as StarIconSolid
 } from '@heroicons/react/24/solid';
 
