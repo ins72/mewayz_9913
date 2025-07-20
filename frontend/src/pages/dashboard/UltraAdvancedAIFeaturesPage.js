@@ -115,12 +115,26 @@ const UltraAdvancedAIFeaturesPage = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setResult(data.data);
-        success('AI request completed successfully!');
-        fetchAIAnalytics(); // Refresh analytics
+        if (data.success) {
+          setResult(data.data);
+          const tokensConsumed = data.tokens_consumed;
+          success(`AI request completed successfully! ${tokensConsumed ? `(${tokensConsumed} tokens consumed)` : ''}`);
+          fetchAIAnalytics(); // Refresh analytics
+        } else {
+          // Handle insufficient tokens error
+          if (data.error === 'insufficient_tokens') {
+            error(`Insufficient tokens: ${data.message}. Need ${data.tokens_needed} tokens.`);
+          } else {
+            error(data.message || 'AI request failed');
+          }
+        }
       } else {
         const errorData = await response.json();
-        error(errorData.detail || 'AI request failed');
+        if (errorData.error === 'insufficient_tokens') {
+          error(`Insufficient tokens: ${errorData.message}. Need ${errorData.tokens_needed} tokens.`);
+        } else {
+          error(errorData.detail || 'AI request failed');
+        }
       }
     } catch (err) {
       error('Failed to process AI request');
