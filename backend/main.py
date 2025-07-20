@@ -3482,6 +3482,28 @@ async def generate_ai_course_content(
 ):
     """Generate course content using AI"""
     try:
+        # Get user's workspace
+        workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+        if not workspace:
+            raise HTTPException(status_code=404, detail="Workspace not found")
+        
+        # Get token cost for this feature
+        workspace_tokens = await workspace_tokens_collection.find_one({"workspace_id": str(workspace["_id"])})
+        tokens_needed = workspace_tokens.get("feature_costs", {}).get("course_generation", 15) if workspace_tokens else 15
+        
+        # Consume tokens
+        try:
+            await consume_tokens(str(workspace["_id"]), "course_generation", tokens_needed, current_user)
+        except HTTPException as e:
+            if e.status_code == 402:
+                return {
+                    "success": False,
+                    "error": "insufficient_tokens",
+                    "message": e.detail,
+                    "tokens_needed": tokens_needed
+                }
+            raise e
+        
         result = await ai_system.generate_course_content(
             topic=request.topic,
             lesson_title=request.lesson_title,
@@ -3493,14 +3515,16 @@ async def generate_ai_course_content(
         usage_log = {
             "_id": str(uuid.uuid4()),
             "user_id": current_user["id"],
-            "feature": "course_content_generation",
+            "workspace_id": str(workspace["_id"]),
+            "feature": "course_generation",
             "topic": request.topic,
+            "tokens_consumed": tokens_needed,
             "timestamp": datetime.utcnow(),
             "success": result["success"]
         }
         await ai_usage_collection.insert_one(usage_log)
         
-        return {"success": True, "data": result}
+        return {"success": True, "data": result, "tokens_consumed": tokens_needed}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI course content generation failed: {str(e)}")
