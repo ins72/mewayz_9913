@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-COMPREHENSIVE GLOBALIZATION AND LOCALIZATION SYSTEM TESTING - MEWAYZ PLATFORM
-Phase 5 Globalization and Localization System Testing
+COMPREHENSIVE MARKETING AUTOMATION AND CAMPAIGN MANAGEMENT SYSTEM TESTING - MEWAYZ PLATFORM
+Phase 6 Marketing Automation and Campaign Management System Testing
 Testing Agent - July 20, 2025
 """
 
