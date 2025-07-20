@@ -78,6 +78,7 @@ import TeamManagementPage from './pages/dashboard/TeamManagementPage';
 import FormTemplatesPage from './pages/dashboard/FormTemplatesPage';
 import DiscountCodesPage from './pages/dashboard/DiscountCodesPage';
 import TokenManagementPage from './pages/dashboard/TokenManagementPage';
+import InstagramLeadGeneration from './pages/dashboard/InstagramLeadGeneration';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
