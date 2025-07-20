@@ -6,7 +6,7 @@ import {
   CreditCardIcon,
   StarIcon,
   BoltIcon,
-  CrownIcon,
+  TrophyIcon,
   CheckIcon,
   XMarkIcon,
   ArrowUpIcon,
