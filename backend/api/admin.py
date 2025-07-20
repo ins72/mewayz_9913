@@ -55,7 +55,8 @@ async def get_admin_dashboard(current_user: dict = Depends(verify_admin_user)):
         subscription_breakdown = {item["_id"] or "free": item["count"] for item in subscription_stats}
         
         # Get workspace statistics
-        workspaces_collection = workspace_service.workspaces_collection if workspace_service.workspaces_collection else workspace_service._ensure_collections() or workspace_service.workspaces_collection
+        workspace_service._ensure_collections()
+        workspaces_collection = workspace_service.workspaces_collection
         total_workspaces = await workspaces_collection.count_documents({})
         active_workspaces = await workspaces_collection.count_documents({"is_active": True})
         
