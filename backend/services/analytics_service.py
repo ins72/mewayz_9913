@@ -52,6 +52,8 @@ class AnalyticsService:
 
     async def get_user_analytics(self, user_id: str, days: int = 30) -> Dict[str, Any]:
         """Get real user analytics from database"""
+        self._ensure_collections()
+        
         start_date = datetime.utcnow() - timedelta(days=days)
         
         # Get events for this user
