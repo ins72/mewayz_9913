@@ -313,9 +313,6 @@ const GamifiedAnalyticsPage = () => {
       </div>
     );
   }
-      { id: 'content_creator', name: 'Content Creator', icon: LightBulbIcon, earned: true, rarity: 'common' }
-    ]
-  });
 
   // Advanced analytics data with gamified elements
   const [analytics, setAnalytics] = useState({
