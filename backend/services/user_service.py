@@ -24,6 +24,8 @@ class UserService:
 
     async def create_user(self, email: str, password: str, name: str) -> Dict[str, Any]:
         """Create a new user with real database operations"""
+        self._ensure_collections()
+        
         # Check if user already exists
         existing_user = await self.users_collection.find_one({"email": email})
         if existing_user:
