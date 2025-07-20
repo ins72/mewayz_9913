@@ -174,7 +174,8 @@ async def get_all_users(
 async def get_user_statistics(current_user: dict = Depends(verify_admin_user)):
     """Get detailed user statistics - admin only"""
     try:
-        users_collection = user_service.users_collection if user_service.users_collection else user_service._ensure_collections() or user_service.users_collection
+        user_service._ensure_collections()
+        users_collection = user_service.users_collection
         
         # Registration statistics over time
         registration_pipeline = [
