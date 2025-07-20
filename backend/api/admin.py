@@ -35,7 +35,8 @@ async def get_admin_dashboard(current_user: dict = Depends(verify_admin_user)):
         platform_overview = await analytics_service.get_platform_overview()
         
         # Get real user statistics
-        users_collection = user_service.users_collection if user_service.users_collection else user_service._ensure_collections() or user_service.users_collection
+        user_service._ensure_collections()
+        users_collection = user_service.users_collection
         
         # Calculate real metrics from database
         total_users = await users_collection.count_documents({})
