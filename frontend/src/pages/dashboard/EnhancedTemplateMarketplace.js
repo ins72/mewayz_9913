@@ -321,7 +321,7 @@ const EnhancedTemplateMarketplace = () => {
         {/* Stats */}
         <div className="flex items-center justify-between text-xs text-secondary mb-4">
           <div className="flex items-center space-x-1">
-            <DownloadIcon className="w-3 h-3" />
+            <ArrowDownTrayIcon className="w-3 h-3" />
             <span>{template.downloads.toLocaleString()}</span>
           </div>
           <div className="flex items-center space-x-1">
