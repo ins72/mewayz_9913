@@ -236,7 +236,7 @@ const ComprehensiveAdminDashboard = () => {
               { id: 'revenue', name: 'Revenue Analytics', icon: CurrencyDollarIcon },
               { id: 'system', name: 'System Monitoring', icon: ServerIcon },
               { id: 'content', name: 'Content Management', icon: DocumentTextIcon },
-              { id: 'features', name: 'Feature Analytics', icon: DatabaseIcon }
+              { id: 'features', name: 'Feature Analytics', icon: CircleStackIcon }
             ].map((tab) => (
               <button
                 key={tab.id}
