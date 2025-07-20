@@ -172,6 +172,8 @@ class UserService:
 
     async def get_user_stats(self, user_id: str) -> Dict[str, Any]:
         """Get user statistics with real database calculations"""
+        self._ensure_collections()
+        
         user = await self.users_collection.find_one({"_id": user_id})
         if not user:
             raise ValueError("User not found")
