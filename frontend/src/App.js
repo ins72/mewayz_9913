@@ -136,6 +136,7 @@ function App() {
               <Route path="team-management" element={<TeamManagementPage />} />
               <Route path="form-templates" element={<FormTemplatesPage />} />
               <Route path="discount-codes" element={<DiscountCodesPage />} />
+              <Route path="token-management" element={<TokenManagementPage />} />
               <Route path="financial-management" element={<FinancialManagementPage />} />
               
               <Route path="courses" element={<CoursesPage />} />
