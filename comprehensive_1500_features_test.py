@@ -284,26 +284,22 @@ class Comprehensive1500FeaturesTester:
         try:
             campaign_data = {
                 "name": "1500 Features Launch Campaign",
-                "type": "email",
+                "type": "one_time",
+                "template": "product_launch",
                 "target_audience": "all_users",
-                "subject": "Exciting News: 1500+ Features Now Available!",
-                "content": "We're thrilled to announce that our platform now includes over 1500 comprehensive features to help grow your business.",
-                "schedule_type": "immediate",
-                "automation_rules": {
-                    "trigger": "user_signup",
-                    "delay_hours": 24,
-                    "conditions": ["active_user", "email_verified"]
-                }
+                "send_immediately": "false"
             }
-            response = self.session.post(f"{API_BASE}/marketing/campaigns/create", json=campaign_data, timeout=30)
+            response = self.session.post(f"{API_BASE}/marketing/campaigns/create", data=campaign_data, timeout=30)
             response_time = time.time() - start_time
             
             if response.status_code == 200 or response.status_code == 201:
                 data = response.json()
                 data_size = len(response.text)
-                campaign_id = data.get('campaign_id', 'unknown')
+                campaign_id = data.get('data', {}).get('campaign_id', 'unknown')
+                campaign_name = data.get('data', {}).get('name', 'unknown')
+                status = data.get('data', {}).get('status', 'unknown')
                 self.log_test("/marketing/campaigns/create", "POST", response.status_code, response_time, True, 
-                            f"Marketing campaign created successfully - ID: {campaign_id}", data_size)
+                            f"Marketing campaign created successfully - ID: {campaign_id}, Name: {campaign_name}, Status: {status}", data_size)
             else:
                 self.log_test("/marketing/campaigns/create", "POST", response.status_code, response_time, False, 
                             f"HTTP {response.status_code} - {response.text[:200]}")
