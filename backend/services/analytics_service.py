@@ -178,6 +178,39 @@ class AnalyticsService:
         
         return analytics_data
 
+    async def get_user_analytics_overview(self, user_id: str, days: int = 7) -> Dict[str, Any]:
+        """Get comprehensive analytics overview for user"""
+        self._ensure_collections()
+        
+        # Calculate date range
+        start_date = datetime.utcnow() - timedelta(days=days)
+        
+        # Get user events in date range
+        user_events = await self.analytics_collection.find({
+            "user_id": user_id,
+            "timestamp": {"$gte": start_date}
+        }).to_list(length=None)
+        
+        # Calculate metrics
+        total_events = len(user_events)
+        unique_sessions = len(set(event.get("session_id") for event in user_events if event.get("session_id")))
+        avg_daily_events = total_events / max(days, 1)
+        
+        # Event breakdown
+        event_types = {}
+        for event in user_events:
+            event_type = event.get("event_type", "unknown")
+            event_types[event_type] = event_types.get(event_type, 0) + 1
+        
+        return {
+            "period_days": days,
+            "total_events_7d": total_events,
+            "unique_sessions": unique_sessions,
+            "avg_daily_events": round(avg_daily_events, 2),
+            "event_breakdown": event_types,
+            "calculated_at": datetime.utcnow().isoformat()
+        }
+
     async def get_platform_overview(self) -> Dict[str, Any]:
         """Get real platform-wide analytics"""
         # Get real counts from database
