@@ -449,7 +449,7 @@ const UltraAdvancedInstagramManager = () => {
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
-              <TrendingUpIcon className="h-8 w-8 mx-auto mb-2 text-green-600" />
+              <ArrowTrendingUpIcon className="h-8 w-8 mx-auto mb-2 text-green-600" />
               <div className="text-2xl font-bold text-primary">{aiInsights.insights.growth_prediction}</div>
               <div className="text-sm text-secondary">Growth Forecast</div>
             </div>
