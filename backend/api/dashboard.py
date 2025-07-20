@@ -5,11 +5,15 @@ Professional Mewayz Platform
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import Optional
 
-from ..core.auth import get_current_active_user
-from ..services.user_service import user_service
-from ..services.analytics_service import analytics_service
+from core.auth import get_current_active_user
+from services.user_service import get_user_service
+from services.analytics_service import get_analytics_service
 
 router = APIRouter()
+
+# Initialize service instances
+user_service = get_user_service()
+analytics_service = get_analytics_service()
 
 @router.get("/overview")
 async def get_dashboard_overview(current_user: dict = Depends(get_current_active_user)):
