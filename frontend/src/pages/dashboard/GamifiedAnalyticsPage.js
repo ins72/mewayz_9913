@@ -36,7 +36,7 @@ import {
   FireIcon as FireIconSolid,
   StarIcon as StarIconSolid,
   BoltIcon as BoltIconSolid,
-  CrownIcon as CrownIconSolid
+  TrophyIcon as TrophyIconSolid
 } from '@heroicons/react/24/solid';
 
 const GamifiedAnalyticsPage = () => {
