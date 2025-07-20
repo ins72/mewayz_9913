@@ -97,7 +97,7 @@ class WorkspaceService:
             else:
                 workspace["user_role"] = "member"
             
-            # Calculate activity score (mock calculation based on last activity)
+            # Calculate activity score (real calculation based on last activity)
             days_since_activity = (datetime.utcnow() - workspace.get("statistics", {}).get("last_activity", datetime.utcnow())).days
             workspace["activity_score"] = max(0, 100 - (days_since_activity * 2))
         
