@@ -193,8 +193,8 @@ class Phase2MigrationTester:
         # Create new bio site
         bio_site_data = {
             "name": "Migration Test Bio Site",
-            "slug": "migration-test-bio",
-            "theme": "modern",
+            "url_slug": "migration-test-bio",
+            "theme": "minimal",
             "description": "Testing bio site creation after migration"
         }
         self.test_endpoint("/bio-sites", "POST", data=bio_site_data,
