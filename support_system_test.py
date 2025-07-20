@@ -241,35 +241,33 @@ class SupportSystemTester:
         """Test Escalation & Satisfaction"""
         print(f"\n⚡ TESTING ESCALATION & SATISFACTION SYSTEM")
         
-        # Create escalation
+        # Create escalation - using Form data format with correct field names
         escalation_data = {
             "ticket_id": str(uuid.uuid4()),
-            "reason": "complex_technical_issue",
-            "priority": "high",
-            "escalated_by": self.agent_id or str(uuid.uuid4()),
-            "escalated_to": "senior_support",
-            "description": "Customer experiencing complex billing integration issues requiring senior technical support"
+            "escalation_reason": "complex_technical_issue",
+            "escalation_level": "level_2",
+            "notes": "Customer experiencing complex billing integration issues requiring senior technical support",
+            "urgency": "high"
         }
         
-        self.test_endpoint("/support/escalation/create", "POST", data=escalation_data,
-                         description="Create support escalation for complex issues")
+        self.test_endpoint_form("/support/escalation/create", "POST", data=escalation_data,
+                               description="Create support escalation for complex issues")
         
-        # Submit satisfaction survey
+        # Submit satisfaction survey - using Form data format with correct field names
         satisfaction_data = {
             "ticket_id": str(uuid.uuid4()),
-            "customer_id": str(uuid.uuid4()),
-            "rating": 5,
+            "session_id": str(uuid.uuid4()),
+            "agent_id": self.agent_id or str(uuid.uuid4()),
+            "overall_rating": 5,
+            "agent_rating": 5,
+            "resolution_rating": 5,
+            "response_time_rating": 5,
             "feedback": "Excellent support! Agent was very helpful and resolved my issue quickly.",
-            "categories": {
-                "response_time": 5,
-                "knowledge": 5,
-                "friendliness": 5,
-                "resolution": 5
-            }
+            "would_recommend": True
         }
         
-        self.test_endpoint("/support/satisfaction/submit", "POST", data=satisfaction_data,
-                         description="Submit customer satisfaction survey")
+        self.test_endpoint_form("/support/satisfaction/submit", "POST", data=satisfaction_data,
+                               description="Submit customer satisfaction survey")
         
         # Get satisfaction analytics
         self.test_endpoint("/support/analytics/satisfaction", "GET",
