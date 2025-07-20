@@ -82,7 +82,7 @@ class BackendTester:
             self.log_test("/auth/login", "POST", 0, 0, False, f"Authentication error: {str(e)}")
             return False
     
-    def test_endpoint(self, endpoint, method="GET", data=None, expected_status=200, description=""):
+    def test_endpoint(self, endpoint, method="GET", data=None, form_data=None, expected_status=200, description=""):
         """Test a single endpoint"""
         url = f"{API_BASE}{endpoint}"
         
@@ -92,7 +92,10 @@ class BackendTester:
             if method == "GET":
                 response = self.session.get(url, timeout=30)
             elif method == "POST":
-                response = self.session.post(url, json=data, timeout=30)
+                if form_data:
+                    response = self.session.post(url, data=form_data, timeout=30)
+                else:
+                    response = self.session.post(url, json=data, timeout=30)
             elif method == "PUT":
                 response = self.session.put(url, json=data, timeout=30)
             elif method == "DELETE":
