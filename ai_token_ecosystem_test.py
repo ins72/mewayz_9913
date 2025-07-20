@@ -116,7 +116,7 @@ class AITokenEcosystemTester:
             
             if response.status_code == 200:
                 data = response.json()
-                workspaces = data.get("workspaces", [])
+                workspaces = data.get("data", {}).get("workspaces", [])
                 if workspaces:
                     self.workspace_id = workspaces[0]["id"]
                     self.log_test("Get Workspace ID", True, 
