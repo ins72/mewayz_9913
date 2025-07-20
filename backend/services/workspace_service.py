@@ -22,6 +22,8 @@ class WorkspaceService:
 
     async def create_workspace(self, name: str, owner_id: str, description: str = "") -> Dict[str, Any]:
         """Create a new workspace with real database operations"""
+        self._ensure_collections()
+        
         # Check if user exists
         user = await self.users_collection.find_one({"_id": owner_id})
         if not user:
