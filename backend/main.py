@@ -3040,6 +3040,404 @@ async def get_token_analytics(
         }
     }
 
+# ===== ONBOARDING SYSTEM ENDPOINTS =====
+
+@app.get("/api/onboarding/progress")
+async def get_onboarding_progress(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user's onboarding progress"""
+    try:
+        progress = await onboarding_collection.find_one({"user_id": current_user["id"]})
+        if not progress:
+            return {"success": True, "data": None}
+        
+        progress["id"] = str(progress["_id"])
+        return {"success": True, "data": progress}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get onboarding progress: {str(e)}")
+
+@app.post("/api/onboarding/progress")
+async def save_onboarding_progress(
+    progress_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Save user's onboarding progress"""
+    try:
+        progress_doc = {
+            "user_id": current_user["id"],
+            "current_step": progress_data.get("currentStep", 0),
+            "completed_steps": progress_data.get("completedSteps", []),
+            "data": progress_data.get("data", {}),
+            "updated_at": datetime.utcnow()
+        }
+        
+        await onboarding_collection.update_one(
+            {"user_id": current_user["id"]},
+            {"$set": progress_doc},
+            upsert=True
+        )
+        
+        return {"success": True, "message": "Onboarding progress saved successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save onboarding progress: {str(e)}")
+
+@app.post("/api/onboarding/complete")
+async def complete_onboarding(
+    completion_data: dict,
+    current_user: dict = Depends(get_current_user)
+):
+    """Complete the onboarding process"""
+    try:
+        onboarding_data = completion_data.get("data", {})
+        
+        # Create workspace based on onboarding data
+        workspace_data = {
+            "_id": str(uuid.uuid4()),
+            "name": onboarding_data.get("workspaceName", f"{current_user['name']}'s Workspace"),
+            "description": onboarding_data.get("workspaceDescription", ""),
+            "owner_id": current_user["id"],
+            "industry": onboarding_data.get("industry", ""),
+            "company_size": onboarding_data.get("companySize", ""),
+            "timezone": onboarding_data.get("timezone", "America/New_York"),
+            "selected_goals": onboarding_data.get("selectedGoals", []),
+            "primary_goal": onboarding_data.get("primaryGoal"),
+            "plan": onboarding_data.get("selectedPlan", "free"),
+            "branding": {
+                "brand_name": onboarding_data.get("brandName", ""),
+                "colors": onboarding_data.get("brandColors", {
+                    "primary": "#3B82F6",
+                    "secondary": "#10B981",
+                    "accent": "#F59E0B"
+                }),
+                "logo": onboarding_data.get("logo")
+            },
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow(),
+            "onboarding_completed": True
+        }
+        
+        # Insert workspace
+        await workspaces_collection.insert_one(workspace_data)
+        
+        # Initialize workspace tokens
+        await workspace_tokens_collection.insert_one({
+            "_id": str(uuid.uuid4()),
+            "workspace_id": workspace_data["_id"],
+            "balance": 0,
+            "total_purchased": 0,
+            "total_used": 0,
+            "monthly_allowance": 50,  # Free tier gets 50 tokens per month
+            "allowance_used_this_month": 0,
+            "allowance_reset_date": datetime.utcnow().replace(day=1) + timedelta(days=32),
+            "auto_purchase_enabled": False,
+            "auto_purchase_threshold": 10,
+            "user_limits": {},
+            "feature_costs": {
+                "content_generation": 5,
+                "image_generation": 10,
+                "seo_analysis": 3,
+                "content_analysis": 2,
+                "course_generation": 15,
+                "email_sequence": 8,
+                "hashtag_generation": 2,
+                "content_improvement": 4
+            },
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        })
+        
+        # Update user with onboarding completion
+        await users_collection.update_one(
+            {"_id": current_user["id"]},
+            {
+                "$set": {
+                    "onboarding_completed": True,
+                    "default_workspace_id": workspace_data["_id"],
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        # Mark onboarding as completed
+        await onboarding_collection.update_one(
+            {"user_id": current_user["id"]},
+            {
+                "$set": {
+                    "completed": True,
+                    "completed_at": datetime.utcnow(),
+                    "workspace_id": workspace_data["_id"],
+                    "final_data": onboarding_data
+                }
+            },
+            upsert=True
+        )
+        
+        # Process team member invitations if any
+        team_members = onboarding_data.get("teamMembers", [])
+        for member in team_members:
+            if member.get("email") and member["email"] != current_user["email"]:
+                invite_id = str(uuid.uuid4())
+                invite_doc = {
+                    "_id": invite_id,
+                    "workspace_id": workspace_data["_id"],
+                    "workspace_name": workspace_data["name"],
+                    "invited_by": current_user["id"],
+                    "invited_by_name": current_user["name"],
+                    "email": member["email"],
+                    "role": member.get("role", "editor"),
+                    "status": "pending",
+                    "created_at": datetime.utcnow(),
+                    "expires_at": datetime.utcnow() + timedelta(days=7)
+                }
+                
+                await team_invitations_collection.insert_one(invite_doc)
+                
+                # TODO: Send invitation email
+        
+        return {
+            "success": True,
+            "message": "Onboarding completed successfully",
+            "workspace_id": workspace_data["_id"]
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to complete onboarding: {str(e)}")
+
+# ===== ADMIN MANAGEMENT ENDPOINTS =====
+
+@app.get("/api/admin/users/stats")
+async def get_admin_user_stats(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get user statistics for admin dashboard"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Get user counts
+        total_users = await users_collection.count_documents({})
+        
+        # Users created in last 30 days
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        recent_users = await users_collection.count_documents({
+            "created_at": {"$gte": thirty_days_ago}
+        })
+        
+        # Active users (logged in within last 30 days)
+        active_users = await users_collection.count_documents({
+            "last_login": {"$gte": thirty_days_ago}
+        })
+        
+        # Users created today
+        today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
+        new_today = await users_collection.count_documents({
+            "created_at": {"$gte": today_start}
+        })
+        
+        growth_rate = (recent_users / max(total_users - recent_users, 1)) * 100 if total_users > recent_users else 0
+        
+        return {
+            "success": True,
+            "data": {
+                "total_users": total_users,
+                "recent_users": recent_users,
+                "active_users": active_users,
+                "new_today": new_today,
+                "growth_rate": round(growth_rate, 2)
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get user stats: {str(e)}")
+
+@app.get("/api/admin/workspaces/stats")
+async def get_admin_workspace_stats(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get workspace statistics for admin dashboard"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        total_workspaces = await workspaces_collection.count_documents({})
+        
+        # Active workspaces (updated in last 30 days)
+        thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+        active_workspaces = await workspaces_collection.count_documents({
+            "updated_at": {"$gte": thirty_days_ago}
+        })
+        
+        # Recent workspaces
+        recent_workspaces = await workspaces_collection.count_documents({
+            "created_at": {"$gte": thirty_days_ago}
+        })
+        
+        growth_rate = (recent_workspaces / max(total_workspaces - recent_workspaces, 1)) * 100 if total_workspaces > recent_workspaces else 0
+        
+        return {
+            "success": True,
+            "data": {
+                "total_count": total_workspaces,
+                "active_count": active_workspaces,
+                "recent_count": recent_workspaces,
+                "growth_rate": round(growth_rate, 2)
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get workspace stats: {str(e)}")
+
+@app.get("/api/admin/analytics/overview")
+async def get_admin_analytics_overview(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get analytics overview for admin dashboard"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Mock analytics data - would be replaced with real analytics
+        return {
+            "success": True,
+            "data": {
+                "total_revenue": 284567.89,
+                "revenue_growth": 31.2,
+                "mrr": 8450.25,
+                "churn_rate": 2.1,
+                "token_revenue": 2847.50,
+                "subscription_revenue": 156780.45,
+                "api_calls_total": 2847593,
+                "error_rate": 0.1
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get analytics overview: {str(e)}")
+
+@app.get("/api/admin/system/metrics")
+async def get_system_metrics(
+    current_user: dict = Depends(get_current_user)
+):
+    """Get system health metrics for admin dashboard"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        # Mock system metrics - would be replaced with real system monitoring
+        metrics = {
+            "uptime": "99.9%",
+            "response_time": "145ms",
+            "memory_usage": "68%",
+            "cpu_usage": "23%",
+            "disk_usage": "41%",
+            "active_connections": 1247,
+            "api_calls_today": 25847,
+            "error_rate": "0.1%",
+            "database_connections": 45,
+            "cache_hit_rate": "94.2%",
+            "last_updated": datetime.utcnow().isoformat()
+        }
+        
+        # Store metrics in database
+        await system_metrics_collection.insert_one({
+            "_id": str(uuid.uuid4()),
+            "metrics": metrics,
+            "timestamp": datetime.utcnow()
+        })
+        
+        return {
+            "success": True,
+            "data": metrics
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get system metrics: {str(e)}")
+
+@app.get("/api/admin/users")
+async def get_all_users(
+    page: int = 1,
+    limit: int = 50,
+    search: str = "",
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all users for admin management"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        skip = (page - 1) * limit
+        query = {}
+        
+        if search:
+            query["$or"] = [
+                {"name": {"$regex": search, "$options": "i"}},
+                {"email": {"$regex": search, "$options": "i"}}
+            ]
+        
+        users = await users_collection.find(query).skip(skip).limit(limit).to_list(length=limit)
+        total = await users_collection.count_documents(query)
+        
+        # Remove sensitive data and add id field
+        for user in users:
+            user["id"] = str(user["_id"])
+            user.pop("password", None)
+            user.pop("_id", None)
+        
+        return {
+            "success": True,
+            "data": {
+                "users": users,
+                "total": total,
+                "page": page,
+                "pages": (total + limit - 1) // limit
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get users: {str(e)}")
+
+@app.get("/api/admin/workspaces")
+async def get_all_workspaces(
+    page: int = 1,
+    limit: int = 50,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get all workspaces for admin management"""
+    if current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        skip = (page - 1) * limit
+        
+        workspaces = await workspaces_collection.find({}).skip(skip).limit(limit).to_list(length=limit)
+        total = await workspaces_collection.count_documents({})
+        
+        # Add owner information and format response
+        for workspace in workspaces:
+            workspace["id"] = str(workspace["_id"])
+            
+            # Get owner info
+            if workspace.get("owner_id"):
+                owner = await users_collection.find_one({"_id": workspace["owner_id"]})
+                workspace["owner_name"] = owner.get("name", "Unknown") if owner else "Unknown"
+                workspace["owner_email"] = owner.get("email", "Unknown") if owner else "Unknown"
+            
+            workspace.pop("_id", None)
+        
+        return {
+            "success": True,
+            "data": {
+                "workspaces": workspaces,
+                "total": total,
+                "page": page,
+                "pages": (total + limit - 1) // limit
+            }
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get workspaces: {str(e)}")
+
 # ===== SOCIAL MEDIA & EMAIL INTEGRATION ENDPOINTS =====
 
 # Pydantic models for social media integrations
