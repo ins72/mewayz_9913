@@ -26,7 +26,7 @@ class WorkspaceUpdate(BaseModel):
 class MemberAdd(BaseModel):
     email: str
 
-@router.post("/create")
+@router.post("")
 async def create_workspace(
     workspace_data: WorkspaceCreate,
     current_user: dict = Depends(get_current_active_user)
