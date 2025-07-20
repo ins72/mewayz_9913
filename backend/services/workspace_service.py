@@ -76,6 +76,8 @@ class WorkspaceService:
 
     async def get_user_workspaces(self, user_id: str) -> List[Dict[str, Any]]:
         """Get all workspaces for a user with real database operations"""
+        self._ensure_collections()
+        
         # Find workspaces where user is owner or member
         workspaces = await self.workspaces_collection.find({
             "$or": [
