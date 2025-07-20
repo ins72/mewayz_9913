@@ -489,7 +489,7 @@ class OAuthStripeIntegrationTester:
 def main():
     """Main function to run the OAuth and Stripe integration tests"""
     # Get backend URL from environment
-    backend_url = "https://fbc7fbea-2d99-4296-9b80-a854dcdd044d.preview.emergentagent.com"
+    backend_url = "https://9dd14206-b170-4c02-b8f5-4aee3e308cd4.preview.emergentagent.com"
     
     print(f"🔍 Backend URL: {backend_url}")
     
