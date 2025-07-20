@@ -1,0 +1,156 @@
+{
+  "total_tests": 21,
+  "passed_tests": 19,
+  "failed_tests": 2,
+  "success_rate": 90.47619047619048,
+  "avg_response_time": 0.02998063564300537,
+  "test_results": [
+    {
+      "test": "Admin Login Authentication",
+      "success": true,
+      "details": "Successfully authenticated admin user: Admin User (tmonnens@outlook.com) with role: admin",
+      "response_time": 0.3285360336303711,
+      "timestamp": "2025-07-20T01:26:43.790730"
+    },
+    {
+      "test": "GET /api/onboarding/progress",
+      "success": true,
+      "details": "Successfully retrieved onboarding progress (no existing progress found)",
+      "response_time": 0.010562658309936523,
+      "timestamp": "2025-07-20T01:26:43.801377"
+    },
+    {
+      "test": "POST /api/onboarding/progress",
+      "success": true,
+      "details": "Successfully saved onboarding progress: Onboarding progress saved successfully",
+      "response_time": 0.02025127410888672,
+      "timestamp": "2025-07-20T01:26:43.821706"
+    },
+    {
+      "test": "POST /api/onboarding/complete",
+      "success": true,
+      "details": "Successfully completed onboarding and created workspace: 3ab072e4-0612-4e0a-8156-32bb0cfe3629",
+      "response_time": 0.023291587829589844,
+      "timestamp": "2025-07-20T01:26:43.845058"
+    },
+    {
+      "test": "GET /api/admin/users/stats",
+      "success": true,
+      "details": "Successfully retrieved user stats: 5 total users, 0 active, 0 new today, 0% growth",
+      "response_time": 0.013981103897094727,
+      "timestamp": "2025-07-20T01:26:43.859122"
+    },
+    {
+      "test": "GET /api/admin/workspaces/stats",
+      "success": true,
+      "details": "Successfully retrieved workspace stats: 5 total workspaces, 5 active, 5 recent, 0% growth",
+      "response_time": 0.011511802673339844,
+      "timestamp": "2025-07-20T01:26:43.870709"
+    },
+    {
+      "test": "GET /api/admin/analytics/overview",
+      "success": true,
+      "details": "Successfully retrieved analytics overview: $284,567.89 total revenue, 31.2% growth, $8,450.25 MRR, 2.1% churn",
+      "response_time": 0.009308099746704102,
+      "timestamp": "2025-07-20T01:26:43.880088"
+    },
+    {
+      "test": "GET /api/admin/system/metrics",
+      "success": true,
+      "details": "Successfully retrieved system metrics: 99.9% uptime, 145ms response time, 68% memory, 23% CPU, 1247 connections",
+      "response_time": 0.019049882888793945,
+      "timestamp": "2025-07-20T01:26:43.899206"
+    },
+    {
+      "test": "GET /api/admin/users",
+      "success": true,
+      "details": "Successfully retrieved user list: 5 users on page 1, 5 total users, 1 total pages",
+      "response_time": 0.013942956924438477,
+      "timestamp": "2025-07-20T01:26:43.913236"
+    },
+    {
+      "test": "GET /api/admin/workspaces",
+      "success": true,
+      "details": "Successfully retrieved workspace list: 5 workspaces on page 1, 5 total workspaces, 1 total pages",
+      "response_time": 0.014813423156738281,
+      "timestamp": "2025-07-20T01:26:43.928132"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/users/stats",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.019471168518066406,
+      "timestamp": "2025-07-20T01:26:43.947741"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/workspaces/stats",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.0070018768310546875,
+      "timestamp": "2025-07-20T01:26:43.954781"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/analytics/overview",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.005979776382446289,
+      "timestamp": "2025-07-20T01:26:43.960799"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/system/metrics",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.00730443000793457,
+      "timestamp": "2025-07-20T01:26:43.968141"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/users",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.006187915802001953,
+      "timestamp": "2025-07-20T01:26:43.974376"
+    },
+    {
+      "test": "Unauthorized Access Test - /api/admin/workspaces",
+      "success": true,
+      "details": "Correctly blocked unauthorized access (HTTP 403)",
+      "response_time": 0.0067708492279052734,
+      "timestamp": "2025-07-20T01:26:43.981184"
+    },
+    {
+      "test": "Admin Role Verification Summary",
+      "success": true,
+      "details": "All 6 admin endpoints properly protected with role verification",
+      "response_time": null,
+      "timestamp": "2025-07-20T01:26:43.981218"
+    },
+    {
+      "test": "Onboarding Progress Data Structure",
+      "success": false,
+      "details": "HTTP 500",
+      "response_time": 0.023711681365966797,
+      "timestamp": "2025-07-20T01:26:44.005175"
+    },
+    {
+      "test": "Admin User Stats Data Structure",
+      "success": true,
+      "details": "Response contains all required fields and stats: ['success', 'data', 'total_users', 'active_users', 'growth_rate']",
+      "response_time": 0.011823654174804688,
+      "timestamp": "2025-07-20T01:26:44.017070"
+    },
+    {
+      "test": "MongoDB Onboarding Collection Operations",
+      "success": false,
+      "details": "Failed to retrieve progress: HTTP 500",
+      "response_time": 0.0209043025970459,
+      "timestamp": "2025-07-20T01:26:44.038030"
+    },
+    {
+      "test": "MongoDB Admin Collections Operations",
+      "success": true,
+      "details": "Successfully queried admin collections: 5 users, 5 workspaces",
+      "response_time": 0.025208234786987305,
+      "timestamp": "2025-07-20T01:26:44.063279"
+    }
+  ]
+}
