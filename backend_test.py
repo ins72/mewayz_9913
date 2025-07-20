@@ -142,33 +142,7 @@ class BackendTester:
         campaign_data = {
             "name": "Phase 6 Marketing Launch Campaign",
             "type": "email",
-            "description": "Comprehensive marketing campaign for Phase 6 launch",
-            "target_audience": {
-                "segments": ["new_users", "active_users"],
-                "demographics": {
-                    "age_range": "25-45",
-                    "interests": ["business", "technology", "marketing"]
-                }
-            },
-            "content": {
-                "subject": "Discover Our Revolutionary Marketing Automation Features",
-                "template_id": "marketing_launch_template",
-                "personalization": {
-                    "use_name": True,
-                    "use_company": True,
-                    "dynamic_content": True
-                }
-            },
-            "schedule": {
-                "type": "immediate",
-                "timezone": "UTC"
-            },
-            "goals": {
-                "primary": "engagement",
-                "target_open_rate": 25.0,
-                "target_click_rate": 5.0,
-                "target_conversion_rate": 2.0
-            }
+            "template": "marketing_launch_template"
         }
         self.test_endpoint("/marketing/campaigns/create", "POST",
                          data=campaign_data,
@@ -177,41 +151,23 @@ class BackendTester:
         # 3. Contact Management - Bulk Import
         print(f"\n👥 Testing Contact Management...")
         contacts_data = {
-            "import_type": "csv",
-            "contacts": [
+            "import_source": "csv",
+            "contact_data": [
                 {
                     "email": "john.doe@example.com",
                     "first_name": "John",
                     "last_name": "Doe",
                     "company": "Tech Solutions Inc",
-                    "phone": "+1-555-0123",
-                    "tags": ["prospect", "technology"],
-                    "custom_fields": {
-                        "industry": "Technology",
-                        "company_size": "50-100",
-                        "lead_source": "website"
-                    }
+                    "phone": "+1-555-0123"
                 },
                 {
                     "email": "jane.smith@example.com",
                     "first_name": "Jane",
                     "last_name": "Smith",
                     "company": "Marketing Pro LLC",
-                    "phone": "+1-555-0124",
-                    "tags": ["customer", "marketing"],
-                    "custom_fields": {
-                        "industry": "Marketing",
-                        "company_size": "10-50",
-                        "lead_source": "referral"
-                    }
+                    "phone": "+1-555-0124"
                 }
-            ],
-            "list_name": "Phase 6 Marketing Contacts",
-            "duplicate_handling": "skip",
-            "validation": {
-                "email_validation": True,
-                "phone_validation": True
-            }
+            ]
         }
         self.test_endpoint("/marketing/bulk-import/contacts", "POST",
                          data=contacts_data,
