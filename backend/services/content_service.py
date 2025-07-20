@@ -11,10 +11,18 @@ from core.database import get_database
 
 class ContentService:
     def __init__(self):
-        self.db = get_database()
-        self.blog_posts_collection = self.db.blog_posts
-        self.categories_collection = self.db.blog_categories
-        self.tags_collection = self.db.blog_tags
+        self.db = None
+        self.blog_posts_collection = None
+        self.categories_collection = None
+        self.tags_collection = None
+    
+    def _ensure_collections(self):
+        """Ensure collections are initialized"""
+        if self.db is None:
+            self.db = get_database()
+            self.blog_posts_collection = self.db.blog_posts
+            self.categories_collection = self.db.blog_categories
+            self.tags_collection = self.db.blog_tags
 
     async def create_blog_post(self, post_data: Dict[str, Any], author_id: str) -> Dict[str, Any]:
         """Create blog post with real database operations"""
