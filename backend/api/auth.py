@@ -7,9 +7,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 from datetime import timedelta
 
-from ..core.auth import create_access_token, get_current_active_user
-from ..core.config import settings
-from ..services.user_service import user_service
+from core.auth import create_access_token, get_current_active_user
+from core.config import settings
+from services.user_service import user_service
 
 router = APIRouter()
 
