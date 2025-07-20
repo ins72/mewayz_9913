@@ -302,7 +302,7 @@ const ProfessionalLinkInBioBuilder = () => {
         url: LinkIcon,
         social: UserGroupIcon,
         video: VideoCameraIcon,
-        music: MusicIcon,
+        music: MusicalNoteIcon,
         shop: ShoppingBagIcon,
         booking: CalendarIcon,
         contact: PhoneIcon,
