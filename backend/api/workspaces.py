@@ -6,10 +6,13 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 
-from ..core.auth import get_current_active_user
-from ..services.workspace_service import workspace_service
+from core.auth import get_current_active_user
+from services.workspace_service import get_workspace_service
 
 router = APIRouter()
+
+# Initialize service instance
+workspace_service = get_workspace_service()
 
 class WorkspaceCreate(BaseModel):
     name: str
