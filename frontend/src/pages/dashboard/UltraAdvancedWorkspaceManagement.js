@@ -116,7 +116,7 @@ const UltraAdvancedWorkspaceManagement = () => {
   const rolePermissions = {
     owner: { 
       name: 'Owner', 
-      icon: CrownIcon, 
+      icon: TrophyIcon, 
       color: 'yellow',
       description: 'Full access to all features and settings',
       permissions: ['all']
