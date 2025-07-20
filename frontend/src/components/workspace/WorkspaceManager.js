@@ -128,7 +128,7 @@ const WorkspaceManager = () => {
   };
 
   const handleDeleteWorkspace = async (workspaceId) => {
-    if (!confirm('Are you sure you want to delete this workspace? This action cannot be undone.')) {
+    if (!window.confirm('Are you sure you want to delete this workspace? This action cannot be undone.')) {
       return;
     }
 
