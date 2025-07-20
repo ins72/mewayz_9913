@@ -6,10 +6,13 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 
-from ..core.auth import get_current_active_user
-from ..services.analytics_service import analytics_service
+from core.auth import get_current_active_user
+from services.analytics_service import get_analytics_service
 
 router = APIRouter()
+
+# Initialize service instance
+analytics_service = get_analytics_service()
 
 class EventData(BaseModel):
     event_type: str
