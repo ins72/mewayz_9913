@@ -270,7 +270,7 @@ const UltraAdvancedWorkspaceManagement = () => {
           }`}>
             {workspace.subscription_plan || 'Free'}
           </span>
-          {workspace.role === 'owner' && <CrownIconSolid className="h-4 w-4 text-yellow-500" />}
+          {workspace.role === 'owner' && <TrophyIconSolid className="h-4 w-4 text-yellow-500" />}
         </div>
       </div>
       
