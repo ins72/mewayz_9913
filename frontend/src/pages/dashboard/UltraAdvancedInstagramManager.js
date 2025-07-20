@@ -16,7 +16,7 @@ import {
   MapPinIcon,
   CalendarIcon,
   ClockIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   HashtagIcon,
   PhotoIcon,
   VideoCameraIcon,
