@@ -2888,12 +2888,14 @@ async def consume_tokens(
     else:
         # Use combination of allowance and purchased tokens
         purchased_tokens_used = tokens_needed - allowance_remaining
+        # Handle both balance and current_tokens field names
+        balance_field = "balance" if "balance" in workspace_tokens else "current_tokens"
         await workspace_tokens_collection.update_one(
             {"workspace_id": workspace_id},
             {
                 "$inc": {
                     "allowance_used_this_month": allowance_remaining,
-                    "balance": -purchased_tokens_used,
+                    balance_field: -purchased_tokens_used,
                     "total_used": tokens_needed
                 }
             }
