@@ -9,7 +9,7 @@ from datetime import timedelta
 
 from core.auth import create_access_token, get_current_active_user
 from core.config import settings
-from services.user_service import user_service
+from services.user_service import get_user_service
 
 router = APIRouter()
 
@@ -34,6 +34,7 @@ async def register_user(user_data: UserRegistration):
         )
     
     try:
+        user_service = get_user_service()
         user = await user_service.create_user(
             email=user_data.email,
             password=user_data.password,
@@ -70,6 +71,7 @@ async def register_user(user_data: UserRegistration):
 async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
     """Authenticate user with real database operations"""
     try:
+        user_service = get_user_service()
         user = await user_service.authenticate_user(
             email=form_data.username,
             password=form_data.password
