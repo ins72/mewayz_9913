@@ -287,16 +287,6 @@ const GamifiedAnalyticsPage = () => {
     // This would be more sophisticated in a real implementation
   };
 
-  const getRarityColor = (rarity) => {
-    switch (rarity) {
-      case 'legendary': return 'from-yellow-400 to-orange-500';
-      case 'epic': return 'from-purple-400 to-pink-500';
-      case 'rare': return 'from-blue-400 to-cyan-500';
-      case 'common': return 'from-gray-400 to-gray-500';
-      default: return 'from-gray-400 to-gray-500';
-    }
-  };
-
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'hard': return 'bg-red-500';
