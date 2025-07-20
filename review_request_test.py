@@ -498,7 +498,7 @@ class ReviewRequestTester:
 
 def main():
     """Main function to run the review request tests"""
-    backend_url = "https://9dd14206-b170-4c02-b8f5-4aee3e308cd4.preview.emergentagent.com"
+    backend_url = "https://c1377653-96a4-4862-8647-9ed933db2920.preview.emergentagent.com"
     
     print(f"🔍 Backend URL: {backend_url}")
     
