@@ -21061,7 +21061,6 @@ async def get_satisfaction_analytics(
         ]
     }
     return {"success": True, "data": analytics_data}
-    return {"success": True, "data": analytics_data}
 
 # Final endpoint count - achieving ultimate 10,000+ feature comprehensive business platform
 if __name__ == "__main__":
