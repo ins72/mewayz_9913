@@ -222,18 +222,18 @@ class BackendTester:
         
         # 8. A/B Testing
         print(f"\n🧪 Testing A/B Testing...")
-        ab_test_data = {
+        ab_test_form_data = {
             "test_name": "Subject Line A/B Test",
-            "test_type": "email_subject",
+            "test_type": "email",
             "variable_to_test": "subject_line",
-            "variant_a": "Discover Our New Features",
-            "variant_b": "Revolutionary Features Await You",
-            "audience_size": 1000,
-            "test_duration_days": 1,
+            "variant_a": json.dumps({"subject": "Discover Our New Features"}),
+            "variant_b": json.dumps({"subject": "Revolutionary Features Await You"}),
+            "audience_size": "1000",
+            "test_duration_days": "1",
             "success_metric": "open_rate"
         }
         self.test_endpoint("/marketing/ab-testing/create", "POST",
-                         data=ab_test_data,
+                         form_data=ab_test_form_data,
                          description="Create A/B testing campaign")
         
         # 9. Customer Lifecycle Analytics
