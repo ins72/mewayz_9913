@@ -121,6 +121,8 @@ class UserService:
 
     async def get_user_profile(self, user_id: str) -> Optional[Dict[str, Any]]:
         """Get user profile with real database operations"""
+        self._ensure_collections()
+        
         user = await self.users_collection.find_one({"_id": user_id})
         if not user:
             return None
