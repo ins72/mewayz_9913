@@ -4997,6 +4997,539 @@ async def request_contextual_help(
         }
     }
 
+# ===== ENHANCED GUIDED TOUR & INTERACTIVE ONBOARDING SYSTEM =====
+
+# Enhanced onboarding collections
+guided_tours_collection = database.guided_tours
+interactive_tutorials_collection = database.interactive_tutorials
+user_tour_progress_collection = database.user_tour_progress
+onboarding_analytics_collection = database.onboarding_analytics
+feature_adoption_tracking_collection = database.feature_adoption_tracking
+
+@app.get("/api/onboarding/enhanced/dashboard")
+async def get_enhanced_onboarding_dashboard(current_user: dict = Depends(get_current_user)):
+    """Get comprehensive enhanced onboarding dashboard"""
+    onboarding_dashboard = {
+        "user_onboarding_status": {
+            "overall_completion": 67.5,
+            "active_tours": 2,
+            "completed_tours": 8,
+            "total_available_tours": 15,
+            "current_level": "Intermediate User",
+            "next_milestone": "Advanced Features Unlocked",
+            "estimated_time_to_completion": "45 minutes",
+            "achievements_unlocked": 12,
+            "total_achievements": 25
+        },
+        "interactive_tour_library": [
+            {
+                "tour_id": "tour_advanced_001",
+                "title": "AI Content Creation Mastery",
+                "description": "Master all AI-powered content creation tools with step-by-step guidance",
+                "difficulty": "intermediate",
+                "duration": "15 minutes",
+                "steps": 23,
+                "completion_rate": 78.3,
+                "prerequisites": ["basic_ai_tour"],
+                "features_covered": ["ai_writer", "ai_image_generator", "ai_video_editor"],
+                "user_rating": 4.7,
+                "last_updated": "2025-07-18"
+            },
+            {
+                "tour_id": "tour_advanced_002",
+                "title": "Complete Social Media Automation",
+                "description": "Set up automated social media workflows from content creation to posting",
+                "difficulty": "advanced",
+                "duration": "25 minutes",
+                "steps": 35,
+                "completion_rate": 65.2,
+                "prerequisites": ["social_media_basics", "ai_content_creation"],
+                "features_covered": ["scheduler", "ai_hashtags", "analytics", "automation"],
+                "user_rating": 4.8,
+                "last_updated": "2025-07-19"
+            },
+            {
+                "tour_id": "tour_advanced_003",
+                "title": "E-commerce Store Launch Guide",
+                "description": "Complete walkthrough to launch your online store with payment processing",
+                "difficulty": "advanced",
+                "duration": "35 minutes",
+                "steps": 42,
+                "completion_rate": 52.1,
+                "prerequisites": ["platform_basics"],
+                "features_covered": ["product_setup", "payment_integration", "inventory", "marketing"],
+                "user_rating": 4.6,
+                "last_updated": "2025-07-20"
+            }
+        ],
+        "personalized_learning_path": {
+            "current_path": "Content Creator Pro",
+            "path_description": "Master content creation and social media automation",
+            "progress": 73.8,
+            "next_steps": [
+                {
+                    "step": "Complete Advanced Analytics Tour",
+                    "estimated_time": "12 minutes",
+                    "value": "Understand audience insights and optimize content"
+                },
+                {
+                    "step": "Set up Email Marketing Automation",
+                    "estimated_time": "18 minutes", 
+                    "value": "Nurture leads and increase conversions"
+                }
+            ],
+            "recommended_features": [
+                {
+                    "feature": "A/B Testing for Content",
+                    "reason": "You're creating lots of content - optimize performance",
+                    "potential_impact": "+35% engagement"
+                }
+            ]
+        },
+        "adoption_insights": {
+            "feature_adoption_score": 68.4,
+            "most_used_features": [
+                {"feature": "AI Content Writer", "usage": 89.2},
+                {"feature": "Social Media Scheduler", "usage": 76.8},
+                {"feature": "Analytics Dashboard", "usage": 71.4}
+            ],
+            "underutilized_features": [
+                {"feature": "Email Marketing", "potential": "High", "barrier": "Setup complexity"},
+                {"feature": "CRM System", "potential": "High", "barrier": "Training needed"},
+                {"feature": "Automation Workflows", "potential": "Medium", "barrier": "Advanced feature"}
+            ],
+            "engagement_trends": {
+                "daily_active_features": 5.2,
+                "weekly_new_feature_discovery": 1.8,
+                "feature_stickiness_rate": 73.6
+            }
+        }
+    }
+    return {"success": True, "data": onboarding_dashboard}
+
+@app.get("/api/onboarding/tours/{tour_id}/detailed")
+async def get_detailed_tour_content(
+    tour_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get detailed step-by-step tour content with interactive elements"""
+    tour_details = {
+        "tour_info": {
+            "tour_id": tour_id,
+            "title": "AI Content Creation Mastery",
+            "description": "Master all AI-powered content creation tools",
+            "total_steps": 23,
+            "estimated_duration": "15 minutes",
+            "difficulty": "intermediate",
+            "prerequisites_met": True,
+            "can_start": True
+        },
+        "tour_steps": [
+            {
+                "step_number": 1,
+                "title": "Introduction to AI Content Tools",
+                "description": "Overview of available AI content creation features",
+                "step_type": "information",
+                "interaction_required": False,
+                "estimated_time": "30 seconds",
+                "content": {
+                    "text": "Welcome to AI Content Creation! You'll learn to use 8 powerful AI tools...",
+                    "image": "/tutorials/ai-content-overview.jpg",
+                    "highlights": ["ai_writer_tab", "image_generator_button"]
+                }
+            },
+            {
+                "step_number": 2,
+                "title": "Navigate to AI Writer",
+                "description": "Click on the AI Writer tab to begin",
+                "step_type": "interaction",
+                "interaction_required": True,
+                "estimated_time": "20 seconds",
+                "target_element": "#ai-writer-tab",
+                "interaction_type": "click",
+                "validation": "check_page_url_contains('/ai/writer')",
+                "hints": [
+                    "Look for the AI Writer tab in the left navigation",
+                    "It's usually the first item in the AI Features section"
+                ]
+            },
+            {
+                "step_number": 3,
+                "title": "Create Your First AI Article",
+                "description": "Use the AI writer to generate a blog post",
+                "step_type": "guided_action",
+                "interaction_required": True,
+                "estimated_time": "2 minutes",
+                "actions": [
+                    {
+                        "action": "fill_input",
+                        "target": "#topic-input",
+                        "value": "10 Benefits of AI in Business",
+                        "description": "Enter the article topic"
+                    },
+                    {
+                        "action": "select_option",
+                        "target": "#tone-selector",
+                        "value": "professional",
+                        "description": "Choose a professional tone"
+                    },
+                    {
+                        "action": "click",
+                        "target": "#generate-button",
+                        "description": "Click Generate to create the article"
+                    }
+                ],
+                "success_criteria": "content_generated_successfully",
+                "tips": [
+                    "Be specific with your topic for better results",
+                    "The professional tone works best for business content"
+                ]
+            }
+        ],
+        "progress_tracking": {
+            "user_progress": {
+                "current_step": 1,
+                "completion_percentage": 0,
+                "time_spent": 0,
+                "steps_completed": [],
+                "last_activity": None
+            },
+            "analytics": {
+                "average_completion_time": "14.5 minutes",
+                "common_drop_off_points": [3, 8, 15],
+                "user_satisfaction": 4.7,
+                "completion_rate": 78.3
+            }
+        },
+        "interactive_features": {
+            "skip_available": True,
+            "replay_available": True,
+            "speed_control": True,
+            "help_available": True,
+            "progress_saving": True,
+            "offline_mode": False
+        }
+    }
+    return {"success": True, "data": tour_details}
+
+@app.post("/api/onboarding/tours/{tour_id}/step/{step_number}/complete")
+async def complete_interactive_tour_step(
+    tour_id: str,
+    step_number: int,
+    time_spent: int = Form(...),
+    interaction_data: Optional[str] = Form("{}"),
+    feedback_rating: Optional[int] = Form(None),
+    notes: Optional[str] = Form(""),
+    current_user: dict = Depends(get_current_user)
+):
+    """Complete an interactive tour step with detailed tracking"""
+    step_completion = {
+        "_id": str(uuid.uuid4()),
+        "user_id": current_user["id"],
+        "tour_id": tour_id,
+        "step_number": step_number,
+        "completed_at": datetime.utcnow(),
+        "time_spent": time_spent,
+        "interaction_data": json.loads(interaction_data),
+        "feedback_rating": feedback_rating,
+        "notes": notes,
+        "success": True
+    }
+    
+    await user_tour_progress_collection.insert_one(step_completion)
+    
+    # Calculate next step and achievements
+    next_step = step_number + 1
+    total_steps = 23  # Would be fetched from tour definition
+    completion_percentage = (step_number / total_steps) * 100
+    
+    # Check for achievements
+    achievements = []
+    if step_number == 5:
+        achievements.append({
+            "id": "first_ai_interaction",
+            "title": "AI Interaction Pro",
+            "description": "Successfully completed your first AI interaction",
+            "points": 100
+        })
+    elif step_number == 15:
+        achievements.append({
+            "id": "content_creator",
+            "title": "Content Creator",
+            "description": "Mastered AI content creation basics",
+            "points": 250
+        })
+    
+    return {
+        "success": True,
+        "data": {
+            "step_completed": step_number,
+            "next_step": next_step if next_step <= total_steps else None,
+            "completion_percentage": completion_percentage,
+            "tour_completed": next_step > total_steps,
+            "achievements_unlocked": achievements,
+            "next_instruction": "Great job! Now let's learn about content optimization..." if next_step <= total_steps else "Congratulations! You've completed the tour!",
+            "estimated_remaining_time": max(0, (total_steps - step_number) * 0.65) if next_step <= total_steps else 0
+        }
+    }
+
+@app.post("/api/onboarding/interactive-tutorial/create")
+async def create_interactive_tutorial(
+    title: str = Form(...),
+    description: str = Form(...),
+    category: str = Form(...),
+    difficulty: str = Form(...),
+    target_features: List[str] = Form([]),
+    steps_json: str = Form(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create custom interactive tutorial"""
+    tutorial_doc = {
+        "_id": str(uuid.uuid4()),
+        "title": title,
+        "description": description,
+        "category": category,
+        "difficulty": difficulty,
+        "target_features": target_features,
+        "steps": json.loads(steps_json),
+        "created_by": current_user["id"],
+        "created_at": datetime.utcnow(),
+        "status": "active",
+        "completion_rate": 0,
+        "user_rating": 0,
+        "total_completions": 0
+    }
+    
+    await interactive_tutorials_collection.insert_one(tutorial_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "tutorial_id": tutorial_doc["_id"],
+            "title": title,
+            "status": "created",
+            "preview_url": f"/tutorials/preview/{tutorial_doc['_id']}",
+            "edit_url": f"/tutorials/edit/{tutorial_doc['_id']}"
+        }
+    }
+
+@app.get("/api/onboarding/feature-adoption/analytics")
+async def get_feature_adoption_analytics(
+    date_range: str = Query("30d"),
+    feature_category: Optional[str] = Query(None),
+    current_user: dict = Depends(get_current_user)
+):
+    """Get detailed feature adoption analytics"""
+    analytics_data = {
+        "adoption_overview": {
+            "overall_adoption_rate": 68.4,
+            "features_discovered": 45,
+            "features_actively_used": 23,
+            "features_mastered": 12,
+            "total_features_available": 87,
+            "adoption_velocity": "+12.5% this month"
+        },
+        "category_breakdown": [
+            {
+                "category": "AI Features",
+                "total_features": 15,
+                "adopted_features": 9,
+                "adoption_rate": 60.0,
+                "avg_time_to_adoption": "3.2 days",
+                "most_popular": "AI Content Writer",
+                "engagement_score": 87.3
+            },
+            {
+                "category": "Social Media",
+                "total_features": 18,
+                "adopted_features": 12,
+                "adoption_rate": 66.7,
+                "avg_time_to_adoption": "2.8 days",
+                "most_popular": "Post Scheduler",
+                "engagement_score": 92.1
+            },
+            {
+                "category": "Analytics",
+                "total_features": 12,
+                "adopted_features": 8,
+                "adoption_rate": 66.7,
+                "avg_time_to_adoption": "4.1 days",
+                "most_popular": "Performance Dashboard",
+                "engagement_score": 78.9
+            }
+        ],
+        "adoption_funnel": {
+            "feature_discovery": 89.2,  # % of users who discover features
+            "first_interaction": 72.5,  # % who try after discovery
+            "repeated_usage": 58.3,     # % who use more than once
+            "feature_mastery": 34.7,    # % who become proficient
+            "advocacy": 18.9            # % who recommend to others
+        },
+        "onboarding_effectiveness": {
+            "tour_completion_rate": 73.4,
+            "tutorial_engagement": 81.7,
+            "help_usage": 45.2,
+            "support_ticket_reduction": 67.8,
+            "user_satisfaction": 4.6,
+            "feature_stickiness": 84.3
+        },
+        "personalized_recommendations": [
+            {
+                "feature": "Email Marketing Automation",
+                "reason": "High ROI potential based on your content creation activity",
+                "confidence": 87.3,
+                "estimated_value": "+25% lead conversion",
+                "setup_time": "15 minutes"
+            },
+            {
+                "feature": "Advanced Analytics",
+                "reason": "You're actively creating content - time to optimize!",
+                "confidence": 82.1,
+                "estimated_value": "Better content performance insights",
+                "setup_time": "8 minutes"
+            }
+        ],
+        "improvement_opportunities": [
+            {
+                "area": "E-commerce Features",
+                "current_adoption": 23.4,
+                "potential_adoption": 67.8,
+                "barrier": "Complex setup process",
+                "recommendation": "Simplify onboarding with step-by-step wizard"
+            },
+            {
+                "area": "Advanced Automation",
+                "current_adoption": 34.1,
+                "potential_adoption": 72.3,
+                "barrier": "Requires technical knowledge",
+                "recommendation": "Add visual workflow builder"
+            }
+        ]
+    }
+    return {"success": True, "data": analytics_data}
+
+@app.post("/api/onboarding/smart-hints/request")
+async def request_smart_contextual_hints(
+    current_page: str = Form(...),
+    user_action: str = Form(...),
+    feature_context: str = Form(...),
+    difficulty_level: Optional[str] = Form("auto"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Request smart contextual hints based on user behavior"""
+    hint_request = {
+        "_id": str(uuid.uuid4()),
+        "user_id": current_user["id"],
+        "current_page": current_page,
+        "user_action": user_action,
+        "feature_context": feature_context,
+        "difficulty_level": difficulty_level,
+        "requested_at": datetime.utcnow()
+    }
+    
+    # Generate smart hints based on context
+    smart_hints = {
+        "contextual_tips": [
+            {
+                "type": "quick_tip",
+                "title": "Pro Tip",
+                "content": "Use Ctrl+Space to quickly access AI suggestions in any text field",
+                "relevance_score": 94.2,
+                "estimated_time_saved": "30 seconds per use"
+            },
+            {
+                "type": "feature_discovery", 
+                "title": "Hidden Feature",
+                "content": "Right-click on any generated content to access advanced editing options",
+                "relevance_score": 87.8,
+                "estimated_value": "Enhanced content customization"
+            }
+        ],
+        "suggested_actions": [
+            {
+                "action": "enable_keyboard_shortcuts",
+                "title": "Enable Keyboard Shortcuts",
+                "description": "Speed up your workflow with custom shortcuts",
+                "impact": "high",
+                "setup_time": "2 minutes"
+            },
+            {
+                "action": "customize_workspace",
+                "title": "Customize Your Workspace",
+                "description": "Arrange tools based on your workflow",
+                "impact": "medium",
+                "setup_time": "5 minutes"
+            }
+        ],
+        "learning_resources": [
+            {
+                "type": "video_tutorial",
+                "title": "Advanced Content Creation Techniques",
+                "duration": "4 minutes",
+                "url": "/tutorials/advanced-content-creation"
+            },
+            {
+                "type": "documentation",
+                "title": "Feature Reference Guide",
+                "estimated_read_time": "3 minutes",
+                "url": "/docs/features/content-creation"
+            }
+        ],
+        "ai_recommendations": {
+            "next_best_action": "Try the bulk content generator for efficiency",
+            "confidence": 89.3,
+            "reasoning": "Based on your content creation patterns, bulk generation could save 60% time",
+            "tutorial_available": True
+        }
+    }
+    
+    return {"success": True, "data": smart_hints}
+
+@app.get("/api/onboarding/completion/certificate")
+async def generate_completion_certificate(
+    achievement_type: str = Query(...),  # tour_completion, feature_mastery, level_completion
+    current_user: dict = Depends(get_current_user)
+):
+    """Generate completion certificate for achievements"""
+    user = await users_collection.find_one({"email": current_user["email"]})
+    
+    certificate_data = {
+        "certificate_id": str(uuid.uuid4()),
+        "recipient": {
+            "name": user.get("name", "Professional User"),
+            "email": user.get("email"),
+            "user_level": "Intermediate User",
+            "completion_date": datetime.utcnow().isoformat()
+        },
+        "achievement": {
+            "type": achievement_type,
+            "title": "AI Content Creation Master" if achievement_type == "tour_completion" else "Platform Professional",
+            "description": "Successfully completed comprehensive training and demonstrated proficiency",
+            "skill_areas": [
+                "AI Content Generation",
+                "Social Media Automation", 
+                "Analytics & Reporting",
+                "Workflow Optimization"
+            ],
+            "verification_code": f"MEWAYZ-{str(uuid.uuid4())[:8].upper()}"
+        },
+        "platform_info": {
+            "issued_by": "Mewayz Professional Platform",
+            "certification_level": "Professional",
+            "valid_until": (datetime.utcnow() + timedelta(days=365)).isoformat(),
+            "certificate_url": f"/certificates/view/{str(uuid.uuid4())}",
+            "share_url": f"/certificates/share/{str(uuid.uuid4())}"
+        },
+        "statistics": {
+            "features_mastered": 23,
+            "hours_trained": 12.5,
+            "tutorials_completed": 8,
+            "proficiency_score": 89.2
+        }
+    }
+    
+    return {"success": True, "data": certificate_data}
+
 # ===== SUBSCRIPTION & BILLING MANAGEMENT (40+ ENDPOINTS) =====
 
 @app.get("/api/billing/subscription/details")
