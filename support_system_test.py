@@ -85,8 +85,8 @@ class SupportSystemTester:
             self.log_test("/auth/login", "POST", 0, 0, False, f"Authentication error: {str(e)}")
             return False
     
-    def test_endpoint(self, endpoint, method="GET", data=None, expected_status=200, description=""):
-        """Test a single endpoint"""
+    def test_endpoint_form(self, endpoint, method="GET", data=None, expected_status=200, description=""):
+        """Test a single endpoint with form data"""
         url = f"{API_BASE}{endpoint}"
         
         try:
@@ -95,9 +95,9 @@ class SupportSystemTester:
             if method == "GET":
                 response = self.session.get(url, timeout=30)
             elif method == "POST":
-                response = self.session.post(url, json=data, timeout=30)
+                response = self.session.post(url, data=data, timeout=30)
             elif method == "PUT":
-                response = self.session.put(url, json=data, timeout=30)
+                response = self.session.put(url, data=data, timeout=30)
             elif method == "DELETE":
                 response = self.session.delete(url, timeout=30)
             else:
@@ -117,10 +117,11 @@ class SupportSystemTester:
                     details += f" - Error: {response_data.get('detail', 'Unknown error')}"
                 
                 # Store important IDs for subsequent tests
-                if success and 'session_id' in response_data:
-                    self.session_id = response_data['session_id']
-                if success and 'agent_id' in response_data:
-                    self.agent_id = response_data['agent_id']
+                if success and 'data' in response_data:
+                    if 'session_id' in response_data['data']:
+                        self.session_id = response_data['data']['session_id']
+                    if 'agent_id' in response_data['data']:
+                        self.agent_id = response_data['data']['agent_id']
                     
             except:
                 data_size = len(response.text)
