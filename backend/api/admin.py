@@ -237,8 +237,10 @@ async def get_system_metrics(current_user: dict = Depends(verify_admin_user)):
         # Database collection sizes
         user_service._ensure_collections()
         users_collection = user_service.users_collection
-        workspaces_collection = workspace_service.workspaces_collection if workspace_service.workspaces_collection else workspace_service._ensure_collections() or workspace_service.workspaces_collection
-        analytics_collection = analytics_service.analytics_collection if analytics_service.analytics_collection else analytics_service._ensure_collections() or analytics_service.analytics_collection
+        workspace_service._ensure_collections()
+        workspaces_collection = workspace_service.workspaces_collection
+        analytics_service._ensure_collections()
+        analytics_collection = analytics_service.analytics_collection
         
         users_count = await users_collection.count_documents({})
         workspaces_count = await workspaces_collection.count_documents({})
