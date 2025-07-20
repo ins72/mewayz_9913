@@ -225,7 +225,15 @@ class Historic5000FeaturesTester:
         
         # Omni-channel content creation
         self.test_endpoint("/ai/content-creation-suite/omni-generate", "POST",
-                         data={"content_type": "blog_post", "topic": "5000 features platform", "channels": ["blog", "social", "email"]},
+                         data={
+                             "content_brief": "Create content about the revolutionary 5000 features platform",
+                             "target_audience": "business_owners",
+                             "business_objectives": ["increase_awareness", "drive_signups"],
+                             "content_formats": ["blog_post", "social_media", "email"],
+                             "content_type": "blog_post", 
+                             "topic": "5000 features platform", 
+                             "channels": ["blog", "social", "email"]
+                         },
                          description="Omni-channel content creation", phase="Phase 8")
 
     def test_phase_9_globalization_localization(self):
