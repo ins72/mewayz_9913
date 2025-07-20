@@ -23,7 +23,7 @@ import {
   ComputerDesktopIcon,
   ArrowUpIcon,
   ArrowDownIcon,
-  DuplicateIcon
+  DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
