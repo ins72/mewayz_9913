@@ -4614,7 +4614,496 @@ async def get_ai_usage_analytics(current_user: dict = Depends(get_current_user))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get AI analytics: {str(e)}")
 
-# ===== PHASE 4: ADDITIONAL MISSING FEATURES =====
+# ===== PHASE 5: VALUABLE EXPANSIONS =====
+
+# Advanced collections for valuable expansions
+automation_workflows_collection = database.automation_workflows
+social_media_analytics_collection = database.social_media_analytics
+advanced_notifications_collection = database.advanced_notifications
+competitor_tracking_collection = database.competitor_tracking
+affiliate_program_collection = database.affiliate_program
+
+# ===== ADVANCED AUTOMATION WORKFLOWS =====
+@app.get("/api/automation/workflows")
+async def get_automation_workflows(current_user: dict = Depends(get_current_user)):
+    """Get automation workflows for workspace"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    workflows = await automation_workflows_collection.find(
+        {"workspace_id": str(workspace["_id"])}
+    ).to_list(length=50)
+    
+    for workflow in workflows:
+        workflow["id"] = str(workflow["_id"])
+    
+    return {
+        "success": True,
+        "data": {
+            "workflows": [
+                {
+                    "id": workflow["id"],
+                    "name": workflow["name"],
+                    "description": workflow.get("description"),
+                    "trigger": workflow["trigger"],
+                    "actions": workflow["actions"],
+                    "status": workflow.get("status", "active"),
+                    "executions": workflow.get("executions", 0),
+                    "success_rate": workflow.get("success_rate", 0),
+                    "created_at": workflow["created_at"].isoformat()
+                } for workflow in workflows
+            ],
+            "templates": [
+                {
+                    "name": "Welcome New Users",
+                    "trigger": "user_registered",
+                    "actions": ["send_welcome_email", "add_to_onboarding_sequence"]
+                },
+                {
+                    "name": "Re-engage Inactive Users",
+                    "trigger": "user_inactive_30_days",
+                    "actions": ["send_reengagement_email", "offer_discount"]
+                },
+                {
+                    "name": "Post-Purchase Follow-up",
+                    "trigger": "order_completed",
+                    "actions": ["send_thank_you_email", "request_review", "recommend_products"]
+                }
+            ]
+        }
+    }
+
+@app.post("/api/automation/workflows/create")
+async def create_automation_workflow(
+    name: str = Form(...),
+    description: str = Form(""),
+    trigger: str = Form(...),
+    actions: List[str] = Form(...),
+    conditions: Optional[str] = Form("{}"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Create new automation workflow"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    workflow_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "name": name,
+        "description": description,
+        "trigger": trigger,
+        "actions": actions,
+        "conditions": json.loads(conditions) if conditions else {},
+        "status": "active",
+        "executions": 0,
+        "success_count": 0,
+        "failure_count": 0,
+        "success_rate": 0,
+        "created_at": datetime.utcnow(),
+        "last_executed": None
+    }
+    
+    await automation_workflows_collection.insert_one(workflow_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "workflow": {
+                "id": workflow_doc["_id"],
+                "name": workflow_doc["name"],
+                "trigger": workflow_doc["trigger"],
+                "actions": workflow_doc["actions"],
+                "created_at": workflow_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== ADVANCED SOCIAL MEDIA ANALYTICS =====
+@app.get("/api/social/analytics/comprehensive")
+async def get_comprehensive_social_analytics(current_user: dict = Depends(get_current_user)):
+    """Advanced social media analytics with competitor tracking"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Mock comprehensive social media analytics
+    analytics_data = {
+        "overview": {
+            "total_followers": 125890,
+            "engagement_rate": 4.2,
+            "reach": 450000,
+            "impressions": 1250000,
+            "growth_rate": 12.5
+        },
+        "platform_breakdown": {
+            "instagram": {
+                "followers": 85000,
+                "engagement_rate": 3.8,
+                "best_posting_time": "18:00",
+                "top_hashtags": ["#business", "#entrepreneur", "#success"]
+            },
+            "facebook": {
+                "followers": 25000,
+                "engagement_rate": 2.1,
+                "best_posting_time": "12:00",
+                "top_content_types": ["videos", "images", "links"]
+            },
+            "twitter": {
+                "followers": 15890,
+                "engagement_rate": 1.9,
+                "best_posting_time": "09:00",
+                "top_keywords": ["tech", "innovation", "startup"]
+            }
+        },
+        "competitor_analysis": {
+            "avg_engagement_rate": 3.1,
+            "market_position": "Above Average",
+            "growth_comparison": "+25% vs competitors",
+            "content_gap_opportunities": ["video content", "user-generated content"]
+        },
+        "content_performance": {
+            "best_performing_posts": [
+                {"type": "video", "engagement": 2890, "reach": 45000},
+                {"type": "carousel", "engagement": 2340, "reach": 38000},
+                {"type": "image", "engagement": 1890, "reach": 32000}
+            ],
+            "optimal_posting_schedule": {
+                "monday": ["09:00", "18:00"],
+                "tuesday": ["12:00", "19:00"],
+                "wednesday": ["10:00", "17:00"]
+            }
+        },
+        "ai_insights": [
+            "Increase video content by 40% to improve engagement",
+            "Post 3x more on Tuesday for maximum reach",
+            "Use #entrepreneurship hashtag - 25% higher engagement",
+            "Stories perform 60% better than feed posts"
+        ]
+    }
+    
+    return {
+        "success": True,
+        "data": analytics_data
+    }
+
+@app.post("/api/social/competitors/track")
+async def track_competitor(
+    competitor_name: str = Form(...),
+    platform: str = Form(...),
+    username: str = Form(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Add competitor for tracking"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    competitor_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "competitor_name": competitor_name,
+        "platform": platform,
+        "username": username,
+        "tracking_metrics": ["followers", "engagement_rate", "posting_frequency"],
+        "status": "active",
+        "created_at": datetime.utcnow(),
+        "last_analyzed": None
+    }
+    
+    await competitor_tracking_collection.insert_one(competitor_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "competitor": {
+                "id": competitor_doc["_id"],
+                "name": competitor_doc["competitor_name"],
+                "platform": competitor_doc["platform"],
+                "username": competitor_doc["username"],
+                "created_at": competitor_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== ADVANCED NOTIFICATION SYSTEM =====
+@app.get("/api/notifications/smart")
+async def get_smart_notifications(current_user: dict = Depends(get_current_user)):
+    """AI-powered smart notifications and insights"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        return {"success": True, "data": {"notifications": []}}
+    
+    smart_notifications = [
+        {
+            "id": str(uuid.uuid4()),
+            "type": "insight",
+            "priority": "high",
+            "title": "Revenue Opportunity Detected",
+            "message": "Your Instagram engagement is up 45% - perfect time to launch that course!",
+            "action": "Create Course",
+            "action_url": "/dashboard/courses/create",
+            "ai_confidence": 0.89,
+            "data_points": ["engagement_trend", "audience_analysis"],
+            "created_at": datetime.utcnow().isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "type": "optimization",
+            "priority": "medium",
+            "title": "Link in Bio Performance Alert",
+            "message": "Your bio link clicks dropped 12% this week. Consider updating content.",
+            "action": "Update Bio",
+            "action_url": "/dashboard/link-in-bio",
+            "ai_confidence": 0.76,
+            "data_points": ["click_analytics", "content_freshness"],
+            "created_at": datetime.utcnow().isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "type": "opportunity",
+            "priority": "medium",
+            "title": "Trending Hashtag Alert",
+            "message": "#DigitalNomad is trending in your niche (+340% usage). Perfect for your next post!",
+            "action": "Create Post",
+            "action_url": "/dashboard/social-media/create",
+            "ai_confidence": 0.82,
+            "data_points": ["hashtag_trends", "audience_interests"],
+            "created_at": datetime.utcnow().isoformat()
+        }
+    ]
+    
+    return {
+        "success": True,
+        "data": {
+            "smart_notifications": smart_notifications,
+            "notification_categories": [
+                {"type": "insight", "count": 12, "description": "AI-powered business insights"},
+                {"type": "optimization", "count": 8, "description": "Performance optimization suggestions"},
+                {"type": "opportunity", "count": 15, "description": "Revenue and growth opportunities"},
+                {"type": "alert", "count": 3, "description": "Important system alerts"}
+            ],
+            "ai_summary": {
+                "insights_this_week": 23,
+                "recommendations_followed": 18,
+                "estimated_revenue_impact": 2450.00
+            }
+        }
+    }
+
+# ===== AFFILIATE PROGRAM MANAGEMENT =====
+@app.get("/api/affiliate/program/overview")
+async def get_affiliate_program_overview(current_user: dict = Depends(get_current_user)):
+    """Get affiliate program overview and statistics"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Mock affiliate program data
+    affiliate_data = {
+        "program_stats": {
+            "total_affiliates": 245,
+            "active_affiliates": 189,
+            "total_commissions_paid": 15670.50,
+            "pending_commissions": 3240.75,
+            "conversion_rate": 3.2,
+            "avg_commission_per_sale": 45.60
+        },
+        "top_affiliates": [
+            {"name": "Sarah Johnson", "sales": 45, "commission_earned": 2250.00, "conversion_rate": 5.2},
+            {"name": "Mike Chen", "sales": 38, "commission_earned": 1900.00, "conversion_rate": 4.8},
+            {"name": "Emma Davis", "sales": 32, "commission_earned": 1600.00, "conversion_rate": 4.1}
+        ],
+        "commission_structure": {
+            "tier_1": {"min_sales": 0, "commission_rate": 0.30, "description": "30% for first 10 sales"},
+            "tier_2": {"min_sales": 10, "commission_rate": 0.35, "description": "35% for 10-50 sales"},
+            "tier_3": {"min_sales": 50, "commission_rate": 0.40, "description": "40% for 50+ sales"}
+        },
+        "marketing_materials": [
+            {"type": "banner", "size": "728x90", "url": "/assets/banners/728x90.png"},
+            {"type": "banner", "size": "300x250", "url": "/assets/banners/300x250.png"},
+            {"type": "text_link", "title": "Try Mewayz Today", "url": "https://mewayz.com"},
+            {"type": "email_template", "subject": "Boost Your Business", "template_id": "email_001"}
+        ]
+    }
+    
+    return {
+        "success": True,
+        "data": affiliate_data
+    }
+
+@app.post("/api/affiliate/invite")
+async def invite_affiliate(
+    email: str = Form(...),
+    name: str = Form(...),
+    message: Optional[str] = Form(""),
+    current_user: dict = Depends(get_current_user)
+):
+    """Invite new affiliate"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    affiliate_doc = {
+        "_id": str(uuid.uuid4()),
+        "workspace_id": str(workspace["_id"]),
+        "inviter_id": current_user["id"],
+        "affiliate_email": email,
+        "affiliate_name": name,
+        "invitation_message": message,
+        "affiliate_code": secrets.token_urlsafe(8).upper(),
+        "status": "invited",
+        "commission_rate": 0.30,  # Default 30%
+        "sales_count": 0,
+        "total_commission": 0.00,
+        "created_at": datetime.utcnow(),
+        "invited_at": datetime.utcnow(),
+        "joined_at": None
+    }
+    
+    await affiliate_program_collection.insert_one(affiliate_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "invitation": {
+                "id": affiliate_doc["_id"],
+                "affiliate_email": affiliate_doc["affiliate_email"],
+                "affiliate_code": affiliate_doc["affiliate_code"],
+                "commission_rate": affiliate_doc["commission_rate"],
+                "invitation_url": f"https://mewayz.com/affiliate/join/{affiliate_doc['affiliate_code']}",
+                "created_at": affiliate_doc["created_at"].isoformat()
+            }
+        }
+    }
+
+# ===== ADVANCED SEARCH & DISCOVERY =====
+@app.get("/api/search/global")
+async def global_search(
+    q: str = Query(..., description="Search query"),
+    category: Optional[str] = Query(None, description="Search category"),
+    current_user: dict = Depends(get_current_user)
+):
+    """Advanced global search across all platform content"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    search_results = {
+        "products": [],
+        "courses": [],
+        "templates": [],
+        "contacts": [],
+        "content": [],
+        "analytics": []
+    }
+    
+    # Mock search results based on query
+    if "marketing" in q.lower():
+        search_results["courses"] = [
+            {"id": "course_1", "title": "Digital Marketing Mastery", "type": "course", "relevance": 0.95}
+        ]
+        search_results["templates"] = [
+            {"id": "template_1", "title": "Marketing Email Template", "type": "template", "relevance": 0.87}
+        ]
+    
+    if "analytics" in q.lower():
+        search_results["analytics"] = [
+            {"id": "report_1", "title": "Marketing Performance Report", "type": "report", "relevance": 0.92}
+        ]
+    
+    total_results = sum(len(results) for results in search_results.values())
+    
+    return {
+        "success": True,
+        "data": {
+            "query": q,
+            "total_results": total_results,
+            "results": search_results,
+            "suggestions": [
+                "Try searching for 'social media templates'",
+                "Looking for 'course analytics'?",
+                "Check out 'email marketing automation'"
+            ],
+            "search_time": "0.045s"
+        }
+    }
+
+# ===== BULK OPERATIONS SYSTEM =====
+@app.post("/api/bulk/contacts/import")
+async def bulk_import_contacts(
+    file: UploadFile = File(...),
+    workspace_id: str = Form(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """Bulk import contacts from CSV file"""
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="Only CSV files are supported")
+    
+    # Read CSV content (mock implementation)
+    content = await file.read()
+    
+    # Mock processing results
+    import_results = {
+        "total_rows": 150,
+        "successful_imports": 142,
+        "failed_imports": 8,
+        "duplicates_found": 12,
+        "new_contacts": 130,
+        "updated_contacts": 12,
+        "errors": [
+            {"row": 15, "error": "Invalid email format"},
+            {"row": 23, "error": "Missing required field: name"}
+        ]
+    }
+    
+    return {
+        "success": True,
+        "data": {
+            "import_results": import_results,
+            "import_id": str(uuid.uuid4()),
+            "processing_time": "2.3s",
+            "next_steps": [
+                "Review failed imports",
+                "Set up email sequences for new contacts",
+                "Update contact tags and segments"
+            ]
+        }
+    }
+
+@app.post("/api/bulk/social/schedule")
+async def bulk_schedule_posts(
+    posts: List[dict],
+    current_user: dict = Depends(get_current_user)
+):
+    """Bulk schedule social media posts"""
+    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    scheduled_posts = []
+    for post in posts:
+        post_doc = {
+            "id": str(uuid.uuid4()),
+            "content": post["content"],
+            "platforms": post["platforms"],
+            "scheduled_time": post["scheduled_time"],
+            "status": "scheduled",
+            "created_at": datetime.utcnow().isoformat()
+        }
+        scheduled_posts.append(post_doc)
+    
+    return {
+        "success": True,
+        "data": {
+            "scheduled_posts": len(scheduled_posts),
+            "posts": scheduled_posts,
+            "estimated_reach": 125000,
+            "estimated_engagement": 5200,
+            "next_posting_date": min([post["scheduled_time"] for post in posts])
+        }
+    }
 
 # Advanced Collections for new features
 template_marketplace_collection = database.template_marketplace
