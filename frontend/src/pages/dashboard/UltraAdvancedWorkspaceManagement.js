@@ -10,7 +10,7 @@ import {
   PencilIcon,
   TrashIcon,
   UserPlusIcon,
-  CrownIcon,
+  TrophyIcon,
   ShieldCheckIcon,
   EyeIcon,
   DocumentTextIcon,
