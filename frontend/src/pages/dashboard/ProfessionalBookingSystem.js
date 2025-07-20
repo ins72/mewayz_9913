@@ -28,7 +28,8 @@ import {
   UserGroupIcon,
   StarIcon,
   HeartIcon,
-  EyeIcon
+  EyeIcon,
+  AcademicCapIcon
 } from '@heroicons/react/24/outline';
 import {
   CalendarDaysIcon as CalendarDaysIconSolid,
