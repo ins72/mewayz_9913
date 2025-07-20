@@ -12,8 +12,15 @@ from core.auth import get_password_hash, verify_password
 
 class UserService:
     def __init__(self):
-        self.users_collection = get_users_collection()
-        self.workspaces_collection = get_workspaces_collection()
+        self.users_collection = None
+        self.workspaces_collection = None
+    
+    def _ensure_collections(self):
+        """Ensure collections are initialized"""
+        if self.users_collection is None:
+            self.users_collection = get_users_collection()
+        if self.workspaces_collection is None:
+            self.workspaces_collection = get_workspaces_collection()
 
     async def create_user(self, email: str, password: str, name: str) -> Dict[str, Any]:
         """Create a new user with real database operations"""
