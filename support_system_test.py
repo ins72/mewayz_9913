@@ -149,25 +149,27 @@ class SupportSystemTester:
         """Test Agent Management"""
         print(f"\n👥 TESTING AGENT MANAGEMENT")
         
-        # Create support agent
+        # Create support agent - using Form data format as expected by API
         agent_data = {
             "name": "Test Support Agent",
             "email": "agent@mewayz.com",
-            "department": "customer_support",
-            "skills": ["technical_support", "billing", "general_inquiry"],
-            "languages": ["en", "es", "fr"],
-            "availability": {
-                "timezone": "UTC",
-                "working_hours": {
-                    "start": "09:00",
-                    "end": "17:00"
-                },
-                "days": ["monday", "tuesday", "wednesday", "thursday", "friday"]
-            }
+            "role": "senior_support",
+            "specialties": ["technical_support", "billing"],
+            "languages": ["en", "es"],
+            "timezone": "UTC"
         }
         
-        self.test_endpoint("/support/agents/create", "POST", data=agent_data,
-                         description="Create support agent with skills and availability")
+        success, response = self.test_endpoint_form("/support/agents/create", "POST", data=agent_data,
+                                                   description="Create support agent with skills and availability")
+        
+        # Store agent_id if successful
+        if success and response:
+            try:
+                response_data = response.json()
+                if 'data' in response_data and 'agent_id' in response_data['data']:
+                    self.agent_id = response_data['data']['agent_id']
+            except:
+                pass
 
     def test_live_chat_system(self):
         """Test Live Chat System"""
