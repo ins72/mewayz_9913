@@ -293,7 +293,7 @@ async def discover_influencers(
     
     for i in range(await service.get_metric()):
         influencer_niche = niche if niche else await self._get_real_status_from_db(niches)
-        followers = random.randint(min_followers or 1000, max_followers or 1000000)
+        followers = await self._get_real_metric_from_db('followers_count', min_followers or 1000, max_followers or 1000000, user_id)
         
         influencer = {
             "id": str(uuid.uuid4()),
