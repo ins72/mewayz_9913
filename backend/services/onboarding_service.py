@@ -93,6 +93,10 @@ class OnboardingService:
     async def save_progress(self, user_id: str, progress_data: dict):
         """Save user's onboarding progress"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         try:
             db = await self.get_database()
             
