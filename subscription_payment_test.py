@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://823980b2-6530-44a0-a2ff-62a33dba5d8d.preview.emergentagent.com"
+BACKEND_URL = "https://7cfbae80-c985-4454-b805-9babb474ff5c.preview.emergentagent.com"
 ADMIN_EMAIL = "tmonnens@outlook.com"
 ADMIN_PASSWORD = "Voetballen5"
 
