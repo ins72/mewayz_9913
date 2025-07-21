@@ -186,7 +186,7 @@ async def get_link_shortener_dashboard(current_user: dict = Depends(get_current_
                     "short_code": link["short_code"],
                     "short_url": f"https://mwz.to/{link['short_code']}",
                     "original_url": link["original_url"],
-                    "clicks": link["total_clicks"],
+                    "clicks": link.get("total_clicks", 0),
                     "created_at": link["created_at"]
                 } for link in top_links
             ],
