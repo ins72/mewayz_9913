@@ -358,7 +358,7 @@ Click below to secure your spot and join the thousands who are already seeing in
                     "model": "dall-e-3",
                     "cost": 0.04,
                     "quality_score": image_data["quality_score"],
-                    "processing_time": f"{round(await self._get_enhanced_metric_from_db("float", 15.5, 45.8), 1)}s"
+                    "processing_time": f"{round(await self._get_enhanced_metric_from_db('float', 15.5, 45.8), 1)}s"
                 }
             }
         }
