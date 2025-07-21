@@ -108,7 +108,8 @@ async def delete_survey(
 ):
     """Delete a survey"""
     try:
-        result = await SurveyService.delete_survey(survey_id, current_user["id"])
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        result = await SurveyService.delete_survey(survey_id, user_id)
         return {"success": True, "message": "Survey deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
