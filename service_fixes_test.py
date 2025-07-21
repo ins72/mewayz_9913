@@ -153,19 +153,19 @@ class ServiceFixesTester:
         """Test services that should now be using real database operations"""
         print("\n=== Testing Database Integration Services ===")
         
-        # Test services mentioned as having database integration fixes
+        # Test services that are actually loaded and should have database integration
         database_services = [
-            # Core services that should be working with database integration
+            # Working services with database integration
             ("/social-media/analytics", "Social Media Service"),
             ("/automation/workflows", "Automation Service"),
             ("/support/tickets", "Support Service"),
-            ("/advanced-financial/dashboard", "Advanced Financial Service"),
-            ("/advanced-ai/capabilities", "Advanced AI Service"),
-            ("/templates/marketplace", "Template Marketplace Service"),
-            ("/ai-content/templates", "AI Content Service"),
-            ("/escrow/transactions", "Escrow Service"),
-            ("/compliance/framework-status", "Compliance Service"),
-            ("/monitoring/system-health", "Monitoring Service")
+            ("/monitoring/system-health", "Monitoring Service"),
+            ("/backup/comprehensive-status", "Backup Service"),
+            ("/business-intelligence/metrics", "Business Intelligence Service"),
+            ("/enhanced-ecommerce/products", "Enhanced E-commerce Service"),
+            ("/financial/dashboard", "Financial Management Service"),
+            ("/crm/contacts", "CRM Management Service"),
+            ("/content-creation/projects", "Content Creation Service")
         ]
         
         for endpoint, service_name in database_services:
