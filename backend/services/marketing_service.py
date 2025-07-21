@@ -78,3 +78,6 @@ class MarketingService:
     }
         
         return analytics
+
+# Global service instance
+marketing_service = MarketingService()

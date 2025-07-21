@@ -78,3 +78,6 @@ class TeamService:
         
         result = await db.team_projects.insert_one(project)
         return project
+
+# Global service instance
+team_service = TeamService()

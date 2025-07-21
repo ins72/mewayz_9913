@@ -5,7 +5,6 @@ Business logic for comprehensive AI services including video processing, voice A
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -796,7 +795,6 @@ class AdvancedAIService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)

@@ -192,3 +192,6 @@ class AdvancedAISuiteService:
         }
         
         return analytics
+
+# Global service instance
+advanced_ai_suite_service = AdvancedAISuiteService()

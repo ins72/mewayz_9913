@@ -59,3 +59,6 @@ class AdminService:
     "total_count": len(users),
     "filters": ["active", "inactive", "premium", "free"]
     }
+
+# Global service instance
+admin_service = AdminService()

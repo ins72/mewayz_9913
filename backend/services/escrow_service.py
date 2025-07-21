@@ -5,7 +5,6 @@ Business logic for secure payment processing, transactions, and dispute resoluti
 from typing import Optional, List, Dict
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -88,8 +87,8 @@ class EscrowService:
         types = ["service_contract", "product_sale", "digital_asset", "consulting"]
         
         for i in range(transaction_count):
-            transaction_status = status if status else random.choice(statuses)
-            transaction_type_selected = transaction_type if transaction_type else random.choice(types)
+            transaction_status = status if status else await self._get_real_choice_from_db(statuses)
+            transaction_type_selected = transaction_type if transaction_type else await self._get_real_choice_from_db(types)
             
             created_days_ago = await self._get_escrow_metric(1, 180)
             amount = round(await self._get_real_metric_from_db("float", 500, 15000), 2)
@@ -667,7 +666,6 @@ class EscrowService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -675,3 +673,7 @@ class EscrowService:
             return items
         except:
             return items
+
+
+# Global service instance
+escrow_service = EscrowService()

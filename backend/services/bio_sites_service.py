@@ -54,3 +54,6 @@ class BioSitesService:
         )
         
         return await db.bio_sites.find_one({"user_id": user_id})
+
+# Global service instance
+bio_sites_service = BioSitesService()

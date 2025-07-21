@@ -88,3 +88,6 @@ class FormBuilderService:
         )
         
         return submission
+
+# Global service instance
+form_builder_service = FormBuilderService()

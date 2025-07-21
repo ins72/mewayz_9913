@@ -189,3 +189,6 @@ class MediaLibraryService:
         }
         
         return stats
+
+# Global service instance
+media_library_service = MediaLibraryService()

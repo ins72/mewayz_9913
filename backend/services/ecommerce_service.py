@@ -47,3 +47,6 @@ class EcommerceService:
         
         orders = await db.orders.find({"seller_id": user_id}).sort("created_at", -1).to_list(length=None)
         return orders
+
+# Global service instance
+ecommerce_service = EcommerceService()

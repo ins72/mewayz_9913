@@ -80,3 +80,6 @@ class WebsiteBuilderService:
     }
     ]
         return templates
+
+# Global service instance
+website_builder_service = WebsiteBuilderService()

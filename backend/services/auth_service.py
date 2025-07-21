@@ -72,3 +72,6 @@ class AuthService:
             {"_id": user_id},
             {"$set": {"last_login": datetime.utcnow()}}
         )
+
+# Global service instance
+auth_service = AuthService()

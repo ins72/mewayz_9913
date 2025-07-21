@@ -138,3 +138,6 @@ class UsersService:
         
         result = await db.user_activities.insert_one(activity)
         return activity
+
+# Global service instance
+users_service = UsersService()

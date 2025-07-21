@@ -72,3 +72,6 @@ class AIService:
         }).sort("created_at", -1).limit(50).to_list(length=None)
         
         return conversations
+
+# Global service instance
+ai_service = AIService()

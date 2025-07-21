@@ -91,3 +91,6 @@ class GoogleOAuthService:
         })
         
         return result.deleted_count > 0
+
+# Global service instance
+google_oauth_service = GoogleOAuthService()

@@ -110,3 +110,7 @@ class BusinessIntelligenceService:
             return result[0]["avg"] if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
+
+
+# Global service instance
+business_intelligence_service = BusinessIntelligenceService()

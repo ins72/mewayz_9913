@@ -519,3 +519,6 @@ class SurveyService:
                 {"name": "product", "count": 1}
             ]
         }
+
+# Global service instance
+survey_service = SurveyService()

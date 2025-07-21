@@ -72,3 +72,6 @@ class CRMService:
         
         result = await db.crm_deals.insert_one(deal)
         return deal
+
+# Global service instance
+crm_service = CRMService()

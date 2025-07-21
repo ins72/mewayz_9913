@@ -448,3 +448,7 @@ class MonitoringService:
             return result[0]["avg"] / 100.0 if result else (min_val + max_val) / 2
         except:
             return (min_val + max_val) / 2
+
+
+# Global service instance
+monitoring_service = MonitoringService()

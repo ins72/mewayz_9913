@@ -523,3 +523,7 @@ class OnboardingService:
             return items
         except:
             return items
+
+
+# Global service instance
+onboarding_service = OnboardingService()

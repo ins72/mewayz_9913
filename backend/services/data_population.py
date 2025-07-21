@@ -517,3 +517,6 @@ class DataPopulationService:
 
 # Global data population service instance
 data_population_service = DataPopulationService(None, None)
+
+# Global service instance
+data_population_service = DataPopulationService()

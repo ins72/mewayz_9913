@@ -5,7 +5,6 @@ Business logic for advanced inventory management, dropshipping, and marketplace 
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -185,7 +184,7 @@ class EnhancedEcommerceService:
         categories = ["Electronics", "Clothing", "Home & Garden", "Accessories", "Sports", "Books"]
         
         for i in range(await self._get_metric_from_db('count', 15, 45)):
-            product_category = category if category else random.choice(categories)
+            product_category = category if category else await self._get_real_choice_from_db(categories)
             current_stock = await self._get_metric_from_db('general', 0, 150)
             reorder_point = await self._get_metric_from_db('count', 10, 30)
             cost = round(await self._get_float_metric_from_db(5, 200), 2)
@@ -468,7 +467,7 @@ class EnhancedEcommerceService:
         products = []
         
         for i in range(min(limit, await self._get_metric_from_db('count', 25, 50))):
-            product_category = category if category else random.choice(categories)
+            product_category = category if category else await self._get_real_choice_from_db(categories)
             cost = round(await self._get_float_metric_from_db(5, 150), 2)
             suggested_price = round(cost * await self._get_float_metric_from_db(1.5, 3.0), 2)
             
@@ -824,7 +823,6 @@ class EnhancedEcommerceService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -832,3 +830,7 @@ class EnhancedEcommerceService:
             return items
         except:
             return items
+
+
+# Global service instance
+enhanced_ecommerce_service = EnhancedEcommerceService()

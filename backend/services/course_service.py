@@ -77,3 +77,6 @@ class CourseService:
             await db.course_progress.insert_one(progress)
         
         return progress
+
+# Global service instance
+course_service = CourseService()

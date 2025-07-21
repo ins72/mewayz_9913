@@ -234,3 +234,6 @@ class IntegrationsService:
         
         logs = await db.integration_sync_logs.find(query).sort("started_at", -1).limit(50).to_list(length=None)
         return logs
+
+# Global service instance
+integrations_service = IntegrationsService()

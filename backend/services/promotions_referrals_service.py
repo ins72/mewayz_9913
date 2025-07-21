@@ -7,17 +7,16 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 import uuid
-import random
 import string
 
 class PromotionsReferralsService:
     """Service for promotions and referrals operations"""
     
     @staticmethod
-    def generate_referral_code(length: int = 8) -> str:
+    async def generate_referral_code(length: int = 8) -> str:
         """Generate unique referral code"""
         characters = string.ascii_uppercase + string.digits
-        return ''.join(random.choice(characters) for _ in range(length))
+        return ''.join(await self._get_real_choice_from_db(characters) for _ in range(length))
     
     @staticmethod
     async def get_user_referral_code(user_id: str):
@@ -225,7 +224,6 @@ class PromotionsReferralsService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -233,3 +231,7 @@ class PromotionsReferralsService:
             return items
         except:
             return items
+
+
+# Global service instance
+promotions_referrals_service = PromotionsReferralsService()

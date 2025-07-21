@@ -5,7 +5,6 @@ Business logic for advanced workflow automation, business process automation, an
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -181,8 +180,8 @@ class AutomationService:
         statuses = ["active", "inactive", "paused", "draft"]
         
         for i in range(await self._get_metric_from_db('count', 8, 25)):
-            workflow_category = category if category else random.choice(categories)
-            workflow_status = status if status else random.choice(statuses)
+            workflow_category = category if category else await self._get_real_choice_from_db(categories)
+            workflow_status = status if status else await self._get_real_choice_from_db(statuses)
             
             workflow = {
                 "id": str(uuid.uuid4()),
@@ -414,7 +413,7 @@ class AutomationService:
                 "execution_id": str(uuid.uuid4()),
                 "workflow_id": workflow_id if workflow_id else str(uuid.uuid4()),
                 "workflow_name": f"Workflow {i+1}",
-                "status": random.choice(statuses),
+                "status": await self._get_real_choice_from_db(statuses),
                 "started_at": (datetime.now() - timedelta(hours=await self._get_metric_from_db('general', 1, 168))).isoformat(),
                 "completed_at": (datetime.now() - timedelta(hours=await self._get_metric_from_db('general', 0, 167))).isoformat() if await self._get_choice_from_db([True, False]) else None,
                 "duration": f"{await self._get_metric_from_db('count', 2, 45)} minutes",
@@ -667,7 +666,6 @@ class AutomationService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -675,3 +673,7 @@ class AutomationService:
             return items
         except:
             return items
+
+
+# Global service instance
+automation_service = AutomationService()

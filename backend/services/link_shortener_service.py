@@ -8,17 +8,16 @@ from typing import Dict, Any, List, Optional
 from core.database import get_database
 import uuid
 import hashlib
-import random
 import string
 
 class LinkShortenerService:
     """Service for link shortening operations"""
     
     @staticmethod
-    def generate_short_code(length: int = 6) -> str:
+    async def generate_short_code(length: int = 6) -> str:
         """Generate random short code"""
         characters = string.ascii_letters + string.digits
-        return ''.join(random.choice(characters) for _ in range(length))
+        return ''.join(await self._get_real_choice_from_db(characters) for _ in range(length))
     
     @staticmethod
     async def create_short_link(user_id: str, url: str, custom_code: str = None):
@@ -176,7 +175,6 @@ class LinkShortenerService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -184,3 +182,7 @@ class LinkShortenerService:
             return items
         except:
             return items
+
+
+# Global service instance
+link_shortener_service = LinkShortenerService()

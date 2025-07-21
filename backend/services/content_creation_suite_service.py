@@ -293,3 +293,7 @@ class ContentCreationSuiteService:
             return choices[0]
         except:
             return choices[0]
+
+
+# Global service instance
+content_creation_suite_service = ContentCreationSuiteService()

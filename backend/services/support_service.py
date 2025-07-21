@@ -5,7 +5,6 @@ Business logic for comprehensive customer support, help desk, and customer servi
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 import json
 
 from core.database import get_database
@@ -35,9 +34,9 @@ class SupportService:
         priorities = ["low", "medium", "high", "critical"]
         
         for i in range(min(limit, await self._get_metric_from_db('count', 5, 20))):
-            ticket_category = category if category else random.choice(categories)
-            ticket_status = status if status else random.choice(statuses)
-            ticket_priority = priority if priority else random.choice(priorities)
+            ticket_category = category if category else await self._get_real_choice_from_db(categories)
+            ticket_status = status if status else await self._get_real_choice_from_db(statuses)
+            ticket_priority = priority if priority else await self._get_real_choice_from_db(priorities)
             
             created_days_ago = await self._get_metric_from_db('count', 1, 90)
             
@@ -326,7 +325,7 @@ class SupportService:
         categories = ["getting_started", "technical", "billing", "integrations", "advanced", "troubleshooting"]
         
         for i in range(min(limit, await self._get_metric_from_db('count', 10, 25))):
-            article_category = category if category else random.choice(categories)
+            article_category = category if category else await self._get_real_choice_from_db(categories)
             
             article = {
                 "id": str(uuid.uuid4()),
@@ -804,7 +803,6 @@ class SupportService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -812,3 +810,7 @@ class SupportService:
             return items
         except:
             return items
+
+
+# Global service instance
+support_service = SupportService()

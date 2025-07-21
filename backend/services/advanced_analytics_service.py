@@ -531,3 +531,7 @@ class AdvancedAnalyticsService:
             return max(min_val, min(count, max_val))
         except:
             return min_val
+
+
+# Global service instance
+advanced_analytics_service = AdvancedAnalyticsService()

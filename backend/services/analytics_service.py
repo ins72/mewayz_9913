@@ -304,3 +304,6 @@ class AnalyticsService:
 # Create service instance function (dependency injection)
 def get_analytics_service() -> AnalyticsService:
     return AnalyticsService()
+
+# Global service instance
+analytics_service = AnalyticsService()

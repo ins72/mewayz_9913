@@ -71,3 +71,6 @@ class FinancialService:
         }).sort("date", -1).limit(limit).to_list(length=None)
         
         return transactions
+
+# Global service instance
+financial_service = FinancialService()

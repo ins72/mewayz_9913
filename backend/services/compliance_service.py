@@ -6,7 +6,6 @@ Enterprise-grade compliance management and audit operations
 from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 import uuid
-import random
 
 from core.database import get_database
 
@@ -282,7 +281,7 @@ class ComplianceService:
             log_entry = {
                 "id": str(uuid.uuid4()),
                 "timestamp": log_time.isoformat(),
-                "event_type": random.choice(event_types),
+                "event_type": await self._get_real_choice_from_db(event_types),
                 "severity": await self._get_compliance_status(["info", "warning", "error", "critical"]),
                 "user_id": f"user_{await self._get_compliance_score(1000, 9999)}",
                 "ip_address": f"192.168.{await self._get_compliance_score(1, 254)}.{await self._get_compliance_score(1, 254)}",
@@ -494,7 +493,7 @@ class ComplianceService:
                     "Market volatility", "Technology obsolescence", "Legal disputes",
                     "Natural disaster", "Supply chain disruption", "Currency fluctuation"
                 ]),
-                "category": random.choice(risk_categories),
+                "category": await self._get_real_choice_from_db(risk_categories),
                 "probability": await self._get_compliance_status(["Very Low", "Low", "Medium", "High"]),
                 "impact": await self._get_compliance_status(["Low", "Medium", "High", "Critical"]),
                 "risk_score": await self._get_compliance_score(1, 16),
@@ -650,7 +649,6 @@ class ComplianceService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -658,3 +656,7 @@ class ComplianceService:
             return items
         except:
             return items
+
+
+# Global service instance
+compliance_service = ComplianceService()

@@ -738,3 +738,6 @@ class NotificationService:
             "preferences": preferences_data,
             "updated_at": datetime.utcnow().isoformat()
         }
+
+# Global service instance
+notification_service = NotificationService()

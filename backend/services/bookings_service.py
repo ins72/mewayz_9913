@@ -176,3 +176,6 @@ class BookingsService:
         )
         
         return result.modified_count > 0
+
+# Global service instance
+bookings_service = BookingsService()

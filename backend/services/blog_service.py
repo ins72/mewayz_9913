@@ -93,3 +93,6 @@ class BlogService:
         
         categories = await db.blog_posts.aggregate(pipeline).to_list(length=None)
         return [{"name": cat["_id"], "count": cat["count"]} for cat in categories]
+
+# Global service instance
+blog_service = BlogService()

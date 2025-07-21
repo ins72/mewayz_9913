@@ -804,3 +804,6 @@ class RateLimitingService:
             ]
         else:
             return ["You're on our highest tier!"]
+
+# Global service instance
+rate_limiting_service = RateLimitingService()

@@ -117,3 +117,6 @@ class AITokenService:
         }).sort("created_at", -1).to_list(length=None)
         
         return transactions
+
+# Global service instance
+ai_token_service = AITokenService()

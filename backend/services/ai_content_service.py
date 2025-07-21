@@ -5,7 +5,6 @@ Business logic for AI-powered content creation, conversations, and optimization
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -507,7 +506,7 @@ Click below to secure your spot and join the thousands who are already seeing in
             "Excellent insight! Building on that idea..."
         ]
         
-        ai_response = random.choice(ai_responses) + f"\n\nRegarding your question about '{content[:50]}...', here are some key considerations that will help you move forward effectively."
+        ai_response = await self._get_real_choice_from_db(ai_responses) + f"\n\nRegarding your question about '{content[:50]}...', here are some key considerations that will help you move forward effectively."
         
         user_message = {
             "id": user_message_id,
@@ -794,7 +793,6 @@ Click below to secure your spot and join the thousands who are already seeing in
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)

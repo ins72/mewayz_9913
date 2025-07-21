@@ -5,7 +5,6 @@ Business logic for template marketplace, creation, monetization, and analytics
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -97,7 +96,7 @@ class TemplateMarketplaceService:
         ]
         
         for i in range(template_count):
-            template_category = category if category else random.choice(categories)
+            template_category = category if category else await self._get_real_choice_from_db(categories)
             is_premium = await self._get_template_category([True, False])
             
             price = 0
@@ -126,7 +125,7 @@ class TemplateMarketplaceService:
                 "category": template_category,
                 "price": price,
                 "is_premium": is_premium,
-                "creator": random.choice(creators),
+                "creator": await self._get_real_choice_from_db(creators),
                 "creator_id": str(uuid.uuid4()),
                 "creator_verified": await self._get_template_category([True, False]),
                 "downloads": downloads,
@@ -718,7 +717,6 @@ class TemplateMarketplaceService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -726,3 +724,7 @@ class TemplateMarketplaceService:
             return items
         except:
             return items
+
+
+# Global service instance
+template_marketplace_service = TemplateMarketplaceService()

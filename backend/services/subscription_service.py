@@ -145,3 +145,6 @@ class SubscriptionService:
             "limit": limit,
             "current": current_count
         }
+
+# Global service instance
+subscription_service = SubscriptionService()

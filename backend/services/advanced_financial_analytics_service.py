@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 import uuid
-import random
 
 
     async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
@@ -373,7 +372,6 @@ class AdvancedFinancialAnalyticsService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -381,3 +379,7 @@ class AdvancedFinancialAnalyticsService:
             return items
         except:
             return items
+
+
+# Global service instance
+advanced_financial_analytics_service = AdvancedFinancialAnalyticsService()

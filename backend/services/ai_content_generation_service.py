@@ -225,3 +225,6 @@ This generated content meets your specified requirements and can be further cust
         }
         
         return analytics
+
+# Global service instance
+ai_content_generation_service = AIContentGenerationService()

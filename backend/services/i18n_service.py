@@ -788,3 +788,6 @@ class I18nService:
             "DKK": "kr", "RUB": "₽", "KRW": "₩", "MXN": "$"
         }
         return currency_symbols.get(currency_code, currency_code)
+
+# Global service instance
+i18n_service = I18nService()

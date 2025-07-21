@@ -6,7 +6,6 @@ Enterprise-grade backup management and disaster recovery operations
 from datetime import datetime, timedelta
 from typing import Dict, Any, List, Optional
 import uuid
-import random
 import asyncio
 
 from core.database import get_database
@@ -540,3 +539,7 @@ class BackupService:
             return result[0]["_id"] if result and result[0]["_id"] in choices else choices[0]
         except:
             return choices[0]
+
+
+# Global service instance
+backup_service = BackupService()

@@ -97,3 +97,6 @@ class DashboardService:
         })
         
         return overview
+
+# Global service instance
+dashboard_service = DashboardService()

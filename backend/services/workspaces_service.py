@@ -179,3 +179,6 @@ class WorkspacesService:
     }
         
         return analytics
+
+# Global service instance
+workspaces_service = WorkspacesService()

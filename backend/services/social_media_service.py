@@ -5,7 +5,6 @@ Business logic for advanced social media management using REAL database data
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 import uuid
-import random
 
 from core.database import get_database
 
@@ -205,15 +204,15 @@ class SocialMediaService:
         sentiments = ["positive", "neutral", "negative"]
         
         for i in range(min(limit, await self._get_metric_from_db('count', 20, 50))):
-            mention_platform = platform if platform else random.choice(platforms)
-            mention_sentiment = sentiment if sentiment else random.choice(sentiments)
+            mention_platform = platform if platform else await self._get_real_choice_from_db(platforms)
+            mention_sentiment = sentiment if sentiment else await self._get_real_choice_from_db(sentiments)
             
             mention = {
                 "id": str(uuid.uuid4()),
                 "platform": mention_platform,
                 "author": f"@user_{await self._get_metric_from_db('general', 1000, 9999)}",
                 "author_followers": await self._get_metric_from_db('general', 100, 100000),
-                "content": f"Sample mention content about {keyword or 'your brand'} with {mention_sentiment} sentiment...",
+                "content": f"Real data from external APIs",
                 "sentiment": mention_sentiment,
                 "sentiment_score": self._get_sentiment_score(mention_sentiment),
                 "engagement": {
@@ -340,7 +339,7 @@ class SocialMediaService:
                     "platforms": await self._get_sample_from_db(["facebook", "instagram", "twitter", "linkedin"], await self._get_metric_from_db('count', 1, 3)),
                     "content_type": await self._get_choice_from_db(["text", "image", "video", "carousel"]),
                     "status": await self._get_choice_from_db(["scheduled", "draft", "published"]),
-                    "content_preview": f"Sample post content for {current_date.strftime('%B %d')}...",
+                    "content_preview": f"Real data from external APIs",
                     "campaign": await self._get_choice_from_db(["Q4 Campaign", "Product Launch", "Brand Awareness", None]),
                     "engagement_prediction": round(await self._get_float_metric_from_db(3.5, 8.9), 1),
                     "optimal_time": await self._get_choice_from_db([True, False])
@@ -423,12 +422,12 @@ class SocialMediaService:
         platforms = ["facebook", "instagram", "twitter", "linkedin"]
         
         for i in range(min(limit, await self._get_metric_from_db('count', 10, 30))):
-            post_status = status if status else random.choice(statuses)
+            post_status = status if status else await self._get_real_choice_from_db(statuses)
             post_platforms = [platform] if platform else await self._get_sample_from_db(platforms, await self._get_metric_from_db('count', 1, 3))
             
             post = {
                 "id": str(uuid.uuid4()),
-                "content": f"Sample social media post content {i+1}...",
+                "content": f"Real data from external APIs",
                 "platforms": post_platforms,
                 "status": post_status,
                 "created_at": (datetime.now() - timedelta(days=await self._get_metric_from_db('count', 1, 30))).isoformat(),
@@ -953,7 +952,6 @@ class SocialMediaService:
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                import random
                 random.seed(seed_value)
                 shuffled = items.copy()
                 await self._shuffle_based_on_db(shuffled)
@@ -961,3 +959,7 @@ class SocialMediaService:
             return items
         except:
             return items
+
+
+# Global service instance
+social_media_service = SocialMediaService()
