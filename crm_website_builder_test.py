@@ -161,11 +161,11 @@ class CRMWebsiteBuilderTester:
         self.test_endpoint("/crm/contacts", "POST", data=contact_data, expected_status=200, 
                           description="Customer contact creation")
         
-        # Test missing endpoints (should return 404)
+        # Test missing endpoints (should return 404 or 405)
         self.test_endpoint("/crm/pipelines", "GET", expected_status=404, 
                           description="Sales pipelines (not implemented)")
-        self.test_endpoint("/crm/activities", "GET", expected_status=404, 
-                          description="Customer activities log (not implemented)")
+        self.test_endpoint("/crm/activities", "GET", expected_status=405, 
+                          description="Customer activities log (GET not implemented, only POST exists)")
         self.test_endpoint("/crm/reports", "GET", expected_status=404, 
                           description="CRM analytics reports (not implemented)")
 
