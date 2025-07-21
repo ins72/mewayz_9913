@@ -241,7 +241,7 @@ async def delete_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Delete template"""
-    return await marketplace_service.delete_template(current_user["id"], template_id)
+    return await marketplace_service.delete_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id)
 
 @router.post("/{template_id}/purchase")
 async def purchase_template(
