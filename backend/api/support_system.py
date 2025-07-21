@@ -48,7 +48,7 @@ async def get_support_tickets(
 ):
     """Get user's support tickets with filtering"""
     return await support_service.get_user_tickets(
-        current_user["id"], status, category, priority, limit
+        current_user.get("_id") or current_user.get("id", "default-user"), status, category, priority, limit
     )
 
 @router.post("/tickets/create")
