@@ -10,7 +10,7 @@ import uuid
 
 
 class AdvancedFinancialAnalyticsService:
-        """Get metric from database instead of random generation"""
+    """Service for advanced financial analytics operations"""
         try:
             db = await self.get_database()
             
