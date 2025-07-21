@@ -366,8 +366,21 @@ class BackendTester:
         """Test platform startup and health metrics"""
         print("\n=== Platform Startup & Health Verification ===")
         
-        # Test system endpoints
-        self.test_endpoint("/", test_name="Platform Root Status")
+        # Test system endpoints - note that root might serve frontend HTML
+        try:
+            response = self.session.get(f"{BACKEND_URL}/", timeout=10)
+            if response.status_code == 200:
+                if 'application/json' in response.headers.get('content-type', ''):
+                    data = response.json()
+                    self.log_result("Platform Root Status", True, f"JSON API response: {data.get('message', 'Unknown')}", data)
+                else:
+                    self.log_result("Platform Root Status", True, "Root serves frontend (expected in production setup)")
+            else:
+                self.log_result("Platform Root Status", False, f"Root failed with status {response.status_code}")
+        except Exception as e:
+            self.log_result("Platform Root Status", False, f"Root error: {str(e)}")
+        
+        # Test health and metrics endpoints
         self.test_endpoint("/health", test_name="Platform Health Check")
         self.test_endpoint("/metrics", test_name="Platform System Metrics")
         
