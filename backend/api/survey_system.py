@@ -66,7 +66,7 @@ async def get_survey(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.put("/surveys/{survey_id}")
+@router.put("/{survey_id}")
 async def update_survey(
     survey_id: str,
     title: str = Form(None),
