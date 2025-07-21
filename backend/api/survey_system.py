@@ -24,7 +24,7 @@ async def get_surveys(current_user: dict = Depends(get_current_user)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/surveys")
+@router.post("")
 async def create_survey(
     title: str = Form(...),
     description: str = Form(""),
