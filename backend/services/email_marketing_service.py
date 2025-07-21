@@ -808,6 +808,16 @@ class EmailMarketingService:
             if result and result[0]["_id"] in [str(c).lower() for c in choices]:
                 return result[0]["_id"]
             return choices[0] if choices else "unknown"
+    
+    async def _get_sample_from_db(self, choices: list, k: int):
+        """Get sample of choices based on real data patterns"""
+        try:
+            from services.data_population import data_population_service
+            return await data_population_service.get_sample_from_db(choices, k)
+        except Exception:
+            # Fallback to selecting first k items
+            import random
+            return random.sample(choices, min(k, len(choices)))
 
 # Global service instance
 email_marketing_service = EmailMarketingService()
