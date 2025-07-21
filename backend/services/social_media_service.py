@@ -559,7 +559,7 @@ class SocialMediaService:
                 "name": campaign_data["name"],
                 "status": "draft",
                 "platforms": campaign_data["platforms"],
-                "duration": (datetime.fromisoformat(campaign_data["end_date"].replace('Z', '+00:00')) - datetime.fromisoformat(campaign_data["start_date"].replace('Z', '+00:00'))).days,
+                "duration": self._calculate_campaign_duration(campaign_data.get("start_date"), campaign_data.get("end_date")),
                 "budget": campaign_data.get("budget", 0),
                 "estimated_reach": random.randint(15000, 150000),
                 "estimated_engagement": round(random.uniform(4.2, 8.9), 1),
