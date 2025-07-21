@@ -97,7 +97,7 @@ async def upload_video_for_processing(
 ):
     """Upload video for AI processing"""
     return await ai_service.upload_video_for_processing(
-        current_user["id"], file, service_type, processing_options
+        current_user.get("_id") or current_user.get("id", "default-user"), file, service_type, processing_options
     )
 
 @router.post("/video/analyze")
