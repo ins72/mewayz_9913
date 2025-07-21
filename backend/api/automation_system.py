@@ -245,7 +245,7 @@ async def install_workflow_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Install and customize workflow template"""
-    return await automation_service.install_template(current_user["id"], template_id, customization)
+    return await automation_service.install_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, customization)
 
 @router.get("/executions/history")
 async def get_execution_history(
