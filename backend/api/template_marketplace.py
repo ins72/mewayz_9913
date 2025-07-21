@@ -62,7 +62,7 @@ async def get_template_marketplace(
         search=search,
         limit=limit, 
         offset=offset,
-        user_id=current_user["id"]
+        user_id=current_user.get("_id") or current_user.get("id", "default-user")
     )
 
 @router.get("/marketplace/featured")
