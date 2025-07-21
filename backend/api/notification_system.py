@@ -252,3 +252,24 @@ async def update_notification_preferences(
         raise HTTPException(status_code=400, detail="Invalid JSON in categories")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/{notification_id}")
+async def get_notification_details(
+    notification_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get notification details"""
+    try:
+        notification = await NotificationService.get_notification_details(
+            notification_id=notification_id,
+            user_id=current_user.get("_id") or current_user.get("id", "default-user")
+        )
+        
+        if not notification:
+            raise HTTPException(status_code=404, detail="Notification not found")
+            
+        return {"success": True, "data": notification}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
