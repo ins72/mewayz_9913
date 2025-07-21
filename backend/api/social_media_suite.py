@@ -11,6 +11,7 @@ import random
 
 from core.auth import get_current_user
 from services.social_media_service import SocialMediaService
+from core.advanced_data_service import advanced_data_service
 
 router = APIRouter()
 
