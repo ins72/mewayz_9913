@@ -106,7 +106,7 @@ async def analyze_video(
     current_user: dict = Depends(get_current_user)
 ):
     """Analyze video content with AI"""
-    return await ai_service.analyze_video(current_user["id"], analysis_request.dict())
+    return await ai_service.analyze_video(current_user.get("_id") or current_user.get("id", "default-user"), analysis_request.dict())
 
 @router.get("/voice/services")
 async def get_voice_ai_services(current_user: dict = Depends(get_current_user)):
