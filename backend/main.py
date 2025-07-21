@@ -126,6 +126,9 @@ app.include_router(content_creation_suite.router, prefix="/api/content-creation"
 app.include_router(customer_experience_suite.router, prefix="/api/customer-experience", tags=["Customer Experience Suite"])
 app.include_router(social_media_suite.router, prefix="/api/social-media", tags=["Social Media Suite"])
 
+# TWELFTH WAVE - SURVEY & FEEDBACK SYSTEM - Newly Implemented
+app.include_router(survey_system.router, prefix="/api/surveys", tags=["Survey & Feedback System"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
