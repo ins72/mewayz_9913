@@ -471,3 +471,5 @@ class AdvancedAIService:
                 "status_check_url": f"/api/advanced-ai/batch/{batch_id}/status"
             }
         }
+# Global service instance
+advanced_ai_service = AdvancedAiService()

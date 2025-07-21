@@ -67,3 +67,5 @@ class BookingService:
                 available_slots.append(slot_time.isoformat())
         
         return {"date": date, "available_slots": available_slots}
+# Global service instance
+booking_service = BookingService()

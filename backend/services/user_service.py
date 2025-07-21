@@ -238,3 +238,5 @@ class UserService:
 # Create service instance function (dependency injection)
 def get_user_service() -> UserService:
     return UserService()
+# Global service instance
+user_service = UserService()

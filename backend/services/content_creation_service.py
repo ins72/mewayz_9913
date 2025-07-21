@@ -493,3 +493,5 @@ class ContentCreationService:
             "viewer": ["view"]
         }
         return permissions.get(role, ["view"])
+# Global service instance
+content_creation_service = ContentCreationService()

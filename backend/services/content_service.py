@@ -397,3 +397,5 @@ class ContentService:
 # Create service instance function (dependency injection)
 def get_content_service() -> ContentService:
     return ContentService()
+# Global service instance
+content_service = ContentService()

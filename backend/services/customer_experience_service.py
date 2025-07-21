@@ -478,3 +478,5 @@ class CustomerExperienceService:
                 ]
             }
         }
+# Global service instance
+customer_experience_service = CustomerExperienceService()

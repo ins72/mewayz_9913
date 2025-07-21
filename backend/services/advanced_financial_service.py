@@ -345,3 +345,5 @@ class AdvancedFinancialService:
                 ]
             }
         }
+# Global service instance
+advanced_financial_service = AdvancedFinancialService()

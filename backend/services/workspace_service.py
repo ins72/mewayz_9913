@@ -337,3 +337,5 @@ class WorkspaceService:
 # Create service instance function (dependency injection)
 def get_workspace_service() -> WorkspaceService:
     return WorkspaceService()
+# Global service instance
+workspace_service = WorkspaceService()

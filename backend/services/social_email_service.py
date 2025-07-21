@@ -492,3 +492,5 @@ class SocialEmailService:
                 "message": "Automation rule created successfully"
             }
         }
+# Global service instance
+social_email_service = SocialEmailService()

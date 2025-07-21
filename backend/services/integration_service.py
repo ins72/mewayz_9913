@@ -85,3 +85,5 @@ class IntegrationService:
         
         result = await db.user_integrations.insert_one(integration)
         return integration
+# Global service instance
+integration_service = IntegrationService()

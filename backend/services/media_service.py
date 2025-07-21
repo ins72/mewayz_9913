@@ -571,3 +571,5 @@ class MediaService:
             i += 1
         
         return f"{size_bytes:.1f} {size_names[i]}"
+# Global service instance
+media_service = MediaService()
