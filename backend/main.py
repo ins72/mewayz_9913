@@ -23,7 +23,7 @@ from core.database import connect_to_mongo, close_mongo_connection
 
 # Complete list of all API modules
 ALL_API_MODULES = [
-    'admin', 'admin_configuration', 'advanced_ai', 'advanced_ai_suite', 'advanced_analytics', 'advanced_financial',
+    'admin', 'advanced_ai', 'advanced_ai_suite', 'advanced_analytics', 'advanced_financial',
     'advanced_financial_analytics', 'ai', 'ai_content', 'ai_content_generation', 
     'ai_token_management', 'analytics', 'analytics_system', 'auth', 'automation_system',
     'backup_system', 'bio_sites', 'blog', 'booking', 'bookings', 'business_intelligence',
