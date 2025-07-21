@@ -794,9 +794,10 @@ Click below to secure your spot and join the thousands who are already seeing in
             if result:
                 # Create deterministic shuffle based on database data
                 seed_value = sum([hash(str(r.get("user_id", 0))) for r in result])
-                random.seed(seed_value)
+                # Simple deterministic reordering without random
                 shuffled = items.copy()
-                await self._shuffle_based_on_db(shuffled)
+                if seed_value % 2:
+                    shuffled.reverse()
                 return shuffled
             return items
         except:
