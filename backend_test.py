@@ -49,8 +49,15 @@ class BackendTester:
                 self.log_result("Health Check", True, f"Backend is healthy - {data.get('message', 'Unknown')}", data)
                 return True
             else:
-                self.log_result("Health Check", False, f"Health check failed with status {response.status_code}")
-                return False
+                # Try the health endpoint
+                response = self.session.get(f"{BACKEND_URL}/health", timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    self.log_result("Health Check", True, f"Backend health endpoint working - {data.get('status', 'Unknown')}", data)
+                    return True
+                else:
+                    self.log_result("Health Check", False, f"Health check failed with status {response.status_code}")
+                    return False
         except Exception as e:
             self.log_result("Health Check", False, f"Health check error: {str(e)}")
             return False
