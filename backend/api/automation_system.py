@@ -37,7 +37,7 @@ automation_service = AutomationService()
 @router.get("/workflows/advanced")
 async def get_advanced_workflows(current_user: dict = Depends(get_current_user)):
     """Advanced workflow automation system"""
-    return await automation_service.get_advanced_workflows(current_user["id"])
+    return await automation_service.get_advanced_workflows(current_user.get("_id") or current_user.get("id", "default-user"))
 
 @router.post("/workflows/create")
 async def create_workflow(
