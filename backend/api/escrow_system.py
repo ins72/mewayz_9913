@@ -202,7 +202,8 @@ async def create_dispute(
     current_user: dict = Depends(get_current_user)
 ):
     """Create new dispute case"""
-    return await escrow_service.create_dispute(current_user["id"], dispute.dict())
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await escrow_service.create_dispute(user_id, dispute.dict())
 
 @router.get("/analytics")
 async def get_escrow_analytics(
