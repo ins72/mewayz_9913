@@ -9,7 +9,7 @@ from core.database import get_database
 import uuid
 
 
-    async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
+class AdvancedFinancialAnalyticsService:
         """Get metric from database instead of random generation"""
         try:
             db = await self.get_database()
