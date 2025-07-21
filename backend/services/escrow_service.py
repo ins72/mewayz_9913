@@ -23,6 +23,10 @@ class EscrowService:
     async def get_transactions(self, user_id: str, status: Optional[str] = None, transaction_type: Optional[str] = None, limit: int = 50):
         """Get user's escrow transactions"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         # Generate realistic transaction data
         transactions = []
         transaction_count = min(limit, random.randint(15, 45))
