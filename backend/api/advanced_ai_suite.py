@@ -247,7 +247,7 @@ async def enhance_image(
 ):
     """Enhance image quality using AI"""
     return await ai_service.enhance_image(
-        current_user["id"], file, enhancement_type, factor
+        current_user.get("_id") or current_user.get("id", "default-user"), file, enhancement_type, factor
     )
 
 @router.get("/nlp/services")
