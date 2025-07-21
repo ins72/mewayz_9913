@@ -63,7 +63,7 @@ async def create_workflow(
     - **tags**: Optional tags for organization
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -154,7 +154,7 @@ async def create_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to create workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -176,7 +176,7 @@ async def list_workflows(
     - **limit**: Maximum number of workflows to return (1-100)
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -231,7 +231,7 @@ async def list_workflows(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to list workflows: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -249,7 +249,7 @@ async def get_workflow(
     - **workflow_id**: The ID of the workflow to retrieve
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -350,7 +350,7 @@ async def get_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -370,7 +370,7 @@ async def execute_workflow(
     - **trigger_data**: Optional data to pass to the workflow execution
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -438,7 +438,7 @@ async def execute_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to execute workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -458,7 +458,7 @@ async def get_workflow_executions(
     - **limit**: Maximum number of executions to return (1-100)
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -510,7 +510,7 @@ async def get_workflow_executions(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get workflow executions: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -528,7 +528,7 @@ async def pause_workflow(
     - **workflow_id**: The ID of the workflow to pause
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -588,7 +588,7 @@ async def pause_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to pause workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -606,7 +606,7 @@ async def resume_workflow(
     - **workflow_id**: The ID of the workflow to resume
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -671,7 +671,7 @@ async def resume_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to resume workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -689,7 +689,7 @@ async def delete_workflow(
     - **workflow_id**: The ID of the workflow to delete
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -744,7 +744,7 @@ async def delete_workflow(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to delete workflow: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -898,7 +898,7 @@ async def get_workflow_templates(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get workflow templates: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -913,7 +913,7 @@ async def get_workflow_stats(
     Get workflow statistics for the current user
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -969,7 +969,7 @@ async def get_workflow_stats(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get workflow stats: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
