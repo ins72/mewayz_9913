@@ -192,7 +192,7 @@ async def get_conversation(
     current_user: dict = Depends(get_current_user)
 ):
     """Get specific conversation with messages"""
-    return await ai_service.get_conversation(current_user["id"], conversation_id)
+    return await ai_service.get_conversation(current_user.get("_id") or current_user.get("id", "default-user"), conversation_id)
 
 @router.post("/conversations/{conversation_id}/messages")
 async def send_message(
