@@ -254,7 +254,7 @@ async def get_execution_history(
     current_user: dict = Depends(get_current_user)
 ):
     """Get workflow execution history"""
-    return await automation_service.get_execution_history(current_user["id"], workflow_id, limit)
+    return await automation_service.get_execution_history(current_user.get("_id") or current_user.get("id", "default-user"), workflow_id, limit)
 
 @router.get("/performance/metrics")
 async def get_performance_metrics(
