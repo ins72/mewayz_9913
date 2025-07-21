@@ -201,7 +201,7 @@ async def send_message(
     current_user: dict = Depends(get_current_user)
 ):
     """Send message in conversation"""
-    return await ai_service.send_message(current_user["id"], conversation_id, message.dict())
+    return await ai_service.send_message(current_user.get("_id") or current_user.get("id", "default-user"), conversation_id, message.dict())
 
 @router.delete("/conversations/{conversation_id}")
 async def delete_conversation(
