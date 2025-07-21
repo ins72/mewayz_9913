@@ -10912,8 +10912,8 @@ async def add_social_listening_keyword(
 ai_video_processing_collection = database.ai_video_processing
 voice_ai_collection = database.voice_ai
 image_recognition_collection = database.image_recognition
-inventory_management_collection = database.inventory_management
-dropshipping_integration_collection = database.dropshipping_integration
+# ✅ MIGRATED: inventory_management_collection moved to /app/backend/services/enhanced_ecommerce_service.py
+# ✅ MIGRATED: dropshipping_integration_collection moved to /app/backend/services/enhanced_ecommerce_service.py
 influencer_marketplace_collection = database.influencer_marketplace
 sms_marketing_collection = database.sms_marketing
 push_notifications_collection = database.push_notifications
