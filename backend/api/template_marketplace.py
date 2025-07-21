@@ -412,7 +412,7 @@ async def search_templates(
         price_max=price_max,
         rating_min=rating_min,
         limit=limit,
-        user_id=current_user["id"]
+        user_id=current_user.get("_id") or current_user.get("id", "default-user")
     )
 
 @router.get("/trending")
