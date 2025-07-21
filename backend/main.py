@@ -10,6 +10,7 @@ import uvicorn
 from core.config import settings
 from core.database import connect_to_mongo, close_mongo_connection
 from api import auth, users, analytics, dashboard, workspaces, blog, admin, ai, bio_sites, ecommerce, bookings, social_media, marketing, integrations, business_intelligence
+from api import subscription_management, google_oauth, financial_management, link_shortener, analytics_system
 
 # Application lifespan management
 @asynccontextmanager
