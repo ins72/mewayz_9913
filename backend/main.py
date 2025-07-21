@@ -156,18 +156,19 @@ app.include_router(backup_system.router, prefix="/api/backup", tags=["Comprehens
 app.include_router(compliance_system.router, prefix="/api/compliance", tags=["Advanced Compliance & Audit System"])
 
 # API-SERVICE MAPPING COMPLETION - Additional API routes for complete coverage
-app.include_router(advanced_ai.router, prefix="/api/advanced-ai", tags=["Advanced AI"])
-app.include_router(advanced_financial.router, prefix="/api/advanced-financial", tags=["Advanced Financial"])
-app.include_router(ai_content.router, prefix="/api/ai-content", tags=["AI Content"])
-app.include_router(booking.router, prefix="/api/booking", tags=["Booking System"])
-app.include_router(content_creation.router, prefix="/api/content-creation", tags=["Content Creation"])
-app.include_router(content.router, prefix="/api/content", tags=["Content Management"])
-app.include_router(customer_experience.router, prefix="/api/customer-experience", tags=["Customer Experience"])
-app.include_router(integration.router, prefix="/api/integration", tags=["Integrations"])
-app.include_router(media.router, prefix="/api/media", tags=["Media Management"])
-app.include_router(social_email.router, prefix="/api/social-email", tags=["Social Email"])
-app.include_router(user.router, prefix="/api/user", tags=["User Management"])
-app.include_router(workspace.router, prefix="/api/workspace", tags=["Workspace Management"])
+# Note: These routers already have prefixes defined, so no additional prefix needed
+app.include_router(advanced_ai.router)
+app.include_router(advanced_financial.router)
+app.include_router(ai_content.router)
+app.include_router(booking.router)
+app.include_router(content_creation.router)
+app.include_router(content.router)
+app.include_router(customer_experience.router)
+app.include_router(integration.router)
+app.include_router(media.router)
+app.include_router(social_email.router)
+app.include_router(user.router)
+app.include_router(workspace.router)
 
 if __name__ == "__main__":
     uvicorn.run(
