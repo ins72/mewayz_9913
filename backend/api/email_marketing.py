@@ -140,7 +140,8 @@ async def get_campaign(
     current_user: dict = Depends(get_current_user)
 ):
     """Get specific campaign details"""
-    return await email_service.get_campaign(current_user["id"], campaign_id)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_campaign(user_id, campaign_id)
 
 @router.put("/campaigns/{campaign_id}")
 async def update_campaign(
