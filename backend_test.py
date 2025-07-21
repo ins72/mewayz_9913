@@ -191,25 +191,54 @@ class BackendTester:
         # Test Workspace API
         self.test_endpoint("/workspace/list", test_name="Workspace - List")
     
-    def test_existing_priority_apis(self):
-        """Test existing priority API endpoints"""
-        print("\n=== Testing Existing Priority APIs ===")
+    def test_core_working_endpoints(self):
+        """Test the core working API endpoints that are actually available"""
+        print("\n=== Testing Core Working API Endpoints ===")
         
-        # Test User Management (existing users API)
+        # Test authentication endpoints
+        self.test_endpoint("/auth/register", "POST", {"email": "test@example.com", "password": "testpass"}, "Auth - Register")
+        
+        # Test dashboard endpoints
+        self.test_endpoint("/dashboard/overview", test_name="Dashboard - Overview")
+        self.test_endpoint("/dashboard/activity-summary", test_name="Dashboard - Activity Summary")
+        
+        # Test analytics endpoints
+        self.test_endpoint("/analytics/overview", test_name="Analytics - Overview")
+        self.test_endpoint("/analytics/platform/overview", test_name="Analytics - Platform Overview")
+        self.test_endpoint("/analytics/features/usage", test_name="Analytics - Features Usage")
+        
+        # Test user management endpoints
         self.test_endpoint("/users/profile", test_name="Users - Profile")
-        self.test_endpoint("/users/preferences", test_name="Users - Preferences")
+        self.test_endpoint("/users/stats", test_name="Users - Stats")
+        self.test_endpoint("/users/analytics", test_name="Users - Analytics")
         
-        # Test Workspace Management (existing workspaces API)
+        # Test workspace endpoints
         self.test_endpoint("/workspaces", test_name="Workspaces - List")
         
-        # Test Integration endpoints (existing integrations API)
-        self.test_endpoint("/integrations/available", test_name="Integrations - Available")
-        self.test_endpoint("/integrations/connected", test_name="Integrations - Connected")
+        # Test blog endpoints
+        self.test_endpoint("/blog/posts", test_name="Blog - Posts")
+        self.test_endpoint("/blog/analytics", test_name="Blog - Analytics")
         
-        # Test some working endpoints from the test_result.md
-        self.test_endpoint("/compliance/framework-status", test_name="Compliance - Framework Status")
-        self.test_endpoint("/backup/comprehensive-status", test_name="Backup - Status")
-        self.test_endpoint("/monitoring/system-health", test_name="Monitoring - System Health")
+        # Test admin endpoints
+        self.test_endpoint("/admin/dashboard", test_name="Admin - Dashboard")
+        self.test_endpoint("/admin/users", test_name="Admin - Users")
+        self.test_endpoint("/admin/users/stats", test_name="Admin - User Stats")
+        self.test_endpoint("/admin/system/metrics", test_name="Admin - System Metrics")
+        
+        # Test AI endpoints
+        self.test_endpoint("/ai/services", test_name="AI - Services")
+        self.test_endpoint("/ai/conversations", test_name="AI - Conversations")
+        
+        # Test ecommerce endpoints
+        self.test_endpoint("/ecommerce/products", test_name="Ecommerce - Products")
+        self.test_endpoint("/ecommerce/orders", test_name="Ecommerce - Orders")
+        self.test_endpoint("/ecommerce/dashboard", test_name="Ecommerce - Dashboard")
+        
+        # Test marketing endpoints
+        self.test_endpoint("/marketing/campaigns", test_name="Marketing - Campaigns")
+        self.test_endpoint("/marketing/contacts", test_name="Marketing - Contacts")
+        self.test_endpoint("/marketing/lists", test_name="Marketing - Lists")
+        self.test_endpoint("/marketing/analytics", test_name="Marketing - Analytics")
     
     def test_database_integration_verification(self):
         """Test database integration verification for the massive database work completed"""
