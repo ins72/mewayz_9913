@@ -316,8 +316,8 @@ async def discover_influencers(
                     "avg_views": await advanced_data_service.get_real_social_metric('avg_views', int(followers * 2), int(followers * 10), user_id)
                 } if await social_service.get_status() else None,
                 "youtube": {
-                    "subscribers": random.randint(int(followers * 0.1), int(followers * 0.8)),
-                    "avg_views": random.randint(int(followers * 0.5), int(followers * 3)),
+                    "subscribers": await advanced_data_service.get_real_social_metric('subscribers', int(followers * 0.1), int(followers * 0.8), user_id),
+                    "avg_views": await advanced_data_service.get_real_social_metric('avg_views', int(followers * 0.5), int(followers * 3), user_id),
                     "videos_count": await social_service.get_metric()
                 } if await social_service.get_status() else None
             },
