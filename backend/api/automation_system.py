@@ -62,7 +62,7 @@ async def get_workflow_details(
     current_user: dict = Depends(get_current_user)
 ):
     """Get detailed workflow information"""
-    return await automation_service.get_workflow_details(current_user["id"], workflow_id)
+    return await automation_service.get_workflow_details(current_user.get("_id") or current_user.get("id", "default-user"), workflow_id)
 
 @router.put("/workflows/{workflow_id}")
 async def update_workflow(
