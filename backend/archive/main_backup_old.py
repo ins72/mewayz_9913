@@ -9459,61 +9459,6 @@ innovation_lab_collection = database.innovation_lab
 
 # ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
 
-@app.get("/api/social/listening/overview")
-async def get_live_chat_overview(current_user: dict = Depends(get_current_user)):
-    """Live chat system overview and analytics"""
-    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    
-    live_chat_data = {
-        "real_time_stats": {
-            "active_chats": 12,
-            "agents_online": 5,
-            "queue_length": 3,
-            "avg_wait_time": "2m 15s",
-            "response_rate": 98.7
-        },
-        "daily_metrics": {
-            "total_conversations": 89,
-            "resolved_conversations": 76,
-            "avg_resolution_time": "8m 45s",
-            "customer_satisfaction": 4.7,
-            "first_contact_resolution": 82.4
-        },
-        "agent_performance": [
-            {"agent": "Sarah Johnson", "active_chats": 4, "avg_response": "45s", "satisfaction": 4.9},
-            {"agent": "Mike Chen", "active_chats": 3, "avg_response": "1m 12s", "satisfaction": 4.6},
-            {"agent": "Emma Davis", "active_chats": 2, "avg_response": "38s", "satisfaction": 4.8}
-        ],
-        "chat_features": {
-            "basic": ["Real-time messaging", "File sharing", "Emoji support", "Typing indicators"],
-            "advanced": ["Screen sharing", "Video chat", "Co-browsing", "Chat transfer"],
-            "ai_powered": ["Auto-responses", "Intent detection", "Language translation", "Sentiment analysis"]
-        },
-        "integration_options": {
-            "website_widget": "Embeddable chat widget for websites",
-            "mobile_sdk": "Native mobile app integration",
-            "social_media": "Facebook Messenger, WhatsApp integration",
-            "crm_sync": "Automatic contact and conversation sync"
-        },
-        "automation": {
-            "chatbots": "AI-powered chatbots for initial responses",
-            "routing_rules": "Intelligent chat routing based on skills",
-            "auto_translation": "Real-time message translation",
-            "canned_responses": "Quick response templates"
-        }
-    }
-    
-    await live_chat_collection.insert_one({
-        "_id": str(uuid.uuid4()),
-        "workspace_id": str(workspace["_id"]),
-        "chat_data": live_chat_data,
-        "generated_at": datetime.utcnow()
-    })
-    
-    return {"success": True, "data": live_chat_data}
-
 @app.post("/api/customer-experience/live-chat/conversation/start")
 async def start_live_chat_conversation(
     visitor_info: str = Form(...),  # JSON string
