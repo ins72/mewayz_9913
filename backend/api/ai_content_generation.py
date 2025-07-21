@@ -184,7 +184,7 @@ async def create_conversation(
     current_user: dict = Depends(get_current_user)
 ):
     """Create new AI conversation"""
-    return await ai_service.create_conversation(current_user["id"], conversation.dict())
+    return await ai_service.create_conversation(current_user.get("_id") or current_user.get("id", "default-user"), conversation.dict())
 
 @router.get("/conversations/{conversation_id}")
 async def get_conversation(
