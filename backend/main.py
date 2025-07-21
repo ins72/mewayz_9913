@@ -132,6 +132,9 @@ app.include_router(survey_system.router, prefix="/api/surveys", tags=["Survey & 
 # TWELFTH WAVE - MEDIA LIBRARY & FILE MANAGEMENT - Newly Implemented  
 app.include_router(media_library.router, prefix="/api/media", tags=["Media Library & File Management"])
 
+# THIRTEENTH WAVE - INTERNATIONALIZATION & LOCALIZATION - Newly Implemented
+app.include_router(i18n_system.router, prefix="/api/i18n", tags=["Internationalization & Localization"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
