@@ -73,53 +73,53 @@ async def get_competitor_analysis(current_user: dict = Depends(get_current_user)
                 {
                     "name": "CompetitorA",
                     "platforms": {
-                        "twitter": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "facebook": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "instagram": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "linkedin": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)}
+                        "twitter": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "facebook": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "instagram": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "linkedin": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)}
                     },
                     "posting_frequency": {
-                        "twitter": f"{await service.get_metric()} posts/day",
-                        "facebook": f"{await service.get_metric()} posts/day",
-                        "instagram": f"{await service.get_metric()} posts/day",
-                        "linkedin": f"{await service.get_metric()} posts/day"
+                        "twitter": f"{await social_service.get_metric()} posts/day",
+                        "facebook": f"{await social_service.get_metric()} posts/day",
+                        "instagram": f"{await social_service.get_metric()} posts/day",
+                        "linkedin": f"{await social_service.get_metric()} posts/day"
                     },
                     "content_themes": ["Product Updates", "Industry News", "Customer Stories", "Behind the Scenes"],
                     "engagement_peak_times": ["9:00 AM", "1:00 PM", "6:00 PM"],
                     "hashtag_strategy": ["#innovation", "#technology", "#business", "#growth"],
-                    "sentiment_score": round(await service.get_metric(), 2)
+                    "sentiment_score": round(await social_service.get_metric(), 2)
                 },
                 {
                     "name": "CompetitorB",
                     "platforms": {
-                        "twitter": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "facebook": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "instagram": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
-                        "linkedin": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)}
+                        "twitter": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "facebook": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "instagram": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)},
+                        "linkedin": {"followers": await social_service.get_metric(), "engagement_rate": round(await social_service.get_metric(), 1)}
                     },
                     "posting_frequency": {
-                        "twitter": f"{await service.get_metric()} posts/day",
-                        "facebook": f"{await service.get_metric()} posts/day",
-                        "instagram": f"{await service.get_metric()} posts/day",
-                        "linkedin": f"{await service.get_metric()} posts/day"
+                        "twitter": f"{await social_service.get_metric()} posts/day",
+                        "facebook": f"{await social_service.get_metric()} posts/day",
+                        "instagram": f"{await social_service.get_metric()} posts/day",
+                        "linkedin": f"{await social_service.get_metric()} posts/day"
                     },
                     "content_themes": ["Educational Content", "Case Studies", "Thought Leadership", "Company Culture"],
                     "engagement_peak_times": ["8:00 AM", "12:00 PM", "5:00 PM"],
                     "hashtag_strategy": ["#leadership", "#education", "#success", "#teamwork"],
-                    "sentiment_score": round(await service.get_metric(), 2)
+                    "sentiment_score": round(await social_service.get_metric(), 2)
                 }
             ],
             "competitive_insights": {
                 "market_share_voice": {
-                    "your_brand": f"{round(await service.get_metric(), 1)}%",
-                    "competitorA": f"{round(await service.get_metric(), 1)}%",
-                    "competitorB": f"{round(await service.get_metric(), 1)}%",
-                    "others": f"{round(await service.get_metric(), 1)}%"
+                    "your_brand": f"{round(await social_service.get_metric(), 1)}%",
+                    "competitorA": f"{round(await social_service.get_metric(), 1)}%",
+                    "competitorB": f"{round(await social_service.get_metric(), 1)}%",
+                    "others": f"{round(await social_service.get_metric(), 1)}%"
                 },
                 "engagement_comparison": {
-                    "your_brand": round(await service.get_metric(), 1),
-                    "industry_average": round(await service.get_metric(), 1),
-                    "top_competitor": round(await service.get_metric(), 1)
+                    "your_brand": round(await social_service.get_metric(), 1),
+                    "industry_average": round(await social_service.get_metric(), 1),
+                    "top_competitor": round(await social_service.get_metric(), 1)
                 },
                 "content_gap_analysis": [
                     "More video content needed",
@@ -135,9 +135,9 @@ async def get_competitor_analysis(current_user: dict = Depends(get_current_user)
                 ]
             },
             "trending_topics": [
-                {"topic": "AI Integration", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"},
-                {"topic": "Remote Work", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"},
-                {"topic": "Sustainability", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"}
+                {"topic": "AI Integration", "mentions": await social_service.get_metric(), "growth": f"+{round(await social_service.get_metric(), 1)}%"},
+                {"topic": "Remote Work", "mentions": await social_service.get_metric(), "growth": f"+{round(await social_service.get_metric(), 1)}%"},
+                {"topic": "Sustainability", "mentions": await social_service.get_metric(), "growth": f"+{round(await social_service.get_metric(), 1)}%"}
             ]
         }
     }
@@ -197,41 +197,41 @@ async def get_engagement_analytics(
         "success": True,
         "data": {
             "engagement_summary": {
-                "total_engagements": await service.get_metric(),
-                "engagement_rate": round(await service.get_metric(), 1),
-                "reach": await service.get_metric(),
-                "impressions": await service.get_metric(),
-                "engagement_growth": f"+{round(await service.get_metric(), 1)}%"
+                "total_engagements": await social_service.get_metric(),
+                "engagement_rate": round(await social_service.get_metric(), 1),
+                "reach": await social_service.get_metric(),
+                "impressions": await social_service.get_metric(),
+                "engagement_growth": f"+{round(await social_service.get_metric(), 1)}%"
             },
             "engagement_by_platform": [
                 {
                     "platform": "Instagram",
-                    "engagements": await service.get_metric(),
-                    "engagement_rate": round(await service.get_metric(), 1),
+                    "engagements": await social_service.get_metric(),
+                    "engagement_rate": round(await social_service.get_metric(), 1),
                     "top_content_type": "Carousel posts",
                     "best_posting_time": "6:00 PM",
                     "audience_demographics": {"18-24": 35, "25-34": 40, "35-44": 20, "45+": 5}
                 },
                 {
                     "platform": "Facebook",
-                    "engagements": await service.get_metric(),
-                    "engagement_rate": round(await service.get_metric(), 1),
+                    "engagements": await social_service.get_metric(),
+                    "engagement_rate": round(await social_service.get_metric(), 1),
                     "top_content_type": "Video posts",
                     "best_posting_time": "1:00 PM",
                     "audience_demographics": {"18-24": 20, "25-34": 35, "35-44": 30, "45+": 15}
                 },
                 {
                     "platform": "Twitter",
-                    "engagements": await service.get_metric(),
-                    "engagement_rate": round(await service.get_metric(), 1),
+                    "engagements": await social_service.get_metric(),
+                    "engagement_rate": round(await social_service.get_metric(), 1),
                     "top_content_type": "Thread posts",
                     "best_posting_time": "9:00 AM",
                     "audience_demographics": {"18-24": 25, "25-34": 45, "35-44": 25, "45+": 5}
                 },
                 {
                     "platform": "LinkedIn",
-                    "engagements": await service.get_metric(),
-                    "engagement_rate": round(await service.get_metric(), 1),
+                    "engagements": await social_service.get_metric(),
+                    "engagement_rate": round(await social_service.get_metric(), 1),
                     "top_content_type": "Article shares",
                     "best_posting_time": "8:00 AM",
                     "audience_demographics": {"18-24": 15, "25-34": 40, "35-44": 35, "45+": 10}
@@ -240,40 +240,40 @@ async def get_engagement_analytics(
             "content_performance": [
                 {
                     "content_type": "Video",
-                    "avg_engagement_rate": round(await service.get_metric(), 1),
-                    "total_posts": await service.get_metric(),
+                    "avg_engagement_rate": round(await social_service.get_metric(), 1),
+                    "total_posts": await social_service.get_metric(),
                     "best_performing": "Product demo video",
                     "optimization_tip": "Add captions for better accessibility"
                 },
                 {
                     "content_type": "Image",
-                    "avg_engagement_rate": round(await service.get_metric(), 1),
-                    "total_posts": await service.get_metric(),
+                    "avg_engagement_rate": round(await social_service.get_metric(), 1),
+                    "total_posts": await social_service.get_metric(),
                     "best_performing": "Behind-the-scenes photo",
                     "optimization_tip": "Use consistent brand colors"
                 },
                 {
                     "content_type": "Text",
-                    "avg_engagement_rate": round(await service.get_metric(), 1),
-                    "total_posts": await service.get_metric(),
+                    "avg_engagement_rate": round(await social_service.get_metric(), 1),
+                    "total_posts": await social_service.get_metric(),
                     "best_performing": "Industry insights post",
                     "optimization_tip": "Include relevant hashtags"
                 }
             ],
             "trending_hashtags": [
-                {"hashtag": "#innovation", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
-                {"hashtag": "#technology", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
-                {"hashtag": "#business", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
-                {"hashtag": "#growth", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)}
+                {"hashtag": "#innovation", "usage": await social_service.get_metric(), "engagement": round(await social_service.get_metric(), 1)},
+                {"hashtag": "#technology", "usage": await social_service.get_metric(), "engagement": round(await social_service.get_metric(), 1)},
+                {"hashtag": "#business", "usage": await social_service.get_metric(), "engagement": round(await social_service.get_metric(), 1)},
+                {"hashtag": "#growth", "usage": await social_service.get_metric(), "engagement": round(await social_service.get_metric(), 1)}
             ],
             "audience_insights": {
                 "most_active_hours": ["8:00 AM", "1:00 PM", "6:00 PM", "9:00 PM"],
                 "most_active_days": ["Tuesday", "Wednesday", "Thursday"],
                 "geographic_breakdown": [
-                    {"country": "United States", "percentage": round(await service.get_metric(), 1)},
-                    {"country": "Canada", "percentage": round(await service.get_metric(), 1)},
-                    {"country": "United Kingdom", "percentage": round(await service.get_metric(), 1)},
-                    {"country": "Australia", "percentage": round(await service.get_metric(), 1)}
+                    {"country": "United States", "percentage": round(await social_service.get_metric(), 1)},
+                    {"country": "Canada", "percentage": round(await social_service.get_metric(), 1)},
+                    {"country": "United Kingdom", "percentage": round(await social_service.get_metric(), 1)},
+                    {"country": "Australia", "percentage": round(await social_service.get_metric(), 1)}
                 ],
                 "interests": ["Technology", "Business", "Marketing", "Innovation", "Entrepreneurship"]
             }
@@ -289,12 +289,13 @@ async def discover_influencers(
 ):
     """Discover relevant influencers for collaboration"""
     
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
     influencers = []
     niches = ["Technology", "Business", "Marketing", "Lifestyle", "Finance", "Health", "Education"]
     
-    for i in range(await service.get_metric()):
-        influencer_niche = niche if niche else await self._get_real_status_from_db(niches)
-        followers = await self._get_real_metric_from_db('followers_count', min_followers or 1000, max_followers or 1000000, user_id)
+    for i in range(await social_service.get_metric()):
+        influencer_niche = niche if niche else await social_service._get_real_status_from_db(niches)
+        followers = await social_service._get_real_metric_from_db('followers_count', min_followers or 1000, max_followers or 1000000, user_id)
         
         influencer = {
             "id": str(uuid.uuid4()),
@@ -304,35 +305,35 @@ async def discover_influencers(
             "platforms": {
                 "instagram": {
                     "followers": followers,
-                    "engagement_rate": round(await service.get_metric(), 1),
-                    "avg_likes": await self._get_real_metric_from_db('avg_likes', int(followers * 0.02), int(followers * 0.15), user_id),
-                    "avg_comments": await self._get_real_metric_from_db('avg_comments', int(followers * 0.001), int(followers * 0.01), user_id)
+                    "engagement_rate": round(await social_service.get_metric(), 1),
+                    "avg_likes": await social_service._get_real_metric_from_db('avg_likes', int(followers * 0.02), int(followers * 0.15), user_id),
+                    "avg_comments": await social_service._get_real_metric_from_db('avg_comments', int(followers * 0.001), int(followers * 0.01), user_id)
                 },
                 "tiktok": {
                     "followers": random.randint(int(followers * 0.5), int(followers * 2)),
-                    "engagement_rate": round(await service.get_metric(), 1),
+                    "engagement_rate": round(await social_service.get_metric(), 1),
                     "avg_views": random.randint(int(followers * 2), int(followers * 10))
-                } if await service.get_status() else None,
+                } if await social_service.get_status() else None,
                 "youtube": {
                     "subscribers": random.randint(int(followers * 0.1), int(followers * 0.8)),
                     "avg_views": random.randint(int(followers * 0.5), int(followers * 3)),
-                    "videos_count": await service.get_metric()
-                } if await service.get_status() else None
+                    "videos_count": await social_service.get_metric()
+                } if await social_service.get_status() else None
             },
             "demographics": {
-                "age_groups": {"18-24": await service.get_metric(), "25-34": await service.get_metric(), "35-44": await service.get_metric()},
-                "gender": {"male": await service.get_metric(), "female": await service.get_metric()},
+                "age_groups": {"18-24": await social_service.get_metric(), "25-34": await social_service.get_metric(), "35-44": await social_service.get_metric()},
+                "gender": {"male": await social_service.get_metric(), "female": await social_service.get_metric()},
                 "top_countries": ["United States", "Canada", "United Kingdom"]
             },
             "collaboration_metrics": {
-                "average_cost_per_post": await service.get_metric(),
-                "response_rate": round(await service.get_metric(), 1),
-                "brand_safety_score": round(await service.get_metric(), 1),
-                "authenticity_score": round(await service.get_metric(), 1)
+                "average_cost_per_post": await social_service.get_metric(),
+                "response_rate": round(await social_service.get_metric(), 1),
+                "brand_safety_score": round(await social_service.get_metric(), 1),
+                "authenticity_score": round(await social_service.get_metric(), 1)
             },
-            "recent_collaborations": await service.get_metric(),
-            "content_style": await service.get_status(),
-            "posting_frequency": f"{await service.get_metric()} posts/week"
+            "recent_collaborations": await social_service.get_metric(),
+            "content_style": await social_service.get_status(),
+            "posting_frequency": f"{await social_service.get_metric()} posts/week"
         }
         influencers.append(influencer)
     
@@ -386,8 +387,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Send helpful response with link to FAQ",
                     "platforms": ["Twitter", "Facebook"],
                     "status": "active",
-                    "success_rate": round(await service.get_metric(), 1),
-                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
+                    "success_rate": round(await social_service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await social_service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -397,8 +398,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Post at optimal engagement times for each platform",
                     "platforms": ["Instagram", "Facebook", "Twitter", "LinkedIn"],
                     "status": "active",
-                    "success_rate": round(await service.get_metric(), 1),
-                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
+                    "success_rate": round(await social_service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await social_service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -408,8 +409,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Suggest trending and relevant hashtags",
                     "platforms": ["Instagram", "Twitter"],
                     "status": "active",
-                    "success_rate": round(await service.get_metric(), 1),
-                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
+                    "success_rate": round(await social_service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await social_service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -419,37 +420,37 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Alert team and suggest response strategy",
                     "platforms": ["All platforms"],
                     "status": "active",
-                    "success_rate": round(await service.get_metric(), 1),
-                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
+                    "success_rate": round(await social_service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await social_service.get_metric())).isoformat()
                 }
             ],
             "automation_categories": {
                 "content_creation": {
                     "description": "AI-powered content generation and optimization",
                     "features": ["Auto-captions", "Hashtag suggestions", "Image optimization", "Content scheduling"],
-                    "time_saved": f"{await service.get_metric()} hours/week"
+                    "time_saved": f"{await social_service.get_metric()} hours/week"
                 },
                 "engagement_management": {
                     "description": "Automated responses and community management",
                     "features": ["Auto-responses", "Comment moderation", "DM routing", "Mention alerts"],
-                    "time_saved": f"{await service.get_metric()} hours/week"
+                    "time_saved": f"{await social_service.get_metric()} hours/week"
                 },
                 "analytics_automation": {
                     "description": "Automated reporting and insights generation",
                     "features": ["Daily reports", "Performance alerts", "Competitor tracking", "ROI calculation"],
-                    "time_saved": f"{await service.get_metric()} hours/week"
+                    "time_saved": f"{await social_service.get_metric()} hours/week"
                 },
                 "campaign_management": {
                     "description": "Automated campaign optimization and management",
                     "features": ["Budget optimization", "Audience targeting", "A/B testing", "Performance monitoring"],
-                    "time_saved": f"{await service.get_metric()} hours/week"
+                    "time_saved": f"{await social_service.get_metric()} hours/week"
                 }
             },
             "roi_metrics": {
-                "time_saved_weekly": f"{await service.get_metric()} hours",
-                "cost_reduction": f"{round(await service.get_metric(), 1)}%",
-                "engagement_improvement": f"+{round(await service.get_metric(), 1)}%",
-                "response_time_improvement": f"-{round(await service.get_metric(), 1)}%"
+                "time_saved_weekly": f"{await social_service.get_metric()} hours",
+                "cost_reduction": f"{round(await social_service.get_metric(), 1)}%",
+                "engagement_improvement": f"+{round(await social_service.get_metric(), 1)}%",
+                "response_time_improvement": f"-{round(await social_service.get_metric(), 1)}%"
             }
         }
     }
@@ -472,163 +473,4 @@ async def get_comprehensive_social_report(
     """Get comprehensive social media reporting"""
     return await social_service.get_comprehensive_report(
         current_user.get("_id") or current_user.get("id", "default-user"), period
-    )
-        from core.database import get_database
-        return get_database()
-    
-    async def _get_real_count_from_db(self, collection: str, min_val: int = 0, max_val: int = 1000) -> int:
-        """Get real count from database collection"""
-        try:
-            db = await self.get_database()
-            count = await db[collection].count_documents({})
-            
-            # Scale the count appropriately
-            if count == 0:
-                # If no data, use minimum realistic value
-                return max(min_val, 10)
-            elif count > max_val:
-                # If too high, scale down proportionally
-                return max_val
-            else:
-                return max(min_val, count)
-                
-        except Exception:
-            # Calculate based on activity patterns
-            try:
-                db = await self.get_database()
-                activities_count = await db.user_activities.count_documents({})
-                return max(min_val, min(activities_count // 10, max_val))
-            except:
-                return min_val + ((max_val - min_val) // 2)
-    
-    async def _get_real_amount_from_db(self, min_val: float = 10.0, max_val: float = 1000.0) -> float:
-        """Get real amount from financial transactions"""
-        try:
-            db = await self.get_database()
-            
-            # Try to get average from actual transactions
-            pipeline = [
-                {"$match": {"type": {"$in": ["purchase", "payment", "transaction"]}}},
-                {"$group": {"_id": None, "avg_amount": {"$avg": "$value"}}}
-            ]
-            
-            result = await db.user_actions.aggregate(pipeline).to_list(length=1)
-            if result and result[0]["avg_amount"]:
-                amount = float(result[0]["avg_amount"])
-                return max(min_val, min(amount, max_val))
-                
-            # Fallback to pricing patterns
-            return min_val + ((max_val - min_val) * 0.3)  # 30% of range as realistic baseline
-            
-        except Exception:
-            return min_val + ((max_val - min_val) * 0.3)
-    
-    async def _get_real_percentage_from_db(self, min_val: float = 0.1, max_val: float = 0.9) -> float:
-        """Get real percentage/rate from database analytics"""
-        try:
-            db = await self.get_database()
-            
-            # Calculate real conversion rate
-            pipeline = [
-                {"$match": {"type": {"$in": ["signup", "purchase", "conversion"]}}},
-                {"$group": {
-                    "_id": None,
-                    "total_events": {"$sum": 1},
-                    "conversions": {"$sum": {"$cond": [{"$eq": ["$type", "conversion"]}, 1, 0]}}
-                }}
-            ]
-            
-            result = await db.user_activities.aggregate(pipeline).to_list(length=1)
-            if result and result[0]["total_events"] > 0:
-                rate = result[0]["conversions"] / result[0]["total_events"]
-                return max(min_val, min(rate, max_val))
-                
-            # Fallback to industry standards
-            return 0.05  # 5% conversion rate is realistic
-            
-        except Exception:
-            return 0.05
-    
-    async def _get_real_status_from_db(self, status_options: List[str]) -> str:
-        """Get most common status from database"""
-        try:
-            db = await self.get_database()
-            
-            # Find most common status in user activities
-            pipeline = [
-                {"$match": {"type": {"$exists": True}}},
-                {"$group": {"_id": "$type", "count": {"$sum": 1}}},
-                {"$sort": {"count": -1}},
-                {"$limit": 1}
-            ]
-            
-            result = await db.user_activities.aggregate(pipeline).to_list(length=1)
-            if result:
-                common_type = result[0]["_id"]
-                
-                # Map to status options if possible
-                status_mapping = {
-                    "completed": ["completed", "active", "success", "published"],
-                    "pending": ["pending", "processing", "draft", "review"],
-                    "failed": ["failed", "error", "rejected", "cancelled"]
-                }
-                
-                for status in status_options:
-                    for key, values in status_mapping.items():
-                        if status.lower() in values and common_type in values:
-                            return status
-            
-            # Default to first option or most realistic
-            realistic_defaults = ["active", "completed", "published", "success"]
-            for default in realistic_defaults:
-                if default in status_options:
-                    return default
-                    
-            return status_options[0] if status_options else "active"
-            
-        except Exception:
-            return status_options[0] if status_options else "active"
-    
-    async def _get_real_user_metric(self, metric_type: str, min_val: int = 1, max_val: int = 100) -> int:
-        """Get real user-based metrics"""
-        try:
-            db = await self.get_database()
-            
-            if metric_type in ["followers", "connections", "subscribers"]:
-                # Calculate based on user activities
-                pipeline = [
-                    {"$match": {"type": {"$in": ["follow", "connect", "subscribe"]}}},
-                    {"$group": {"_id": "$user_id", "count": {"$sum": 1}}},
-                    {"$group": {"_id": None, "avg_count": {"$avg": "$count"}}}
-                ]
-                
-                result = await db.user_activities.aggregate(pipeline).to_list(length=1)
-                if result and result[0]["avg_count"]:
-                    return int(max(min_val, min(result[0]["avg_count"], max_val)))
-            
-            elif metric_type in ["posts", "content", "articles"]:
-                # Count actual content creation activities
-                content_count = await db.user_activities.count_documents(
-                    {"type": {"$in": ["post_created", "content_published", "article_written"]}}
-                )
-                if content_count > 0:
-                    return max(min_val, min(content_count // 10, max_val))
-            
-            # Realistic baseline for various metrics
-            baselines = {
-                "followers": 25,
-                "posts": 8,
-                "likes": 15,
-                "shares": 3,
-                "comments": 5,
-                "views": 50,
-                "clicks": 12
-            }
-            
-            baseline = baselines.get(metric_type, min_val + ((max_val - min_val) // 3))
-            return max(min_val, min(baseline, max_val))
-            
-        except Exception:
-            return max(min_val, min(25, max_val))  # Realistic default
-
     )
