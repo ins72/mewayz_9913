@@ -93,7 +93,7 @@ class AIContentService:
             }
         }
     
-    def _generate_blog_content(self, prompt: str, tone: str, length: str):
+    async def _generate_blog_content(self, prompt: str, tone: str, length: str):
         """Generate blog post content"""
         
         word_counts = {"short": "500-800", "medium": "800-1200", "long": "1200-2000"}
