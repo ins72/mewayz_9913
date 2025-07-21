@@ -203,7 +203,8 @@ async def get_contacts(
     current_user: dict = Depends(get_current_user)
 ):
     """Get user's email contacts"""
-    return await email_service.get_contacts(current_user["id"], search, tags)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_contacts(user_id, search, tags)
 
 @router.post("/contacts")
 async def create_contact(
