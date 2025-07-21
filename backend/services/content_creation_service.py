@@ -224,11 +224,12 @@ class ContentCreationService:
     
     def _get_file_extension(self, asset_type: str) -> str:
         """Get appropriate file extension for asset type"""
+        import random
         extensions = {
-            "image": await self._get_choice_from_db(["jpg", "png", "webp"]),
-            "video": await self._get_choice_from_db(["mp4", "mov", "webm"]),
-            "audio": await self._get_choice_from_db(["mp3", "wav", "aac"]),
-            "document": await self._get_choice_from_db(["pdf", "docx", "txt"]),
+            "image": random.choice(["jpg", "png", "webp"]),
+            "video": random.choice(["mp4", "mov", "webm"]),
+            "audio": random.choice(["mp3", "wav", "aac"]),
+            "document": random.choice(["pdf", "docx", "txt"]),
             "template": "json"
         }
         return extensions.get(asset_type, "file")
