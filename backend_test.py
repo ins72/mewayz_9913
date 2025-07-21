@@ -539,25 +539,39 @@ class BackendTester:
         else:
             print(f"      ❌ CRITICAL - Collaboration features need attention")
         
-        # Third Wave Assessment (NEWLY ADDED)
+        # Third Wave Assessment
         third_wave_passed = sum(1 for r in third_wave_tests if r['success'])
         third_wave_total = len(third_wave_tests)
         third_wave_rate = (third_wave_passed / third_wave_total * 100) if third_wave_total > 0 else 0
         
-        print(f"\n   🌊 THIRD WAVE - MARKETING & PROMOTIONS (NEWLY ADDED): {third_wave_rate:.1f}% ({third_wave_passed}/{third_wave_total})")
+        print(f"\n   🌊 THIRD WAVE - MARKETING & PROMOTIONS: {third_wave_rate:.1f}% ({third_wave_passed}/{third_wave_total})")
         if third_wave_rate >= 80:
-            print(f"      ✅ EXCELLENT - New promotional features operational")
+            print(f"      ✅ EXCELLENT - Promotional features operational")
         elif third_wave_rate >= 60:
             print(f"      ⚠️  GOOD - Most promotional features working")
         else:
-            print(f"      ❌ CRITICAL - New promotional features need attention")
+            print(f"      ❌ CRITICAL - Promotional features need attention")
+        
+        # Fourth Wave Assessment (NEWLY ADDED)
+        fourth_wave_tests = [r for r in self.test_results if any(wave in r['endpoint'] for wave in ['/tokens/', '/courses/'])]
+        fourth_wave_passed = sum(1 for r in fourth_wave_tests if r['success'])
+        fourth_wave_total = len(fourth_wave_tests)
+        fourth_wave_rate = (fourth_wave_passed / fourth_wave_total * 100) if fourth_wave_total > 0 else 0
+        
+        print(f"\n   🌊 FOURTH WAVE - ADVANCED BUSINESS SYSTEMS (NEWLY ADDED): {fourth_wave_rate:.1f}% ({fourth_wave_passed}/{fourth_wave_total})")
+        if fourth_wave_rate >= 80:
+            print(f"      ✅ EXCELLENT - New AI token & course systems operational")
+        elif fourth_wave_rate >= 60:
+            print(f"      ⚠️  GOOD - Most advanced business features working")
+        else:
+            print(f"      ❌ CRITICAL - New advanced business systems need attention")
         
         # Final assessment
         print(f"\n🎯 FINAL PRODUCTION READINESS:")
         if success_rate >= 85:
-            print(f"   ✅ EXCELLENT - All three waves operational, platform production-ready!")
+            print(f"   ✅ EXCELLENT - All four waves operational, platform production-ready!")
             print(f"   🌟 Comprehensive regression test successful across all migrated features")
-            print(f"   🚀 Marketing & promotional system successfully integrated")
+            print(f"   🚀 AI token economy & learning management systems successfully integrated")
         elif success_rate >= 70:
             print(f"   ⚠️  GOOD - Platform mostly operational with minor issues to address")
         elif success_rate >= 50:
@@ -570,4 +584,4 @@ class BackendTester:
 
 if __name__ == "__main__":
     tester = BackendTester()
-    tester.run_comprehensive_three_wave_test()
+    tester.run_comprehensive_fourth_wave_test()
