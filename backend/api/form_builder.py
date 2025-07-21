@@ -261,6 +261,14 @@ async def create_form(
                 detail=f"Form limit reached ({max_forms}). Upgrade your plan for more forms."
             )
         
+        # Validate and assign field IDs
+        processed_fields = []
+        for i, field in enumerate(form_data.fields):
+            field_dict = field.dict()
+            if not field_dict.get("id"):
+                field_dict["id"] = f"field_{i+1}_{uuid.uuid4().hex[:8]}"
+            processed_fields.append(field_dict)
+        
         # Create form document
         form_doc = {
             "_id": str(uuid.uuid4()),
@@ -268,7 +276,7 @@ async def create_form(
             "workspace_id": form_data.workspace_id,
             "title": form_data.title,
             "description": form_data.description,
-            "fields": [field.dict() for field in form_data.fields],
+            "fields": processed_fields,
             "settings": {
                 "allow_multiple_submissions": form_data.settings.get("allow_multiple_submissions", True),
                 "require_authentication": form_data.settings.get("require_authentication", False),
