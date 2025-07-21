@@ -141,6 +141,9 @@ app.include_router(notification_system.router, prefix="/api/notifications", tags
 # THIRTEENTH WAVE - API RATE LIMITING & THROTTLING - Newly Implemented
 app.include_router(rate_limiting_system.router, prefix="/api/rate-limits", tags=["API Rate Limiting & Throttling"])
 
+# SEVENTEENTH WAVE - ADVANCED WEBHOOK & EVENT MANAGEMENT - Newly Implemented
+app.include_router(webhook_system.router, prefix="/api/webhooks", tags=["Advanced Webhook & Event Management"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
