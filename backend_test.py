@@ -558,14 +558,183 @@ class BackendTester:
         self.test_endpoint("/health", test_name="System Stability Check")
         self.test_endpoint("/metrics", test_name="System Metrics Check")
 
+    def test_admin_configuration_system(self):
+        """Test the new Admin Configuration System endpoints"""
+        print("\n=== Admin Configuration System Testing ===")
+        print("Testing the new admin configuration endpoints for external API management")
+        
+        # Test admin configuration endpoints
+        admin_config_endpoints = [
+            ("/admin-config/configuration", "GET", "Admin Config - Get Configuration"),
+            ("/admin-config/integrations/status", "GET", "Admin Config - Integration Status"),
+            ("/admin-config/system/health", "GET", "Admin Config - System Health"),
+            ("/admin-config/logs", "GET", "Admin Config - System Logs"),
+            ("/admin-config/available-services", "GET", "Admin Config - Available Services"),
+            ("/admin-config/analytics/dashboard", "GET", "Admin Config - Analytics Dashboard"),
+            ("/admin-config/logs/statistics", "GET", "Admin Config - Log Statistics")
+        ]
+        
+        for endpoint, method, test_name in admin_config_endpoints:
+            self.test_endpoint(endpoint, method, test_name=test_name)
+        
+        # Test admin configuration update (POST)
+        config_update_data = {
+            "enable_rate_limiting": True,
+            "rate_limit_per_minute": 100,
+            "enable_audit_logging": True,
+            "log_level": "INFO"
+        }
+        self.test_endpoint("/admin-config/configuration", "POST", config_update_data, "Admin Config - Update Configuration")
+        
+        # Test integration testing endpoints
+        integration_services = ["stripe", "openai", "sendgrid", "twitter"]
+        for service in integration_services:
+            self.test_endpoint(f"/admin-config/integrations/{service}/test", "POST", {}, f"Admin Config - Test {service.title()} Integration")
+    
+    def test_external_api_integration_framework(self):
+        """Test External API Integration Framework"""
+        print("\n=== External API Integration Framework Testing ===")
+        print("Testing the external API integration system initialization and configuration")
+        
+        # Test integration management endpoints
+        integration_endpoints = [
+            ("/integrations/available", "Integration - Available Services"),
+            ("/integrations/connected", "Integration - Connected Services"),
+            ("/integrations/status", "Integration - Status Check")
+        ]
+        
+        for endpoint, test_name in integration_endpoints:
+            self.test_endpoint(endpoint, test_name=test_name)
+    
+    def test_professional_logging_system(self):
+        """Test Professional Logging System"""
+        print("\n=== Professional Logging System Testing ===")
+        print("Testing the comprehensive logging system operational status")
+        
+        # Test logging endpoints
+        logging_endpoints = [
+            ("/admin-config/logs", "Professional Logging - System Logs"),
+            ("/admin-config/logs/statistics", "Professional Logging - Log Statistics"),
+            ("/admin-config/analytics/dashboard", "Professional Logging - Analytics Dashboard")
+        ]
+        
+        for endpoint, test_name in logging_endpoints:
+            self.test_endpoint(endpoint, test_name=test_name)
+        
+        # Test log filtering
+        log_filter_params = "?level=INFO&category=API&limit=50"
+        self.test_endpoint(f"/admin-config/logs{log_filter_params}", test_name="Professional Logging - Filtered Logs")
+    
+    def test_random_data_elimination_verification(self):
+        """Test Random Data Elimination - verify real database operations"""
+        print("\n=== Random Data Elimination Verification ===")
+        print("Testing services to verify they use real database operations instead of random data")
+        
+        # Test services that should now use real database data
+        real_data_services = [
+            ("/dashboard/overview", "Email Marketing Analytics - Real Data"),
+            ("/analytics/overview", "Dashboard Metrics - Real Data"),
+            ("/users/profile", "User Activity Tracking - Real Data"),
+            ("/ai/services", "AI Usage Analytics - Real Data"),
+            ("/marketing/analytics", "Marketing Service Analytics - Real Data"),
+            ("/ecommerce/dashboard", "E-commerce Analytics - Real Data"),
+            ("/admin/system/metrics", "Admin System Metrics - Real Data")
+        ]
+        
+        for endpoint, test_name in real_data_services:
+            self.test_endpoint(endpoint, test_name=test_name)
+        
+        # Test data consistency to verify real database usage
+        print("\nTesting data consistency to confirm real database operations:")
+        consistency_endpoints = [
+            "/dashboard/overview",
+            "/users/profile", 
+            "/ai/services",
+            "/marketing/analytics",
+            "/ecommerce/dashboard"
+        ]
+        
+        for endpoint in consistency_endpoints:
+            self.test_data_consistency(endpoint)
+    
+    def test_core_platform_functionality_after_changes(self):
+        """Test Core Platform Functionality after major infrastructure changes"""
+        print("\n=== Core Platform Functionality After Infrastructure Changes ===")
+        print("Ensuring all existing functionality still works after major infrastructure changes")
+        
+        # Test core business functionality
+        core_endpoints = [
+            # Authentication and user management
+            ("/auth/register", "POST", {"name": "Test User", "email": "test@example.com", "password": "testpass"}, "Core - User Registration"),
+            ("/users/profile", "GET", None, "Core - User Profile"),
+            ("/users/stats", "GET", None, "Core - User Statistics"),
+            
+            # Dashboard and analytics
+            ("/dashboard/overview", "GET", None, "Core - Dashboard Overview"),
+            ("/dashboard/activity-summary", "GET", None, "Core - Dashboard Activity"),
+            ("/analytics/overview", "GET", None, "Core - Analytics Overview"),
+            ("/analytics/features/usage", "GET", None, "Core - Feature Usage Analytics"),
+            
+            # AI services
+            ("/ai/services", "GET", None, "Core - AI Services"),
+            ("/ai/conversations", "GET", None, "Core - AI Conversations"),
+            
+            # E-commerce
+            ("/ecommerce/products", "GET", None, "Core - E-commerce Products"),
+            ("/ecommerce/orders", "GET", None, "Core - E-commerce Orders"),
+            ("/ecommerce/dashboard", "GET", None, "Core - E-commerce Dashboard"),
+            
+            # Marketing
+            ("/marketing/campaigns", "GET", None, "Core - Marketing Campaigns"),
+            ("/marketing/contacts", "GET", None, "Core - Marketing Contacts"),
+            ("/marketing/analytics", "GET", None, "Core - Marketing Analytics"),
+            
+            # Admin functions
+            ("/admin/users", "GET", None, "Core - Admin Users"),
+            ("/admin/system/metrics", "GET", None, "Core - Admin System Metrics"),
+            
+            # Workspace management
+            ("/workspaces", "GET", None, "Core - Workspaces")
+        ]
+        
+        for endpoint, method, data, test_name in core_endpoints:
+            self.test_endpoint(endpoint, method, data, test_name)
+    
+    def test_database_integration_improvements(self):
+        """Test Database Integration improvements"""
+        print("\n=== Database Integration Improvements Testing ===")
+        print("Testing that real data population services are working correctly")
+        
+        # Test database-integrated services
+        db_services = [
+            ("/dashboard/overview", "Database Integration - Dashboard Service"),
+            ("/analytics/overview", "Database Integration - Analytics Service"),
+            ("/users/profile", "Database Integration - User Management"),
+            ("/ai/services", "Database Integration - AI Services"),
+            ("/ecommerce/products", "Database Integration - E-commerce"),
+            ("/marketing/campaigns", "Database Integration - Marketing"),
+            ("/admin/users", "Database Integration - Admin Management"),
+            ("/workspaces", "Database Integration - Workspace Management")
+        ]
+        
+        for endpoint, test_name in db_services:
+            self.test_endpoint(endpoint, test_name=test_name)
+        
+        # Test data persistence by making multiple calls
+        print("\nTesting data persistence across multiple calls:")
+        for endpoint, _ in db_services[:5]:  # Test first 5 services
+            self.test_data_consistency(endpoint)
+
     def run_comprehensive_test(self):
-        """Run comprehensive backend testing for final verification after service overhaul"""
-        print("🎉 FINAL COMPREHENSIVE BACKEND VERIFICATION AFTER COMPLETE SERVICE OVERHAUL")
-        print("Testing after the most comprehensive service audit and fixes in platform history:")
-        print("- 🔧 Zero Mock Data Policy: 97 → 33 remaining random data calls")
-        print("- 🔧 Complete Service Infrastructure: Fixed 69 critical service issues")
-        print("- 🔧 Enterprise Infrastructure: Professional logging, security, payment processors")
-        print("- 🔧 Production-Ready main.py: Complete FastAPI application with 63 API modules")
+        """Run comprehensive backend testing for Mewayz Platform with new improvements"""
+        print("🎯 COMPREHENSIVE BACKEND TESTING - MEWAYZ PLATFORM WITH NEW IMPROVEMENTS")
+        print("Testing the new Admin Configuration System and infrastructure improvements:")
+        print("- 🔧 Admin Configuration System: External API management endpoints")
+        print("- 🔧 Random Data Elimination: Real database operations verification")
+        print("- 🔧 External API Integration Framework: Integration system testing")
+        print("- 🔧 Professional Logging System: Comprehensive logging verification")
+        print("- 🔧 Core Platform Functionality: Ensuring no regressions after changes")
+        print("- 🔧 Database Integration: Real data population services testing")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
@@ -580,17 +749,26 @@ class BackendTester:
             print("❌ Authentication failed - cannot proceed with testing.")
             return False
         
+        # Test new Admin Configuration System
+        self.test_admin_configuration_system()
+        
+        # Test Random Data Elimination verification
+        self.test_random_data_elimination_verification()
+        
+        # Test External API Integration Framework
+        self.test_external_api_integration_framework()
+        
+        # Test Professional Logging System
+        self.test_professional_logging_system()
+        
+        # Test Core Platform Functionality after changes
+        self.test_core_platform_functionality_after_changes()
+        
+        # Test Database Integration improvements
+        self.test_database_integration_improvements()
+        
         # Test platform startup and health
         self.test_platform_startup_health()
-        
-        # Test service method fixes
-        self.test_service_method_fixes()
-        
-        # Test data integrity verification
-        self.test_data_integrity_verification()
-        
-        # Test API endpoint functionality
-        self.test_api_endpoint_functionality()
         
         # Test performance and reliability
         self.test_performance_reliability()
