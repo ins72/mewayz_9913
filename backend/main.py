@@ -135,6 +135,9 @@ app.include_router(media_library.router, prefix="/api/media", tags=["Media Libra
 # THIRTEENTH WAVE - INTERNATIONALIZATION & LOCALIZATION - Newly Implemented
 app.include_router(i18n_system.router, prefix="/api/i18n", tags=["Internationalization & Localization"])
 
+# THIRTEENTH WAVE - ADVANCED NOTIFICATION & COMMUNICATION - Newly Implemented
+app.include_router(notification_system.router, prefix="/api/notifications", tags=["Advanced Notification & Communication"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
