@@ -363,7 +363,7 @@ async def batch_process_ai(
     current_user: dict = Depends(get_current_user)
 ):
     """Process multiple AI requests in batch"""
-    return await ai_service.batch_process(current_user["id"], [req.dict() for req in processing_requests])
+    return await ai_service.batch_process(current_user.get("_id") or current_user.get("id", "default-user"), [req.dict() for req in processing_requests])
 
 @router.get("/innovations/latest")
 async def get_latest_ai_innovations(current_user: dict = Depends(get_current_user)):
