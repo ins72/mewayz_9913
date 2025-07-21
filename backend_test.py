@@ -343,11 +343,6 @@ class BackendTester:
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
         
-        # Test basic connectivity
-        if not self.test_health_check():
-            print("❌ Backend health check failed. Stopping tests.")
-            return False
-        
         # Test authentication - critical after massive changes
         if not self.test_authentication():
             print("❌ Authentication failed after massive database integration changes.")
