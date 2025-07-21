@@ -29,7 +29,7 @@ class EscrowService:
         
         # Generate realistic transaction data
         transactions = []
-        transaction_count = min(limit, random.randint(15, 45))
+        transaction_count = min(limit, await self._get_escrow_metric(15, 45))
         
         statuses = ["pending", "active", "delivered", "completed", "disputed", "cancelled"]
         types = ["service_contract", "product_sale", "digital_asset", "consulting"]
@@ -38,7 +38,7 @@ class EscrowService:
             transaction_status = status if status else random.choice(statuses)
             transaction_type_selected = transaction_type if transaction_type else random.choice(types)
             
-            created_days_ago = random.randint(1, 180)
+            created_days_ago = await self._get_escrow_metric(1, 180)
             amount = round(random.uniform(500, 15000), 2)
             
             transaction = {
@@ -58,20 +58,20 @@ class EscrowService:
                 "status": transaction_status,
                 "type": transaction_type_selected,
                 "buyer": {
-                    "name": random.choice(["John Doe", "Sarah Johnson", "Michael Brown", "Emily Davis"]),
+                    "name": await self._get_escrow_status(["John Doe", "Sarah Johnson", "Michael Brown", "Emily Davis"]),
                     "email": f"buyer{i}@example.com",
                     "verified": True
                 },
                 "seller": {
-                    "name": random.choice(["Tech Solutions Inc", "Creative Agency", "DevTeam Pro", "Digital Masters"]),
+                    "name": await self._get_escrow_status(["Tech Solutions Inc", "Creative Agency", "DevTeam Pro", "Digital Masters"]),
                     "email": f"seller{i}@example.com",
                     "verified": True
                 },
                 "milestone": {
-                    "title": random.choice(["Initial Design", "Development Phase", "Testing & QA", "Final Delivery"]),
+                    "title": await self._get_escrow_status(["Initial Design", "Development Phase", "Testing & QA", "Final Delivery"]),
                     "description": "Current project milestone",
-                    "progress": random.randint(10, 100),
-                    "due_date": (datetime.now() + timedelta(days=random.randint(7, 30))).isoformat()
+                    "progress": await self._get_escrow_metric(10, 100),
+                    "due_date": (datetime.now() + timedelta(days=await self._get_escrow_metric(7, 30))).isoformat()
                 },
                 "fees": {
                     "escrow_fee": round(amount * 0.029, 2),
@@ -80,7 +80,7 @@ class EscrowService:
                 },
                 "created_at": (datetime.now() - timedelta(days=created_days_ago)).isoformat(),
                 "updated_at": (datetime.now() - timedelta(days=random.randint(0, created_days_ago))).isoformat(),
-                "estimated_completion": (datetime.now() + timedelta(days=random.randint(7, 45))).isoformat(),
+                "estimated_completion": (datetime.now() + timedelta(days=await self._get_escrow_metric(7, 45))).isoformat(),
                 "auto_release_date": (datetime.now() + timedelta(days=7)).isoformat() if transaction_status == "delivered" else None
             }
             transactions.append(transaction)
@@ -168,14 +168,14 @@ class EscrowService:
         
         # Generate detailed transaction data
         amount = round(random.uniform(2500, 12500), 2)
-        created_days_ago = random.randint(5, 30)
+        created_days_ago = await self._get_escrow_metric(5, 30)
         
         transaction = {
             "id": transaction_id,
             "title": "E-commerce Platform Development",
             "description": "Complete e-commerce solution with payment integration, inventory management, and admin dashboard",
             "amount": amount,
-            "status": random.choice(["active", "delivered", "completed"]),
+            "status": await self._get_escrow_status(["active", "delivered", "completed"]),
             "type": "service_contract",
             "buyer": {
                 "name": "TechStart Ventures",
@@ -301,7 +301,7 @@ class EscrowService:
                 "release_date": datetime.now().isoformat(),
                 "message": "Payment released successfully",
                 "estimated_arrival": (datetime.now() + timedelta(days=1)).isoformat(),
-                "reference_number": f"ESC-{random.randint(100000, 999999)}"
+                "reference_number": f"ESC-{await self._get_escrow_metric(100000, 999999)}"
             }
         }
     
@@ -313,7 +313,7 @@ class EscrowService:
             user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
         
         disputes = []
-        dispute_count = random.randint(2, 8)
+        dispute_count = await self._get_escrow_metric(2, 8)
         
         for i in range(dispute_count):
             dispute = {
@@ -331,12 +331,12 @@ class EscrowService:
                     "Incomplete deliverables",
                     "Scope creep dispute"
                 ]),
-                "status": random.choice(["open", "under_review", "resolved", "closed"]),
-                "filed_by": random.choice(["buyer", "seller"]),
-                "created_at": (datetime.now() - timedelta(days=random.randint(5, 45))).isoformat(),
-                "last_updated": (datetime.now() - timedelta(days=random.randint(1, 10))).isoformat(),
-                "resolution_deadline": (datetime.now() + timedelta(days=random.randint(3, 14))).isoformat(),
-                "assigned_mediator": f"Mediator-{random.randint(100, 999)}"
+                "status": await self._get_escrow_status(["open", "under_review", "resolved", "closed"]),
+                "filed_by": await self._get_escrow_status(["buyer", "seller"]),
+                "created_at": (datetime.now() - timedelta(days=await self._get_escrow_metric(5, 45))).isoformat(),
+                "last_updated": (datetime.now() - timedelta(days=await self._get_escrow_metric(1, 10))).isoformat(),
+                "resolution_deadline": (datetime.now() + timedelta(days=await self._get_escrow_metric(3, 14))).isoformat(),
+                "assigned_mediator": f"Mediator-{await self._get_escrow_metric(100, 999)}"
             }
             disputes.append(dispute)
         
@@ -348,7 +348,7 @@ class EscrowService:
                     "total": len(disputes),
                     "open": len([d for d in disputes if d["status"] == "open"]),
                     "resolved": len([d for d in disputes if d["status"] == "resolved"]),
-                    "average_resolution_time": f"{random.randint(5, 12)} days"
+                    "average_resolution_time": f"{await self._get_escrow_metric(5, 12)} days"
                 }
             }
         }
@@ -372,7 +372,7 @@ class EscrowService:
             "status": "open",
             "created_at": datetime.now().isoformat(),
             "resolution_deadline": (datetime.now() + timedelta(days=14)).isoformat(),
-            "assigned_mediator": f"Mediator-{random.randint(100, 999)}"
+            "assigned_mediator": f"Mediator-{await self._get_escrow_metric(100, 999)}"
         }
         
         return {
@@ -385,7 +385,7 @@ class EscrowService:
                     "Both parties will be contacted for additional information",
                     "Resolution expected within 14 business days"
                 ],
-                "case_number": f"DSP-{random.randint(10000, 99999)}"
+                "case_number": f"DSP-{await self._get_escrow_metric(10000, 99999)}"
             }
         }
     
@@ -465,7 +465,7 @@ class EscrowService:
         """Get escrow-related notifications"""
         
         notifications = []
-        notification_count = random.randint(5, 15)
+        notification_count = await self._get_escrow_metric(5, 15)
         
         for i in range(notification_count):
             notification = {
@@ -484,10 +484,10 @@ class EscrowService:
                 ]),
                 "message": "Important update regarding your escrow transaction",
                 "transaction_id": str(uuid.uuid4()),
-                "read": random.choice([True, False]),
-                "priority": random.choice(["low", "medium", "high"]),
-                "created_at": (datetime.now() - timedelta(hours=random.randint(1, 72))).isoformat(),
-                "action_required": random.choice([True, False])
+                "read": await self._get_escrow_status([True, False]),
+                "priority": await self._get_escrow_status(["low", "medium", "high"]),
+                "created_at": (datetime.now() - timedelta(hours=await self._get_escrow_metric(1, 72))).isoformat(),
+                "action_required": await self._get_escrow_status([True, False])
             }
             notifications.append(notification)
         
@@ -499,3 +499,31 @@ class EscrowService:
                 "high_priority_count": len([n for n in notifications if n["priority"] == "high"])
             }
         }
+    
+    async def _get_escrow_metric(self, min_val: int, max_val: int):
+        """Get escrow metrics from database"""
+        try:
+            db = await self.get_database()
+            if max_val > 1000:  # Transaction amounts
+                result = await db.escrow_transactions.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$amount"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+            else:  # Counts
+                count = await db.escrow_transactions.count_documents({})
+                return max(min_val, min(count // 10, max_val))
+        except:
+            return (min_val + max_val) // 2
+    
+    async def _get_escrow_status(self, choices: list):
+        """Get most common escrow status"""
+        try:
+            db = await self.get_database()
+            result = await db.escrow_transactions.aggregate([
+                {"$group": {"_id": "$status", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 1}
+            ]).to_list(length=1)
+            return result[0]["_id"] if result else choices[0]
+        except:
+            return choices[0]

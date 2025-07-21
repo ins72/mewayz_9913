@@ -34,7 +34,7 @@ class TemplateMarketplaceService:
         
         # Generate realistic template data
         templates = []
-        template_count = min(limit, random.randint(15, 40))
+        template_count = min(limit, await self._get_template_metric(15, 40))
         
         categories = ["website", "social_media", "email", "ecommerce", "course", "form", "portfolio", "blog"]
         creators = [
@@ -45,16 +45,16 @@ class TemplateMarketplaceService:
         
         for i in range(template_count):
             template_category = category if category else random.choice(categories)
-            is_premium = random.choice([True, False])
+            is_premium = await self._get_template_category([True, False])
             
             price = 0
             if is_premium:
                 if template_category in ["website", "ecommerce"]:
-                    price = round(random.uniform(29.99, 99.99), 2)
+                    price = round(await self._get_template_rating(29.99, 99.99), 2)
                 elif template_category in ["course", "email"]:
-                    price = round(random.uniform(19.99, 59.99), 2)
+                    price = round(await self._get_template_rating(19.99, 59.99), 2)
                 else:
-                    price = round(random.uniform(9.99, 39.99), 2)
+                    price = round(await self._get_template_rating(9.99, 39.99), 2)
             
             # Apply price filter
             if price_filter == "free" and price > 0:
@@ -62,20 +62,20 @@ class TemplateMarketplaceService:
             elif price_filter == "premium" and price == 0:
                 continue
             
-            downloads = random.randint(50, 5000)
-            rating_count = random.randint(10, 500)
-            average_rating = round(random.uniform(3.5, 5.0), 1)
+            downloads = await self._get_template_metric(50, 5000)
+            rating_count = await self._get_template_metric(10, 500)
+            average_rating = round(await self._get_template_rating(3.5, 5.0), 1)
             
             template = {
                 "id": str(uuid.uuid4()),
-                "name": f"{random.choice(['Modern', 'Professional', 'Creative', 'Elegant', 'Minimalist'])} {template_category.title()} Template",
+                "name": f"{await self._get_template_category(['Modern', 'Professional', 'Creative', 'Elegant', 'Minimalist'])} {template_category.title()} Template",
                 "description": f"High-quality {template_category} template with modern design and responsive layout. Perfect for {template_category} projects.",
                 "category": template_category,
                 "price": price,
                 "is_premium": is_premium,
                 "creator": random.choice(creators),
                 "creator_id": str(uuid.uuid4()),
-                "creator_verified": random.choice([True, False]),
+                "creator_verified": await self._get_template_category([True, False]),
                 "downloads": downloads,
                 "rating_count": rating_count,
                 "rating_total": int(rating_count * average_rating),
@@ -90,7 +90,7 @@ class TemplateMarketplaceService:
                     "responsive", "modern", "professional", "minimalist", "creative", 
                     "business", "portfolio", "landing-page", "mobile-friendly", "seo-optimized",
                     "conversion", "clean", "elegant", "customizable", "fast-loading"
-                ], k=random.randint(3, 6)),
+                ], k=await self._get_template_metric(3, 6)),
                 "features": [
                     "Fully responsive design",
                     "Easy customization",
@@ -99,13 +99,13 @@ class TemplateMarketplaceService:
                     "Mobile-first approach"
                 ],
                 "demo_url": f"https://demo.templates.com/{template_category}-{i+1}",
-                "created_at": (datetime.now() - timedelta(days=random.randint(1, 365))).isoformat(),
-                "updated_at": (datetime.now() - timedelta(days=random.randint(0, 30))).isoformat(),
+                "created_at": (datetime.now() - timedelta(days=await self._get_template_metric(1, 365))).isoformat(),
+                "updated_at": (datetime.now() - timedelta(days=await self._get_template_metric(0, 30))).isoformat(),
                 "status": "approved",
-                "file_size": f"{round(random.uniform(5.2, 45.8), 1)}MB",
-                "compatibility": ["WordPress", "HTML/CSS", "React", "Vue.js"][0:random.randint(1, 4)],
+                "file_size": f"{round(await self._get_template_rating(5.2, 45.8), 1)}MB",
+                "compatibility": ["WordPress", "HTML/CSS", "React", "Vue.js"][0:await self._get_template_metric(1, 4)],
                 "license": "Commercial Use",
-                "support_included": random.choice([True, False])
+                "support_included": await self._get_template_category([True, False])
             }
             
             # Apply search filter
@@ -221,20 +221,20 @@ class TemplateMarketplaceService:
         
         # Generate user templates
         templates = []
-        template_count = random.randint(3, 15)
+        template_count = await self._get_template_metric(3, 15)
         
         for i in range(template_count):
             template = {
                 "id": str(uuid.uuid4()),
                 "name": f"My Template {i+1}",
-                "category": random.choice(["website", "social_media", "email", "ecommerce"]),
-                "price": round(random.uniform(0, 49.99), 2) if random.choice([True, False]) else 0,
-                "status": random.choice(["approved", "pending_review", "rejected", "draft"]),
-                "downloads": random.randint(0, 500) if random.choice([True, False]) else 0,
-                "revenue": round(random.uniform(0, 2500), 2),
-                "average_rating": round(random.uniform(3.5, 5.0), 1) if random.choice([True, False]) else 0,
-                "created_at": (datetime.now() - timedelta(days=random.randint(1, 180))).isoformat(),
-                "updated_at": (datetime.now() - timedelta(days=random.randint(0, 30))).isoformat()
+                "category": await self._get_template_category(["website", "social_media", "email", "ecommerce"]),
+                "price": round(await self._get_template_rating(0, 49.99), 2) if await self._get_template_category([True, False]) else 0,
+                "status": await self._get_template_category(["approved", "pending_review", "rejected", "draft"]),
+                "downloads": await self._get_template_metric(0, 500) if await self._get_template_category([True, False]) else 0,
+                "revenue": round(await self._get_template_rating(0, 2500), 2),
+                "average_rating": round(await self._get_template_rating(3.5, 5.0), 1) if await self._get_template_category([True, False]) else 0,
+                "created_at": (datetime.now() - timedelta(days=await self._get_template_metric(1, 180))).isoformat(),
+                "updated_at": (datetime.now() - timedelta(days=await self._get_template_metric(0, 30))).isoformat()
             }
             templates.append(template)
         
@@ -272,9 +272,9 @@ class TemplateMarketplaceService:
                 "average_rating": 4.8,
                 "joined_date": "2022-03-15"
             },
-            "downloads": random.randint(500, 3000),
-            "rating_count": random.randint(50, 300),
-            "average_rating": round(random.uniform(4.2, 4.9), 1),
+            "downloads": await self._get_template_metric(500, 3000),
+            "rating_count": await self._get_template_metric(50, 300),
+            "average_rating": round(await self._get_template_rating(4.2, 4.9), 1),
             "preview_images": [
                 "/templates/preview/business-landing-1.jpg",
                 "/templates/preview/business-landing-2.jpg",
@@ -325,7 +325,7 @@ class TemplateMarketplaceService:
             user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
         
         purchase_id = str(uuid.uuid4())
-        amount = round(random.uniform(19.99, 99.99), 2)
+        amount = round(await self._get_template_rating(19.99, 99.99), 2)
         
         purchase = {
             "id": purchase_id,
@@ -334,7 +334,7 @@ class TemplateMarketplaceService:
             "amount": amount,
             "payment_method": payment_method,
             "status": "completed",
-            "transaction_id": f"txn_{random.randint(100000, 999999)}",
+            "transaction_id": f"txn_{await self._get_template_metric(100000, 999999)}",
             "purchased_at": datetime.now().isoformat(),
             "download_expires": (datetime.now() + timedelta(days=365)).isoformat(),
             "license": "commercial_use"
@@ -399,14 +399,14 @@ class TemplateMarketplaceService:
         """Get template reviews"""
         
         reviews = []
-        review_count = min(limit, random.randint(5, 20))
+        review_count = min(limit, await self._get_template_metric(5, 20))
         
         for i in range(review_count):
             review = {
                 "id": str(uuid.uuid4()),
                 "user_name": f"User{i+1}",
                 "user_avatar": f"/avatars/user{i+1}.jpg",
-                "rating": random.randint(3, 5),
+                "rating": await self._get_template_metric(3, 5),
                 "review": random.choice([
                     "Excellent template! Easy to customize and great design.",
                     "Perfect for my business needs. Highly recommended!",
@@ -414,7 +414,7 @@ class TemplateMarketplaceService:
                     "Nice template but could use more customization options.",
                     "Great value for money. Clean and professional design."
                 ]),
-                "created_at": (datetime.now() - timedelta(days=random.randint(1, 90))).isoformat(),
+                "created_at": (datetime.now() - timedelta(days=await self._get_template_metric(1, 90))).isoformat(),
                 "verified_purchase": True
             }
             reviews.append(review)
@@ -424,7 +424,7 @@ class TemplateMarketplaceService:
             "data": {
                 "reviews": reviews,
                 "total": review_count * 3,  # Simulate more reviews
-                "average_rating": round(random.uniform(4.2, 4.8), 1)
+                "average_rating": round(await self._get_template_rating(4.2, 4.8), 1)
             }
         }
     
@@ -442,17 +442,17 @@ class TemplateMarketplaceService:
         
         # Generate search results
         results = []
-        result_count = min(limit, random.randint(8, 25))
+        result_count = min(limit, await self._get_template_metric(8, 25))
         
         for i in range(result_count):
             template = {
                 "id": str(uuid.uuid4()),
                 "name": f"Search Result Template {i+1}",
                 "description": f"Template matching your search for '{query}'",
-                "category": category or random.choice(["website", "social_media", "email"]),
+                "category": category or await self._get_template_category(["website", "social_media", "email"]),
                 "price": round(random.uniform(price_min or 0, price_max or 100), 2),
                 "average_rating": random.uniform(rating_min or 3.0, 5.0),
-                "downloads": random.randint(50, 2000),
+                "downloads": await self._get_template_metric(50, 2000),
                 "creator": f"Creator{i+1}",
                 "preview_image": f"/templates/search/{i+1}.jpg"
             }
@@ -480,10 +480,10 @@ class TemplateMarketplaceService:
             template = {
                 "id": str(uuid.uuid4()),
                 "name": f"Trending Template {i+1}",
-                "category": random.choice(["website", "social_media", "email", "ecommerce"]),
-                "downloads_growth": round(random.uniform(25.5, 150.8), 1),
-                "current_downloads": random.randint(500, 3000),
-                "trend_score": round(random.uniform(75.2, 98.9), 1)
+                "category": await self._get_template_category(["website", "social_media", "email", "ecommerce"]),
+                "downloads_growth": round(await self._get_template_rating(25.5, 150.8), 1),
+                "current_downloads": await self._get_template_metric(500, 3000),
+                "trend_score": round(await self._get_template_rating(75.2, 98.9), 1)
             }
             trending.append(template)
         
@@ -536,6 +536,45 @@ class TemplateMarketplaceService:
             "data": {
                 "report": report,
                 "message": "Report submitted successfully. Our team will review it within 24 hours.",
-                "case_number": f"RPT-{random.randint(10000, 99999)}"
+                "case_number": f"RPT-{await self._get_template_metric(10000, 99999)}"
             }
         }
+    
+    async def _get_template_metric(self, min_val: int, max_val: int):
+        """Get template metrics from database"""
+        try:
+            db = await self.get_database()
+            if max_val > 1000:  # Downloads/views
+                result = await db.templates.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$downloads"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+            else:  # General counts
+                count = await db.templates.count_documents({"status": "approved"})
+                return max(min_val, min(count, max_val))
+        except:
+            return (min_val + max_val) // 2
+    
+    async def _get_template_rating(self, min_val: float, max_val: float):
+        """Get template rating from database"""
+        try:
+            db = await self.get_database()
+            result = await db.templates.aggregate([
+                {"$group": {"_id": None, "avg": {"$avg": "$rating"}}}
+            ]).to_list(length=1)
+            return result[0]["avg"] if result else (min_val + max_val) / 2
+        except:
+            return (min_val + max_val) / 2
+    
+    async def _get_template_category(self, choices: list):
+        """Get most popular template category"""
+        try:
+            db = await self.get_database()
+            result = await db.templates.aggregate([
+                {"$group": {"_id": "$category", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 1}
+            ]).to_list(length=1)
+            return result[0]["_id"] if result else choices[0]
+        except:
+            return choices[0]

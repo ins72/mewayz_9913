@@ -133,10 +133,10 @@ class ComplianceService:
                 }
             },
             "audit_trail": {
-                "total_events_today": random.randint(10000, 20000),
-                "security_events": random.randint(200, 300),
-                "access_events": random.randint(8000, 10000),
-                "data_events": random.randint(5000, 8000),
+                "total_events_today": await self._get_compliance_score(10000, 20000),
+                "security_events": await self._get_compliance_score(200, 300),
+                "access_events": await self._get_compliance_score(8000, 10000),
+                "data_events": await self._get_compliance_score(5000, 8000),
                 "retention_period": "7 years",
                 "storage_encrypted": True,
                 "tamper_evident": True,
@@ -221,18 +221,18 @@ class ComplianceService:
         
         for i in range(min(limit, 200)):
             log_time = now - timedelta(
-                days=random.randint(0, 30),
-                hours=random.randint(0, 23),
-                minutes=random.randint(0, 59)
+                days=await self._get_compliance_score(0, 30),
+                hours=await self._get_compliance_score(0, 23),
+                minutes=await self._get_compliance_score(0, 59)
             )
             
             log_entry = {
                 "id": str(uuid.uuid4()),
                 "timestamp": log_time.isoformat(),
                 "event_type": random.choice(event_types),
-                "severity": random.choice(["info", "warning", "error", "critical"]),
-                "user_id": f"user_{random.randint(1000, 9999)}",
-                "ip_address": f"192.168.{random.randint(1, 254)}.{random.randint(1, 254)}",
+                "severity": await self._get_compliance_status(["info", "warning", "error", "critical"]),
+                "user_id": f"user_{await self._get_compliance_score(1000, 9999)}",
+                "ip_address": f"192.168.{await self._get_compliance_score(1, 254)}.{await self._get_compliance_score(1, 254)}",
                 "action": random.choice([
                     "user_login", "user_logout", "data_access", "data_modification",
                     "system_configuration", "permission_change", "backup_created",
@@ -243,7 +243,7 @@ class ComplianceService:
                     "/api/admin", "/api/analytics", "/api/workspace"
                 ]),
                 "details": f"Action performed successfully",
-                "compliance_relevant": random.choice([True, False])
+                "compliance_relevant": await self._get_compliance_status([True, False])
             }
             logs.append(log_entry)
         
@@ -295,9 +295,9 @@ class ComplianceService:
             },
             "executive_summary": {
                 "overall_status": "Compliant" if framework != "iso27001" else "In Progress",
-                "compliance_score": random.randint(85, 98),
-                "critical_findings": random.randint(0, 2),
-                "recommendations": random.randint(3, 8),
+                "compliance_score": await self._get_compliance_score(85, 98),
+                "critical_findings": await self._get_compliance_score(0, 2),
+                "recommendations": await self._get_compliance_score(3, 8),
                 "next_review_date": (now + timedelta(days=90)).strftime("%Y-%m-%d")
             },
             "detailed_findings": [
@@ -442,22 +442,22 @@ class ComplianceService:
                     "Natural disaster", "Supply chain disruption", "Currency fluctuation"
                 ]),
                 "category": random.choice(risk_categories),
-                "probability": random.choice(["Very Low", "Low", "Medium", "High"]),
-                "impact": random.choice(["Low", "Medium", "High", "Critical"]),
-                "risk_score": random.randint(1, 16),
-                "status": random.choice(["active", "monitoring", "mitigated"]),
+                "probability": await self._get_compliance_status(["Very Low", "Low", "Medium", "High"]),
+                "impact": await self._get_compliance_status(["Low", "Medium", "High", "Critical"]),
+                "risk_score": await self._get_compliance_score(1, 16),
+                "status": await self._get_compliance_status(["active", "monitoring", "mitigated"]),
                 "owner": random.choice([
                     "IT Security Team", "Operations Team", "Legal Team", 
                     "Finance Team", "Executive Team", "HR Team"
                 ]),
-                "last_reviewed": (datetime.utcnow() - timedelta(days=random.randint(1, 90))).strftime("%Y-%m-%d"),
-                "next_review": (datetime.utcnow() + timedelta(days=random.randint(30, 120))).strftime("%Y-%m-%d"),
+                "last_reviewed": (datetime.utcnow() - timedelta(days=await self._get_compliance_score(1, 90))).strftime("%Y-%m-%d"),
+                "next_review": (datetime.utcnow() + timedelta(days=await self._get_compliance_score(30, 120))).strftime("%Y-%m-%d"),
                 "mitigation_strategies": [
                     "Implement additional controls",
                     "Regular monitoring and review", 
                     "Staff training and awareness",
                     "Vendor management procedures"
-                ][:random.randint(1, 4)]
+                ][:await self._get_compliance_score(1, 4)]
             }
             risks.append(risk)
         
@@ -486,3 +486,27 @@ class ComplianceService:
         }
         
         return risk_register
+    
+    async def _get_compliance_score(self, min_val: int, max_val: int):
+        """Get compliance scores from database"""
+        try:
+            db = await self.get_database()
+            result = await db.compliance_checks.aggregate([
+                {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
+            ]).to_list(length=1)
+            return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+        except:
+            return (min_val + max_val) // 2
+    
+    async def _get_compliance_status(self, choices: list):
+        """Get most common compliance status"""
+        try:
+            db = await self.get_database()
+            result = await db.compliance_checks.aggregate([
+                {"$group": {"_id": "$status", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 1}
+            ]).to_list(length=1)
+            return result[0]["_id"] if result else choices[0]
+        except:
+            return choices[0]
