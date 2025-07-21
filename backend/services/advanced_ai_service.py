@@ -28,6 +28,27 @@ class AdvancedAIService:
             user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
         
         job_id = str(uuid.uuid4())
+        tokens_required = random.randint(25, 150)
+        cost = tokens_required * 0.002  # $0.002 per token
+        
+        # Store usage in database
+        try:
+            db = await self.get_database()
+            await db.ai_usage.insert_one({
+                "user_id": user_id,
+                "service_type": "Video Processing",
+                "job_id": job_id,
+                "tokens_used": tokens_required,
+                "cost": cost,
+                "status": "processing",
+                "created_at": datetime.now(),
+                "metadata": {
+                    "service_type": service_type,
+                    "processing_options": processing_options
+                }
+            })
+        except Exception as e:
+            print(f"Error storing AI usage: {e}")
         
         return {
             "success": True,
@@ -41,7 +62,8 @@ class AdvancedAIService:
                 "queue_position": random.randint(1, 8),
                 "estimated_processing_time": f"{random.randint(5, 25)} minutes",
                 "estimated_completion": (datetime.now() + timedelta(minutes=random.randint(10, 30))).isoformat(),
-                "tokens_required": random.randint(25, 150),
+                "tokens_required": tokens_required,
+                "cost": round(cost, 4),
                 "uploaded_at": datetime.now().isoformat()
             }
         }
