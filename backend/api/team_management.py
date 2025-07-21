@@ -248,8 +248,20 @@ async def invite_team_member(
 ):
     """Invite new team member with role-based permissions"""
     try:
+        # Get workspace_id if not provided
+        workspace_id = invite_data.workspace_id
+        if not workspace_id:
+            workspaces_collection = get_workspaces_collection()
+            workspace = await workspaces_collection.find_one({"owner_id": current_user["_id"]})
+            if not workspace:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="No workspace found"
+                )
+            workspace_id = str(workspace["_id"])
+        
         # Verify user can manage team
-        user_role = await get_user_role_in_workspace(invite_data.workspace_id, current_user["_id"])
+        user_role = await get_user_role_in_workspace(workspace_id, current_user["_id"])
         if user_role not in ["owner", "admin"]:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -267,7 +279,7 @@ async def invite_team_member(
         # Check if user is already in team
         team_members_collection = get_team_members_collection()
         existing_member = await team_members_collection.find_one({
-            "workspace_id": invite_data.workspace_id,
+            "workspace_id": workspace_id,
             "email": invite_data.email
         })
         
@@ -280,7 +292,7 @@ async def invite_team_member(
         # Check for existing pending invitation
         team_invitations_collection = get_team_invitations_collection()
         existing_invitation = await team_invitations_collection.find_one({
-            "workspace_id": invite_data.workspace_id,
+            "workspace_id": workspace_id,
             "email": invite_data.email,
             "status": "pending",
             "expires_at": {"$gt": datetime.utcnow()}
@@ -296,7 +308,7 @@ async def invite_team_member(
         invitation_token = secrets.token_urlsafe(32)
         invitation_doc = {
             "_id": str(uuid.uuid4()),
-            "workspace_id": invite_data.workspace_id,
+            "workspace_id": workspace_id,
             "email": invite_data.email,
             "role": invite_data.role,
             "invited_by": current_user["_id"],
@@ -313,7 +325,7 @@ async def invite_team_member(
         
         # Log activity
         await log_workspace_activity(
-            invite_data.workspace_id,
+            workspace_id,
             current_user["_id"],
             current_user["name"],
             "team_invite_sent",
@@ -325,7 +337,7 @@ async def invite_team_member(
             send_team_invitation_email,
             invite_data.email,
             current_user["name"],
-            invite_data.workspace_id,
+            workspace_id,
             invitation_token,
             invite_data.role
         )
