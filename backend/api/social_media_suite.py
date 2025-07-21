@@ -472,8 +472,7 @@ async def get_comprehensive_social_report(
     """Get comprehensive social media reporting"""
     return await social_service.get_comprehensive_report(
         current_user.get("_id") or current_user.get("id", "default-user"), period
-
-    async def get_database(self):
+    )
         """Get database connection"""
         from core.database import get_database
         return get_database()
