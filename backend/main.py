@@ -111,6 +111,10 @@ app.include_router(onboarding_system.router, prefix="/api/onboarding", tags=["On
 app.include_router(template_marketplace.router, prefix="/api/templates", tags=["Template Marketplace"])
 app.include_router(ai_content_generation.router, prefix="/api/ai-content", tags=["AI Content Generation"])
 
+# NINTH WAVE - SOCIAL EMAIL INTEGRATION & ADVANCED FINANCIAL ANALYTICS - Newly Migrated
+app.include_router(social_email_integration.router, prefix="/api/social-email", tags=["Social Email Integration"])
+app.include_router(advanced_financial_analytics.router, prefix="/api/advanced-financial", tags=["Advanced Financial Analytics"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
