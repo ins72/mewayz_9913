@@ -317,7 +317,7 @@ async def get_ai_usage_analytics(
     current_user: dict = Depends(get_current_user)
 ):
     """Get AI service usage analytics"""
-    return await ai_service.get_usage_analytics(current_user["id"], period)
+    return await ai_service.get_usage_analytics(current_user.get("_id") or current_user.get("id", "default-user"), period)
 
 @router.get("/processing/queue")
 async def get_processing_queue_status(current_user: dict = Depends(get_current_user)):
