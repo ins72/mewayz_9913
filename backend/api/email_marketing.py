@@ -245,7 +245,8 @@ async def create_automation(
     current_user: dict = Depends(get_current_user)
 ):
     """Create email automation"""
-    return await email_service.create_automation(current_user["id"], automation.dict())
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.create_automation(user_id, automation.dict())
 
 @router.get("/analytics")
 async def get_email_analytics(
