@@ -140,7 +140,7 @@ class BackendTester:
         print("\n=== Testing Newly Created API Modules ===")
         print("Testing Advanced AI Analytics, Real-time Notifications, and Workflow Automation endpoints")
         
-        # Test Advanced AI Analytics API (/api/ai-analytics)
+        # Test Advanced AI Analytics API (/api/ai-analytics/api/ai-analytics)
         print("\n--- Advanced AI Analytics API Testing ---")
         
         # Generate predictive insights (POST)
@@ -149,10 +149,10 @@ class BackendTester:
             "time_range": "30_days",
             "metrics": ["engagement", "conversion", "retention"]
         }
-        self.test_endpoint("/ai-analytics/insights/generate", "POST", insights_data, "AI Analytics - Generate Predictive Insights")
+        self.test_endpoint("/ai-analytics/api/ai-analytics/insights/generate", "POST", insights_data, "AI Analytics - Generate Predictive Insights")
         
         # Get user insights (GET)
-        self.test_endpoint("/ai-analytics/insights", test_name="AI Analytics - Get User Insights")
+        self.test_endpoint("/ai-analytics/api/ai-analytics/insights", test_name="AI Analytics - Get User Insights")
         
         # Generate anomaly detection (POST)
         anomaly_data = {
@@ -160,44 +160,44 @@ class BackendTester:
             "threshold": 0.95,
             "time_window": "7_days"
         }
-        self.test_endpoint("/ai-analytics/insights/anomaly-detection", "POST", anomaly_data, "AI Analytics - Generate Anomaly Detection")
+        self.test_endpoint("/ai-analytics/api/ai-analytics/insights/anomaly-detection", "POST", anomaly_data, "AI Analytics - Generate Anomaly Detection")
         
         # Get analytics summary (GET)
-        self.test_endpoint("/ai-analytics/analytics/summary", test_name="AI Analytics - Get Analytics Summary")
+        self.test_endpoint("/ai-analytics/api/ai-analytics/analytics/summary", test_name="AI Analytics - Get Analytics Summary")
         
-        # Test Real-time Notifications API (/api/notifications)
+        # Test Real-time Notifications API (/api/notifications/api/notifications)
         print("\n--- Real-time Notifications API Testing ---")
         
         # Send notification to user (POST)
         notification_data = {
-            "user_id": "user_123",
             "title": "Test Notification",
             "message": "This is a test notification from the API testing suite",
-            "type": "info",
-            "priority": "medium"
+            "notification_type": "info",
+            "channels": ["websocket", "in_app"],
+            "priority": 5
         }
-        self.test_endpoint("/notifications/send", "POST", notification_data, "Notifications - Send Notification")
+        self.test_endpoint("/notifications/api/notifications/send", "POST", notification_data, "Notifications - Send Notification")
         
         # Get notification history (GET)
-        self.test_endpoint("/notifications/history", test_name="Notifications - Get History")
+        self.test_endpoint("/notifications/api/notifications/history", test_name="Notifications - Get History")
         
         # Get notification statistics (GET)
-        self.test_endpoint("/notifications/stats", test_name="Notifications - Get Statistics")
+        self.test_endpoint("/notifications/api/notifications/stats", test_name="Notifications - Get Statistics")
         
         # Get connection status (GET)
-        self.test_endpoint("/notifications/connection-status", test_name="Notifications - Get Connection Status")
+        self.test_endpoint("/notifications/api/notifications/connection-status", test_name="Notifications - Get Connection Status")
         
-        # Test Workflow Automation API (/api/workflows)
+        # Test Workflow Automation API (/api/workflows/api/workflows)
         print("\n--- Workflow Automation API Testing ---")
         
         # List user workflows (GET)
-        self.test_endpoint("/workflows/list", test_name="Workflows - List User Workflows")
+        self.test_endpoint("/workflows/api/workflows/list", test_name="Workflows - List User Workflows")
         
         # Get workflow templates (GET)
-        self.test_endpoint("/workflows/templates/list", test_name="Workflows - Get Workflow Templates")
+        self.test_endpoint("/workflows/api/workflows/templates/list", test_name="Workflows - Get Workflow Templates")
         
         # Get workflow statistics (GET)
-        self.test_endpoint("/workflows/stats", test_name="Workflows - Get Workflow Statistics")
+        self.test_endpoint("/workflows/api/workflows/stats", test_name="Workflows - Get Workflow Statistics")
     
     def test_core_working_endpoints(self):
         """Test the core working API endpoints that are actually available"""
