@@ -170,7 +170,7 @@ async def get_available_actions(current_user: dict = Depends(get_current_user)):
 @router.get("/analytics/dashboard")
 async def get_automation_analytics(current_user: dict = Depends(get_current_user)):
     """Get automation analytics dashboard"""
-    return await automation_service.get_automation_analytics(current_user["id"])
+    return await automation_service.get_automation_analytics(current_user.get("_id") or current_user.get("id", "default-user"))
 
 @router.get("/templates")
 async def get_workflow_templates(
