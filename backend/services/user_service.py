@@ -3,7 +3,7 @@ User Service - Real Database Operations
 Professional Mewayz Platform
 """
 from typing import Optional, Dict, Any, List
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 from bson import ObjectId
 
