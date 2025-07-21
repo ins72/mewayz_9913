@@ -156,7 +156,7 @@ async def get_survey_analytics(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/surveys/{survey_id}/export")
+@router.get("/{survey_id}/export")
 async def export_survey_responses(
     survey_id: str,
     format: str = "csv",
