@@ -45,7 +45,7 @@ async def create_workflow(
     current_user: dict = Depends(get_current_user)
 ):
     """Create a new automation workflow"""
-    return await automation_service.create_workflow(current_user["id"], workflow_data.dict())
+    return await automation_service.create_workflow(current_user.get("_id") or current_user.get("id", "default-user"), workflow_data.dict())
 
 @router.get("/workflows")
 async def get_user_workflows(
