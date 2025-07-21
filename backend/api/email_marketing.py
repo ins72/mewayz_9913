@@ -236,7 +236,8 @@ async def create_template(
 @router.get("/automations")
 async def get_automations(current_user: dict = Depends(get_current_user)):
     """Get email automations"""
-    return await email_service.get_automations(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_automations(user_id)
 
 @router.post("/automations")
 async def create_automation(
