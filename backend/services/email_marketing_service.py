@@ -816,8 +816,7 @@ class EmailMarketingService:
             return await data_population_service.get_sample_from_db(choices, k)
         except Exception:
             # Fallback to selecting first k items
-            import random
-            return random.sample(choices, min(k, len(choices)))
+            return choices[:min(k, len(choices))]
 
 # Global service instance
 email_marketing_service = EmailMarketingService()
