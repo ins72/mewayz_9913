@@ -361,46 +361,150 @@ class BackendTester:
         for endpoint, test_name in business_endpoints:
             self.test_endpoint(endpoint, test_name=test_name)
 
-    def test_critical_service_fixes(self):
-        """Test the specific services that were failing and have been fixed"""
-        print("\n=== Testing Critical Service Fixes ===")
-        print("Testing the 4 specific services that were previously failing:")
-        print("1. Customer Experience Service - was import error")
-        print("2. Social Email Service - was syntax error") 
-        print("3. Email Marketing Service - was runtime error")
-        print("4. Content Creation Service - was endpoint not found")
+    def test_platform_startup_health(self):
+        """Test platform startup and health metrics"""
+        print("\n=== Platform Startup & Health Verification ===")
         
-        # Test the specific endpoints that were failing
-        critical_endpoints = [
-            ("/customer-experience/dashboard", "Customer Experience - Dashboard (was import error)"),
-            ("/social-email/campaigns", "Social Email - Campaigns (was syntax error)"),
-            ("/email-marketing/campaigns", "Email Marketing - Campaigns (was runtime error)"),
-            ("/content-creation/projects", "Content Creation - Projects (was endpoint not found)")
+        # Test system endpoints
+        self.test_endpoint("/", test_name="Platform Root Status")
+        self.test_endpoint("/health", test_name="Platform Health Check")
+        self.test_endpoint("/metrics", test_name="Platform System Metrics")
+        
+        # Test API documentation
+        self.test_endpoint("/docs", test_name="API Documentation")
+        self.test_endpoint("/redoc", test_name="API ReDoc Documentation")
+    
+    def test_service_method_fixes(self):
+        """Test service method fixes for previously failing services"""
+        print("\n=== Service Method Fixes Verification ===")
+        print("Testing services that were previously failing due to method mapping issues")
+        
+        # Test services that had method mapping issues
+        service_fixes = [
+            ("/customer-experience/dashboard", "Customer Experience Service - Dashboard"),
+            ("/customer-experience/journey-mapping", "Customer Experience Service - Journey Mapping"),
+            ("/customer-experience/feedback", "Customer Experience Service - Feedback"),
+            ("/social-email/campaigns", "Social Email Service - Campaigns"),
+            ("/social-email/templates", "Social Email Service - Templates"),
+            ("/email-marketing/campaigns", "Email Marketing Service - Campaigns"),
+            ("/content-creation/projects", "Content Creation Service - Projects"),
+            ("/content-creation/templates", "Content Creation Service - Templates"),
+            ("/content-creation/assets", "Content Creation Service - Assets")
         ]
         
-        for endpoint, test_name in critical_endpoints:
+        for endpoint, test_name in service_fixes:
             self.test_endpoint(endpoint, test_name=test_name)
     
-    def test_service_method_mapping(self):
-        """Test service method mapping to confirm instances are properly instantiated"""
-        print("\n=== Testing Service Method Mapping ===")
-        print("Verifying service instances are properly instantiated and methods are accessible")
+    def test_data_integrity_verification(self):
+        """Test data integrity to verify elimination of mock data"""
+        print("\n=== Data Integrity Verification ===")
+        print("Verifying elimination of random data and real database operations")
         
-        # Test various service endpoints to verify method mapping
-        service_mapping_endpoints = [
-            ("/customer-experience/dashboard", "Customer Experience Service Instance"),
-            ("/customer-experience/journey-mapping", "Customer Experience Journey Mapping"),
-            ("/customer-experience/feedback", "Customer Experience Feedback"),
-            ("/social-email/campaigns", "Social Email Service Instance"),
-            ("/social-email/templates", "Social Email Templates"),
-            ("/email-marketing/campaigns", "Email Marketing Service Instance"),
-            ("/content-creation/projects", "Content Creation Service Instance"),
-            ("/content-creation/templates", "Content Creation Templates"),
-            ("/content-creation/assets", "Content Creation Assets")
+        # Test core services that should now use real database data
+        data_integrity_endpoints = [
+            ("/dashboard/overview", "Dashboard Service - Real Database Data"),
+            ("/analytics/overview", "Analytics Service - Real Database Data"),
+            ("/users/profile", "User Management - Real Database Data"),
+            ("/ai/services", "AI Services - Real Database Data"),
+            ("/ecommerce/products", "E-commerce - Real Database Data"),
+            ("/marketing/campaigns", "Marketing - Real Database Data"),
+            ("/admin/users", "Admin Management - Real Database Data"),
+            ("/automation/workflows", "Automation - Real Database Data"),
+            ("/support/tickets", "Support System - Real Database Data"),
+            ("/monitoring/system-health", "Monitoring - Real Database Data")
         ]
         
-        for endpoint, test_name in service_mapping_endpoints:
+        for endpoint, test_name in data_integrity_endpoints:
             self.test_endpoint(endpoint, test_name=test_name)
+        
+        # Test data consistency
+        self.test_data_consistency_verification()
+    
+    def test_api_endpoint_functionality(self):
+        """Test API endpoint functionality across all major modules"""
+        print("\n=== API Endpoint Functionality Testing ===")
+        
+        # Test core authentication
+        print("Testing Core Authentication:")
+        self.test_endpoint("/auth/register", "POST", {"name": "Test User", "email": "test@example.com", "password": "testpass"}, "Auth - Register")
+        
+        # Test dashboard analytics
+        print("Testing Dashboard Analytics:")
+        self.test_endpoint("/dashboard/overview", test_name="Dashboard - Overview")
+        self.test_endpoint("/dashboard/activity-summary", test_name="Dashboard - Activity Summary")
+        
+        # Test AI services
+        print("Testing AI Services:")
+        self.test_endpoint("/ai/services", test_name="AI - Services")
+        self.test_endpoint("/ai/conversations", test_name="AI - Conversations")
+        self.test_endpoint("/advanced-ai/capabilities", test_name="Advanced AI - Capabilities")
+        self.test_endpoint("/advanced-ai/models", test_name="Advanced AI - Models")
+        
+        # Test e-commerce functions
+        print("Testing E-commerce Functions:")
+        self.test_endpoint("/ecommerce/products", test_name="E-commerce - Products")
+        self.test_endpoint("/ecommerce/orders", test_name="E-commerce - Orders")
+        self.test_endpoint("/ecommerce/dashboard", test_name="E-commerce - Dashboard")
+        
+        # Test social media integrations
+        print("Testing Social Media Integrations:")
+        self.test_endpoint("/social-media/analytics", test_name="Social Media - Analytics")
+        self.test_endpoint("/social-email/campaigns", test_name="Social Email - Campaigns")
+        
+        # Test business intelligence
+        print("Testing Business Intelligence:")
+        self.test_endpoint("/business-intelligence/metrics", test_name="Business Intelligence - Metrics")
+        self.test_endpoint("/analytics/features/usage", test_name="Analytics - Features Usage")
+        
+        # Test integration management
+        print("Testing Integration Management:")
+        self.test_endpoint("/integrations/available", test_name="Integrations - Available")
+        self.test_endpoint("/integrations/connected", test_name="Integrations - Connected")
+    
+    def test_performance_reliability(self):
+        """Test performance and reliability metrics"""
+        print("\n=== Performance & Reliability Testing ===")
+        
+        # Test response times for key endpoints
+        performance_endpoints = [
+            "/dashboard/overview",
+            "/users/profile", 
+            "/ai/services",
+            "/ecommerce/products",
+            "/analytics/overview"
+        ]
+        
+        total_response_time = 0
+        successful_requests = 0
+        
+        for endpoint in performance_endpoints:
+            try:
+                import time
+                start_time = time.time()
+                
+                url = f"{API_BASE}{endpoint}"
+                response = self.session.get(url, timeout=10)
+                
+                end_time = time.time()
+                response_time = end_time - start_time
+                total_response_time += response_time
+                
+                if response.status_code == 200:
+                    successful_requests += 1
+                    self.log_result(f"Performance - {endpoint}", True, f"Response time: {response_time:.3f}s")
+                else:
+                    self.log_result(f"Performance - {endpoint}", False, f"Failed with status {response.status_code}")
+                    
+            except Exception as e:
+                self.log_result(f"Performance - {endpoint}", False, f"Request error: {str(e)}")
+        
+        if successful_requests > 0:
+            avg_response_time = total_response_time / successful_requests
+            self.log_result("Average Response Time", True, f"Average: {avg_response_time:.3f}s across {successful_requests} endpoints")
+        
+        # Test system stability
+        self.test_endpoint("/health", test_name="System Stability Check")
+        self.test_endpoint("/metrics", test_name="System Metrics Check")
 
     def run_comprehensive_test(self):
         """Run comprehensive backend testing for final verification after service overhaul"""
