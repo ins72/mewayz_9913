@@ -12,7 +12,7 @@ import hmac
 import hashlib
 from datetime import datetime, timedelta
 
-from core.auth import get_current_user, get_current_admin_user
+from core.auth import get_current_user
 from core.database import get_database
 from services.webhook_service import WebhookService
 
