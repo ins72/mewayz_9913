@@ -857,7 +857,7 @@ class WebhookService:
             # 4. Update delivery record in database
             
             # For demo, just simulate success/failure
-                        success = await self._get_probability_from_db() > 0.1  # 90% success rate
+            success = await self._get_probability_from_db() > 0.1  # 90% success rate
             
             delivery_result = {
                 "delivery_id": delivery_id,
