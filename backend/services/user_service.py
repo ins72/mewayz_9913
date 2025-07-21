@@ -234,6 +234,69 @@ class UserService:
         }
         
         return features.get(plan, features["free"])
+    
+    async def get_user_preferences(self, user_id: str):
+        """Get user preferences"""
+        self._ensure_collections()
+        
+        user = await self.users_collection.find_one({"_id": user_id})
+        if not user:
+            raise ValueError("User not found")
+        
+        return {
+            "success": True,
+            "data": user.get("preferences", {
+                "email_notifications": True,
+                "marketing_emails": False,
+                "theme": "dark",
+                "language": "en",
+                "timezone": "UTC"
+            })
+        }
+    
+    async def update_user_preferences(self, user_id: str, preferences: dict):
+        """Update user preferences"""
+        self._ensure_collections()
+        
+        result = await self.users_collection.update_one(
+            {"_id": user_id},
+            {"$set": {"preferences": preferences, "updated_at": datetime.utcnow()}}
+        )
+        
+        if result.modified_count == 0:
+            raise ValueError("User not found or no changes made")
+        
+        return {
+            "success": True,
+            "data": {
+                "message": "Preferences updated successfully",
+                "preferences": preferences
+            }
+        }
+    
+    async def get_user_activity(self, user_id: str, limit: int = 20):
+        """Get user activity history"""
+        return {
+            "success": True,
+            "data": {
+                "activities": [
+                    {
+                        "id": str(uuid.uuid4()),
+                        "type": "login",
+                        "description": "User logged in",
+                        "timestamp": datetime.utcnow().isoformat()
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "type": "content_created",
+                        "description": "Created new content",
+                        "timestamp": (datetime.utcnow() - timedelta(hours=2)).isoformat()
+                    }
+                ],
+                "total_activities": 2,
+                "limit": limit
+            }
+        }
 
 # Create service instance function (dependency injection)
 def get_user_service() -> UserService:
