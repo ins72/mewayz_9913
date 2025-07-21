@@ -258,11 +258,11 @@ class SocialMediaService:
     def _get_sentiment_score(self, sentiment: str) -> float:
         """Convert sentiment to numerical score"""
         scores = {
-            "positive": await self._get_float_metric_from_db(0.6, 1.0),
-            "neutral": random.uniform(-0.2, 0.2),
-            "negative": random.uniform(-1.0, -0.3)
+            "positive": 0.8,
+            "neutral": 0.0,
+            "negative": -0.6
         }
-        return round(scores.get(sentiment, 0.0), 2)
+        return scores.get(sentiment, 0.0)
     
     async def get_sentiment_analysis(self, user_id: str, period: str = "weekly"):
         """Get social media sentiment analysis"""
