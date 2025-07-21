@@ -285,8 +285,8 @@ Click below to secure your spot and join the thousands who are already seeing in
 
 **Technical SEO Elements:**
 - Proper H1, H2, H3 tag structure
-- Keyword density: {round(await self._get_enhanced_metric_from_db("float", 1.5, 3.2), 1)}%
-- Readability score: {await self._get_enhanced_metric_from_db("count", 75, 95)}/100
+- Keyword density: {round(await self._get_enhanced_metric_from_db('float', 1.5, 3.2), 1)}%
+- Readability score: {await self._get_enhanced_metric_from_db('count', 75, 95)}/100
 - Mobile-friendly formatting
 - Schema markup recommendations included"""
         
