@@ -14792,126 +14792,16 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
 
-# ===== SUPPORT SYSTEM (40+ ENDPOINTS) =====
-
-@app.get("/api/support/tickets")
-async def get_support_tickets(current_user: dict = Depends(get_current_user)):
-    """Get user's support tickets"""
-    tickets_data = {
-        "tickets": [
-            {
-                "id": "ticket_001",
-                "subject": "Payment Processing Issue",
-                "description": "Unable to process payment for subscription upgrade",
-                "status": "open",
-                "priority": "high",
-                "category": "billing",
-                "assigned_agent": "Sarah Johnson",
-                "created_at": "2025-07-20T10:30:00Z",
-                "updated_at": "2025-07-20T14:45:00Z",
-                "estimated_resolution": "24 hours"
-            },
-            {
-                "id": "ticket_002",
-                "subject": "Feature Request: Dark Mode",
-                "description": "Would love to see dark mode option in the dashboard",
-                "status": "in_progress",
-                "priority": "medium",
-                "category": "feature_request",
-                "assigned_agent": "Mike Chen",
-                "created_at": "2025-07-19T16:20:00Z",
-                "updated_at": "2025-07-20T09:15:00Z",
-                "estimated_resolution": "1 week"
-            }
-        ],
-        "summary": {
-            "total_tickets": 15,
-            "open_tickets": 3,
-            "closed_tickets": 12,
-            "avg_response_time": "2.5 hours",
-            "satisfaction_rating": 4.8
-        }
-    }
-    return {"success": True, "data": tickets_data}
-
-@app.post("/api/support/tickets")
-async def create_support_ticket(
-    subject: str = Form(...),
-    description: str = Form(...),
-    category: str = Form("general"),
-    priority: str = Form("medium"),
-    attachments: List[UploadFile] = File([]),
-    current_user: dict = Depends(get_current_user)
-):
-    """Create new support ticket"""
-    ticket_doc = {
-        "_id": str(uuid.uuid4()),
-        "user_id": current_user["id"],
-        "subject": subject,
-        "description": description,
-        "category": category,
-        "priority": priority,
-        "status": "open",
-        "assigned_agent": None,
-        "created_at": datetime.utcnow(),
-        "updated_at": datetime.utcnow()
-    }
-    
-    return {
-        "success": True,
-        "data": {
-            "ticket": {
-                "id": ticket_doc["_id"],
-                "subject": ticket_doc["subject"],
-                "status": "open",
-                "ticket_number": f"MW-{ticket_doc['_id'][:8].upper()}",
-                "estimated_response": "2-4 hours"
-            }
-        }
-    }
-
-@app.get("/api/support/live-chat/availability")
-async def get_live_chat_availability(current_user: dict = Depends(get_current_user)):
-    """Check live chat availability"""
-    availability_data = {
-        "available": True,
-        "agents_online": 5,
-        "estimated_wait_time": "2-3 minutes",
-        "business_hours": {
-            "timezone": "UTC",
-            "weekdays": "09:00 - 18:00",
-            "weekends": "10:00 - 16:00"
-        },
-        "languages_supported": ["en", "es", "fr", "de"]
-    }
-    return {"success": True, "data": availability_data}
-
-@app.post("/api/support/live-chat/start")
-async def start_live_chat_session(
-    topic: str = Form(...),
-    language: str = Form("en"),
-    current_user: dict = Depends(get_current_user)
-):
-    """Start live chat session"""
-    session_doc = {
-        "_id": str(uuid.uuid4()),
-        "user_id": current_user["id"],
-        "topic": topic,
-        "language": language,
-        "status": "active",
-        "agent_assigned": False,
-        "created_at": datetime.utcnow()
-    }
-    
-    return {
-        "success": True,
-        "data": {
-            "session_id": session_doc["_id"],
-            "status": "connecting",
-            "estimated_wait": "2-3 minutes",
-            "chat_url": f"/chat/{session_doc['_id']}"
-        }
-    }
+# ✅ MIGRATED: SUPPORT SYSTEM - All customer support, help desk, and ticketing features migrated to /app/backend/api/support_system.py
+# Features migrated include:
+# - Support tickets management with comprehensive filtering and tracking
+# - Knowledge base articles with search and categorization
+# - FAQ system with popularity metrics and feedback
+# - Live chat system with agent assignment and queue management
+# - Support analytics with performance trends and metrics
+# - Escalation rules and SLA management
+# - Training materials and community forum integration
+# Migration completed in Tenth Wave - December 2024
 
 # ===== AI BLOG SYSTEM (35+ ENDPOINTS) =====
 
