@@ -98,14 +98,19 @@ class BackendTester:
         try:
             url = f"{API_BASE}{endpoint}"
             
+            # Ensure we have authentication headers if we have a token
+            headers = {}
+            if self.access_token:
+                headers["Authorization"] = f"Bearer {self.access_token}"
+            
             if method.upper() == "GET":
-                response = self.session.get(url, timeout=10)
+                response = self.session.get(url, headers=headers, timeout=10)
             elif method.upper() == "POST":
-                response = self.session.post(url, json=data, timeout=10)
+                response = self.session.post(url, json=data, headers=headers, timeout=10)
             elif method.upper() == "PUT":
-                response = self.session.put(url, json=data, timeout=10)
+                response = self.session.put(url, json=data, headers=headers, timeout=10)
             elif method.upper() == "DELETE":
-                response = self.session.delete(url, timeout=10)
+                response = self.session.delete(url, headers=headers, timeout=10)
             else:
                 self.log_result(test_name, False, f"Unsupported method: {method}")
                 return False
@@ -126,6 +131,14 @@ class BackendTester:
                 return False
             elif response.status_code == 403:
                 self.log_result(test_name, False, f"Access forbidden (403)")
+                return False
+            elif response.status_code == 500:
+                try:
+                    error_data = response.json()
+                    error_msg = error_data.get('message', 'Internal server error')
+                    self.log_result(test_name, False, f"Internal server error (500): {error_msg}")
+                except:
+                    self.log_result(test_name, False, f"Internal server error (500): {response.text}")
                 return False
             else:
                 self.log_result(test_name, False, f"Endpoint error - Status {response.status_code}: {response.text}")
