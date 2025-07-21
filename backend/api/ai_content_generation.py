@@ -171,7 +171,7 @@ async def generate_image(
     current_user: dict = Depends(get_current_user)
 ):
     """Generate AI images"""
-    return await ai_service.generate_image(current_user["id"], request.dict())
+    return await ai_service.generate_image(current_user.get("_id") or current_user.get("id", "default-user"), request.dict())
 
 @router.get("/conversations")
 async def get_conversations(current_user: dict = Depends(get_current_user)):
