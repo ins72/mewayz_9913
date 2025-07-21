@@ -235,7 +235,7 @@ async def generate_image(
 ):
     """Generate images from text prompt"""
     return await ai_service.generate_image(
-        current_user["id"], prompt, style, resolution, variations
+        current_user.get("_id") or current_user.get("id", "default-user"), prompt, style, resolution, variations
     )
 
 @router.post("/image/enhance")
