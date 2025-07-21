@@ -257,22 +257,22 @@ class FinalAuditTester:
         print("Verifying all /api/admin-config/ endpoints are working perfectly")
         
         admin_config_endpoints = [
-            ("/admin-config/configuration", "Get Configuration"),
-            ("/admin-config/integrations/status", "Integration Status"),
-            ("/admin-config/system/health", "System Health"),
-            ("/admin-config/logs", "System Logs"),
-            ("/admin-config/available-services", "Available Services"),
-            ("/admin-config/analytics/dashboard", "Analytics Dashboard"),
-            ("/admin-config/logs/statistics", "Log Statistics"),
-            ("/admin-config/integrations/stripe/test", "Test Stripe Integration"),
-            ("/admin-config/integrations/openai/test", "Test OpenAI Integration"),
-            ("/admin-config/integrations/sendgrid/test", "Test SendGrid Integration"),
-            ("/admin-config/integrations/twitter/test", "Test Twitter Integration")
+            ("/admin-config/configuration", "Get Configuration", "GET"),
+            ("/admin-config/integrations/status", "Integration Status", "GET"),
+            ("/admin-config/system/health", "System Health", "GET"),
+            ("/admin-config/logs", "System Logs", "GET"),
+            ("/admin-config/available-services", "Available Services", "GET"),
+            ("/admin-config/analytics/dashboard", "Analytics Dashboard", "GET"),
+            ("/admin-config/logs/statistics", "Log Statistics", "GET"),
+            ("/admin-config/integrations/stripe/test", "Test Stripe Integration", "POST"),
+            ("/admin-config/integrations/openai/test", "Test OpenAI Integration", "POST"),
+            ("/admin-config/integrations/sendgrid/test", "Test SendGrid Integration", "POST"),
+            ("/admin-config/integrations/twitter/test", "Test Twitter Integration", "POST")
         ]
         
         admin_config_working = 0
-        for endpoint, name in admin_config_endpoints:
-            success, data = self.test_endpoint(endpoint, f"Admin Config - {name}")
+        for endpoint, name, method in admin_config_endpoints:
+            success, data = self.test_endpoint_with_method(endpoint, method, f"Admin Config - {name}")
             if success:
                 admin_config_working += 1
         
