@@ -22,7 +22,7 @@ user_service = get_user_service()
 class TeamMemberInvite(BaseModel):
     email: EmailStr
     role: str = "member"  # owner, admin, member, viewer
-    workspace_id: str
+    workspace_id: Optional[str] = None
     message: Optional[str] = ""
 
 class TeamMemberUpdate(BaseModel):
