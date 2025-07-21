@@ -54,7 +54,7 @@ class AdvancedAIService:
             "data": {
                 "job_id": job_id,
                 "upload_status": "completed",
-                "file_size": f"{round(await self._get_enhanced_metric_from_db("float", 50.5, 500.8), 1)}MB",
+                "file_size": f"{round(await self._get_enhanced_metric_from_db('float', 50.5, 500.8), 1)}MB",
                 "duration": f"{await self._get_enhanced_metric_from_db("count", 5, 120)} minutes",
                 "service_type": service_type,
                 "processing_status": "queued",
