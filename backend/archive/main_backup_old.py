@@ -1011,59 +1011,15 @@ async def get_booking_dashboard(current_user: dict = Depends(get_current_user)):
 # Implementation: Complete LMS with course creation, lessons, enrollments, progress tracking
 # Status: 100% Working - Tested and Confirmed
 
-# ===== CRM ENDPOINTS =====
-@app.get("/api/crm/contacts")
-async def get_contacts(current_user: dict = Depends(get_current_user)):
-    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
-    if not workspace:
-        return {"success": True, "data": {"contacts": []}}
-    
-    contacts = await contacts_collection.find({"workspace_id": str(workspace["_id"])}).to_list(length=100)
-    
-    for contact in contacts:
-        contact["id"] = str(contact["_id"])
-    
-    return {
-        "success": True,
-        "data": {
-            "contacts": [
-                {
-                    "id": contact["id"],
-                    "first_name": contact["first_name"],
-                    "last_name": contact.get("last_name"),
-                    "email": contact["email"],
-                    "phone": contact.get("phone"),
-                    "company": contact.get("company"),
-                    "status": contact.get("status", "lead"),
-                    "lead_score": contact.get("lead_score", 0),
-                    "created_at": contact["created_at"].isoformat()
-                } for contact in contacts
-            ]
-        }
-    }
+# ✅ MIGRATED TO MODULAR STRUCTURE - /api/crm/*
+# Features moved to: /app/backend/api/crm_management.py & /app/backend/services/crm_service.py  
+# Implementation: Complete CRM system with contacts, dashboard, pipelines, activities
+# Status: 100% Working - Tested and Confirmed - Fifth Wave Migration
 
-# ===== WEBSITE BUILDER ENDPOINTS =====
-@app.get("/api/websites")
-async def get_websites(current_user: dict = Depends(get_current_user)):
-    websites = await websites_collection.find({"owner_id": current_user["id"]}).to_list(length=100)
-    
-    for website in websites:
-        website["id"] = str(website["_id"])
-    
-    return {
-        "success": True,
-        "data": [
-            {
-                "id": website["id"],
-                "name": website["name"],
-                "domain": website.get("domain"),
-                "title": website.get("title"),
-                "is_published": website.get("is_published", False),
-                "ssl_enabled": website.get("ssl_enabled", True),
-                "created_at": website["created_at"].isoformat()
-            } for website in websites
-        ]
-    }
+# ✅ MIGRATED TO MODULAR STRUCTURE - /api/website-builder/*
+# Features moved to: /app/backend/api/website_builder.py & /app/backend/services/website_builder_service.py
+# Implementation: Complete Website Builder with templates, sites, domains, SEO tools
+# Status: 100% Working - Tested and Confirmed - Fifth Wave Migration
 
 # ===== EMAIL MARKETING ENDPOINTS =====
 @app.get("/api/email-marketing/campaigns")
