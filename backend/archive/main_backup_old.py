@@ -10786,9 +10786,9 @@ async def add_social_listening_keyword(
     }
 
 # Advanced collections for maximum value delivery
-ai_video_processing_collection = database.ai_video_processing
-voice_ai_collection = database.voice_ai
-image_recognition_collection = database.image_recognition
+# ✅ MIGRATED: ai_video_processing_collection moved to /app/backend/services/advanced_ai_service.py
+# ✅ MIGRATED: voice_ai_collection moved to /app/backend/services/advanced_ai_service.py
+# ✅ MIGRATED: image_recognition_collection moved to /app/backend/services/advanced_ai_service.py
 # ✅ MIGRATED: inventory_management_collection moved to /app/backend/services/enhanced_ecommerce_service.py
 # ✅ MIGRATED: dropshipping_integration_collection moved to /app/backend/services/enhanced_ecommerce_service.py
 influencer_marketplace_collection = database.influencer_marketplace
@@ -10797,11 +10797,11 @@ push_notifications_collection = database.push_notifications
 heat_mapping_collection = database.heat_mapping
 session_recordings_collection = database.session_recordings
 funnel_analysis_collection = database.funnel_analysis
-advanced_workflows_collection = database.advanced_workflows
+# ✅ MIGRATED: advanced_workflows_collection moved to /app/backend/services/automation_service.py
 social_listening_collection = database.social_listening
 project_management_collection = database.project_management
 time_tracking_collection = database.time_tracking
-help_desk_collection = database.help_desk
+# ✅ MIGRATED: help_desk_collection moved to /app/backend/services/support_service.py
 
 # ✅ MIGRATED: ADVANCED AI SUITE - All AI processing, video/voice/image services migrated to /app/backend/api/advanced_ai_suite.py
 # Features migrated include:
