@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://7cfbae80-c985-4454-b805-9babb474ff5c.preview.emergentagent.com/api"
+BACKEND_URL = "https://24cf731f-7b16-4968-bceb-592500093c66.preview.emergentagent.com/api"
 TEST_EMAIL = "tmonnens@outlook.com"
 TEST_PASSWORD = "Voetballen5"
 
