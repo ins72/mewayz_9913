@@ -81,6 +81,7 @@ async def update_survey(
 ):
     """Update a survey"""
     try:
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
         updates = {}
         if title:
             updates["title"] = title
@@ -93,7 +94,7 @@ async def update_survey(
         if status:
             updates["status"] = status
             
-        survey = await SurveyService.update_survey(survey_id, current_user["id"], updates)
+        survey = await SurveyService.update_survey(survey_id, user_id, updates)
         return {"success": True, "data": survey}
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON in questions or settings")
