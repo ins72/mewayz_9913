@@ -8,7 +8,7 @@ from datetime import datetime
 from pydantic import BaseModel
 import uuid
 
-from core.auth import get_current_user, require_auth
+from core.auth import get_current_user
 from core.workflow_automation_engine import (
     workflow_engine, TriggerType, ActionType, WorkflowStatus
 )
