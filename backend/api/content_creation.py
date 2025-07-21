@@ -69,7 +69,7 @@ async def invite_collaborator(
 ):
     """Invite collaborator to content project"""
     user_id = current_user.get("user_id")
-    return await content_creation_service.invite_collaborator(user_id, collaboration_data)
+    return await content_creation_service.invite_collaborator_alt(user_id, collaboration_data)
 
 @router.get("/workflow")
 async def get_content_workflow(
