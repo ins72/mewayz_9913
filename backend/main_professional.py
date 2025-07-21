@@ -36,7 +36,7 @@ from api import (
     
     # Customer Engagement & Experience
     bio_sites, social_media, social_media_suite, marketing, email_marketing,
-    customer_experience_suite, social_email_integration, notifications_system,
+    customer_experience_suite, social_email_integration, notification_system,
     
     # Business Operations
     bookings, crm_management, team_management, course_management, support_system,
@@ -180,7 +180,7 @@ app.include_router(marketing.router, prefix="/api/marketing", tags=["📢 Market
 app.include_router(email_marketing.router, prefix="/api/email-marketing", tags=["📧 Email Marketing"])
 app.include_router(customer_experience_suite.router, prefix="/api/customer-experience", tags=["🎯 Customer Experience"])
 app.include_router(social_email_integration.router, prefix="/api/social-email", tags=["📧 Social Email Integration"])
-app.include_router(notifications_system.router, prefix="/api/notifications", tags=["🔔 Notifications"])
+app.include_router(notification_system.router, prefix="/api/notifications", tags=["🔔 Notifications"])
 
 # BUSINESS OPERATIONS
 app.include_router(bookings.router, prefix="/api/bookings", tags=["📅 Booking System"])
