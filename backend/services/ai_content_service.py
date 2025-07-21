@@ -135,7 +135,7 @@ Drawing from industry expertise, these best practices will help you achieve opti
 
 **Word Count:** Approximately {word_counts.get(length, "800-1200")} words
 **Tone:** {tone.title()}
-**Recommended Reading Time:** {await self._get_enhanced_metric_from_db("count", 3, 8)} minutes"""
+**Recommended Reading Time:** {await self._get_enhanced_metric_from_db('count', 3, 8)} minutes"""
 
         return content
     
