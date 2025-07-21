@@ -311,7 +311,7 @@ async def discover_influencers(
                     "avg_comments": await social_service._get_real_metric_from_db('avg_comments', int(followers * 0.001), int(followers * 0.01), user_id)
                 },
                 "tiktok": {
-                    "followers": random.randint(int(followers * 0.5), int(followers * 2)),
+                    "followers": await advanced_data_service.get_real_social_metric('followers', int(followers * 0.5), int(followers * 2), user_id),
                     "engagement_rate": round(await social_service.get_metric(), 1),
                     "avg_views": random.randint(int(followers * 2), int(followers * 10))
                 } if await social_service.get_status() else None,
