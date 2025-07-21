@@ -153,7 +153,7 @@ class FinalAuditTester:
             ("/users/profile", "User Management"),
             ("/ai/services", "AI Services"),
             ("/ecommerce/dashboard", "E-commerce"),
-            ("/admin/system-metrics", "Admin Management"),
+            ("/admin/system/metrics", "Admin Management"),
             ("/marketing/analytics", "Marketing Service"),
             ("/workspaces", "Workspace Management")
         ]
