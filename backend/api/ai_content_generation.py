@@ -163,7 +163,7 @@ async def optimize_seo_content(
     current_user: dict = Depends(get_current_user)
 ):
     """Optimize content for SEO"""
-    return await ai_service.optimize_seo(current_user["id"], request.dict())
+    return await ai_service.optimize_seo(current_user.get("_id") or current_user.get("id", "default-user"), request.dict())
 
 @router.post("/generate-image")
 async def generate_image(
