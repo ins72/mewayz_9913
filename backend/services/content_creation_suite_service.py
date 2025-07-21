@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 from core.database import get_database
 import uuid
+import random
 
 class ContentCreationSuiteService:
     """Service for comprehensive content creation operations"""
