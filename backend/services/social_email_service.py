@@ -262,8 +262,8 @@ class SocialEmailService:
                 "peak_engagement_hour": f"{await self._get_metric_from_db('count', 9, 17)}:00"
             },
             "comparison": {
-                "vs_account_average": round(random.uniform(-15.2, 35.8), 1),
-                "vs_previous_post": round(random.uniform(-25.4, 45.2), 1)
+                "vs_account_average": round(await self._get_real_float_metric_from_db(-15.2, 35.8), 1),
+                "vs_previous_post": round(await self._get_real_float_metric_from_db(-25.4, 45.2), 1)
             }
         }
         
