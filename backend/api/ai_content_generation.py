@@ -301,7 +301,7 @@ async def generate_from_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Generate content using template"""
-    return await ai_service.generate_from_template(current_user["id"], template_id, variables)
+    return await ai_service.generate_from_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, variables)
 
 @router.get("/analytics")
 async def get_ai_usage_analytics(
