@@ -309,9 +309,9 @@ Click below to secure your spot and join the thousands who are already seeing in
                     "Optimize meta description for higher click-through rate"
                 ],
                 "performance_prediction": {
-                    "search_visibility_increase": f"+{await self._get_enhanced_metric_from_db("count", 15, 45)}%",
-                    "estimated_traffic_boost": f"+{await self._get_enhanced_metric_from_db("count", 25, 85)}%",
-                    "ranking_improvement": f"{await self._get_enhanced_metric_from_db("count", 3, 12)} positions"
+                    "search_visibility_increase": f"+{await self._get_enhanced_metric_from_db('count', 15, 45)}%",
+                    "estimated_traffic_boost": f"+{await self._get_enhanced_metric_from_db('count', 25, 85)}%",
+                    "ranking_improvement": f"{await self._get_enhanced_metric_from_db('count', 3, 12)} positions"
                 }
             }
         }
