@@ -97,7 +97,7 @@ async def update_survey(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.delete("/surveys/{survey_id}")
+@router.delete("/{survey_id}")
 async def delete_survey(
     survey_id: str,
     current_user: dict = Depends(get_current_user)
