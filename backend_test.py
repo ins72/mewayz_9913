@@ -417,10 +417,10 @@ class BackendTester:
         # User profile
         self.test_endpoint("/users/profile", "GET", description="User profile access")
         
-    def run_comprehensive_three_wave_test(self):
-        """Run comprehensive three-wave regression test"""
-        print(f"🌊 COMPREHENSIVE THREE-WAVE REGRESSION TEST - MEWAYZ PLATFORM")
-        print(f"Testing all migrated features across systematic waves")
+    def run_comprehensive_fourth_wave_test(self):
+        """Run comprehensive fourth-wave regression test"""
+        print(f"🌊 COMPREHENSIVE FOURTH WAVE REGRESSION TEST - MEWAYZ PLATFORM")
+        print(f"Testing FOURTH WAVE Advanced Business Systems + All Previous Waves")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
