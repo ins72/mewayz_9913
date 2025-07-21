@@ -11,7 +11,6 @@ from core.database import get_database
 
 
 class ComplianceService:
-        """Get metric from database instead of random generation"""
         try:
             db = await self.get_database()
             
