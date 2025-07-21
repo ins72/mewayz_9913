@@ -64,3 +64,14 @@ async def get_current_active_user(current_user: dict = Depends(get_current_user)
     if not current_user.get("is_active", True):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+async def get_current_admin(current_user: dict = Depends(get_current_user)):
+    """Get current admin user"""
+    if not current_user.get("is_active", True):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    
+    # Check if user has admin role
+    if not current_user.get("is_admin", False) and current_user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    return current_user
