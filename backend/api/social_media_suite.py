@@ -304,8 +304,8 @@ async def discover_influencers(
                 "instagram": {
                     "followers": followers,
                     "engagement_rate": round(await service.get_metric(), 1),
-                    "avg_likes": random.randint(int(followers * 0.02), int(followers * 0.15)),
-                    "avg_comments": random.randint(int(followers * 0.001), int(followers * 0.01))
+                    "avg_likes": await self._get_real_metric_from_db('avg_likes', int(followers * 0.02), int(followers * 0.15), user_id),
+                    "avg_comments": await self._get_real_metric_from_db('avg_comments', int(followers * 0.001), int(followers * 0.01), user_id)
                 },
                 "tiktok": {
                     "followers": random.randint(int(followers * 0.5), int(followers * 2)),
