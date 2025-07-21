@@ -23,8 +23,8 @@ from core.database import connect_to_mongo, close_mongo_connection
 
 # Complete list of all API modules
 ALL_API_MODULES = [
-    'admin', 'advanced_ai', 'advanced_ai_suite', 'advanced_analytics', 'advanced_financial',
-    'advanced_financial_analytics', 'ai', 'ai_content', 'ai_content_generation', 
+    'admin', 'advanced_ai', 'advanced_ai_analytics', 'advanced_ai_suite', 'advanced_analytics', 
+    'advanced_financial', 'advanced_financial_analytics', 'ai', 'ai_content', 'ai_content_generation', 
     'ai_token_management', 'analytics', 'analytics_system', 'auth', 'automation_system',
     'backup_system', 'bio_sites', 'blog', 'booking', 'bookings', 'business_intelligence',
     'compliance_system', 'content', 'content_creation', 'content_creation_suite',
@@ -33,10 +33,10 @@ ALL_API_MODULES = [
     'financial_management', 'form_builder', 'google_oauth', 'i18n_system', 'integration',
     'integrations', 'link_shortener', 'marketing', 'media', 'media_library',
     'monitoring_system', 'notification_system', 'onboarding_system', 'promotions_referrals',
-    'rate_limiting_system', 'social_email', 'social_email_integration', 'social_media',
-    'social_media_suite', 'subscription_management', 'support_system', 'survey_system',
+    'rate_limiting_system', 'realtime_notifications', 'social_email', 'social_email_integration', 
+    'social_media', 'social_media_suite', 'subscription_management', 'support_system', 'survey_system',
     'team_management', 'template_marketplace', 'user', 'users', 'website_builder',
-    'webhook_system', 'workspace', 'workspaces'
+    'webhook_system', 'workflow_automation', 'workspace', 'workspaces'
 ]
 
 working_modules = []
