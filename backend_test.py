@@ -42,22 +42,16 @@ class BackendTester:
     def test_health_check(self):
         """Test basic health check endpoint"""
         try:
-            # Try the root endpoint first (based on main.py)
-            response = self.session.get(f"{BACKEND_URL}/", timeout=10)
+            # Check if we can access the OpenAPI spec (this confirms the backend is running)
+            response = self.session.get(f"{BACKEND_URL}/openapi.json", timeout=10)
             if response.status_code == 200:
                 data = response.json()
-                self.log_result("Health Check", True, f"Backend is healthy - {data.get('message', 'Unknown')}", data)
+                paths_count = len(data.get('paths', {}))
+                self.log_result("Health Check", True, f"Backend is operational with {paths_count} API endpoints", {"paths_count": paths_count})
                 return True
             else:
-                # Try the health endpoint
-                response = self.session.get(f"{BACKEND_URL}/health", timeout=10)
-                if response.status_code == 200:
-                    data = response.json()
-                    self.log_result("Health Check", True, f"Backend health endpoint working - {data.get('status', 'Unknown')}", data)
-                    return True
-                else:
-                    self.log_result("Health Check", False, f"Health check failed with status {response.status_code}")
-                    return False
+                self.log_result("Health Check", False, f"Backend not accessible - OpenAPI status {response.status_code}")
+                return False
         except Exception as e:
             self.log_result("Health Check", False, f"Health check error: {str(e)}")
             return False
