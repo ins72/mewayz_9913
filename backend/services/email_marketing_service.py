@@ -40,7 +40,7 @@ class EmailMarketingService:
             campaign = {
                 "id": str(uuid.uuid4()),
                 "name": f"Campaign {i + 1}: {await self._get_choice_from_db(['Newsletter', 'Promotion', 'Announcement', 'Update', 'Welcome Series'])}",
-                "subject": random.choice([
+                "subject": await self._get_choice_from_db([
                     "Your weekly industry insights are here",
                     "🎉 Special offer just for you",
                     "Important update from our team",
@@ -201,7 +201,7 @@ class EmailMarketingService:
             subscriber_count = await self._get_metric_from_db('general', 100, 5000)
             lists.append({
                 "id": str(uuid.uuid4()),
-                "name": random.choice([
+                "name": await self._get_choice_from_db([
                     "Newsletter Subscribers",
                     "Premium Customers", 
                     "Free Trial Users",

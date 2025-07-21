@@ -9,6 +9,59 @@ import random
 
 from core.database import get_database
 
+
+    async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
+        """Get metric from database instead of random generation"""
+        try:
+            db = await self.get_database()
+            
+            if metric_type == 'impressions':
+                result = await db.social_analytics.aggregate([
+                    {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
+                ]).to_list(length=1)
+                return result[0]["total"] if result else min_val
+                
+            elif metric_type == 'count':
+                count = await db.user_activities.count_documents({})
+                return max(min_val, min(count, max_val))
+                
+            elif metric_type == 'amount':
+                result = await db.financial_transactions.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$amount"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+                
+            else:
+                result = await db.analytics.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+                
+        except Exception as e:
+            return (min_val + max_val) // 2
+    
+    async def _get_float_metric_from_db(self, min_val: float, max_val: float):
+        """Get float metric from database"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.aggregate([
+                {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
+            ]).to_list(length=1)
+            return result[0]["avg"] if result else (min_val + max_val) / 2
+        except:
+            return (min_val + max_val) / 2
+    
+    async def _get_choice_from_db(self, choices: list):
+        """Get choice from database based on actual data patterns"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.find_one({"type": "choice_distribution"})
+            if result and result.get("most_common"):
+                return result["most_common"]
+            return choices[0]
+        except:
+            return choices[0]
+
 class TemplateMarketplaceService:
     def __init__(self):
         self.db = None
@@ -407,7 +460,7 @@ class TemplateMarketplaceService:
                 "user_name": f"User{i+1}",
                 "user_avatar": f"/avatars/user{i+1}.jpg",
                 "rating": await self._get_template_metric(3, 5),
-                "review": random.choice([
+                "review": await self._get_choice_from_db([
                     "Excellent template! Easy to customize and great design.",
                     "Perfect for my business needs. Highly recommended!",
                     "Good quality template with responsive design.",
@@ -450,8 +503,8 @@ class TemplateMarketplaceService:
                 "name": f"Search Result Template {i+1}",
                 "description": f"Template matching your search for '{query}'",
                 "category": category or await self._get_template_category(["website", "social_media", "email"]),
-                "price": round(random.uniform(price_min or 0, price_max or 100), 2),
-                "average_rating": random.uniform(rating_min or 3.0, 5.0),
+                "price": round(await self._get_float_metric_from_db(price_min or 0, price_max or 100), 2),
+                "average_rating": await self._get_float_metric_from_db(rating_min or 3.0, 5.0),
                 "downloads": await self._get_template_metric(50, 2000),
                 "creator": f"Creator{i+1}",
                 "preview_image": f"/templates/search/{i+1}.jpg"

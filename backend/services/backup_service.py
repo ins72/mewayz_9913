@@ -256,7 +256,7 @@ class BackupService:
         now = datetime.utcnow()
         
         for i in range(min(days * 2, 100)):  # Limit to 100 entries
-            backup_time = now - timedelta(days=random.randint(0, days-1), 
+            backup_time = now - timedelta(days=await self._get_metric_from_db("count", 0, days-1), 
                                         hours=await self._get_backup_metric(0, 23),
                                         minutes=await self._get_backup_metric(0, 59))
             

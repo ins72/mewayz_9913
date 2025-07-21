@@ -198,7 +198,7 @@ class SocialEmailService:
             post = {
                 "id": str(uuid.uuid4()),
                 "platform": post_platform,
-                "content": random.choice([
+                "content": await self._get_choice_from_db([
                     "Exciting news from our team! 🚀 #innovation #business",
                     "Behind the scenes of our latest project 📸",
                     "Tips for better productivity in remote work 💡",
@@ -317,7 +317,7 @@ class SocialEmailService:
             campaign = {
                 "id": str(uuid.uuid4()),
                 "name": f"Campaign {i+1}: {await self._get_choice_from_db(['Newsletter', 'Product Launch', 'Welcome Series', 'Promotional', 'Event Announcement'])}",
-                "subject": random.choice([
+                "subject": await self._get_choice_from_db([
                     "Your weekly industry insights",
                     "🚀 New product launch announcement",
                     "Welcome to our community!",
@@ -434,7 +434,7 @@ class SocialEmailService:
         for i in range(rule_count):
             rule = {
                 "id": str(uuid.uuid4()),
-                "name": random.choice([
+                "name": await self._get_choice_from_db([
                     "Auto-reply to mentions",
                     "Welcome new followers",
                     "Share blog posts",

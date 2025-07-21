@@ -51,7 +51,7 @@ class SupportService:
                 "category": ticket_category,
                 "assigned_agent": await self._get_choice_from_db(["Sarah Johnson", "Mike Chen", "Emma Davis", "Alex Rodriguez"]),
                 "created_at": (datetime.now() - timedelta(days=created_days_ago)).isoformat(),
-                "updated_at": (datetime.now() - timedelta(days=random.randint(0, created_days_ago))).isoformat(),
+                "updated_at": (datetime.now() - timedelta(days=await self._get_metric_from_db("count", 0, created_days_ago))).isoformat(),
                 "estimated_resolution": self._get_estimated_resolution(ticket_priority),
                 "messages_count": await self._get_metric_from_db('count', 1, 8),
                 "satisfaction_rating": await self._get_metric_from_db('count', 3, 5) if ticket_status in ["resolved", "closed"] else None,

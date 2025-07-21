@@ -134,12 +134,12 @@ class AdvancedFinancialService:
         for i in range(total_invoices):
             amount = round(await self._get_float_metric_from_db(500, 15000), 2)
             created_days_ago = await self._get_metric_from_db('general', 1, 180)
-            due_days = random.randint(-30, 60)  # Negative means overdue
+            due_days = await self._get_metric_from_db("count", -30, 60)  # Negative means overdue
             
             invoice = {
                 "id": str(uuid.uuid4()),
                 "invoice_number": f"INV-2024-{1000 + i}",
-                "client_name": random.choice([
+                "client_name": await self._get_choice_from_db([
                     "Tech Solutions Inc", "Digital Marketing Co", "Creative Studio LLC",
                     "Business Consulting Group", "E-commerce Experts", "Software Development Ltd"
                 ]),

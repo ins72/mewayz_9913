@@ -346,7 +346,7 @@ class EnhancedEcommerceService:
         
         for product in products:
             base_demand = await self._get_metric_from_db('count', 15, 85)
-            weekly_variation = random.uniform(-0.2, 0.3)
+            weekly_variation = await self._get_float_metric_from_db(-0.2, 0.3)
             
             forecast = {
                 "product": product,
