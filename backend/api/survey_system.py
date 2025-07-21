@@ -109,7 +109,7 @@ async def delete_survey(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/surveys/{survey_id}/responses")
+@router.post("/{survey_id}/responses")
 async def submit_survey_response(
     survey_id: str,
     responses: str = Form(...),  # JSON string
