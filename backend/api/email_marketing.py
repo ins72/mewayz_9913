@@ -159,7 +159,8 @@ async def send_campaign(
     current_user: dict = Depends(get_current_user)
 ):
     """Send or schedule campaign"""
-    return await email_service.send_campaign(current_user["id"], campaign_id)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.send_campaign(user_id, campaign_id)
 
 @router.get("/lists")
 async def get_email_lists(current_user: dict = Depends(get_current_user)):
