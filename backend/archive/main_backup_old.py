@@ -2562,9 +2562,9 @@ async def stripe_webhook(request: Request):
             detail=f"Webhook processing failed: {str(e)}"
         )
 
-@app.get("/api/subscription/status")
+@app.get("/api/subscription/status")  # ✅ MIGRATED - Keep for compatibility but functionality moved to /api/subscriptions/current
 async def get_subscription_status(current_user: dict = Depends(get_current_user)):
-    """Get current user's subscription status"""
+    """Get current user's subscription status - DEPRECATED - Use /api/subscriptions/current instead"""
     user = await users_collection.find_one({"email": current_user["email"]})
     
     subscription_info = {
