@@ -171,7 +171,8 @@ async def export_survey_responses(
 ):
     """Export survey responses"""
     try:
-        export_data = await SurveyService.export_responses(survey_id, current_user["id"], format)
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        export_data = await SurveyService.export_responses(survey_id, user_id, format)
         return {"success": True, "data": export_data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
