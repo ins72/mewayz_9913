@@ -67,5 +67,45 @@ class BookingService:
                 available_slots.append(slot_time.isoformat())
         
         return {"date": date, "available_slots": available_slots}
+    
+    @staticmethod
+    async def get_booking_services(user_id: str):
+        """Get all available booking services"""
+        return {
+            "success": True,
+            "data": {
+                "services": [
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Business Consultation",
+                        "description": "Strategic business planning and consultation",
+                        "duration": 60,
+                        "price": 150.00,
+                        "category": "consulting",
+                        "available": True
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Technical Support",
+                        "description": "Technical assistance and troubleshooting",
+                        "duration": 30,
+                        "price": 75.00,
+                        "category": "support",
+                        "available": True
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "name": "Training Session",
+                        "description": "Personalized training and skill development",
+                        "duration": 90,
+                        "price": 200.00,
+                        "category": "training",
+                        "available": True
+                    }
+                ],
+                "total_services": 3
+            }
+        }
+
 # Global service instance
 booking_service = BookingService()
