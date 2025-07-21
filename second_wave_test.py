@@ -51,36 +51,48 @@ class SecondWaveTester:
         print(f"\n🔐 AUTHENTICATING WITH ADMIN CREDENTIALS...")
         print(f"Email: {ADMIN_EMAIL}")
         
-        login_data = {
-            "email": ADMIN_EMAIL,
-            "password": ADMIN_PASSWORD
-        }
+        # Try different authentication formats
+        auth_formats = [
+            # Format 1: JSON with email/password
+            {"json": {"email": ADMIN_EMAIL, "password": ADMIN_PASSWORD}},
+            # Format 2: Form data with username/password (OAuth2PasswordRequestForm)
+            {"data": {"username": ADMIN_EMAIL, "password": ADMIN_PASSWORD}},
+            # Format 3: JSON with username/password
+            {"json": {"username": ADMIN_EMAIL, "password": ADMIN_PASSWORD}}
+        ]
         
-        try:
-            start_time = time.time()
-            response = self.session.post(f"{API_BASE}/auth/login", json=login_data, timeout=30)
-            response_time = time.time() - start_time
-            
-            if response.status_code == 200:
-                data = response.json()
-                self.auth_token = data.get('token')
-                if self.auth_token:
-                    self.session.headers.update({'Authorization': f'Bearer {self.auth_token}'})
-                    self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
-                                f"Admin authentication successful, token: {self.auth_token[:20]}...")
-                    return True
-                else:
-                    self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
-                                "No access token in response")
-                    return False
-            else:
-                self.log_test("/auth/login", "POST", response.status_code, response_time, False, 
-                            f"Login failed: {response.text[:100]}")
-                return False
+        for i, auth_format in enumerate(auth_formats, 1):
+            try:
+                print(f"Trying authentication format {i}...")
+                start_time = time.time()
                 
-        except Exception as e:
-            self.log_test("/auth/login", "POST", 0, 0, False, f"Authentication error: {str(e)}")
-            return False
+                if "json" in auth_format:
+                    response = self.session.post(f"{API_BASE}/auth/login", json=auth_format["json"], timeout=30)
+                else:
+                    response = self.session.post(f"{API_BASE}/auth/login", data=auth_format["data"], timeout=30)
+                    
+                response_time = time.time() - start_time
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    self.auth_token = data.get('access_token') or data.get('token')
+                    if self.auth_token:
+                        self.session.headers.update({'Authorization': f'Bearer {self.auth_token}'})
+                        self.log_test("/auth/login", "POST", response.status_code, response_time, True, 
+                                    f"Admin authentication successful (format {i}), token: {self.auth_token[:20]}...")
+                        return True
+                    else:
+                        print(f"Format {i} - No access token in response: {data}")
+                else:
+                    print(f"Format {i} failed - Status: {response.status_code}, Response: {response.text[:200]}")
+                    
+            except Exception as e:
+                print(f"Format {i} error: {str(e)}")
+                continue
+        
+        # If all formats failed
+        self.log_test("/auth/login", "POST", 0, 0, False, "All authentication formats failed")
+        return False
     
     def test_endpoint(self, endpoint, method="GET", data=None, expected_status=200, description=""):
         """Test a single endpoint"""
