@@ -193,7 +193,8 @@ async def release_payment(
 @router.get("/disputes")
 async def get_disputes(current_user: dict = Depends(get_current_user)):
     """Get user's dispute cases"""
-    return await escrow_service.get_disputes(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await escrow_service.get_disputes(user_id)
 
 @router.post("/disputes")
 async def create_dispute(
