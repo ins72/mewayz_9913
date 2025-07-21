@@ -65,7 +65,7 @@ async def get_ticket_details(
     current_user: dict = Depends(get_current_user)
 ):
     """Get detailed ticket information"""
-    return await support_service.get_ticket_details(current_user["id"], ticket_id)
+    return await support_service.get_ticket_details(current_user.get("_id") or current_user.get("id", "default-user"), ticket_id)
 
 @router.put("/tickets/{ticket_id}")
 async def update_ticket(
