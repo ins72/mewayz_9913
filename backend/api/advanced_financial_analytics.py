@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 import uuid
 import random
 
-from core.auth import get_current_user
+from core.advanced_data_service import advanced_data_service
 from services.advanced_financial_service import AdvancedFinancialService
 
 router = APIRouter()
