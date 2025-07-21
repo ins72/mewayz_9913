@@ -77,12 +77,16 @@ app.include_router(marketing.router, prefix="/api/marketing", tags=["Marketing &
 app.include_router(integrations.router, prefix="/api/integrations", tags=["Integrations"])
 app.include_router(business_intelligence.router, prefix="/api/business-intelligence", tags=["Business Intelligence"])
 
-# NEW HIGH-VALUE FEATURES - Migrated from Monolithic Structure
+# FIRST WAVE - HIGH-VALUE FEATURES - Migrated from Monolithic Structure
 app.include_router(subscription_management.router, prefix="/api/subscriptions", tags=["Subscription Management"])
 app.include_router(google_oauth.router, prefix="/api/oauth", tags=["OAuth Integration"])
 app.include_router(financial_management.router, prefix="/api/financial", tags=["Financial Management"])
 app.include_router(link_shortener.router, prefix="/api/links", tags=["Link Shortener"])
 app.include_router(analytics_system.router, prefix="/api/analytics-system", tags=["Analytics System"])
+
+# SECOND WAVE - BUSINESS COLLABORATION FEATURES - Newly Migrated
+app.include_router(team_management.router, prefix="/api/team", tags=["Team Management"])
+app.include_router(form_builder.router, prefix="/api/forms", tags=["Form Builder"])
 
 if __name__ == "__main__":
     uvicorn.run(
