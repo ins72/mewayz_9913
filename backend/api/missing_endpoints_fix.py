@@ -417,4 +417,4 @@ async def get_integration_status(current_admin: dict = Depends(get_current_admin
         return {"success": False, "error": str(e)}
 
 # Export routers for inclusion in main.py
-__all__ = ["marketing_router", "workspace_router", "integration_router"]
+__all__ = ["marketing_router", "workspace_router", "integration_router", "automation_router", "support_router", "monitoring_router"]
