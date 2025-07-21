@@ -174,7 +174,8 @@ async def create_email_list(
     current_user: dict = Depends(get_current_user)
 ):
     """Create a new email list"""
-    return await email_service.create_list(current_user["id"], email_list.dict())
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.create_list(user_id, email_list.dict())
 
 @router.get("/lists/{list_id}/contacts")
 async def get_list_contacts(
