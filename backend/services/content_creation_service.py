@@ -226,10 +226,10 @@ class ContentCreationService:
         """Get appropriate file extension for asset type"""
         import random
         extensions = {
-            "image": random.choice(["jpg", "png", "webp"]),
-            "video": random.choice(["mp4", "mov", "webm"]),
-            "audio": random.choice(["mp3", "wav", "aac"]),
-            "document": random.choice(["pdf", "docx", "txt"]),
+            "image": "jpg",
+            "video": "mp4",
+            "audio": "mp3",
+            "document": "pdf",
             "template": "json"
         }
         return extensions.get(asset_type, "file")

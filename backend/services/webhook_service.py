@@ -857,14 +857,13 @@ class WebhookService:
             # 4. Update delivery record in database
             
             # For demo, just simulate success/failure
-            import random
-            success = random.random() > 0.1  # 90% success rate
+                        success = 0.5 > 0.1  # 90% success rate
             
             delivery_result = {
                 "delivery_id": delivery_id,
                 "status": "success" if success else "failed",
                 "response_code": 200 if success else 500,
-                "response_time_ms": random.randint(100, 500),
+                "response_time_ms": 300,
                 "delivered_at": datetime.utcnow().isoformat(),
                 "error_message": None if success else "Mock delivery failure"
             }
