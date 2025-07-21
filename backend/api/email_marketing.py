@@ -193,7 +193,8 @@ async def add_contacts_to_list(
     current_user: dict = Depends(get_current_user)
 ):
     """Add contacts to email list"""
-    return await email_service.add_contacts_to_list(current_user["id"], list_id, [c.dict() for c in contacts])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.add_contacts_to_list(user_id, list_id, [c.dict() for c in contacts])
 
 @router.get("/contacts")
 async def get_contacts(
