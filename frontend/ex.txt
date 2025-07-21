@@ -1,0 +1,2167 @@
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Smartphone, ShoppingCart, GraduationCap, Users, Globe, Brain, Mail, BarChart, LayoutDashboard, LogOut, BookOpen, Package, LineChart, Home, Settings, HelpCircle, Bell, User, Zap, PlusCircle, Trash2, Edit, CheckCircle, XCircle, FileText, UploadCloud, Search, MessageSquare, Briefcase, Image, BellRing, CalendarDays, Megaphone, Lightbulb, Link, DollarSign, CreditCard, FormInput, Gift, Bot, Code, CalendarCheck, Tag, Sparkles
+} from 'lucide-react';
+
+const App = () => {
+  // State for theme toggle
+  const [theme, setTheme] = useState('dark');
+  // New state for user login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Effect to apply theme to body
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    // Adjust header background on initial load and theme change
+    const header = document.querySelector('header');
+    if (header) {
+      header.className = `fixed top-0 w-full z-50 transition-all duration-400 ease-in-out ${
+        theme === 'dark' ? 'bg-black bg-opacity-70 backdrop-blur-lg border-b border-gray-700' : 'bg-white bg-opacity-90 backdrop-blur-lg border-b border-gray-200'
+      }`;
+    }
+  }, [theme]);
+
+  // Function to toggle theme
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
+  // Function to handle login (simple toggle for demonstration)
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  // Effect for header background change on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector('header');
+      if (header) {
+        if (window.scrollY > 100) {
+          header.className = `fixed top-0 w-full z-50 transition-all duration-400 ease-in-out ${
+            theme === 'dark' ? 'bg-black bg-opacity-90 backdrop-blur-lg border-b border-gray-800' : 'bg-white bg-opacity-95 backdrop-blur-lg border-b border-gray-300'
+          }`;
+        } else {
+          header.className = `fixed top-0 w-full z-50 transition-all duration-400 ease-in-out ${
+            theme === 'dark' ? 'bg-black bg-opacity-70 backdrop-blur-lg border-b border-gray-700' : 'bg-white bg-opacity-80 backdrop-blur-lg border-b border-gray-200'
+          }`;
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [theme]); // Re-run effect if theme changes
+
+  // Component for the Header section
+  const Header = ({ isLoggedIn, handleLogout, handleLogin, toggleTheme, theme, setActiveView }) => (
+    <header className={`fixed top-0 w-full z-50 transition-all duration-400 ease-in-out ${theme === 'dark' ? 'bg-black bg-opacity-70 backdrop-blur-lg border-b border-gray-700' : 'bg-white bg-opacity-90 backdrop-blur-lg border-b border-gray-200'}`}>
+      <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
+        <div className={`text-2xl font-bold tracking-tight relative group ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+          Mewayz
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+        </div>
+        <ul className="hidden md:flex space-x-10">
+          {isLoggedIn ? (
+            <>
+              <li>
+                <a href="#dashboard" onClick={() => setActiveView('overview')} className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">
+                  Dashboard<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#courses" onClick={() => setActiveView('courses')} className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">
+                  Courses<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#products" onClick={() => setActiveView('products')} className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">
+                  Products<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#analytics" onClick={() => setActiveView('analytics')} className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">
+                  Analytics<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+              </li>
+            </>
+          ) : (
+            <>
+              <li><a href="#about" className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">About<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span></a></li>
+              <li><a href="#features" className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">Features<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span></a></li>
+              <li><a href="#pricing" className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">Pricing<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span></a></li>
+              <li><a href="#testimonials" className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">Testimonials<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span></a></li>
+              <li><a href="#contact" className="text-gray-400 hover:text-white font-medium relative py-2 transition-colors duration-300 group">Contact<span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 group-hover:w-full"></span></a></li>
+            </>
+          )}
+        </ul>
+        <div className="flex items-center space-x-4">
+          <button onClick={toggleTheme} className="bg-gray-800 bg-opacity-30 backdrop-blur-md border border-gray-700 text-white p-3 rounded-xl transition-all duration-300 hover:bg-gray-700 hover:scale-105">
+            {theme === 'dark' ? '🌙' : '☀️'}
+          </button>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="px-6 py-3 rounded-xl font-semibold text-white bg-red-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
+              <LogOut className="inline-block mr-2" size={20} /> Logout
+            </button>
+          ) : (
+            <button onClick={handleLogin} className={`px-6 py-3 rounded-xl font-semibold border border-blue-500 transition-all duration-300 hover:bg-blue-600 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Login</button>
+          )}
+          {!isLoggedIn && (
+            <a href="#signup" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
+              Get Started
+              <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+            </a>
+          )}
+        </div>
+      </nav>
+    </header>
+  );
+
+  // Dashboard Overview Component
+  const DashboardOverview = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <LayoutDashboard className="inline-block mr-2" size={20} /> <span>Your Dashboard</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Welcome Back, Creator!</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Here's a quick overview of your Mewayz account.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+        {/* Dashboard Card 1 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Total Revenue</h3>
+          <p className="text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text">$12,345</p>
+          <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+15% from last month</p>
+          {/* Placeholder for API call: Fetch total revenue from /api/financial/revenue */}
+        </div>
+
+        {/* Dashboard Card 2 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Subscribers</h3>
+          <p className="text-5xl font-extrabold bg-gradient-to-r from-green-500 to-teal-500 text-transparent bg-clip-text">567</p>
+          <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+8% from last week</p>
+          {/* Placeholder for API call: Fetch new subscribers from /api/crm/subscribers or /api/email-marketing/subscribers */}
+        </div>
+
+        {/* Dashboard Card 3 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Courses Sold</h3>
+          <p className="text-5xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">89</p>
+          <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+20% from last month</p>
+          {/* Placeholder for API call: Fetch courses sold from /api/courses/sales or /api/ecommerce/sales */}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Quick Actions</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="#new-course" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <GraduationCap className="inline-block mr-2" size={20} /> New Course
+          </a>
+          <a href="#new-product" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-green-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <ShoppingCart className="inline-block mr-2" size={20} /> New Product
+          </a>
+          <a href="#manage-social" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-purple-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <Smartphone className="inline-block mr-2" size={20} /> Manage Social
+          </a>
+          <a href="#view-analytics" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-orange-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <BarChart className="inline-block mr-2" size={20} /> View Analytics
+          </a>
+        </div>
+      </div>
+
+      {/* Recent Activity Feed */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Activity</h3>
+        <ul className="space-y-4">
+          <li className="flex items-center space-x-3">
+            <CheckCircle className="text-green-500" size={20} />
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>New course "Advanced React Hooks" published. <span className="text-sm text-gray-500">2 hours ago</span></p>
+          </li>
+          <li className="flex items-center space-x-3">
+            <ShoppingCart className="text-blue-500" size={20} />
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>New sale: "E-book: Creator's Guide" to John Doe. <span className="text-sm text-gray-500">Yesterday</span></p>
+          </li>
+          <li className="flex items-center space-x-3">
+            <Users className="text-purple-500" size={20} />
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>5 new subscribers joined your mailing list. <span className="text-sm text-gray-500">3 days ago</span></p>
+          </li>
+          <li className="flex items-center space-x-3">
+            <BarChart className="text-orange-500" size={20} />
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Analytics report generated for Q2 2025. <span className="text-sm text-gray-500">1 week ago</span></p>
+          </li>
+          {/* Placeholder for API call: Fetch recent activities from /api/dashboard/activity or relevant module endpoints */}
+        </ul>
+      </div>
+    </div>
+  );
+
+  // Courses Page Component
+  const CoursesPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <BookOpen className="inline-block mr-2" size={20} /> <span>Your Courses</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Courses</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Create, edit, and publish your online courses.</p>
+      </div>
+
+      {/* Create New Course Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Course</h3>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="courseTitle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Title</label>
+            <input type="text" id="courseTitle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Master React Development" />
+          </div>
+          <div>
+            <label htmlFor="courseCategory" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
+            <select id="courseCategory" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="">Select Category</option>
+              <option value="development">Development</option>
+              <option value="design">Design</option>
+              <option value="marketing">Marketing</option>
+              <option value="business">Business</option>
+            </select>
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="courseDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Description</label>
+            <textarea id="courseDescription" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Briefly describe your course content..."></textarea>
+          </div>
+          <div>
+            <label htmlFor="coursePrice" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Price ($)</label>
+            <input type="number" id="coursePrice" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 99.00" step="0.01" />
+          </div>
+          <div>
+            <label htmlFor="courseDuration" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Duration (hours)</label>
+            <input type="number" id="courseDuration" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 10" />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="courseImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Thumbnail Image</label>
+            <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+              </div>
+              <input id="courseImage" type="file" className="hidden" />
+            </div>
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Publish Course
+            </button>
+          </div>
+          {/* Placeholder for API call: Submit new course data to /api/courses/ */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Existing Courses</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Example Course Card 1 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/007bff/ffffff?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Introduction to AI</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Learn the basics of Artificial Intelligence and Machine Learning.</p>
+          <div className="flex items-center justify-between mb-3">
+            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
+            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '75%'}}></div>
+            </div>
+            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>75%</span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$99</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+          {/* Placeholder for API call: Fetch course data from /api/courses/ */}
+        </div>
+        {/* Example Course Card 2 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/28a745/ffffff?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Advanced Web Dev</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Master modern web development with React and Node.js.</p>
+          <div className="flex items-center justify-between mb-3">
+            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
+            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '50%'}}></div>
+            </div>
+            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>50%</span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$149</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+        </div>
+        {/* Example Course Card 3 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/ffc107/000000?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Digital Marketing 101</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Strategies for effective online marketing and brand building.</p>
+          <div className="flex items-center justify-between mb-3">
+            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
+            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '90%'}}></div>
+            </div>
+            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>90%</span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$79</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Products Page Component
+  const ProductsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Package className="inline-block mr-2" size={20} /> <span>Your Products</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Products</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Add, update, and organize your digital and physical products.</p>
+      </div>
+
+      {/* Add New Product Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Product</h3>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="productName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Name</label>
+            <input type="text" id="productName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Ultimate Photo Presets" />
+          </div>
+          <div>
+            <label htmlFor="productPrice" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Price ($)</label>
+            <input type="number" id="productPrice" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 49.99" step="0.01" />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="productDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Description</label>
+            <textarea id="productDescription" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Describe your product..."></textarea>
+          </div>
+          <div>
+            <label htmlFor="productStock" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Stock Quantity</label>
+            <input type="number" id="productStock" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 100" />
+          </div>
+          <div>
+            <label htmlFor="productSKU" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>SKU (Optional)</label>
+            <input type="text" id="productSKU" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., UPP-2025" />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="productImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Image</label>
+            <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+              </div>
+              <input id="productImage" type="file" className="hidden" />
+            </div>
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Add Product
+            </button>
+          </div>
+          {/* Placeholder for API call: Submit new product data to /api/ecommerce/products */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Current Products</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Example Product Card 1 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/dc3545/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>E-book: Creator's Guide</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>A comprehensive guide for aspiring and established creators.</p>
+          <div className="flex justify-between items-center text-sm mb-3">
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-green-500">In Stock</span></span>
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">1,234</span></span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$29</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+          {/* Placeholder for API call: Fetch product data from /api/ecommerce/products */}
+        </div>
+        {/* Example Product Card 2 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/6f42c1/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Premium Preset Pack</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Enhance your photos with our exclusive collection of presets.</p>
+          <div className="flex justify-between items-center text-sm mb-3">
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-green-500">In Stock</span></span>
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">876</span></span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$49</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+        </div>
+        {/* Example Product Card 3 */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <img src="https://placehold.co/300x180/17a2b8/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Consultation Session</h3>
+          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>One-on-one personalized consultation with an expert.</p>
+          <div className="flex justify-between items-center text-sm mb-3">
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-red-500">Limited (3)</span></span>
+            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">25</span></span>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$199</span>
+            <div className="flex space-x-2">
+              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
+              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Analytics Page Component
+  const AnalyticsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <LineChart className="inline-block mr-2" size={20} /> <span>Your Analytics</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Detailed Analytics</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Track your performance with in-depth data and insights.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        {/* Website Traffic */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Website Traffic</h3>
+          <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Visits over the last 30 days. <span className="text-green-500">+12%</span></p>
+          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
+            <p>A dynamic line chart showing daily unique visitors and page views would appear here.</p>
+            <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mt-4 text-center">
+            <div>
+              <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>15,432</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Total Visits</p>
+            </div>
+            <div>
+              <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>8,765</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Unique Visitors</p>
+            </div>
+          </div>
+          {/* Placeholder for API call: Fetch traffic data from /api/analytics/traffic or /api/analytics-system/traffic */}
+        </div>
+
+        {/* Sales Performance */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Sales Performance</h3>
+          <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Revenue breakdown by product category. <span className="text-green-500">+18%</span></p>
+          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
+            <p>A dynamic bar chart or pie chart illustrating sales by product category would be here.</p>
+            <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 mt-4 text-center">
+            <div>
+              <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$5,678</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Courses Revenue</p>
+            </div>
+            <div>
+              <p className={`text-xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$6,667</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Products Revenue</p>
+            </div>
+          </div>
+          {/* Placeholder for API call: Fetch sales data from /api/financial/sales or /api/enhanced-ecommerce/sales */}
+        </div>
+
+        {/* Audience Demographics */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Audience Demographics</h3>
+          <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Breakdown of your audience by age and location.</p>
+          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
+            <p>A dynamic pie chart or bar chart showing audience age groups and top countries.</p>
+            <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
+          </div>
+          {/* Placeholder for API call: Fetch audience data from /api/crm/audience or /api/analytics/audience */}
+        </div>
+
+        {/* Top Performing Content */}
+        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+          <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Top Performing Content</h3>
+          <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Your most viewed courses and products.</p>
+          <ul className="space-y-2">
+            <li className={`flex justify-between ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <span>Introduction to AI (Course)</span> <span className="font-semibold">345 views</span>
+            </li>
+            <li className={`flex justify-between ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <span>E-book: Creator's Guide (Product)</span> <span className="font-semibold">280 sales</span>
+            </li>
+            <li className={`flex justify-between ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              <span>Advanced Web Dev (Course)</span> <span className="font-semibold">210 views</span>
+            </li>
+          </ul>
+          {/* Placeholder for API call: Fetch top content from /api/analytics/content-performance or /api/blog/top-posts */}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Workspaces Page Component
+  const WorkspacesPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Briefcase className="inline-block mr-2" size={20} /> <span>Workspaces</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Workspaces</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Organize your projects and content into dedicated workspaces.</p>
+      </div>
+
+      {/* Create New Workspace Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Workspace</h3>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="workspaceName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Workspace Name</label>
+            <input type="text" id="workspaceName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., My Personal Brand" />
+          </div>
+          <div>
+            <label htmlFor="workspaceType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Workspace Type</label>
+            <select id="workspaceType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="">Select Type</option>
+              <option value="personal">Personal</option>
+              <option value="business">Business</option>
+              <option value="agency">Agency</option>
+            </select>
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="workspaceDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Description</label>
+            <textarea id="workspaceDescription" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Briefly describe this workspace..."></textarea>
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Create Workspace
+            </button>
+          </div>
+          {/* Placeholder for API call: Create new workspace via /api/workspaces/ */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Workspaces</h3>
+      <div className="overflow-x-auto">
+        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <tr>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Description</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Members</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Creator Hub</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Personal</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Main workspace for content creation.</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Marketing Campaigns</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Business</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Dedicated to email and social media campaigns.</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>3</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            {/* Placeholder for API call: Fetch workspaces from /api/workspaces/ */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // Blog & Content Management Page Component
+  const BlogContentPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <BookOpen className="inline-block mr-2" size={20} /> <span>Blog & Content</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Content</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Create, publish, and manage your blog posts and articles.</p>
+      </div>
+
+      {/* Create New Post Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Post</h3>
+        <form className="grid grid-cols-1 gap-6">
+          <div>
+            <label htmlFor="postTitle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Post Title</label>
+            <input type="text" id="postTitle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 10 Tips for Growing Your Audience" />
+          </div>
+          <div>
+            <label htmlFor="postCategory" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
+            <select id="postCategory" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="">Select Category</option>
+              <option value="marketing">Marketing</option>
+              <option value="productivity">Productivity</option>
+              <option value="tutorials">Tutorials</option>
+              <option value="news">News</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="postContent" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Content</label>
+            <textarea id="postContent" rows="8" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Write your blog post content here..."></textarea>
+          </div>
+          <div>
+            <label htmlFor="postTags" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Tags (comma-separated)</label>
+            <input type="text" id="postTags" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., marketing, social media, tips" />
+          </div>
+          <div className="flex items-center justify-between">
+            <label htmlFor="publishNow" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Publish Immediately</label>
+            <input type="checkbox" id="publishNow" className="toggle toggle-primary" defaultChecked />
+          </div>
+          <div className="flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Publish Post
+            </button>
+          </div>
+          {/* Placeholder for API call: Create new blog post via /api/blog/posts */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Blog Posts</h3>
+      <div className="overflow-x-auto">
+        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <tr>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Title</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Category</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Published Date</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Views</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>The Future of Creator Economy</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Industry Trends</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Published</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-07-15</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1,500</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>How to Master Video Editing</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Tutorials</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>Draft</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>N/A</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>50</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            {/* Placeholder for API call: Fetch blog posts from /api/blog/posts */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // AI Tools Page Component
+  const AIToolsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Bot className="inline-block mr-2" size={20} /> <span>AI Tools</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI-Powered Creation Suite</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Leverage advanced AI to generate content, images, and optimize your workflow.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        {/* AI Content Generation */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Content Generator</h3>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="contentPrompt" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Prompt</label>
+              <textarea id="contentPrompt" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Write a blog post outline about sustainable living."></textarea>
+            </div>
+            <div>
+              <label htmlFor="contentType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Content Type</label>
+              <select id="contentType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                <option value="blog-outline">Blog Post Outline</option>
+                <option value="social-post">Social Media Post</option>
+                <option value="email-subject">Email Subject Line</option>
+                <option value="product-description">Product Description</option>
+              </select>
+            </div>
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Generate Content
+            </button>
+          </form>
+          <div className={`mt-6 p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-300'}`}>
+            <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Generated Output:</h4>
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              {/* Placeholder for generated content */}
+              [AI generated text will appear here based on your prompt.]
+            </p>
+          </div>
+          {/* Placeholder for API call: Generate content via /api/ai-content/generate */}
+        </div>
+
+        {/* AI Image Generation */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Image Generator</h3>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="imagePrompt" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Image Description</label>
+              <textarea id="imagePrompt" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., A futuristic city at sunset, cyberpunk style."></textarea>
+            </div>
+            <div>
+              <label htmlFor="imageStyle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Style</label>
+              <select id="imageStyle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                <option value="realistic">Realistic</option>
+                <option value="cartoon">Cartoon</option>
+                <option value="abstract">Abstract</option>
+              </select>
+            </div>
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Generate Image
+            </button>
+          </form>
+          <div className={`mt-6 p-4 rounded-lg border flex items-center justify-center h-48 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-300'}`}>
+            <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+              {/* Placeholder for generated image */}
+              [AI generated image would appear here.]
+            </p>
+          </div>
+          {/* Placeholder for API call: Generate image via /api/ai/image-generation or /api/advanced-ai/image */}
+        </div>
+      </div>
+
+      {/* AI Token Usage */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Token Usage</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+          <div>
+            <p className={`text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text`}>1,234</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Tokens Used This Month</p>
+          </div>
+          <div>
+            <p className={`text-4xl font-extrabold bg-gradient-to-r from-green-500 to-teal-500 text-transparent bg-clip-text`}>5,000</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Monthly Limit</p>
+          </div>
+          <div>
+            <p className={`text-4xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text`}>3,766</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Remaining</p>
+          </div>
+        </div>
+        <div className="mt-6 text-center">
+          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            Purchase More Tokens
+          </button>
+        </div>
+        {/* Placeholder for API call: Fetch token usage from /api/tokens/usage */}
+      </div>
+    </div>
+  );
+
+  // Bookings Page Component
+  const BookingsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <CalendarCheck className="inline-block mr-2" size={20} /> <span>Bookings</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Bookings</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>View, add, and manage your appointments and consultation sessions.</p>
+      </div>
+
+      {/* Add New Booking Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Booking</h3>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="clientName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Client Name</label>
+            <input type="text" id="clientName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Alice Wonderland" />
+          </div>
+          <div>
+            <label htmlFor="clientEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Client Email</label>
+            <input type="email" id="clientEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="alice@example.com" />
+          </div>
+          <div>
+            <label htmlFor="bookingService" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Service</label>
+            <select id="bookingService" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="">Select Service</option>
+              <option value="consultation">1-on-1 Consultation</option>
+              <option value="workshop">Workshop Session</option>
+              <option value="coaching">Coaching Call</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor="bookingDate" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Date</label>
+            <input type="date" id="bookingDate" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
+          </div>
+          <div>
+            <label htmlFor="bookingTime" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Time</label>
+            <input type="time" id="bookingTime" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
+          </div>
+          <div>
+            <label htmlFor="bookingStatus" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Status</label>
+            <select id="bookingStatus" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Add Booking
+            </button>
+          </div>
+          {/* Placeholder for API call: Add new booking via /api/bookings/ */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upcoming Bookings</h3>
+      <div className="overflow-x-auto">
+        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <tr>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Client</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Service</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Date</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Time</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Alice Wonderland</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1-on-1 Consultation</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-07-25</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>10:00 AM</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Confirmed</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Bob The Builder</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Workshop Session</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-08-01</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>02:00 PM</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>Pending</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            {/* Placeholder for API call: Fetch bookings from /api/bookings/ */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // Marketing & Promotions Page Component
+  const MarketingPromotionsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Megaphone className="inline-block mr-2" size={20} /> <span>Marketing & Promotions</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Boost Your Reach & Sales</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage email campaigns, promotions, and referral programs.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        {/* Email Campaigns */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Campaigns</h3>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="campaignName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Campaign Name</label>
+              <input type="text" id="campaignName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Summer Sale Newsletter" />
+            </div>
+            <div>
+              <label htmlFor="campaignSubject" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Subject Line</label>
+              <input type="text" id="campaignSubject" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Catchy subject for your email" />
+            </div>
+            <div>
+              <label htmlFor="campaignContent" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Content</label>
+              <textarea id="campaignContent" rows="5" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Design your email content..."></textarea>
+            </div>
+            <div className="flex justify-end">
+              <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                Schedule Campaign
+              </button>
+            </div>
+            {/* Placeholder for API call: Create email campaign via /api/email-marketing/campaigns */}
+          </form>
+        </div>
+
+        {/* Promotions & Coupons */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Promotions & Coupons</h3>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="couponCode" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Coupon Code</label>
+              <input type="text" id="couponCode" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., SUMMER20" />
+            </div>
+            <div>
+              <label htmlFor="discountType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Discount Type</label>
+              <select id="discountType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                <option value="percentage">Percentage (%)</option>
+                <option value="fixed">Fixed Amount ($)</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="discountValue" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Discount Value</label>
+              <input type="number" id="discountValue" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 20 (for 20% or $20)" step="0.01" />
+            </div>
+            <div>
+              <label htmlFor="expiryDate" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Expiry Date</label>
+              <input type="date" id="expiryDate" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
+            </div>
+            <div className="flex justify-end">
+              <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-green-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                Create Coupon
+              </button>
+            </div>
+            {/* Placeholder for API call: Create promotions/coupons via /api/promotions/coupons */}
+          </form>
+        </div>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Active Campaigns & Promotions</h3>
+      <div className="overflow-x-auto">
+        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <tr>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name/Code</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Value</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Expiry/End</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Welcome Series</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Email Campaign</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>N/A</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Active</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Ongoing</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>SAVE15</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Coupon</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>15% Off</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Active</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-08-31</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            {/* Placeholder for API call: Fetch active campaigns/promotions from /api/marketing/campaigns or /api/promotions/ */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+
+  // Team Management Page Component
+  const TeamManagementPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Briefcase className="inline-block mr-2" size={20} /> <span>Team Management</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Team</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Add, remove, and manage roles for your team members.</p>
+      </div>
+
+      {/* Add New Team Member Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Team Member</h3>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="memberName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
+            <input type="text" id="memberName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., John Doe" />
+          </div>
+          <div>
+            <label htmlFor="memberEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
+            <input type="email" id="memberEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="john.doe@example.com" />
+          </div>
+          <div className="md:col-span-2">
+            <label htmlFor="memberRole" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Role</label>
+            <select id="memberRole" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+              <option value="">Select Role</option>
+              <option value="admin">Admin</option>
+              <option value="editor">Editor</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Add Member
+            </button>
+          </div>
+          {/* Placeholder for API call: Submit new team member to /api/team/members */}
+        </form>
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Current Team Members</h3>
+      <div className="overflow-x-auto">
+        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+            <tr>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Email</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Role</th>
+              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Jane Doe</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>jane.doe@example.com</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Admin</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Mark Johnson</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>mark.j@example.com</td>
+              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Editor</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
+                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
+              </td>
+            </tr>
+            {/* Placeholder for API call: Fetch team members from /api/team/members */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // Media Library Page Component
+  const MediaLibraryPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Image className="inline-block mr-2" size={20} /> <span>Media Library</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Assets</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Upload, organize, and use your images, videos, and documents.</p>
+      </div>
+
+      {/* Upload Media Section */}
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upload New Media</h3>
+        <div className={`flex items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+            <UploadCloud className={`w-10 h-10 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+            <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Max file size: 10MB (JPG, PNG, GIF, MP4, PDF)</p>
+          </div>
+          <input id="mediaUpload" type="file" className="hidden" multiple />
+        </div>
+        <div className="flex justify-end mt-6">
+          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            Upload Files
+          </button>
+        </div>
+        {/* Placeholder for API call: Upload files to /api/media/upload */}
+      </div>
+
+      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Media Files</h3>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Example Media Card */}
+        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <img src="https://placehold.co/300x200/4CAF50/FFFFFF?text=Image+1" alt="Media File" className="w-full h-40 object-cover" />
+          <div className="p-4">
+            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>my_awesome_photo.jpg</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Image | 1.2 MB</p>
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
+            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
+          </div>
+        </div>
+        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <img src="https://placehold.co/300x200/FFC107/000000?text=Video+Clip" alt="Media File" className="w-full h-40 object-cover" />
+          <div className="p-4">
+            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>intro_video.mp4</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Video | 5.8 MB</p>
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
+            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
+          </div>
+        </div>
+        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <img src="https://placehold.co/300x200/007bff/ffffff?text=Document" alt="Media File" className="w-full h-40 object-cover" />
+          <div className="p-4">
+            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>report_2025.pdf</p>
+            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Document | 2.1 MB</p>
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
+            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
+          </div>
+        </div>
+        {/* Placeholder for API call: Fetch media files from /api/media/files */}
+      </div>
+    </div>
+  );
+
+  // Notifications Page Component
+  const NotificationsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <BellRing className="inline-block mr-2" size={20} /> <span>Notifications</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Notifications</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stay updated on all activities and important alerts.</p>
+      </div>
+
+      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Notifications</h3>
+        <ul className="space-y-4">
+          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+            <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
+            <div>
+              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Course Published Successfully!</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Your course "Introduction to AI" is now live and available to students. <span className="block text-xs text-gray-500 mt-1">2 hours ago</span></p>
+            </div>
+            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
+          </li>
+          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+            <ShoppingCart className="text-blue-500 mr-3 mt-1 flex-shrink-0" size={20} />
+            <div>
+              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Order Received!</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>John Doe purchased "E-book: Creator's Guide". Order #MWZ789. <span className="block text-xs text-gray-500 mt-1">Yesterday</span></p>
+            </div>
+            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
+          </li>
+          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+            <Users className="text-purple-500 mr-3 mt-1 flex-shrink-0" size={20} />
+            <div>
+              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Subscriber Alert!</p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>You have 5 new subscribers to your email list. <span className="block text-xs text-gray-500 mt-1">3 days ago</span></p>
+            </div>
+            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
+          </li>
+          {/* Placeholder for API call: Fetch notifications from /api/notifications/ */}
+        </ul>
+        <div className="text-center mt-8">
+          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            Load More Notifications
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+
+  // Settings Page Component
+  const SettingsPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <Settings className="inline-block mr-2" size={20} /> <span>Account Settings</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Preferences</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Update your profile, notification settings, and integrations.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        {/* Profile Settings */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile Information</h3>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="fullName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
+              <input type="text" id="fullName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="Jane Doe" />
+            </div>
+            <div>
+              <label htmlFor="email" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
+              <input type="email" id="email" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="jane.doe@example.com" />
+            </div>
+            <div>
+              <label htmlFor="username" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Username</label>
+              <input type="text" id="username" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="janedoecreator" />
+            </div>
+            <div>
+              <label htmlFor="phone" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Phone Number</label>
+              <input type="tel" id="phone" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="+1 (555) 123-4567" />
+            </div>
+            <div>
+              <label htmlFor="timezone" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Timezone</label>
+              <select id="timezone" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
+                <option value="UTC-5">America/New_York (UTC-05:00)</option>
+                <option value="UTC+1">Europe/London (UTC+01:00)</option>
+                <option value="UTC+7" selected>Asia/Bangkok (UTC+07:00)</option>
+              </select>
+            </div>
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Update Profile
+            </button>
+            {/* Placeholder for API call: Update user profile to /api/users/{user_id} */}
+          </form>
+        </div>
+
+        {/* Notification Settings */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Notification Preferences</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label htmlFor="emailNotifications" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Notifications</label>
+              <input type="checkbox" id="emailNotifications" className="toggle toggle-primary" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="pushNotifications" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Push Notifications</label>
+              <input type="checkbox" id="pushNotifications" className="toggle toggle-primary" />
+            </div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="smsNotifications" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>SMS Notifications</label>
+              <input type="checkbox" id="smsNotifications" className="toggle toggle-primary" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="productUpdates" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Updates</label>
+              <input type="checkbox" id="productUpdates" className="toggle toggle-primary" defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <label htmlFor="marketingEmails" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Marketing Emails</label>
+              <input type="checkbox" id="marketingEmails" className="toggle toggle-primary" />
+            </div>
+          </div>
+          <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 mt-6">
+              Save Preferences
+            </button>
+            {/* Placeholder for API call: Update notification preferences to /api/notifications/preferences */}
+        </div>
+
+        {/* Integrations */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Integrations</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Stripe</span>
+              <button className="px-4 py-2 text-sm rounded-lg bg-green-500 text-white">Connected</button>
+            </div>
+            <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Mailchimp</span>
+              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+            </div>
+            <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Zapier</span>
+              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+            </div>
+            <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Google Analytics</span>
+              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+            </div>
+            <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Facebook Ads</span>
+              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+            </div>
+          </div>
+          {/* Placeholder for API call: Manage integrations via /api/integrations/ */}
+        </div>
+
+        {/* API Keys (relevant to ai_token_management) */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>API Keys</h3>
+          <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage your API keys for external services and AI integrations.</p>
+          <div className="space-y-4">
+            <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Content Generation Key</p>
+              <div className="flex items-center mt-2">
+                <input type="text" readOnly value="********************abcde12345" className={`flex-grow p-2 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-gray-100 border-gray-300 text-gray-700'}`} />
+                <button className="ml-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Regenerate</button>
+              </div>
+            </div>
+            <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Public API Key</p>
+              <div className="flex items-center mt-2">
+                <input type="text" readOnly value="********************fghij67890" className={`flex-grow p-2 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-gray-100 border-gray-300 text-gray-700'}`} />
+                <button className="ml-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Regenerate</button>
+              </div>
+            </div>
+          </div>
+          {/* Placeholder for API call: Manage API tokens via /api/tokens/ */}
+        </div>
+
+        {/* Subscription & Billing (relevant to subscription_management, financial_management) */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Subscription & Billing</h3>
+          <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage your subscription plan and billing details.</p>
+          <div className="space-y-4">
+            <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Current Plan: <span className="font-bold text-blue-500">Professional</span></p>
+              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Renews on: July 20, 2026</p>
+              <button className="mt-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Change Plan</button>
+            </div>
+            <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Payment Method: **** **** **** 1234</p>
+              <button className="mt-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Update Payment</button>
+            </div>
+          </div>
+          {/* Placeholder for API call: Fetch subscription details from /api/subscriptions/current or /api/financial/billing */}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Help & Support Page Component
+  const HelpAndSupportPage = ({ theme }) => (
+    <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="text-center mb-16">
+        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+          <HelpCircle className="inline-block mr-2" size={20} /> <span>Help & Support</span>
+        </div>
+        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>How Can We Help You?</h2>
+        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Find answers to common questions or contact our support team.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+        {/* FAQ Section */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Frequently Asked Questions</h3>
+          <div className="space-y-4">
+            <details className="group">
+              <summary className={`flex justify-between items-center font-semibold cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                How do I create a new course?
+                <span className="transform transition-transform duration-200 group-open:rotate-180">▼</span>
+              </summary>
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Navigate to the "Courses" section in your sidebar, then click on "Create New Course" and fill in the details.</p>
+            </details>
+            <details className="group">
+              <summary className={`flex justify-between items-center font-semibold cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                Can I integrate with other platforms?
+                <span className="transform transition-transform duration-200 group-open:rotate-180">▼</span>
+              </summary>
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Yes, Mewayz supports integrations with popular tools like Stripe, Mailchimp, and Zapier. Find more in "Settings" under "Integrations".</p>
+            </details>
+            <details className="group">
+              <summary className={`flex justify-between items-center font-semibold cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                Where can I view my sales analytics?
+                <span className="transform transition-transform duration-200 group-open:rotate-180">▼</span>
+              </summary>
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Your detailed sales and traffic analytics are available in the "Analytics" section of your dashboard.</p>
+            </details>
+            <details className="group">
+              <summary className={`flex justify-between items-center font-semibold cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                Is my data secure on Mewayz?
+                <span className="transform transition-transform duration-200 group-open:rotate-180">▼</span>
+              </summary>
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Absolutely. We employ industry-standard security measures, including encryption and regular audits, to protect your data. Refer to our Privacy Policy for more details.</p>
+            </details>
+            <details className="group">
+              <summary className={`flex justify-between items-center font-semibold cursor-pointer ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                How do I update my billing information?
+                <span className="transform transition-transform duration-200 group-open:rotate-180">▼</span>
+              </summary>
+              <p className={`mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>You can update your billing information in the "Settings" section under "Billing & Subscriptions".</p>
+            </details>
+          </div>
+          {/* Placeholder for API call: Fetch FAQs from /api/support/faqs */}
+        </div>
+
+        {/* Contact Support */}
+        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Contact Support</h3>
+          <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Can't find what you're looking for? Reach out to our support team.</p>
+          <form className="space-y-4">
+            <div>
+              <label htmlFor="supportEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Your Email</label>
+              <input type="email" id="supportEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="your.email@example.com" />
+            </div>
+            <div>
+              <label htmlFor="supportSubject" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Subject</label>
+              <input type="text" id="supportSubject" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Issue with my course..." />
+            </div>
+            <div>
+              <label htmlFor="supportMessage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
+              <textarea id="supportMessage" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Describe your issue in detail..."></textarea>
+            </div>
+            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              Send Message
+            </button>
+            {/* Placeholder for API call: Submit support ticket to /api/support/tickets */}
+          </form>
+        </div>
+
+        {/* Documentation Link */}
+        <div className={`p-8 rounded-2xl border lg:col-span-2 ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Documentation & Guides</h3>
+          <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Explore our extensive documentation for detailed guides and tutorials.</p>
+          <a href="#documentation" className="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <FileText className="mr-2" size={20} /> View Documentation
+          </a>
+          {/* Placeholder for API call: Link to external documentation or /api/blog/category/tutorials */}
+        </div>
+      </div>
+    </div>
+  );
+
+
+  // Dashboard Layout Component
+  const DashboardLayout = ({ theme, toggleTheme, handleLogout }) => {
+    const [activeView, setActiveView] = useState('overview'); // State to manage active dashboard view
+
+    const renderContent = () => {
+      switch (activeView) {
+        case 'overview':
+          return <DashboardOverview theme={theme} />;
+        case 'courses':
+          return <CoursesPage theme={theme} />;
+        case 'products':
+          return <ProductsPage theme={theme} />;
+        case 'analytics':
+          return <AnalyticsPage theme={theme} />;
+        case 'workspaces':
+          return <WorkspacesPage theme={theme} />;
+        case 'blog':
+          return <BlogContentPage theme={theme} />;
+        case 'ai-tools':
+          return <AIToolsPage theme={theme} />;
+        case 'bookings':
+          return <BookingsPage theme={theme} />;
+        case 'marketing':
+          return <MarketingPromotionsPage theme={theme} />;
+        case 'team':
+          return <TeamManagementPage theme={theme} />;
+        case 'media':
+          return <MediaLibraryPage theme={theme} />;
+        case 'notifications':
+          return <NotificationsPage theme={theme} />;
+        case 'settings':
+          return <SettingsPage theme={theme} />;
+        case 'help':
+          return <HelpAndSupportPage theme={theme} />;
+        default:
+          return <DashboardOverview theme={theme} />;
+      }
+    };
+
+    return (
+      <div className={`flex min-h-screen pt-16 ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-900'}`}>
+        {/* Sidebar */}
+        <aside className={`w-64 fixed top-16 left-0 h-[calc(100vh-4rem)] p-4 border-r ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-50 backdrop-blur-lg border-gray-200'} transition-all duration-300 ease-in-out`}>
+          <nav className="space-y-2">
+            <a
+              href="#dashboard-overview"
+              onClick={() => setActiveView('overview')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'overview' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <LayoutDashboard className="mr-3" size={20} /> Overview
+            </a>
+            <a
+              href="#dashboard-courses"
+              onClick={() => setActiveView('courses')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'courses' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <BookOpen className="mr-3" size={20} /> Courses
+            </a>
+            <a
+              href="#dashboard-products"
+              onClick={() => setActiveView('products')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'products' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Package className="mr-3" size={20} /> Products
+            </a>
+            <a
+              href="#dashboard-analytics"
+              onClick={() => setActiveView('analytics')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'analytics' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <LineChart className="mr-3" size={20} /> Analytics
+            </a>
+            <a
+              href="#dashboard-workspaces"
+              onClick={() => setActiveView('workspaces')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'workspaces' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Briefcase className="mr-3" size={20} /> Workspaces
+            </a>
+            <a
+              href="#dashboard-blog"
+              onClick={() => setActiveView('blog')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'blog' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <FileText className="mr-3" size={20} /> Blog & Content
+            </a>
+            <a
+              href="#dashboard-ai-tools"
+              onClick={() => setActiveView('ai-tools')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'ai-tools' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Bot className="mr-3" size={20} /> AI Tools
+            </a>
+            <a
+              href="#dashboard-bookings"
+              onClick={() => setActiveView('bookings')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'bookings' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <CalendarCheck className="mr-3" size={20} /> Bookings
+            </a>
+            <a
+              href="#dashboard-marketing"
+              onClick={() => setActiveView('marketing')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'marketing' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Megaphone className="mr-3" size={20} /> Marketing
+            </a>
+            <a
+              href="#dashboard-team"
+              onClick={() => setActiveView('team')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'team' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Users className="mr-3" size={20} /> Team
+            </a>
+            <a
+              href="#dashboard-media"
+              onClick={() => setActiveView('media')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'media' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} hover:bg-gray-800 hover:text-white`
+              }`}
+            >
+              <Image className="mr-3" size={20} /> Media Library
+            </a>
+            <a
+              href="#dashboard-notifications"
+              onClick={() => setActiveView('notifications')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'notifications' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} hover:bg-gray-800 hover:text-white`
+              }`}
+            >
+              <BellRing className="mr-3" size={20} /> Notifications
+            </a>
+            <div className="border-t border-gray-700 my-4"></div> {/* Separator */}
+            <a
+              href="#dashboard-settings"
+              onClick={() => setActiveView('settings')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'settings' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <Settings className="mr-3" size={20} /> Settings
+            </a>
+            <a
+              href="#dashboard-help"
+              onClick={() => setActiveView('help')}
+              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                activeView === 'help' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+              }`}
+            >
+              <HelpCircle className="mr-3" size={20} /> Help & Support
+            </a>
+          </nav>
+        </aside>
+
+        {/* Main Content Area */}
+        <main className="flex-1 ml-64 p-8">
+          {renderContent()}
+        </main>
+      </div>
+    );
+  };
+
+  // Component for the Hero section
+  const HeroSection = () => (
+    <section className={`relative pt-40 pb-24 text-center max-w-7xl mx-auto px-4 overflow-hidden ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+      {/* Background glow */}
+      <div className="absolute top-1/5 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-radial from-black/10 to-transparent rounded-full animate-pulseGlow opacity-60 -z-10"></div>
+
+      <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-8 animate-fade-in-up transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+        <span className="text-xl">✨</span> <span>New: AI-Powered Creator Tools</span>
+      </div>
+      <h2 className={`text-6xl font-extrabold leading-tight tracking-tighter mb-2 animate-fade-in-up-delay-200 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+        Complete Creator
+      </h2>
+      <h2 className="text-6xl font-extrabold leading-tight tracking-tighter bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text mb-12 animate-fade-in-up-delay-400">
+        Economy Platform
+      </h2>
+      <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in-up-delay-600">
+        Everything you need to build, manage, and scale your creator business. From social media management to e-commerce, courses, and beyond.
+      </p>
+      <div className="flex justify-center space-x-6 flex-wrap animate-fade-in-up-delay-800">
+        <a href="#trial" className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
+          Start Free Trial
+          <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+        </a>
+        {/* Learn More button with dynamic styling for light mode */}
+        <a href="#learn" className={`px-8 py-4 rounded-xl font-semibold backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group ${theme === 'dark' ? 'text-white border border-gray-700 bg-gray-800 bg-opacity-30 hover:bg-gray-700' : 'text-gray-900 border border-gray-300 bg-gray-200 hover:bg-gray-300'}`}>
+          Learn More
+          <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+        </a>
+      </div>
+      <div className="flex justify-center space-x-12 flex-wrap mt-16 animate-fade-in-up-delay-1000">
+        <div className="text-center">
+          <span className="block text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text">10K+</span>
+          <span className="block text-sm text-gray-500 uppercase tracking-wider font-medium">Active Creators</span>
+        </div>
+        <div className="text-center">
+          <span className="block text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text">$2M+</span>
+          <span className="block text-sm text-gray-500 uppercase tracking-wider font-medium">Revenue Generated</span>
+        </div>
+        <div className="text-center">
+          <span className="block text-4xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text">99.9%</span>
+          <span className="block text-sm text-gray-500 uppercase tracking-wider font-medium">Uptime</span>
+        </div>
+      </div>
+    </section>
+  );
+
+  // Component for the Features section
+  const FeaturesSection = () => {
+    const featureCardsRef = useRef([]);
+
+    // Intersection Observer for scroll animations on feature cards
+    useEffect(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      featureCardsRef.current.forEach(card => {
+        if (card) observer.observe(card);
+      });
+
+      return () => {
+        featureCardsRef.current.forEach(card => {
+          if (card) observer.unobserve(card);
+        });
+      };
+    }, []);
+
+    const featuresData = [
+      { icon: <Smartphone className="w-7 h-7" />, title: "Social Media Management", description: "Manage all your social media accounts from one powerful dashboard with advanced scheduling and analytics, saving hours every week." },
+      { icon: <ShoppingCart className="w-7 h-7" />, title: "E-commerce Platform", description: "Launch your online store effortlessly with integrated payment processing, inventory tracking, and customizable product pages." },
+      { icon: <GraduationCap className="w-7 h-7" />, title: "Course Creation & Hosting", description: "Design, host, and sell engaging online courses with interactive lessons, quizzes, and student progress tracking." },
+      { icon: <Users className="w-7 h-7" />, title: "Integrated CRM System", description: "Keep track of your audience, manage leads, and segment your customers with our intuitive customer relationship management tools." },
+      { icon: <Globe className="w-7 h-7" />, title: "Custom Bio Sites & Websites", description: "Build stunning, mobile-responsive bio links and full-fledged websites with our drag-and-drop builder and custom domain support." },
+      { icon: <Brain className="w-7 h-7" />, title: "AI-Powered Content & Marketing", description: "Generate engaging content, optimize marketing campaigns, and predict trends with our advanced AI tools, saving time and boosting ROI." },
+      { icon: <Mail className="w-7 h-7" />, title: "Email Marketing Automation", description: "Automate your email campaigns, build subscriber lists, and track performance with powerful segmentation and analytics." },
+      { icon: <BarChart className="w-7 h-7" />, title: "Advanced Analytics & Reporting", description: "Gain deep insights into your audience, content performance, and revenue with customizable dashboards and detailed reports." },
+    ];
+
+    return (
+      <section id="features" className={`relative py-24 px-4 max-w-7xl mx-auto ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+        <div className="text-center mb-16">
+          <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+            <span className="text-xl">🚀</span> <span>Features</span>
+          </div>
+          <h2 className="text-5xl font-extrabold mb-4 tracking-tight">Everything You Need in One Platform</h2>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">Powerful tools designed specifically for creators, entrepreneurs, and businesses looking to thrive in the digital economy.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+          {featuresData.map((feature, index) => (
+            <div
+              key={index}
+              ref={el => featureCardsRef.current[index] = el}
+              // Conditional background for light theme
+              className={`p-8 rounded-2xl border transition-all duration-600 ease-in-out transform opacity-0 translate-y-8 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden group 
+                ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}
+            >
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-400"></div>
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-3xl mb-6 transition-transform duration-300 group-hover:scale-105">
+                {feature.icon}
+              </div>
+              <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{feature.title}</h3>
+              <p className={`text-base ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  };
+
+  // Component for the Testimonials section
+  const TestimonialsSection = () => {
+    const testimonialCardsRef = useRef([]);
+
+    // Intersection Observer for scroll animations on testimonial cards
+    useEffect(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      testimonialCardsRef.current.forEach(card => {
+        if (card) observer.observe(card);
+      });
+
+      return () => {
+        testimonialCardsRef.current.forEach(card => {
+          if (card) observer.unobserve(card);
+        });
+      };
+    }, []);
+
+    const testimonialsData = [
+      { text: "Mewayz transformed my online business. The all-in-one platform saved me so much time and allowed me to focus on creating amazing content. Highly recommend!", author: "Jane Doe", title: "Fashion Blogger", img: "https://placehold.co/50x50/673AB7/FFFFFF?text=JD" },
+      { text: "I've tried many platforms, but Mewayz is by far the most comprehensive and user-friendly. My course sales have doubled since I switched!", author: "Alex Smith", title: "Online Educator", img: "https://placehold.co/50x50/2196F3/FFFFFF?text=AS" },
+      { text: "The AI tools are a game-changer! From content generation to marketing automation, Mewayz helps me stay ahead without the extra workload.", author: "Maria Brown", title: "Digital Artist", img: "https://placehold.co/50x50/4CAF50/FFFFFF?text=MB" },
+    ];
+
+    return (
+      <section id="testimonials" className={`relative py-24 px-4 ${theme === 'dark' ? 'bg-black' : 'bg-white'} text-center`}>
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+        <div className="text-center mb-16">
+          <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+            <span className="text-xl">💬</span> <span>Testimonials</span>
+          </div>
+          <h2 className="text-5xl font-extrabold mb-4 tracking-tight">What Our Creators Say</h2>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">Hear directly from the creators who are thriving with Mewayz.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto mt-16">
+          {testimonialsData.map((testimonial, index) => (
+            <div
+              key={index}
+              ref={el => testimonialCardsRef.current[index] = el}
+              className={`p-8 rounded-2xl border text-left flex flex-col justify-between transition-all duration-600 ease-in-out transform opacity-0 translate-y-8 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}
+            >
+              <p className={`text-lg mb-6 flex-grow ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{testimonial.text}</p>
+              <div className="flex items-center space-x-4 mt-auto">
+                <img src={testimonial.img} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border-none" />
+                <div>
+                  <strong className={`block text-base ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{testimonial.author}</strong>
+                  <span className={`block text-sm ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>{testimonial.title}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  };
+
+  // Component for the Call to Action section
+  const CtaSection = () => (
+    <section className={`${theme === 'dark' ? 'bg-black' : 'bg-white'} py-24 px-4 text-center shadow-xl`}>
+      <h2 className={`text-5xl font-extrabold mb-6 leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Ready to Elevate Your Creator Business?</h2>
+      <p className={`text-xl mb-10 max-w-2xl mx-auto ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>Join thousands of successful creators who are building, managing, and scaling their empires with Mewayz. Start your free trial today!</p>
+      <a href="#signup" className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
+        Get Started Now
+        <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+      </a>
+    </section>
+  );
+
+  // Component for the Pricing section
+  const PricingSection = () => {
+    const pricingCardsRef = useRef([]);
+
+    // Intersection Observer for scroll animations on pricing cards
+    useEffect(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      pricingCardsRef.current.forEach(card => {
+        if (card) observer.observe(card);
+      });
+
+      return () => {
+        pricingCardsRef.current.forEach(card => {
+          if (card) observer.unobserve(card);
+        });
+      };
+    }, []);
+
+    const pricingData = [
+      {
+        name: "Starter",
+        price: "$9",
+        features: [
+          "Up to 3 social media accounts",
+          "Basic analytics & insights",
+          "Email support",
+          "1 bio site included",
+          "Basic templates library",
+          "Mobile app access",
+        ],
+        popular: false,
+      },
+      {
+        name: "Professional",
+        price: "$29",
+        features: [
+          "Unlimited social media accounts",
+          "Advanced analytics & AI insights",
+          "Priority support & live chat",
+          "Unlimited bio sites & pages",
+          "Premium templates & themes",
+          "E-commerce features included",
+          "Course creation tools",
+          "Custom domain support",
+        ],
+        popular: true,
+      },
+      {
+        name: "Enterprise",
+        price: "$99",
+        features: [
+          "Everything in Professional",
+          "Team collaboration tools",
+          "Custom integrations & API",
+          "White-label options",
+          "Dedicated account manager",
+          "Custom development",
+          "Priority feature requests",
+          "Advanced security features",
+        ],
+        popular: false,
+      },
+    ];
+
+    return (
+      <section id="pricing" className={`relative py-24 px-4 ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+              <span className="text-xl">💰</span> <span>Pricing</span>
+            </div>
+            <h2 className="text-5xl font-extrabold mb-4 tracking-tight">Simple, Transparent Pricing</h2>
+            <p className="text-lg text-gray-400">Choose the plan that's right for your business</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+            {pricingData.map((plan, index) => (
+              <div
+                key={index}
+                ref={el => pricingCardsRef.current[index] = el}
+                className={`relative p-0.5 rounded-2xl overflow-hidden transition-all duration-600 ease-in-out transform opacity-0 translate-y-8 hover:-translate-y-2 hover:shadow-xl
+                  ${plan.popular ? 'scale-105 shadow-xl bg-gradient-to-r from-blue-500 to-cyan-500' : ''}
+                `}
+              >
+                <div className={`relative h-full w-full p-8 rounded-2xl
+                  ${theme === 'dark' 
+                    ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800 hover:border-gray-700' 
+                    : 'bg-gray-100 backdrop-blur-lg border border-gray-200 hover:border-gray-300'}
+                `}>
+                  {plan.popular && (
+                    // Adjusted padding and positioning for 'Most Popular' label to reduce height
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-b-xl text-sm font-semibold uppercase tracking-wider shadow-md z-10 w-max whitespace-nowrap">
+                      Most Popular
+                    </div>
+                  )}
+                  <h3 className={`text-2xl font-bold mt-4 mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
+                  <div className="text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text mb-6">
+                    {plan.price}<span className={`text-base font-medium ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>/month</span>
+                  </div>
+                  <ul className="list-none my-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className={`flex items-center py-2 transition-colors duration-300 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
+                        <span className="text-green-500 mr-3 text-lg">✓</span> {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <a href={`#${plan.name.toLowerCase()}`} className="block w-full text-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
+                    Get Started
+                    <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  };
+
+  // Component for the Footer section
+  const Footer = () => (
+    <footer id="contact" className={`${theme === 'dark' ? 'bg-black' : 'bg-white'} py-16 px-4 border-t ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'}`}>
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
+          <div className="lg:col-span-2">
+            <div className={`text-2xl font-bold tracking-tight mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Mewayz</div>
+            <p className={`mb-6 text-base max-w-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>The complete creator economy platform for modern businesses. Empowering creators to build, grow, and monetize their digital presence.</p>
+            <div className="flex space-x-4">
+              <a href="#twitter" className={`w-11 h-11 backdrop-blur-md border rounded-xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-purple-600 hover:text-white hover:-translate-y-1 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>𝕏</a>
+              <a href="#instagram" className={`w-11 h-11 backdrop-blur-md border rounded-xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-purple-600 hover:text-white hover:-translate-y-1 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>📷</a>
+              <a href="#linkedin" className={`w-11 h-11 backdrop-blur-md border rounded-xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-purple-600 hover:text-white hover:-translate-y-1 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>💼</a>
+              <a href="#youtube" className={`w-11 h-11 backdrop-blur-md border rounded-xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-purple-600 hover:text-white hover:-translate-y-1 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>📺</a>
+              <a href="#facebook" className={`w-11 h-11 backdrop-blur-md border rounded-xl flex items-center justify-center text-xl transition-all duration-300 hover:bg-purple-600 hover:text-white hover:-translate-y-1 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-gray-400' : 'bg-gray-100 border-gray-200 text-gray-600'}`}>📘</a>
+            </div>
+          </div>
+
+          <div>
+            <h4 className={`font-bold mb-6 text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Product</h4>
+            <ul className="space-y-3">
+              <li><a href="#features" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Features Overview</a></li>
+              <li><a href="#ecommerce" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>E-commerce</a></li>
+              <li><a href="#courses" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Course Platform</a></li>
+              <li><a href="#crm" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>CRM & Audience</a></li>
+              <li><a href="#websites" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Websites & Bio Links</a></li>
+              <li><a href="#ai-tools" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>AI Tools</a></li>
+              <li><a href="#email-marketing" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Email Marketing</a></li>
+              <li><a href="#analytics" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Analytics</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className={`font-bold mb-6 text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Company</h4>
+            <ul className="space-y-3">
+              <li><a href="#about-us" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>About Us</a></li>
+              <li><a href="#team" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Our Team</a></li>
+              <li><a href="#careers" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Careers <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-md ml-1">Hiring!</span></a></li>
+              <li><a href="#partners" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Partnerships</a></li>
+              <li><a href="#press" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Press & Media</a></li>
+              <li><a href="#blog" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Blog</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className={`font-bold mb-6 text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Resources</h4>
+            <ul className="space-y-3">
+              <li><a href="#help-center" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Help Center</a></li>
+              <li><a href="#faqs" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>FAQs</a></li>
+              <li><a href="#tutorials" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Video Tutorials</a></li>
+              <li><a href="#community" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Community Forum</a></li>
+              <li><a href="#webinars" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Webinars & Events</a></li>
+              <li><a href="#api-docs" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>API Documentation</a></li>
+              <li><a href="#status" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>System Status</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className={`font-bold mb-6 text-lg ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Legal & Support</h4>
+            <ul className="space-y-3">
+              <li><a href="#terms" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Terms of Service</a></li>
+              <li><a href="#privacy" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Privacy Policy</a></li>
+              <li><a href="#cookies" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Cookie Policy</a></li>
+              <li><a href="#gdpr" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>GDPR Compliance</a></li>
+              <li><a href="#security" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Security</a></li>
+              <li><a href="mailto:support@mewayz.com" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Support Email</a></li>
+              <li><a href="tel:+18001234567" className={`font-medium transition-all duration-300 hover:pl-3 ${theme === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Call Us: +1 (800) 123-4567</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className={`text-center pt-8 border-t ${theme === 'dark' ? 'border-gray-800' : 'border-gray-200'} ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'} font-medium`}>
+          <p>© 2025 Mewayz. All rights reserved. Built with ❤️ for creators worldwide.</p>
+        </div>
+      </div>
+    </footer>
+  );
+
+  return (
+    // Main container for the React app, applying global styles
+    <div className={`font-inter ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-900'} min-h-screen transition-colors duration-400 ease-in-out`}>
+      {/* Tailwind CSS CDN script for development */}
+      <script src="https://cdn.tailwindcss.com"></script>
+      {/* Custom styles that cannot be easily translated to Tailwind classes */}
+      <style>
+        {`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          overflow-x: hidden;
+        }
+
+        /* Custom keyframes for animations */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes pulseGlow {
+            from { transform: translateX(-50%) scale(1); opacity: 0.1; }
+            to { transform: translateX(-50%) scale(1.05); opacity: 0.2; }
+        }
+
+        /* Tailwind animation classes */
+        .animate-fade-in-up {
+          animation: fadeInUp 0.8s ease forwards;
+        }
+        .animate-fade-in-up-delay-200 {
+          animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+        .animate-fade-in-up-delay-400 {
+          animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+        .animate-fade-in-up-delay-600 {
+          animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+        .animate-fade-in-up-delay-800 {
+          animation: fadeInUp 0.8s ease 0.8s forwards;
+        }
+        .animate-fade-in-up-delay-1000 {
+          animation: fadeInUp 0.8s ease 1s forwards;
+        }
+        .animate-pulseGlow {
+          animation: pulseGlow 4s infinite alternate;
+        }
+
+        /* Basic toggle switch styling for settings page */
+        .toggle {
+          appearance: none;
+          width: 3.5rem;
+          height: 1.75rem;
+          border-radius: 9999px;
+          background-color: #ccc;
+          position: relative;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .toggle::before {
+          content: '';
+          position: absolute;
+          width: 1.5rem;
+          height: 1.5rem;
+          border-radius: 9999px;
+          background-color: white;
+          top: 0.125rem;
+          left: 0.125rem;
+          transition: transform 0.3s;
+        }
+
+        .toggle:checked {
+          background-color: #3B82F6; /* Blue-500 */
+        }
+
+        .toggle:checked::before {
+          transform: translateX(1.75rem);
+        }
+
+        /* Dark mode specific toggle styling */
+        [data-theme="dark"] .toggle {
+          background-color: #4B5563; /* Gray-600 */
+        }
+
+        [data-theme="dark"] .toggle:checked {
+          background-color: #60A5FA; /* Blue-400 */
+        }
+        `}
+      </style>
+
+      {/* Pass setActiveView to Header so it can navigate dashboard views */}
+      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleLogin={handleLogin} toggleTheme={toggleTheme} theme={theme} setActiveView={(view) => {
+        // This is a simplified navigation for demonstration.
+        // In a real app, you might use React Router or similar.
+        if (isLoggedIn) {
+          // If logged in, clicking dashboard links should change the active view within the dashboard
+          // This logic is handled within DashboardLayout's renderContent.
+          // For now, we just ensure the page doesn't scroll to a non-existent anchor.
+          // A full router implementation would be more robust.
+        } else {
+          // If not logged in, clicking these links will scroll to sections on the landing page
+          window.location.hash = view; // This handles the landing page navigation
+        }
+      }} />
+      
+      {isLoggedIn ? (
+        <DashboardLayout theme={theme} toggleTheme={toggleTheme} handleLogout={handleLogout} />
+      ) : (
+        <main>
+          <HeroSection />
+          <FeaturesSection />
+          <TestimonialsSection />
+          <CtaSection />
+          <PricingSection />
+        </main>
+      )}
+      {!isLoggedIn && <Footer />} {/* Footer is only visible when not logged in */}
+    </div>
+  );
+};
+
+export default App;
