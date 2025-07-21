@@ -155,7 +155,7 @@ async def generate_content(
     current_user: dict = Depends(get_current_user)
 ):
     """Generate AI content based on request"""
-    return await ai_service.generate_content(current_user["id"], request.dict())
+    return await ai_service.generate_content(current_user.get("_id") or current_user.get("id", "default-user"), request.dict())
 
 @router.post("/optimize-seo")
 async def optimize_seo_content(
