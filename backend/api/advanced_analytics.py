@@ -241,7 +241,7 @@ async def get_revenue_analytics(
                 {
                     "month": f"2024-{i+1:02d}",
                     "revenue": round(await service.get_metric(), 2),
-                    "growth": round(random.uniform(-5.2, 18.7), 1),
+                    "growth": round(await self._get_real_growth_from_db(user_id), 1),
                     "customers": await service.get_metric()
                 } for i in range(12)
             ],
