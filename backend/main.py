@@ -129,6 +129,9 @@ app.include_router(social_media_suite.router, prefix="/api/social-media", tags=[
 # TWELFTH WAVE - SURVEY & FEEDBACK SYSTEM - Newly Implemented
 app.include_router(survey_system.router, prefix="/api/surveys", tags=["Survey & Feedback System"])
 
+# TWELFTH WAVE - MEDIA LIBRARY & FILE MANAGEMENT - Newly Implemented  
+app.include_router(media_library.router, prefix="/api/media", tags=["Media Library & File Management"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
