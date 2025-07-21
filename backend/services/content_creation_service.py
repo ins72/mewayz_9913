@@ -511,7 +511,7 @@ class ContentCreationService:
             asset_data.get("tags", [])
         )
     
-    async def invite_collaborator(self, user_id: str, collaboration_data: Dict[str, Any]):
+    async def invite_collaborator_alt(self, user_id: str, collaboration_data: Dict[str, Any]):
         """Invite collaborator to content project (with updated signature)"""
         return await self.invite_collaborator(
             user_id,
