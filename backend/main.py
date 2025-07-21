@@ -103,6 +103,10 @@ app.include_router(website_builder.router, prefix="/api/website-builder", tags=[
 app.include_router(email_marketing.router, prefix="/api/email-marketing", tags=["Email Marketing"])
 app.include_router(advanced_analytics.router, prefix="/api/advanced-analytics", tags=["Advanced Analytics"])
 
+# SEVENTH WAVE - ESCROW & ONBOARDING SYSTEMS - Newly Migrated
+app.include_router(escrow_system.router, prefix="/api/escrow", tags=["Escrow System"])
+app.include_router(onboarding_system.router, prefix="/api/onboarding", tags=["Onboarding System"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
