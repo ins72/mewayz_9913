@@ -738,3 +738,6 @@ class EmailMarketingService:
             return result[0]["_id"] if result and result[0]["_id"] in choices else choices[0]
         except:
             return choices[0]
+
+# Global service instance
+email_marketing_service = EmailMarketingService()
