@@ -57,7 +57,7 @@ async def create_support_ticket(
     current_user: dict = Depends(get_current_user)
 ):
     """Create a new support ticket"""
-    return await support_service.create_ticket(current_user["id"], ticket_data.dict())
+    return await support_service.create_ticket(current_user.get("_id") or current_user.get("id", "default-user"), ticket_data.dict())
 
 @router.get("/tickets/{ticket_id}")
 async def get_ticket_details(
