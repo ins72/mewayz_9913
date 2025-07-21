@@ -34,9 +34,9 @@ class AIContentService:
         
         # Simulate AI content generation
         content_templates = {
-            "blog_post": self._generate_blog_content(prompt, tone, length),
+            "blog_post": await self._generate_blog_content(prompt, tone, length),
             "product_description": self._generate_product_description(prompt, tone),
-            "social_post": self._generate_social_content(prompt, tone),
+            "social_post": await self._generate_social_content(prompt, tone),
             "email": self._generate_email_content(prompt, tone),
             "ad_copy": self._generate_ad_copy(prompt, tone)
         }
