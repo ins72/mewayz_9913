@@ -284,10 +284,11 @@ class BackendTester:
         consistency_endpoints = [
             "/dashboard/overview",
             "/workspaces", 
-            "/advanced-ai/capabilities",
-            "/compliance/framework-status",
-            "/backup/comprehensive-status",
-            "/monitoring/system-health"
+            "/analytics/overview",
+            "/users/profile",
+            "/users/stats",
+            "/ecommerce/dashboard",
+            "/marketing/analytics"
         ]
         
         for endpoint in consistency_endpoints:
