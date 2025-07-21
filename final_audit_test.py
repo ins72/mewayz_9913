@@ -225,17 +225,16 @@ class FinalAuditTester:
         
         admin_config_endpoints = [
             ("/admin-config/configuration", "Get Configuration"),
-            ("/admin-config/integration-status", "Integration Status"),
-            ("/admin-config/system-health", "System Health"),
-            ("/admin-config/system-logs", "System Logs"),
+            ("/admin-config/integrations/status", "Integration Status"),
+            ("/admin-config/system/health", "System Health"),
+            ("/admin-config/logs", "System Logs"),
             ("/admin-config/available-services", "Available Services"),
-            ("/admin-config/analytics-dashboard", "Analytics Dashboard"),
-            ("/admin-config/log-statistics", "Log Statistics"),
-            ("/admin-config/update-configuration", "Update Configuration"),
-            ("/admin-config/test-stripe", "Test Stripe Integration"),
-            ("/admin-config/test-openai", "Test OpenAI Integration"),
-            ("/admin-config/test-sendgrid", "Test SendGrid Integration"),
-            ("/admin-config/test-twitter", "Test Twitter Integration")
+            ("/admin-config/analytics/dashboard", "Analytics Dashboard"),
+            ("/admin-config/logs/statistics", "Log Statistics"),
+            ("/admin-config/integrations/stripe/test", "Test Stripe Integration"),
+            ("/admin-config/integrations/openai/test", "Test OpenAI Integration"),
+            ("/admin-config/integrations/sendgrid/test", "Test SendGrid Integration"),
+            ("/admin-config/integrations/twitter/test", "Test Twitter Integration")
         ]
         
         admin_config_working = 0
