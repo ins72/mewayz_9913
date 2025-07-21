@@ -8,7 +8,7 @@ from datetime import datetime
 from pydantic import BaseModel
 import uuid
 
-from core.auth import get_current_user, require_auth
+from core.auth import get_current_user
 from core.realtime_notification_system import (
     WebSocketConnectionManager, NotificationProcessor, Notification,
     NotificationType, NotificationChannel
@@ -17,8 +17,7 @@ from core.professional_logger import professional_logger, LogLevel, LogCategory
 
 router = APIRouter(
     prefix="/api/notifications",
-    tags=["Real-time Notifications"],
-    dependencies=[Depends(require_auth)]
+    tags=["Real-time Notifications"]
 )
 
 # Global instances
