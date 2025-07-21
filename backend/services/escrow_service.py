@@ -308,6 +308,10 @@ class EscrowService:
     async def get_disputes(self, user_id: str):
         """Get user's dispute cases"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         disputes = []
         dispute_count = random.randint(2, 8)
         
