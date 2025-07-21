@@ -28,7 +28,7 @@ async def generate_predictive_insights(
     - Returns comprehensive insights including revenue trends, engagement analysis, churn risk, and content performance
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -78,7 +78,7 @@ async def generate_predictive_insights(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to generate AI insights: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -98,7 +98,7 @@ async def get_user_insights(
     - **insight_type**: Optional filter by insight type (predictive, trend, anomaly, recommendation, sentiment, forecasting)
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -136,7 +136,7 @@ async def get_user_insights(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to get user insights: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -154,7 +154,7 @@ async def generate_anomaly_detection(
     - Returns actionable insights about data anomalies
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -200,7 +200,7 @@ async def generate_anomaly_detection(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to generate anomaly detection: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -218,7 +218,7 @@ async def mark_insight_viewed(
     - **insight_id**: The ID of the insight to mark as viewed
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -269,7 +269,7 @@ async def mark_insight_viewed(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to mark insight as viewed: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -289,7 +289,7 @@ async def mark_insight_acted_upon(
     - **action_taken**: Description of the action taken based on the insight
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -342,7 +342,7 @@ async def mark_insight_acted_upon(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to mark insight as acted upon: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -359,7 +359,7 @@ async def get_analytics_summary(
     - Returns overview of insights, performance metrics, and recommendations
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -422,7 +422,7 @@ async def get_analytics_summary(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to get analytics summary: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -440,7 +440,7 @@ async def delete_insight(
     - **insight_id**: The ID of the insight to delete
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -483,7 +483,7 @@ async def delete_insight(
             LogLevel.ERROR, LogCategory.AI_SERVICE,
             f"Failed to delete insight: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
