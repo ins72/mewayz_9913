@@ -157,7 +157,8 @@ async def get_survey_analytics(
 ):
     """Get analytics for a survey"""
     try:
-        analytics = await SurveyService.get_survey_analytics(survey_id, current_user["id"])
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        analytics = await SurveyService.get_survey_analytics(survey_id, user_id)
         return {"success": True, "data": analytics}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
