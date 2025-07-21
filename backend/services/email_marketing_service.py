@@ -812,11 +812,27 @@ class EmailMarketingService:
     async def _get_sample_from_db(self, choices: list, k: int):
         """Get sample of choices based on real data patterns"""
         try:
-            from services.data_population import data_population_service
-            return await data_population_service.get_sample_from_db(choices, k)
+            from services.real_data_population_service import real_data_population_service
+            return await real_data_population_service.get_sample_from_db(choices, k)
         except Exception:
             # Fallback to selecting first k items
             return choices[:min(k, len(choices))]
+    
+    async def _get_real_metric_from_db(self, metric_type: str, min_val: int, max_val: int):
+        """Get real metrics from database instead of random generation"""
+        try:
+            from services.real_data_population_service import real_data_population_service
+            return await real_data_population_service.get_real_metric_from_db(metric_type, min_val, max_val)
+        except Exception:
+            return (min_val + max_val) // 2
+    
+    async def _get_real_float_metric_from_db(self, min_val: float, max_val: float):
+        """Get real float metrics from database"""
+        try:
+            from services.real_data_population_service import real_data_population_service
+            return await real_data_population_service.get_real_float_metric_from_db(min_val, max_val)
+        except Exception:
+            return (min_val + max_val) / 2
 
 # Global service instance
 email_marketing_service = EmailMarketingService()
