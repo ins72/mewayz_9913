@@ -602,4 +602,4 @@ Click below to secure your spot and join the thousands who are already seeing in
             }
         }
 # Global service instance
-ai_content_service = AiContentService()
+ai_content_service = AIContentService()
