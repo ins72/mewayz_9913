@@ -107,6 +107,10 @@ app.include_router(advanced_analytics.router, prefix="/api/advanced-analytics", 
 app.include_router(escrow_system.router, prefix="/api/escrow", tags=["Escrow System"])
 app.include_router(onboarding_system.router, prefix="/api/onboarding", tags=["Onboarding System"])
 
+# EIGHTH WAVE - TEMPLATE MARKETPLACE & AI CONTENT - Newly Migrated
+app.include_router(template_marketplace.router, prefix="/api/templates", tags=["Template Marketplace"])
+app.include_router(ai_content_generation.router, prefix="/api/ai-content", tags=["AI Content Generation"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
