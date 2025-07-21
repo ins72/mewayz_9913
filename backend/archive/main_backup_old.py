@@ -450,54 +450,7 @@ def get_password_hash(password):
 # ✅ GOOGLE OAUTH SYSTEM - IMPLEMENTED - /app/backend/api/google_oauth.py
 
 # ✅ ADMIN DASHBOARD - IMPLEMENTED - /app/backend/api/admin.py
-@app.get("/api/admin/dashboard")
-async def get_admin_dashboard(current_admin: dict = Depends(get_current_admin_user)):
-    total_users = await users_collection.count_documents({})
-    total_workspaces = await workspaces_collection.count_documents({})
-    total_bio_sites = await bio_sites_collection.count_documents({})
-    total_websites = await websites_collection.count_documents({})
-    total_courses = await courses_collection.count_documents({})
-    total_bookings = await bookings_collection.count_documents({})
-    total_orders = await orders_collection.count_documents({})
-    
-    return {
-        "success": True,
-        "data": {
-            "user_metrics": {
-                "total_users": total_users,
-                "active_users": max(total_users - 1, 0),
-                "admin_users": await users_collection.count_documents({"role": {"$in": [UserRole.ADMIN, UserRole.SUPER_ADMIN]}}),
-                "new_users_today": await users_collection.count_documents({"created_at": {"$gte": datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)}})
-            },
-            "business_metrics": {
-                "total_workspaces": total_workspaces,
-                "total_bio_sites": total_bio_sites,
-                "total_websites": total_websites,
-                "total_courses": total_courses,
-                "total_bookings": total_bookings,
-                "total_orders": total_orders
-            },
-            "revenue_metrics": {
-                "total_revenue": 45230.50,
-                "monthly_revenue": 12400.00,
-                "growth_rate": 15.3,
-                "conversion_rate": 3.2
-            },
-            "system_health": {
-                "uptime": "99.9%",
-                "response_time": "89ms",
-                "error_rate": "0.1%",
-                "database_status": "healthy"
-            }
-        }
-    }
-
-# ✅ MIGRATED TO MODULAR STRUCTURE - /api/ai-content/*
-# Features moved to: /app/backend/api/ai_content_generation.py & /app/backend/services/ai_content_service.py  
-# Implementation: Complete AI content generation with multiple models, SEO optimization, conversations, image generation
-# Status: 100% Working - Tested and Confirmed - Eighth Wave Migration
-
-# ===== BIO SITES ENDPOINTS =====
+# ✅ BIO SITES SYSTEM - IMPLEMENTED - /app/backend/api/bio_sites.py
 @app.get("/api/bio-sites")
 async def get_bio_sites(current_user: dict = Depends(get_current_user)):
     bio_sites = await bio_sites_collection.find({"owner_id": current_user["id"]}).to_list(length=100)
