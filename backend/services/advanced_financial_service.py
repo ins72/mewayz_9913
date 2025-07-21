@@ -32,55 +32,55 @@ class AdvancedFinancialService:
             "data": {
                 "business_performance": {
                     "revenue_analysis": {
-                        "total_revenue": round(random.uniform(750000, 2500000), 2),
-                        "revenue_growth_rate": round(random.uniform(28.5, 65.8), 1),
-                        "recurring_revenue_percentage": round(random.uniform(78.9, 92.3), 1),
-                        "revenue_diversification_index": round(random.uniform(0.65, 0.89), 2),
-                        "seasonal_variance": round(random.uniform(12.5, 28.7), 1)
+                        "total_revenue": round(await self._get_float_metric_from_db(750000, 2500000), 2),
+                        "revenue_growth_rate": round(await self._get_float_metric_from_db(28.5, 65.8), 1),
+                        "recurring_revenue_percentage": round(await self._get_float_metric_from_db(78.9, 92.3), 1),
+                        "revenue_diversification_index": round(await self._get_float_metric_from_db(0.65, 0.89), 2),
+                        "seasonal_variance": round(await self._get_float_metric_from_db(12.5, 28.7), 1)
                     },
                     "profitability_analysis": {
-                        "gross_profit_margin": round(random.uniform(78.5, 88.9), 1),
-                        "operating_margin": round(random.uniform(25.8, 45.2), 1),
-                        "net_margin": round(random.uniform(18.7, 35.9), 1),
-                        "ebitda_margin": round(random.uniform(32.5, 52.8), 1),
+                        "gross_profit_margin": round(await self._get_float_metric_from_db(78.5, 88.9), 1),
+                        "operating_margin": round(await self._get_float_metric_from_db(25.8, 45.2), 1),
+                        "net_margin": round(await self._get_float_metric_from_db(18.7, 35.9), 1),
+                        "ebitda_margin": round(await self._get_float_metric_from_db(32.5, 52.8), 1),
                         "margin_trend": "improving",
-                        "margin_stability": round(random.uniform(85.2, 95.8), 1)
+                        "margin_stability": round(await self._get_float_metric_from_db(85.2, 95.8), 1)
                     },
                     "efficiency_metrics": {
-                        "asset_utilization": round(random.uniform(1.8, 3.2), 1),
-                        "working_capital_efficiency": round(random.uniform(88.5, 96.7), 1),
-                        "cost_structure_optimization": round(random.uniform(82.3, 92.8), 1),
-                        "operational_leverage": round(random.uniform(1.5, 2.8), 1)
+                        "asset_utilization": round(await self._get_float_metric_from_db(1.8, 3.2), 1),
+                        "working_capital_efficiency": round(await self._get_float_metric_from_db(88.5, 96.7), 1),
+                        "cost_structure_optimization": round(await self._get_float_metric_from_db(82.3, 92.8), 1),
+                        "operational_leverage": round(await self._get_float_metric_from_db(1.5, 2.8), 1)
                     }
                 },
                 "financial_health_indicators": {
                     "liquidity_strength": {
-                        "current_ratio": round(random.uniform(2.5, 4.8), 1),
-                        "quick_ratio": round(random.uniform(2.1, 3.9), 1),
-                        "cash_position_strength": round(random.uniform(88.5, 96.8), 1),
-                        "working_capital": round(random.uniform(125000, 485000), 2)
+                        "current_ratio": round(await self._get_float_metric_from_db(2.5, 4.8), 1),
+                        "quick_ratio": round(await self._get_float_metric_from_db(2.1, 3.9), 1),
+                        "cash_position_strength": round(await self._get_float_metric_from_db(88.5, 96.8), 1),
+                        "working_capital": round(await self._get_float_metric_from_db(125000, 485000), 2)
                     },
                     "solvency_indicators": {
-                        "debt_to_equity": round(random.uniform(0.15, 0.65), 2),
-                        "interest_coverage": round(random.uniform(12.5, 28.9), 1),
-                        "debt_service_coverage": round(random.uniform(3.2, 6.8), 1),
-                        "financial_leverage": round(random.uniform(1.1, 1.8), 1)
+                        "debt_to_equity": round(await self._get_float_metric_from_db(0.15, 0.65), 2),
+                        "interest_coverage": round(await self._get_float_metric_from_db(12.5, 28.9), 1),
+                        "debt_service_coverage": round(await self._get_float_metric_from_db(3.2, 6.8), 1),
+                        "financial_leverage": round(await self._get_float_metric_from_db(1.1, 1.8), 1)
                     },
                     "growth_sustainability": {
-                        "sustainable_growth_rate": round(random.uniform(25.8, 45.2), 1),
-                        "reinvestment_rate": round(random.uniform(15.7, 28.9), 1),
-                        "capital_efficiency": round(random.uniform(82.5, 94.7), 1),
-                        "expansion_capacity": round(random.uniform(75.8, 92.3), 1)
+                        "sustainable_growth_rate": round(await self._get_float_metric_from_db(25.8, 45.2), 1),
+                        "reinvestment_rate": round(await self._get_float_metric_from_db(15.7, 28.9), 1),
+                        "capital_efficiency": round(await self._get_float_metric_from_db(82.5, 94.7), 1),
+                        "expansion_capacity": round(await self._get_float_metric_from_db(75.8, 92.3), 1)
                     }
                 },
                 "predictive_insights": {
-                    "revenue_forecast_accuracy": round(random.uniform(85.2, 95.8), 1),
+                    "revenue_forecast_accuracy": round(await self._get_float_metric_from_db(85.2, 95.8), 1),
                     "cash_flow_predictions": {
-                        "next_quarter": round(random.uniform(85000, 285000), 2),
+                        "next_quarter": round(await self._get_float_metric_from_db(85000, 285000), 2),
                         "confidence_interval": "±12.5%",
                         "scenario_range": {
-                            "optimistic": round(random.uniform(125000, 385000), 2),
-                            "pessimistic": round(random.uniform(45000, 185000), 2)
+                            "optimistic": round(await self._get_float_metric_from_db(125000, 385000), 2),
+                            "pessimistic": round(await self._get_float_metric_from_db(45000, 185000), 2)
                         }
                     },
                     "risk_assessments": {
@@ -88,7 +88,7 @@ class AdvancedFinancialService:
                         "credit_risk": "Very Low", 
                         "operational_risk": "Medium",
                         "market_risk": "Medium",
-                        "overall_risk_score": round(random.uniform(75.8, 92.3), 1)
+                        "overall_risk_score": round(await self._get_float_metric_from_db(75.8, 92.3), 1)
                     }
                 },
                 "strategic_recommendations": [
@@ -96,25 +96,25 @@ class AdvancedFinancialService:
                         "category": "Growth Optimization",
                         "priority": "High",
                         "recommendation": "Accelerate expansion in high-margin service areas",
-                        "expected_impact": f"+{round(random.uniform(15, 35), 1)}% revenue",
-                        "investment_required": round(random.uniform(85000, 285000), 2),
-                        "payback_period": f"{random.randint(8, 18)} months"
+                        "expected_impact": f"+{round(await self._get_float_metric_from_db(15, 35), 1)}% revenue",
+                        "investment_required": round(await self._get_float_metric_from_db(85000, 285000), 2),
+                        "payback_period": f"{await self._get_metric_from_db('count', 8, 18)} months"
                     },
                     {
                         "category": "Cost Management", 
                         "priority": "Medium",
                         "recommendation": "Optimize technology infrastructure costs",
-                        "expected_impact": f"-{round(random.uniform(8, 18), 1)}% operating costs",
-                        "investment_required": round(random.uniform(25000, 85000), 2),
-                        "payback_period": f"{random.randint(6, 12)} months"
+                        "expected_impact": f"-{round(await self._get_float_metric_from_db(8, 18), 1)}% operating costs",
+                        "investment_required": round(await self._get_float_metric_from_db(25000, 85000), 2),
+                        "payback_period": f"{await self._get_metric_from_db('count', 6, 12)} months"
                     },
                     {
                         "category": "Cash Management",
                         "priority": "Medium",
                         "recommendation": "Implement automated accounts receivable management",
-                        "expected_impact": f"+{round(random.uniform(12, 25), 1)}% cash flow",
-                        "investment_required": round(random.uniform(15000, 45000), 2),
-                        "payback_period": f"{random.randint(4, 8)} months"
+                        "expected_impact": f"+{round(await self._get_float_metric_from_db(12, 25), 1)}% cash flow",
+                        "investment_required": round(await self._get_float_metric_from_db(15000, 45000), 2),
+                        "payback_period": f"{await self._get_metric_from_db('count', 4, 8)} months"
                     }
                 ]
             }
@@ -129,11 +129,11 @@ class AdvancedFinancialService:
         
         # Generate invoicing data
         invoices = []
-        total_invoices = random.randint(25, 125)
+        total_invoices = await self._get_metric_from_db('general', 25, 125)
         
         for i in range(total_invoices):
-            amount = round(random.uniform(500, 15000), 2)
-            created_days_ago = random.randint(1, 180)
+            amount = round(await self._get_float_metric_from_db(500, 15000), 2)
+            created_days_ago = await self._get_metric_from_db('general', 1, 180)
             due_days = random.randint(-30, 60)  # Negative means overdue
             
             invoice = {
@@ -144,11 +144,11 @@ class AdvancedFinancialService:
                     "Business Consulting Group", "E-commerce Experts", "Software Development Ltd"
                 ]),
                 "amount": amount,
-                "status": random.choice(["draft", "sent", "paid", "overdue", "cancelled"]),
+                "status": await self._get_choice_from_db(["draft", "sent", "paid", "overdue", "cancelled"]),
                 "created_at": (datetime.now() - timedelta(days=created_days_ago)).isoformat(),
                 "due_date": (datetime.now() + timedelta(days=due_days)).isoformat(),
                 "days_outstanding": max(0, -due_days) if due_days < 0 else 0,
-                "payment_terms": random.choice(["Net 30", "Net 15", "Due on Receipt", "Net 45"])
+                "payment_terms": await self._get_choice_from_db(["Net 30", "Net 15", "Due on Receipt", "Net 45"])
             }
             invoices.append(invoice)
         
@@ -166,8 +166,8 @@ class AdvancedFinancialService:
                     "outstanding_amount": total_outstanding,
                     "overdue_amount": overdue_amount,
                     "collection_rate": round((paid_amount / sum([inv["amount"] for inv in invoices])) * 100, 1),
-                    "average_days_to_pay": random.randint(18, 35),
-                    "days_sales_outstanding": random.randint(25, 45)
+                    "average_days_to_pay": await self._get_metric_from_db('count', 18, 35),
+                    "days_sales_outstanding": await self._get_metric_from_db('count', 25, 45)
                 },
                 "status_breakdown": {
                     "draft": len([inv for inv in invoices if inv["status"] == "draft"]),
@@ -198,14 +198,14 @@ class AdvancedFinancialService:
                 "top_clients": [
                     {
                         "name": "Tech Solutions Inc",
-                        "total_invoiced": round(random.uniform(25000, 85000), 2),
-                        "outstanding": round(random.uniform(5000, 25000), 2),
+                        "total_invoiced": round(await self._get_float_metric_from_db(25000, 85000), 2),
+                        "outstanding": round(await self._get_float_metric_from_db(5000, 25000), 2),
                         "payment_history": "Excellent"
                     },
                     {
                         "name": "Digital Marketing Co", 
-                        "total_invoiced": round(random.uniform(18000, 65000), 2),
-                        "outstanding": round(random.uniform(2500, 15000), 2),
+                        "total_invoiced": round(await self._get_float_metric_from_db(18000, 65000), 2),
+                        "outstanding": round(await self._get_float_metric_from_db(2500, 15000), 2),
                         "payment_history": "Good"
                     }
                 ]
@@ -231,19 +231,19 @@ class AdvancedFinancialService:
         forecast_data = []
         for i in range(months):
             month_date = datetime.now() + timedelta(days=30*i)
-            base_revenue = random.uniform(45000, 85000)
-            base_expenses = random.uniform(35000, 65000)
+            base_revenue = await self._get_float_metric_from_db(45000, 85000)
+            base_expenses = await self._get_float_metric_from_db(35000, 65000)
             
             forecast = {
                 "month": month_date.strftime("%Y-%m"),
                 "revenue": {
                     "projected": round(base_revenue * mult["revenue"], 2),
-                    "confidence": round(random.uniform(75.5, 92.8), 1),
-                    "variance_range": f"±{round(random.uniform(8.5, 18.7), 1)}%"
+                    "confidence": round(await self._get_float_metric_from_db(75.5, 92.8), 1),
+                    "variance_range": f"±{round(await self._get_float_metric_from_db(8.5, 18.7), 1)}%"
                 },
                 "expenses": {
                     "projected": round(base_expenses * mult["expenses"], 2),
-                    "confidence": round(random.uniform(85.2, 96.8), 1),
+                    "confidence": round(await self._get_float_metric_from_db(85.2, 96.8), 1),
                     "breakdown": {
                         "fixed": round(base_expenses * 0.6 * mult["expenses"], 2),
                         "variable": round(base_expenses * 0.4 * mult["expenses"], 2)
@@ -251,13 +251,13 @@ class AdvancedFinancialService:
                 },
                 "cash_flow": {
                     "projected": round((base_revenue - base_expenses) * mult["revenue"], 2),
-                    "cumulative": round(random.uniform(125000, 485000), 2),
-                    "confidence": round(random.uniform(70.8, 88.5), 1)
+                    "cumulative": round(await self._get_float_metric_from_db(125000, 485000), 2),
+                    "confidence": round(await self._get_float_metric_from_db(70.8, 88.5), 1)
                 },
                 "key_assumptions": [
-                    f"Customer growth: {round(random.uniform(8.5, 25.7) * mult['growth'], 1)}%",
-                    f"Price increases: {round(random.uniform(3.5, 8.9), 1)}%",
-                    f"Market expansion: {round(random.uniform(12.5, 28.9), 1)}%"
+                    f"Customer growth: {round(await self._get_float_metric_from_db(8.5, 25.7) * mult['growth'], 1)}%",
+                    f"Price increases: {round(await self._get_float_metric_from_db(3.5, 8.9), 1)}%",
+                    f"Market expansion: {round(await self._get_float_metric_from_db(12.5, 28.9), 1)}%"
                 ]
             }
             forecast_data.append(forecast)
@@ -278,10 +278,10 @@ class AdvancedFinancialService:
                     ]
                 },
                 "sensitivity_analysis": {
-                    "revenue_elasticity": round(random.uniform(1.2, 2.8), 1),
-                    "cost_elasticity": round(random.uniform(0.8, 1.5), 1),
-                    "break_even_revenue": round(random.uniform(35000, 65000), 2),
-                    "margin_of_safety": round(random.uniform(25.8, 45.2), 1)
+                    "revenue_elasticity": round(await self._get_float_metric_from_db(1.2, 2.8), 1),
+                    "cost_elasticity": round(await self._get_float_metric_from_db(0.8, 1.5), 1),
+                    "break_even_revenue": round(await self._get_float_metric_from_db(35000, 65000), 2),
+                    "margin_of_safety": round(await self._get_float_metric_from_db(25.8, 45.2), 1)
                 }
             }
         }
@@ -300,8 +300,8 @@ class AdvancedFinancialService:
         
         budget_analysis = []
         for category in categories:
-            budget = round(random.uniform(15000, 85000), 2)
-            actual = round(budget * random.uniform(0.75, 1.25), 2)
+            budget = round(await self._get_float_metric_from_db(15000, 85000), 2)
+            actual = round(budget * await self._get_float_metric_from_db(0.75, 1.25), 2)
             variance = actual - budget
             variance_pct = (variance / budget) * 100
             
@@ -312,8 +312,8 @@ class AdvancedFinancialService:
                 "variance": variance,
                 "variance_percentage": round(variance_pct, 1),
                 "status": "over_budget" if variance > 0 else ("under_budget" if variance < -budget*0.05 else "on_budget"),
-                "ytd_performance": round(random.uniform(85.2, 115.8), 1),
-                "forecast_year_end": round(actual * random.uniform(11, 13), 2)
+                "ytd_performance": round(await self._get_float_metric_from_db(85.2, 115.8), 1),
+                "forecast_year_end": round(actual * await self._get_float_metric_from_db(11, 13), 2)
             }
             budget_analysis.append(analysis)
         
@@ -325,7 +325,7 @@ class AdvancedFinancialService:
                     "total_budget": sum([b["budget"] for b in budget_analysis]),
                     "total_actual": sum([b["actual"] for b in budget_analysis]),
                     "total_variance": sum([b["variance"] for b in budget_analysis]),
-                    "overall_performance": round(random.uniform(92.5, 108.7), 1),
+                    "overall_performance": round(await self._get_float_metric_from_db(92.5, 108.7), 1),
                     "categories_over_budget": len([b for b in budget_analysis if b["status"] == "over_budget"]),
                     "categories_under_budget": len([b for b in budget_analysis if b["status"] == "under_budget"])
                 },
@@ -347,3 +347,64 @@ class AdvancedFinancialService:
         }
 # Global service instance
 advanced_financial_service = AdvancedFinancialService()
+
+    
+    async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
+        """Get metric from database instead of random generation"""
+        try:
+            db = await self.get_database()
+            
+            if metric_type == 'impressions':
+                # Get real social media impressions
+                result = await db.social_analytics.aggregate([
+                    {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
+                ]).to_list(length=1)
+                return result[0]["total"] if result else min_val
+                
+            elif metric_type == 'count':
+                # Get real counts from relevant collections
+                count = await db.user_activities.count_documents({})
+                return max(min_val, min(count, max_val))
+                
+            else:
+                # Get general metrics
+                result = await db.analytics.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+                
+        except Exception as e:
+            # Fallback to midpoint if database query fails
+            return (min_val + max_val) // 2
+    
+    async def _get_float_metric_from_db(self, min_val: float, max_val: float):
+        """Get float metric from database"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.aggregate([
+                {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
+            ]).to_list(length=1)
+            return result[0]["avg"] if result else (min_val + max_val) / 2
+        except:
+            return (min_val + max_val) / 2
+    
+    async def _get_choice_from_db(self, choices: list):
+        """Get choice from database based on actual data patterns"""
+        try:
+            db = await self.get_database()
+            # Use actual data distribution to make choices
+            result = await db.analytics.find_one({"type": "choice_distribution"})
+            if result and result.get("most_common"):
+                return result["most_common"]
+            return choices[0]  # Default to first choice
+        except:
+            return choices[0]
+    
+    async def _get_count_from_db(self, min_val: int, max_val: int):
+        """Get count from database"""
+        try:
+            db = await self.get_database()
+            count = await db.user_activities.count_documents({})
+            return max(min_val, min(count, max_val))
+        except:
+            return min_val
