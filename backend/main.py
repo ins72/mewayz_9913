@@ -235,12 +235,18 @@ print(f"\n🎉 Successfully included {included_count} routers in the FastAPI app
 
 # Include additional missing endpoints manually
 try:
-    from api.missing_endpoints_fix import marketing_router, workspace_router, integration_router
+    from api.missing_endpoints_fix import (
+        marketing_router, workspace_router, integration_router,
+        automation_router, support_router, monitoring_router
+    )
     app.include_router(marketing_router, tags=["Marketing"])
     app.include_router(workspace_router, tags=["Workspaces"])  
     app.include_router(integration_router, tags=["External Integrations"])
-    included_count += 3
-    print("  ✅ Included missing marketing, workspace, and integration routers")
+    app.include_router(automation_router, tags=["Automation"])
+    app.include_router(support_router, tags=["Support"])
+    app.include_router(monitoring_router, tags=["Monitoring"])
+    included_count += 6
+    print("  ✅ Included all missing endpoints: marketing, workspace, integration, automation, support, monitoring")
 except Exception as e:
     print(f"  ❌ Failed to include missing endpoints: {str(e)}")
 
