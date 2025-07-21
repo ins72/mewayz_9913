@@ -329,4 +329,5 @@ async def create_segment(
     current_user: dict = Depends(get_current_user)
 ):
     """Create audience segment"""
-    return await email_service.create_segment(current_user["id"], segment_data)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.create_segment(user_id, segment_data)
