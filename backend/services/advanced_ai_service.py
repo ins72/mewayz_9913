@@ -472,4 +472,4 @@ class AdvancedAIService:
             }
         }
 # Global service instance
-advanced_ai_service = AdvancedAiService()
+advanced_ai_service = AdvancedAIService()
