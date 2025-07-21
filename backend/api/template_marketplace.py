@@ -233,7 +233,7 @@ async def update_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Update template details"""
-    return await marketplace_service.update_template(current_user["id"], template_id, updates.dict(exclude_unset=True))
+    return await marketplace_service.update_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, updates.dict(exclude_unset=True))
 
 @router.delete("/{template_id}")
 async def delete_template(
