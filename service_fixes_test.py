@@ -119,27 +119,35 @@ class ServiceFixesTester:
         """Test the endpoints that were previously failing with 500 errors due to service method mapping issues"""
         print("\n=== Testing Previously Failing Endpoints (Service Method Mapping Issues) ===")
         
-        # Customer Experience API - Previously failing with method mapping issues
-        print("\n--- Customer Experience API ---")
-        self.test_endpoint("/customer-experience/dashboard", test_name="Customer Experience - Dashboard")
-        self.test_endpoint("/customer-experience/journey-mapping", test_name="Customer Experience - Journey Mapping")
-        self.test_endpoint("/customer-experience/feedback", test_name="Customer Experience - Feedback")
+        # Based on the backend startup logs, these modules had syntax issues:
+        # - customer_experience: cannot import (still failing)
+        # - social_email: unexpected indent (still failing) 
+        # - advanced_ai: f-string unmatched '(' (still failing)
+        # - content_creation: working now
+        # - email_marketing: working now
         
-        # Content Creation API - Previously failing with method mapping issues
-        print("\n--- Content Creation API ---")
+        # Content Creation API - Should be working now (module loaded successfully)
+        print("\n--- Content Creation API (Should be working) ---")
         self.test_endpoint("/content-creation/projects", test_name="Content Creation - Projects")
         self.test_endpoint("/content-creation/templates", test_name="Content Creation - Templates")
         self.test_endpoint("/content-creation/assets", test_name="Content Creation - Assets")
         
-        # Social Email API - Previously failing with method mapping issues
-        print("\n--- Social Email API ---")
-        self.test_endpoint("/social-email/campaigns", test_name="Social Email - Campaigns")
-        self.test_endpoint("/social-email/templates", test_name="Social Email - Templates")
-        
-        # Email Marketing API - Previously failing with method mapping issues
-        print("\n--- Email Marketing API ---")
+        # Email Marketing API - Should be working now (module loaded successfully)
+        print("\n--- Email Marketing API (Should be working) ---")
         self.test_endpoint("/email-marketing/campaigns", test_name="Email Marketing - Campaigns")
         self.test_endpoint("/email-marketing/analytics", test_name="Email Marketing - Analytics")
+        self.test_endpoint("/email-marketing/contacts", test_name="Email Marketing - Contacts")
+        
+        # Customer Experience API - Still has import issues (module failed to load)
+        print("\n--- Customer Experience API (Still has issues) ---")
+        self.test_endpoint("/customer-experience/dashboard", test_name="Customer Experience - Dashboard")
+        self.test_endpoint("/customer-experience/journey-mapping", test_name="Customer Experience - Journey Mapping")
+        self.test_endpoint("/customer-experience/feedback", test_name="Customer Experience - Feedback")
+        
+        # Social Email API - Still has syntax issues (module failed to load)
+        print("\n--- Social Email API (Still has issues) ---")
+        self.test_endpoint("/social-email/campaigns", test_name="Social Email - Campaigns")
+        self.test_endpoint("/social-email/templates", test_name="Social Email - Templates")
     
     def test_database_integration_services(self):
         """Test services that should now be using real database operations"""
