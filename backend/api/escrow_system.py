@@ -161,7 +161,8 @@ async def create_transaction(
     current_user: dict = Depends(get_current_user)
 ):
     """Create new escrow transaction"""
-    return await escrow_service.create_transaction(current_user["id"], transaction.dict())
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await escrow_service.create_transaction(user_id, transaction.dict())
 
 @router.get("/transactions/{transaction_id}")
 async def get_transaction(
