@@ -82,10 +82,10 @@ class SupportService:
     def _get_estimated_resolution(self, priority: str) -> str:
         """Get estimated resolution time based on priority"""
         resolution_times = {
-            "critical": f"{await self._get_metric_from_db('count', 2, 8)} hours",
-            "high": f"{await self._get_metric_from_db('count', 8, 24)} hours",
-            "medium": f"{await self._get_metric_from_db('count', 1, 3)} days",
-            "low": f"{await self._get_metric_from_db('count', 3, 7)} days"
+            "critical": "2-8 hours",
+            "high": "8-24 hours", 
+            "medium": "1-3 days",
+            "low": "3-7 days"
         }
         return resolution_times.get(priority, "3-5 days")
     
