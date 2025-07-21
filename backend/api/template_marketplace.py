@@ -211,7 +211,7 @@ async def create_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Create new template for marketplace"""
-    return await marketplace_service.create_template(current_user["id"], template.dict())
+    return await marketplace_service.create_template(current_user.get("_id") or current_user.get("id", "default-user"), template.dict())
 
 @router.get("/my-templates")
 async def get_my_templates(current_user: dict = Depends(get_current_user)):
