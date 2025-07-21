@@ -15,7 +15,7 @@ from services.survey_service import SurveyService
 
 router = APIRouter()
 
-@router.get("/surveys")
+@router.get("")
 async def get_surveys(current_user: dict = Depends(get_current_user)):
     """Get all surveys for the workspace"""
     try:
