@@ -733,15 +733,12 @@ class BackendTester:
             self.test_data_consistency(endpoint)
 
     def run_comprehensive_test(self):
-        """Run comprehensive backend testing for Mewayz Platform with new improvements"""
-        print("🎯 COMPREHENSIVE BACKEND TESTING - MEWAYZ PLATFORM WITH NEW IMPROVEMENTS")
-        print("Testing the new Admin Configuration System and infrastructure improvements:")
-        print("- 🔧 Admin Configuration System: External API management endpoints")
-        print("- 🔧 Random Data Elimination: Real database operations verification")
-        print("- 🔧 External API Integration Framework: Integration system testing")
-        print("- 🔧 Professional Logging System: Comprehensive logging verification")
-        print("- 🔧 Core Platform Functionality: Ensuring no regressions after changes")
-        print("- 🔧 Database Integration: Real data population services testing")
+        """Run comprehensive backend testing for newly created Advanced AI Analytics, Real-time Notifications, and Workflow Automation APIs"""
+        print("🎯 TESTING NEWLY CREATED API ENDPOINTS - MEWAYZ PLATFORM")
+        print("Testing the newly created Advanced AI Analytics, Real-time Notifications, and Workflow Automation API endpoints:")
+        print("- 🔧 Advanced AI Analytics (/api/ai-analytics): Predictive insights, anomaly detection, analytics summary")
+        print("- 🔧 Real-time Notifications (/api/notifications): Send notifications, history, stats, connection status")
+        print("- 🔧 Workflow Automation (/api/workflows): List workflows, templates, statistics")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
@@ -756,29 +753,16 @@ class BackendTester:
             print("❌ Authentication failed - cannot proceed with testing.")
             return False
         
-        # Test new Admin Configuration System
-        self.test_admin_configuration_system()
+        # Test the newly created APIs (main focus)
+        self.test_newly_created_apis()
         
-        # Test Random Data Elimination verification
-        self.test_random_data_elimination_verification()
+        # Test some core functionality to ensure integration works
+        print("\n=== Testing Core Integration ===")
+        self.test_endpoint("/dashboard/overview", test_name="Core - Dashboard Overview")
+        self.test_endpoint("/users/profile", test_name="Core - User Profile")
         
-        # Test External API Integration Framework
-        self.test_external_api_integration_framework()
-        
-        # Test Professional Logging System
-        self.test_professional_logging_system()
-        
-        # Test Core Platform Functionality after changes
-        self.test_core_platform_functionality_after_changes()
-        
-        # Test Database Integration improvements
-        self.test_database_integration_improvements()
-        
-        # Test platform startup and health
+        # Test platform health
         self.test_platform_startup_health()
-        
-        # Test performance and reliability
-        self.test_performance_reliability()
         
         # Print summary
         self.print_summary()
