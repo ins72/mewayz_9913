@@ -7,7 +7,7 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 import uuid
 
-from core.auth import get_current_user, require_auth
+from core.auth import get_current_user
 from core.ai_analytics_engine import ai_analytics_engine, AnalyticsType
 from core.professional_logger import professional_logger, LogLevel, LogCategory
 
