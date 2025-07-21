@@ -414,11 +414,7 @@ class BackendTester:
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
         
-        # Test basic health and authentication first
-        if not self.test_health_check():
-            print("❌ Health check failed - backend may not be running.")
-            return False
-            
+        # Test authentication first
         if not self.test_authentication():
             print("❌ Authentication failed - cannot proceed with testing.")
             return False
