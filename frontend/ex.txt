@@ -1,13 +1,114 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Smartphone, ShoppingCart, GraduationCap, Users, Globe, Brain, Mail, BarChart, LayoutDashboard, LogOut, BookOpen, Package, LineChart, Home, Settings, HelpCircle, Bell, User, Zap, PlusCircle, Trash2, Edit, CheckCircle, XCircle, FileText, UploadCloud, Search, MessageSquare, Briefcase, Image, BellRing, CalendarDays, Megaphone, Lightbulb, Link, DollarSign, CreditCard, FormInput, Gift, Bot, Code, CalendarCheck, Tag, Sparkles
+  Smartphone, ShoppingCart, GraduationCap, Users, Globe, Brain, Mail, BarChart, LayoutDashboard, LogOut, BookOpen, Package, LineChart, Home, Settings, HelpCircle, Bell, User, Zap, PlusCircle, Trash2, Edit, CheckCircle, XCircle, FileText, UploadCloud, Search, MessageSquare, Briefcase, Image, BellRing, CalendarDays, Megaphone, Lightbulb, Link, DollarSign, CreditCard, FormInput, Gift, Bot, Code, CalendarCheck, Tag, Sparkles, Menu, X
 } from 'lucide-react';
+
+// Reusable Button Component
+const Button = ({ children, onClick, className = '', variant = 'primary', icon: Icon, type = 'button', theme }) => { // Added theme prop
+  const baseStyle = "px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group";
+  let variantStyle = "";
+
+  switch (variant) {
+    case 'primary':
+      variantStyle = "text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg";
+      break;
+    case 'secondary':
+      // Explicitly setting dark mode styles based on the 'theme' prop
+      variantStyle = `border border-gray-300 bg-gray-200 hover:bg-gray-300 ${
+        theme === 'dark' ? 'text-white bg-gray-900 border-gray-700 hover:bg-gray-700' : 'text-gray-900'
+      }`;
+      break;
+    case 'danger':
+      variantStyle = "text-white bg-red-500 shadow-lg hover:bg-red-600";
+      break;
+    case 'success':
+      variantStyle = "text-white bg-green-500 shadow-lg hover:bg-green-600";
+      break;
+    case 'icon':
+      variantStyle = "p-3 rounded-full text-white bg-blue-500 hover:bg-blue-600 flex items-center justify-center";
+      break;
+    default:
+      variantStyle = "text-white bg-blue-500 shadow-lg";
+  }
+
+  return (
+    <button type={type} onClick={onClick} className={`${baseStyle} ${variantStyle} ${className}`}>
+      {Icon && <Icon className="inline-block mr-2" size={20} />}
+      {children}
+      {variant === 'primary' && (
+        <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
+      )}
+    </button>
+  );
+};
+
+// Reusable InputGroup Component
+const InputGroup = ({ label, id, type = 'text', placeholder, value, onChange, className = '', theme, children, isTextArea = false, rows = 3, selectOptions = [] }) => (
+  <div>
+    <label htmlFor={id} className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+      {label}
+    </label>
+    {isTextArea ? (
+      <textarea
+        id={id}
+        rows={rows}
+        className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} ${className}`}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      ></textarea>
+    ) : selectOptions.length > 0 ? (
+      <select
+        id={id}
+        className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} ${className}`}
+        value={value}
+        onChange={onChange}
+      >
+        {selectOptions.map((option, index) => (
+          <option key={index} value={option.value}>{option.label}</option>
+        ))}
+      </select>
+    ) : (
+      <input
+        type={type}
+        id={id}
+        className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'} ${className}`}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      />
+    )}
+    {children}
+  </div>
+);
+
+// Reusable Card Component
+const Card = ({ children, theme, className = '' }) => (
+  <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'} ${className}`}>
+    {children}
+  </div>
+);
+
+// Reusable SectionHeader Component
+const SectionHeader = ({ icon: Icon, title, subtitle, theme }) => (
+  <div className="text-center mb-16">
+    <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
+      {Icon && <Icon className="inline-block mr-2" size={20} />} <span>{title}</span>
+    </div>
+    <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{subtitle}</h2>
+    <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{subtitle}</p>
+  </div>
+);
 
 const App = () => {
   // State for theme toggle
   const [theme, setTheme] = useState('dark');
   // New state for user login status
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // State for mobile menu open/close
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // State for dashboard sidebar collapse
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Effect to apply theme to body
   useEffect(() => {
@@ -34,6 +135,7 @@ const App = () => {
   // Function to handle logout
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setIsSidebarCollapsed(false); // Reset sidebar on logout
   };
 
   // Effect for header background change on scroll
@@ -58,13 +160,15 @@ const App = () => {
   }, [theme]); // Re-run effect if theme changes
 
   // Component for the Header section
-  const Header = ({ isLoggedIn, handleLogout, handleLogin, toggleTheme, theme, setActiveView }) => (
+  const Header = ({ isLoggedIn, handleLogout, handleLogin, toggleTheme, theme, setActiveView, toggleMobileMenu, isMobileMenuOpen }) => (
     <header className={`fixed top-0 w-full z-50 transition-all duration-400 ease-in-out ${theme === 'dark' ? 'bg-black bg-opacity-70 backdrop-blur-lg border-b border-gray-700' : 'bg-white bg-opacity-90 backdrop-blur-lg border-b border-gray-200'}`}>
       <nav className="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
         <div className={`text-2xl font-bold tracking-tight relative group ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
           Mewayz
           <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
         </div>
+
+        {/* Desktop Navigation */}
         <ul className="hidden md:flex space-x-10">
           {isLoggedIn ? (
             <>
@@ -99,86 +203,110 @@ const App = () => {
             </>
           )}
         </ul>
+
+        {/* Action Buttons & Mobile Menu Toggle */}
         <div className="flex items-center space-x-4">
-          <button onClick={toggleTheme} className="bg-gray-800 bg-opacity-30 backdrop-blur-md border border-gray-700 text-white p-3 rounded-xl transition-all duration-300 hover:bg-gray-700 hover:scale-105">
+          {/* Pass the theme prop to the Button component */}
+          <Button onClick={toggleTheme} className="p-3 rounded-xl" variant="secondary" theme={theme}>
             {theme === 'dark' ? '🌙' : '☀️'}
-          </button>
+          </Button>
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="px-6 py-3 rounded-xl font-semibold text-white bg-red-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
-              <LogOut className="inline-block mr-2" size={20} /> Logout
-            </button>
+            <Button onClick={handleLogout} icon={LogOut} variant="danger" theme={theme}>Logout</Button>
           ) : (
-            <button onClick={handleLogin} className={`px-6 py-3 rounded-xl font-semibold border border-blue-500 transition-all duration-300 hover:bg-blue-600 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Login</button>
+            <>
+              {/* Pass the theme prop to the Button component */}
+              <Button onClick={handleLogin} variant="secondary" className="hidden md:block" theme={theme}>Login</Button>
+              <Button href="#signup" variant="primary" className="hidden md:block" theme={theme}>Get Started</Button>
+            </>
           )}
-          {!isLoggedIn && (
-            <a href="#signup" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
-              Get Started
-              <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
-            </a>
-          )}
+          <button onClick={toggleMobileMenu} className="md:hidden p-2 rounded-lg text-gray-400 hover:text-white transition-colors">
+            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      <div className={`fixed inset-0 bg-black bg-opacity-90 z-40 md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
+        <div className={`absolute top-0 right-0 w-full h-full p-6 transform transition-transform duration-300 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <button onClick={toggleMobileMenu} className="absolute top-6 right-6 p-2 rounded-lg text-white hover:bg-gray-700">
+            <X size={28} />
+          </button>
+          <ul className="flex flex-col items-center justify-center h-full space-y-8 text-xl font-bold">
+            {isLoggedIn ? (
+              <>
+                <li><a href="#dashboard" onClick={() => { setActiveView('overview'); toggleMobileMenu(); }} className="text-white hover:text-blue-400">Dashboard</a></li>
+                <li><a href="#courses" onClick={() => { setActiveView('courses'); toggleMobileMenu(); }} className="text-white hover:text-blue-400">Courses</a></li>
+                <li><a href="#products" onClick={() => { setActiveView('products'); toggleMobileMenu(); }} className="text-white hover:text-blue-400">Products</a></li>
+                <li><a href="#analytics" onClick={() => { setActiveView('analytics'); toggleMobileMenu(); }} className="text-white hover:text-blue-400">Analytics</a></li>
+              </>
+            ) : (
+              <>
+                <li><a href="#about" onClick={toggleMobileMenu} className="text-white hover:text-blue-400">About</a></li>
+                <li><a href="#features" onClick={toggleMobileMenu} className="text-white hover:text-blue-400">Features</a></li>
+                <li><a href="#pricing" onClick={toggleMobileMenu} className="text-white hover:text-blue-400">Pricing</a></li>
+                <li><a href="#testimonials" onClick={toggleMobileMenu} className="text-white hover:text-blue-400">Testimonials</a></li>
+                <li><a href="#contact" onClick={toggleMobileMenu} className="text-white hover:text-blue-400">Contact</a></li>
+                {/* Pass the theme prop to the Button component */}
+                <li><Button onClick={() => { handleLogin(); toggleMobileMenu(); }} variant="secondary" className="w-full mt-4" theme={theme}>Login</Button></li>
+                <li><Button href="#signup" variant="primary" className="w-full mt-2" theme={theme}>Get Started</Button></li>
+              </>
+            )}
+          </ul>
+        </div>
+      </div>
     </header>
   );
 
   // Dashboard Overview Component
   const DashboardOverview = ({ theme }) => (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <LayoutDashboard className="inline-block mr-2" size={20} /> <span>Your Dashboard</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Welcome Back, Creator!</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Here's a quick overview of your Mewayz account.</p>
-      </div>
+      <SectionHeader
+        icon={LayoutDashboard}
+        title="Your Dashboard"
+        subtitle="Welcome Back, Creator!"
+        description="Here's a quick overview of your Mewayz account."
+        theme={theme}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
         {/* Dashboard Card 1 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Total Revenue</h3>
           <p className="text-5xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-500 text-transparent bg-clip-text">$12,345</p>
           <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+15% from last month</p>
           {/* Placeholder for API call: Fetch total revenue from /api/financial/revenue */}
-        </div>
+        </Card>
 
         {/* Dashboard Card 2 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Subscribers</h3>
           <p className="text-5xl font-extrabold bg-gradient-to-r from-green-500 to-teal-500 text-transparent bg-clip-text">567</p>
           <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+8% from last week</p>
           {/* Placeholder for API call: Fetch new subscribers from /api/crm/subscribers or /api/email-marketing/subscribers */}
-        </div>
+        </Card>
 
         {/* Dashboard Card 3 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Courses Sold</h3>
           <p className="text-5xl font-extrabold bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">89</p>
           <p className={`text-sm mt-2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>+20% from last month</p>
           {/* Placeholder for API call: Fetch courses sold from /api/courses/sales or /api/ecommerce/sales */}
-        </div>
+        </Card>
       </div>
 
       {/* Quick Actions */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+      <Card theme={theme} className="mt-16">
         <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <a href="#new-course" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <GraduationCap className="inline-block mr-2" size={20} /> New Course
-          </a>
-          <a href="#new-product" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-green-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <ShoppingCart className="inline-block mr-2" size={20} /> New Product
-          </a>
-          <a href="#manage-social" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-purple-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <Smartphone className="inline-block mr-2" size={20} /> Manage Social
-          </a>
-          <a href="#view-analytics" className="flex items-center justify-center px-6 py-3 rounded-xl font-semibold text-white bg-orange-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <BarChart className="inline-block mr-2" size={20} /> View Analytics
-          </a>
+          <Button variant="primary" icon={GraduationCap} theme={theme}>New Course</Button>
+          <Button variant="primary" icon={ShoppingCart} theme={theme}>New Product</Button>
+          <Button variant="primary" icon={Smartphone} theme={theme}>Manage Social</Button>
+          <Button variant="primary" icon={BarChart} theme={theme}>View Analytics</Button>
         </div>
-      </div>
+      </Card>
 
       {/* Recent Activity Feed */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+      <Card theme={theme} className="mt-16">
         <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Activity</h3>
         <ul className="space-y-4">
           <li className="flex items-center space-x-3">
@@ -199,269 +327,186 @@ const App = () => {
           </li>
           {/* Placeholder for API call: Fetch recent activities from /api/dashboard/activity or relevant module endpoints */}
         </ul>
-      </div>
+      </Card>
     </div>
   );
 
   // Courses Page Component
-  const CoursesPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <BookOpen className="inline-block mr-2" size={20} /> <span>Your Courses</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Courses</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Create, edit, and publish your online courses.</p>
-      </div>
+  const CoursesPage = ({ theme }) => {
+    const courses = [
+      { id: 1, title: "Introduction to AI", category: "Development", progress: 75, price: 99, image: "https://placehold.co/300x180/007bff/ffffff?text=Course+Image+1" },
+      { id: 2, title: "Advanced Web Dev", category: "Development", progress: 50, price: 149, image: "https://placehold.co/300x180/28a745/ffffff?text=Course+Image+2" },
+      { id: 3, title: "Digital Marketing 101", category: "Marketing", progress: 90, price: 79, image: "https://placehold.co/300x180/ffc107/000000?text=Course+Image+3" },
+    ];
 
-      {/* Create New Course Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Course</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="courseTitle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Title</label>
-            <input type="text" id="courseTitle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Master React Development" />
-          </div>
-          <div>
-            <label htmlFor="courseCategory" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
-            <select id="courseCategory" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="">Select Category</option>
-              <option value="development">Development</option>
-              <option value="design">Design</option>
-              <option value="marketing">Marketing</option>
-              <option value="business">Business</option>
-            </select>
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="courseDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Description</label>
-            <textarea id="courseDescription" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Briefly describe your course content..."></textarea>
-          </div>
-          <div>
-            <label htmlFor="coursePrice" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Price ($)</label>
-            <input type="number" id="coursePrice" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 99.00" step="0.01" />
-          </div>
-          <div>
-            <label htmlFor="courseDuration" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Duration (hours)</label>
-            <input type="number" id="courseDuration" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 10" />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="courseImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Thumbnail Image</label>
-            <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={BookOpen}
+          title="Your Courses"
+          subtitle="Manage Your Courses"
+          description="Create, edit, and publish your online courses."
+          theme={theme}
+        />
+
+        {/* Create New Course Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Course</h3>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputGroup theme={theme} id="courseTitle" label="Course Title" placeholder="e.g., Master React Development" />
+            <InputGroup
+              theme={theme}
+              id="courseCategory"
+              label="Category"
+              type="select"
+              selectOptions={[
+                { value: "", label: "Select Category" },
+                { value: "development", label: "Development" },
+                { value: "design", label: "Design" },
+                { value: "marketing", label: "Marketing" },
+                { value: "business", label: "Business" },
+              ]}
+            />
+            <InputGroup theme={theme} id="courseDescription" label="Course Description" placeholder="Briefly describe your course content..." isTextArea rows={4} className="md:col-span-2" />
+            <InputGroup theme={theme} id="coursePrice" label="Price ($)" type="number" placeholder="e.g., 99.00" className="md:col-span-1" />
+            <InputGroup theme={theme} id="courseDuration" label="Duration (hours)" type="number" placeholder="e.g., 10" className="md:col-span-1" />
+            <div className="md:col-span-2">
+              <label htmlFor="courseImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Course Thumbnail Image</label>
+              <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                  <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                </div>
+                <input id="courseImage" type="file" className="hidden" />
               </div>
-              <input id="courseImage" type="file" className="hidden" />
             </div>
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Publish Course
-            </button>
-          </div>
-          {/* Placeholder for API call: Submit new course data to /api/courses/ */}
-        </form>
-      </div>
+            <div className="md:col-span-2 flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Publish Course</Button>
+            </div>
+            {/* Placeholder for API call: Submit new course data to /api/courses/ */}
+          </form>
+        </Card>
 
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Existing Courses</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Example Course Card 1 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/007bff/ffffff?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Introduction to AI</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Learn the basics of Artificial Intelligence and Machine Learning.</p>
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
-            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '75%'}}></div>
-            </div>
-            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>75%</span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$99</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
-          {/* Placeholder for API call: Fetch course data from /api/courses/ */}
-        </div>
-        {/* Example Course Card 2 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/28a745/ffffff?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Advanced Web Dev</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Master modern web development with React and Node.js.</p>
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
-            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '50%'}}></div>
-            </div>
-            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>50%</span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$149</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
-        </div>
-        {/* Example Course Card 3 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/ffc107/000000?text=Course+Image" alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Digital Marketing 101</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Strategies for effective online marketing and brand building.</p>
-          <div className="flex items-center justify-between mb-3">
-            <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
-            <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '90%'}}></div>
-            </div>
-            <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>90%</span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$79</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Existing Courses</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map(course => (
+            <Card key={course.id} theme={theme}>
+              <img src={course.image} alt="Course Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+              <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{course.title}</h3>
+              <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Category: {course.category}</p>
+              <div className="flex items-center justify-between mb-3">
+                <span className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Progress:</span>
+                <div className="w-2/3 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                  <div className="bg-blue-600 h-2.5 rounded-full" style={{width: `${course.progress}%`}}></div>
+                </div>
+                <span className={`text-sm font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{course.progress}%</span>
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>${course.price}</span>
+                <div className="flex space-x-2">
+                  <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600" theme={theme}><Edit size={18} /></Button>
+                  <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                </div>
+              </div>
+              {/* Placeholder for API call: Fetch course data from /api/courses/ */}
+            </Card>
+          ))}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Products Page Component
-  const ProductsPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Package className="inline-block mr-2" size={20} /> <span>Your Products</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Products</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Add, update, and organize your digital and physical products.</p>
-      </div>
+  const ProductsPage = ({ theme }) => {
+    const products = [
+      { id: 1, name: "E-book: Creator's Guide", stock: "In Stock", sales: 1234, price: 29, image: "https://placehold.co/300x180/dc3545/ffffff?text=Product+Image+1" },
+      { id: 2, name: "Premium Preset Pack", stock: "In Stock", sales: 876, price: 49, image: "https://placehold.co/300x180/6f42c1/ffffff?text=Product+Image+2" },
+      { id: 3, name: "Consultation Session", stock: "Limited (3)", sales: 25, price: 199, image: "https://placehold.co/300x180/17a2b8/ffffff?text=Product+Image+3" },
+    ];
 
-      {/* Add New Product Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Product</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="productName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Name</label>
-            <input type="text" id="productName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Ultimate Photo Presets" />
-          </div>
-          <div>
-            <label htmlFor="productPrice" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Price ($)</label>
-            <input type="number" id="productPrice" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 49.99" step="0.01" />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="productDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Description</label>
-            <textarea id="productDescription" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Describe your product..."></textarea>
-          </div>
-          <div>
-            <label htmlFor="productStock" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Stock Quantity</label>
-            <input type="number" id="productStock" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 100" />
-          </div>
-          <div>
-            <label htmlFor="productSKU" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>SKU (Optional)</label>
-            <input type="text" id="productSKU" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., UPP-2025" />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="productImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Image</label>
-            <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-                <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={Package}
+          title="Your Products"
+          subtitle="Manage Your Products"
+          description="Add, update, and organize your digital and physical products."
+          theme={theme}
+        />
+
+        {/* Add New Product Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Product</h3>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputGroup theme={theme} id="productName" label="Product Name" placeholder="e.g., Ultimate Photo Presets" />
+            <InputGroup theme={theme} id="productPrice" label="Price ($)" type="number" placeholder="e.g., 49.99" />
+            <InputGroup theme={theme} id="productDescription" label="Product Description" placeholder="Describe your product..." isTextArea rows={4} className="md:col-span-2" />
+            <InputGroup theme={theme} id="productStock" label="Stock Quantity" type="number" placeholder="e.g., 100" />
+            <InputGroup theme={theme} id="productSKU" label="SKU (Optional)" placeholder="e.g., UPP-2025" />
+            <div className="md:col-span-2">
+              <label htmlFor="productImage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Product Image</label>
+              <div className={`flex items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <UploadCloud className={`w-8 h-8 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+                  <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                  <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                </div>
+                <input id="productImage" type="file" className="hidden" />
               </div>
-              <input id="productImage" type="file" className="hidden" />
             </div>
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Add Product
-            </button>
-          </div>
-          {/* Placeholder for API call: Submit new product data to /api/ecommerce/products */}
-        </form>
-      </div>
+            <div className="md:col-span-2 flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Add Product</Button>
+            </div>
+            {/* Placeholder for API call: Submit new product data to /api/ecommerce/products */}
+          </form>
+        </Card>
 
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Current Products</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Example Product Card 1 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/dc3545/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>E-book: Creator's Guide</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>A comprehensive guide for aspiring and established creators.</p>
-          <div className="flex justify-between items-center text-sm mb-3">
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-green-500">In Stock</span></span>
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">1,234</span></span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$29</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
-          {/* Placeholder for API call: Fetch product data from /api/ecommerce/products */}
-        </div>
-        {/* Example Product Card 2 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/6f42c1/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Premium Preset Pack</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Enhance your photos with our exclusive collection of presets.</p>
-          <div className="flex justify-between items-center text-sm mb-3">
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-green-500">In Stock</span></span>
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">876</span></span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$49</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
-        </div>
-        {/* Example Product Card 3 */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
-          <img src="https://placehold.co/300x180/17a2b8/ffffff?text=Product+Image" alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
-          <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Consultation Session</h3>
-          <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>One-on-one personalized consultation with an expert.</p>
-          <div className="flex justify-between items-center text-sm mb-3">
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className="font-semibold text-red-500">Limited (3)</span></span>
-            <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">25</span></span>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>$199</span>
-            <div className="flex space-x-2">
-              <button className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition-colors"><Edit size={18} /></button>
-              <button className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"><Trash2 size={18} /></button>
-            </div>
-          </div>
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Current Products</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products.map(product => (
+            <Card key={product.id} theme={theme}>
+              <img src={product.image} alt="Product Thumbnail" className="rounded-xl mb-4 w-full h-48 object-cover" />
+              <h3 className={`text-2xl font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{product.name}</h3>
+              <p className={`text-base mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Price: ${product.price}</p>
+              <div className="flex justify-between items-center text-sm mb-3">
+                <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stock: <span className={`font-semibold ${product.stock === "In Stock" ? 'text-green-500' : 'text-red-500'}`}>{product.stock}</span></span>
+                <span className={`${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Sales: <span className="font-semibold">{product.sales}</span></span>
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <span className={`text-lg font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>${product.price}</span>
+                <div className="flex space-x-2">
+                  <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600" theme={theme}><Edit size={18} /></Button>
+                  <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                </div>
+              </div>
+              {/* Placeholder for API call: Fetch product data from /api/ecommerce/products */}
+            </Card>
+          ))}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Analytics Page Component
   const AnalyticsPage = ({ theme }) => (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <LineChart className="inline-block mr-2" size={20} /> <span>Your Analytics</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Detailed Analytics</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Track your performance with in-depth data and insights.</p>
-      </div>
+      <SectionHeader
+        icon={LineChart}
+        title="Your Analytics"
+        subtitle="Detailed Analytics"
+        description="Track your performance with in-depth data and insights."
+        theme={theme}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
         {/* Website Traffic */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Website Traffic</h3>
           <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Visits over the last 30 days. <span className="text-green-500">+12%</span></p>
-          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
-            <p>A dynamic line chart showing daily unique visitors and page views would appear here.</p>
+          <div className="bg-gray-700 h-48 rounded-lg flex flex-col items-center justify-center text-gray-300 text-center p-4">
+            <p className="font-semibold">Dynamic Line Chart Placeholder</p>
+            <p className="text-sm mt-2">Showing daily unique visitors and page views.</p>
             <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 text-center">
@@ -475,14 +520,15 @@ const App = () => {
             </div>
           </div>
           {/* Placeholder for API call: Fetch traffic data from /api/analytics/traffic or /api/analytics-system/traffic */}
-        </div>
+        </Card>
 
         {/* Sales Performance */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Sales Performance</h3>
           <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Revenue breakdown by product category. <span className="text-green-500">+18%</span></p>
-          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
-            <p>A dynamic bar chart or pie chart illustrating sales by product category would be here.</p>
+          <div className="bg-gray-700 h-48 rounded-lg flex flex-col items-center justify-center text-gray-300 text-center p-4">
+            <p className="font-semibold">Dynamic Bar/Pie Chart Placeholder</p>
+            <p className="text-sm mt-2">Illustrating sales by product category.</p>
             <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4 text-center">
@@ -496,21 +542,22 @@ const App = () => {
             </div>
           </div>
           {/* Placeholder for API call: Fetch sales data from /api/financial/sales or /api/enhanced-ecommerce/sales */}
-        </div>
+        </Card>
 
         {/* Audience Demographics */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Audience Demographics</h3>
           <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Breakdown of your audience by age and location.</p>
-          <div className="bg-gray-700 h-48 rounded-lg flex items-center justify-center text-gray-300 text-center p-4">
-            <p>A dynamic pie chart or bar chart showing audience age groups and top countries.</p>
+          <div className="bg-gray-700 h-48 rounded-lg flex flex-col items-center justify-center text-gray-300 text-center p-4">
+            <p className="font-semibold">Dynamic Demographics Chart Placeholder</p>
+            <p className="text-sm mt-2">Showing audience age groups and top countries.</p>
             <p className="text-xs mt-2">(Integration with charting libraries like Recharts or Nivo)</p>
           </div>
           {/* Placeholder for API call: Fetch audience data from /api/crm/audience or /api/analytics/audience */}
-        </div>
+        </Card>
 
         {/* Top Performing Content */}
-        <div className={`p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Top Performing Content</h3>
           <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Your most viewed courses and products.</p>
           <ul className="space-y-2">
@@ -525,217 +572,202 @@ const App = () => {
             </li>
           </ul>
           {/* Placeholder for API call: Fetch top content from /api/analytics/content-performance or /api/blog/top-posts */}
-        </div>
+        </Card>
       </div>
     </div>
   );
 
   // Workspaces Page Component
-  const WorkspacesPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Briefcase className="inline-block mr-2" size={20} /> <span>Workspaces</span>
+  const WorkspacesPage = ({ theme }) => {
+    const workspaces = [
+      { id: 1, name: "Creator Hub", type: "Personal", description: "Main workspace for content creation.", members: 1 },
+      { id: 2, name: "Marketing Campaigns", type: "Business", description: "Dedicated to email and social media campaigns.", members: 3 },
+      { id: 3, name: "Product Launch 2025", type: "Project", description: "Workspace for upcoming product launch.", members: 5 },
+    ];
+
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={Briefcase}
+          title="Workspaces"
+          subtitle="Manage Your Workspaces"
+          description="Organize your projects and content into dedicated workspaces."
+          theme={theme}
+        />
+
+        {/* Create New Workspace Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Workspace</h3>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputGroup theme={theme} id="workspaceName" label="Workspace Name" placeholder="e.g., My Personal Brand" />
+            <InputGroup
+              theme={theme}
+              id="workspaceType"
+              label="Workspace Type"
+              type="select"
+              selectOptions={[
+                { value: "", label: "Select Type" },
+                { value: "personal", label: "Personal" },
+                { value: "business", label: "Business" },
+                { value: "agency", label: "Agency" },
+                { value: "project", label: "Project" },
+              ]}
+            />
+            <InputGroup theme={theme} id="workspaceDescription" label="Description" placeholder="Briefly describe this workspace..." isTextArea rows={3} className="md:col-span-2" />
+            <div className="md:col-span-2 flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Create Workspace</Button>
+            </div>
+            {/* Placeholder for API call: Create new workspace via /api/workspaces/ */}
+          </form>
+        </Card>
+
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Workspaces</h3>
+        <div className="overflow-x-auto">
+          <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+            <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <tr>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Description</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Members</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+              {workspaces.map(workspace => (
+                <tr key={workspace.id} className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{workspace.name}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{workspace.type}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{workspace.description}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{workspace.members}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600 mr-2" theme={theme}><Edit size={18} /></Button>
+                    <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Placeholder for API call: Fetch workspaces from /api/workspaces/ */}
+            </tbody>
+          </table>
         </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Workspaces</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Organize your projects and content into dedicated workspaces.</p>
       </div>
-
-      {/* Create New Workspace Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Workspace</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="workspaceName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Workspace Name</label>
-            <input type="text" id="workspaceName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., My Personal Brand" />
-          </div>
-          <div>
-            <label htmlFor="workspaceType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Workspace Type</label>
-            <select id="workspaceType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="">Select Type</option>
-              <option value="personal">Personal</option>
-              <option value="business">Business</option>
-              <option value="agency">Agency</option>
-            </select>
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="workspaceDescription" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Description</label>
-            <textarea id="workspaceDescription" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Briefly describe this workspace..."></textarea>
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Create Workspace
-            </button>
-          </div>
-          {/* Placeholder for API call: Create new workspace via /api/workspaces/ */}
-        </form>
-      </div>
-
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Workspaces</h3>
-      <div className="overflow-x-auto">
-        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
-          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-            <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Description</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Members</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Creator Hub</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Personal</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Main workspace for content creation.</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Marketing Campaigns</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Business</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Dedicated to email and social media campaigns.</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>3</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            {/* Placeholder for API call: Fetch workspaces from /api/workspaces/ */}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Blog & Content Management Page Component
-  const BlogContentPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <BookOpen className="inline-block mr-2" size={20} /> <span>Blog & Content</span>
+  const BlogContentPage = ({ theme }) => {
+    const posts = [
+      { id: 1, title: "The Future of Creator Economy", category: "Industry Trends", status: "Published", date: "2025-07-15", views: 1500 },
+      { id: 2, title: "How to Master Video Editing", category: "Tutorials", status: "Draft", date: "N/A", views: 50 },
+      { id: 3, title: "Top 5 Marketing Strategies for 2025", category: "Marketing", status: "Published", date: "2025-07-01", views: 2300 },
+    ];
+
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={BookOpen}
+          title="Blog & Content"
+          subtitle="Manage Your Content"
+          description="Create, publish, and manage your blog posts and articles."
+          theme={theme}
+        />
+
+        {/* Create New Post Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Post</h3>
+          <form className="grid grid-cols-1 gap-6">
+            <InputGroup theme={theme} id="postTitle" label="Post Title" placeholder="e.g., 10 Tips for Growing Your Audience" />
+            <InputGroup
+              theme={theme}
+              id="postCategory"
+              label="Category"
+              type="select"
+              selectOptions={[
+                { value: "", label: "Select Category" },
+                { value: "marketing", label: "Marketing" },
+                { value: "productivity", label: "Productivity" },
+                { value: "tutorials", label: "Tutorials" },
+                { value: "news", label: "News" },
+              ]}
+            />
+            <InputGroup theme={theme} id="postContent" label="Content" placeholder="Write your blog post content here..." isTextArea rows={8} />
+            <InputGroup theme={theme} id="postTags" label="Tags (comma-separated)" placeholder="e.g., marketing, social media, tips" />
+            <div className="flex items-center justify-between">
+              <label htmlFor="publishNow" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Publish Immediately</label>
+              <input type="checkbox" id="publishNow" className="toggle toggle-primary" defaultChecked />
+            </div>
+            <div className="flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Publish Post</Button>
+            </div>
+            {/* Placeholder for API call: Create new blog post via /api/blog/posts */}
+          </form>
+        </Card>
+
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Blog Posts</h3>
+        <div className="overflow-x-auto">
+          <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+            <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <tr>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Title</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Category</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Published Date</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Views</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+              {posts.map(post => (
+                <tr key={post.id} className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{post.title}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{post.category}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${post.status === 'Published' ? (theme === 'dark' ? 'text-green-500' : 'text-green-700') : (theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700')}`}>{post.status}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{post.date}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{post.views}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600 mr-2" theme={theme}><Edit size={18} /></Button>
+                    <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Placeholder for API call: Fetch blog posts from /api/blog/posts */}
+            </tbody>
+          </table>
         </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Content</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Create, publish, and manage your blog posts and articles.</p>
       </div>
-
-      {/* Create New Post Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Create New Post</h3>
-        <form className="grid grid-cols-1 gap-6">
-          <div>
-            <label htmlFor="postTitle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Post Title</label>
-            <input type="text" id="postTitle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 10 Tips for Growing Your Audience" />
-          </div>
-          <div>
-            <label htmlFor="postCategory" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
-            <select id="postCategory" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="">Select Category</option>
-              <option value="marketing">Marketing</option>
-              <option value="productivity">Productivity</option>
-              <option value="tutorials">Tutorials</option>
-              <option value="news">News</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="postContent" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Content</label>
-            <textarea id="postContent" rows="8" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Write your blog post content here..."></textarea>
-          </div>
-          <div>
-            <label htmlFor="postTags" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Tags (comma-separated)</label>
-            <input type="text" id="postTags" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., marketing, social media, tips" />
-          </div>
-          <div className="flex items-center justify-between">
-            <label htmlFor="publishNow" className={`text-base font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Publish Immediately</label>
-            <input type="checkbox" id="publishNow" className="toggle toggle-primary" defaultChecked />
-          </div>
-          <div className="flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Publish Post
-            </button>
-          </div>
-          {/* Placeholder for API call: Create new blog post via /api/blog/posts */}
-        </form>
-      </div>
-
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Blog Posts</h3>
-      <div className="overflow-x-auto">
-        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
-          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-            <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Title</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Category</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Published Date</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Views</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>The Future of Creator Economy</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Industry Trends</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Published</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-07-15</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1,500</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>How to Master Video Editing</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Tutorials</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>Draft</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>N/A</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>50</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            {/* Placeholder for API call: Fetch blog posts from /api/blog/posts */}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // AI Tools Page Component
   const AIToolsPage = ({ theme }) => (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Bot className="inline-block mr-2" size={20} /> <span>AI Tools</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI-Powered Creation Suite</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Leverage advanced AI to generate content, images, and optimize your workflow.</p>
-      </div>
+      <SectionHeader
+        icon={Bot}
+        title="AI Tools"
+        subtitle="AI-Powered Creation Suite"
+        description="Leverage advanced AI to generate content, images, and optimize your workflow."
+        theme={theme}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
         {/* AI Content Generation */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Content Generator</h3>
           <form className="space-y-4">
-            <div>
-              <label htmlFor="contentPrompt" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Prompt</label>
-              <textarea id="contentPrompt" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Write a blog post outline about sustainable living."></textarea>
-            </div>
-            <div>
-              <label htmlFor="contentType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Content Type</label>
-              <select id="contentType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                <option value="blog-outline">Blog Post Outline</option>
-                <option value="social-post">Social Media Post</option>
-                <option value="email-subject">Email Subject Line</option>
-                <option value="product-description">Product Description</option>
-              </select>
-            </div>
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Generate Content
-            </button>
+            <InputGroup theme={theme} id="contentPrompt" label="Prompt" placeholder="e.g., Write a blog post outline about sustainable living." isTextArea rows={3} />
+            <InputGroup
+              theme={theme}
+              id="contentType"
+              label="Content Type"
+              type="select"
+              selectOptions={[
+                { value: "blog-outline", label: "Blog Post Outline" },
+                { value: "social-post", label: "Social Media Post" },
+                { value: "email-subject", label: "Email Subject Line" },
+                { value: "product-description", label: "Product Description" },
+              ]}
+            />
+            <Button type="submit" variant="primary" theme={theme}>Generate Content</Button>
           </form>
           <div className={`mt-6 p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-300'}`}>
             <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Generated Output:</h4>
@@ -745,27 +777,25 @@ const App = () => {
             </p>
           </div>
           {/* Placeholder for API call: Generate content via /api/ai-content/generate */}
-        </div>
+        </Card>
 
         {/* AI Image Generation */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Image Generator</h3>
           <form className="space-y-4">
-            <div>
-              <label htmlFor="imagePrompt" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Image Description</label>
-              <textarea id="imagePrompt" rows="3" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., A futuristic city at sunset, cyberpunk style."></textarea>
-            </div>
-            <div>
-              <label htmlFor="imageStyle" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Style</label>
-              <select id="imageStyle" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                <option value="realistic">Realistic</option>
-                <option value="cartoon">Cartoon</option>
-                <option value="abstract">Abstract</option>
-              </select>
-            </div>
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Generate Image
-            </button>
+            <InputGroup theme={theme} id="imagePrompt" label="Image Description" placeholder="e.g., A futuristic city at sunset, cyberpunk style." isTextArea rows={3} />
+            <InputGroup
+              theme={theme}
+              id="imageStyle"
+              label="Style"
+              type="select"
+              selectOptions={[
+                { value: "realistic", label: "Realistic" },
+                { value: "cartoon", label: "Cartoon" },
+                { value: "abstract", label: "Abstract" },
+              ]}
+            />
+            <Button type="submit" variant="primary" theme={theme}>Generate Image</Button>
           </form>
           <div className={`mt-6 p-4 rounded-lg border flex items-center justify-center h-48 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-200 border-gray-300'}`}>
             <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
@@ -774,11 +804,11 @@ const App = () => {
             </p>
           </div>
           {/* Placeholder for API call: Generate image via /api/ai/image-generation or /api/advanced-ai/image */}
-        </div>
+        </Card>
       </div>
 
       {/* AI Token Usage */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+      <Card theme={theme} className="mt-16">
         <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Token Usage</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
           <div>
@@ -795,478 +825,421 @@ const App = () => {
           </div>
         </div>
         <div className="mt-6 text-center">
-          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            Purchase More Tokens
-          </button>
+          <Button variant="primary" theme={theme}>Purchase More Tokens</Button>
         </div>
         {/* Placeholder for API call: Fetch token usage from /api/tokens/usage */}
-      </div>
+      </Card>
     </div>
   );
 
   // Bookings Page Component
-  const BookingsPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <CalendarCheck className="inline-block mr-2" size={20} /> <span>Bookings</span>
+  const BookingsPage = ({ theme }) => {
+    const bookings = [
+      { id: 1, client: "Alice Wonderland", service: "1-on-1 Consultation", date: "2025-07-25", time: "10:00 AM", status: "Confirmed" },
+      { id: 2, client: "Bob The Builder", service: "Workshop Session", date: "2025-08-01", time: "02:00 PM", status: "Pending" },
+      { id: 3, client: "Charlie Chaplin", service: "Coaching Call", date: "2025-08-05", time: "11:30 AM", status: "Confirmed" },
+    ];
+
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={CalendarCheck}
+          title="Bookings"
+          subtitle="Manage Your Bookings"
+          description="View, add, and manage your appointments and consultation sessions."
+          theme={theme}
+        />
+
+        {/* Add New Booking Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Booking</h3>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputGroup theme={theme} id="clientName" label="Client Name" placeholder="e.g., Alice Wonderland" />
+            <InputGroup theme={theme} id="clientEmail" label="Client Email" type="email" placeholder="alice@example.com" />
+            <InputGroup
+              theme={theme}
+              id="bookingService"
+              label="Service"
+              type="select"
+              selectOptions={[
+                { value: "", label: "Select Service" },
+                { value: "consultation", label: "1-on-1 Consultation" },
+                { value: "workshop", label: "Workshop Session" },
+                { value: "coaching", label: "Coaching Call" },
+              ]}
+            />
+            <InputGroup theme={theme} id="bookingDate" label="Date" type="date" />
+            <InputGroup theme={theme} id="bookingTime" label="Time" type="time" />
+            <InputGroup
+              theme={theme}
+              id="bookingStatus"
+              label="Status"
+              type="select"
+              selectOptions={[
+                { value: "pending", label: "Pending" },
+                { value: "confirmed", label: "Confirmed" },
+                { value: "cancelled", label: "Cancelled" },
+                { value: "completed", label: "Completed" },
+              ]}
+            />
+            <div className="md:col-span-2 flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Add Booking</Button>
+            </div>
+            {/* Placeholder for API call: Add new booking via /api/bookings/ */}
+          </form>
+        </Card>
+
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upcoming Bookings</h3>
+        <div className="overflow-x-auto">
+          <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+            <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <tr>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Client</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Service</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Date</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Time</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+              {bookings.map(booking => (
+                <tr key={booking.id} className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{booking.client}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{booking.service}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{booking.date}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{booking.time}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${booking.status === 'Confirmed' ? (theme === 'dark' ? 'text-green-500' : 'text-green-700') : (theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700')}`}>{booking.status}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600 mr-2" theme={theme}><Edit size={18} /></Button>
+                    <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Placeholder for API call: Fetch bookings from /api/bookings/ */}
+            </tbody>
+          </table>
         </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Bookings</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>View, add, and manage your appointments and consultation sessions.</p>
       </div>
-
-      {/* Add New Booking Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Booking</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="clientName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Client Name</label>
-            <input type="text" id="clientName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Alice Wonderland" />
-          </div>
-          <div>
-            <label htmlFor="clientEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Client Email</label>
-            <input type="email" id="clientEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="alice@example.com" />
-          </div>
-          <div>
-            <label htmlFor="bookingService" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Service</label>
-            <select id="bookingService" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="">Select Service</option>
-              <option value="consultation">1-on-1 Consultation</option>
-              <option value="workshop">Workshop Session</option>
-              <option value="coaching">Coaching Call</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="bookingDate" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Date</label>
-            <input type="date" id="bookingDate" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
-          </div>
-          <div>
-            <label htmlFor="bookingTime" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Time</label>
-            <input type="time" id="bookingTime" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
-          </div>
-          <div>
-            <label htmlFor="bookingStatus" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Status</label>
-            <select id="bookingStatus" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="completed">Completed</option>
-            </select>
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Add Booking
-            </button>
-          </div>
-          {/* Placeholder for API call: Add new booking via /api/bookings/ */}
-        </form>
-      </div>
-
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upcoming Bookings</h3>
-      <div className="overflow-x-auto">
-        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
-          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-            <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Client</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Service</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Date</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Time</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Alice Wonderland</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>1-on-1 Consultation</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-07-25</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>10:00 AM</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Confirmed</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Bob The Builder</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Workshop Session</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-08-01</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>02:00 PM</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-yellow-500' : 'text-yellow-700'}`}>Pending</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            {/* Placeholder for API call: Fetch bookings from /api/bookings/ */}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Marketing & Promotions Page Component
-  const MarketingPromotionsPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Megaphone className="inline-block mr-2" size={20} /> <span>Marketing & Promotions</span>
+  const MarketingPromotionsPage = ({ theme }) => {
+    const campaigns = [
+      { id: 1, name: "Welcome Series", type: "Email Campaign", value: "N/A", status: "Active", expiry: "Ongoing" },
+      { id: 2, name: "SAVE15", type: "Coupon", value: "15% Off", status: "Active", expiry: "2025-08-31" },
+      { id: 3, name: "Holiday Discount", type: "Coupon", value: "$25 Off", status: "Inactive", expiry: "2024-12-31" },
+    ];
+
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={Megaphone}
+          title="Marketing & Promotions"
+          subtitle="Boost Your Reach & Sales"
+          description="Manage email campaigns, promotions, and referral programs."
+          theme={theme}
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
+          {/* Email Campaigns */}
+          <Card theme={theme}>
+            <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Campaigns</h3>
+            <form className="space-y-4">
+              <InputGroup theme={theme} id="campaignName" label="Campaign Name" placeholder="e.g., Summer Sale Newsletter" />
+              <InputGroup theme={theme} id="campaignSubject" label="Subject Line" placeholder="Catchy subject for your email" />
+              <InputGroup theme={theme} id="campaignContent" label="Email Content" placeholder="Design your email content..." isTextArea rows={5} />
+              <div className="flex justify-end">
+                <Button type="submit" variant="primary" theme={theme}>Schedule Campaign</Button>
+              </div>
+              {/* Placeholder for API call: Create email campaign via /api/email-marketing/campaigns */}
+            </form>
+          </Card>
+
+          {/* Promotions & Coupons */}
+          <Card theme={theme}>
+            <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Promotions & Coupons</h3>
+            <form className="space-y-4">
+              <InputGroup theme={theme} id="couponCode" label="Coupon Code" placeholder="e.g., SUMMER20" />
+              <InputGroup
+                theme={theme}
+                id="discountType"
+                label="Discount Type"
+                type="select"
+                selectOptions={[
+                  { value: "percentage", label: "Percentage (%)" },
+                  { value: "fixed", label: "Fixed Amount ($)" },
+                ]}
+              />
+              <InputGroup theme={theme} id="discountValue" label="Discount Value" type="number" placeholder="e.g., 20 (for 20% or $20)" />
+              <InputGroup theme={theme} id="expiryDate" label="Expiry Date" type="date" />
+              <div className="flex justify-end">
+                <Button type="submit" variant="success" theme={theme}>Create Coupon</Button>
+              </div>
+              {/* Placeholder for API call: Create promotions/coupons via /api/promotions/coupons */}
+            </form>
+          </Card>
         </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Boost Your Reach & Sales</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage email campaigns, promotions, and referral programs.</p>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
-        {/* Email Campaigns */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Email Campaigns</h3>
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="campaignName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Campaign Name</label>
-              <input type="text" id="campaignName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., Summer Sale Newsletter" />
-            </div>
-            <div>
-              <label htmlFor="campaignSubject" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Subject Line</label>
-              <input type="text" id="campaignSubject" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Catchy subject for your email" />
-            </div>
-            <div>
-              <label htmlFor="campaignContent" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Content</label>
-              <textarea id="campaignContent" rows="5" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Design your email content..."></textarea>
-            </div>
-            <div className="flex justify-end">
-              <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                Schedule Campaign
-              </button>
-            </div>
-            {/* Placeholder for API call: Create email campaign via /api/email-marketing/campaigns */}
-          </form>
-        </div>
-
-        {/* Promotions & Coupons */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Promotions & Coupons</h3>
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="couponCode" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Coupon Code</label>
-              <input type="text" id="couponCode" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., SUMMER20" />
-            </div>
-            <div>
-              <label htmlFor="discountType" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Discount Type</label>
-              <select id="discountType" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                <option value="percentage">Percentage (%)</option>
-                <option value="fixed">Fixed Amount ($)</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="discountValue" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Discount Value</label>
-              <input type="number" id="discountValue" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., 20 (for 20% or $20)" step="0.01" />
-            </div>
-            <div>
-              <label htmlFor="expiryDate" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Expiry Date</label>
-              <input type="date" id="expiryDate" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} />
-            </div>
-            <div className="flex justify-end">
-              <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-green-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                Create Coupon
-              </button>
-            </div>
-            {/* Placeholder for API call: Create promotions/coupons via /api/promotions/coupons */}
-          </form>
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Active Campaigns & Promotions</h3>
+        <div className="overflow-x-auto">
+          <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+            <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <tr>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name/Code</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Value</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Expiry/End</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+              {campaigns.map(campaign => (
+                <tr key={campaign.id} className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{campaign.name}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{campaign.type}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{campaign.value}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${campaign.status === 'Active' ? (theme === 'dark' ? 'text-green-500' : 'text-green-700') : (theme === 'dark' ? 'text-red-500' : 'text-red-700')}`}>{campaign.status}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{campaign.expiry}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600 mr-2" theme={theme}><Edit size={18} /></Button>
+                    <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Placeholder for API call: Fetch active campaigns/promotions from /api/marketing/campaigns or /api/promotions/ */}
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Active Campaigns & Promotions</h3>
-      <div className="overflow-x-auto">
-        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
-          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-            <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name/Code</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Type</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Value</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Status</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Expiry/End</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Welcome Series</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Email Campaign</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>N/A</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Active</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Ongoing</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>SAVE15</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Coupon</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>15% Off</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-green-500' : 'text-green-700'}`}>Active</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>2025-08-31</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            {/* Placeholder for API call: Fetch active campaigns/promotions from /api/marketing/campaigns or /api/promotions/ */}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-
+    );
+  };
 
   // Team Management Page Component
-  const TeamManagementPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Briefcase className="inline-block mr-2" size={20} /> <span>Team Management</span>
+  const TeamManagementPage = ({ theme }) => {
+    const teamMembers = [
+      { id: 1, name: "Jane Doe", email: "jane.doe@example.com", role: "Admin" },
+      { id: 2, name: "Mark Johnson", email: "mark.j@example.com", role: "Editor" },
+      { id: 3, name: "Sarah Lee", email: "sarah.l@example.com", role: "Viewer" },
+    ];
+
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={Users}
+          title="Team Management"
+          subtitle="Manage Your Team"
+          description="Add, remove, and manage roles for your team members."
+          theme={theme}
+        />
+
+        {/* Add New Team Member Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Team Member</h3>
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputGroup theme={theme} id="memberName" label="Full Name" placeholder="e.g., John Doe" />
+            <InputGroup theme={theme} id="memberEmail" label="Email Address" type="email" placeholder="john.doe@example.com" />
+            <InputGroup
+              theme={theme}
+              id="memberRole"
+              label="Role"
+              type="select"
+              selectOptions={[
+                { value: "", label: "Select Role" },
+                { value: "admin", label: "Admin" },
+                { value: "editor", label: "Editor" },
+                { value: "viewer", label: "Viewer" },
+              ]}
+              className="md:col-span-2"
+            />
+            <div className="md:col-span-2 flex justify-end">
+              <Button type="submit" variant="primary" theme={theme}>Add Member</Button>
+            </div>
+            {/* Placeholder for API call: Submit new team member to /api/team/members */}
+          </form>
+        </Card>
+
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Current Team Members</h3>
+        <div className="overflow-x-auto">
+          <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
+            <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+              <tr>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Email</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Role</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
+              </tr>
+            </thead>
+            <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
+              {teamMembers.map(member => (
+                <tr key={member.id} className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{member.name}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{member.email}</td>
+                  <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{member.role}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <Button variant="icon" className="p-2 bg-blue-500 hover:bg-blue-600 mr-2" theme={theme}><Edit size={18} /></Button>
+                    <Button variant="icon" className="p-2 bg-red-500 hover:bg-red-600" theme={theme}><Trash2 size={18} /></Button>
+                  </td>
+                </tr>
+              ))}
+              {/* Placeholder for API call: Fetch team members from /api/team/members */}
+            </tbody>
+          </table>
         </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Team</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Add, remove, and manage roles for your team members.</p>
       </div>
-
-      {/* Add New Team Member Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Add New Team Member</h3>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="memberName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
-            <input type="text" id="memberName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="e.g., John Doe" />
-          </div>
-          <div>
-            <label htmlFor="memberEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
-            <input type="email" id="memberEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="john.doe@example.com" />
-          </div>
-          <div className="md:col-span-2">
-            <label htmlFor="memberRole" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Role</label>
-            <select id="memberRole" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-              <option value="">Select Role</option>
-              <option value="admin">Admin</option>
-              <option value="editor">Editor</option>
-              <option value="viewer">Viewer</option>
-            </select>
-          </div>
-          <div className="md:col-span-2 flex justify-end">
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Add Member
-            </button>
-          </div>
-          {/* Placeholder for API call: Submit new team member to /api/team/members */}
-        </form>
-      </div>
-
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Current Team Members</h3>
-      <div className="overflow-x-auto">
-        <table className={`min-w-full rounded-lg overflow-hidden ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800' : 'bg-gray-100 backdrop-blur-lg border border-gray-200'}`}>
-          <thead className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
-            <tr>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Name</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Email</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Role</th>
-              <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>Actions</th>
-            </tr>
-          </thead>
-          <tbody className={`divide-y ${theme === 'dark' ? 'divide-gray-700' : 'divide-gray-300'}`}>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Jane Doe</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>jane.doe@example.com</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Admin</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            <tr className={`${theme === 'dark' ? 'hover:bg-gray-850' : 'hover:bg-gray-150'}`}>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Mark Johnson</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>mark.j@example.com</td>
-              <td className={`px-6 py-4 whitespace-nowrap ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Editor</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button className="text-blue-500 hover:text-blue-700 mr-3"><Edit size={18} /></button>
-                <button className="text-red-500 hover:text-red-700"><Trash2 size={18} /></button>
-              </td>
-            </tr>
-            {/* Placeholder for API call: Fetch team members from /api/team/members */}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    );
+  };
 
   // Media Library Page Component
-  const MediaLibraryPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Image className="inline-block mr-2" size={20} /> <span>Media Library</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Assets</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Upload, organize, and use your images, videos, and documents.</p>
-      </div>
+  const MediaLibraryPage = ({ theme }) => {
+    const mediaFiles = [
+      { id: 1, name: "my_awesome_photo.jpg", type: "Image", size: "1.2 MB", url: "https://placehold.co/300x200/4CAF50/FFFFFF?text=Image+1" },
+      { id: 2, name: "intro_video.mp4", type: "Video", size: "5.8 MB", url: "https://placehold.co/300x200/FFC107/000000?text=Video+Clip" },
+      { id: 3, name: "report_2025.pdf", type: "Document", size: "2.1 MB", url: "https://placehold.co/300x200/007bff/ffffff?text=Document" },
+      { id: 4, name: "brand_logo.png", type: "Image", size: "0.5 MB", url: "https://placehold.co/300x200/9C27B0/FFFFFF?text=Logo" },
+    ];
 
-      {/* Upload Media Section */}
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upload New Media</h3>
-        <div className={`flex items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <UploadCloud className={`w-10 h-10 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
-            <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
-            <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Max file size: 10MB (JPG, PNG, GIF, MP4, PDF)</p>
-          </div>
-          <input id="mediaUpload" type="file" className="hidden" multiple />
-        </div>
-        <div className="flex justify-end mt-6">
-          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            Upload Files
-          </button>
-        </div>
-        {/* Placeholder for API call: Upload files to /api/media/upload */}
-      </div>
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={Image}
+          title="Media Library"
+          subtitle="Manage Your Assets"
+          description="Upload, organize, and use your images, videos, and documents."
+          theme={theme}
+        />
 
-      <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Media Files</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {/* Example Media Card */}
-        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-          <img src="https://placehold.co/300x200/4CAF50/FFFFFF?text=Image+1" alt="Media File" className="w-full h-40 object-cover" />
-          <div className="p-4">
-            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>my_awesome_photo.jpg</p>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Image | 1.2 MB</p>
+        {/* Upload Media Section */}
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Upload New Media</h3>
+          <div className={`flex items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer ${theme === 'dark' ? 'border-gray-700 bg-gray-800 hover:border-gray-600' : 'border-gray-300 bg-gray-50 hover:border-gray-400'}`}>
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <UploadCloud className={`w-10 h-10 mb-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
+              <p className={`mb-2 text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}><span className="font-semibold">Click to upload</span> or drag and drop</p>
+              <p className={`text-xs ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>Max file size: 10MB (JPG, PNG, GIF, MP4, PDF)</p>
+            </div>
+            <input id="mediaUpload" type="file" className="hidden" multiple />
           </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
-            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
+          <div className="flex justify-end mt-6">
+            <Button variant="primary" theme={theme}>Upload Files</Button>
           </div>
+          {/* Placeholder for API call: Upload files to /api/media/upload */}
+        </Card>
+
+        <h3 className={`text-3xl font-bold mb-8 mt-16 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Media Files</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {mediaFiles.map(file => (
+            <div key={file.id} className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+              <img src={file.url} alt="Media File" className="w-full h-40 object-cover" />
+              <div className="p-4">
+                <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{file.name}</p>
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{file.type} | {file.size}</p>
+              </div>
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Button variant="icon" className="p-2 bg-blue-500 text-white mx-1 hover:bg-blue-600" theme={theme}><Search size={20} /></Button>
+                <Button variant="icon" className="p-2 bg-red-500 text-white mx-1 hover:bg-red-600" theme={theme}><Trash2 size={20} /></Button>
+              </div>
+            </div>
+          ))}
+          {/* Placeholder for API call: Fetch media files from /api/media/files */}
         </div>
-        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-          <img src="https://placehold.co/300x200/FFC107/000000?text=Video+Clip" alt="Media File" className="w-full h-40 object-cover" />
-          <div className="p-4">
-            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>intro_video.mp4</p>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Video | 5.8 MB</p>
-          </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
-            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
-          </div>
-        </div>
-        <div className={`relative group rounded-lg overflow-hidden border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-          <img src="https://placehold.co/300x200/007bff/ffffff?text=Document" alt="Media File" className="w-full h-40 object-cover" />
-          <div className="p-4">
-            <p className={`font-medium truncate ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>report_2025.pdf</p>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Document | 2.1 MB</p>
-          </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button className="p-2 rounded-full bg-blue-500 text-white mx-1 hover:bg-blue-600"><Search size={20} /></button>
-            <button className="p-2 rounded-full bg-red-500 text-white mx-1 hover:bg-red-600"><Trash2 size={20} /></button>
-          </div>
-        </div>
-        {/* Placeholder for API call: Fetch media files from /api/media/files */}
       </div>
-    </div>
-  );
+    );
+  };
 
   // Notifications Page Component
-  const NotificationsPage = ({ theme }) => (
-    <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <BellRing className="inline-block mr-2" size={20} /> <span>Notifications</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Your Notifications</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Stay updated on all activities and important alerts.</p>
-      </div>
+  const NotificationsPage = ({ theme }) => {
+    const notifications = [
+      { id: 1, type: "success", icon: CheckCircle, title: "Course Published Successfully!", message: "Your course 'Introduction to AI' is now live and available to students.", time: "2 hours ago" },
+      { id: 2, type: "info", icon: ShoppingCart, title: "New Order Received!", message: "John Doe purchased 'E-book: Creator's Guide'. Order #MWZ789.", time: "Yesterday" },
+      { id: 3, type: "info", icon: Users, title: "New Subscriber Alert!", message: "You have 5 new subscribers to your email list.", time: "3 days ago" },
+      { id: 4, type: "warning", icon: BellRing, title: "Storage Limit Reached", message: "You are nearing your storage limit. Please upgrade your plan.", time: "1 week ago" },
+    ];
 
-      <div className={`mt-16 p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
-        <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Notifications</h3>
-        <ul className="space-y-4">
-          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
-            <CheckCircle className="text-green-500 mr-3 mt-1 flex-shrink-0" size={20} />
-            <div>
-              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Course Published Successfully!</p>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Your course "Introduction to AI" is now live and available to students. <span className="block text-xs text-gray-500 mt-1">2 hours ago</span></p>
-            </div>
-            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
-          </li>
-          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
-            <ShoppingCart className="text-blue-500 mr-3 mt-1 flex-shrink-0" size={20} />
-            <div>
-              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Order Received!</p>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>John Doe purchased "E-book: Creator's Guide". Order #MWZ789. <span className="block text-xs text-gray-500 mt-1">Yesterday</span></p>
-            </div>
-            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
-          </li>
-          <li className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
-            <Users className="text-purple-500 mr-3 mt-1 flex-shrink-0" size={20} />
-            <div>
-              <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>New Subscriber Alert!</p>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>You have 5 new subscribers to your email list. <span className="block text-xs text-gray-500 mt-1">3 days ago</span></p>
-            </div>
-            <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
-          </li>
-          {/* Placeholder for API call: Fetch notifications from /api/notifications/ */}
-        </ul>
-        <div className="text-center mt-8">
-          <button className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            Load More Notifications
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    const getIconColor = (type) => {
+      switch (type) {
+        case 'success': return 'text-green-500';
+        case 'info': return 'text-blue-500';
+        case 'warning': return 'text-yellow-500';
+        case 'error': return 'text-red-500';
+        default: return 'text-gray-500';
+      }
+    };
 
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4">
+        <SectionHeader
+          icon={BellRing}
+          title="Notifications"
+          subtitle="Your Notifications"
+          description="Stay updated on all activities and important alerts."
+          theme={theme}
+        />
+
+        <Card theme={theme} className="mt-16">
+          <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Recent Notifications</h3>
+          <ul className="space-y-4">
+            {notifications.map(notification => (
+              <li key={notification.id} className={`flex items-start p-4 rounded-lg ${theme === 'dark' ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+                <notification.icon className={`${getIconColor(notification.type)} mr-3 mt-1 flex-shrink-0`} size={20} />
+                <div>
+                  <p className={`font-semibold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{notification.title}</p>
+                  <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{notification.message} <span className="block text-xs text-gray-500 mt-1">{notification.time}</span></p>
+                </div>
+                <button className={`ml-auto p-1 rounded-full ${theme === 'dark' ? 'text-gray-400 hover:text-white hover:bg-gray-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'}`}><XCircle size={18} /></button>
+              </li>
+            ))}
+            {/* Placeholder for API call: Fetch notifications from /api/notifications/ */}
+          </ul>
+          <div className="text-center mt-8">
+            <Button variant="primary" theme={theme}>Load More Notifications</Button>
+          </div>
+        </Card>
+      </div>
+    );
+  };
 
   // Settings Page Component
   const SettingsPage = ({ theme }) => (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <Settings className="inline-block mr-2" size={20} /> <span>Account Settings</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Manage Your Preferences</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Update your profile, notification settings, and integrations.</p>
-      </div>
+      <SectionHeader
+        icon={Settings}
+        title="Account Settings"
+        subtitle="Manage Your Preferences"
+        description="Update your profile, notification settings, and integrations."
+        theme={theme}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
         {/* Profile Settings */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Profile Information</h3>
           <form className="space-y-4">
-            <div>
-              <label htmlFor="fullName" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Full Name</label>
-              <input type="text" id="fullName" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="Jane Doe" />
-            </div>
-            <div>
-              <label htmlFor="email" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Email Address</label>
-              <input type="email" id="email" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="jane.doe@example.com" />
-            </div>
-            <div>
-              <label htmlFor="username" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Username</label>
-              <input type="text" id="username" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="janedoecreator" />
-            </div>
-            <div>
-              <label htmlFor="phone" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Phone Number</label>
-              <input type="tel" id="phone" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} defaultValue="+1 (555) 123-4567" />
-            </div>
-            <div>
-              <label htmlFor="timezone" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Timezone</label>
-              <select id="timezone" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`}>
-                <option value="UTC-5">America/New_York (UTC-05:00)</option>
-                <option value="UTC+1">Europe/London (UTC+01:00)</option>
-                <option value="UTC+7" selected>Asia/Bangkok (UTC+07:00)</option>
-              </select>
-            </div>
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Update Profile
-            </button>
+            <InputGroup theme={theme} id="fullName" label="Full Name" defaultValue="Jane Doe" />
+            <InputGroup theme={theme} id="email" label="Email Address" type="email" defaultValue="jane.doe@example.com" />
+            <InputGroup theme={theme} id="username" label="Username" defaultValue="janedoecreator" />
+            <InputGroup theme={theme} id="phone" label="Phone Number" type="tel" defaultValue="+1 (555) 123-4567" />
+            <InputGroup
+              theme={theme}
+              id="timezone"
+              label="Timezone"
+              type="select"
+              selectOptions={[
+                { value: "UTC-5", label: "America/New_York (UTC-05:00)" },
+                { value: "UTC+1", label: "Europe/London (UTC+01:00)" },
+                { value: "UTC+7", label: "Asia/Bangkok (UTC+07:00)" },
+              ]}
+              defaultValue="UTC+7"
+            />
+            <Button type="submit" variant="primary" theme={theme}>Update Profile</Button>
             {/* Placeholder for API call: Update user profile to /api/users/{user_id} */}
           </form>
-        </div>
+        </Card>
 
         {/* Notification Settings */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Notification Preferences</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -1290,42 +1263,40 @@ const App = () => {
               <input type="checkbox" id="marketingEmails" className="toggle toggle-primary" />
             </div>
           </div>
-          <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 mt-6">
-              Save Preferences
-            </button>
+          <Button type="submit" variant="primary" className="mt-6" theme={theme}>Save Preferences</Button>
             {/* Placeholder for API call: Update notification preferences to /api/notifications/preferences */}
-        </div>
+        </Card>
 
         {/* Integrations */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Integrations</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Stripe</span>
-              <button className="px-4 py-2 text-sm rounded-lg bg-green-500 text-white">Connected</button>
+              <Button className="px-4 py-2 text-sm" variant="success" theme={theme}>Connected</Button>
             </div>
             <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Mailchimp</span>
-              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+              <Button className="px-4 py-2 text-sm" variant="primary" theme={theme}>Connect</Button>
             </div>
             <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Zapier</span>
-              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+              <Button className="px-4 py-2 text-sm" variant="primary" theme={theme}>Connect</Button>
             </div>
             <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Google Analytics</span>
-              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+              <Button className="px-4 py-2 text-sm" variant="primary" theme={theme}>Connect</Button>
             </div>
             <div className={`p-4 rounded-lg border flex items-center justify-between ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <span className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Facebook Ads</span>
-              <button className="px-4 py-2 text-sm rounded-lg bg-blue-500 text-white">Connect</button>
+              <Button className="px-4 py-2 text-sm" variant="primary" theme={theme}>Connect</Button>
             </div>
           </div>
           {/* Placeholder for API call: Manage integrations via /api/integrations/ */}
-        </div>
+        </Card>
 
         {/* API Keys (relevant to ai_token_management) */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>API Keys</h3>
           <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage your API keys for external services and AI integrations.</p>
           <div className="space-y-4">
@@ -1333,37 +1304,37 @@ const App = () => {
               <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>AI Content Generation Key</p>
               <div className="flex items-center mt-2">
                 <input type="text" readOnly value="********************abcde12345" className={`flex-grow p-2 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-gray-100 border-gray-300 text-gray-700'}`} />
-                <button className="ml-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Regenerate</button>
+                <Button className="ml-3 px-4 py-2 text-sm" variant="primary" theme={theme}>Regenerate</Button>
               </div>
             </div>
             <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Public API Key</p>
               <div className="flex items-center mt-2">
                 <input type="text" readOnly value="********************fghij67890" className={`flex-grow p-2 rounded-lg border ${theme === 'dark' ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-gray-100 border-gray-300 text-gray-700'}`} />
-                <button className="ml-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Regenerate</button>
+                <Button className="ml-3 px-4 py-2 text-sm" variant="primary" theme={theme}>Regenerate</Button>
               </div>
             </div>
           </div>
           {/* Placeholder for API call: Manage API tokens via /api/tokens/ */}
-        </div>
+        </Card>
 
         {/* Subscription & Billing (relevant to subscription_management, financial_management) */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Subscription & Billing</h3>
           <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Manage your subscription plan and billing details.</p>
           <div className="space-y-4">
             <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Current Plan: <span className="font-bold text-blue-500">Professional</span></p>
               <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Renews on: July 20, 2026</p>
-              <button className="mt-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Change Plan</button>
+              <Button className="mt-3 px-4 py-2 text-sm" variant="primary" theme={theme}>Change Plan</Button>
             </div>
             <div className={`p-4 rounded-lg border ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-300'}`}>
               <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Payment Method: **** **** **** 1234</p>
-              <button className="mt-3 px-4 py-2 rounded-lg bg-blue-500 text-white text-sm hover:bg-blue-600">Update Payment</button>
+              <Button className="mt-3 px-4 py-2 text-sm" variant="primary" theme={theme}>Update Payment</Button>
             </div>
           </div>
           {/* Placeholder for API call: Fetch subscription details from /api/subscriptions/current or /api/financial/billing */}
-        </div>
+        </Card>
       </div>
     </div>
   );
@@ -1371,17 +1342,17 @@ const App = () => {
   // Help & Support Page Component
   const HelpAndSupportPage = ({ theme }) => (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <div className="text-center mb-16">
-        <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-4 ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
-          <HelpCircle className="inline-block mr-2" size={20} /> <span>Help & Support</span>
-        </div>
-        <h2 className={`text-5xl font-extrabold mb-4 tracking-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>How Can We Help You?</h2>
-        <p className={`text-lg max-w-2xl mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Find answers to common questions or contact our support team.</p>
-      </div>
+      <SectionHeader
+        icon={HelpCircle}
+        title="Help & Support"
+        subtitle="How Can We Help You?"
+        description="Find answers to common questions or contact our support team."
+        theme={theme}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-16">
         {/* FAQ Section */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Frequently Asked Questions</h3>
           <div className="space-y-4">
             <details className="group">
@@ -1421,48 +1392,34 @@ const App = () => {
             </details>
           </div>
           {/* Placeholder for API call: Fetch FAQs from /api/support/faqs */}
-        </div>
+        </Card>
 
         {/* Contact Support */}
-        <div className={`p-8 rounded-2xl border ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme}>
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Contact Support</h3>
           <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Can't find what you're looking for? Reach out to our support team.</p>
           <form className="space-y-4">
-            <div>
-              <label htmlFor="supportEmail" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Your Email</label>
-              <input type="email" id="supportEmail" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="your.email@example.com" />
-            </div>
-            <div>
-              <label htmlFor="supportSubject" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Subject</label>
-              <input type="text" id="supportSubject" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Issue with my course..." />
-            </div>
-            <div>
-              <label htmlFor="supportMessage" className={`block text-sm font-medium mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
-              <textarea id="supportMessage" rows="4" className={`w-full p-3 rounded-lg border focus:ring-blue-500 focus:border-blue-500 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-gray-900'}`} placeholder="Describe your issue in detail..."></textarea>
-            </div>
-            <button type="submit" className="px-6 py-3 rounded-xl font-semibold text-white bg-blue-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              Send Message
-            </button>
+            <InputGroup theme={theme} id="supportEmail" label="Your Email" type="email" placeholder="your.email@example.com" />
+            <InputGroup theme={theme} id="supportSubject" label="Subject" placeholder="Issue with my course..." />
+            <InputGroup theme={theme} id="supportMessage" label="Message" placeholder="Describe your issue in detail..." isTextArea rows={4} />
+            <Button type="submit" variant="primary" theme={theme}>Send Message</Button>
             {/* Placeholder for API call: Submit support ticket to /api/support/tickets */}
           </form>
-        </div>
+        </Card>
 
         {/* Documentation Link */}
-        <div className={`p-8 rounded-2xl border lg:col-span-2 ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-100 backdrop-blur-lg border-gray-200'}`}>
+        <Card theme={theme} className="lg:col-span-2">
           <h3 className={`text-2xl font-bold mb-6 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Documentation & Guides</h3>
           <p className={`mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>Explore our extensive documentation for detailed guides and tutorials.</p>
-          <a href="#documentation" className="inline-flex items-center px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <FileText className="mr-2" size={20} /> View Documentation
-          </a>
+          <Button variant="primary" icon={FileText} theme={theme}>View Documentation</Button>
           {/* Placeholder for API call: Link to external documentation or /api/blog/category/tutorials */}
-        </div>
+        </Card>
       </div>
     </div>
   );
 
-
   // Dashboard Layout Component
-  const DashboardLayout = ({ theme, toggleTheme, handleLogout }) => {
+  const DashboardLayout = ({ theme, toggleTheme, handleLogout, isSidebarCollapsed, toggleSidebar }) => {
     const [activeView, setActiveView] = useState('overview'); // State to manage active dashboard view
 
     const renderContent = () => {
@@ -1503,140 +1460,67 @@ const App = () => {
     return (
       <div className={`flex min-h-screen pt-16 ${theme === 'dark' ? 'bg-black text-white' : 'bg-white text-gray-900'}`}>
         {/* Sidebar */}
-        <aside className={`w-64 fixed top-16 left-0 h-[calc(100vh-4rem)] p-4 border-r ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-50 backdrop-blur-lg border-gray-200'} transition-all duration-300 ease-in-out`}>
+        <aside className={`fixed top-16 left-0 h-[calc(100vh-4rem)] p-4 border-r ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800' : 'bg-gray-50 backdrop-blur-lg border-gray-200'} transition-all duration-300 ease-in-out
+          ${isSidebarCollapsed ? 'w-20 md:w-20' : 'w-64'}
+          ${isSidebarCollapsed ? 'hidden md:block' : 'block'}
+        `}>
           <nav className="space-y-2">
-            <a
-              href="#dashboard-overview"
-              onClick={() => setActiveView('overview')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'overview' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
+            <button
+              onClick={toggleSidebar}
+              className={`hidden md:flex items-center p-3 rounded-xl font-medium transition-colors duration-200 mb-4 w-full justify-center ${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`}
             >
-              <LayoutDashboard className="mr-3" size={20} /> Overview
-            </a>
-            <a
-              href="#dashboard-courses"
-              onClick={() => setActiveView('courses')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'courses' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <BookOpen className="mr-3" size={20} /> Courses
-            </a>
-            <a
-              href="#dashboard-products"
-              onClick={() => setActiveView('products')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'products' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Package className="mr-3" size={20} /> Products
-            </a>
-            <a
-              href="#dashboard-analytics"
-              onClick={() => setActiveView('analytics')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'analytics' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <LineChart className="mr-3" size={20} /> Analytics
-            </a>
-            <a
-              href="#dashboard-workspaces"
-              onClick={() => setActiveView('workspaces')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'workspaces' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Briefcase className="mr-3" size={20} /> Workspaces
-            </a>
-            <a
-              href="#dashboard-blog"
-              onClick={() => setActiveView('blog')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'blog' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <FileText className="mr-3" size={20} /> Blog & Content
-            </a>
-            <a
-              href="#dashboard-ai-tools"
-              onClick={() => setActiveView('ai-tools')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'ai-tools' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Bot className="mr-3" size={20} /> AI Tools
-            </a>
-            <a
-              href="#dashboard-bookings"
-              onClick={() => setActiveView('bookings')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'bookings' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <CalendarCheck className="mr-3" size={20} /> Bookings
-            </a>
-            <a
-              href="#dashboard-marketing"
-              onClick={() => setActiveView('marketing')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'marketing' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Megaphone className="mr-3" size={20} /> Marketing
-            </a>
-            <a
-              href="#dashboard-team"
-              onClick={() => setActiveView('team')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'team' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Users className="mr-3" size={20} /> Team
-            </a>
-            <a
-              href="#dashboard-media"
-              onClick={() => setActiveView('media')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'media' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} hover:bg-gray-800 hover:text-white`
-              }`}
-            >
-              <Image className="mr-3" size={20} /> Media Library
-            </a>
-            <a
-              href="#dashboard-notifications"
-              onClick={() => setActiveView('notifications')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'notifications' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} hover:bg-gray-800 hover:text-white`
-              }`}
-            >
-              <BellRing className="mr-3" size={20} /> Notifications
-            </a>
+              {isSidebarCollapsed ? <Menu size={20} /> : <X size={20} />}
+              {!isSidebarCollapsed && <span className="ml-3">Collapse</span>}
+            </button>
+            {/* Dashboard Links */}
+            {[
+              { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+              { id: 'courses', label: 'Courses', icon: BookOpen },
+              { id: 'products', label: 'Products', icon: Package },
+              { id: 'analytics', label: 'Analytics', icon: LineChart },
+              { id: 'workspaces', label: 'Workspaces', icon: Briefcase },
+              { id: 'blog', label: 'Blog & Content', icon: FileText },
+              { id: 'ai-tools', label: 'AI Tools', icon: Bot },
+              { id: 'bookings', label: 'Bookings', icon: CalendarCheck },
+              { id: 'marketing', label: 'Marketing', icon: Megaphone },
+              { id: 'team', label: 'Team', icon: Users },
+              { id: 'media', label: 'Media Library', icon: Image },
+              { id: 'notifications', label: 'Notifications', icon: BellRing },
+            ].map(item => (
+              <a
+                key={item.id}
+                href={`#dashboard-${item.id}`}
+                onClick={() => setActiveView(item.id)}
+                className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                  activeView === item.id ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+                } ${isSidebarCollapsed ? 'justify-center' : ''}`}
+              >
+                <item.icon className={`${isSidebarCollapsed ? '' : 'mr-3'}`} size={20} />
+                {!isSidebarCollapsed && item.label}
+              </a>
+            ))}
             <div className="border-t border-gray-700 my-4"></div> {/* Separator */}
-            <a
-              href="#dashboard-settings"
-              onClick={() => setActiveView('settings')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'settings' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <Settings className="mr-3" size={20} /> Settings
-            </a>
-            <a
-              href="#dashboard-help"
-              onClick={() => setActiveView('help')}
-              className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
-                activeView === 'help' ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
-              }`}
-            >
-              <HelpCircle className="mr-3" size={20} /> Help & Support
-            </a>
+            {[
+              { id: 'settings', label: 'Settings', icon: Settings },
+              { id: 'help', label: 'Help & Support', icon: HelpCircle },
+            ].map(item => (
+              <a
+                key={item.id}
+                href={`#dashboard-${item.id}`}
+                onClick={() => setActiveView(item.id)}
+                className={`flex items-center p-3 rounded-xl font-medium transition-colors duration-200 ${
+                  activeView === item.id ? 'bg-blue-600 text-white shadow-md' : `${theme === 'dark' ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-200'}`
+                } ${isSidebarCollapsed ? 'justify-center' : ''}`}
+              >
+                <item.icon className={`${isSidebarCollapsed ? '' : 'mr-3'}`} size={20} />
+                {!isSidebarCollapsed && item.label}
+              </a>
+            ))}
           </nav>
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 ml-64 p-8">
+        <main className={`flex-1 p-8 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-20' : 'ml-64'}`}>
           {renderContent()}
         </main>
       </div>
@@ -1647,7 +1531,7 @@ const App = () => {
   const HeroSection = () => (
     <section className={`relative pt-40 pb-24 text-center max-w-7xl mx-auto px-4 overflow-hidden ${theme === 'dark' ? 'bg-black' : 'bg-white'}`}>
       {/* Background glow */}
-      <div className="absolute top-1/5 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-radial from-black/10 to-transparent rounded-full animate-pulseGlow opacity-60 -z-10"></div>
+      <div className="absolute top-1/5 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full animate-pulseGlow opacity-60 -z-10"></div>
 
       <div className={`inline-flex items-center space-x-2 backdrop-blur-md border px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wider mb-8 animate-fade-in-up transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${theme === 'dark' ? 'bg-gray-800 bg-opacity-30 border-gray-700 text-white' : 'bg-gray-100 border-gray-200 text-gray-900'}`}>
         <span className="text-xl">✨</span> <span>New: AI-Powered Creator Tools</span>
@@ -1662,15 +1546,8 @@ const App = () => {
         Everything you need to build, manage, and scale your creator business. From social media management to e-commerce, courses, and beyond.
       </p>
       <div className="flex justify-center space-x-6 flex-wrap animate-fade-in-up-delay-800">
-        <a href="#trial" className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
-          Start Free Trial
-          <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
-        </a>
-        {/* Learn More button with dynamic styling for light mode */}
-        <a href="#learn" className={`px-8 py-4 rounded-xl font-semibold backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden group ${theme === 'dark' ? 'text-white border border-gray-700 bg-gray-800 bg-opacity-30 hover:bg-gray-700' : 'text-gray-900 border border-gray-300 bg-gray-200 hover:bg-gray-300'}`}>
-          Learn More
-          <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
-        </a>
+        <Button href="#trial" variant="primary" theme={theme}>Start Free Trial</Button>
+        <Button href="#learn" variant="secondary" theme={theme}>Learn More</Button>
       </div>
       <div className="flex justify-center space-x-12 flex-wrap mt-16 animate-fade-in-up-delay-1000">
         <div className="text-center">
@@ -1740,8 +1617,7 @@ const App = () => {
             <div
               key={index}
               ref={el => featureCardsRef.current[index] = el}
-              // Conditional background for light theme
-              className={`p-8 rounded-2xl border transition-all duration-600 ease-in-out transform opacity-0 translate-y-8 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden group 
+              className={`p-8 rounded-2xl border transition-all duration-600 ease-in-out transform opacity-0 translate-y-8 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden group
                 ${theme === 'dark' ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border-gray-800 hover:border-gray-700' : 'bg-gray-100 backdrop-blur-lg border-gray-200 hover:border-gray-300'}`}
             >
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-400"></div>
@@ -1825,10 +1701,7 @@ const App = () => {
     <section className={`${theme === 'dark' ? 'bg-black' : 'bg-white'} py-24 px-4 text-center shadow-xl`}>
       <h2 className={`text-5xl font-extrabold mb-6 leading-tight ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Ready to Elevate Your Creator Business?</h2>
       <p className={`text-xl mb-10 max-w-2xl mx-auto ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>Join thousands of successful creators who are building, managing, and scaling their empires with Mewayz. Start your free trial today!</p>
-      <a href="#signup" className="px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
-        Get Started Now
-        <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
-      </a>
+      <Button href="#signup" variant="primary" theme={theme}>Get Started Now</Button>
     </section>
   );
 
@@ -1924,8 +1797,8 @@ const App = () => {
                 `}
               >
                 <div className={`relative h-full w-full p-8 rounded-2xl
-                  ${theme === 'dark' 
-                    ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800 hover:border-gray-700' 
+                  ${theme === 'dark'
+                    ? 'bg-gray-900 bg-opacity-80 backdrop-blur-lg border border-gray-800 hover:border-gray-700'
                     : 'bg-gray-100 backdrop-blur-lg border border-gray-200 hover:border-gray-300'}
                 `}>
                   {plan.popular && (
@@ -1945,10 +1818,7 @@ const App = () => {
                       </li>
                     ))}
                   </ul>
-                  <a href={`#${plan.name.toLowerCase()}`} className="block w-full text-center px-8 py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden group">
-                    Get Started
-                    <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500 group-hover:left-[100%]"></span>
-                  </a>
+                  <Button href={`#${plan.name.toLowerCase()}`} variant="primary" className="block w-full text-center" theme={theme}>Get Started</Button>
                 </div>
               </div>
             ))}
@@ -2044,7 +1914,7 @@ const App = () => {
       <style>
         {`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
+
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           overflow-x: hidden;
@@ -2063,8 +1933,9 @@ const App = () => {
         }
 
         @keyframes pulseGlow {
-            from { transform: translateX(-50%) scale(1); opacity: 0.1; }
-            to { transform: translateX(-50%) scale(1.05); opacity: 0.2; }
+            0% { transform: translateX(-50%) scale(0.98); opacity: 0.1; }
+            50% { transform: translateX(-50%) scale(1.02); opacity: 0.2; }
+            100% { transform: translateX(-50%) scale(0.98); opacity: 0.1; }
         }
 
         /* Tailwind animation classes */
@@ -2134,22 +2005,35 @@ const App = () => {
       </style>
 
       {/* Pass setActiveView to Header so it can navigate dashboard views */}
-      <Header isLoggedIn={isLoggedIn} handleLogout={handleLogout} handleLogin={handleLogin} toggleTheme={toggleTheme} theme={theme} setActiveView={(view) => {
-        // This is a simplified navigation for demonstration.
-        // In a real app, you might use React Router or similar.
-        if (isLoggedIn) {
-          // If logged in, clicking dashboard links should change the active view within the dashboard
-          // This logic is handled within DashboardLayout's renderContent.
-          // For now, we just ensure the page doesn't scroll to a non-existent anchor.
-          // A full router implementation would be more robust.
-        } else {
-          // If not logged in, clicking these links will scroll to sections on the landing page
-          window.location.hash = view; // This handles the landing page navigation
-        }
-      }} />
-      
+      <Header
+        isLoggedIn={isLoggedIn}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
+        toggleTheme={toggleTheme}
+        theme={theme}
+        setActiveView={(view) => {
+          if (isLoggedIn) {
+            // This is a simplified navigation for demonstration.
+            // In a real app, you might use React Router or similar.
+            // For now, we just ensure the page doesn't scroll to a non-existent anchor.
+            // A full router implementation would be more robust.
+          } else {
+            // If not logged in, clicking these links will scroll to sections on the landing page
+            window.location.hash = view; // This handles the landing page navigation
+          }
+        }}
+        toggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isMobileMenuOpen={isMobileMenuOpen}
+      />
+
       {isLoggedIn ? (
-        <DashboardLayout theme={theme} toggleTheme={toggleTheme} handleLogout={handleLogout} />
+        <DashboardLayout
+          theme={theme}
+          toggleTheme={toggleTheme}
+          handleLogout={handleLogout}
+          isSidebarCollapsed={isSidebarCollapsed}
+          toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+        />
       ) : (
         <main>
           <HeroSection />
