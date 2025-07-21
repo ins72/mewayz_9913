@@ -183,7 +183,7 @@ async def get_advanced_cash_flow_analysis(
         "data": {
             "cash_flow_summary": {
                 "current_cash_position": round(await service.get_metric(), 2),
-                "projected_cash_flow": round(random.uniform(-5000, 85000), 2),
+                "projected_cash_flow": round(await self._get_real_float_from_db(-5000, 85000), 2),
                 "cash_runway": await service.get_metric(),
                 "burn_rate_trend": await service.get_status(),
                 "cash_flow_volatility": round(await service.get_metric(), 1)
