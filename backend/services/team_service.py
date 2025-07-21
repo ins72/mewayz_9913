@@ -29,16 +29,16 @@ class TeamService:
         db = await get_database()
         
         invitation = {
-            "_id": str(uuid.uuid4()),
-            "owner_id": user_id,
-            "workspace_id": invite_data.get("workspace_id"),
-            "email": invite_data.get("email"),
-            "role": invite_data.get("role", "member"),
-            "permissions": invite_data.get("permissions", []),
-            "status": "pending",
-            "invited_at": datetime.utcnow(),
+    "_id": str(uuid.uuid4()),
+    "owner_id": user_id,
+    "workspace_id": invite_data.get("workspace_id"),
+    "email": invite_data.get("email"),
+    "role": invite_data.get("role", "member"),
+    "permissions": invite_data.get("permissions", []),
+    "status": "pending",
+    "invited_at": datetime.utcnow(),
             "expires_at": datetime.utcnow() + datetime.timedelta(days=7)
-        }
+    }
         
         result = await db.team_invitations.insert_one(invitation)
         return invitation
@@ -49,10 +49,10 @@ class TeamService:
         db = await get_database()
         
         projects = await db.team_projects.find({
-            "$or": [
-                {"owner_id": user_id},
-                {"team_members": user_id}
-            ]
+    "$or": [
+    {"owner_id": user_id},
+    {"team_members": user_id}
+    ]
         }).sort("created_at", -1).to_list(length=None)
         
         return projects
@@ -63,18 +63,18 @@ class TeamService:
         db = await get_database()
         
         project = {
-            "_id": str(uuid.uuid4()),
-            "owner_id": user_id,
-            "name": project_data.get("name"),
-            "description": project_data.get("description", ""),
-            "status": project_data.get("status", "active"),
-            "team_members": project_data.get("team_members", []),
-            "tasks": [],
-            "deadline": project_data.get("deadline"),
-            "priority": project_data.get("priority", "medium"),
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "owner_id": user_id,
+    "name": project_data.get("name"),
+    "description": project_data.get("description", ""),
+    "status": project_data.get("status", "active"),
+    "team_members": project_data.get("team_members", []),
+    "tasks": [],
+    "deadline": project_data.get("deadline"),
+    "priority": project_data.get("priority", "medium"),
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.team_projects.insert_one(project)
         return project

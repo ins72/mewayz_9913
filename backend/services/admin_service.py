@@ -24,26 +24,26 @@ class AdminService:
         total_workspaces = await db.workspaces.count_documents({})
         
         overview = {
-            "users": {
-                "total": total_users,
-                "active": active_users,
-                "inactive": total_users - active_users
-            },
-            "workspaces": {
-                "total": total_workspaces,
-                "active": total_workspaces  # Simplified
-            },
-            "system_health": {
-                "status": "healthy",
-                "uptime": "99.9%",
-                "last_updated": datetime.utcnow()
-            },
-            "recent_activity": {
-                "new_users_24h": 12,
-                "logins_24h": 156,
-                "api_calls_24h": 2847
-            }
-        }
+    "users": {
+    "total": total_users,
+    "active": active_users,
+    "inactive": total_users - active_users
+    },
+    "workspaces": {
+    "total": total_workspaces,
+    "active": total_workspaces  # Simplified
+    },
+    "system_health": {
+    "status": "healthy",
+    "uptime": "99.9%",
+    "last_updated": datetime.utcnow()
+    },
+    "recent_activity": {
+    "new_users_24h": 12,
+    "logins_24h": 156,
+    "api_calls_24h": 2847
+    }
+    }
         
         return overview
     
@@ -55,7 +55,7 @@ class AdminService:
         users = await db.users.find({}).sort("created_at", -1).limit(100).to_list(length=None)
         
         return {
-            "users": users,
-            "total_count": len(users),
-            "filters": ["active", "inactive", "premium", "free"]
-        }
+    "users": users,
+    "total_count": len(users),
+    "filters": ["active", "inactive", "premium", "free"]
+    }

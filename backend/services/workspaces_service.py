@@ -17,10 +17,10 @@ class WorkspacesService:
         db = await get_database()
         
         workspaces = await db.workspaces.find({
-            "$or": [
-                {"user_id": user_id},
-                {"members": user_id}
-            ]
+    "$or": [
+    {"user_id": user_id},
+    {"members": user_id}
+    ]
         }).sort("created_at", -1).to_list(length=None)
         
         return workspaces
@@ -31,26 +31,26 @@ class WorkspacesService:
         db = await get_database()
         
         workspace = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "name": workspace_data.get("name"),
-            "description": workspace_data.get("description", ""),
-            "type": workspace_data.get("type", "business"),
-            "industry": workspace_data.get("industry"),
-            "settings": {
-                "is_public": workspace_data.get("is_public", False),
-                "allow_members": workspace_data.get("allow_members", True),
-                "theme": workspace_data.get("theme", "default"),
-                "branding": workspace_data.get("branding", {})
-            },
-            "members": [user_id],  # Owner is always a member
-            "member_roles": {
-                user_id: "owner"
-            },
-            "status": "active",
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "name": workspace_data.get("name"),
+    "description": workspace_data.get("description", ""),
+    "type": workspace_data.get("type", "business"),
+    "industry": workspace_data.get("industry"),
+    "settings": {
+    "is_public": workspace_data.get("is_public", False),
+    "allow_members": workspace_data.get("allow_members", True),
+    "theme": workspace_data.get("theme", "default"),
+    "branding": workspace_data.get("branding", {})
+    },
+    "members": [user_id],  # Owner is always a member
+    "member_roles": {
+    user_id: "owner"
+    },
+    "status": "active",
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.workspaces.insert_one(workspace)
         return workspace
@@ -65,9 +65,9 @@ class WorkspacesService:
         # If user_id provided, ensure user has access
         if user_id:
             query["$or"] = [
-                {"user_id": user_id},
-                {"members": user_id}
-            ]
+    {"user_id": user_id},
+    {"members": user_id}
+    ]
         
         workspace = await db.workspaces.find_one(query)
         return workspace
@@ -87,11 +87,11 @@ class WorkspacesService:
             return None
         
         update_fields = {
-            "name": update_data.get("name"),
-            "description": update_data.get("description"),
-            "industry": update_data.get("industry"),
-            "updated_at": datetime.utcnow()
-        }
+    "name": update_data.get("name"),
+    "description": update_data.get("description"),
+    "industry": update_data.get("industry"),
+    "updated_at": datetime.utcnow()
+    }
         
         # Remove None values
         update_fields = {k: v for k, v in update_fields.items() if v is not None}
@@ -102,9 +102,9 @@ class WorkspacesService:
             update_fields["settings"] = new_settings
         
         result = await db.workspaces.update_one(
-            {"_id": workspace_id},
-            {"$set": update_fields}
-        )
+    {"_id": workspace_id},
+    {"$set": update_fields}
+    )
         
         return await db.workspaces.find_one({"_id": workspace_id})
     
@@ -115,9 +115,9 @@ class WorkspacesService:
         
         # Verify ownership
         workspace = await db.workspaces.find_one({
-            "_id": workspace_id,
-            "user_id": owner_id
-        })
+    "_id": workspace_id,
+    "user_id": owner_id
+    })
         if not workspace:
             return None
         
@@ -134,12 +134,12 @@ class WorkspacesService:
         
         # Add member
         result = await db.workspaces.update_one(
-            {"_id": workspace_id},
-            {
-                "$addToSet": {"members": member_id},
-                "$set": {f"member_roles.{member_id}": role}
-            }
-        )
+    {"_id": workspace_id},
+    {
+    "$addToSet": {"members": member_id},
+    "$set": {f"member_roles.{member_id}": role}
+    }
+    )
         
         return {"success": True, "member_id": member_id, "role": role}
     
@@ -155,27 +155,27 @@ class WorkspacesService:
         
         # Generate analytics (simplified)
         analytics = {
-            "overview": {
-                "total_members": len(workspace.get("members", [])),
-                "active_projects": 5,  # Would be calculated from actual data
-                "total_tasks": 23,
-                "completed_tasks": 18
-            },
-            "activity": {
-                "daily_active_users": 3,
-                "weekly_active_users": 7,
-                "recent_activities": [
-                    {
-                        "type": "member_added",
-                        "message": "New member joined workspace",
-                        "timestamp": datetime.utcnow()
-                    }
-                ]
-            },
-            "growth": {
-                "member_growth": 15.5,  # percentage
-                "activity_growth": 8.2
-            }
-        }
+    "overview": {
+    "total_members": len(workspace.get("members", [])),
+    "active_projects": 5,  # Would be calculated from actual data
+    "total_tasks": 23,
+    "completed_tasks": 18
+    },
+    "activity": {
+    "daily_active_users": 3,
+    "weekly_active_users": 7,
+    "recent_activities": [
+    {
+    "type": "member_added",
+    "message": "New member joined workspace",
+    "timestamp": datetime.utcnow()
+    }
+    ]
+    },
+    "growth": {
+    "member_growth": 15.5,  # percentage
+    "activity_growth": 8.2
+    }
+    }
         
         return analytics

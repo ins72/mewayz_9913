@@ -40,28 +40,28 @@ class BlogService:
         slug = BlogService.generate_slug(post_data.get("title", ""))
         
         post = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "title": post_data.get("title"),
-            "slug": slug,
-            "content": post_data.get("content", ""),
-            "excerpt": post_data.get("excerpt", ""),
-            "featured_image": post_data.get("featured_image"),
-            "categories": post_data.get("categories", []),
-            "tags": post_data.get("tags", []),
-            "status": post_data.get("status", "draft"),
-            "seo": {
-                "meta_title": post_data.get("meta_title"),
-                "meta_description": post_data.get("meta_description"),
-                "og_image": post_data.get("og_image")
-            },
-            "view_count": 0,
-            "like_count": 0,
-            "comment_count": 0,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow(),
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "title": post_data.get("title"),
+    "slug": slug,
+    "content": post_data.get("content", ""),
+    "excerpt": post_data.get("excerpt", ""),
+    "featured_image": post_data.get("featured_image"),
+    "categories": post_data.get("categories", []),
+    "tags": post_data.get("tags", []),
+    "status": post_data.get("status", "draft"),
+    "seo": {
+    "meta_title": post_data.get("meta_title"),
+    "meta_description": post_data.get("meta_description"),
+    "og_image": post_data.get("og_image")
+    },
+    "view_count": 0,
+    "like_count": 0,
+    "comment_count": 0,
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow(),
             "published_at": datetime.utcnow() if post_data.get("status") == "published" else None
-        }
+    }
         
         result = await db.blog_posts.insert_one(post)
         return post
@@ -85,11 +85,11 @@ class BlogService:
         
         # Aggregate categories from posts
         pipeline = [
-            {"$match": {"user_id": user_id}},
-            {"$unwind": "$categories"},
-            {"$group": {"_id": "$categories", "count": {"$sum": 1}}},
-            {"$sort": {"count": -1}}
-        ]
+    {"$match": {"user_id": user_id}},
+    {"$unwind": "$categories"},
+    {"$group": {"_id": "$categories", "count": {"$sum": 1}}},
+    {"$sort": {"count": -1}}
+    ]
         
         categories = await db.blog_posts.aggregate(pipeline).to_list(length=None)
         return [{"name": cat["_id"], "count": cat["count"]} for cat in categories]

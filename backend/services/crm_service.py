@@ -25,20 +25,20 @@ class CRMService:
         db = await get_database()
         
         contact = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "name": contact_data.get("name"),
-            "email": contact_data.get("email"),
-            "phone": contact_data.get("phone"),
-            "company": contact_data.get("company"),
-            "position": contact_data.get("position"),
-            "status": contact_data.get("status", "lead"),
-            "tags": contact_data.get("tags", []),
-            "notes": contact_data.get("notes", ""),
-            "last_contact": contact_data.get("last_contact"),
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "name": contact_data.get("name"),
+    "email": contact_data.get("email"),
+    "phone": contact_data.get("phone"),
+    "company": contact_data.get("company"),
+    "position": contact_data.get("position"),
+    "status": contact_data.get("status", "lead"),
+    "tags": contact_data.get("tags", []),
+    "notes": contact_data.get("notes", ""),
+    "last_contact": contact_data.get("last_contact"),
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.crm_contacts.insert_one(contact)
         return contact
@@ -57,18 +57,18 @@ class CRMService:
         db = await get_database()
         
         deal = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "contact_id": deal_data.get("contact_id"),
-            "title": deal_data.get("title"),
-            "value": deal_data.get("value", 0),
-            "stage": deal_data.get("stage", "prospect"),
-            "probability": deal_data.get("probability", 0),
-            "expected_close": deal_data.get("expected_close"),
-            "notes": deal_data.get("notes", ""),
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "contact_id": deal_data.get("contact_id"),
+    "title": deal_data.get("title"),
+    "value": deal_data.get("value", 0),
+    "stage": deal_data.get("stage", "prospect"),
+    "probability": deal_data.get("probability", 0),
+    "expected_close": deal_data.get("expected_close"),
+    "notes": deal_data.get("notes", ""),
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.crm_deals.insert_one(deal)
         return deal

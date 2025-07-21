@@ -25,30 +25,30 @@ class WebsiteBuilderService:
         db = await get_database()
         
         website = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "name": website_data.get("name"),
-            "domain": website_data.get("domain"),
-            "template": website_data.get("template", "default"),
-            "pages": [
-                {
-                    "id": "home",
-                    "title": "Home",
-                    "content": {"sections": []},
-                    "slug": "/"
-                }
-            ],
-            "settings": {
-                "theme": website_data.get("theme", "light"),
-                "fonts": website_data.get("fonts", "default"),
-                "colors": website_data.get("colors", {}),
-                "seo": website_data.get("seo", {})
-            },
-            "status": "draft",
-            "published_at": None,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "name": website_data.get("name"),
+    "domain": website_data.get("domain"),
+    "template": website_data.get("template", "default"),
+    "pages": [
+    {
+    "id": "home",
+    "title": "Home",
+    "content": {"sections": []},
+    "slug": "/"
+    }
+    ],
+    "settings": {
+    "theme": website_data.get("theme", "light"),
+    "fonts": website_data.get("fonts", "default"),
+    "colors": website_data.get("colors", {}),
+    "seo": website_data.get("seo", {})
+    },
+    "status": "draft",
+    "published_at": None,
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.websites.insert_one(website)
         return website
@@ -57,26 +57,26 @@ class WebsiteBuilderService:
     async def get_templates():
         """Get available website templates"""
         templates = [
-            {
-                "id": "modern-business",
-                "name": "Modern Business",
-                "category": "business",
-                "preview": "modern-business-preview.jpg",
-                "features": ["responsive", "contact-forms", "gallery"]
-            },
-            {
-                "id": "portfolio",
-                "name": "Portfolio",
-                "category": "personal",
-                "preview": "portfolio-preview.jpg", 
-                "features": ["responsive", "gallery", "blog"]
-            },
-            {
-                "id": "ecommerce",
-                "name": "E-commerce",
-                "category": "shop",
-                "preview": "ecommerce-preview.jpg",
-                "features": ["responsive", "product-catalog", "cart", "payment"]
-            }
-        ]
+    {
+    "id": "modern-business",
+    "name": "Modern Business",
+    "category": "business",
+    "preview": "modern-business-preview.jpg",
+    "features": ["responsive", "contact-forms", "gallery"]
+    },
+    {
+    "id": "portfolio",
+    "name": "Portfolio",
+    "category": "personal",
+    "preview": "portfolio-preview.jpg", 
+    "features": ["responsive", "gallery", "blog"]
+    },
+    {
+    "id": "ecommerce",
+    "name": "E-commerce",
+    "category": "shop",
+    "preview": "ecommerce-preview.jpg",
+    "features": ["responsive", "product-catalog", "cart", "payment"]
+    }
+    ]
         return templates

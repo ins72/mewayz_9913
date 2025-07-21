@@ -25,17 +25,17 @@ class EcommerceService:
         db = await get_database()
         
         product = {
-            "_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "name": product_data.get("name"),
-            "description": product_data.get("description"),
-            "price": product_data.get("price"),
-            "category": product_data.get("category"),
-            "inventory": product_data.get("inventory", 0),
-            "status": "active",
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
+    "_id": str(uuid.uuid4()),
+    "user_id": user_id,
+    "name": product_data.get("name"),
+    "description": product_data.get("description"),
+    "price": product_data.get("price"),
+    "category": product_data.get("category"),
+    "inventory": product_data.get("inventory", 0),
+    "status": "active",
+    "created_at": datetime.utcnow(),
+    "updated_at": datetime.utcnow()
+    }
         
         result = await db.products.insert_one(product)
         return product
