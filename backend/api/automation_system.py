@@ -80,7 +80,7 @@ async def execute_workflow(
     current_user: dict = Depends(get_current_user)
 ):
     """Execute workflow manually"""
-    return await automation_service.execute_workflow(current_user["id"], workflow_id, execution_data)
+    return await automation_service.execute_workflow(current_user.get("_id") or current_user.get("id", "default-user"), workflow_id, execution_data)
 
 @router.get("/triggers/available")
 async def get_available_triggers(current_user: dict = Depends(get_current_user)):
