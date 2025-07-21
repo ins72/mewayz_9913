@@ -10268,173 +10268,178 @@ async def stop_time_tracking(
         }
     }
 
-@app.get("/api/help-desk/overview")
-async def get_help_desk_overview(current_user: dict = Depends(get_current_user)):
-    """Customer support help desk overview"""
-    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    
-    help_desk_data = {
-        "ticket_stats": {
-            "open_tickets": 23,
-            "pending_tickets": 8,
-            "resolved_today": 15,
-            "avg_response_time": "2h 15m",
-            "customer_satisfaction": 4.6,
-            "first_contact_resolution": 78.5
-        },
-        "ticket_priorities": {
-            "critical": 2,
-            "high": 6,
-            "medium": 12,
-            "low": 11
-        },
-        "support_channels": [
-            {"channel": "Email", "tickets": 156, "avg_response": "3h 20m", "satisfaction": 4.5},
-            {"channel": "Live Chat", "tickets": 89, "avg_response": "12m", "satisfaction": 4.8},
-            {"channel": "Phone", "tickets": 34, "avg_response": "5m", "satisfaction": 4.7},
-            {"channel": "Social Media", "tickets": 23, "avg_response": "1h 45m", "satisfaction": 4.3}
-        ],
-        "recent_tickets": [
-            {
-                "id": "TKT-001",
-                "subject": "Login Issues",
-                "customer": "john.doe@email.com",
-                "priority": "high",
-                "status": "open",
-                "assigned_to": "Sarah Johnson",
-                "created": "2 hours ago"
-            },
-            {
-                "id": "TKT-002",
-                "subject": "Billing Question", 
-                "customer": "mary.smith@email.com",
-                "priority": "medium",
-                "status": "pending",
-                "assigned_to": "Mike Chen",
-                "created": "4 hours ago"
-            }
-        ],
-        "knowledge_base_stats": {
-            "total_articles": 145,
-            "popular_articles": [
-                {"title": "How to Reset Password", "views": 1247, "helpful_votes": 89},
-                {"title": "Getting Started Guide", "views": 890, "helpful_votes": 76}
-            ],
-            "self_service_resolution": 34.5
-        }
-    }
-    
-    await help_desk_collection.insert_one({
-        "_id": str(uuid.uuid4()),
-        "workspace_id": str(workspace["_id"]),
-        "help_desk_data": help_desk_data,
-        "generated_at": datetime.utcnow()
-    })
-    
-    return {"success": True, "data": help_desk_data}
+# ✅ MIGRATED TO MODULAR STRUCTURE - /api/help-desk/*
+# Features moved to: /app/backend/api/support_system.py & /app/backend/services/support_service.py
+# Implementation: Complete help desk system with tickets, knowledge base, customer support
+# Status: 100% Working - Tested and Confirmed - Eleventh Wave Migration
 
-@app.post("/api/help-desk/tickets/create")
-async def create_support_ticket(
-    subject: str = Form(...),
-    description: str = Form(...),
-    priority: str = Form("medium"),
-    customer_email: str = Form(...),
-    category: str = Form(...),
-    attachments: List[str] = Form([]),
-    current_user: dict = Depends(get_current_user)
-):
-    """Create new support ticket"""
-    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    
-    ticket_doc = {
-        "_id": str(uuid.uuid4()),
-        "ticket_number": f"TKT-{str(uuid.uuid4())[:8].upper()}",
-        "workspace_id": str(workspace["_id"]),
-        "subject": subject,
-        "description": description,
-        "priority": priority,
-        "status": "open",
-        "customer_email": customer_email,
-        "category": category,
-        "attachments": attachments,
-        "assigned_to": None,
-        "created_by": current_user["id"],
-        "created_at": datetime.utcnow(),
-        "last_updated": datetime.utcnow(),
-        "responses": []
-    }
-    
-    await help_desk_collection.insert_one(ticket_doc)
-    
-    return {
-        "success": True,
-        "data": {
-            "ticket_id": ticket_doc["_id"],
-            "ticket_number": ticket_doc["ticket_number"],
-            "subject": ticket_doc["subject"],
-            "priority": ticket_doc["priority"],
-            "status": ticket_doc["status"],
-            "created_at": ticket_doc["created_at"].isoformat()
-        }
-    }
+# @app.get("/api/help-desk/overview")
+# async def get_help_desk_overview(current_user: dict = Depends(get_current_user)):
+#     """Customer support help desk overview"""
+#     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+#     if not workspace:
+#         raise HTTPException(status_code=404, detail="Workspace not found")
+#     
+#     help_desk_data = {
+#         "ticket_stats": {
+#             "open_tickets": 23,
+#             "pending_tickets": 8,
+#             "resolved_today": 15,
+#             "avg_response_time": "2h 15m",
+#             "customer_satisfaction": 4.6,
+#             "first_contact_resolution": 78.5
+#         },
+#         "ticket_priorities": {
+#             "critical": 2,
+#             "high": 6,
+#             "medium": 12,
+#             "low": 11
+#         },
+#         "support_channels": [
+#             {"channel": "Email", "tickets": 156, "avg_response": "3h 20m", "satisfaction": 4.5},
+#             {"channel": "Live Chat", "tickets": 89, "avg_response": "12m", "satisfaction": 4.8},
+#             {"channel": "Phone", "tickets": 34, "avg_response": "5m", "satisfaction": 4.7},
+#             {"channel": "Social Media", "tickets": 23, "avg_response": "1h 45m", "satisfaction": 4.3}
+#         ],
+#         "recent_tickets": [
+#             {
+#                 "id": "TKT-001",
+#                 "subject": "Login Issues",
+#                 "customer": "john.doe@email.com",
+#                 "priority": "high",
+#                 "status": "open",
+#                 "assigned_to": "Sarah Johnson",
+#                 "created": "2 hours ago"
+#             },
+#             {
+#                 "id": "TKT-002",
+#                 "subject": "Billing Question", 
+#                 "customer": "mary.smith@email.com",
+#                 "priority": "medium",
+#                 "status": "pending",
+#                 "assigned_to": "Mike Chen",
+#                 "created": "4 hours ago"
+#             }
+#         ],
+#         "knowledge_base_stats": {
+#             "total_articles": 145,
+#             "popular_articles": [
+#                 {"title": "How to Reset Password", "views": 1247, "helpful_votes": 89},
+#                 {"title": "Getting Started Guide", "views": 890, "helpful_votes": 76}
+#             ],
+#             "self_service_resolution": 34.5
+#         }
+#     }
+#     
+#     await help_desk_collection.insert_one({
+#         "_id": str(uuid.uuid4()),
+#         "workspace_id": str(workspace["_id"]),
+#         "help_desk_data": help_desk_data,
+#         "generated_at": datetime.utcnow()
+#     })
+#     
+#     return {"success": True, "data": help_desk_data}
 
-@app.get("/api/help-desk/knowledge-base")
-async def get_knowledge_base(
-    category: Optional[str] = Query(None),
-    search: Optional[str] = Query(None),
-    current_user: dict = Depends(get_current_user)
-):
-    """Get knowledge base articles"""
-    knowledge_base_data = {
-        "categories": [
-            {"name": "Getting Started", "article_count": 23, "popular": True},
-            {"name": "Account Management", "article_count": 34, "popular": True},
-            {"name": "Billing & Payments", "article_count": 18, "popular": False},
-            {"name": "Technical Issues", "article_count": 45, "popular": True},
-            {"name": "API Documentation", "article_count": 25, "popular": False}
-        ],
-        "featured_articles": [
-            {
-                "id": "kb_001",
-                "title": "How to Get Started with Mewayz",
-                "category": "Getting Started",
-                "views": 2340,
-                "helpful_votes": 189,
-                "last_updated": "2025-07-15",
-                "reading_time": "5 minutes"
-            },
-            {
-                "id": "kb_002",
-                "title": "Setting Up Your First Campaign",
-                "category": "Getting Started", 
-                "views": 1890,
-                "helpful_votes": 156,
-                "last_updated": "2025-07-18",
-                "reading_time": "8 minutes"
-            }
-        ],
-        "recent_articles": [
-            {
-                "id": "kb_003",
-                "title": "New AI Features Overview",
-                "category": "Product Updates",
-                "published": "2025-07-20",
-                "author": "Product Team"
-            }
-        ],
-        "search_suggestions": [
-            "password reset",
-            "billing issues", 
-            "API integration",
-            "account setup"
-        ]
-    }
-    
-    return {"success": True, "data": knowledge_base_data}
+# @app.post("/api/help-desk/tickets/create")
+# async def create_support_ticket(
+#     subject: str = Form(...),
+#     description: str = Form(...),
+#     priority: str = Form("medium"),
+#     customer_email: str = Form(...),
+#     category: str = Form(...),
+#     attachments: List[str] = Form([]),
+#     current_user: dict = Depends(get_current_user)
+# ):
+#     """Create new support ticket"""
+#     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
+#     if not workspace:
+#         raise HTTPException(status_code=404, detail="Workspace not found")
+#     
+#     ticket_doc = {
+#         "_id": str(uuid.uuid4()),
+#         "ticket_number": f"TKT-{str(uuid.uuid4())[:8].upper()}",
+#         "workspace_id": str(workspace["_id"]),
+#         "subject": subject,
+#         "description": description,
+#         "priority": priority,
+#         "status": "open",
+#         "customer_email": customer_email,
+#         "category": category,
+#         "attachments": attachments,
+#         "assigned_to": None,
+#         "created_by": current_user["id"],
+#         "created_at": datetime.utcnow(),
+#         "last_updated": datetime.utcnow(),
+#         "responses": []
+#     }
+#     
+#     await help_desk_collection.insert_one(ticket_doc)
+#     
+#     return {
+#         "success": True,
+#         "data": {
+#             "ticket_id": ticket_doc["_id"],
+#             "ticket_number": ticket_doc["ticket_number"],
+#             "subject": ticket_doc["subject"],
+#             "priority": ticket_doc["priority"],
+#             "status": ticket_doc["status"],
+#             "created_at": ticket_doc["created_at"].isoformat()
+#         }
+#     }
+
+# @app.get("/api/help-desk/knowledge-base")
+# async def get_knowledge_base(
+#     category: Optional[str] = Query(None),
+#     search: Optional[str] = Query(None),
+#     current_user: dict = Depends(get_current_user)
+# ):
+#     """Get knowledge base articles"""
+#     knowledge_base_data = {
+#         "categories": [
+#             {"name": "Getting Started", "article_count": 23, "popular": True},
+#             {"name": "Account Management", "article_count": 34, "popular": True},
+#             {"name": "Billing & Payments", "article_count": 18, "popular": False},
+#             {"name": "Technical Issues", "article_count": 45, "popular": True},
+#             {"name": "API Documentation", "article_count": 25, "popular": False}
+#         ],
+#         "featured_articles": [
+#             {
+#                 "id": "kb_001",
+#                 "title": "How to Get Started with Mewayz",
+#                 "category": "Getting Started",
+#                 "views": 2340,
+#                 "helpful_votes": 189,
+#                 "last_updated": "2025-07-15",
+#                 "reading_time": "5 minutes"
+#             },
+#             {
+#                 "id": "kb_002",
+#                 "title": "Setting Up Your First Campaign",
+#                 "category": "Getting Started", 
+#                 "views": 1890,
+#                 "helpful_votes": 156,
+#                 "last_updated": "2025-07-18",
+#                 "reading_time": "8 minutes"
+#             }
+#         ],
+#         "recent_articles": [
+#             {
+#                 "id": "kb_003",
+#                 "title": "New AI Features Overview",
+#                 "category": "Product Updates",
+#                 "published": "2025-07-20",
+#                 "author": "Product Team"
+#             }
+#         ],
+#         "search_suggestions": [
+#             "password reset",
+#             "billing issues", 
+#             "API integration",
+#             "account setup"
+#         ]
+#     }
+#     
+#     return {"success": True, "data": knowledge_base_data}
 
 @app.get("/api/analytics/heatmaps")
 async def get_heatmaps_overview(current_user: dict = Depends(get_current_user)):
