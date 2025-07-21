@@ -185,9 +185,11 @@ class CRMWebsiteBuilderTester:
         # Test Get Websites (sites)
         self.test_endpoint("/website-builder/websites", "GET", description="User's websites")
         
-        # Test Create Website
+        # Test Create Website (with unique name to avoid conflicts)
+        import random
+        unique_id = random.randint(1000, 9999)
         website_data = {
-            "name": "My Business Website",
+            "name": f"Business Website {unique_id}",
             "title": "Professional Business Solutions",
             "description": "A comprehensive business website showcasing our services and expertise",
             "domain": None,  # Will use subdomain
