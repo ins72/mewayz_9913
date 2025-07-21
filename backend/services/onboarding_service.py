@@ -16,6 +16,7 @@ class OnboardingService:
     async def get_database(self):
         """Get database connection with lazy initialization"""
         if not self.db:
+            from core.database import get_database
             self.db = get_database()
         return self.db
     
