@@ -262,7 +262,7 @@ async def get_performance_metrics(
     current_user: dict = Depends(get_current_user)
 ):
     """Get automation performance metrics"""
-    return await automation_service.get_performance_metrics(current_user["id"], period)
+    return await automation_service.get_performance_metrics(current_user.get("_id") or current_user.get("id", "default-user"), period)
 
 @router.post("/rules/create")
 async def create_automation_rule(
