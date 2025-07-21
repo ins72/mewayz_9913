@@ -473,7 +473,6 @@ async def get_comprehensive_social_report(
     return await social_service.get_comprehensive_report(
         current_user.get("_id") or current_user.get("id", "default-user"), period
     )
-        """Get database connection"""
         from core.database import get_database
         return get_database()
     
