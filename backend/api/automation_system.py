@@ -270,7 +270,7 @@ async def create_automation_rule(
     current_user: dict = Depends(get_current_user)
 ):
     """Create custom automation rule"""
-    return await automation_service.create_automation_rule(current_user["id"], rule_data.dict())
+    return await automation_service.create_automation_rule(current_user.get("_id") or current_user.get("id", "default-user"), rule_data.dict())
 
 @router.get("/integrations/available")
 async def get_available_integrations(current_user: dict = Depends(get_current_user)):
