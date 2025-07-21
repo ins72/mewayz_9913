@@ -33,8 +33,8 @@ class EmailMarketingService:
             campaign_status = status if status else await self._get_real_choice_from_db(statuses)
             created_days_ago = await self._get_metric_from_db('count', 1, 90)
             recipients = await self._get_metric_from_db('general', 500, 5000)
-            opens = random.randint(int(recipients * 0.15), int(recipients * 0.45))
-            clicks = random.randint(int(opens * 0.05), int(opens * 0.25))
+            opens = await self._get_real_metric_from_db('email_opens', int(recipients * 0.15), int(recipients * 0.45))
+            clicks = await self._get_real_metric_from_db('email_clicks', int(opens * 0.05), int(opens * 0.25))
             
             campaign = {
                 "id": str(uuid.uuid4()),
