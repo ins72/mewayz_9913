@@ -65,7 +65,7 @@ bio_sites_collection = database.bio_sites
 products_collection = database.products
 services_collection = database.services
 courses_collection = database.courses
-contacts_collection = database.contacts
+# ✅ MIGRATED: contacts_collection moved to /app/backend/services/crm_service.py
 orders_collection = database.orders
 bookings_collection = database.bookings
 invoices_collection = database.invoices
