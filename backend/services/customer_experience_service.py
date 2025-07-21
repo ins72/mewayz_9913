@@ -578,6 +578,8 @@ class CustomerExperienceService:
         }
         
         return {"success": True, "data": optimization}
+    
+    async def get_cx_analytics_dashboard(self, user_id: str, period: str = "monthly"):
         """Get comprehensive customer experience analytics dashboard"""
         
         # Handle user_id properly
