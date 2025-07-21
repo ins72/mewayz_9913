@@ -65,7 +65,8 @@ async def save_onboarding_progress(
     current_user: dict = Depends(get_current_user)
 ):
     """Save user's onboarding progress"""
-    return await onboarding_service.save_progress(current_user["id"], progress.dict())
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await onboarding_service.save_progress(user_id, progress.dict())
 
 @router.get("/steps")
 async def get_onboarding_steps(current_user: dict = Depends(get_current_user)):
