@@ -232,6 +232,27 @@ for module_name in working_modules:
             print(f"  ❌ Failed to include {module_name}: {str(e)}")
 
 print(f"\n🎉 Successfully included {included_count} routers in the FastAPI application!")
+
+# Include additional missing endpoints manually
+try:
+    from api.missing_endpoints_fix import marketing_router, workspace_router, integration_router
+    app.include_router(marketing_router)
+    app.include_router(workspace_router)  
+    app.include_router(integration_router)
+    included_count += 3
+    print("  ✅ Included missing marketing, workspace, and integration routers")
+except Exception as e:
+    print(f"  ❌ Failed to include missing endpoints: {str(e)}")
+
+# Include admin configuration router manually
+try:
+    from api.admin_configuration import router as admin_config_router
+    app.include_router(admin_config_router, prefix="/api/admin-config", tags=["Admin Configuration"])
+    included_count += 1
+    print("  ✅ Included admin configuration router at /api/admin-config")
+except Exception as e:
+    print(f"  ❌ Failed to include admin configuration router: {str(e)}")
+
 print(f"📊 Platform ready with {included_count} operational API endpoints!")
 
 # Core system endpoints
