@@ -42,10 +42,11 @@ class BackendTester:
     def test_health_check(self):
         """Test basic health check endpoint"""
         try:
-            response = self.session.get(f"{BACKEND_URL}/health", timeout=10)
+            # Try the root endpoint first (based on main.py)
+            response = self.session.get(f"{BACKEND_URL}/", timeout=10)
             if response.status_code == 200:
                 data = response.json()
-                self.log_result("Health Check", True, f"Backend is healthy - {data.get('app_name', 'Unknown')}", data)
+                self.log_result("Health Check", True, f"Backend is healthy - {data.get('message', 'Unknown')}", data)
                 return True
             else:
                 self.log_result("Health Check", False, f"Health check failed with status {response.status_code}")
