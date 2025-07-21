@@ -443,7 +443,7 @@ async def batch_generate_content(
     current_user: dict = Depends(get_current_user)
 ):
     """Generate multiple content pieces in batch"""
-    return await ai_service.batch_generate(current_user["id"], [req.dict() for req in requests])
+    return await ai_service.batch_generate(current_user.get("_id") or current_user.get("id", "default-user"), [req.dict() for req in requests])
 
 @router.get("/inspiration")
 async def get_content_inspiration(
