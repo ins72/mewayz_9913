@@ -269,7 +269,8 @@ async def get_escrow_analytics(
 @router.get("/settings")
 async def get_escrow_settings(current_user: dict = Depends(get_current_user)):
     """Get user's escrow settings"""
-    return await escrow_service.get_settings(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await escrow_service.get_settings(user_id)
 
 @router.put("/settings")
 async def update_escrow_settings(
