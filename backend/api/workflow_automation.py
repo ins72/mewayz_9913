@@ -238,6 +238,77 @@ async def list_workflows(
             detail=f"Failed to list workflows: {str(e)}"
         )
 
+@router.get("/stats", response_model=Dict[str, Any])
+async def get_workflow_stats(
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """
+    Get workflow statistics for the current user
+    """
+    try:
+        user_id = current_user.get("_id")
+        if not user_id:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid user authentication"
+            )
+        
+        from core.database import get_database
+        db = get_database()
+        
+        # Get workflow counts by status
+        status_stats = await db.workflows.aggregate([
+            {"$match": {"user_id": user_id}},
+            {"$group": {"_id": "$status", "count": {"$sum": 1}}}
+        ]).to_list(length=None)
+        
+        # Get total executions
+        total_executions = await db.workflow_executions.count_documents({"user_id": user_id})
+        successful_executions = await db.workflow_executions.count_documents({
+            "user_id": user_id,
+            "status": "completed"
+        })
+        
+        # Get recent activity
+        from datetime import timedelta
+        seven_days_ago = datetime.utcnow() - timedelta(days=7)
+        recent_executions = await db.workflow_executions.count_documents({
+            "user_id": user_id,
+            "started_at": {"$gte": seven_days_ago}
+        })
+        
+        # Calculate success rate
+        success_rate = (successful_executions / total_executions * 100) if total_executions > 0 else 0
+        
+        # Get active workflow count
+        active_workflows = len([w for w in workflow_engine.active_workflows.values() if w.user_id == user_id])
+        
+        return {
+            "success": True,
+            "stats": {
+                "total_workflows": sum(stat["count"] for stat in status_stats),
+                "active_workflows": active_workflows,
+                "workflows_by_status": status_stats,
+                "total_executions": total_executions,
+                "successful_executions": successful_executions,
+                "success_rate": round(success_rate, 1),
+                "recent_executions_7d": recent_executions
+            },
+            "generated_at": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.SYSTEM,
+            f"Failed to get workflow stats: {str(e)}",
+            error=e,
+            user_id=current_user.get("_id")
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get workflow stats: {str(e)}"
+        )
+
 @router.get("/{workflow_id}", response_model=Dict[str, Any])
 async def get_workflow(
     workflow_id: str,
