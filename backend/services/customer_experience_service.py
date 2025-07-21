@@ -783,3 +783,6 @@ class CustomerExperienceService:
             return items
         except:
             return items
+
+# Create service instance
+customer_experience_service = CustomerExperienceService()
