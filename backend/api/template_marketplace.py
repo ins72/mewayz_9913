@@ -267,7 +267,7 @@ async def rate_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Rate and review template"""
-    return await marketplace_service.rate_template(current_user["id"], template_id, rating.dict())
+    return await marketplace_service.rate_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, rating.dict())
 
 @router.get("/{template_id}/reviews")
 async def get_template_reviews(
