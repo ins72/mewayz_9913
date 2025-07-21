@@ -59,7 +59,8 @@ async def get_survey(
 ):
     """Get a specific survey"""
     try:
-        survey = await SurveyService.get_survey(survey_id, current_user["id"])
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        survey = await SurveyService.get_survey(survey_id, user_id)
         if not survey:
             raise HTTPException(status_code=404, detail="Survey not found")
         return {"success": True, "data": survey}
