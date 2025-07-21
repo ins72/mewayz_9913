@@ -36,6 +36,10 @@ def get_database():
     """Get database instance"""
     return db.database
 
+async def get_database_async():
+    """Get database instance (async version for compatibility)"""
+    return db.database
+
 # Collection getters - these will return the actual collections
 def get_users_collection():
     return db.database.users
