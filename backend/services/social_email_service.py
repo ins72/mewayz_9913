@@ -609,106 +609,16 @@ social_email_service = SocialEmailService()
         except:
             return choices[0]
 
+    async def _get_sample_from_db(self, choices: list, k: int):
+        """Get sample from database based on actual data patterns"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.find_one({"type": "sample_distribution"})
+            if result and result.get("common_samples"):
+                return result["common_samples"][:k]
+            return random.sample(choices, k=min(k, len(choices)))
+        except:
+            return random.sample(choices, k=min(k, len(choices)))
+
 # Global service instance
 social_email_service = SocialEmailService()
-        """Get metric from database instead of random generation"""
-        try:
-            db = await self.get_database()
-            
-            if metric_type == 'impressions':
-                # Get real social media impressions
-                result = await db.social_analytics.aggregate([
-                    {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
-                ]).to_list(length=1)
-                return result[0]["total"] if result else min_val
-                
-            elif metric_type == 'count':
-                # Get real counts from relevant collections
-                count = await db.user_activities.count_documents({})
-                return max(min_val, min(count, max_val))
-                
-            else:
-                # Get general metrics
-                result = await db.analytics.aggregate([
-                    {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
-                ]).to_list(length=1)
-                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
-                
-        except Exception as e:
-            # Fallback to midpoint if database query fails
-            return (min_val + max_val) // 2
-    
-    async def _get_float_metric_from_db(self, min_val: float, max_val: float):
-        """Get float metric from database"""
-        try:
-            db = await self.get_database()
-            result = await db.analytics.aggregate([
-                {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
-            ]).to_list(length=1)
-            return result[0]["avg"] if result else (min_val + max_val) / 2
-        except:
-            return (min_val + max_val) / 2
-    
-    async def _get_choice_from_db(self, choices: list):
-        """Get choice from database based on actual data patterns"""
-        try:
-            db = await self.get_database()
-            # Use actual data distribution to make choices
-            result = await db.analytics.find_one({"type": "choice_distribution"})
-            if result and result.get("most_common"):
-                return result["most_common"]
-            return choices[0]  # Default to first choice
-        except:
-            return choices[0]
-    
-    async def _get_count_from_db(self, min_val: int, max_val: int):
-        """Get count from database"""
-        try:
-            db = await self.get_database()
-            count = await db.user_activities.count_documents({})
-            return max(min_val, min(count, max_val))
-        except:
-            return min_val
-
-    
-    async def _get_email_metric(self, min_val: int, max_val: int):
-        """Get email metrics from database"""
-        try:
-            db = await self.get_database()
-            if max_val > 1000:  # Subscriber counts or send volumes
-                result = await db.email_campaigns_detailed.aggregate([
-                    {"$group": {"_id": None, "avg": {"$avg": "$recipients_count"}}}
-                ]).to_list(length=1)
-                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
-            else:  # Open rates, click rates
-                result = await db.email_campaigns_detailed.aggregate([
-                    {"$group": {"_id": None, "avg": {"$avg": "$clicked_count"}}}
-                ]).to_list(length=1)
-                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
-        except:
-            return (min_val + max_val) // 2
-    
-    async def _get_email_rate(self, min_val: float, max_val: float):
-        """Get email rates from database"""
-        try:
-            db = await self.get_database()
-            result = await db.email_campaigns_detailed.aggregate([
-                {"$match": {"sent_count": {"$gt": 0}}},
-                {"$group": {"_id": None, "avg": {"$avg": {"$divide": ["$opened_count", "$sent_count"]}}}},
-            ]).to_list(length=1)
-            return result[0]["avg"] if result else (min_val + max_val) / 2
-        except:
-            return (min_val + max_val) / 2
-    
-    async def _get_email_status(self, choices: list):
-        """Get most common email status"""
-        try:
-            db = await self.get_database()
-            result = await db.email_campaigns_detailed.aggregate([
-                {"$group": {"_id": "$status", "count": {"$sum": 1}}},
-                {"$sort": {"count": -1}},
-                {"$limit": 1}
-            ]).to_list(length=1)
-            return result[0]["_id"] if result and result[0]["_id"] in choices else choices[0]
-        except:
-            return choices[0]
