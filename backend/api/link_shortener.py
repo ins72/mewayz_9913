@@ -109,7 +109,9 @@ async def get_link_shortener_dashboard(current_user: dict = Depends(get_current_
         ]
         
         clicks_result = await short_links_collection.aggregate(clicks_pipeline).to_list(length=1)
-        total_clicks = clicks_result[0].get("total_clicks", 0) if clicks_result else 0
+        total_clicks = 0
+        if clicks_result and len(clicks_result) > 0 and clicks_result[0]:
+            total_clicks = clicks_result[0].get("total_clicks", 0) or 0
         
         # Get top performing links
         top_links = await short_links_collection.find(
