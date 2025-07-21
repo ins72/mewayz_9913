@@ -378,8 +378,25 @@ class BackendTester:
         self.test_endpoint("/metrics", test_name="Platform System Metrics")
         
         # Test API documentation
-        self.test_endpoint("/docs", test_name="API Documentation")
-        self.test_endpoint("/redoc", test_name="API ReDoc Documentation")
+        try:
+            response = self.session.get(f"{BACKEND_URL}/docs", timeout=10)
+            if response.status_code == 200:
+                self.log_result("API Documentation", True, "Swagger UI accessible")
+            else:
+                self.log_result("API Documentation", False, f"Docs failed with status {response.status_code}")
+        except Exception as e:
+            self.log_result("API Documentation", False, f"Docs error: {str(e)}")
+            
+        try:
+            response = self.session.get(f"{BACKEND_URL}/openapi.json", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                paths_count = len(data.get('paths', {}))
+                self.log_result("OpenAPI Specification", True, f"OpenAPI spec available with {paths_count} endpoints", {"paths_count": paths_count})
+            else:
+                self.log_result("OpenAPI Specification", False, f"OpenAPI failed with status {response.status_code}")
+        except Exception as e:
+            self.log_result("OpenAPI Specification", False, f"OpenAPI error: {str(e)}")
     
     def test_service_method_fixes(self):
         """Test service method fixes for previously failing services"""
