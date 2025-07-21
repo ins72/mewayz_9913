@@ -97,7 +97,40 @@ class FinalAuditTester:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False, None
     
-    def test_data_consistency(self, endpoint: str, test_name: str):
+    def test_endpoint_with_method(self, endpoint: str, method: str = "GET", test_name: str = None):
+        """Test a specific API endpoint with specified method"""
+        if not test_name:
+            test_name = endpoint
+            
+        try:
+            url = f"{API_BASE}{endpoint}"
+            
+            if method.upper() == "GET":
+                response = self.session.get(url, timeout=10)
+            elif method.upper() == "POST":
+                response = self.session.post(url, json={}, timeout=10)
+            else:
+                self.log_result(test_name, False, f"Unsupported method: {method}")
+                return False, None
+            
+            if response.status_code == 200:
+                try:
+                    data = response.json()
+                    self.log_result(test_name, True, f"Working perfectly ({len(str(data))} chars response)", data)
+                    return True, data
+                except:
+                    self.log_result(test_name, True, f"Working perfectly (non-JSON response)")
+                    return True, None
+            elif response.status_code == 404:
+                self.log_result(test_name, False, f"Endpoint not found (404)")
+                return False, None
+            else:
+                self.log_result(test_name, False, f"Status {response.status_code}: {response.text[:100]}")
+                return False, None
+                
+        except Exception as e:
+            self.log_result(test_name, False, f"Request error: {str(e)}")
+            return False, None
         """Test data consistency across multiple calls"""
         try:
             url = f"{API_BASE}{endpoint}"
