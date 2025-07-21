@@ -735,3 +735,14 @@ class SocialMediaService:
                 }
             }
         }
+    
+    def _calculate_campaign_duration(self, start_date: str, end_date: str) -> int:
+        """Calculate campaign duration in days"""
+        try:
+            if start_date and end_date:
+                start = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                end = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                return (end - start).days
+            return 30  # Default duration
+        except Exception:
+            return 30  # Default duration on error
