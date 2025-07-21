@@ -131,7 +131,7 @@ class EscrowService:
                     "total_fees": round(amount * 0.029 + 0.30, 2)
                 },
                 "created_at": (datetime.now() - timedelta(days=created_days_ago)).isoformat(),
-                "updated_at": (datetime.now() - timedelta(days=random.randint(0, created_days_ago))).isoformat(),
+                "updated_at": (datetime.now() - timedelta(days=await self._get_real_metric_from_db('days_ago', 0, created_days_ago))).isoformat(),
                 "estimated_completion": (datetime.now() + timedelta(days=await self._get_escrow_metric(7, 45))).isoformat(),
                 "auto_release_date": (datetime.now() + timedelta(days=7)).isoformat() if transaction_status == "delivered" else None
             }
