@@ -103,6 +103,10 @@ class EscrowService:
     async def create_transaction(self, user_id: str, transaction_data: dict):
         """Create new escrow transaction"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         transaction_id = str(uuid.uuid4())
         amount = transaction_data.get("amount", 0)
         
