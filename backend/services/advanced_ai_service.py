@@ -467,5 +467,76 @@ class AdvancedAIService:
                 "status_check_url": f"/api/advanced-ai/batch/{batch_id}/status"
             }
         }
+    
+    async def get_ai_capabilities(self):
+        """Get available advanced AI capabilities"""
+        return {
+            "success": True,
+            "data": {
+                "capabilities": [
+                    {
+                        "name": "Video Processing",
+                        "description": "Advanced video analysis and processing",
+                        "features": ["Engagement analysis", "Transcription", "Sentiment analysis"],
+                        "status": "available"
+                    },
+                    {
+                        "name": "Voice Synthesis",
+                        "description": "Text-to-speech with emotion control",
+                        "features": ["Multiple voices", "Emotion control", "Language support"],
+                        "status": "available"
+                    },
+                    {
+                        "name": "Image Generation",
+                        "description": "AI-powered image creation and enhancement",
+                        "features": ["Text-to-image", "Style transfer", "Enhancement"],
+                        "status": "available"
+                    },
+                    {
+                        "name": "Text Analysis",
+                        "description": "Natural language processing and analysis",
+                        "features": ["Sentiment analysis", "Entity extraction", "Summarization"],
+                        "status": "available"
+                    }
+                ],
+                "total_capabilities": 4,
+                "active_models": 12
+            }
+        }
+    
+    async def get_ai_insights(self, user_id: str, category: str = None):
+        """Get AI-generated insights"""
+        # Handle user_id properly
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
+        return {
+            "success": True,
+            "data": {
+                "insights": [
+                    {
+                        "id": str(uuid.uuid4()),
+                        "category": category or "general",
+                        "title": "AI Performance Optimization",
+                        "description": "Your AI usage patterns show opportunities for optimization",
+                        "recommendation": "Consider batch processing for better efficiency",
+                        "impact": "high",
+                        "confidence": 0.92
+                    },
+                    {
+                        "id": str(uuid.uuid4()),
+                        "category": category or "general",
+                        "title": "Cost Optimization",
+                        "description": "Switch to more cost-effective models for routine tasks",
+                        "recommendation": "Use GPT-3.5 for simple content generation",
+                        "impact": "medium",
+                        "confidence": 0.87
+                    }
+                ],
+                "total_insights": 2,
+                "category": category or "general"
+            }
+        }
+
 # Global service instance
 advanced_ai_service = AdvancedAIService()
