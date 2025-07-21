@@ -303,7 +303,7 @@ async def analyze_text(
 ):
     """Analyze text using NLP"""
     return await ai_service.analyze_text(
-        current_user["id"], text, analysis_types.split(","), language
+        current_user.get("_id") or current_user.get("id", "default-user"), text, analysis_types.split(","), language
     )
 
 @router.get("/models/available")
