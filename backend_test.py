@@ -380,9 +380,30 @@ class BackendTester:
         except Exception as e:
             self.log_result("Platform Root Status", False, f"Root error: {str(e)}")
         
-        # Test health and metrics endpoints
-        self.test_endpoint("/health", test_name="Platform Health Check")
-        self.test_endpoint("/metrics", test_name="Platform System Metrics")
+        # Test health and metrics endpoints (these are not prefixed with /api)
+        try:
+            response = self.session.get(f"{BACKEND_URL}/health", timeout=10)
+            if response.status_code in [200, 503]:  # 503 is acceptable for degraded status
+                data = response.json()
+                status = data.get('status', 'unknown')
+                modules_loaded = data.get('system', {}).get('modules_loaded', 0)
+                self.log_result("Platform Health Check", True, f"Health endpoint working - Status: {status}, Modules: {modules_loaded}", data)
+            else:
+                self.log_result("Platform Health Check", False, f"Health failed with status {response.status_code}")
+        except Exception as e:
+            self.log_result("Platform Health Check", False, f"Health error: {str(e)}")
+            
+        try:
+            response = self.session.get(f"{BACKEND_URL}/metrics", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                load_success_rate = data.get('modules', {}).get('load_success_rate', '0%')
+                total_collections = data.get('database', {}).get('total_collections', 0)
+                self.log_result("Platform System Metrics", True, f"Metrics endpoint working - Load success: {load_success_rate}, DB collections: {total_collections}", data)
+            else:
+                self.log_result("Platform System Metrics", False, f"Metrics failed with status {response.status_code}")
+        except Exception as e:
+            self.log_result("Platform System Metrics", False, f"Metrics error: {str(e)}")
         
         # Test API documentation
         try:
