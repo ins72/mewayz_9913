@@ -309,7 +309,7 @@ async def analyze_text(
 @router.get("/models/available")
 async def get_available_ai_models(current_user: dict = Depends(get_current_user)):
     """Get available AI models and their capabilities"""
-    return await ai_service.get_available_models(current_user["id"])
+    return await ai_service.get_available_models(current_user.get("_id") or current_user.get("id", "default-user"))
 
 @router.get("/usage/analytics")
 async def get_ai_usage_analytics(
