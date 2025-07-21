@@ -286,7 +286,7 @@ async def report_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Report template for policy violations"""
-    return await marketplace_service.report_template(current_user["id"], template_id, report.dict())
+    return await marketplace_service.report_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, report.dict())
 
 @router.get("/analytics/dashboard")
 async def get_creator_dashboard(current_user: dict = Depends(get_current_user)):
