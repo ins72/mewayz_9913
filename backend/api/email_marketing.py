@@ -320,7 +320,8 @@ async def get_performance_report(
 @router.get("/segments")
 async def get_segments(current_user: dict = Depends(get_current_user)):
     """Get audience segments"""
-    return await email_service.get_segments(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_segments(user_id)
 
 @router.post("/segments")
 async def create_segment(
