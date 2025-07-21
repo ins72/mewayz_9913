@@ -152,7 +152,8 @@ async def get_transactions(
     current_user: dict = Depends(get_current_user)
 ):
     """Get user's escrow transactions"""
-    return await escrow_service.get_transactions(current_user["id"], status, transaction_type, limit)
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await escrow_service.get_transactions(user_id, status, transaction_type, limit)
 
 @router.post("/transactions")
 async def create_transaction(
