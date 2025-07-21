@@ -35,11 +35,12 @@ async def create_survey(
 ):
     """Create a new survey"""
     try:
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
         questions_data = json.loads(questions)
         settings_data = json.loads(settings)
         
         survey = await SurveyService.create_survey(
-            user_id=current_user["id"],
+            user_id=user_id,
             title=title,
             description=description,
             questions=questions_data,
