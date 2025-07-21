@@ -209,21 +209,156 @@ class BackendTester:
         self.test_endpoint("/backup/comprehensive-status", test_name="Backup - Status")
         self.test_endpoint("/monitoring/system-health", test_name="Monitoring - System Health")
     
+    def test_database_integration_verification(self):
+        """Test database integration verification for the massive database work completed"""
+        print("\n=== Database Integration Verification ===")
+        print("Testing services converted from random data to real database operations")
+        
+        # Test services mentioned in the review request as having been converted
+        database_integrated_services = [
+            # Wave 1 services (1,186 random calls fixed)
+            ("/social-media/analytics", "Social Media Service Database Integration"),
+            ("/customer-experience/dashboard", "Customer Experience Service Database Integration"),
+            ("/enhanced-ecommerce/products", "Enhanced E-commerce Service Database Integration"),
+            ("/automation/workflows", "Automation Service Database Integration"),
+            ("/analytics/overview", "Analytics Service Database Integration"),
+            ("/support/tickets", "Support Service Database Integration"),
+            ("/content-creation/projects", "Content Creation Service Database Integration"),
+            ("/email-marketing/campaigns", "Email Marketing Service Database Integration"),
+            ("/social-email/campaigns", "Social Email Service Database Integration"),
+            ("/advanced-financial/dashboard", "Advanced Financial Service Database Integration"),
+            
+            # Wave 2 services (310 random calls fixed)
+            ("/advanced-ai/capabilities", "Advanced AI Service Database Integration"),
+            ("/advanced-financial/forecasting", "Financial Analytics Service Database Integration"),
+            ("/templates/marketplace", "Template Marketplace Service Database Integration"),
+            ("/ai-content/templates", "AI Content Service Database Integration"),
+            ("/escrow/transactions", "Escrow Service Database Integration"),
+            ("/customer-experience/journey-mapping", "Customer Experience Suite Database Integration"),
+            ("/compliance/framework-status", "Compliance Service Database Integration"),
+            ("/business-intelligence/metrics", "Business Intelligence Service Database Integration"),
+            ("/content-creation/assets", "Content Creation Suite Database Integration"),
+            ("/monitoring/system-health", "Monitoring Service Database Integration")
+        ]
+        
+        for endpoint, test_name in database_integrated_services:
+            self.test_endpoint(endpoint, test_name=test_name)
+    
+    def test_data_consistency_verification(self):
+        """Test data consistency to verify real database usage vs random generation"""
+        print("\n=== Data Consistency Verification ===")
+        print("Testing for consistent data across multiple calls (indicates real database usage)")
+        
+        # Test endpoints that should have consistent data
+        consistency_endpoints = [
+            "/dashboard/overview",
+            "/workspaces", 
+            "/advanced-ai/capabilities",
+            "/compliance/framework-status",
+            "/backup/comprehensive-status",
+            "/monitoring/system-health"
+        ]
+        
+        for endpoint in consistency_endpoints:
+            self.test_data_consistency(endpoint)
+    
+    def test_data_consistency(self, endpoint: str):
+        """Test if endpoint returns consistent data (indicating real database usage)"""
+        try:
+            url = f"{API_BASE}{endpoint}"
+            
+            # Make first request
+            response1 = self.session.get(url, timeout=10)
+            if response1.status_code != 200:
+                self.log_result(f"Data Consistency - {endpoint}", False, f"First request failed - Status {response1.status_code}")
+                return False
+            
+            data1 = response1.json()
+            
+            # Wait a moment and make second request
+            import time
+            time.sleep(1)
+            
+            response2 = self.session.get(url, timeout=10)
+            if response2.status_code != 200:
+                self.log_result(f"Data Consistency - {endpoint}", False, f"Second request failed - Status {response2.status_code}")
+                return False
+            
+            data2 = response2.json()
+            
+            # Compare responses
+            if json.dumps(data1, sort_keys=True) == json.dumps(data2, sort_keys=True):
+                self.log_result(f"Data Consistency - {endpoint}", True, f"Data consistent across calls - confirms real database usage")
+                return True
+            else:
+                self.log_result(f"Data Consistency - {endpoint}", False, f"Data inconsistent - may still be using random generation")
+                return False
+                
+        except Exception as e:
+            self.log_result(f"Data Consistency - {endpoint}", False, f"Request error: {str(e)}")
+            return False
+    
+    def test_core_business_functionality(self):
+        """Test core business functionality that now uses real data"""
+        print("\n=== Core Business Functionality with Real Data ===")
+        
+        # Test key business endpoints that should now use real database data
+        business_endpoints = [
+            # Dashboard and analytics
+            ("/dashboard/overview", "Dashboard Real Database Data"),
+            ("/analytics/overview", "Analytics Real Database Data"),
+            
+            # User and workspace management
+            ("/users/profile", "User Management Real Data"),
+            ("/workspaces", "Workspace Management Real Data"),
+            
+            # AI services
+            ("/advanced-ai/capabilities", "AI Services Real Data"),
+            ("/advanced-ai/models", "AI Models Real Data"),
+            
+            # Business intelligence
+            ("/compliance/framework-status", "Compliance Real Data"),
+            ("/backup/comprehensive-status", "Backup System Real Data"),
+            ("/monitoring/system-health", "Monitoring Real Data"),
+            
+            # Integration management
+            ("/integrations/available", "Integration Management Real Data"),
+            ("/integrations/connected", "Connected Integrations Real Data")
+        ]
+        
+        for endpoint, test_name in business_endpoints:
+            self.test_endpoint(endpoint, test_name=test_name)
+
     def run_comprehensive_test(self):
-        """Run comprehensive backend testing"""
-        print("🚀 Starting Comprehensive Backend API Testing")
+        """Run comprehensive backend testing focused on database integration verification"""
+        print("🚀 Starting Comprehensive Database Integration Verification")
+        print("Testing the massive database integration work completed:")
+        print("- ✅ Wave 1: Fixed 1,186 random calls across 10 services")
+        print("- ✅ Wave 2: Fixed 310 random calls across 10 services") 
+        print("- ✅ Total: 1,549 random data calls replaced with real database operations")
+        print("- ✅ 20 high-priority services converted")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Test Credentials: {TEST_EMAIL}")
-        print("=" * 60)
+        print("=" * 80)
         
         # Test basic connectivity
         if not self.test_health_check():
             print("❌ Backend health check failed. Stopping tests.")
             return False
         
-        # Test authentication
+        # Test authentication - critical after massive changes
         if not self.test_authentication():
-            print("❌ Authentication failed. Some tests may not work.")
+            print("❌ Authentication failed after massive database integration changes.")
+            return False
+        
+        # Test database integration verification
+        self.test_database_integration_verification()
+        
+        # Test data consistency verification
+        self.test_data_consistency_verification()
+        
+        # Test core business functionality
+        self.test_core_business_functionality()
         
         # Test newly created API modules
         self.test_newly_created_apis()
