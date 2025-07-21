@@ -261,10 +261,26 @@ class FinalAuditTester:
             self.log_result("API Endpoint Count", False, f"Error: {str(e)}")
         
         # Health check
-        health_success, health_data = self.test_endpoint("/health", "System Health")
+        try:
+            response = self.session.get(f"{BACKEND_URL}/health", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("System Health", True, f"Health endpoint working - {data.get('status', 'unknown')}", data)
+            else:
+                self.log_result("System Health", False, f"Health endpoint error: {response.status_code}")
+        except Exception as e:
+            self.log_result("System Health", False, f"Health endpoint error: {str(e)}")
         
         # Metrics check  
-        metrics_success, metrics_data = self.test_endpoint("/metrics", "System Metrics")
+        try:
+            response = self.session.get(f"{BACKEND_URL}/metrics", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                self.log_result("System Metrics", True, f"Metrics endpoint working", data)
+            else:
+                self.log_result("System Metrics", False, f"Metrics endpoint error: {response.status_code}")
+        except Exception as e:
+            self.log_result("System Metrics", False, f"Metrics endpoint error: {str(e)}")
         
         print("\n=== 5. PERFORMANCE TESTING ===")
         print("Testing response times and system performance")
