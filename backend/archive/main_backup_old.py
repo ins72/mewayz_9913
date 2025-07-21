@@ -9457,56 +9457,9 @@ innovation_lab_collection = database.innovation_lab
 # - Automation performance metrics and optimization suggestions
 # Migration completed in Tenth Wave - December 2024
 
-# ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
+# ===== ADVANCED E-COMMERCE FEATURES =====
 
-@app.get("/api/social/listening/overview")
-async def get_social_listening_overview(current_user: dict = Depends(get_current_user)):
-    """Get social media listening overview and insights"""
-    workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
-    if not workspace:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    
-    # Mock data for social listening overview
-    overview_data = {
-        "total_mentions": 1247,
-        "sentiment_score": 78.5,
-        "engagement_rate": 4.2,
-        "reach": 156789,
-        "trending_hashtags": ["#business", "#growth", "#innovation"],
-        "top_platforms": [
-            {"platform": "Twitter", "mentions": 456, "sentiment": 82.1},
-            {"platform": "Instagram", "mentions": 389, "sentiment": 75.3},
-            {"platform": "Facebook", "mentions": 234, "sentiment": 79.8},
-            {"platform": "LinkedIn", "mentions": 168, "sentiment": 85.2}
-        ],
-        "recent_mentions": [
-            {
-                "id": str(uuid.uuid4()),
-                "platform": "Twitter",
-                "author": "@businessuser",
-                "content": "Great insights from this company!",
-                "sentiment": "positive",
-                "engagement": 45,
-                "timestamp": datetime.utcnow().isoformat()
-            }
-        ]
-    }
-    
-    return {
-        "success": True,
-        "data": overview_data
-    }
-
-# ✅ MIGRATED: ADVANCED SOCIAL MEDIA SUITE - All social media management features migrated to /app/backend/api/social_media_suite.py
-# Features migrated include:
-# - Social media listening and monitoring with brand mentions tracking
-# - Publishing calendar and post creation with optimization
-# - Analytics and engagement tracking with performance insights
-# - Influencer discovery and collaboration management
-# - Social media automation rules and comprehensive reporting  
-# Migration completed in Eleventh Wave - December 2024
-
-# ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
+@app.get("/api/customer-journey/mapping")
 async def get_customer_journey_mapping(current_user: dict = Depends(get_current_user)):
     """Advanced customer journey mapping and optimization"""
     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
