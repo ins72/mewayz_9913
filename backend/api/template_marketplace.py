@@ -224,7 +224,7 @@ async def get_template_details(
     current_user: dict = Depends(get_current_user)
 ):
     """Get detailed template information"""
-    return await marketplace_service.get_template_details(current_user["id"], template_id)
+    return await marketplace_service.get_template_details(current_user.get("_id") or current_user.get("id", "default-user"), template_id)
 
 @router.put("/{template_id}")
 async def update_template(
