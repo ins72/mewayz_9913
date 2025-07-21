@@ -263,7 +263,7 @@ class FinalAuditTester:
         # Health check
         health_success, health_data = self.test_endpoint("/health", "System Health")
         
-        # Metrics check
+        # Metrics check  
         metrics_success, metrics_data = self.test_endpoint("/metrics", "System Metrics")
         
         print("\n=== 5. PERFORMANCE TESTING ===")
