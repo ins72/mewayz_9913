@@ -10,6 +10,7 @@ import uuid
 import random
 
 from core.advanced_data_service import advanced_data_service
+from core.auth import get_current_user
 from services.advanced_financial_service import AdvancedFinancialService
 
 router = APIRouter()
