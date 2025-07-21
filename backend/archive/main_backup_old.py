@@ -13925,7 +13925,7 @@ sales_pipelines_collection = database.sales_pipelines
 lead_scoring_collection = database.lead_scoring
 customer_journey_collection = database.customer_journey
 supply_chain_collection = database.supply_chain
-inventory_optimization_collection = database.inventory_optimization
+# ✅ MIGRATED: inventory_optimization_collection moved to /app/backend/services/enhanced_ecommerce_service.py
 vendor_management_collection = database.vendor_management
 hr_management_collection = database.hr_management
 payroll_system_collection = database.payroll_system
