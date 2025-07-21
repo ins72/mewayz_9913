@@ -356,6 +356,10 @@ class EscrowService:
     async def create_dispute(self, user_id: str, dispute_data: dict):
         """Create new dispute case"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         dispute_id = str(uuid.uuid4())
         
         dispute = {
