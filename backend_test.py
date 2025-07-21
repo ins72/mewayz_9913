@@ -361,28 +361,78 @@ class BackendTester:
         for endpoint, test_name in business_endpoints:
             self.test_endpoint(endpoint, test_name=test_name)
 
+    def test_critical_service_fixes(self):
+        """Test the specific services that were failing and have been fixed"""
+        print("\n=== Testing Critical Service Fixes ===")
+        print("Testing the 4 specific services that were previously failing:")
+        print("1. Customer Experience Service - was import error")
+        print("2. Social Email Service - was syntax error") 
+        print("3. Email Marketing Service - was runtime error")
+        print("4. Content Creation Service - was endpoint not found")
+        
+        # Test the specific endpoints that were failing
+        critical_endpoints = [
+            ("/customer-experience/dashboard", "Customer Experience - Dashboard (was import error)"),
+            ("/social-email/campaigns", "Social Email - Campaigns (was syntax error)"),
+            ("/email-marketing/campaigns", "Email Marketing - Campaigns (was runtime error)"),
+            ("/content-creation/projects", "Content Creation - Projects (was endpoint not found)")
+        ]
+        
+        for endpoint, test_name in critical_endpoints:
+            self.test_endpoint(endpoint, test_name=test_name)
+    
+    def test_service_method_mapping(self):
+        """Test service method mapping to confirm instances are properly instantiated"""
+        print("\n=== Testing Service Method Mapping ===")
+        print("Verifying service instances are properly instantiated and methods are accessible")
+        
+        # Test various service endpoints to verify method mapping
+        service_mapping_endpoints = [
+            ("/customer-experience/dashboard", "Customer Experience Service Instance"),
+            ("/customer-experience/journey-mapping", "Customer Experience Journey Mapping"),
+            ("/customer-experience/feedback", "Customer Experience Feedback"),
+            ("/social-email/campaigns", "Social Email Service Instance"),
+            ("/social-email/templates", "Social Email Templates"),
+            ("/email-marketing/campaigns", "Email Marketing Service Instance"),
+            ("/content-creation/projects", "Content Creation Service Instance"),
+            ("/content-creation/templates", "Content Creation Templates"),
+            ("/content-creation/assets", "Content Creation Assets")
+        ]
+        
+        for endpoint, test_name in service_mapping_endpoints:
+            self.test_endpoint(endpoint, test_name=test_name)
+
     def run_comprehensive_test(self):
-        """Run comprehensive backend testing focused on database integration verification"""
-        print("🚀 Starting Final Comprehensive Database Integration Verification")
-        print("Testing the massive database integration work completed:")
-        print("- ✅ Wave 1: Fixed 1,186 random calls across 10 services")
-        print("- ✅ Wave 2: Fixed 310 random calls across 10 services") 
-        print("- ✅ Wave 3: Fixed 836 random calls across remaining services")
-        print("- ✅ Total: 2,386 random data calls eliminated (96.0% success rate)")
-        print("- ✅ 30+ database collections with comprehensive real data")
+        """Run comprehensive backend testing focused on critical service fixes verification"""
+        print("🚀 Starting Critical Service Fixes Verification Testing")
+        print("Testing after critical fixes to backend services:")
+        print("- 🔧 Customer Experience Service: Fixed missing service instance declaration")
+        print("- 🔧 Social Email Service: Fixed severe syntax issues with misplaced helper methods")
+        print("- 🔧 Email Marketing Service: Added missing service instance declaration")
+        print("- 🔧 Content Creation Service: Fixed recursive method call issue in invite_collaborator")
         print(f"Backend URL: {BACKEND_URL}")
         print(f"Test Credentials: {TEST_EMAIL}")
         print("=" * 80)
         
-        # Test authentication - critical after massive changes
+        # Test basic health and authentication first
+        if not self.test_health_check():
+            print("❌ Health check failed - backend may not be running.")
+            return False
+            
         if not self.test_authentication():
-            print("❌ Authentication failed after massive database integration changes.")
+            print("❌ Authentication failed - cannot proceed with testing.")
             return False
         
-        # Test core working endpoints
+        # Test the critical service fixes
+        self.test_critical_service_fixes()
+        
+        # Test service method mapping
+        self.test_service_method_mapping()
+        
+        # Test core working endpoints to ensure no regressions
         self.test_core_working_endpoints()
         
-        # Test data consistency verification
+        # Test data consistency to ensure database integration wasn't broken
         self.test_data_consistency_verification()
         
         # Print summary
