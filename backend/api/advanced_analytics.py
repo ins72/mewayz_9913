@@ -345,7 +345,8 @@ async def get_conversion_funnel(current_user: dict = Depends(get_current_user)):
 @router.get("/reports")
 async def get_reports(current_user: dict = Depends(get_current_user)):
     """Get available reports"""
-    return await analytics_service.get_reports(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await analytics_service.get_reports(user_id)
 
 @router.post("/reports/custom")
 async def create_custom_report(
