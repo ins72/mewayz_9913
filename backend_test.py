@@ -7,6 +7,7 @@ Tests authentication and newly created API endpoints
 import requests
 import json
 import sys
+import time
 from typing import Dict, Any, Optional
 
 # Backend URL from environment
