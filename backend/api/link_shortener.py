@@ -250,7 +250,8 @@ async def get_short_links(
         # Enhance links with additional data
         for link in links:
             link["short_url"] = f"https://mwz.to/{link['short_code']}"
-            link["is_expired"] = link.get("expires_at", datetime.max) < datetime.utcnow()
+            expires_at = link.get("expires_at")
+            link["is_expired"] = expires_at is not None and expires_at < datetime.utcnow()
             link["has_password"] = bool(link.get("password"))
             # Remove password from response for security
             link.pop("password", None)
