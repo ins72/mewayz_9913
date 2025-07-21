@@ -221,7 +221,8 @@ async def get_email_templates(
     current_user: dict = Depends(get_current_user)
 ):
     """Get email templates"""
-    return await email_service.get_templates(current_user["id"], category)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_templates(user_id, category)
 
 @router.post("/templates")
 async def create_template(
