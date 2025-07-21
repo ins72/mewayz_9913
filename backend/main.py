@@ -95,6 +95,10 @@ app.include_router(promotions_referrals.router, prefix="/api/promotions", tags=[
 app.include_router(ai_token_management.router, prefix="/api/tokens", tags=["AI Token Management"])
 app.include_router(course_management.router, prefix="/api/courses", tags=["Course & Learning Management"])
 
+# FIFTH WAVE - CRM & WEBSITE BUILDER SYSTEMS - Newly Migrated
+app.include_router(crm_management.router, prefix="/api/crm", tags=["CRM Management"])
+app.include_router(website_builder.router, prefix="/api/website-builder", tags=["Website Builder"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
