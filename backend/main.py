@@ -116,6 +116,11 @@ app.include_router(social_email_integration.router, prefix="/api/social-email", 
 app.include_router(advanced_financial_analytics.router, prefix="/api/advanced-financial", tags=["Advanced Financial Analytics"])
 app.include_router(enhanced_ecommerce.router, prefix="/api/enhanced-ecommerce", tags=["Enhanced E-commerce"])
 
+# TENTH WAVE - AUTOMATION, ADVANCED AI & SUPPORT SYSTEMS - Newly Migrated
+app.include_router(automation_system.router, prefix="/api/automation", tags=["Automation System"])
+app.include_router(advanced_ai_suite.router, prefix="/api/advanced-ai", tags=["Advanced AI Suite"])
+app.include_router(support_system.router, prefix="/api/support", tags=["Support System"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
