@@ -19,7 +19,8 @@ router = APIRouter()
 async def get_surveys(current_user: dict = Depends(get_current_user)):
     """Get all surveys for the workspace"""
     try:
-        surveys = await SurveyService.get_workspace_surveys(current_user["id"])
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        surveys = await SurveyService.get_workspace_surveys(user_id)
         return {"success": True, "data": surveys}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
