@@ -122,7 +122,8 @@ async def get_campaigns(
     current_user: dict = Depends(get_current_user)
 ):
     """Get user's email campaigns with filtering"""
-    return await email_service.get_campaigns(current_user["id"], status)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_campaigns(user_id, status)
 
 @router.post("/campaigns")
 async def create_campaign(
