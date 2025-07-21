@@ -497,7 +497,7 @@ class RateLimitingSystemTester:
 def main():
     """Main test execution"""
     # Get backend URL from environment
-    backend_url = "https://b41c19cb-929f-464f-8cdb-d0cbbfea76f7.preview.emergentagent.com"
+    backend_url = "https://79c6a2ec-1e50-47a1-b6f6-409bf241961e.preview.emergentagent.com"
     
     print(f"🌊 RATE LIMITING & THROTTLING SYSTEM BACKEND TEST")
     print(f"🔗 Backend URL: {backend_url}")

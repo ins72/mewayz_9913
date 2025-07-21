@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timedelta
 
 # Configuration
-BACKEND_URL = "https://b41c19cb-929f-464f-8cdb-d0cbbfea76f7.preview.emergentagent.com"
+BACKEND_URL = "https://79c6a2ec-1e50-47a1-b6f6-409bf241961e.preview.emergentagent.com"
 LOGIN_EMAIL = "tmonnens@outlook.com"
 LOGIN_PASSWORD = "Voetballen5"
 
