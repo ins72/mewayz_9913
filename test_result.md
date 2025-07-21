@@ -3958,14 +3958,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Legal Pages System"
-    - "Ultra-Comprehensive Admin Dashboard System"
-    - "Bio Sites & Link-in-Bio"
-    - "Website Builder System"
-    - "Ultra-Advanced Gamification System"
+    - "Team Management & Workspace Collaboration System"
+    - "Form Builder System"
   stuck_tasks:
-    - "Legal Pages System"
-    - "Ultra-Comprehensive Admin Dashboard System"
+    - "Team Management & Workspace Collaboration System"
+    - "Form Builder System"
+    - "Google OAuth Integration (First Wave Regression)"
   test_all: false
   test_priority: "high_first"
 
