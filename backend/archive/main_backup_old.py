@@ -6059,41 +6059,7 @@ event_tracking_collection = database.event_tracking
 # ✅ MEDIA LIBRARY & FILE MANAGEMENT - IMPLEMENTED - /app/backend/api/media_library.py
 
 
-
-@app.post("/api/files/upload")
-async def upload_file(
-    file: UploadFile = File(...),
-    folder: Optional[str] = Form("/uploads"),
-    alt_text: Optional[str] = Form(""),
-    current_user: dict = Depends(get_current_user)
-):
-    """Upload file to media library"""
-    file_doc = {
-        "_id": str(uuid.uuid4()),
-        "original_name": file.filename,
-        "name": file.filename,
-        "type": file.content_type.split('/')[0] if file.content_type else "unknown",
-        "size": 0,  # Would be calculated from actual file
-        "folder": folder,
-        "mime_type": file.content_type,
-        "uploaded_by": current_user["id"],
-        "uploaded_at": datetime.utcnow(),
-        "alt_text": alt_text,
-        "url": f"https://cdn.example.com{folder}/{file.filename}"
-    }
-    
-    await file_management_collection.insert_one(file_doc)
-    
-    return {
-        "success": True,
-        "data": {
-            "file_id": file_doc["_id"],
-            "name": file_doc["name"],
-            "url": file_doc["url"],
-            "type": file_doc["type"],
-            "uploaded_at": file_doc["uploaded_at"].isoformat()
-        }
-    }
+# ===== EMAIL TEMPLATE MANAGEMENT (20+ ENDPOINTS) =====
 
 @app.get("/api/files/{file_id}")
 async def get_file_details(
