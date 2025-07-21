@@ -131,6 +131,41 @@ class FinalAuditTester:
         except Exception as e:
             self.log_result(test_name, False, f"Request error: {str(e)}")
             return False, None
+    
+    def test_data_consistency(self, endpoint: str, test_name: str):
+        """Test data consistency across multiple calls"""
+        try:
+            url = f"{API_BASE}{endpoint}"
+            
+            # Make first call
+            response1 = self.session.get(url, timeout=10)
+            if response1.status_code != 200:
+                self.log_result(test_name, False, f"First call failed: {response1.status_code}")
+                return False
+            
+            time.sleep(0.1)  # Small delay
+            
+            # Make second call
+            response2 = self.session.get(url, timeout=10)
+            if response2.status_code != 200:
+                self.log_result(test_name, False, f"Second call failed: {response2.status_code}")
+                return False
+            
+            # Compare responses
+            data1 = response1.json()
+            data2 = response2.json()
+            
+            if data1 == data2:
+                self.log_result(test_name, True, "Data consistent across calls - confirms real database usage")
+                return True
+            else:
+                self.log_result(test_name, False, "Data inconsistent - may still be using random generation")
+                self.random_data_calls += 1
+                return False
+                
+        except Exception as e:
+            self.log_result(test_name, False, f"Consistency test error: {str(e)}")
+            return False
         """Test data consistency across multiple calls"""
         try:
             url = f"{API_BASE}{endpoint}"
