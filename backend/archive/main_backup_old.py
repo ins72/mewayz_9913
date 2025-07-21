@@ -4377,10 +4377,7 @@ async def generate_completion_certificate(
     
     return {"success": True, "data": certificate_data}
 
-# ===== COMPREHENSIVE GLOBALIZATION & LOCALIZATION SYSTEM =====
-
-# Globalization collections
-languages_collection = database.supported_languages
+# ✅ INTERNATIONALIZATION & LOCALIZATION SYSTEM - IMPLEMENTED - /app/backend/api/i18n_system.py
 translations_collection = database.translations
 user_locale_preferences_collection = database.user_locale_preferences
 regional_content_collection = database.regional_content
