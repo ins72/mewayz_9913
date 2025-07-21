@@ -109,7 +109,7 @@ async def send_notification(
     - **expires_at**: Optional expiration time (ISO format)
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -203,7 +203,7 @@ async def send_notification(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to send notification: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -291,7 +291,7 @@ async def send_bulk_notification(
         await professional_logger.log(
             LogLevel.INFO, LogCategory.SYSTEM,
             f"Bulk notification sent to {successful}/{len(bulk_request.user_ids)} users",
-            user_id=current_user.get("user_id"),
+            user_id=current_user.get("_id"),
             details={
                 "total_users": len(bulk_request.user_ids),
                 "successful": successful,
@@ -315,7 +315,7 @@ async def send_bulk_notification(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to send bulk notification: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -337,7 +337,7 @@ async def get_notification_history(
     - **channel**: Optional filter by delivery channel
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -410,7 +410,7 @@ async def get_notification_history(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get notification history: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -428,7 +428,7 @@ async def mark_notification_read(
     - **notification_id**: The ID of the notification to mark as read
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -472,7 +472,7 @@ async def mark_notification_read(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to mark notification as read: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -487,7 +487,7 @@ async def mark_all_notifications_read(
     Mark all notifications as read for the current user
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -523,7 +523,7 @@ async def mark_all_notifications_read(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to mark all notifications as read: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -538,7 +538,7 @@ async def get_notification_stats(
     Get notification statistics for the current user
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -603,7 +603,7 @@ async def get_notification_stats(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get notification stats: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -618,7 +618,7 @@ async def get_connection_status(
     Get real-time connection status for the current user
     """
     try:
-        user_id = current_user.get("user_id")
+        user_id = current_user.get("_id")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -657,7 +657,7 @@ async def get_connection_status(
             LogLevel.ERROR, LogCategory.SYSTEM,
             f"Failed to get connection status: {str(e)}",
             error=e,
-            user_id=current_user.get("user_id")
+            user_id=current_user.get("_id")
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
