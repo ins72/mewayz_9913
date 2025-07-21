@@ -16,7 +16,8 @@ class EmailMarketingService:
     async def get_database(self):
         """Get database connection with lazy initialization"""
         if not self.db:
-            self.db = await get_database()
+            from core.database import get_database_async
+            self.db = await get_database_async()
         return self.db
     
     async def get_campaigns(self, user_id: str, status: Optional[str] = None):
