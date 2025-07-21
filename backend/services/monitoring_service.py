@@ -239,7 +239,7 @@ class MonitoringService:
                 "error_rate_trend": "decreasing",
                 "resource_utilization_trend": "stable"
             },
-            "time_series": reversed(time_series),  # Most recent first
+            "time_series": list(reversed(time_series)),  # Most recent first
             "recommendations": [
                 "Consider implementing Redis caching for frequently accessed data",
                 "Monitor database query performance during peak hours",
