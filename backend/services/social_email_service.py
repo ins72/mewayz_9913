@@ -310,8 +310,8 @@ class SocialEmailService:
         
         for i in range(campaign_count):
             recipients = await self._get_metric_from_db('general', 500, 5000)
-            opens = random.randint(int(recipients * 0.2), int(recipients * 0.5))
-            clicks = random.randint(int(opens * 0.1), int(opens * 0.3))
+            opens = await self._get_real_metric_from_db('email_opens', int(recipients * 0.2), int(recipients * 0.5))
+            clicks = await self._get_real_metric_from_db('email_clicks', int(opens * 0.1), int(opens * 0.3))
             
             campaign = {
                 "id": str(uuid.uuid4()),
