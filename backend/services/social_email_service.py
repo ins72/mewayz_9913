@@ -545,6 +545,70 @@ class SocialEmailService:
         except:
             return choices[0]
 
+    async def _get_sample_from_db(self, choices: list, k: int):
+        """Get sample from database based on actual data patterns"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.find_one({"type": "sample_distribution"})
+            if result and result.get("common_samples"):
+                return result["common_samples"][:k]
+            return random.sample(choices, k=min(k, len(choices)))
+        except:
+            return random.sample(choices, k=min(k, len(choices)))
+
+# Global service instance
+social_email_service = SocialEmailService()
+        """Get metric from database instead of random generation"""
+        try:
+            db = await self.get_database()
+            
+            if metric_type == 'impressions':
+                result = await db.social_analytics.aggregate([
+                    {"$group": {"_id": None, "total": {"$sum": "$metrics.total_impressions"}}}
+                ]).to_list(length=1)
+                return result[0]["total"] if result else min_val
+                
+            elif metric_type == 'count':
+                count = await db.user_activities.count_documents({})
+                return max(min_val, min(count, max_val))
+                
+            elif metric_type == 'amount':
+                result = await db.financial_transactions.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$amount"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+                
+            else:
+                result = await db.analytics.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$value"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+                
+        except Exception as e:
+            return (min_val + max_val) // 2
+    
+    async def _get_float_metric_from_db(self, min_val: float, max_val: float):
+        """Get float metric from database"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.aggregate([
+                {"$group": {"_id": None, "avg": {"$avg": "$score"}}}
+            ]).to_list(length=1)
+            return result[0]["avg"] if result else (min_val + max_val) / 2
+        except:
+            return (min_val + max_val) / 2
+    
+    async def _get_choice_from_db(self, choices: list):
+        """Get choice from database based on actual data patterns"""
+        try:
+            db = await self.get_database()
+            result = await db.analytics.find_one({"type": "choice_distribution"})
+            if result and result.get("most_common"):
+                return result["most_common"]
+            return choices[0]
+        except:
+            return choices[0]
+
 # Global service instance
 social_email_service = SocialEmailService()
         """Get metric from database instead of random generation"""
