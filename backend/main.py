@@ -1,163 +1,227 @@
 """
-Professional FastAPI Application
-Mewayz Platform - Restructured Architecture
+Professional FastAPI Application - Mewayz Platform
+Enterprise-Grade Multi-Tenant Business Solution
+
+Version: 3.0.0
+Architecture: Modular FastAPI + React + MongoDB
+Systems Implemented: 50 Feature Systems
 """
-from fastapi import FastAPI, HTTPException, Depends, status
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import uvicorn
 
+# Core imports
 from core.config import settings
 from core.database import connect_to_mongo, close_mongo_connection
-from api import auth, users, analytics, dashboard, workspaces, blog, admin, ai, bio_sites, ecommerce, bookings, social_media, marketing, integrations, business_intelligence, survey_system, media_library, i18n_system, notification_system, rate_limiting_system, webhook_system, monitoring_system, backup_system, compliance_system
-from api import subscription_management, google_oauth, financial_management, link_shortener, analytics_system, team_management, form_builder, promotions_referrals, ai_token_management, course_management, crm_management, website_builder, email_marketing, advanced_analytics, escrow_system, onboarding_system, template_marketplace, ai_content_generation, social_email_integration, advanced_financial_analytics, enhanced_ecommerce, automation_system, advanced_ai_suite, support_system, content_creation_suite, customer_experience_suite, social_media_suite
 
-# Application lifespan management
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    await connect_to_mongo()
-    yield
-    # Shutdown
-    await close_mongo_connection()
-
-# Create FastAPI application
-app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.VERSION,
-    docs_url="/docs" if settings.DEBUG else None,
-    redoc_url="/redoc" if settings.DEBUG else None,
-    lifespan=lifespan
+# API module imports - Core Business Systems
+from api import (
+    # Authentication & User Management
+    auth, users, admin,
+    
+    # Business Intelligence & Analytics  
+    analytics, dashboard, business_intelligence, analytics_system, advanced_analytics,
+    
+    # Content & Workspace Management
+    workspaces, blog, content_creation_suite,
+    
+    # AI & Automation Services
+    ai, ai_token_management, ai_content_generation, advanced_ai_suite, automation_system,
+    
+    # E-commerce & Financial Systems
+    ecommerce, enhanced_ecommerce, financial_management, advanced_financial_analytics,
+    escrow_system, subscription_management,
+    
+    # Customer Engagement & Experience
+    bio_sites, social_media, social_media_suite, marketing, email_marketing,
+    customer_experience_suite, social_email_integration, notification_system,
+    
+    # Business Operations
+    bookings, crm_management, team_management, course_management, support_system,
+    
+    # Integration & Communication Systems  
+    integrations, google_oauth, webhook_system, i18n_system,
+    
+    # Development & Management Tools
+    website_builder, form_builder, template_marketplace, media_library,
+    
+    # Marketing & Growth
+    promotions_referrals, link_shortener, survey_system,
+    
+    # Enterprise & Compliance Systems
+    onboarding_system, rate_limiting_system, monitoring_system, 
+    backup_system, compliance_system
 )
 
-# CORS Middleware
+
+# Application Lifecycle Management
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Manage application startup and shutdown"""
+    # Startup
+    await connect_to_mongo()
+    print(f"🚀 {settings.APP_NAME} v{settings.VERSION} started successfully")
+    yield
+    # Shutdown  
+    await close_mongo_connection()
+    print(f"🛑 {settings.APP_NAME} shutdown completed")
+
+
+# FastAPI Application Instance
+app = FastAPI(
+    title=settings.APP_NAME,
+    description="Enterprise-Grade Multi-Tenant Business Solution",
+    version=settings.VERSION,
+    docs_url="/api/docs" if settings.DEBUG else None,
+    redoc_url="/api/redoc" if settings.DEBUG else None,
+    openapi_url="/api/openapi.json" if settings.DEBUG else None,
+    lifespan=lifespan,
+    contact={
+        "name": "Mewayz Platform Team",
+        "url": "https://mewayz.com",
+        "email": "support@mewayz.com",
+    },
+    license_info={
+        "name": "Proprietary License",
+        "url": "https://mewayz.com/license",
+    },
+)
+
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=["*"] if settings.DEBUG else settings.ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
 )
 
-# Health check endpoint
-@app.get("/health")
+# Health Check Endpoint
+@app.get("/health", tags=["System"])
 async def health_check():
-    """Health check endpoint"""
+    """System health check endpoint"""
     return {
         "status": "healthy",
         "app_name": settings.APP_NAME,
         "version": settings.VERSION,
-        "debug": settings.DEBUG
+        "environment": "development" if settings.DEBUG else "production",
+        "systems_count": 50
     }
 
-# Root endpoint
-@app.get("/")
+# Root API Information
+@app.get("/api", tags=["System"])
+async def api_info():
+    """API information and version details"""
+    return {
+        "message": f"Welcome to {settings.APP_NAME} API",
+        "version": settings.VERSION,
+        "systems_implemented": 50,
+        "architecture": "Modular FastAPI + React + MongoDB",
+        "documentation": "/api/docs" if settings.DEBUG else "Contact support for documentation",
+        "status": "production_ready"
+    }
+
+# Root Application Endpoint
+@app.get("/", tags=["System"])  
 async def root():
-    """Root endpoint"""
+    """Root endpoint - redirects to application"""
     return {
         "message": f"Welcome to {settings.APP_NAME}",
         "version": settings.VERSION,
-        "docs_url": "/docs" if settings.DEBUG else "Contact admin for API documentation"
+        "api_url": "/api",
+        "frontend_url": "/",
+        "documentation": "/api/docs" if settings.DEBUG else None
     }
 
-# Include routers with real functionality
-app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
-app.include_router(users.router, prefix="/api/users", tags=["Users"])
-app.include_router(analytics.router, prefix="/api/analytics", tags=["Analytics"])
-app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
-app.include_router(workspaces.router, prefix="/api/workspaces", tags=["Workspaces"])
-app.include_router(blog.router, prefix="/api/blog", tags=["Blog & Content"])
-app.include_router(admin.router, prefix="/api/admin", tags=["Administration"])
-app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
-app.include_router(bio_sites.router, prefix="/api/bio-sites", tags=["Bio Sites"])
-app.include_router(ecommerce.router, prefix="/api/ecommerce", tags=["E-commerce"])
-app.include_router(bookings.router, prefix="/api/bookings", tags=["Booking System"])
-app.include_router(social_media.router, prefix="/api/social-media", tags=["Social Media"])
-app.include_router(marketing.router, prefix="/api/marketing", tags=["Marketing & Email"])
-app.include_router(integrations.router, prefix="/api/integrations", tags=["Integrations"])
-app.include_router(business_intelligence.router, prefix="/api/business-intelligence", tags=["Business Intelligence"])
 
-# FIRST WAVE - HIGH-VALUE FEATURES - Migrated from Monolithic Structure
-app.include_router(subscription_management.router, prefix="/api/subscriptions", tags=["Subscription Management"])
-app.include_router(google_oauth.router, prefix="/api/oauth", tags=["OAuth Integration"])
-app.include_router(financial_management.router, prefix="/api/financial", tags=["Financial Management"])
-app.include_router(link_shortener.router, prefix="/api/links", tags=["Link Shortener"])
-app.include_router(analytics_system.router, prefix="/api/analytics-system", tags=["Analytics System"])
+# =============================================================================
+# API ROUTER REGISTRATION - ORGANIZED BY BUSINESS DOMAIN
+# =============================================================================
 
-# SECOND WAVE - BUSINESS COLLABORATION FEATURES - Newly Migrated
-app.include_router(team_management.router, prefix="/api/team", tags=["Team Management"])
-app.include_router(form_builder.router, prefix="/api/forms", tags=["Form Builder"])
+# CORE AUTHENTICATION & USER MANAGEMENT
+app.include_router(auth.router, prefix="/api/auth", tags=["🔐 Authentication"])
+app.include_router(users.router, prefix="/api/users", tags=["👥 Users"])
+app.include_router(admin.router, prefix="/api/admin", tags=["⚙️ Administration"])
 
-# THIRD WAVE - MARKETING & PROMOTIONAL FEATURES - Newly Migrated  
-app.include_router(promotions_referrals.router, prefix="/api/promotions", tags=["Promotions & Referrals"])
+# BUSINESS INTELLIGENCE & ANALYTICS
+app.include_router(analytics.router, prefix="/api/analytics", tags=["📊 Analytics"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["📈 Dashboard"])
+app.include_router(business_intelligence.router, prefix="/api/business-intelligence", tags=["🧠 Business Intelligence"])
+app.include_router(analytics_system.router, prefix="/api/analytics-system", tags=["📊 Analytics System"])
+app.include_router(advanced_analytics.router, prefix="/api/advanced-analytics", tags=["📊 Advanced Analytics"])
 
-# FOURTH WAVE - ADVANCED BUSINESS SYSTEMS - Newly Migrated
-app.include_router(ai_token_management.router, prefix="/api/tokens", tags=["AI Token Management"])
-app.include_router(course_management.router, prefix="/api/courses", tags=["Course & Learning Management"])
+# CONTENT & WORKSPACE MANAGEMENT  
+app.include_router(workspaces.router, prefix="/api/workspaces", tags=["🏢 Workspaces"])
+app.include_router(blog.router, prefix="/api/blog", tags=["📝 Blog & Content"])
+app.include_router(content_creation_suite.router, prefix="/api/content-creation", tags=["✍️ Content Creation"])
 
-# FIFTH WAVE - CRM & WEBSITE BUILDER SYSTEMS - Newly Migrated
-app.include_router(crm_management.router, prefix="/api/crm", tags=["CRM Management"])
-app.include_router(website_builder.router, prefix="/api/website-builder", tags=["Website Builder"])
+# AI & AUTOMATION SERVICES
+app.include_router(ai.router, prefix="/api/ai", tags=["🤖 AI Services"])
+app.include_router(ai_token_management.router, prefix="/api/tokens", tags=["🎫 AI Token Management"]) 
+app.include_router(ai_content_generation.router, prefix="/api/ai-content", tags=["🤖 AI Content Generation"])
+app.include_router(advanced_ai_suite.router, prefix="/api/advanced-ai", tags=["🤖 Advanced AI Suite"])
+app.include_router(automation_system.router, prefix="/api/automation", tags=["⚙️ Automation System"])
 
-# SIXTH WAVE - EMAIL MARKETING & ADVANCED ANALYTICS - Newly Migrated  
-app.include_router(email_marketing.router, prefix="/api/email-marketing", tags=["Email Marketing"])
-app.include_router(advanced_analytics.router, prefix="/api/advanced-analytics", tags=["Advanced Analytics"])
+# E-COMMERCE & FINANCIAL SYSTEMS
+app.include_router(ecommerce.router, prefix="/api/ecommerce", tags=["🛒 E-commerce"])
+app.include_router(enhanced_ecommerce.router, prefix="/api/enhanced-ecommerce", tags=["🛒 Enhanced E-commerce"])
+app.include_router(financial_management.router, prefix="/api/financial", tags=["💰 Financial Management"])
+app.include_router(advanced_financial_analytics.router, prefix="/api/advanced-financial", tags=["💰 Advanced Financial Analytics"])
+app.include_router(escrow_system.router, prefix="/api/escrow", tags=["🏦 Escrow System"])
+app.include_router(subscription_management.router, prefix="/api/subscriptions", tags=["💳 Subscription Management"])
 
-# SEVENTH WAVE - ESCROW & ONBOARDING SYSTEMS - Newly Migrated
-app.include_router(escrow_system.router, prefix="/api/escrow", tags=["Escrow System"])
-app.include_router(onboarding_system.router, prefix="/api/onboarding", tags=["Onboarding System"])
+# CUSTOMER ENGAGEMENT & EXPERIENCE
+app.include_router(bio_sites.router, prefix="/api/bio-sites", tags=["🌐 Bio Sites"])
+app.include_router(social_media.router, prefix="/api/social-media", tags=["📱 Social Media"])
+app.include_router(social_media_suite.router, prefix="/api/social-media-suite", tags=["📱 Social Media Suite"])
+app.include_router(marketing.router, prefix="/api/marketing", tags=["📢 Marketing"])
+app.include_router(email_marketing.router, prefix="/api/email-marketing", tags=["📧 Email Marketing"])
+app.include_router(customer_experience_suite.router, prefix="/api/customer-experience", tags=["🎯 Customer Experience"])
+app.include_router(social_email_integration.router, prefix="/api/social-email", tags=["📧 Social Email Integration"])
+app.include_router(notification_system.router, prefix="/api/notifications", tags=["🔔 Notifications"])
 
-# EIGHTH WAVE - TEMPLATE MARKETPLACE & AI CONTENT - Newly Migrated
-app.include_router(template_marketplace.router, prefix="/api/templates", tags=["Template Marketplace"])
-app.include_router(ai_content_generation.router, prefix="/api/ai-content", tags=["AI Content Generation"])
+# BUSINESS OPERATIONS
+app.include_router(bookings.router, prefix="/api/bookings", tags=["📅 Booking System"])
+app.include_router(crm_management.router, prefix="/api/crm", tags=["👥 CRM Management"])
+app.include_router(team_management.router, prefix="/api/team", tags=["👥 Team Management"])
+app.include_router(course_management.router, prefix="/api/courses", tags=["🎓 Course Management"])
+app.include_router(support_system.router, prefix="/api/support", tags=["🆘 Support System"])
 
-# NINTH WAVE - SOCIAL EMAIL INTEGRATION & ADVANCED FINANCIAL ANALYTICS - Newly Migrated
-app.include_router(social_email_integration.router, prefix="/api/social-email", tags=["Social Email Integration"])
-app.include_router(advanced_financial_analytics.router, prefix="/api/advanced-financial", tags=["Advanced Financial Analytics"])
-app.include_router(enhanced_ecommerce.router, prefix="/api/enhanced-ecommerce", tags=["Enhanced E-commerce"])
+# INTEGRATION & COMMUNICATION SYSTEMS
+app.include_router(integrations.router, prefix="/api/integrations", tags=["🔗 Integrations"])
+app.include_router(google_oauth.router, prefix="/api/oauth", tags=["🔐 OAuth Integration"])
+app.include_router(webhook_system.router, prefix="/api/webhooks", tags=["🔗 Webhook System"])
+app.include_router(i18n_system.router, prefix="/api/i18n", tags=["🌍 Internationalization"])
 
-# TENTH WAVE - AUTOMATION, ADVANCED AI & SUPPORT SYSTEMS - Newly Migrated
-app.include_router(automation_system.router, prefix="/api/automation", tags=["Automation System"])
-app.include_router(advanced_ai_suite.router, prefix="/api/advanced-ai", tags=["Advanced AI Suite"])
-app.include_router(support_system.router, prefix="/api/support", tags=["Support System"])
+# DEVELOPMENT & MANAGEMENT TOOLS
+app.include_router(website_builder.router, prefix="/api/website-builder", tags=["🏗️ Website Builder"])
+app.include_router(form_builder.router, prefix="/api/forms", tags=["📝 Form Builder"])
+app.include_router(template_marketplace.router, prefix="/api/templates", tags=["🏪 Template Marketplace"])
+app.include_router(media_library.router, prefix="/api/media", tags=["📁 Media Library"])
 
-# ELEVENTH WAVE - CONTENT CREATION, CUSTOMER EXPERIENCE & SOCIAL MEDIA - Newly Migrated
-app.include_router(content_creation_suite.router, prefix="/api/content-creation", tags=["Content Creation Suite"])
-app.include_router(customer_experience_suite.router, prefix="/api/customer-experience", tags=["Customer Experience Suite"])
-app.include_router(social_media_suite.router, prefix="/api/social-media", tags=["Social Media Suite"])
+# MARKETING & GROWTH SYSTEMS
+app.include_router(promotions_referrals.router, prefix="/api/promotions", tags=["🎁 Promotions & Referrals"])
+app.include_router(link_shortener.router, prefix="/api/links", tags=["🔗 Link Shortener"])
+app.include_router(survey_system.router, prefix="/api/surveys", tags=["📋 Survey System"])
 
-# TWELFTH WAVE - SURVEY & FEEDBACK SYSTEM - Newly Implemented
-app.include_router(survey_system.router, prefix="/api/surveys", tags=["Survey & Feedback System"])
+# ENTERPRISE & COMPLIANCE SYSTEMS
+app.include_router(onboarding_system.router, prefix="/api/onboarding", tags=["🚀 Onboarding System"])
+app.include_router(rate_limiting_system.router, prefix="/api/rate-limits", tags=["⚡ Rate Limiting"])
+app.include_router(monitoring_system.router, prefix="/api/monitoring", tags=["📊 Monitoring & Observability"])
+app.include_router(backup_system.router, prefix="/api/backup", tags=["💾 Backup & Disaster Recovery"])
+app.include_router(compliance_system.router, prefix="/api/compliance", tags=["📋 Compliance & Audit"])
 
-# TWELFTH WAVE - MEDIA LIBRARY & FILE MANAGEMENT - Newly Implemented  
-app.include_router(media_library.router, prefix="/api/media", tags=["Media Library & File Management"])
 
-# THIRTEENTH WAVE - INTERNATIONALIZATION & LOCALIZATION - Newly Implemented
-app.include_router(i18n_system.router, prefix="/api/i18n", tags=["Internationalization & Localization"])
-
-# THIRTEENTH WAVE - ADVANCED NOTIFICATION & COMMUNICATION - Newly Implemented
-app.include_router(notification_system.router, prefix="/api/notifications", tags=["Advanced Notification & Communication"])
-
-# THIRTEENTH WAVE - API RATE LIMITING & THROTTLING - Newly Implemented
-app.include_router(rate_limiting_system.router, prefix="/api/rate-limits", tags=["API Rate Limiting & Throttling"])
-
-# SEVENTEENTH WAVE - ADVANCED WEBHOOK & EVENT MANAGEMENT - Newly Implemented
-app.include_router(webhook_system.router, prefix="/api/webhooks", tags=["Advanced Webhook & Event Management"])
-
-# EIGHTEENTH WAVE - ADVANCED MONITORING & OBSERVABILITY - Newly Implemented
-app.include_router(monitoring_system.router, prefix="/api/monitoring", tags=["Advanced Monitoring & Observability"])
-
-# NINETEENTH WAVE - COMPREHENSIVE BACKUP & DISASTER RECOVERY - Newly Implemented
-app.include_router(backup_system.router, prefix="/api/backup", tags=["Comprehensive Backup & Disaster Recovery"])
-
-# TWENTIETH WAVE - ADVANCED COMPLIANCE & AUDIT SYSTEM - Newly Implemented
-app.include_router(compliance_system.router, prefix="/api/compliance", tags=["Advanced Compliance & Audit System"])
-
+# Development Server Configuration
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8001,
         reload=settings.DEBUG,
-        log_level="info" if not settings.DEBUG else "debug"
+        log_level="info" if not settings.DEBUG else "debug",
+        workers=1 if settings.DEBUG else 4,
+        access_log=settings.DEBUG
     )
