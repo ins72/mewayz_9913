@@ -182,6 +182,7 @@ ROUTER_MAPPINGS = {
     "auth": ("/api/auth", ["Authentication"]),
     "users": ("/api/users", ["User Management"]),  
     "admin": ("/api/admin", ["Administration"]),
+    "admin_configuration": ("/api/admin-config", ["Admin Configuration"]),
     "dashboard": ("/api/dashboard", ["Dashboard"]),
     
     # Analytics & Intelligence
