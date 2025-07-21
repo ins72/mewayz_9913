@@ -166,6 +166,10 @@ class AdvancedAIService:
             user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
         
         generated_images = []
+        total_tokens = variations * 30
+        total_cost = variations * 0.04  # $0.04 per image
+        processing_time = random.uniform(15.5, 45.8)
+        
         for i in range(variations):
             generated_images.append({
                 "image_id": str(uuid.uuid4()),
@@ -177,10 +181,34 @@ class AdvancedAIService:
                 "variation_number": i + 1
             })
         
+        generation_id = str(uuid.uuid4())
+        
+        # Store usage in database
+        try:
+            db = await self.get_database()
+            await db.ai_usage.insert_one({
+                "user_id": user_id,
+                "service_type": "Image Generation",
+                "job_id": generation_id,
+                "tokens_used": total_tokens,
+                "cost": total_cost,
+                "status": "success",
+                "response_time": processing_time,
+                "created_at": datetime.now(),
+                "metadata": {
+                    "prompt": prompt,
+                    "style": style,
+                    "resolution": resolution,
+                    "variations": variations
+                }
+            })
+        except Exception as e:
+            print(f"Error storing AI usage: {e}")
+        
         return {
             "success": True,
             "data": {
-                "generation_id": str(uuid.uuid4()),
+                "generation_id": generation_id,
                 "prompt": prompt,
                 "images": generated_images,
                 "generation_details": {
@@ -188,8 +216,9 @@ class AdvancedAIService:
                     "style": style,
                     "resolution": resolution,
                     "variations_count": variations,
-                    "processing_time": f"{round(random.uniform(15.5, 45.8), 1)} seconds",
-                    "tokens_consumed": variations * 30,
+                    "processing_time": f"{round(processing_time, 1)} seconds",
+                    "tokens_consumed": total_tokens,
+                    "cost": round(total_cost, 4),
                     "seed_values": [random.randint(100000, 999999) for _ in range(variations)]
                 },
                 "enhancement_options": {
