@@ -438,16 +438,20 @@ class BackendTester:
         # Step 4: Test SECOND WAVE - Business Collaboration
         self.test_second_wave_business_collaboration()
         
-        # Step 5: Test THIRD WAVE - Marketing & Promotions (NEWLY ADDED)
+        # Step 5: Test THIRD WAVE - Marketing & Promotions
         self.test_third_wave_promotions_referrals()
+        
+        # Step 6: Test FOURTH WAVE - Advanced Business Systems (NEWLY ADDED)
+        self.test_fourth_wave_ai_token_management()
+        self.test_fourth_wave_course_management()
         
         # Generate final report
         self.generate_comprehensive_final_report()
 
     def generate_comprehensive_final_report(self):
-        """Generate comprehensive final report for all three waves"""
+        """Generate comprehensive final report for all four waves"""
         print(f"\n" + "="*80)
-        print(f"📊 COMPREHENSIVE THREE-WAVE REGRESSION TEST - FINAL REPORT")
+        print(f"📊 COMPREHENSIVE FOURTH WAVE REGRESSION TEST - FINAL REPORT")
         print(f"="*80)
         
         success_rate = (self.passed_tests / self.total_tests * 100) if self.total_tests > 0 else 0
