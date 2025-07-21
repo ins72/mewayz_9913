@@ -202,13 +202,17 @@ class AnalyticsService:
             event_type = event.get("event_type", "unknown")
             event_types[event_type] = event_types.get(event_type, 0) + 1
         
+        # Generate cache key for consistency
+        cache_key = f"analytics_overview_{user_id}_{days}_{start_date.strftime('%Y-%m-%d')}"
+        
         return {
             "period_days": days,
             "total_events_7d": total_events,
             "unique_sessions": unique_sessions,
             "avg_daily_events": round(avg_daily_events, 2),
             "event_breakdown": event_types,
-            "calculated_at": datetime.utcnow().isoformat()
+            "date_range": f"{days} days",
+            "cache_key": cache_key
         }
 
     async def get_platform_overview(self) -> Dict[str, Any]:
