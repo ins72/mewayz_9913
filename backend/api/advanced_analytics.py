@@ -111,7 +111,8 @@ async def get_analytics_overview(
     current_user: dict = Depends(get_current_user)
 ):
     """Get analytics overview with historical data"""
-    return await analytics_service.get_overview(current_user["id"], period)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await analytics_service.get_overview(user_id, period)
 
 @router.get("/real-time")
 async def get_realtime_analytics(current_user: dict = Depends(get_current_user)):
