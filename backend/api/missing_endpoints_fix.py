@@ -86,7 +86,6 @@ async def get_marketing_contacts(current_user: dict = Depends(get_current_user))
         return {"success": False, "error": str(e), "data": []}
 
 async def get_marketing_analytics(current_user: dict):
-    """Core marketing analytics function"""
     """Get marketing analytics with real database data"""
     try:
         db = get_database()
