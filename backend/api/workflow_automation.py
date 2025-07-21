@@ -16,8 +16,7 @@ from core.professional_logger import professional_logger, LogLevel, LogCategory
 
 router = APIRouter(
     prefix="/api/workflows",
-    tags=["Workflow Automation"],
-    dependencies=[Depends(require_auth)]
+    tags=["Workflow Automation"]
 )
 
 # Pydantic models
