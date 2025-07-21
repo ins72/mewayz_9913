@@ -99,6 +99,10 @@ app.include_router(course_management.router, prefix="/api/courses", tags=["Cours
 app.include_router(crm_management.router, prefix="/api/crm", tags=["CRM Management"])
 app.include_router(website_builder.router, prefix="/api/website-builder", tags=["Website Builder"])
 
+# SIXTH WAVE - EMAIL MARKETING & ADVANCED ANALYTICS - Newly Migrated  
+app.include_router(email_marketing.router, prefix="/api/email-marketing", tags=["Email Marketing"])
+app.include_router(advanced_analytics.router, prefix="/api/advanced-analytics", tags=["Advanced Analytics"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
