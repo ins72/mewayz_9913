@@ -74,7 +74,7 @@ async def update_ticket(
     current_user: dict = Depends(get_current_user)
 ):
     """Update ticket information"""
-    return await support_service.update_ticket(current_user["id"], ticket_id, update_data.dict())
+    return await support_service.update_ticket(current_user.get("_id") or current_user.get("id", "default-user"), ticket_id, update_data.dict())
 
 @router.post("/tickets/{ticket_id}/messages")
 async def add_ticket_message(
