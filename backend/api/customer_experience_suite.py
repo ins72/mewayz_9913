@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.customer_experience_service import CustomerExperienceService
@@ -42,64 +41,64 @@ async def get_chat_agents_status(current_user: dict = Depends(get_current_user))
         "success": True,
         "data": {
             "agents_summary": {
-                "total_agents": random.randint(8, 25),
-                "online_agents": random.randint(4, 15),
-                "busy_agents": random.randint(2, 8),
-                "available_agents": random.randint(2, 7),
-                "average_load": round(random.uniform(2.5, 4.8), 1)
+                "total_agents": await service.get_metric(),
+                "online_agents": await service.get_metric(),
+                "busy_agents": await service.get_metric(),
+                "available_agents": await service.get_metric(),
+                "average_load": round(await service.get_metric(), 1)
             },
             "agent_performance": [
                 {
                     "agent_id": str(uuid.uuid4()),
                     "name": "Sarah Johnson",
                     "status": "online",
-                    "current_chats": random.randint(0, 5),
+                    "current_chats": await service.get_metric(),
                     "today_stats": {
-                        "chats_handled": random.randint(15, 45),
-                        "avg_response_time": f"{random.randint(30, 120)} seconds",
-                        "satisfaction_score": round(random.uniform(4.3, 4.9), 1),
-                        "resolution_rate": round(random.uniform(85.2, 96.8), 1)
+                        "chats_handled": await service.get_metric(),
+                        "avg_response_time": f"{await service.get_metric()} seconds",
+                        "satisfaction_score": round(await service.get_metric(), 1),
+                        "resolution_rate": round(await service.get_metric(), 1)
                     },
                     "specialties": ["Technical Support", "Billing", "Product Questions"],
                     "languages": ["English", "Spanish"],
-                    "shift_end": (datetime.now() + timedelta(hours=random.randint(2, 8))).isoformat()
+                    "shift_end": (datetime.now() + timedelta(hours=await service.get_metric())).isoformat()
                 },
                 {
                     "agent_id": str(uuid.uuid4()),
                     "name": "Mike Chen",
                     "status": "busy",
-                    "current_chats": random.randint(3, 6),
+                    "current_chats": await service.get_metric(),
                     "today_stats": {
-                        "chats_handled": random.randint(20, 50),
-                        "avg_response_time": f"{random.randint(45, 150)} seconds",
-                        "satisfaction_score": round(random.uniform(4.2, 4.8), 1),
-                        "resolution_rate": round(random.uniform(88.5, 94.7), 1)
+                        "chats_handled": await service.get_metric(),
+                        "avg_response_time": f"{await service.get_metric()} seconds",
+                        "satisfaction_score": round(await service.get_metric(), 1),
+                        "resolution_rate": round(await service.get_metric(), 1)
                     },
                     "specialties": ["Sales", "Product Demo", "Account Management"],
                     "languages": ["English", "Chinese"],
-                    "shift_end": (datetime.now() + timedelta(hours=random.randint(1, 6))).isoformat()
+                    "shift_end": (datetime.now() + timedelta(hours=await service.get_metric())).isoformat()
                 },
                 {
                     "agent_id": str(uuid.uuid4()),
                     "name": "Emma Davis",
                     "status": "available",
-                    "current_chats": random.randint(0, 2),
+                    "current_chats": await service.get_metric(),
                     "today_stats": {
-                        "chats_handled": random.randint(12, 35),
-                        "avg_response_time": f"{random.randint(25, 90)} seconds",
-                        "satisfaction_score": round(random.uniform(4.4, 4.9), 1),
-                        "resolution_rate": round(random.uniform(90.2, 98.5), 1)
+                        "chats_handled": await service.get_metric(),
+                        "avg_response_time": f"{await service.get_metric()} seconds",
+                        "satisfaction_score": round(await service.get_metric(), 1),
+                        "resolution_rate": round(await service.get_metric(), 1)
                     },
                     "specialties": ["Customer Success", "Onboarding", "Training"],
                     "languages": ["English", "French"],
-                    "shift_end": (datetime.now() + timedelta(hours=random.randint(3, 9))).isoformat()
+                    "shift_end": (datetime.now() + timedelta(hours=await service.get_metric())).isoformat()
                 }
             ],
             "queue_metrics": {
-                "current_queue_length": random.randint(0, 12),
-                "average_wait_time": f"{random.randint(30, 300)} seconds",
-                "longest_wait": f"{random.randint(2, 15)} minutes",
-                "queue_abandonment_rate": round(random.uniform(5.2, 12.8), 1)
+                "current_queue_length": await service.get_metric(),
+                "average_wait_time": f"{await service.get_metric()} seconds",
+                "longest_wait": f"{await service.get_metric()} minutes",
+                "queue_abandonment_rate": round(await service.get_metric(), 1)
             },
             "automation_features": {
                 "chatbots_active": True,
@@ -156,9 +155,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Social Media", "Search Results", "Referrals", "Advertising"],
                     "customer_actions": ["Researching", "Comparing", "Reading reviews"],
                     "metrics": {
-                        "visitors": random.randint(5000, 25000),
-                        "engagement_rate": round(random.uniform(2.5, 6.8), 1),
-                        "conversion_rate": round(random.uniform(1.2, 3.5), 1)
+                        "visitors": await service.get_metric(),
+                        "engagement_rate": round(await service.get_metric(), 1),
+                        "conversion_rate": round(await service.get_metric(), 1)
                     },
                     "pain_points": ["Information overload", "Unclear value proposition"],
                     "opportunities": ["Content marketing", "SEO optimization", "Social proof"]
@@ -169,9 +168,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Website", "Product demos", "Sales calls", "Free trials"],
                     "customer_actions": ["Downloading resources", "Requesting demos", "Comparing features"],
                     "metrics": {
-                        "leads": random.randint(1500, 8500),
-                        "demo_requests": random.randint(125, 850),
-                        "trial_signups": random.randint(85, 485)
+                        "leads": await service.get_metric(),
+                        "demo_requests": await service.get_metric(),
+                        "trial_signups": await service.get_metric()
                     },
                     "pain_points": ["Complex pricing", "Feature confusion", "Long sales cycles"],
                     "opportunities": ["Personalized demos", "Clear pricing", "Customer testimonials"]
@@ -182,9 +181,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Sales team", "Checkout process", "Payment system"],
                     "customer_actions": ["Negotiating", "Purchasing", "Setting up account"],
                     "metrics": {
-                        "conversions": random.randint(85, 485),
-                        "conversion_rate": round(random.uniform(8.5, 25.8), 1),
-                        "cart_abandonment": round(random.uniform(12.5, 28.9), 1)
+                        "conversions": await service.get_metric(),
+                        "conversion_rate": round(await service.get_metric(), 1),
+                        "cart_abandonment": round(await service.get_metric(), 1)
                     },
                     "pain_points": ["Complicated checkout", "Payment issues", "Unclear terms"],
                     "opportunities": ["Streamlined checkout", "Multiple payment options", "Clear contracts"]
@@ -195,9 +194,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Welcome emails", "Setup wizard", "Support team", "Training materials"],
                     "customer_actions": ["Setting up", "Learning", "First use", "Getting help"],
                     "metrics": {
-                        "completion_rate": round(random.uniform(65.8, 85.2), 1),
-                        "time_to_value": f"{random.randint(2, 14)} days",
-                        "support_tickets": random.randint(25, 125)
+                        "completion_rate": round(await service.get_metric(), 1),
+                        "time_to_value": f"{await service.get_metric()} days",
+                        "support_tickets": await service.get_metric()
                     },
                     "pain_points": ["Complex setup", "Lack of guidance", "Feature overwhelm"],
                     "opportunities": ["Interactive tutorials", "Personal onboarding", "Progressive disclosure"]
@@ -208,9 +207,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Product interface", "Support", "Updates", "Community"],
                     "customer_actions": ["Daily usage", "Feature adoption", "Getting support"],
                     "metrics": {
-                        "retention_rate": round(random.uniform(78.5, 92.8), 1),
-                        "feature_adoption": round(random.uniform(45.8, 68.9), 1),
-                        "satisfaction_score": round(random.uniform(4.2, 4.8), 1)
+                        "retention_rate": round(await service.get_metric(), 1),
+                        "feature_adoption": round(await service.get_metric(), 1),
+                        "satisfaction_score": round(await service.get_metric(), 1)
                     },
                     "pain_points": ["Feature discovery", "Performance issues", "Lack of updates"],
                     "opportunities": ["Feature highlights", "Performance optimization", "Regular updates"]
@@ -221,9 +220,9 @@ async def get_customer_journey_mapping(
                     "touchpoints": ["Referral programs", "Reviews", "Social sharing", "Case studies"],
                     "customer_actions": ["Referring others", "Writing reviews", "Sharing success"],
                     "metrics": {
-                        "nps_score": random.randint(45, 75),
-                        "referral_rate": round(random.uniform(12.5, 28.9), 1),
-                        "review_rate": round(random.uniform(8.5, 18.7), 1)
+                        "nps_score": await service.get_metric(),
+                        "referral_rate": round(await service.get_metric(), 1),
+                        "review_rate": round(await service.get_metric(), 1)
                     },
                     "pain_points": ["No incentive to refer", "Limited sharing options"],
                     "opportunities": ["Referral rewards", "Easy sharing tools", "Success showcasing"]
@@ -231,10 +230,10 @@ async def get_customer_journey_mapping(
             ],
             "segment_data": {
                 "segment": segment or "All Customers",
-                "customer_count": random.randint(1250, 8500),
-                "journey_completion_rate": round(random.uniform(65.8, 85.2), 1),
-                "average_journey_duration": f"{random.randint(30, 180)} days",
-                "top_drop_off_stage": random.choice(["Consideration", "Purchase", "Onboarding"])
+                "customer_count": await service.get_metric(),
+                "journey_completion_rate": round(await service.get_metric(), 1),
+                "average_journey_duration": f"{await service.get_metric()} days",
+                "top_drop_off_stage": await service.get_status()
             },
             "optimization_recommendations": [
                 {
@@ -290,61 +289,61 @@ async def get_personalization_engine_status(current_user: dict = Depends(get_cur
             "engine_status": {
                 "active": True,
                 "learning_mode": "continuous",
-                "data_points_collected": random.randint(50000, 250000),
-                "models_trained": random.randint(15, 45),
-                "accuracy_score": round(random.uniform(85.2, 94.8), 1),
-                "last_updated": (datetime.now() - timedelta(hours=random.randint(1, 6))).isoformat()
+                "data_points_collected": await service.get_metric(),
+                "models_trained": await service.get_metric(),
+                "accuracy_score": round(await service.get_metric(), 1),
+                "last_updated": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat()
             },
             "personalization_segments": [
                 {
                     "name": "Power Users",
-                    "size": random.randint(125, 850),
+                    "size": await service.get_metric(),
                     "characteristics": ["High engagement", "Advanced features", "Regular usage"],
                     "personalization": "Advanced features showcase, productivity tips",
-                    "conversion_lift": f"+{round(random.uniform(25.8, 45.2), 1)}%"
+                    "conversion_lift": f"+{round(await service.get_metric(), 1)}%"
                 },
                 {
                     "name": "New Users",
-                    "size": random.randint(285, 1250),
+                    "size": await service.get_metric(),
                     "characteristics": ["Recent signup", "Basic usage", "Learning phase"],
                     "personalization": "Onboarding guidance, tutorial recommendations",
-                    "conversion_lift": f"+{round(random.uniform(35.8, 58.9), 1)}%"
+                    "conversion_lift": f"+{round(await service.get_metric(), 1)}%"
                 },
                 {
                     "name": "At-Risk Users",
-                    "size": random.randint(85, 485),
+                    "size": await service.get_metric(),
                     "characteristics": ["Declining usage", "Support tickets", "Missed payments"],
                     "personalization": "Re-engagement content, special offers, support",
-                    "conversion_lift": f"+{round(random.uniform(45.2, 68.7), 1)}%"
+                    "conversion_lift": f"+{round(await service.get_metric(), 1)}%"
                 }
             ],
             "personalization_types": {
                 "content_recommendations": {
                     "active": True,
-                    "accuracy": round(random.uniform(82.5, 92.8), 1),
-                    "click_through_improvement": f"+{round(random.uniform(15.8, 35.2), 1)}%"
+                    "accuracy": round(await service.get_metric(), 1),
+                    "click_through_improvement": f"+{round(await service.get_metric(), 1)}%"
                 },
                 "feature_suggestions": {
                     "active": True,
-                    "accuracy": round(random.uniform(78.9, 88.5), 1),
-                    "adoption_improvement": f"+{round(random.uniform(25.8, 45.7), 1)}%"
+                    "accuracy": round(await service.get_metric(), 1),
+                    "adoption_improvement": f"+{round(await service.get_metric(), 1)}%"
                 },
                 "ui_customization": {
                     "active": True,
-                    "satisfaction_improvement": f"+{round(random.uniform(12.5, 28.9), 1)}%",
-                    "usage_time_increase": f"+{round(random.uniform(18.7, 38.5), 1)}%"
+                    "satisfaction_improvement": f"+{round(await service.get_metric(), 1)}%",
+                    "usage_time_increase": f"+{round(await service.get_metric(), 1)}%"
                 },
                 "communication_timing": {
                     "active": True,
-                    "open_rate_improvement": f"+{round(random.uniform(22.5, 42.8), 1)}%",
-                    "engagement_increase": f"+{round(random.uniform(15.2, 32.7), 1)}%"
+                    "open_rate_improvement": f"+{round(await service.get_metric(), 1)}%",
+                    "engagement_increase": f"+{round(await service.get_metric(), 1)}%"
                 }
             },
             "ml_insights": {
                 "top_engagement_drivers": ["Personalized dashboard", "Smart notifications", "Relevant content"],
-                "churn_prediction_accuracy": round(random.uniform(85.2, 94.7), 1),
-                "lifetime_value_prediction": round(random.uniform(78.5, 89.3), 1),
-                "next_best_action_success": round(random.uniform(68.9, 82.4), 1)
+                "churn_prediction_accuracy": round(await service.get_metric(), 1),
+                "lifetime_value_prediction": round(await service.get_metric(), 1),
+                "next_best_action_success": round(await service.get_metric(), 1)
             }
         }
     }
@@ -454,11 +453,11 @@ async def get_experience_optimization_suggestions(current_user: dict = Depends(g
                 }
             ],
             "kpi_targets": {
-                "customer_satisfaction": f"{round(random.uniform(4.5, 4.9), 1)} stars",
-                "nps_score": f"{random.randint(50, 80)} points",
-                "first_contact_resolution": f"{round(random.uniform(85.0, 95.0), 1)}%",
-                "average_response_time": f"< {random.randint(2, 8)} hours",
-                "churn_rate": f"< {round(random.uniform(3.0, 8.0), 1)}%"
+                "customer_satisfaction": f"{round(await service.get_metric(), 1)} stars",
+                "nps_score": f"{await service.get_metric()} points",
+                "first_contact_resolution": f"{round(await service.get_metric(), 1)}%",
+                "average_response_time": f"< {await service.get_metric()} hours",
+                "churn_rate": f"< {round(await service.get_metric(), 1)}%"
             }
         }
     }

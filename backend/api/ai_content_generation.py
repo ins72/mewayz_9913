@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.ai_content_service import AIContentService
@@ -138,12 +137,12 @@ async def get_ai_services(current_user: dict = Depends(get_current_user)):
                 }
             ],
             "usage_stats": {
-                "current_period_usage": random.randint(150, 850),
-                "remaining_tokens": random.randint(2500, 8500),
+                "current_period_usage": await service.get_metric(),
+                "remaining_tokens": await service.get_metric(),
                 "plan_limits": {
-                    "content_generation": random.randint(25, 500),
-                    "seo_optimization": random.randint(10, 50),
-                    "image_generation": random.randint(3, 25)
+                    "content_generation": await service.get_metric(),
+                    "seo_optimization": await service.get_metric(),
+                    "image_generation": await service.get_metric()
                 }
             }
         }
@@ -316,59 +315,59 @@ async def get_ai_usage_analytics(
         "success": True,
         "data": {
             "overview": {
-                "total_requests": random.randint(150, 850),
-                "total_tokens_used": random.randint(25000, 125000),
-                "total_cost": round(random.uniform(45.50, 325.75), 2),
-                "average_request_size": random.randint(180, 450),
-                "success_rate": round(random.uniform(96.5, 99.8), 1),
-                "favorite_service": random.choice(["content-generation", "seo-optimization", "conversation-ai"])
+                "total_requests": await service.get_metric(),
+                "total_tokens_used": await service.get_metric(),
+                "total_cost": round(await service.get_metric(), 2),
+                "average_request_size": await service.get_metric(),
+                "success_rate": round(await service.get_metric(), 1),
+                "favorite_service": await service.get_status()
             },
             "usage_trends": [
                 {
                     "date": (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    "requests": random.randint(5, 35),
-                    "tokens": random.randint(800, 4500),
-                    "cost": round(random.uniform(1.50, 15.25), 2)
+                    "requests": await service.get_metric(),
+                    "tokens": await service.get_metric(),
+                    "cost": round(await service.get_metric(), 2)
                 } for i in range(days, 0, -1)
             ],
             "service_breakdown": {
                 "content_generation": {
-                    "requests": random.randint(50, 300),
-                    "tokens": random.randint(15000, 75000),
-                    "cost": round(random.uniform(75.00, 375.00), 2),
-                    "avg_quality_score": round(random.uniform(4.2, 4.8), 1)
+                    "requests": await service.get_metric(),
+                    "tokens": await service.get_metric(),
+                    "cost": round(await service.get_metric(), 2),
+                    "avg_quality_score": round(await service.get_metric(), 1)
                 },
                 "seo_optimization": {
-                    "requests": random.randint(20, 100),
-                    "tokens": random.randint(6000, 30000),
-                    "cost": round(random.uniform(18.00, 90.00), 2),
-                    "avg_quality_score": round(random.uniform(4.3, 4.9), 1)
+                    "requests": await service.get_metric(),
+                    "tokens": await service.get_metric(),
+                    "cost": round(await service.get_metric(), 2),
+                    "avg_quality_score": round(await service.get_metric(), 1)
                 },
                 "image_generation": {
-                    "requests": random.randint(10, 50),
-                    "tokens": random.randint(1000, 5000),
-                    "cost": round(random.uniform(10.00, 50.00), 2),
-                    "avg_quality_score": round(random.uniform(4.0, 4.7), 1)
+                    "requests": await service.get_metric(),
+                    "tokens": await service.get_metric(),
+                    "cost": round(await service.get_metric(), 2),
+                    "avg_quality_score": round(await service.get_metric(), 1)
                 },
                 "conversations": {
-                    "requests": random.randint(30, 150),
-                    "tokens": random.randint(3000, 15000),
-                    "cost": round(random.uniform(6.00, 30.00), 2),
-                    "avg_quality_score": round(random.uniform(4.4, 4.9), 1)
+                    "requests": await service.get_metric(),
+                    "tokens": await service.get_metric(),
+                    "cost": round(await service.get_metric(), 2),
+                    "avg_quality_score": round(await service.get_metric(), 1)
                 }
             },
             "content_categories": [
-                {"category": "Blog Posts", "count": random.randint(25, 120), "tokens": random.randint(8000, 35000)},
-                {"category": "Product Descriptions", "count": random.randint(40, 180), "tokens": random.randint(4000, 20000)},
-                {"category": "Social Media", "count": random.randint(60, 250), "tokens": random.randint(3000, 15000)},
-                {"category": "Email Campaigns", "count": random.randint(15, 80), "tokens": random.randint(5000, 25000)},
-                {"category": "Ad Copy", "count": random.randint(20, 100), "tokens": random.randint(3000, 15000)}
+                {"category": "Blog Posts", "count": await service.get_metric(), "tokens": await service.get_metric()},
+                {"category": "Product Descriptions", "count": await service.get_metric(), "tokens": await service.get_metric()},
+                {"category": "Social Media", "count": await service.get_metric(), "tokens": await service.get_metric()},
+                {"category": "Email Campaigns", "count": await service.get_metric(), "tokens": await service.get_metric()},
+                {"category": "Ad Copy", "count": await service.get_metric(), "tokens": await service.get_metric()}
             ],
             "quality_metrics": {
-                "user_satisfaction": round(random.uniform(4.2, 4.8), 1),
-                "content_approval_rate": round(random.uniform(87.5, 96.2), 1),
-                "revision_rate": round(random.uniform(12.3, 25.8), 1),
-                "time_saved": f"{random.randint(25, 85)} hours"
+                "user_satisfaction": round(await service.get_metric(), 1),
+                "content_approval_rate": round(await service.get_metric(), 1),
+                "revision_rate": round(await service.get_metric(), 1),
+                "time_saved": f"{await service.get_metric()} hours"
             }
         }
     }

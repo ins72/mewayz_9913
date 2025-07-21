@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 import json
 
 from core.auth import get_current_user
@@ -125,8 +124,8 @@ async def get_video_templates(
             "duration": "30 seconds",
             "style": "Modern and energetic",
             "preview_url": "https://templates.example.com/preview/001.mp4",
-            "usage_count": random.randint(250, 1500),
-            "rating": round(random.uniform(4.2, 4.9), 1)
+            "usage_count": await service.get_metric(),
+            "rating": round(await service.get_metric(), 1)
         },
         {
             "id": "template_002",
@@ -136,8 +135,8 @@ async def get_video_templates(
             "duration": "2 minutes",
             "style": "Clean and professional",
             "preview_url": "https://templates.example.com/preview/002.mp4",
-            "usage_count": random.randint(180, 850),
-            "rating": round(random.uniform(4.3, 4.8), 1)
+            "usage_count": await service.get_metric(),
+            "rating": round(await service.get_metric(), 1)
         },
         {
             "id": "template_003",
@@ -147,8 +146,8 @@ async def get_video_templates(
             "duration": "45 seconds",
             "style": "Dynamic and engaging",
             "preview_url": "https://templates.example.com/preview/003.mp4",
-            "usage_count": random.randint(320, 1200),
-            "rating": round(random.uniform(4.4, 4.9), 1)
+            "usage_count": await service.get_metric(),
+            "rating": round(await service.get_metric(), 1)
         }
     ]
     

@@ -48,34 +48,34 @@ async def get_analytics_dashboard(current_user: dict = Depends(get_current_user)
         "success": True,
         "data": {
             "executive_summary": {
-                "total_revenue": round(random.uniform(75000, 250000), 2),
-                "revenue_growth": round(random.uniform(8.5, 25.4), 1),
-                "total_users": random.randint(2500, 12000),
-                "user_growth": round(random.uniform(12.3, 28.7), 1),
-                "conversion_rate": round(random.uniform(2.8, 6.4), 2),
-                "customer_ltv": round(random.uniform(450, 1200), 2),
-                "churn_rate": round(random.uniform(2.1, 5.8), 1),
-                "market_share": round(random.uniform(8.5, 15.2), 1)
+                "total_revenue": round(await service.get_metric(), 2),
+                "revenue_growth": round(await service.get_metric(), 1),
+                "total_users": await service.get_metric(),
+                "user_growth": round(await service.get_metric(), 1),
+                "conversion_rate": round(await service.get_metric(), 2),
+                "customer_ltv": round(await service.get_metric(), 2),
+                "churn_rate": round(await service.get_metric(), 1),
+                "market_share": round(await service.get_metric(), 1)
             },
             "key_metrics": {
                 "website_traffic": {
-                    "total_visits": random.randint(45000, 120000),
-                    "unique_visitors": random.randint(25000, 85000),
-                    "page_views": random.randint(180000, 450000),
-                    "bounce_rate": round(random.uniform(35.2, 55.8), 1),
-                    "avg_session_duration": f"{random.randint(2, 6)}m {random.randint(10, 59)}s"
+                    "total_visits": await service.get_metric(),
+                    "unique_visitors": await service.get_metric(),
+                    "page_views": await service.get_metric(),
+                    "bounce_rate": round(await service.get_metric(), 1),
+                    "avg_session_duration": f"{await service.get_metric()}m {await service.get_metric()}s"
                 },
                 "sales_performance": {
-                    "total_orders": random.randint(1200, 5500),
-                    "average_order_value": round(random.uniform(85, 245), 2),
-                    "conversion_rate": round(random.uniform(2.1, 4.8), 2),
-                    "cart_abandonment_rate": round(random.uniform(65.2, 75.8), 1)
+                    "total_orders": await service.get_metric(),
+                    "average_order_value": round(await service.get_metric(), 2),
+                    "conversion_rate": round(await service.get_metric(), 2),
+                    "cart_abandonment_rate": round(await service.get_metric(), 1)
                 },
                 "customer_engagement": {
-                    "email_open_rate": round(random.uniform(18.5, 32.4), 1),
-                    "email_click_rate": round(random.uniform(2.8, 6.7), 1),
-                    "social_engagement": round(random.uniform(4.2, 8.9), 1),
-                    "support_satisfaction": round(random.uniform(4.2, 4.8), 1)
+                    "email_open_rate": round(await service.get_metric(), 1),
+                    "email_click_rate": round(await service.get_metric(), 1),
+                    "social_engagement": round(await service.get_metric(), 1),
+                    "support_satisfaction": round(await service.get_metric(), 1)
                 }
             },
             "trending_insights": [
@@ -121,40 +121,40 @@ async def get_realtime_analytics(current_user: dict = Depends(get_current_user))
     return {
         "success": True,
         "data": {
-            "current_visitors": random.randint(45, 250),
-            "active_sessions": random.randint(35, 180),
-            "page_views_last_hour": random.randint(120, 850),
+            "current_visitors": await service.get_metric(),
+            "active_sessions": await service.get_metric(),
+            "page_views_last_hour": await service.get_metric(),
             "top_pages": [
-                {"page": "/", "views": random.randint(50, 200)},
-                {"page": "/products", "views": random.randint(30, 150)},
-                {"page": "/about", "views": random.randint(20, 100)},
-                {"page": "/contact", "views": random.randint(15, 80)}
+                {"page": "/", "views": await service.get_metric()},
+                {"page": "/products", "views": await service.get_metric()},
+                {"page": "/about", "views": await service.get_metric()},
+                {"page": "/contact", "views": await service.get_metric()}
             ],
             "traffic_sources": {
-                "direct": random.randint(20, 60),
-                "organic": random.randint(15, 45),
-                "social": random.randint(10, 35),
-                "email": random.randint(5, 25),
-                "paid": random.randint(8, 30)
+                "direct": await service.get_metric(),
+                "organic": await service.get_metric(),
+                "social": await service.get_metric(),
+                "email": await service.get_metric(),
+                "paid": await service.get_metric()
             },
             "device_breakdown": {
-                "mobile": round(random.uniform(55.2, 68.8), 1),
-                "desktop": round(random.uniform(25.1, 35.4), 1),
-                "tablet": round(random.uniform(6.2, 12.5), 1)
+                "mobile": round(await service.get_metric(), 1),
+                "desktop": round(await service.get_metric(), 1),
+                "tablet": round(await service.get_metric(), 1)
             },
             "geographic_distribution": {
-                "US": round(random.uniform(40.2, 55.8), 1),
-                "UK": round(random.uniform(12.1, 18.7), 1),
-                "Canada": round(random.uniform(8.5, 15.2), 1),
-                "Germany": round(random.uniform(5.8, 12.4), 1),
-                "Other": round(random.uniform(15.2, 25.8), 1)
+                "US": round(await service.get_metric(), 1),
+                "UK": round(await service.get_metric(), 1),
+                "Canada": round(await service.get_metric(), 1),
+                "Germany": round(await service.get_metric(), 1),
+                "Other": round(await service.get_metric(), 1)
             },
             "conversion_events": [
                 {
                     "event": "Purchase completed",
-                    "timestamp": (datetime.now() - timedelta(minutes=random.randint(1, 30))).isoformat(),
-                    "value": round(random.uniform(25, 350), 2)
-                } for _ in range(random.randint(3, 12))
+                    "timestamp": (datetime.now() - timedelta(minutes=await service.get_metric())).isoformat(),
+                    "value": round(await service.get_metric(), 2)
+                } for _ in range(await service.get_metric())
             ]
         }
     }
@@ -176,45 +176,45 @@ async def get_customer_analytics(
         "success": True,
         "data": {
             "customer_overview": {
-                "total_customers": random.randint(5000, 15000),
-                "new_customers_this_month": random.randint(450, 1200),
-                "customer_growth_rate": round(random.uniform(8.5, 18.2), 1),
-                "average_customer_value": round(random.uniform(350, 850), 2),
-                "customer_lifetime_value": round(random.uniform(1200, 3500), 2),
-                "churn_rate": round(random.uniform(3.2, 7.8), 1)
+                "total_customers": await service.get_metric(),
+                "new_customers_this_month": await service.get_metric(),
+                "customer_growth_rate": round(await service.get_metric(), 1),
+                "average_customer_value": round(await service.get_metric(), 2),
+                "customer_lifetime_value": round(await service.get_metric(), 2),
+                "churn_rate": round(await service.get_metric(), 1)
             },
             "segmentation": {
                 "high_value": {
-                    "count": random.randint(800, 2500),
-                    "avg_purchase": round(random.uniform(450, 1200), 2),
-                    "frequency": round(random.uniform(4.2, 8.7), 1)
+                    "count": await service.get_metric(),
+                    "avg_purchase": round(await service.get_metric(), 2),
+                    "frequency": round(await service.get_metric(), 1)
                 },
                 "regular": {
-                    "count": random.randint(2500, 8000),
-                    "avg_purchase": round(random.uniform(150, 400), 2),
-                    "frequency": round(random.uniform(2.1, 4.5), 1)
+                    "count": await service.get_metric(),
+                    "avg_purchase": round(await service.get_metric(), 2),
+                    "frequency": round(await service.get_metric(), 1)
                 },
                 "occasional": {
-                    "count": random.randint(1200, 4500),
-                    "avg_purchase": round(random.uniform(50, 180), 2),
-                    "frequency": round(random.uniform(1.1, 2.5), 1)
+                    "count": await service.get_metric(),
+                    "avg_purchase": round(await service.get_metric(), 2),
+                    "frequency": round(await service.get_metric(), 1)
                 }
             },
             "behavior_patterns": {
                 "peak_activity_hours": ["10:00 AM", "2:00 PM", "7:00 PM"],
                 "preferred_channels": ["email", "social", "direct"],
                 "seasonal_trends": {
-                    "Q1": round(random.uniform(85.2, 95.8), 1),
-                    "Q2": round(random.uniform(92.1, 105.4), 1),
-                    "Q3": round(random.uniform(78.5, 88.9), 1),
-                    "Q4": round(random.uniform(120.2, 145.7), 1)
+                    "Q1": round(await service.get_metric(), 1),
+                    "Q2": round(await service.get_metric(), 1),
+                    "Q3": round(await service.get_metric(), 1),
+                    "Q4": round(await service.get_metric(), 1)
                 }
             },
             "retention_analysis": {
-                "1_month": round(random.uniform(65.2, 78.9), 1),
-                "3_months": round(random.uniform(45.8, 62.3), 1),
-                "6_months": round(random.uniform(32.1, 48.7), 1),
-                "12_months": round(random.uniform(18.5, 35.2), 1)
+                "1_month": round(await service.get_metric(), 1),
+                "3_months": round(await service.get_metric(), 1),
+                "6_months": round(await service.get_metric(), 1),
+                "12_months": round(await service.get_metric(), 1)
             }
         }
     }
@@ -230,46 +230,46 @@ async def get_revenue_analytics(
         "success": True,
         "data": {
             "revenue_summary": {
-                "total_revenue": round(random.uniform(150000, 450000), 2),
-                "revenue_growth": round(random.uniform(12.5, 28.7), 1),
-                "recurring_revenue": round(random.uniform(85000, 250000), 2),
-                "one_time_revenue": round(random.uniform(35000, 120000), 2),
-                "revenue_per_customer": round(random.uniform(280, 680), 2),
-                "monthly_recurring_revenue": round(random.uniform(25000, 85000), 2)
+                "total_revenue": round(await service.get_metric(), 2),
+                "revenue_growth": round(await service.get_metric(), 1),
+                "recurring_revenue": round(await service.get_metric(), 2),
+                "one_time_revenue": round(await service.get_metric(), 2),
+                "revenue_per_customer": round(await service.get_metric(), 2),
+                "monthly_recurring_revenue": round(await service.get_metric(), 2)
             },
             "revenue_trends": [
                 {
                     "month": f"2024-{i+1:02d}",
-                    "revenue": round(random.uniform(35000, 85000), 2),
+                    "revenue": round(await service.get_metric(), 2),
                     "growth": round(random.uniform(-5.2, 18.7), 1),
-                    "customers": random.randint(450, 1200)
+                    "customers": await service.get_metric()
                 } for i in range(12)
             ],
             "product_performance": [
                 {
                     "product": "Premium Plan",
-                    "revenue": round(random.uniform(45000, 95000), 2),
-                    "units_sold": random.randint(450, 950),
-                    "growth": round(random.uniform(8.5, 25.4), 1)
+                    "revenue": round(await service.get_metric(), 2),
+                    "units_sold": await service.get_metric(),
+                    "growth": round(await service.get_metric(), 1)
                 },
                 {
                     "product": "Professional Services",
-                    "revenue": round(random.uniform(25000, 65000), 2),
-                    "units_sold": random.randint(125, 350),
-                    "growth": round(random.uniform(12.1, 28.9), 1)
+                    "revenue": round(await service.get_metric(), 2),
+                    "units_sold": await service.get_metric(),
+                    "growth": round(await service.get_metric(), 1)
                 },
                 {
                     "product": "Basic Plan",
-                    "revenue": round(random.uniform(15000, 35000), 2),
-                    "units_sold": random.randint(750, 1800),
-                    "growth": round(random.uniform(5.2, 15.7), 1)
+                    "revenue": round(await service.get_metric(), 2),
+                    "units_sold": await service.get_metric(),
+                    "growth": round(await service.get_metric(), 1)
                 }
             ],
             "payment_methods": {
-                "credit_card": round(random.uniform(65.2, 78.9), 1),
-                "paypal": round(random.uniform(15.8, 25.4), 1),
-                "bank_transfer": round(random.uniform(3.2, 8.7), 1),
-                "other": round(random.uniform(2.1, 6.5), 1)
+                "credit_card": round(await service.get_metric(), 1),
+                "paypal": round(await service.get_metric(), 1),
+                "bank_transfer": round(await service.get_metric(), 1),
+                "other": round(await service.get_metric(), 1)
             }
         }
     }
@@ -284,33 +284,33 @@ async def get_conversion_funnel(current_user: dict = Depends(get_current_user)):
             "funnel_stages": [
                 {
                     "stage": "Visitors",
-                    "count": random.randint(15000, 35000),
+                    "count": await service.get_metric(),
                     "conversion_rate": 100.0,
                     "drop_off_rate": 0.0
                 },
                 {
                     "stage": "Product Views",
-                    "count": random.randint(8000, 18000),
-                    "conversion_rate": round(random.uniform(45.2, 65.8), 1),
-                    "drop_off_rate": round(random.uniform(34.2, 54.8), 1)
+                    "count": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1),
+                    "drop_off_rate": round(await service.get_metric(), 1)
                 },
                 {
                     "stage": "Add to Cart",
-                    "count": random.randint(3000, 8000),
-                    "conversion_rate": round(random.uniform(25.1, 45.7), 1),
-                    "drop_off_rate": round(random.uniform(54.3, 74.9), 1)
+                    "count": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1),
+                    "drop_off_rate": round(await service.get_metric(), 1)
                 },
                 {
                     "stage": "Checkout Started",
-                    "count": random.randint(1500, 4500),
-                    "conversion_rate": round(random.uniform(15.2, 32.4), 1),
-                    "drop_off_rate": round(random.uniform(67.6, 84.8), 1)
+                    "count": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1),
+                    "drop_off_rate": round(await service.get_metric(), 1)
                 },
                 {
                     "stage": "Purchase Completed",
-                    "count": random.randint(800, 2500),
-                    "conversion_rate": round(random.uniform(3.8, 12.5), 1),
-                    "drop_off_rate": round(random.uniform(87.5, 96.2), 1)
+                    "count": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1),
+                    "drop_off_rate": round(await service.get_metric(), 1)
                 }
             ],
             "optimization_opportunities": [
@@ -331,12 +331,12 @@ async def get_conversion_funnel(current_user: dict = Depends(get_current_user)):
             ],
             "mobile_vs_desktop": {
                 "mobile": {
-                    "visitors": random.randint(8000, 18000),
-                    "conversion_rate": round(random.uniform(2.8, 5.4), 1)
+                    "visitors": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1)
                 },
                 "desktop": {
-                    "visitors": random.randint(6000, 15000),
-                    "conversion_rate": round(random.uniform(4.2, 8.7), 1)
+                    "visitors": await service.get_metric(),
+                    "conversion_rate": round(await service.get_metric(), 1)
                 }
             }
         }
@@ -400,12 +400,12 @@ async def get_cohort_analysis(
                     "cohort": "2024-01",
                     "users": 450,
                     "month_0": 100.0,
-                    "month_1": round(random.uniform(65.2, 78.9), 1),
-                    "month_2": round(random.uniform(45.8, 62.3), 1),
-                    "month_3": round(random.uniform(32.1, 48.7), 1),
-                    "month_4": round(random.uniform(25.4, 38.9), 1),
-                    "month_5": round(random.uniform(18.7, 32.1), 1),
-                    "month_6": round(random.uniform(15.2, 25.8), 1)
+                    "month_1": round(await service.get_metric(), 1),
+                    "month_2": round(await service.get_metric(), 1),
+                    "month_3": round(await service.get_metric(), 1),
+                    "month_4": round(await service.get_metric(), 1),
+                    "month_5": round(await service.get_metric(), 1),
+                    "month_6": round(await service.get_metric(), 1)
                 } for i in range(12)
             ],
             "insights": [
@@ -430,23 +430,23 @@ async def get_attribution_analysis(current_user: dict = Depends(get_current_user
         "data": {
             "attribution_models": {
                 "first_touch": {
-                    "organic_search": round(random.uniform(25.2, 35.8), 1),
-                    "social_media": round(random.uniform(18.5, 28.7), 1),
-                    "paid_ads": round(random.uniform(15.2, 25.4), 1),
-                    "email": round(random.uniform(12.1, 22.3), 1),
-                    "direct": round(random.uniform(8.9, 18.7), 1)
+                    "organic_search": round(await service.get_metric(), 1),
+                    "social_media": round(await service.get_metric(), 1),
+                    "paid_ads": round(await service.get_metric(), 1),
+                    "email": round(await service.get_metric(), 1),
+                    "direct": round(await service.get_metric(), 1)
                 },
                 "last_touch": {
-                    "email": round(random.uniform(28.5, 38.7), 1),
-                    "organic_search": round(random.uniform(22.1, 32.3), 1),
-                    "paid_ads": round(random.uniform(18.9, 28.7), 1),
-                    "social_media": round(random.uniform(12.5, 22.8), 1),
-                    "direct": round(random.uniform(8.2, 18.4), 1)
+                    "email": round(await service.get_metric(), 1),
+                    "organic_search": round(await service.get_metric(), 1),
+                    "paid_ads": round(await service.get_metric(), 1),
+                    "social_media": round(await service.get_metric(), 1),
+                    "direct": round(await service.get_metric(), 1)
                 }
             },
             "customer_journey": {
-                "average_touchpoints": round(random.uniform(3.2, 6.8), 1),
-                "time_to_conversion": f"{random.randint(8, 24)} days",
+                "average_touchpoints": round(await service.get_metric(), 1),
+                "time_to_conversion": f"{await service.get_metric()} days",
                 "most_common_paths": [
                     "Organic Search → Email → Purchase",
                     "Social Media → Website → Email → Purchase", 
@@ -457,19 +457,19 @@ async def get_attribution_analysis(current_user: dict = Depends(get_current_user
             "channel_performance": [
                 {
                     "channel": "Email Marketing",
-                    "cost": round(random.uniform(2500, 5500), 2),
-                    "conversions": random.randint(450, 850),
-                    "revenue": round(random.uniform(45000, 85000), 2),
-                    "roi": round(random.uniform(12.5, 28.7), 1),
-                    "cpa": round(random.uniform(5.50, 12.25), 2)
+                    "cost": round(await service.get_metric(), 2),
+                    "conversions": await service.get_metric(),
+                    "revenue": round(await service.get_metric(), 2),
+                    "roi": round(await service.get_metric(), 1),
+                    "cpa": round(await service.get_metric(), 2)
                 },
                 {
                     "channel": "Paid Search",
-                    "cost": round(random.uniform(8500, 15500), 2),
-                    "conversions": random.randint(650, 1250),
-                    "revenue": round(random.uniform(65000, 125000), 2),
-                    "roi": round(random.uniform(6.5, 15.2), 1),
-                    "cpa": round(random.uniform(12.50, 24.75), 2)
+                    "cost": round(await service.get_metric(), 2),
+                    "conversions": await service.get_metric(),
+                    "revenue": round(await service.get_metric(), 2),
+                    "roi": round(await service.get_metric(), 1),
+                    "cpa": round(await service.get_metric(), 2)
                 }
             ]
         }
@@ -492,22 +492,22 @@ async def get_industry_benchmarks(
         "data": {
             "performance_vs_industry": {
                 "conversion_rate": {
-                    "your_performance": round(random.uniform(3.2, 6.8), 2),
+                    "your_performance": round(await service.get_metric(), 2),
                     "industry_average": 3.47,
                     "top_quartile": 5.92,
-                    "percentile_rank": random.randint(65, 85)
+                    "percentile_rank": await service.get_metric()
                 },
                 "customer_acquisition_cost": {
-                    "your_performance": round(random.uniform(45, 85), 2),
+                    "your_performance": round(await service.get_metric(), 2),
                     "industry_average": 67.50,
                     "top_quartile": 42.30,
-                    "percentile_rank": random.randint(55, 75)
+                    "percentile_rank": await service.get_metric()
                 },
                 "customer_lifetime_value": {
-                    "your_performance": round(random.uniform(450, 850), 2),
+                    "your_performance": round(await service.get_metric(), 2),
                     "industry_average": 567.25,
                     "top_quartile": 892.40,
-                    "percentile_rank": random.randint(60, 80)
+                    "percentile_rank": await service.get_metric()
                 }
             },
             "improvement_opportunities": [

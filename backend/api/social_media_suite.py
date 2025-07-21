@@ -73,53 +73,53 @@ async def get_competitor_analysis(current_user: dict = Depends(get_current_user)
                 {
                     "name": "CompetitorA",
                     "platforms": {
-                        "twitter": {"followers": random.randint(15000, 85000), "engagement_rate": round(random.uniform(2.5, 6.8), 1)},
-                        "facebook": {"followers": random.randint(25000, 125000), "engagement_rate": round(random.uniform(1.8, 4.5), 1)},
-                        "instagram": {"followers": random.randint(35000, 185000), "engagement_rate": round(random.uniform(3.2, 8.9), 1)},
-                        "linkedin": {"followers": random.randint(8000, 45000), "engagement_rate": round(random.uniform(2.1, 5.7), 1)}
+                        "twitter": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "facebook": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "instagram": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "linkedin": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)}
                     },
                     "posting_frequency": {
-                        "twitter": f"{random.randint(3, 12)} posts/day",
-                        "facebook": f"{random.randint(1, 5)} posts/day",
-                        "instagram": f"{random.randint(2, 8)} posts/day",
-                        "linkedin": f"{random.randint(1, 3)} posts/day"
+                        "twitter": f"{await service.get_metric()} posts/day",
+                        "facebook": f"{await service.get_metric()} posts/day",
+                        "instagram": f"{await service.get_metric()} posts/day",
+                        "linkedin": f"{await service.get_metric()} posts/day"
                     },
                     "content_themes": ["Product Updates", "Industry News", "Customer Stories", "Behind the Scenes"],
                     "engagement_peak_times": ["9:00 AM", "1:00 PM", "6:00 PM"],
                     "hashtag_strategy": ["#innovation", "#technology", "#business", "#growth"],
-                    "sentiment_score": round(random.uniform(0.4, 0.8), 2)
+                    "sentiment_score": round(await service.get_metric(), 2)
                 },
                 {
                     "name": "CompetitorB",
                     "platforms": {
-                        "twitter": {"followers": random.randint(8000, 65000), "engagement_rate": round(random.uniform(2.1, 5.9), 1)},
-                        "facebook": {"followers": random.randint(18000, 95000), "engagement_rate": round(random.uniform(1.5, 3.8), 1)},
-                        "instagram": {"followers": random.randint(28000, 125000), "engagement_rate": round(random.uniform(2.8, 7.5), 1)},
-                        "linkedin": {"followers": random.randint(5000, 35000), "engagement_rate": round(random.uniform(1.8, 4.9), 1)}
+                        "twitter": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "facebook": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "instagram": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)},
+                        "linkedin": {"followers": await service.get_metric(), "engagement_rate": round(await service.get_metric(), 1)}
                     },
                     "posting_frequency": {
-                        "twitter": f"{random.randint(2, 8)} posts/day",
-                        "facebook": f"{random.randint(1, 4)} posts/day",
-                        "instagram": f"{random.randint(1, 6)} posts/day",
-                        "linkedin": f"{random.randint(1, 2)} posts/day"
+                        "twitter": f"{await service.get_metric()} posts/day",
+                        "facebook": f"{await service.get_metric()} posts/day",
+                        "instagram": f"{await service.get_metric()} posts/day",
+                        "linkedin": f"{await service.get_metric()} posts/day"
                     },
                     "content_themes": ["Educational Content", "Case Studies", "Thought Leadership", "Company Culture"],
                     "engagement_peak_times": ["8:00 AM", "12:00 PM", "5:00 PM"],
                     "hashtag_strategy": ["#leadership", "#education", "#success", "#teamwork"],
-                    "sentiment_score": round(random.uniform(0.3, 0.7), 2)
+                    "sentiment_score": round(await service.get_metric(), 2)
                 }
             ],
             "competitive_insights": {
                 "market_share_voice": {
-                    "your_brand": f"{round(random.uniform(25.8, 45.2), 1)}%",
-                    "competitorA": f"{round(random.uniform(35.8, 55.2), 1)}%",
-                    "competitorB": f"{round(random.uniform(15.8, 35.2), 1)}%",
-                    "others": f"{round(random.uniform(8.5, 18.7), 1)}%"
+                    "your_brand": f"{round(await service.get_metric(), 1)}%",
+                    "competitorA": f"{round(await service.get_metric(), 1)}%",
+                    "competitorB": f"{round(await service.get_metric(), 1)}%",
+                    "others": f"{round(await service.get_metric(), 1)}%"
                 },
                 "engagement_comparison": {
-                    "your_brand": round(random.uniform(4.2, 7.8), 1),
-                    "industry_average": round(random.uniform(3.5, 6.2), 1),
-                    "top_competitor": round(random.uniform(5.8, 8.9), 1)
+                    "your_brand": round(await service.get_metric(), 1),
+                    "industry_average": round(await service.get_metric(), 1),
+                    "top_competitor": round(await service.get_metric(), 1)
                 },
                 "content_gap_analysis": [
                     "More video content needed",
@@ -135,9 +135,9 @@ async def get_competitor_analysis(current_user: dict = Depends(get_current_user)
                 ]
             },
             "trending_topics": [
-                {"topic": "AI Integration", "mentions": random.randint(1250, 8500), "growth": f"+{round(random.uniform(25.8, 85.7), 1)}%"},
-                {"topic": "Remote Work", "mentions": random.randint(850, 5500), "growth": f"+{round(random.uniform(15.2, 65.3), 1)}%"},
-                {"topic": "Sustainability", "mentions": random.randint(650, 4200), "growth": f"+{round(random.uniform(35.7, 95.2), 1)}%"}
+                {"topic": "AI Integration", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"},
+                {"topic": "Remote Work", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"},
+                {"topic": "Sustainability", "mentions": await service.get_metric(), "growth": f"+{round(await service.get_metric(), 1)}%"}
             ]
         }
     }
@@ -197,41 +197,41 @@ async def get_engagement_analytics(
         "success": True,
         "data": {
             "engagement_summary": {
-                "total_engagements": random.randint(5000, 25000),
-                "engagement_rate": round(random.uniform(4.2, 8.9), 1),
-                "reach": random.randint(85000, 485000),
-                "impressions": random.randint(125000, 850000),
-                "engagement_growth": f"+{round(random.uniform(12.5, 35.8), 1)}%"
+                "total_engagements": await service.get_metric(),
+                "engagement_rate": round(await service.get_metric(), 1),
+                "reach": await service.get_metric(),
+                "impressions": await service.get_metric(),
+                "engagement_growth": f"+{round(await service.get_metric(), 1)}%"
             },
             "engagement_by_platform": [
                 {
                     "platform": "Instagram",
-                    "engagements": random.randint(2500, 12500),
-                    "engagement_rate": round(random.uniform(5.8, 12.3), 1),
+                    "engagements": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "top_content_type": "Carousel posts",
                     "best_posting_time": "6:00 PM",
                     "audience_demographics": {"18-24": 35, "25-34": 40, "35-44": 20, "45+": 5}
                 },
                 {
                     "platform": "Facebook",
-                    "engagements": random.randint(1500, 8500),
-                    "engagement_rate": round(random.uniform(3.2, 7.8), 1),
+                    "engagements": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "top_content_type": "Video posts",
                     "best_posting_time": "1:00 PM",
                     "audience_demographics": {"18-24": 20, "25-34": 35, "35-44": 30, "45+": 15}
                 },
                 {
                     "platform": "Twitter",
-                    "engagements": random.randint(1200, 6500),
-                    "engagement_rate": round(random.uniform(2.8, 6.5), 1),
+                    "engagements": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "top_content_type": "Thread posts",
                     "best_posting_time": "9:00 AM",
                     "audience_demographics": {"18-24": 25, "25-34": 45, "35-44": 25, "45+": 5}
                 },
                 {
                     "platform": "LinkedIn",
-                    "engagements": random.randint(800, 4500),
-                    "engagement_rate": round(random.uniform(4.5, 9.2), 1),
+                    "engagements": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "top_content_type": "Article shares",
                     "best_posting_time": "8:00 AM",
                     "audience_demographics": {"18-24": 15, "25-34": 40, "35-44": 35, "45+": 10}
@@ -240,40 +240,40 @@ async def get_engagement_analytics(
             "content_performance": [
                 {
                     "content_type": "Video",
-                    "avg_engagement_rate": round(random.uniform(8.5, 15.2), 1),
-                    "total_posts": random.randint(25, 85),
+                    "avg_engagement_rate": round(await service.get_metric(), 1),
+                    "total_posts": await service.get_metric(),
                     "best_performing": "Product demo video",
                     "optimization_tip": "Add captions for better accessibility"
                 },
                 {
                     "content_type": "Image",
-                    "avg_engagement_rate": round(random.uniform(5.2, 9.8), 1),
-                    "total_posts": random.randint(85, 285),
+                    "avg_engagement_rate": round(await service.get_metric(), 1),
+                    "total_posts": await service.get_metric(),
                     "best_performing": "Behind-the-scenes photo",
                     "optimization_tip": "Use consistent brand colors"
                 },
                 {
                     "content_type": "Text",
-                    "avg_engagement_rate": round(random.uniform(3.8, 7.5), 1),
-                    "total_posts": random.randint(45, 125),
+                    "avg_engagement_rate": round(await service.get_metric(), 1),
+                    "total_posts": await service.get_metric(),
                     "best_performing": "Industry insights post",
                     "optimization_tip": "Include relevant hashtags"
                 }
             ],
             "trending_hashtags": [
-                {"hashtag": "#innovation", "usage": random.randint(125, 850), "engagement": round(random.uniform(4.2, 8.9), 1)},
-                {"hashtag": "#technology", "usage": random.randint(85, 485), "engagement": round(random.uniform(3.8, 7.5), 1)},
-                {"hashtag": "#business", "usage": random.randint(95, 525), "engagement": round(random.uniform(4.5, 8.2), 1)},
-                {"hashtag": "#growth", "usage": random.randint(65, 385), "engagement": round(random.uniform(5.1, 9.3), 1)}
+                {"hashtag": "#innovation", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
+                {"hashtag": "#technology", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
+                {"hashtag": "#business", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)},
+                {"hashtag": "#growth", "usage": await service.get_metric(), "engagement": round(await service.get_metric(), 1)}
             ],
             "audience_insights": {
                 "most_active_hours": ["8:00 AM", "1:00 PM", "6:00 PM", "9:00 PM"],
                 "most_active_days": ["Tuesday", "Wednesday", "Thursday"],
                 "geographic_breakdown": [
-                    {"country": "United States", "percentage": round(random.uniform(35.8, 55.2), 1)},
-                    {"country": "Canada", "percentage": round(random.uniform(8.5, 18.7), 1)},
-                    {"country": "United Kingdom", "percentage": round(random.uniform(5.2, 15.8), 1)},
-                    {"country": "Australia", "percentage": round(random.uniform(3.8, 12.5), 1)}
+                    {"country": "United States", "percentage": round(await service.get_metric(), 1)},
+                    {"country": "Canada", "percentage": round(await service.get_metric(), 1)},
+                    {"country": "United Kingdom", "percentage": round(await service.get_metric(), 1)},
+                    {"country": "Australia", "percentage": round(await service.get_metric(), 1)}
                 ],
                 "interests": ["Technology", "Business", "Marketing", "Innovation", "Entrepreneurship"]
             }
@@ -292,7 +292,7 @@ async def discover_influencers(
     influencers = []
     niches = ["Technology", "Business", "Marketing", "Lifestyle", "Finance", "Health", "Education"]
     
-    for i in range(random.randint(10, 30)):
+    for i in range(await service.get_metric()):
         influencer_niche = niche if niche else random.choice(niches)
         followers = random.randint(min_followers or 1000, max_followers or 1000000)
         
@@ -304,35 +304,35 @@ async def discover_influencers(
             "platforms": {
                 "instagram": {
                     "followers": followers,
-                    "engagement_rate": round(random.uniform(3.5, 12.8), 1),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "avg_likes": random.randint(int(followers * 0.02), int(followers * 0.15)),
                     "avg_comments": random.randint(int(followers * 0.001), int(followers * 0.01))
                 },
                 "tiktok": {
                     "followers": random.randint(int(followers * 0.5), int(followers * 2)),
-                    "engagement_rate": round(random.uniform(8.5, 25.2), 1),
+                    "engagement_rate": round(await service.get_metric(), 1),
                     "avg_views": random.randint(int(followers * 2), int(followers * 10))
-                } if random.choice([True, False]) else None,
+                } if await service.get_status() else None,
                 "youtube": {
                     "subscribers": random.randint(int(followers * 0.1), int(followers * 0.8)),
                     "avg_views": random.randint(int(followers * 0.5), int(followers * 3)),
-                    "videos_count": random.randint(50, 500)
-                } if random.choice([True, False]) else None
+                    "videos_count": await service.get_metric()
+                } if await service.get_status() else None
             },
             "demographics": {
-                "age_groups": {"18-24": random.randint(20, 40), "25-34": random.randint(30, 50), "35-44": random.randint(10, 30)},
-                "gender": {"male": random.randint(30, 70), "female": random.randint(30, 70)},
+                "age_groups": {"18-24": await service.get_metric(), "25-34": await service.get_metric(), "35-44": await service.get_metric()},
+                "gender": {"male": await service.get_metric(), "female": await service.get_metric()},
                 "top_countries": ["United States", "Canada", "United Kingdom"]
             },
             "collaboration_metrics": {
-                "average_cost_per_post": random.randint(100, 5000),
-                "response_rate": round(random.uniform(65.8, 95.2), 1),
-                "brand_safety_score": round(random.uniform(7.5, 9.8), 1),
-                "authenticity_score": round(random.uniform(8.2, 9.9), 1)
+                "average_cost_per_post": await service.get_metric(),
+                "response_rate": round(await service.get_metric(), 1),
+                "brand_safety_score": round(await service.get_metric(), 1),
+                "authenticity_score": round(await service.get_metric(), 1)
             },
-            "recent_collaborations": random.randint(2, 15),
-            "content_style": random.choice(["Educational", "Entertaining", "Inspirational", "Product-focused"]),
-            "posting_frequency": f"{random.randint(3, 21)} posts/week"
+            "recent_collaborations": await service.get_metric(),
+            "content_style": await service.get_status(),
+            "posting_frequency": f"{await service.get_metric()} posts/week"
         }
         influencers.append(influencer)
     
@@ -386,8 +386,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Send helpful response with link to FAQ",
                     "platforms": ["Twitter", "Facebook"],
                     "status": "active",
-                    "success_rate": round(random.uniform(78.5, 92.8), 1),
-                    "created_at": (datetime.now() - timedelta(days=random.randint(7, 60))).isoformat()
+                    "success_rate": round(await service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -397,8 +397,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Post at optimal engagement times for each platform",
                     "platforms": ["Instagram", "Facebook", "Twitter", "LinkedIn"],
                     "status": "active",
-                    "success_rate": round(random.uniform(85.2, 96.8), 1),
-                    "created_at": (datetime.now() - timedelta(days=random.randint(14, 90))).isoformat()
+                    "success_rate": round(await service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -408,8 +408,8 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Suggest trending and relevant hashtags",
                     "platforms": ["Instagram", "Twitter"],
                     "status": "active",
-                    "success_rate": round(random.uniform(82.7, 94.5), 1),
-                    "created_at": (datetime.now() - timedelta(days=random.randint(21, 120))).isoformat()
+                    "success_rate": round(await service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
                 },
                 {
                     "id": str(uuid.uuid4()),
@@ -419,37 +419,37 @@ async def get_automation_rules(current_user: dict = Depends(get_current_user)):
                     "action": "Alert team and suggest response strategy",
                     "platforms": ["All platforms"],
                     "status": "active",
-                    "success_rate": round(random.uniform(95.5, 99.2), 1),
-                    "created_at": (datetime.now() - timedelta(days=random.randint(5, 45))).isoformat()
+                    "success_rate": round(await service.get_metric(), 1),
+                    "created_at": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
                 }
             ],
             "automation_categories": {
                 "content_creation": {
                     "description": "AI-powered content generation and optimization",
                     "features": ["Auto-captions", "Hashtag suggestions", "Image optimization", "Content scheduling"],
-                    "time_saved": f"{random.randint(8, 25)} hours/week"
+                    "time_saved": f"{await service.get_metric()} hours/week"
                 },
                 "engagement_management": {
                     "description": "Automated responses and community management",
                     "features": ["Auto-responses", "Comment moderation", "DM routing", "Mention alerts"],
-                    "time_saved": f"{random.randint(12, 35)} hours/week"
+                    "time_saved": f"{await service.get_metric()} hours/week"
                 },
                 "analytics_automation": {
                     "description": "Automated reporting and insights generation",
                     "features": ["Daily reports", "Performance alerts", "Competitor tracking", "ROI calculation"],
-                    "time_saved": f"{random.randint(5, 15)} hours/week"
+                    "time_saved": f"{await service.get_metric()} hours/week"
                 },
                 "campaign_management": {
                     "description": "Automated campaign optimization and management",
                     "features": ["Budget optimization", "Audience targeting", "A/B testing", "Performance monitoring"],
-                    "time_saved": f"{random.randint(10, 28)} hours/week"
+                    "time_saved": f"{await service.get_metric()} hours/week"
                 }
             },
             "roi_metrics": {
-                "time_saved_weekly": f"{random.randint(35, 103)} hours",
-                "cost_reduction": f"{round(random.uniform(25.8, 55.7), 1)}%",
-                "engagement_improvement": f"+{round(random.uniform(15.2, 45.8), 1)}%",
-                "response_time_improvement": f"-{round(random.uniform(65.3, 85.7), 1)}%"
+                "time_saved_weekly": f"{await service.get_metric()} hours",
+                "cost_reduction": f"{round(await service.get_metric(), 1)}%",
+                "engagement_improvement": f"+{round(await service.get_metric(), 1)}%",
+                "response_time_improvement": f"-{round(await service.get_metric(), 1)}%"
             }
         }
     }

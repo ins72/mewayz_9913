@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 import json
 
 from core.auth import get_current_user
@@ -296,19 +295,19 @@ async def get_creator_dashboard(current_user: dict = Depends(get_current_user)):
         "success": True,
         "data": {
             "overview": {
-                "total_templates": random.randint(5, 25),
-                "total_downloads": random.randint(450, 5600),
-                "total_revenue": round(random.uniform(1200, 8500), 2),
-                "average_rating": round(random.uniform(4.2, 4.9), 1),
-                "active_templates": random.randint(4, 20),
-                "pending_review": random.randint(0, 3)
+                "total_templates": await service.get_metric(),
+                "total_downloads": await service.get_metric(),
+                "total_revenue": round(await service.get_metric(), 2),
+                "average_rating": round(await service.get_metric(), 1),
+                "active_templates": await service.get_metric(),
+                "pending_review": await service.get_metric()
             },
             "recent_activity": [
                 {
                     "type": "download",
                     "template": "Professional Landing Page",
                     "user": "john_doe",
-                    "timestamp": (datetime.now() - timedelta(minutes=random.randint(15, 180))).isoformat(),
+                    "timestamp": (datetime.now() - timedelta(minutes=await service.get_metric())).isoformat(),
                     "revenue": 29.99
                 },
                 {
@@ -316,31 +315,31 @@ async def get_creator_dashboard(current_user: dict = Depends(get_current_user)):
                     "template": "Social Media Kit",
                     "rating": 5,
                     "review": "Amazing template! Easy to customize.",
-                    "timestamp": (datetime.now() - timedelta(hours=random.randint(1, 12))).isoformat()
+                    "timestamp": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat()
                 },
                 {
                     "type": "sale",
                     "template": "E-commerce Store",
                     "amount": 49.99,
-                    "timestamp": (datetime.now() - timedelta(hours=random.randint(6, 24))).isoformat()
+                    "timestamp": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat()
                 }
             ],
             "performance_metrics": {
                 "top_performing_template": {
                     "name": "Professional Business Landing",
-                    "downloads": random.randint(450, 1200),
-                    "revenue": round(random.uniform(2500, 8500), 2),
-                    "rating": round(random.uniform(4.6, 4.9), 1)
+                    "downloads": await service.get_metric(),
+                    "revenue": round(await service.get_metric(), 2),
+                    "rating": round(await service.get_metric(), 1)
                 },
-                "conversion_rate": round(random.uniform(12.5, 28.7), 1),
-                "average_download_price": round(random.uniform(25.99, 45.99), 2),
-                "repeat_customer_rate": round(random.uniform(35.2, 58.9), 1)
+                "conversion_rate": round(await service.get_metric(), 1),
+                "average_download_price": round(await service.get_metric(), 2),
+                "repeat_customer_rate": round(await service.get_metric(), 1)
             },
             "revenue_trends": [
                 {
                     "month": f"2024-{i+1:02d}",
-                    "revenue": round(random.uniform(500, 2500), 2),
-                    "downloads": random.randint(25, 150)
+                    "revenue": round(await service.get_metric(), 2),
+                    "downloads": await service.get_metric()
                 } for i in range(12)
             ]
         }

@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.support_service import SupportService
@@ -191,45 +190,45 @@ async def get_frequently_asked_questions(
             "question": "How do I reset my password?",
             "answer": "You can reset your password by clicking 'Forgot Password' on the login page and following the email instructions.",
             "category": "account",
-            "views": random.randint(150, 850),
-            "helpful_votes": random.randint(45, 125),
-            "last_updated": (datetime.now() - timedelta(days=random.randint(5, 30))).isoformat()
+            "views": await service.get_metric(),
+            "helpful_votes": await service.get_metric(),
+            "last_updated": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
         },
         {
             "id": "faq_002", 
             "question": "How do I upgrade my subscription?",
             "answer": "Go to Settings > Billing and click 'Upgrade Plan' to select a higher tier subscription.",
             "category": "billing",
-            "views": random.randint(200, 950),
-            "helpful_votes": random.randint(85, 185),
-            "last_updated": (datetime.now() - timedelta(days=random.randint(3, 20))).isoformat()
+            "views": await service.get_metric(),
+            "helpful_votes": await service.get_metric(),
+            "last_updated": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
         },
         {
             "id": "faq_003",
             "question": "How do I integrate with third-party services?",
             "answer": "Visit the Integrations page in your dashboard and follow the setup guide for your desired service.",
             "category": "integration",
-            "views": random.randint(125, 685),
-            "helpful_votes": random.randint(35, 95),
-            "last_updated": (datetime.now() - timedelta(days=random.randint(7, 45))).isoformat()
+            "views": await service.get_metric(),
+            "helpful_votes": await service.get_metric(),
+            "last_updated": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
         },
         {
             "id": "faq_004",
             "question": "What AI features are available?",
             "answer": "Our platform offers content generation, image creation, voice synthesis, and automated workflows powered by AI.",
             "category": "technical",
-            "views": random.randint(185, 750),
-            "helpful_votes": random.randint(65, 145),
-            "last_updated": (datetime.now() - timedelta(days=random.randint(2, 15))).isoformat()
+            "views": await service.get_metric(),
+            "helpful_votes": await service.get_metric(),
+            "last_updated": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
         },
         {
             "id": "faq_005",
             "question": "How do I export my data?",
             "answer": "Data export is available in Settings > Data Management. You can export in various formats including CSV and JSON.",
             "category": "technical",
-            "views": random.randint(95, 485),
-            "helpful_votes": random.randint(25, 85),
-            "last_updated": (datetime.now() - timedelta(days=random.randint(10, 35))).isoformat()
+            "views": await service.get_metric(),
+            "helpful_votes": await service.get_metric(),
+            "last_updated": (datetime.now() - timedelta(days=await service.get_metric())).isoformat()
         }
     ]
     
@@ -255,18 +254,18 @@ async def get_live_chat_status(current_user: dict = Depends(get_current_user)):
         "data": {
             "live_chat": {
                 "available": True,
-                "status": random.choice(["online", "busy", "away"]),
-                "average_wait_time": f"{random.randint(2, 15)} minutes",
-                "agents_online": random.randint(3, 12),
-                "queue_position": random.randint(0, 8) if random.choice([True, False]) else 0,
-                "estimated_response_time": f"{random.randint(30, 300)} seconds"
+                "status": await service.get_status(),
+                "average_wait_time": f"{await service.get_metric()} minutes",
+                "agents_online": await service.get_metric(),
+                "queue_position": await service.get_metric() if await service.get_status() else 0,
+                "estimated_response_time": f"{await service.get_metric()} seconds"
             },
             "office_hours": {
                 "timezone": "UTC",
                 "monday_friday": "9:00 AM - 6:00 PM",
                 "saturday": "10:00 AM - 4:00 PM",
                 "sunday": "Closed",
-                "current_status": "Open" if random.choice([True, False]) else "Closed"
+                "current_status": "Open" if await service.get_status() else "Closed"
             },
             "alternative_support": {
                 "email_support": "24/7 available",
@@ -390,22 +389,22 @@ async def get_support_system_health(current_user: dict = Depends(get_current_use
                 "overall_health": "Excellent",
                 "uptime": "99.98%",
                 "last_incident": "2024-11-15T10:30:00Z",
-                "response_time": f"{round(random.uniform(0.5, 2.5), 1)} seconds",
+                "response_time": f"{round(await service.get_metric(), 1)} seconds",
                 "ticket_processing": "Normal",
                 "live_chat": "Available"
             },
             "performance_metrics": {
-                "average_first_response": f"{random.randint(15, 45)} minutes",
-                "average_resolution_time": f"{round(random.uniform(4.5, 24.8), 1)} hours",
-                "customer_satisfaction": round(random.uniform(4.2, 4.9), 1),
-                "first_contact_resolution": f"{round(random.uniform(68.5, 85.7), 1)}%",
-                "ticket_backlog": random.randint(5, 25)
+                "average_first_response": f"{await service.get_metric()} minutes",
+                "average_resolution_time": f"{round(await service.get_metric(), 1)} hours",
+                "customer_satisfaction": round(await service.get_metric(), 1),
+                "first_contact_resolution": f"{round(await service.get_metric(), 1)}%",
+                "ticket_backlog": await service.get_metric()
             },
             "team_availability": {
-                "agents_online": random.randint(3, 12),
-                "total_agents": random.randint(15, 25),
-                "availability_rate": f"{round(random.uniform(85.2, 96.8), 1)}%",
-                "current_load": random.choice(["Light", "Moderate", "Heavy"]),
+                "agents_online": await service.get_metric(),
+                "total_agents": await service.get_metric(),
+                "availability_rate": f"{round(await service.get_metric(), 1)}%",
+                "current_load": await service.get_status(),
                 "peak_hours": "2:00 PM - 5:00 PM UTC"
             },
             "recent_improvements": [

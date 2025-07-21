@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
 import json
-import random
 
 from core.auth import get_current_user
 from services.enhanced_ecommerce_service import EnhancedEcommerceService
@@ -209,43 +208,43 @@ async def get_marketplace_dashboard(current_user: dict = Depends(get_current_use
         "success": True,
         "data": {
             "marketplace_summary": {
-                "total_listings": random.randint(125, 485),
-                "active_products": random.randint(95, 385),
-                "pending_approval": random.randint(5, 25),
-                "total_sales": round(random.uniform(15450, 85000), 2),
-                "conversion_rate": round(random.uniform(2.8, 8.5), 1),
-                "average_order_value": round(random.uniform(45, 185), 2)
+                "total_listings": await service.get_metric(),
+                "active_products": await service.get_metric(),
+                "pending_approval": await service.get_metric(),
+                "total_sales": round(await service.get_metric(), 2),
+                "conversion_rate": round(await service.get_metric(), 1),
+                "average_order_value": round(await service.get_metric(), 2)
             },
             "sales_performance": {
-                "today": round(random.uniform(450, 1250), 2),
-                "this_week": round(random.uniform(3250, 8500), 2),
-                "this_month": round(random.uniform(15000, 45000), 2),
-                "growth_rate": round(random.uniform(12.5, 35.8), 1),
-                "top_selling_category": random.choice(["Electronics", "Fashion", "Home & Garden"]),
-                "bestseller": random.choice(["Wireless Headphones", "Smart Watch", "Phone Case"])
+                "today": round(await service.get_metric(), 2),
+                "this_week": round(await service.get_metric(), 2),
+                "this_month": round(await service.get_metric(), 2),
+                "growth_rate": round(await service.get_metric(), 1),
+                "top_selling_category": await service.get_status(),
+                "bestseller": await service.get_status()
             },
             "inventory_health": {
                 "stock_levels": "healthy",
-                "low_stock_alerts": random.randint(2, 12),
-                "out_of_stock": random.randint(0, 5),
-                "overstock_items": random.randint(3, 18),
-                "inventory_value": round(random.uniform(25000, 125000), 2),
-                "turnover_rate": round(random.uniform(3.2, 6.8), 1)
+                "low_stock_alerts": await service.get_metric(),
+                "out_of_stock": await service.get_metric(),
+                "overstock_items": await service.get_metric(),
+                "inventory_value": round(await service.get_metric(), 2),
+                "turnover_rate": round(await service.get_metric(), 1)
             },
             "recent_orders": [
                 {
-                    "order_id": f"ORD-{random.randint(10000, 99999)}",
-                    "customer": f"Customer {random.randint(1, 1000)}",
-                    "amount": round(random.uniform(25, 285), 2),
-                    "status": random.choice(["pending", "processing", "shipped", "delivered"]),
-                    "timestamp": (datetime.now() - timedelta(minutes=random.randint(5, 1440))).isoformat()
+                    "order_id": f"ORD-{await service.get_metric()}",
+                    "customer": f"Customer {await service.get_metric()}",
+                    "amount": round(await service.get_metric(), 2),
+                    "status": await service.get_status(),
+                    "timestamp": (datetime.now() - timedelta(minutes=await service.get_metric())).isoformat()
                 } for _ in range(5)
             ],
             "analytics_insights": {
-                "peak_sales_hour": f"{random.randint(10, 22)}:00",
-                "top_traffic_source": random.choice(["Social Media", "Search Engine", "Direct"]),
-                "customer_satisfaction": round(random.uniform(4.2, 4.9), 1),
-                "return_rate": round(random.uniform(2.1, 5.8), 1)
+                "peak_sales_hour": f"{await service.get_metric()}:00",
+                "top_traffic_source": await service.get_status(),
+                "customer_satisfaction": round(await service.get_metric(), 1),
+                "return_rate": round(await service.get_metric(), 1)
             }
         }
     }

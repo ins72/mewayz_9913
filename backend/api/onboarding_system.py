@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field, EmailStr
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.onboarding_service import OnboardingService
@@ -299,7 +298,7 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "profile_complete",
                     "title": "Complete Your Profile",
                     "description": "Add profile picture and bio",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "high",
                     "estimated_time": "2 minutes",
                     "action_url": "/profile/edit"
@@ -308,7 +307,7 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "first_content",
                     "title": "Create Your First Content",
                     "description": "Publish your first post or page",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "high",
                     "estimated_time": "10 minutes",
                     "action_url": "/content/create"
@@ -317,7 +316,7 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "customize_theme",
                     "title": "Customize Your Theme",
                     "description": "Personalize colors and layout",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "medium",
                     "estimated_time": "5 minutes",
                     "action_url": "/settings/theme"
@@ -326,7 +325,7 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "setup_analytics",
                     "title": "Set Up Analytics",
                     "description": "Connect Google Analytics or similar",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "medium",
                     "estimated_time": "5 minutes",
                     "action_url": "/integrations/analytics"
@@ -335,7 +334,7 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "invite_team",
                     "title": "Invite Team Members",
                     "description": "Add collaborators to your workspace",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "low",
                     "estimated_time": "3 minutes",
                     "action_url": "/team/invite"
@@ -344,16 +343,16 @@ async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
                     "id": "explore_features",
                     "title": "Explore Advanced Features",
                     "description": "Take a tour of premium features",
-                    "completed": random.choice([True, False]),
+                    "completed": await service.get_status(),
                     "priority": "low",
                     "estimated_time": "15 minutes",
                     "action_url": "/features/tour"
                 }
             ],
             "completion_stats": {
-                "completed": random.randint(2, 4),
+                "completed": await service.get_metric(),
                 "total": 6,
-                "progress_percentage": random.randint(33, 67)
+                "progress_percentage": await service.get_metric()
             },
             "next_recommended_action": {
                 "title": "Complete Your Profile",

@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, EmailStr
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.social_email_service import SocialEmailService
@@ -63,46 +62,46 @@ async def get_social_email_dashboard(current_user: dict = Depends(get_current_us
         "success": True,
         "data": {
             "overview": {
-                "connected_platforms": random.randint(3, 8),
-                "total_posts_published": random.randint(150, 850),
-                "total_emails_sent": random.randint(5000, 25000),
-                "total_social_followers": random.randint(2500, 15000),
-                "engagement_rate": round(random.uniform(4.2, 8.7), 1),
-                "email_open_rate": round(random.uniform(18.5, 32.4), 1),
-                "campaign_success_rate": round(random.uniform(85.2, 96.8), 1)
+                "connected_platforms": await service.get_metric(),
+                "total_posts_published": await service.get_metric(),
+                "total_emails_sent": await service.get_metric(),
+                "total_social_followers": await service.get_metric(),
+                "engagement_rate": round(await service.get_metric(), 1),
+                "email_open_rate": round(await service.get_metric(), 1),
+                "campaign_success_rate": round(await service.get_metric(), 1)
             },
             "connected_accounts": [
                 {
                     "platform": "Twitter",
                     "username": "@yourbusiness",
-                    "followers": random.randint(1500, 8500),
+                    "followers": await service.get_metric(),
                     "status": "connected",
-                    "last_activity": (datetime.now() - timedelta(hours=random.randint(1, 12))).isoformat(),
-                    "posts_this_month": random.randint(25, 85)
+                    "last_activity": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat(),
+                    "posts_this_month": await service.get_metric()
                 },
                 {
                     "platform": "Instagram", 
                     "username": "@yourbusiness",
-                    "followers": random.randint(2500, 12000),
+                    "followers": await service.get_metric(),
                     "status": "connected",
-                    "last_activity": (datetime.now() - timedelta(hours=random.randint(2, 24))).isoformat(),
-                    "posts_this_month": random.randint(15, 45)
+                    "last_activity": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat(),
+                    "posts_this_month": await service.get_metric()
                 },
                 {
                     "platform": "LinkedIn",
                     "username": "Your Business",
-                    "followers": random.randint(800, 4500),
+                    "followers": await service.get_metric(),
                     "status": "connected",
-                    "last_activity": (datetime.now() - timedelta(hours=random.randint(6, 48))).isoformat(),
-                    "posts_this_month": random.randint(8, 25)
+                    "last_activity": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat(),
+                    "posts_this_month": await service.get_metric()
                 },
                 {
                     "platform": "Facebook",
                     "username": "Your Business Page",
-                    "followers": random.randint(1200, 6500),
+                    "followers": await service.get_metric(),
                     "status": "connected",
-                    "last_activity": (datetime.now() - timedelta(hours=random.randint(4, 36))).isoformat(),
-                    "posts_this_month": random.randint(12, 35)
+                    "last_activity": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat(),
+                    "posts_this_month": await service.get_metric()
                 }
             ],
             "recent_activity": [
@@ -110,31 +109,31 @@ async def get_social_email_dashboard(current_user: dict = Depends(get_current_us
                     "type": "post_published",
                     "platform": "Twitter",
                     "content": "Just launched our new feature! Check it out 🚀",
-                    "engagement": {"likes": random.randint(15, 85), "shares": random.randint(3, 25)},
-                    "timestamp": (datetime.now() - timedelta(minutes=random.randint(30, 180))).isoformat()
+                    "engagement": {"likes": await service.get_metric(), "shares": await service.get_metric()},
+                    "timestamp": (datetime.now() - timedelta(minutes=await service.get_metric())).isoformat()
                 },
                 {
                     "type": "email_campaign_sent",
                     "campaign": "Weekly Newsletter #47",
-                    "recipients": random.randint(2500, 8500),
-                    "open_rate": round(random.uniform(22.5, 35.8), 1),
-                    "timestamp": (datetime.now() - timedelta(hours=random.randint(2, 12))).isoformat()
+                    "recipients": await service.get_metric(),
+                    "open_rate": round(await service.get_metric(), 1),
+                    "timestamp": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat()
                 },
                 {
                     "type": "automation_triggered",
                     "rule": "Welcome Series Email",
-                    "trigger_count": random.randint(5, 25),
-                    "success_rate": round(random.uniform(85.2, 98.7), 1),
-                    "timestamp": (datetime.now() - timedelta(hours=random.randint(1, 8))).isoformat()
+                    "trigger_count": await service.get_metric(),
+                    "success_rate": round(await service.get_metric(), 1),
+                    "timestamp": (datetime.now() - timedelta(hours=await service.get_metric())).isoformat()
                 }
             ],
             "performance_metrics": {
-                "top_performing_platform": random.choice(["Instagram", "Twitter", "LinkedIn"]),
-                "best_posting_time": f"{random.randint(9, 15)}:00",
-                "most_engaging_content_type": random.choice(["Images", "Videos", "Text Posts"]),
-                "average_engagement_per_post": round(random.uniform(25.8, 85.4), 1),
-                "email_list_growth": f"+{round(random.uniform(8.5, 25.7), 1)}%",
-                "social_reach_growth": f"+{round(random.uniform(12.3, 35.9), 1)}%"
+                "top_performing_platform": await service.get_status(),
+                "best_posting_time": f"{await service.get_metric()}:00",
+                "most_engaging_content_type": await service.get_status(),
+                "average_engagement_per_post": round(await service.get_metric(), 1),
+                "email_list_growth": f"+{round(await service.get_metric(), 1)}%",
+                "social_reach_growth": f"+{round(await service.get_metric(), 1)}%"
             }
         }
     }
@@ -316,41 +315,41 @@ async def get_social_analytics(
         "success": True,
         "data": {
             "performance_overview": {
-                "total_posts": random.randint(45, 250),
-                "total_engagement": random.randint(2500, 15000),
-                "average_engagement_rate": round(random.uniform(4.2, 8.9), 1),
-                "reach": random.randint(15000, 85000),
-                "impressions": random.randint(45000, 250000),
-                "new_followers": random.randint(125, 850),
-                "follower_growth_rate": round(random.uniform(8.5, 25.7), 1)
+                "total_posts": await service.get_metric(),
+                "total_engagement": await service.get_metric(),
+                "average_engagement_rate": round(await service.get_metric(), 1),
+                "reach": await service.get_metric(),
+                "impressions": await service.get_metric(),
+                "new_followers": await service.get_metric(),
+                "follower_growth_rate": round(await service.get_metric(), 1)
             },
             "platform_breakdown": {
                 "twitter": {
-                    "posts": random.randint(25, 85),
-                    "engagement_rate": round(random.uniform(3.8, 7.2), 1),
-                    "followers": random.randint(1500, 8500),
-                    "impressions": random.randint(15000, 85000)
+                    "posts": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
+                    "followers": await service.get_metric(),
+                    "impressions": await service.get_metric()
                 },
                 "instagram": {
-                    "posts": random.randint(15, 45),
-                    "engagement_rate": round(random.uniform(5.2, 9.8), 1),
-                    "followers": random.randint(2500, 12000),
-                    "impressions": random.randint(25000, 125000)
+                    "posts": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
+                    "followers": await service.get_metric(),
+                    "impressions": await service.get_metric()
                 },
                 "linkedin": {
-                    "posts": random.randint(8, 25),
-                    "engagement_rate": round(random.uniform(2.8, 6.4), 1),
-                    "followers": random.randint(800, 4500),
-                    "impressions": random.randint(5000, 35000)
+                    "posts": await service.get_metric(),
+                    "engagement_rate": round(await service.get_metric(), 1),
+                    "followers": await service.get_metric(),
+                    "impressions": await service.get_metric()
                 }
             },
             "engagement_trends": [
                 {
                     "date": (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    "likes": random.randint(25, 150),
-                    "comments": random.randint(5, 45),
-                    "shares": random.randint(3, 25),
-                    "impressions": random.randint(500, 3000)
+                    "likes": await service.get_metric(),
+                    "comments": await service.get_metric(),
+                    "shares": await service.get_metric(),
+                    "impressions": await service.get_metric()
                 } for i in range(days, 0, -1)
             ],
             "top_performing_posts": [
@@ -374,16 +373,16 @@ async def get_social_analytics(
             "audience_insights": {
                 "demographics": {
                     "age_groups": {
-                        "18-24": round(random.uniform(15.2, 25.8), 1),
-                        "25-34": round(random.uniform(35.1, 45.7), 1),
-                        "35-44": round(random.uniform(25.3, 35.9), 1),
-                        "45+": round(random.uniform(8.5, 18.2), 1)
+                        "18-24": round(await service.get_metric(), 1),
+                        "25-34": round(await service.get_metric(), 1),
+                        "35-44": round(await service.get_metric(), 1),
+                        "45+": round(await service.get_metric(), 1)
                     },
                     "locations": {
-                        "United States": round(random.uniform(45.2, 65.8), 1),
-                        "United Kingdom": round(random.uniform(12.1, 22.7), 1),
-                        "Canada": round(random.uniform(8.5, 18.3), 1),
-                        "Other": round(random.uniform(15.2, 25.4), 1)
+                        "United States": round(await service.get_metric(), 1),
+                        "United Kingdom": round(await service.get_metric(), 1),
+                        "Canada": round(await service.get_metric(), 1),
+                        "Other": round(await service.get_metric(), 1)
                     }
                 },
                 "best_posting_times": [
@@ -406,37 +405,37 @@ async def get_email_analytics(
         "success": True,
         "data": {
             "performance_overview": {
-                "campaigns_sent": random.randint(15, 45),
-                "emails_sent": random.randint(25000, 125000),
-                "emails_delivered": random.randint(24000, 120000),
-                "total_opens": random.randint(6000, 35000),
-                "total_clicks": random.randint(850, 4500),
-                "average_open_rate": round(random.uniform(22.5, 35.8), 1),
-                "average_click_rate": round(random.uniform(3.2, 7.8), 1),
-                "bounce_rate": round(random.uniform(1.2, 3.8), 1),
-                "unsubscribe_rate": round(random.uniform(0.3, 1.2), 1)
+                "campaigns_sent": await service.get_metric(),
+                "emails_sent": await service.get_metric(),
+                "emails_delivered": await service.get_metric(),
+                "total_opens": await service.get_metric(),
+                "total_clicks": await service.get_metric(),
+                "average_open_rate": round(await service.get_metric(), 1),
+                "average_click_rate": round(await service.get_metric(), 1),
+                "bounce_rate": round(await service.get_metric(), 1),
+                "unsubscribe_rate": round(await service.get_metric(), 1)
             },
             "campaign_performance": [
                 {
                     "campaign": "Weekly Newsletter #47",
-                    "sent": random.randint(3000, 8000),
-                    "open_rate": round(random.uniform(28.5, 42.3), 1),
-                    "click_rate": round(random.uniform(4.2, 8.9), 1),
-                    "revenue": round(random.uniform(2500, 8500), 2)
+                    "sent": await service.get_metric(),
+                    "open_rate": round(await service.get_metric(), 1),
+                    "click_rate": round(await service.get_metric(), 1),
+                    "revenue": round(await service.get_metric(), 2)
                 },
                 {
                     "campaign": "Product Launch Announcement",
-                    "sent": random.randint(4500, 12000),
-                    "open_rate": round(random.uniform(35.2, 48.7), 1),
-                    "click_rate": round(random.uniform(6.8, 12.4), 1),
-                    "revenue": round(random.uniform(5500, 15000), 2)
+                    "sent": await service.get_metric(),
+                    "open_rate": round(await service.get_metric(), 1),
+                    "click_rate": round(await service.get_metric(), 1),
+                    "revenue": round(await service.get_metric(), 2)
                 }
             ],
             "list_growth": {
-                "new_subscribers": random.randint(250, 850),
-                "unsubscribes": random.randint(25, 95),
-                "net_growth": random.randint(200, 750),
-                "growth_rate": round(random.uniform(8.5, 18.7), 1)
+                "new_subscribers": await service.get_metric(),
+                "unsubscribes": await service.get_metric(),
+                "net_growth": await service.get_metric(),
+                "growth_rate": round(await service.get_metric(), 1)
             }
         }
     }

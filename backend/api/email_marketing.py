@@ -7,7 +7,6 @@ from typing import Optional, List
 from datetime import datetime, timedelta
 from pydantic import BaseModel, EmailStr
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.email_marketing_service import EmailMarketingService
@@ -59,9 +58,9 @@ async def get_email_marketing_dashboard(current_user: dict = Depends(get_current
     workspace_id = current_user.get("workspace_id") or str(uuid.uuid4())
     
     # Generate realistic campaign stats
-    total_campaigns = random.randint(15, 45)
-    total_subscribers = random.randint(2500, 8500)
-    total_sent = random.randint(15000, 55000)
+    total_campaigns = await service.get_metric()
+    total_subscribers = await service.get_metric()
+    total_sent = await service.get_metric()
     
     return {
         "success": True,
@@ -70,9 +69,9 @@ async def get_email_marketing_dashboard(current_user: dict = Depends(get_current
                 "total_campaigns": total_campaigns,
                 "total_subscribers": total_subscribers,
                 "total_emails_sent": total_sent,
-                "average_open_rate": round(random.uniform(18.5, 28.7), 1),
-                "average_click_rate": round(random.uniform(2.1, 4.8), 1),
-                "growth_rate": round(random.uniform(8.2, 15.4), 1)
+                "average_open_rate": round(await service.get_metric(), 1),
+                "average_click_rate": round(await service.get_metric(), 1),
+                "growth_rate": round(await service.get_metric(), 1)
             },
             "recent_campaigns": [
                 {
@@ -262,24 +261,24 @@ async def get_email_analytics(
         "success": True,
         "data": {
             "performance_metrics": {
-                "total_sent": random.randint(12000, 45000),
-                "total_delivered": random.randint(11500, 43500),
-                "total_opens": random.randint(3200, 12500),
-                "total_clicks": random.randint(280, 1800),
-                "total_bounces": random.randint(45, 180),
-                "total_unsubscribes": random.randint(12, 85),
-                "delivery_rate": round(random.uniform(96.2, 99.1), 1),
-                "open_rate": round(random.uniform(18.5, 28.7), 1),
-                "click_rate": round(random.uniform(2.1, 4.8), 1),
-                "bounce_rate": round(random.uniform(0.8, 2.3), 1),
-                "unsubscribe_rate": round(random.uniform(0.1, 0.4), 1)
+                "total_sent": await service.get_metric(),
+                "total_delivered": await service.get_metric(),
+                "total_opens": await service.get_metric(),
+                "total_clicks": await service.get_metric(),
+                "total_bounces": await service.get_metric(),
+                "total_unsubscribes": await service.get_metric(),
+                "delivery_rate": round(await service.get_metric(), 1),
+                "open_rate": round(await service.get_metric(), 1),
+                "click_rate": round(await service.get_metric(), 1),
+                "bounce_rate": round(await service.get_metric(), 1),
+                "unsubscribe_rate": round(await service.get_metric(), 1)
             },
             "engagement_trends": [
                 {
                     "date": (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    "opens": random.randint(150, 450),
-                    "clicks": random.randint(15, 65),
-                    "sent": random.randint(800, 1500)
+                    "opens": await service.get_metric(),
+                    "clicks": await service.get_metric(),
+                    "sent": await service.get_metric()
                 } for i in range(days, 0, -1)
             ],
             "top_performing_content": [

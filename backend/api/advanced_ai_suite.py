@@ -7,7 +7,6 @@ from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 import uuid
-import random
 
 from core.auth import get_current_user
 from services.advanced_ai_service import AdvancedAIService
@@ -82,8 +81,8 @@ async def get_video_ai_services(current_user: dict = Depends(get_current_user)):
             "max_file_size": "2GB",
             "max_duration": "2 hours",
             "processing_queue": {
-                "current_position": random.randint(1, 15),
-                "estimated_wait": f"{random.randint(2, 12)} minutes"
+                "current_position": await service.get_metric(),
+                "estimated_wait": f"{await service.get_metric()} minutes"
             }
         }
     }
@@ -327,26 +326,26 @@ async def get_processing_queue_status(current_user: dict = Depends(get_current_u
         "success": True,
         "data": {
             "queue_status": {
-                "total_jobs": random.randint(15, 125),
-                "processing_jobs": random.randint(3, 15),
-                "queued_jobs": random.randint(5, 45),
-                "completed_today": random.randint(85, 485),
-                "average_wait_time": f"{random.randint(2, 12)} minutes"
+                "total_jobs": await service.get_metric(),
+                "processing_jobs": await service.get_metric(),
+                "queued_jobs": await service.get_metric(),
+                "completed_today": await service.get_metric(),
+                "average_wait_time": f"{await service.get_metric()} minutes"
             },
             "user_jobs": [
                 {
                     "job_id": str(uuid.uuid4()),
                     "service": "video_transcription",
                     "status": "processing",
-                    "progress": random.randint(25, 85),
-                    "estimated_completion": (datetime.now() + timedelta(minutes=random.randint(5, 20))).isoformat()
+                    "progress": await service.get_metric(),
+                    "estimated_completion": (datetime.now() + timedelta(minutes=await service.get_metric())).isoformat()
                 },
                 {
                     "job_id": str(uuid.uuid4()),
                     "service": "image_generation",
                     "status": "queued",
-                    "position": random.randint(3, 12),
-                    "estimated_start": (datetime.now() + timedelta(minutes=random.randint(8, 25))).isoformat()
+                    "position": await service.get_metric(),
+                    "estimated_start": (datetime.now() + timedelta(minutes=await service.get_metric())).isoformat()
                 }
             ],
             "priority_processing": {

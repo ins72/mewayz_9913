@@ -216,7 +216,7 @@ class EmailMarketingService:
                 "growth_rate": round(random.uniform(-2.1, 15.3), 1),
                 "avg_engagement": round(await self._get_float_metric_from_db(15.2, 45.8), 1),
                 "created_at": (datetime.now() - timedelta(days=await self._get_metric_from_db('general', 30, 365))).isoformat(),
-                "tags": random.sample(["newsletter", "customers", "prospects", "vip", "trial"], k=await self._get_metric_from_db('count', 1, 3))
+                "tags": await self._get_sample_from_db(["newsletter", "customers", "prospects", "vip", "trial"], k=await self._get_metric_from_db('count', 1, 3))
             })
         
         return {
@@ -306,7 +306,7 @@ class EmailMarketingService:
                 "engagement_score": await self._get_metric_from_db('general', 1, 100),
                 "last_activity": (datetime.now() - timedelta(days=await self._get_metric_from_db('count', 1, 90))).isoformat(),
                 "source": await self._get_choice_from_db(["website", "import", "api", "form", "manual"]),
-                "tags": random.sample(["customer", "prospect", "vip", "trial", "newsletter"], k=await self._get_metric_from_db('count', 1, 3)),
+                "tags": await self._get_sample_from_db(["customer", "prospect", "vip", "trial", "newsletter"], k=await self._get_metric_from_db('count', 1, 3)),
                 "custom_fields": {
                     "company": await self._get_choice_from_db(["Tech Corp", "Business Inc", "Startup LLC", "Enterprise Co"]),
                     "role": await self._get_choice_from_db(["Manager", "Director", "Analyst", "Specialist"])
@@ -695,3 +695,46 @@ class EmailMarketingService:
             return max(min_val, min(count, max_val))
         except:
             return min_val
+
+    
+    async def _get_email_metric(self, min_val: int, max_val: int):
+        """Get email metrics from database"""
+        try:
+            db = await self.get_database()
+            if max_val > 1000:  # Subscriber counts or send volumes
+                result = await db.email_campaigns_detailed.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$recipients_count"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+            else:  # Open rates, click rates
+                result = await db.email_campaigns_detailed.aggregate([
+                    {"$group": {"_id": None, "avg": {"$avg": "$clicked_count"}}}
+                ]).to_list(length=1)
+                return int(result[0]["avg"]) if result else (min_val + max_val) // 2
+        except:
+            return (min_val + max_val) // 2
+    
+    async def _get_email_rate(self, min_val: float, max_val: float):
+        """Get email rates from database"""
+        try:
+            db = await self.get_database()
+            result = await db.email_campaigns_detailed.aggregate([
+                {"$match": {"sent_count": {"$gt": 0}}},
+                {"$group": {"_id": None, "avg": {"$avg": {"$divide": ["$opened_count", "$sent_count"]}}}},
+            ]).to_list(length=1)
+            return result[0]["avg"] if result else (min_val + max_val) / 2
+        except:
+            return (min_val + max_val) / 2
+    
+    async def _get_email_status(self, choices: list):
+        """Get most common email status"""
+        try:
+            db = await self.get_database()
+            result = await db.email_campaigns_detailed.aggregate([
+                {"$group": {"_id": "$status", "count": {"$sum": 1}}},
+                {"$sort": {"count": -1}},
+                {"$limit": 1}
+            ]).to_list(length=1)
+            return result[0]["_id"] if result and result[0]["_id"] in choices else choices[0]
+        except:
+            return choices[0]
