@@ -91,6 +91,10 @@ app.include_router(form_builder.router, prefix="/api/forms", tags=["Form Builder
 # THIRD WAVE - MARKETING & PROMOTIONAL FEATURES - Newly Migrated  
 app.include_router(promotions_referrals.router, prefix="/api/promotions", tags=["Promotions & Referrals"])
 
+# FOURTH WAVE - ADVANCED BUSINESS SYSTEMS - Newly Migrated
+app.include_router(ai_token_management.router, prefix="/api/tokens", tags=["AI Token Management"])
+app.include_router(course_management.router, prefix="/api/courses", tags=["Course & Learning Management"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
