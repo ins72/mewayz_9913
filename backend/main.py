@@ -150,6 +150,9 @@ app.include_router(monitoring_system.router, prefix="/api/monitoring", tags=["Ad
 # NINETEENTH WAVE - COMPREHENSIVE BACKUP & DISASTER RECOVERY - Newly Implemented
 app.include_router(backup_system.router, prefix="/api/backup", tags=["Comprehensive Backup & Disaster Recovery"])
 
+# TWENTIETH WAVE - ADVANCED COMPLIANCE & AUDIT SYSTEM - Newly Implemented
+app.include_router(compliance_system.router, prefix="/api/compliance", tags=["Advanced Compliance & Audit System"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
