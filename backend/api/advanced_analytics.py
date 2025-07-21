@@ -162,7 +162,8 @@ async def get_realtime_analytics(current_user: dict = Depends(get_current_user))
 @router.get("/business-intelligence")
 async def get_business_intelligence(current_user: dict = Depends(get_current_user)):
     """Get advanced business intelligence insights"""
-    return await analytics_service.get_business_intelligence(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await analytics_service.get_business_intelligence(user_id)
 
 @router.get("/customer-analytics")
 async def get_customer_analytics(
