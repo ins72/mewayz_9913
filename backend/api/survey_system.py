@@ -50,7 +50,7 @@ async def create_survey(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/surveys/{survey_id}")
+@router.get("/{survey_id}")
 async def get_survey(
     survey_id: str,
     current_user: dict = Depends(get_current_user)
