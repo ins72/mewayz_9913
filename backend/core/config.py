@@ -34,5 +34,13 @@ class Settings:
     APP_NAME: str = "Mewayz Professional Platform"
     VERSION: str = "3.0.0"
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
+    
+    # CORS Settings
+    ALLOWED_ORIGINS: list = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://mewayz.com",
+        "https://*.mewayz.com"
+    ]
 
 settings = Settings()
