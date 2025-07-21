@@ -139,23 +139,25 @@ class CRMWebsiteBuilderTester:
         # Test Get Contacts
         self.test_endpoint("/crm/contacts", "GET", description="Customer contact list")
         
-        # Test Create Contact
+        # Test Create Contact (with unique email to avoid conflicts)
+        import random
+        unique_id = random.randint(1000, 9999)
         contact_data = {
-            "first_name": "John",
-            "last_name": "Smith",
-            "email": "john.smith@testcompany.com",
-            "phone": "+1-555-0123",
-            "company": "Test Company Inc",
-            "position": "Marketing Director",
-            "website": "https://testcompany.com",
-            "address": "123 Business St, City, State 12345",
-            "status": "lead",
-            "lead_score": 75,
-            "source": "website",
-            "tags": ["marketing", "enterprise"],
+            "first_name": "Sarah",
+            "last_name": "Johnson",
+            "email": f"sarah.johnson{unique_id}@testcompany.com",
+            "phone": "+1-555-0124",
+            "company": "Innovation Corp",
+            "position": "Sales Manager",
+            "website": "https://innovationcorp.com",
+            "address": "456 Innovation Ave, Tech City, State 54321",
+            "status": "prospect",
+            "lead_score": 85,
+            "source": "referral",
+            "tags": ["sales", "high-priority"],
             "custom_fields": {
-                "industry": "Technology",
-                "company_size": "50-100"
+                "industry": "Software",
+                "company_size": "100-500"
             }
         }
         self.test_endpoint("/crm/contacts", "POST", data=contact_data, expected_status=200, 
