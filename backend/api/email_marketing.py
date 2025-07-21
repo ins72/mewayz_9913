@@ -165,7 +165,8 @@ async def send_campaign(
 @router.get("/lists")
 async def get_email_lists(current_user: dict = Depends(get_current_user)):
     """Get user's email lists"""
-    return await email_service.get_lists(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_lists(user_id)
 
 @router.post("/lists")
 async def create_email_list(
