@@ -144,7 +144,8 @@ async def get_survey_responses(
 ):
     """Get all responses for a survey"""
     try:
-        responses = await SurveyService.get_survey_responses(survey_id, current_user["id"])
+        user_id = current_user.get("_id") or current_user.get("id", "default-user")
+        responses = await SurveyService.get_survey_responses(survey_id, user_id)
         return {"success": True, "data": responses}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
