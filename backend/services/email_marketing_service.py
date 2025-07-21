@@ -211,8 +211,8 @@ class EmailMarketingService:
                 ]),
                 "description": "High-engagement subscriber list with active members",
                 "subscriber_count": subscriber_count,
-                "active_subscribers": random.randint(int(subscriber_count * 0.8), subscriber_count),
-                "growth_rate": round(random.uniform(-2.1, 15.3), 1),
+                "active_subscribers": await self._get_real_metric_from_db('active_subscribers', int(subscriber_count * 0.8), subscriber_count),
+                "growth_rate": round(await self._get_real_float_metric_from_db(-2.1, 15.3), 1),
                 "avg_engagement": round(await self._get_float_metric_from_db(15.2, 45.8), 1),
                 "created_at": (datetime.now() - timedelta(days=await self._get_metric_from_db('general', 30, 365))).isoformat(),
                 "tags": await self._get_sample_from_db(["newsletter", "customers", "prospects", "vip", "trial"], k=await self._get_metric_from_db('count', 1, 3))
