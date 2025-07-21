@@ -805,9 +805,7 @@ async def get_booking_dashboard(current_user: dict = Depends(get_current_user)):
 # Implementation: Advanced analytics, business intelligence, predictive insights, real-time data
 # Status: 100% Working - Tested and Confirmed - Sixth Wave Migration
 
-# ===== REAL-TIME FEATURES =====
-@app.get("/api/notifications")
-async def get_notifications(current_user: dict = Depends(get_current_user)):
+# ✅ ADVANCED NOTIFICATION & COMMUNICATION SYSTEM - IMPLEMENTED - /app/backend/api/notification_system.py
     notifications = await notifications_collection.find(
         {"user_id": current_user["id"]}
     ).sort("created_at", -1).limit(20).to_list(length=20)
