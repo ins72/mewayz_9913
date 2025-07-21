@@ -284,7 +284,8 @@ async def complete_onboarding(
     current_user: dict = Depends(get_current_user)
 ):
     """Complete the onboarding process and create workspace"""
-    return await onboarding_service.complete_onboarding(current_user["id"], completion_data.dict())
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await onboarding_service.complete_onboarding(user_id, completion_data.dict())
 
 @router.get("/checklist")
 async def get_setup_checklist(current_user: dict = Depends(get_current_user)):
