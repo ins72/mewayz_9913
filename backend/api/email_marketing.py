@@ -212,7 +212,8 @@ async def create_contact(
     current_user: dict = Depends(get_current_user)
 ):
     """Create a new contact"""
-    return await email_service.create_contact(current_user["id"], contact.dict())
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.create_contact(user_id, contact.dict())
 
 @router.get("/templates")
 async def get_email_templates(
