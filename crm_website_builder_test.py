@@ -173,9 +173,9 @@ class CRMWebsiteBuilderTester:
         """Test Website Builder System endpoints"""
         print(f"\n🌐 TESTING WEBSITE BUILDER SYSTEM...")
         
-        # Test Website Builder Dashboard
-        self.test_endpoint("/website-builder/dashboard", "GET", expected_status=404,
-                          description="Website builder dashboard (endpoint not found)")
+        # Test Website Builder Dashboard (actually exists)
+        self.test_endpoint("/website-builder/dashboard", "GET", expected_status=200,
+                          description="Website builder dashboard with metrics")
         
         # Test Get Templates
         self.test_endpoint("/website-builder/templates", "GET", description="Available website templates")
