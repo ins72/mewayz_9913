@@ -138,6 +138,9 @@ app.include_router(i18n_system.router, prefix="/api/i18n", tags=["Internationali
 # THIRTEENTH WAVE - ADVANCED NOTIFICATION & COMMUNICATION - Newly Implemented
 app.include_router(notification_system.router, prefix="/api/notifications", tags=["Advanced Notification & Communication"])
 
+# THIRTEENTH WAVE - API RATE LIMITING & THROTTLING - Newly Implemented
+app.include_router(rate_limiting_system.router, prefix="/api/rate-limits", tags=["API Rate Limiting & Throttling"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
