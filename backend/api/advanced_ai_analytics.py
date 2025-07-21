@@ -13,8 +13,7 @@ from core.professional_logger import professional_logger, LogLevel, LogCategory
 
 router = APIRouter(
     prefix="/api/ai-analytics",
-    tags=["Advanced AI Analytics"],
-    dependencies=[Depends(require_auth)]
+    tags=["Advanced AI Analytics"]
 )
 
 @router.post("/insights/generate", response_model=Dict[str, Any])
