@@ -9458,6 +9458,8 @@ innovation_lab_collection = database.innovation_lab
 # Migration completed in Tenth Wave - December 2024
 
 # ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
+
+@app.get("/api/social/listening/overview")
 async def get_live_chat_overview(current_user: dict = Depends(get_current_user)):
     """Live chat system overview and analytics"""
     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
