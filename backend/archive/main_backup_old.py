@@ -6056,7 +6056,7 @@ ab_tests_collection = database.ab_tests
 customer_feedback_collection = database.customer_feedback
 event_tracking_collection = database.event_tracking
 
-# ===== FILE MANAGEMENT & MEDIA LIBRARY (25+ ENDPOINTS) =====
+# ✅ MEDIA LIBRARY & FILE MANAGEMENT - IMPLEMENTED - /app/backend/api/media_library.py
 
 @app.get("/api/files")
 async def list_files(
