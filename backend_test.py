@@ -277,6 +277,133 @@ class BackendTester:
         self.test_endpoint("/promotions/referral-codes", "POST", data=referral_code_data,
                          description="Generate referral code", expected_status=404)  # Expected to fail without valid program_id
 
+    def test_fourth_wave_ai_token_management(self):
+        """Test FOURTH WAVE - AI TOKEN MANAGEMENT SYSTEM (NEWLY ADDED)"""
+        print(f"\n🌊 TESTING FOURTH WAVE - AI TOKEN MANAGEMENT SYSTEM (NEWLY ADDED)")
+        
+        # 9. AI Token Management System
+        print(f"\n🪙 Testing AI Token Management System...")
+        
+        # Token Dashboard
+        self.test_endpoint("/tokens/dashboard", "GET", description="AI token dashboard with comprehensive usage analytics")
+        
+        # Token Packages
+        self.test_endpoint("/tokens/packages", "GET", description="Available token packages for purchase")
+        
+        # Workspace Token Balance (using a test workspace ID)
+        test_workspace_id = "test-workspace-123"
+        self.test_endpoint(f"/tokens/workspace/{test_workspace_id}/balance", "GET", 
+                         description="Token balance and settings for workspace")
+        
+        # Token Purchase (would require valid Stripe setup)
+        purchase_data = {
+            "package_id": "starter-pack-id",
+            "workspace_id": test_workspace_id,
+            "payment_method_id": "pm_test_card"
+        }
+        self.test_endpoint("/tokens/purchase", "POST", data=purchase_data,
+                         description="Purchase tokens with Stripe integration", expected_status=[400, 503])
+        
+        # Token Consumption
+        consumption_data = {
+            "workspace_id": test_workspace_id,
+            "feature": "content_generation",
+            "tokens_needed": 5,
+            "description": "Generate blog post content"
+        }
+        self.test_endpoint("/tokens/consume", "POST", data=consumption_data,
+                         description="Internal endpoint to consume tokens for AI features")
+        
+        # Update Token Settings
+        settings_data = {
+            "monthly_token_allowance": 100,
+            "auto_purchase_enabled": True,
+            "auto_purchase_threshold": 20,
+            "user_limits": {"user123": 50},
+            "feature_costs": {
+                "content_generation": 5,
+                "image_generation": 10,
+                "seo_analysis": 3
+            }
+        }
+        self.test_endpoint(f"/tokens/workspace/{test_workspace_id}/settings", "PUT", data=settings_data,
+                         description="Update token settings (owner only)")
+        
+        # Token Analytics
+        self.test_endpoint(f"/tokens/analytics/{test_workspace_id}?days=30", "GET",
+                         description="Detailed token usage analytics")
+
+    def test_fourth_wave_course_management(self):
+        """Test FOURTH WAVE - COURSE & LEARNING MANAGEMENT SYSTEM (NEWLY ADDED)"""
+        print(f"\n🌊 TESTING FOURTH WAVE - COURSE & LEARNING MANAGEMENT SYSTEM (NEWLY ADDED)")
+        
+        # 10. Course & Learning Management System
+        print(f"\n📚 Testing Course & Learning Management System...")
+        
+        # Course Dashboard
+        self.test_endpoint("/courses/dashboard", "GET", description="Comprehensive course management dashboard")
+        
+        # Get Courses
+        self.test_endpoint("/courses/courses?status_filter=published&limit=10", "GET", 
+                         description="Get user's courses with filtering and pagination")
+        
+        # Create Course
+        course_data = {
+            "title": "Advanced Python Programming",
+            "description": "Master advanced Python concepts and techniques",
+            "category": "Programming",
+            "level": "advanced",
+            "price": 99.99,
+            "duration_hours": 20,
+            "learning_objectives": [
+                "Master advanced Python concepts",
+                "Build complex applications",
+                "Understand design patterns"
+            ],
+            "prerequisites": ["Basic Python knowledge"],
+            "is_published": True
+        }
+        self.test_endpoint("/courses/courses", "POST", data=course_data,
+                         description="Create new course with validation")
+        
+        # Get Course Details (using test course ID)
+        test_course_id = "test-course-123"
+        self.test_endpoint(f"/courses/courses/{test_course_id}", "GET",
+                         description="Get course details with lessons and analytics")
+        
+        # Update Course
+        update_data = {
+            "title": "Advanced Python Programming - Updated",
+            "price": 89.99,
+            "is_published": True
+        }
+        self.test_endpoint(f"/courses/courses/{test_course_id}", "PUT", data=update_data,
+                         description="Update course with validation")
+        
+        # Create Lesson
+        lesson_data = {
+            "course_id": test_course_id,
+            "title": "Introduction to Advanced Concepts",
+            "description": "Overview of advanced Python programming concepts",
+            "content": "In this lesson, we'll explore advanced Python concepts...",
+            "duration_minutes": 45,
+            "order_index": 1,
+            "is_free_preview": True
+        }
+        self.test_endpoint(f"/courses/courses/{test_course_id}/lessons", "POST", data=lesson_data,
+                         description="Create new lesson for course")
+        
+        # Enroll in Course
+        enrollment_data = {
+            "course_id": test_course_id
+        }
+        self.test_endpoint("/courses/enroll", "POST", data=enrollment_data,
+                         description="Enroll student in course with payment processing")
+        
+        # Get My Courses
+        self.test_endpoint("/courses/my-courses", "GET",
+                         description="Get courses the user is enrolled in")
+
     def test_core_system_health(self):
         """Test core system health and integration"""
         print(f"\n🔍 TESTING CORE SYSTEM HEALTH")
