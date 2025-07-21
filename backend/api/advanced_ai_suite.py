@@ -170,7 +170,7 @@ async def synthesize_voice(
 ):
     """Synthesize speech from text"""
     return await ai_service.synthesize_voice(
-        current_user["id"], text, voice_id, language, speed, emotion
+        current_user.get("_id") or current_user.get("id", "default-user"), text, voice_id, language, speed, emotion
     )
 
 @router.get("/image/services")
