@@ -144,7 +144,7 @@ async def get_survey_responses(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/surveys/{survey_id}/analytics")
+@router.get("/{survey_id}/analytics")
 async def get_survey_analytics(
     survey_id: str,
     current_user: dict = Depends(get_current_user)
