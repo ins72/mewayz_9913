@@ -71,7 +71,7 @@ async def update_workflow(
     current_user: dict = Depends(get_current_user)
 ):
     """Update existing workflow"""
-    return await automation_service.update_workflow(current_user["id"], workflow_id, workflow_data.dict())
+    return await automation_service.update_workflow(current_user.get("_id") or current_user.get("id", "default-user"), workflow_id, workflow_data.dict())
 
 @router.post("/workflows/{workflow_id}/execute")
 async def execute_workflow(
