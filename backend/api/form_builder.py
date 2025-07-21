@@ -19,7 +19,7 @@ router = APIRouter()
 user_service = get_user_service()
 
 class FormField(BaseModel):
-    id: str
+    id: Optional[str] = None  # Will be auto-generated if not provided
     type: str  # text, email, number, select, checkbox, radio, textarea, file, date
     label: str
     placeholder: Optional[str] = ""
