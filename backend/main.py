@@ -121,6 +121,11 @@ app.include_router(automation_system.router, prefix="/api/automation", tags=["Au
 app.include_router(advanced_ai_suite.router, prefix="/api/advanced-ai", tags=["Advanced AI Suite"])
 app.include_router(support_system.router, prefix="/api/support", tags=["Support System"])
 
+# ELEVENTH WAVE - CONTENT CREATION, CUSTOMER EXPERIENCE & SOCIAL MEDIA - Newly Migrated
+app.include_router(content_creation_suite.router, prefix="/api/content-creation", tags=["Content Creation Suite"])
+app.include_router(customer_experience_suite.router, prefix="/api/customer-experience", tags=["Customer Experience Suite"])
+app.include_router(social_media_suite.router, prefix="/api/social-media", tags=["Social Media Suite"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
