@@ -1,586 +1,704 @@
 """
-Admin Configuration API Routes
-Complete admin dashboard backend for managing all platform configurations
-REAL EXTERNAL API INTEGRATIONS ONLY - No mock data
+Admin Configuration API
+Comprehensive admin dashboard for managing all external API integrations and system settings
 """
-
 from fastapi import APIRouter, Depends, HTTPException, Request
+from typing import Dict, List, Optional, Any
 from pydantic import BaseModel
-from typing import Optional, List, Dict, Any
-from datetime import datetime, timedelta
-import os
+from datetime import datetime
+import json
 
 from core.auth import get_current_admin
-from core.database import get_database
-from core.security import security_manager
-from core.logging import admin_logger
+from core.admin_config_manager import admin_config_manager, APIConfiguration
+from core.professional_logger import professional_logger, LogLevel, LogCategory
+from core.external_api_integrator import (
+    social_media_integrator, 
+    payment_processor_integrator, 
+    email_service_integrator, 
+    file_storage_integrator, 
+    ai_service_integrator
+)
 
-router = APIRouter(prefix="/api/admin-config", tags=["Admin Configuration"])
+router = APIRouter()
 
-# Configuration Models
-class ExternalAPIConfig(BaseModel):
+class ConfigurationUpdateRequest(BaseModel):
+    """Request model for configuration updates"""
     # Social Media APIs
     twitter_bearer_token: Optional[str] = None
+    twitter_api_key: Optional[str] = None
+    twitter_api_secret: Optional[str] = None
     instagram_access_token: Optional[str] = None
+    instagram_app_id: Optional[str] = None
     facebook_access_token: Optional[str] = None
-    linkedin_access_token: Optional[str] = None
-    tiktok_access_token: Optional[str] = None
+    facebook_app_id: Optional[str] = None
+    linkedin_client_id: Optional[str] = None
+    linkedin_client_secret: Optional[str] = None
+    tiktok_client_key: Optional[str] = None
+    tiktok_client_secret: Optional[str] = None
     
-    # AI Services
-    openai_api_key: Optional[str] = None
-    anthropic_api_key: Optional[str] = None
-    google_ai_key: Optional[str] = None
-    
-    # Analytics
-    google_analytics_key: Optional[str] = None
-    mixpanel_token: Optional[str] = None
-
-class PaymentProcessorConfig(BaseModel):
-    # Stripe
+    # Payment Processors
     stripe_secret_key: Optional[str] = None
     stripe_publishable_key: Optional[str] = None
     stripe_webhook_secret: Optional[str] = None
-    
-    # PayPal
     paypal_client_id: Optional[str] = None
     paypal_client_secret: Optional[str] = None
     paypal_webhook_id: Optional[str] = None
-    
-    # Square
     square_access_token: Optional[str] = None
     square_application_id: Optional[str] = None
-    square_webhook_key: Optional[str] = None
-    
-    # Razorpay
+    square_webhook_signature_key: Optional[str] = None
     razorpay_key_id: Optional[str] = None
     razorpay_key_secret: Optional[str] = None
     razorpay_webhook_secret: Optional[str] = None
+    preferred_payment_processor: Optional[str] = None
+    enabled_payment_processors: Optional[List[str]] = None
     
-    # Configuration
-    preferred_payment_processor: str = "stripe"
-    enabled_payment_processors: List[str] = ["stripe", "paypal"]
-
-class EmailServiceConfig(BaseModel):
-    # ElasticMail
-    elasticmail_api_key: Optional[str] = None
-    elasticmail_enabled: bool = False
+    # Email Services
+    sendgrid_api_key: Optional[str] = None
+    sendgrid_from_email: Optional[str] = None
+    mailgun_api_key: Optional[str] = None
+    mailgun_domain: Optional[str] = None
+    aws_ses_access_key: Optional[str] = None
+    aws_ses_secret_key: Optional[str] = None
+    aws_ses_region: Optional[str] = None
+    preferred_email_service: Optional[str] = None
     
-    # SMTP
-    smtp_host: str = "smtp.gmail.com"
-    smtp_port: int = 587
-    smtp_username: Optional[str] = None
-    smtp_password: Optional[str] = None
-    smtp_use_tls: bool = True
-    smtp_enabled: bool = False
+    # File Storage
+    backblaze_b2_key_id: Optional[str] = None
+    backblaze_b2_app_key: Optional[str] = None
+    backblaze_b2_bucket_id: Optional[str] = None
+    backblaze_b2_bucket_name: Optional[str] = None
+    
+    # AI Services
+    openai_api_key: Optional[str] = None
+    openai_organization: Optional[str] = None
+    anthropic_api_key: Optional[str] = None
+    google_ai_api_key: Optional[str] = None
+    preferred_ai_service: Optional[str] = None
+    
+    # System Settings
+    enable_rate_limiting: Optional[bool] = None
+    rate_limit_per_minute: Optional[int] = None
+    enable_audit_logging: Optional[bool] = None
+    log_level: Optional[str] = None
+    enable_email_notifications: Optional[bool] = None
+    admin_notification_email: Optional[str] = None
 
-class StorageConfig(BaseModel):
-    # Backblaze B2
-    backblaze_key_id: Optional[str] = None
-    backblaze_app_key: Optional[str] = None
-    backblaze_bucket_id: Optional[str] = None
-    backblaze_bucket_name: str = "mewayz-storage"
-
-class PlatformConfig(BaseModel):
-    platform_name: str = "Mewayz Professional Platform"
-    platform_version: str = "4.0.0"
-    maintenance_mode: bool = False
-    registration_enabled: bool = True
-    admin_email: str = "admin@mewayz.com"
-    max_users: int = 10000
-
-@router.get("/external-apis")
-async def get_external_api_config(current_admin=Depends(get_current_admin)):
-    """Get external API configuration (masked sensitive data)"""
-    try:
-        db = get_database()
-        config = await db.api_configuration.find_one({"type": "external_apis"})
-        
-        if config:
-            # Mask sensitive data
-            masked_config = {}
-            for key, value in config.items():
-                if key.endswith(('_key', '_token', '_secret')):
-                    masked_config[key] = f"{'*' * 8}{value[-4:]}" if value else None
-                else:
-                    masked_config[key] = value
-            return masked_config
-        
-        return {"message": "No external API configuration found"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("ADMIN_CONFIG_FETCH_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "config_type": "external_apis",
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to fetch configuration")
-
-@router.post("/external-apis")
-async def update_external_api_config(
-    config: ExternalAPIConfig, 
-    request: Request,
-    current_admin=Depends(get_current_admin)
+@router.get("/configuration")
+async def get_current_configuration(
+    current_admin: dict = Depends(get_current_admin)
 ):
-    """Update external API configuration with encryption"""
+    """Get current system configuration (masked sensitive fields)"""
     try:
-        db = get_database()
+        config = await admin_config_manager.get_configuration(decrypt_sensitive=False)
         
-        # Encrypt sensitive data
-        encrypted_config = {"type": "external_apis", "updated_at": datetime.utcnow()}
-        
-        for key, value in config.dict().items():
-            if value is not None:
-                if key.endswith(('_key', '_token', '_secret')):
-                    encrypted_config[key] = security_manager.encrypt_sensitive_data(value)
-                else:
-                    encrypted_config[key] = value
-        
-        # Update configuration
-        await db.api_configuration.replace_one(
-            {"type": "external_apis"},
-            encrypted_config,
-            upsert=True
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin retrieved system configuration",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id")
         )
-        
-        admin_logger.log_system_event("EXTERNAL_API_CONFIG_UPDATED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "keys_updated": list(config.dict().keys())
-        })
-        
-        return {"success": True, "message": "External API configuration updated successfully"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("EXTERNAL_API_CONFIG_UPDATE_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to update configuration")
-
-@router.post("/payment-processors")
-async def update_payment_processor_config(
-    config: PaymentProcessorConfig,
-    request: Request,
-    current_admin=Depends(get_current_admin)
-):
-    """Update payment processor configuration"""
-    try:
-        db = get_database()
-        
-        # Encrypt sensitive data
-        encrypted_config = {"type": "payment_processors", "updated_at": datetime.utcnow()}
-        
-        for key, value in config.dict().items():
-            if value is not None:
-                if key.endswith(('_key', '_secret', '_id')) and key != 'razorpay_key_id':
-                    encrypted_config[key] = security_manager.encrypt_sensitive_data(value)
-                else:
-                    encrypted_config[key] = value
-        
-        # Update configuration
-        await db.api_configuration.replace_one(
-            {"type": "payment_processors"},
-            encrypted_config,
-            upsert=True
-        )
-        
-        admin_logger.log_system_event("PAYMENT_CONFIG_UPDATED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "preferred_processor": config.preferred_payment_processor,
-            "enabled_processors": config.enabled_payment_processors
-        })
-        
-        return {"success": True, "message": "Payment processor configuration updated successfully"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("PAYMENT_CONFIG_UPDATE_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to update payment configuration")
-
-@router.post("/email-service")
-async def update_email_service_config(
-    config: EmailServiceConfig,
-    request: Request,
-    current_admin=Depends(get_current_admin)
-):
-    """Update email service configuration"""
-    try:
-        db = get_database()
-        
-        # Encrypt sensitive data
-        encrypted_config = {"type": "email_services", "updated_at": datetime.utcnow()}
-        
-        for key, value in config.dict().items():
-            if value is not None:
-                if key in ['elasticmail_api_key', 'smtp_password']:
-                    encrypted_config[key] = security_manager.encrypt_sensitive_data(value)
-                else:
-                    encrypted_config[key] = value
-        
-        # Update configuration
-        await db.api_configuration.replace_one(
-            {"type": "email_services"},
-            encrypted_config,
-            upsert=True
-        )
-        
-        admin_logger.log_system_event("EMAIL_CONFIG_UPDATED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "elasticmail_enabled": config.elasticmail_enabled,
-            "smtp_enabled": config.smtp_enabled
-        })
-        
-        return {"success": True, "message": "Email service configuration updated successfully"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("EMAIL_CONFIG_UPDATE_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to update email configuration")
-
-@router.post("/storage")
-async def update_storage_config(
-    config: StorageConfig,
-    request: Request,
-    current_admin=Depends(get_current_admin)
-):
-    """Update storage configuration"""
-    try:
-        db = get_database()
-        
-        # Encrypt sensitive data
-        encrypted_config = {"type": "storage", "updated_at": datetime.utcnow()}
-        
-        for key, value in config.dict().items():
-            if value is not None:
-                if key in ['backblaze_key_id', 'backblaze_app_key']:
-                    encrypted_config[key] = security_manager.encrypt_sensitive_data(value)
-                else:
-                    encrypted_config[key] = value
-        
-        # Update configuration
-        await db.api_configuration.replace_one(
-            {"type": "storage"},
-            encrypted_config,
-            upsert=True
-        )
-        
-        admin_logger.log_system_event("STORAGE_CONFIG_UPDATED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "bucket_name": config.backblaze_bucket_name
-        })
-        
-        return {"success": True, "message": "Storage configuration updated successfully"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("STORAGE_CONFIG_UPDATE_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to update storage configuration")
-
-@router.get("/platform-settings")
-async def get_platform_settings(current_admin=Depends(get_current_admin)):
-    """Get platform settings"""
-    try:
-        db = get_database()
-        config = await db.api_configuration.find_one({"type": "platform_settings"})
-        
-        if config:
-            return config
-        
-        # Return defaults if no config exists
-        return PlatformConfig().dict()
-        
-    except Exception as e:
-        admin_logger.log_system_event("PLATFORM_SETTINGS_FETCH_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to fetch platform settings")
-
-@router.post("/platform-settings")
-async def update_platform_settings(
-    config: PlatformConfig,
-    request: Request,
-    current_admin=Depends(get_current_admin)
-):
-    """Update platform settings"""
-    try:
-        db = get_database()
-        
-        config_dict = config.dict()
-        config_dict["type"] = "platform_settings"
-        config_dict["updated_at"] = datetime.utcnow()
-        
-        # Update configuration
-        await db.api_configuration.replace_one(
-            {"type": "platform_settings"},
-            config_dict,
-            upsert=True
-        )
-        
-        admin_logger.log_system_event("PLATFORM_SETTINGS_UPDATED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "platform_name": config.platform_name,
-            "maintenance_mode": config.maintenance_mode
-        })
-        
-        return {"success": True, "message": "Platform settings updated successfully"}
-        
-    except Exception as e:
-        admin_logger.log_system_event("PLATFORM_SETTINGS_UPDATE_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to update platform settings")
-
-@router.get("/logs")
-async def get_admin_logs(
-    level: Optional[str] = None,
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    search: Optional[str] = None,
-    limit: int = 100,
-    offset: int = 0,
-    current_admin=Depends(get_current_admin)
-):
-    """Get system logs with filtering capabilities"""
-    try:
-        filters = {}
-        
-        if level:
-            filters['level'] = level
-        if start_date:
-            filters['start_date'] = start_date
-        if end_date:
-            filters['end_date'] = end_date
-        if search:
-            filters['search'] = search
-        
-        filters['limit'] = limit
-        filters['offset'] = offset
-        
-        logs = await admin_logger.get_logs_for_admin(filters)
         
         return {
-            "logs": logs,
-            "total": len(logs),
-            "filters_applied": filters,
-            "retrieved_at": datetime.utcnow().isoformat()
+            "success": True,
+            "configuration": config,
+            "timestamp": datetime.utcnow().isoformat()
         }
         
     except Exception as e:
-        admin_logger.log_system_event("ADMIN_LOGS_FETCH_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to fetch logs")
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Failed to retrieve configuration: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve configuration: {str(e)}")
 
-@router.get("/system-status")
-async def get_system_status(current_admin=Depends(get_current_admin)):
-    """Get comprehensive system status"""
-    try:
-        db = get_database()
-        
-        # Get database statistics
-        collections = await db.list_collection_names()
-        collection_stats = {}
-        
-        key_collections = [
-            'users', 'user_activities', 'social_media_posts', 'ai_usage',
-            'email_logs', 'file_storage', 'audit_logs', 'api_configuration'
-        ]
-        
-        for collection in key_collections:
-            if collection in collections:
-                count = await db[collection].count_documents({})
-                collection_stats[collection] = count
-        
-        # Get recent activity
-        recent_activities = await db.user_activities.find().sort("timestamp", -1).limit(10).to_list(length=10)
-        recent_logs = await db.audit_logs.find().sort("timestamp", -1).limit(5).to_list(length=5)
-        
-        return {
-            "system_overview": {
-                "status": "operational",
-                "uptime": "active",
-                "version": "4.0.0",
-                "last_updated": datetime.utcnow().isoformat()
-            },
-            "database": {
-                "status": "connected",
-                "total_collections": len(collections),
-                "collection_stats": collection_stats
-            },
-            "services": {
-                "api_endpoints": 105,
-                "loaded_modules": 53,
-                "success_rate": "84.1%",
-                "data_integrity": "100% real data"
-            },
-            "recent_activity": {
-                "user_activities": len(recent_activities),
-                "audit_logs": len(recent_logs)
-            },
-            "performance": {
-                "average_response_time": "< 15ms",
-                "database_query_time": "< 10ms",
-                "cache_efficiency": "85%+"
-            }
-        }
-        
-    except Exception as e:
-        admin_logger.log_system_event("SYSTEM_STATUS_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to get system status")
-
-@router.post("/test-api-connection")
-async def test_api_connection(
-    api_type: str,
+@router.post("/configuration")
+async def update_system_configuration(
+    config_update: ConfigurationUpdateRequest,
     request: Request,
-    current_admin=Depends(get_current_admin)
+    current_admin: dict = Depends(get_current_admin)
 ):
-    """Test external API connection"""
+    """Update system configuration"""
     try:
-        db = get_database()
+        # Get current configuration
+        current_config = await admin_config_manager.get_configuration(decrypt_sensitive=True)
         
-        if api_type == "twitter":
-            config = await db.api_configuration.find_one({"type": "external_apis"})
-            if not config or not config.get("twitter_bearer_token"):
-                raise HTTPException(status_code=400, detail="Twitter API not configured")
-            
-            # Test Twitter API connection
-            import httpx
-            token = security_manager.decrypt_sensitive_data(config["twitter_bearer_token"])
-            headers = {"Authorization": f"Bearer {token}"}
-            
-            async with httpx.AsyncClient() as client:
-                response = await client.get("https://api.twitter.com/2/users/me", headers=headers)
-            
-            if response.status_code == 200:
-                result = {"status": "connected", "data": response.json()}
-            else:
-                result = {"status": "error", "error": f"HTTP {response.status_code}: {response.text}"}
+        # Update only provided fields
+        update_data = config_update.dict(exclude_unset=True)
+        for key, value in update_data.items():
+            current_config[key] = value
         
-        elif api_type == "stripe":
-            config = await db.api_configuration.find_one({"type": "payment_processors"})
-            if not config or not config.get("stripe_secret_key"):
-                raise HTTPException(status_code=400, detail="Stripe not configured")
-            
-            # Test Stripe API connection
-            import httpx
-            key = security_manager.decrypt_sensitive_data(config["stripe_secret_key"])
-            headers = {"Authorization": f"Bearer {key}"}
-            
-            async with httpx.AsyncClient() as client:
-                response = await client.get("https://api.stripe.com/v1/balance", headers=headers)
-            
-            if response.status_code == 200:
-                result = {"status": "connected", "data": response.json()}
-            else:
-                result = {"status": "error", "error": f"HTTP {response.status_code}: {response.text}"}
+        # Create configuration object
+        api_config = APIConfiguration(**current_config)
         
-        else:
-            raise HTTPException(status_code=400, detail="Unsupported API type")
+        # Save configuration
+        result = await admin_config_manager.save_configuration(
+            api_config, 
+            current_admin.get("user_id")
+        )
         
-        admin_logger.log_system_event("API_CONNECTION_TEST", {
-            "admin": current_admin.get("username", "unknown"),
-            "api_type": api_type,
-            "result": result["status"],
-            "ip": request.client.host
-        })
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin updated system configuration",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "updated_fields": list(update_data.keys())
+            },
+            user_id=current_admin.get("user_id"),
+            ip_address=request.client.host,
+            user_agent=request.headers.get("user-agent")
+        )
         
         return result
         
     except Exception as e:
-        admin_logger.log_system_event("API_CONNECTION_TEST_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "api_type": api_type,
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail=f"Failed to test {api_type} connection: {str(e)}")
-
-@router.get("/data-population-status")
-async def get_data_population_status(current_admin=Depends(get_current_admin)):
-    """Get data population status"""
-    try:
-        db = get_database()
-        
-        # Check if data population service is available
-        try:
-            from services.data_population import data_population_service
-            last_sync = await data_population_service.get_last_sync_status()
-            next_sync = await data_population_service.get_next_sync()
-        except:
-            last_sync = None
-            next_sync = None
-        
-        # Get collection counts to show data population status
-        collections_status = {}
-        key_collections = ['social_media_posts', 'user_activities', 'ai_usage', 'business_metrics']
-        
-        for collection in key_collections:
-            count = await db[collection].count_documents({})
-            collections_status[collection] = {
-                "count": count,
-                "status": "populated" if count > 0 else "empty"
-            }
-        
-        return {
-            "data_population": {
-                "last_sync": last_sync,
-                "next_sync": next_sync,
-                "status": "active" if last_sync else "inactive"
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Configuration update failed: {str(e)}",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "error": str(e)
             },
-            "collections": collections_status,
-            "overall_status": "Data populations active" if any(c["count"] > 0 for c in collections_status.values()) else "Needs data population"
-        }
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Configuration update failed: {str(e)}")
+
+@router.get("/integrations/status")
+async def get_integrations_status(
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get status of all external API integrations"""
+    try:
+        integration_status = await admin_config_manager.get_integration_status()
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin checked integration status",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id")
+        )
+        
+        return integration_status
         
     except Exception as e:
-        admin_logger.log_system_event("DATA_POPULATION_STATUS_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to get data population status")
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Failed to get integration status: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to get integration status: {str(e)}")
 
-@router.post("/trigger-data-population")
-async def trigger_data_population(
+@router.post("/integrations/{service}/test")
+async def test_integration(
+    service: str,
     request: Request,
-    current_admin=Depends(get_current_admin)
+    current_admin: dict = Depends(get_current_admin)
 ):
-    """Manually trigger data population from external APIs"""
+    """Test connection to specific external API service"""
     try:
-        from services.data_population import data_population_service
+        result = await admin_config_manager.test_api_connection(
+            service, 
+            current_admin.get("user_id")
+        )
         
-        # Trigger background data population
-        import asyncio
-        asyncio.create_task(data_population_service.populate_initial_data())
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            f"Admin tested {service} integration",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "service": service,
+                "test_result": result.get("success", False)
+            },
+            user_id=current_admin.get("user_id"),
+            ip_address=request.client.host
+        )
         
-        admin_logger.log_system_event("DATA_POPULATION_TRIGGERED", {
-            "admin": current_admin.get("username", "unknown"),
-            "ip": request.client.host,
-            "triggered_at": datetime.utcnow().isoformat()
-        })
+        return result
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Integration test failed for {service}: {str(e)}",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "service": service
+            },
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Integration test failed: {str(e)}")
+
+@router.post("/payment-processors/switch")
+async def switch_payment_processor(
+    processor_data: Dict[str, Any],
+    request: Request,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Switch preferred payment processor and update enabled processors"""
+    try:
+        preferred_processor = processor_data.get("preferred_processor")
+        enabled_processors = processor_data.get("enabled_processors", [])
+        
+        if not preferred_processor:
+            raise HTTPException(status_code=400, detail="preferred_processor is required")
+        
+        # Get current config and update payment settings
+        current_config = await admin_config_manager.get_configuration(decrypt_sensitive=True)
+        current_config["preferred_payment_processor"] = preferred_processor
+        current_config["enabled_payment_processors"] = enabled_processors
+        
+        api_config = APIConfiguration(**current_config)
+        result = await admin_config_manager.save_configuration(
+            api_config, 
+            current_admin.get("user_id")
+        )
+        
+        # Re-initialize payment processors
+        await payment_processor_integrator.initialize_processors()
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            f"Admin switched payment processor to {preferred_processor}",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "preferred_processor": preferred_processor,
+                "enabled_processors": enabled_processors
+            },
+            user_id=current_admin.get("user_id"),
+            ip_address=request.client.host
+        )
         
         return {
             "success": True,
-            "message": "Data population triggered successfully",
-            "started_at": datetime.utcnow().isoformat()
+            "message": f"Payment processor switched to {preferred_processor}",
+            "preferred_processor": preferred_processor,
+            "enabled_processors": enabled_processors
         }
         
     except Exception as e:
-        admin_logger.log_system_event("DATA_POPULATION_TRIGGER_ERROR", {
-            "admin": current_admin.get("username", "unknown"),
-            "error": str(e)
-        }, "ERROR")
-        raise HTTPException(status_code=500, detail="Failed to trigger data population")
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Payment processor switch failed: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Payment processor switch failed: {str(e)}")
+
+@router.get("/logs")
+async def get_system_logs(
+    level: Optional[str] = None,
+    category: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    search: Optional[str] = None,
+    user_id: Optional[str] = None,
+    limit: int = 100,
+    offset: int = 0,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get system logs with filtering for admin dashboard"""
+    try:
+        # Parse dates if provided
+        start_datetime = datetime.fromisoformat(start_date.replace('Z', '+00:00')) if start_date else None
+        end_datetime = datetime.fromisoformat(end_date.replace('Z', '+00:00')) if end_date else None
+        
+        # Convert string enums
+        from core.professional_logger import LogLevel as LogLevelEnum, LogCategory as LogCategoryEnum
+        log_level = LogLevelEnum(level) if level else None
+        log_category = LogCategoryEnum(category) if category else None
+        
+        logs = await professional_logger.get_admin_logs(
+            level=log_level,
+            category=log_category,
+            start_date=start_datetime,
+            end_date=end_datetime,
+            search=search,
+            user_id=user_id,
+            limit=limit,
+            offset=offset
+        )
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin accessed system logs",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "filters": {
+                    "level": level,
+                    "category": category,
+                    "search": search,
+                    "limit": limit
+                }
+            },
+            user_id=current_admin.get("user_id")
+        )
+        
+        return logs
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Failed to retrieve logs: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to retrieve logs: {str(e)}")
+
+@router.get("/logs/statistics")
+async def get_log_statistics(
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get log statistics for admin dashboard"""
+    try:
+        stats = await professional_logger.get_log_statistics()
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin retrieved log statistics",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id")
+        )
+        
+        return stats
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Failed to get log statistics: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Failed to get log statistics: {str(e)}")
+
+@router.get("/system/health")
+async def get_system_health(
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get comprehensive system health information for admin dashboard"""
+    try:
+        from core.database import get_database
+        
+        db = get_database()
+        
+        # Check database connectivity
+        try:
+            await db.command("ping")
+            database_status = "healthy"
+        except Exception as e:
+            database_status = f"error: {str(e)}"
+        
+        # Get integration status
+        integration_status = await admin_config_manager.get_integration_status()
+        
+        # Get recent error rate
+        log_stats = await professional_logger.get_log_statistics()
+        error_rate = log_stats.get("statistics", {}).get("error_rate", 0) if log_stats.get("success") else 0
+        
+        # Count configured integrations
+        integrations = integration_status.get("integrations", {}) if integration_status.get("success") else {}
+        configured_count = 0
+        total_possible = 0
+        
+        for category, services in integrations.items():
+            if isinstance(services, dict):
+                for service, configured in services.items():
+                    if service not in ["preferred", "enabled"]:
+                        total_possible += 1
+                        if configured:
+                            configured_count += 1
+        
+        health_status = {
+            "status": "healthy" if database_status == "healthy" and error_rate < 5 else "degraded",
+            "timestamp": datetime.utcnow().isoformat(),
+            "database": {
+                "status": database_status,
+                "collections_count": len(await db.list_collection_names()) if database_status == "healthy" else 0
+            },
+            "integrations": {
+                "configured": configured_count,
+                "total_possible": total_possible,
+                "percentage": round((configured_count / total_possible * 100) if total_possible > 0 else 0, 1)
+            },
+            "logging": {
+                "error_rate": error_rate,
+                "status": "healthy" if error_rate < 5 else "degraded"
+            },
+            "external_apis": {
+                "social_media": sum([1 for service, configured in integrations.get("social_media", {}).items() if configured]),
+                "payment_processors": sum([1 for service, configured in integrations.get("payment_processors", {}).items() if isinstance(configured, bool) and configured]),
+                "email_services": sum([1 for service, configured in integrations.get("email_services", {}).items() if isinstance(configured, bool) and configured]),
+                "file_storage": integrations.get("file_storage", {}).get("backblaze_b2", False),
+                "ai_services": sum([1 for service, configured in integrations.get("ai_services", {}).items() if isinstance(configured, bool) and configured])
+            }
+        }
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin checked system health",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "health_status": health_status["status"]
+            },
+            user_id=current_admin.get("user_id")
+        )
+        
+        return {
+            "success": True,
+            "health": health_status
+        }
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"System health check failed: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"System health check failed: {str(e)}")
+
+@router.get("/analytics/dashboard")
+async def get_admin_analytics_dashboard(
+    period: str = "24h",
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get comprehensive admin analytics dashboard"""
+    try:
+        from core.database import get_database
+        from datetime import timedelta
+        
+        db = get_database()
+        
+        # Define time period
+        if period == "24h":
+            since = datetime.utcnow() - timedelta(hours=24)
+        elif period == "7d":
+            since = datetime.utcnow() - timedelta(days=7)
+        elif period == "30d":
+            since = datetime.utcnow() - timedelta(days=30)
+        else:
+            since = datetime.utcnow() - timedelta(hours=24)
+        
+        # Get API usage statistics
+        api_stats = await db.admin_system_logs.aggregate([
+            {"$match": {"category": "API", "timestamp": {"$gte": since}}},
+            {"$group": {
+                "_id": "$endpoint",
+                "count": {"$sum": 1},
+                "avg_response_time": {"$avg": "$response_time"},
+                "error_count": {"$sum": {"$cond": [{"$gte": ["$status_code", 400]}, 1, 0]}}
+            }},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]).to_list(length=10)
+        
+        # Get user activity
+        user_activity = await db.admin_system_logs.aggregate([
+            {"$match": {"timestamp": {"$gte": since}, "user_id": {"$ne": None}}},
+            {"$group": {"_id": "$user_id", "activity_count": {"$sum": 1}}},
+            {"$sort": {"activity_count": -1}},
+            {"$limit": 10}
+        ]).to_list(length=10)
+        
+        # Get error trends
+        error_trends = await db.admin_system_logs.aggregate([
+            {"$match": {"level": {"$in": ["ERROR", "CRITICAL"]}, "timestamp": {"$gte": since}}},
+            {"$group": {
+                "_id": {"$dateToString": {"format": "%Y-%m-%d-%H", "date": "$timestamp"}},
+                "error_count": {"$sum": 1}
+            }},
+            {"$sort": {"_id": 1}}
+        ]).to_list(length=None)
+        
+        # Get external API usage
+        external_api_usage = await db.admin_system_logs.aggregate([
+            {"$match": {"category": "EXTERNAL_API", "timestamp": {"$gte": since}}},
+            {"$group": {
+                "_id": "$details.service",
+                "call_count": {"$sum": 1},
+                "avg_response_time": {"$avg": "$response_time"},
+                "success_rate": {"$avg": {"$cond": [{"$lt": ["$status_code", 400]}, 1, 0]}}
+            }},
+            {"$sort": {"call_count": -1}}
+        ]).to_list(length=None)
+        
+        dashboard_data = {
+            "period": period,
+            "timestamp": datetime.utcnow().isoformat(),
+            "api_usage": {
+                "top_endpoints": [
+                    {
+                        "endpoint": stat["_id"],
+                        "calls": stat["count"],
+                        "avg_response_time": round(stat["avg_response_time"] or 0, 3),
+                        "error_rate": round((stat["error_count"] / stat["count"] * 100) if stat["count"] > 0 else 0, 2)
+                    }
+                    for stat in api_stats
+                ]
+            },
+            "user_activity": [
+                {
+                    "user_id": activity["_id"],
+                    "activity_count": activity["activity_count"]
+                }
+                for activity in user_activity
+            ],
+            "error_trends": [
+                {
+                    "hour": trend["_id"],
+                    "error_count": trend["error_count"]
+                }
+                for trend in error_trends
+            ],
+            "external_apis": [
+                {
+                    "service": usage["_id"] or "unknown",
+                    "calls": usage["call_count"],
+                    "avg_response_time": round(usage["avg_response_time"] or 0, 3),
+                    "success_rate": round((usage["success_rate"] or 0) * 100, 2)
+                }
+                for usage in external_api_usage
+            ]
+        }
+        
+        await professional_logger.log(
+            LogLevel.INFO, LogCategory.ADMIN,
+            "Admin accessed analytics dashboard",
+            details={
+                "admin_id": current_admin.get("user_id"),
+                "period": period
+            },
+            user_id=current_admin.get("user_id")
+        )
+        
+        return {
+            "success": True,
+            "dashboard": dashboard_data
+        }
+        
+    except Exception as e:
+        await professional_logger.log(
+            LogLevel.ERROR, LogCategory.ADMIN,
+            f"Admin analytics dashboard failed: {str(e)}",
+            details={"admin_id": current_admin.get("user_id")},
+            user_id=current_admin.get("user_id"),
+            error=e
+        )
+        raise HTTPException(status_code=500, detail=f"Analytics dashboard failed: {str(e)}")
+
+@router.get("/available-services")
+async def get_available_services(
+    current_admin: dict = Depends(get_current_admin)
+):
+    """Get list of all available services and their configuration requirements"""
+    available_services = {
+        "social_media": {
+            "twitter": {
+                "name": "Twitter API v2",
+                "required_fields": ["twitter_bearer_token", "twitter_api_key", "twitter_api_secret"],
+                "description": "Access Twitter user data, tweets, and analytics"
+            },
+            "instagram": {
+                "name": "Instagram Graph API",
+                "required_fields": ["instagram_access_token", "instagram_app_id"],
+                "description": "Access Instagram business account data and media"
+            },
+            "facebook": {
+                "name": "Facebook Graph API", 
+                "required_fields": ["facebook_access_token", "facebook_app_id"],
+                "description": "Access Facebook page data and analytics"
+            },
+            "linkedin": {
+                "name": "LinkedIn API",
+                "required_fields": ["linkedin_client_id", "linkedin_client_secret"],
+                "description": "Access LinkedIn profile and company data"
+            },
+            "tiktok": {
+                "name": "TikTok API",
+                "required_fields": ["tiktok_client_key", "tiktok_client_secret"],
+                "description": "Access TikTok user data and video analytics"
+            }
+        },
+        "payment_processors": {
+            "stripe": {
+                "name": "Stripe",
+                "required_fields": ["stripe_secret_key", "stripe_publishable_key"],
+                "optional_fields": ["stripe_webhook_secret"],
+                "description": "Process payments with Stripe"
+            },
+            "paypal": {
+                "name": "PayPal",
+                "required_fields": ["paypal_client_id", "paypal_client_secret"],
+                "optional_fields": ["paypal_webhook_id"],
+                "description": "Process payments with PayPal"
+            },
+            "square": {
+                "name": "Square",
+                "required_fields": ["square_access_token", "square_application_id"],
+                "optional_fields": ["square_webhook_signature_key"],
+                "description": "Process payments with Square"
+            },
+            "razorpay": {
+                "name": "Razorpay",
+                "required_fields": ["razorpay_key_id", "razorpay_key_secret"],
+                "optional_fields": ["razorpay_webhook_secret"],
+                "description": "Process payments with Razorpay"
+            }
+        },
+        "email_services": {
+            "sendgrid": {
+                "name": "SendGrid",
+                "required_fields": ["sendgrid_api_key", "sendgrid_from_email"],
+                "description": "Send emails using SendGrid"
+            },
+            "mailgun": {
+                "name": "Mailgun",
+                "required_fields": ["mailgun_api_key", "mailgun_domain"],
+                "description": "Send emails using Mailgun"
+            },
+            "aws_ses": {
+                "name": "AWS SES",
+                "required_fields": ["aws_ses_access_key", "aws_ses_secret_key", "aws_ses_region"],
+                "description": "Send emails using AWS Simple Email Service"
+            }
+        },
+        "file_storage": {
+            "backblaze_b2": {
+                "name": "Backblaze B2",
+                "required_fields": ["backblaze_b2_key_id", "backblaze_b2_app_key", "backblaze_b2_bucket_id"],
+                "optional_fields": ["backblaze_b2_bucket_name"],
+                "description": "Store files in Backblaze B2 cloud storage"
+            }
+        },
+        "ai_services": {
+            "openai": {
+                "name": "OpenAI",
+                "required_fields": ["openai_api_key"],
+                "optional_fields": ["openai_organization"],
+                "description": "Generate content using OpenAI GPT models"
+            },
+            "anthropic": {
+                "name": "Anthropic Claude",
+                "required_fields": ["anthropic_api_key"],
+                "description": "Generate content using Anthropic Claude"
+            },
+            "google_ai": {
+                "name": "Google AI",
+                "required_fields": ["google_ai_api_key"],
+                "description": "Generate content using Google AI models"
+            }
+        }
+    }
+    
+    return {
+        "success": True,
+        "services": available_services
+    }
