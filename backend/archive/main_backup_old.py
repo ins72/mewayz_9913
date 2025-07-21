@@ -9459,53 +9459,42 @@ innovation_lab_collection = database.innovation_lab
 
 # ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
 
-@app.post("/api/customer-experience/live-chat/conversation/start")
-async def start_live_chat_conversation(
-    visitor_info: str = Form(...),  # JSON string
-    initial_message: str = Form(...),
-    department: str = Form("general"),
-    priority: str = Form("normal"),
-    current_user: dict = Depends(get_current_user)
-):
-    """Start new live chat conversation"""
+@app.get("/api/social/listening/overview")
+async def get_social_listening_overview(current_user: dict = Depends(get_current_user)):
+    """Get social media listening overview and insights"""
     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
     if not workspace:
         raise HTTPException(status_code=404, detail="Workspace not found")
     
-    conversation_doc = {
-        "_id": str(uuid.uuid4()),
-        "workspace_id": str(workspace["_id"]),
-        "visitor_info": json.loads(visitor_info),
-        "initial_message": initial_message,
-        "department": department,
-        "priority": priority,
-        "status": "waiting",
-        "assigned_agent": None,
-        "messages": [
+    # Mock data for social listening overview
+    overview_data = {
+        "total_mentions": 1247,
+        "sentiment_score": 78.5,
+        "engagement_rate": 4.2,
+        "reach": 156789,
+        "trending_hashtags": ["#business", "#growth", "#innovation"],
+        "top_platforms": [
+            {"platform": "Twitter", "mentions": 456, "sentiment": 82.1},
+            {"platform": "Instagram", "mentions": 389, "sentiment": 75.3},
+            {"platform": "Facebook", "mentions": 234, "sentiment": 79.8},
+            {"platform": "LinkedIn", "mentions": 168, "sentiment": 85.2}
+        ],
+        "recent_mentions": [
             {
                 "id": str(uuid.uuid4()),
-                "sender": "visitor",
-                "message": initial_message,
-                "timestamp": datetime.utcnow(),
-                "type": "text"
+                "platform": "Twitter",
+                "author": "@businessuser",
+                "content": "Great insights from this company!",
+                "sentiment": "positive",
+                "engagement": 45,
+                "timestamp": datetime.utcnow().isoformat()
             }
-        ],
-        "started_at": datetime.utcnow(),
-        "last_activity": datetime.utcnow()
+        ]
     }
-    
-    await live_chat_collection.insert_one(conversation_doc)
     
     return {
         "success": True,
-        "data": {
-            "conversation_id": conversation_doc["_id"],
-            "status": "waiting",
-            "queue_position": 3,
-            "estimated_wait": "2-3 minutes",
-            "chat_url": f"/live-chat/{conversation_doc['_id']}",
-            "started_at": conversation_doc["started_at"].isoformat()
-        }
+        "data": overview_data
     }
 
 @app.get("/api/customer-experience/journey/mapping")
