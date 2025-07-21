@@ -56,7 +56,8 @@ onboarding_service = OnboardingService()
 @router.get("/progress")
 async def get_onboarding_progress(current_user: dict = Depends(get_current_user)):
     """Get user's onboarding progress"""
-    return await onboarding_service.get_progress(current_user["id"])
+    user_id = current_user.get("_id") or current_user.get("id") or str(current_user.get("email", "default-user"))
+    return await onboarding_service.get_progress(user_id)
 
 @router.post("/progress")
 async def save_onboarding_progress(
