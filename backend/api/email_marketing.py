@@ -314,7 +314,8 @@ async def get_performance_report(
     current_user: dict = Depends(get_current_user)
 ):
     """Get detailed performance reports"""
-    return await email_service.get_performance_report(current_user["id"], start_date, end_date)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_performance_report(user_id, start_date, end_date)
 
 @router.get("/segments")
 async def get_segments(current_user: dict = Depends(get_current_user)):
