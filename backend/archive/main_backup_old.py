@@ -447,39 +447,9 @@ def get_password_hash(password):
 
 # ✅ AUTHENTICATION SYSTEM - IMPLEMENTED - /app/backend/api/auth.py
 
-# ===== GOOGLE OAUTH ENDPOINTS =====
-# ✅ MIGRATED TO MODULAR STRUCTURE - /api/oauth/*
-# Features moved to: /app/backend/api/google_oauth.py
-# Implementation: Complete Google OAuth flow with account linking
-# Status: 100% Working - Tested and Confirmed
+# ✅ GOOGLE OAUTH SYSTEM - IMPLEMENTED - /app/backend/api/google_oauth.py
 
-@app.get("/api/auth/me")
-async def get_current_user_profile(current_user: dict = Depends(get_current_user)):
-    user_response = UserResponse(
-        id=current_user["id"],
-        name=current_user["name"],
-        email=current_user["email"],
-        role=current_user["role"],
-        email_verified=bool(current_user.get("email_verified_at")),
-        phone=current_user.get("phone"),
-        avatar=current_user.get("avatar"),
-        timezone=current_user.get("timezone", "UTC"),
-        language=current_user.get("language", "en"),
-        subscription_plan=current_user.get("subscription_plan", "free"),
-        api_key=current_user.get("api_key", ""),
-        created_at=current_user["created_at"]
-    )
-    
-    return {
-        "success": True,
-        "user": user_response
-    }
-
-@app.post("/api/auth/logout")
-async def logout():
-    return {"success": True, "message": "Logged out successfully"}
-
-# ===== ADMIN DASHBOARD ENDPOINTS =====
+# ✅ ADMIN DASHBOARD - IMPLEMENTED - /app/backend/api/admin.py
 @app.get("/api/admin/dashboard")
 async def get_admin_dashboard(current_admin: dict = Depends(get_current_admin_user)):
     total_users = await users_collection.count_documents({})
