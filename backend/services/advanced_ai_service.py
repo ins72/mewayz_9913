@@ -289,12 +289,8 @@ class AdvancedAIService:
             }
         }
     
-    async def get_available_models(self, user_id: str):
+    async def get_available_models(self):
         """Get available AI models and their capabilities"""
-        
-        # Handle user_id properly
-        if isinstance(user_id, dict):
-            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
         
         return {
             "success": True,
