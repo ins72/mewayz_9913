@@ -144,6 +144,9 @@ app.include_router(rate_limiting_system.router, prefix="/api/rate-limits", tags=
 # SEVENTEENTH WAVE - ADVANCED WEBHOOK & EVENT MANAGEMENT - Newly Implemented
 app.include_router(webhook_system.router, prefix="/api/webhooks", tags=["Advanced Webhook & Event Management"])
 
+# EIGHTEENTH WAVE - ADVANCED MONITORING & OBSERVABILITY - Newly Implemented
+app.include_router(monitoring_system.router, prefix="/api/monitoring", tags=["Advanced Monitoring & Observability"])
+
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
