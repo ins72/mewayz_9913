@@ -361,7 +361,7 @@ class CustomerExperienceService:
             }
         }
     
-    def _estimate_responses(self, target_audience: str) -> int:
+    async def _estimate_responses(self, target_audience: str) -> int:
         """Estimate survey responses based on target audience"""
         estimates = {
             "all": await self._get_metric_from_db('general', 500, 2500),
