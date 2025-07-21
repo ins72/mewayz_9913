@@ -209,7 +209,7 @@ async def delete_conversation(
     current_user: dict = Depends(get_current_user)
 ):
     """Delete conversation"""
-    return await ai_service.delete_conversation(current_user["id"], conversation_id)
+    return await ai_service.delete_conversation(current_user.get("_id") or current_user.get("id", "default-user"), conversation_id)
 
 @router.get("/content-templates")
 async def get_content_templates(
