@@ -1,6 +1,6 @@
 """
 Social Media Service
-Business logic for advanced social media management, listening, monitoring, and analytics
+Business logic for advanced social media management using REAL database data
 """
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
