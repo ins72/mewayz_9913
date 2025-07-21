@@ -135,6 +135,10 @@ class OnboardingService:
     async def complete_onboarding(self, user_id: str, completion_data: dict):
         """Complete the onboarding process and create workspace"""
         
+        # Handle user_id properly - it might be a dict from current_user
+        if isinstance(user_id, dict):
+            user_id = user_id.get("_id") or user_id.get("id") or str(user_id.get("email", "default-user"))
+        
         try:
             workspace_data = completion_data.get("workspace", {})
             team_members = completion_data.get("team_members", [])
