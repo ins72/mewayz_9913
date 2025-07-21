@@ -6058,58 +6058,7 @@ event_tracking_collection = database.event_tracking
 
 # ✅ MEDIA LIBRARY & FILE MANAGEMENT - IMPLEMENTED - /app/backend/api/media_library.py
 
-@app.get("/api/files")
-async def list_files(
-    folder: Optional[str] = Query(None),
-    type: Optional[str] = Query(None),
-    limit: int = Query(50),
-    current_user: dict = Depends(get_current_user)
-):
-    """List all files in media library"""
-    files_data = {
-        "files": [
-            {
-                "id": "file_001",
-                "name": "product_image.jpg",
-                "type": "image",
-                "size": 245760,
-                "folder": "/uploads/products",
-                "url": "https://cdn.example.com/uploads/products/product_image.jpg",
-                "uploaded_at": "2025-07-20T10:30:00Z",
-                "uploaded_by": "user_123",
-                "mime_type": "image/jpeg",
-                "dimensions": {"width": 1920, "height": 1080},
-                "alt_text": "Product showcase image"
-            },
-            {
-                "id": "file_002",
-                "name": "demo_video.mp4",
-                "type": "video",
-                "size": 15728640,
-                "folder": "/uploads/videos",
-                "url": "https://cdn.example.com/uploads/videos/demo_video.mp4",
-                "uploaded_at": "2025-07-19T14:15:00Z",
-                "uploaded_by": "user_456",
-                "mime_type": "video/mp4",
-                "duration": 120,
-                "thumbnail": "https://cdn.example.com/thumbs/demo_video.jpg"
-            }
-        ],
-        "storage_stats": {
-            "total_files": 1247,
-            "total_size": "2.3 GB",
-            "storage_used": "23%",
-            "storage_limit": "10 GB"
-        },
-        "file_types": {
-            "images": 567,
-            "videos": 89,
-            "documents": 234,
-            "audio": 45,
-            "other": 312
-        }
-    }
-    return {"success": True, "data": files_data}
+
 
 @app.post("/api/files/upload")
 async def upload_file(
