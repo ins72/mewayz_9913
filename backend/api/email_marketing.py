@@ -183,7 +183,8 @@ async def get_list_contacts(
     current_user: dict = Depends(get_current_user)
 ):
     """Get contacts in a specific list"""
-    return await email_service.get_list_contacts(current_user["id"], list_id)
+    user_id = current_user.get("_id") or current_user.get("id", "default-user")
+    return await email_service.get_list_contacts(user_id, list_id)
 
 @router.post("/lists/{list_id}/contacts")
 async def add_contacts_to_list(
