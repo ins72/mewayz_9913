@@ -250,7 +250,7 @@ async def purchase_template(
     current_user: dict = Depends(get_current_user)
 ):
     """Purchase template"""
-    return await marketplace_service.purchase_template(current_user["id"], template_id, payment_method)
+    return await marketplace_service.purchase_template(current_user.get("_id") or current_user.get("id", "default-user"), template_id, payment_method)
 
 @router.post("/{template_id}/download")
 async def download_template(
