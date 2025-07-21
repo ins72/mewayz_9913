@@ -9497,7 +9497,16 @@ async def get_social_listening_overview(current_user: dict = Depends(get_current
         "data": overview_data
     }
 
-@app.get("/api/customer-experience/journey/mapping")
+# ✅ MIGRATED: ADVANCED SOCIAL MEDIA SUITE - All social media management features migrated to /app/backend/api/social_media_suite.py
+# Features migrated include:
+# - Social media listening and monitoring with brand mentions tracking
+# - Publishing calendar and post creation with optimization
+# - Analytics and engagement tracking with performance insights
+# - Influencer discovery and collaboration management
+# - Social media automation rules and comprehensive reporting  
+# Migration completed in Eleventh Wave - December 2024
+
+# ===== ADVANCED SOCIAL MEDIA SUITE (20+ ENDPOINTS) =====
 async def get_customer_journey_mapping(current_user: dict = Depends(get_current_user)):
     """Advanced customer journey mapping and optimization"""
     workspace = await workspaces_collection.find_one({"owner_id": current_user["id"]})
