@@ -117,9 +117,9 @@ form_submissions_collection = database.form_submissions
 discount_codes_collection = database.discount_codes
 discount_usage_collection = database.discount_usage
 
-# Website builder collections
-websites_collection = database.websites
-website_pages_collection = database.website_pages
+# ✅ MIGRATED: Website builder collections moved to /app/backend/services/website_builder_service.py
+# websites_collection = database.websites (moved to Website Builder service)
+# website_pages_collection = database.website_pages (moved to Website Builder service)
 
 # Instagram database collections  
 instagram_accounts_collection = database.instagram_accounts
