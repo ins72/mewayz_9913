@@ -194,6 +194,7 @@ ROUTER_MAPPINGS = {
     # AI & Content
     "ai": ("/api/ai", ["AI Services"]),
     "advanced_ai": ("/api/advanced-ai", ["Advanced AI"]),
+    "advanced_ai_analytics": ("/api/ai-analytics", ["Advanced AI Analytics"]),
     "advanced_ai_suite": ("/api/advanced-ai-suite", ["AI Suite"]),
     "ai_content": ("/api/ai-content", ["AI Content"]),
     "ai_content_generation": ("/api/ai-content-generation", ["AI Content Generation"]),
@@ -209,6 +210,60 @@ ROUTER_MAPPINGS = {
     "advanced_financial": ("/api/advanced-financial", ["Advanced Financial"]),
     "advanced_financial_analytics": ("/api/financial-analytics", ["Financial Analytics"]),
     "escrow_system": ("/api/escrow", ["Escrow System"]),
+    
+    # Marketing & Communication
+    "email_marketing": ("/api/email-marketing", ["Email Marketing"]),
+    "marketing": ("/api/marketing", ["Marketing"]),
+    "social_media": ("/api/social-media", ["Social Media"]),
+    "social_media_suite": ("/api/social-media-suite", ["Social Media Suite"]),
+    "social_email": ("/api/social-email", ["Social Email"]),
+    "social_email_integration": ("/api/social-email-integration", ["Social Email Integration"]),
+    
+    # Notifications & Automation
+    "notification_system": ("/api/notifications-system", ["Notification System"]),
+    "realtime_notifications": ("/api/notifications", ["Real-time Notifications"]),
+    "workflow_automation": ("/api/workflows", ["Workflow Automation"]),
+    "automation_system": ("/api/automation", ["Automation System"]),
+    "webhook_system": ("/api/webhooks", ["Webhook System"]),
+    
+    # Workspace & Management
+    "workspace": ("/api/workspace", ["Workspace"]),
+    "workspaces": ("/api/workspaces", ["Workspaces"]),
+    "team_management": ("/api/teams", ["Team Management"]),
+    "user": ("/api/user", ["User Profile"]),
+    
+    # Templates & Media
+    "template_marketplace": ("/api/templates", ["Template Marketplace"]),
+    "media": ("/api/media", ["Media"]),
+    "media_library": ("/api/media-library", ["Media Library"]),
+    
+    # System & Infrastructure
+    "monitoring_system": ("/api/monitoring", ["Monitoring System"]),
+    "backup_system": ("/api/backup", ["Backup System"]),
+    "support_system": ("/api/support", ["Support System"]),
+    "integration": ("/api/integration", ["Integration"]),
+    "integrations": ("/api/integrations", ["Integrations"]),
+    
+    # Additional Features
+    "booking": ("/api/booking", ["Booking"]),
+    "bookings": ("/api/bookings", ["Bookings"]),
+    "course_management": ("/api/courses", ["Course Management"]),
+    "crm_management": ("/api/crm", ["CRM Management"]),
+    "customer_experience": ("/api/customer-experience", ["Customer Experience"]),
+    "customer_experience_suite": ("/api/customer-experience-suite", ["Customer Experience Suite"]),
+    "website_builder": ("/api/website-builder", ["Website Builder"]),
+    "form_builder": ("/api/forms", ["Form Builder"]),
+    "bio_sites": ("/api/bio-sites", ["Bio Sites"]),
+    "blog": ("/api/blog", ["Blog"]),
+    "link_shortener": ("/api/links", ["Link Shortener"]),
+    "subscription_management": ("/api/subscriptions", ["Subscription Management"]),
+    "survey_system": ("/api/surveys", ["Survey System"]),
+    "promotions_referrals": ("/api/promotions", ["Promotions & Referrals"]),
+    "onboarding_system": ("/api/onboarding", ["Onboarding System"]),
+    "compliance_system": ("/api/compliance", ["Compliance System"]),
+    "rate_limiting_system": ("/api/rate-limiting", ["Rate Limiting System"]),
+    "i18n_system": ("/api/i18n", ["Internationalization"]),
+    "google_oauth": ("/api/google-oauth", ["Google OAuth"])
 }
 
 # Include working routers with error handling
