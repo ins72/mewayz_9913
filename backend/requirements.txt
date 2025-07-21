@@ -16,3 +16,7 @@ tweepy
 openai
 httpx
 psutil
+redis
+cryptography
+aiofiles
+b2sdk
