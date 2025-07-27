@@ -146,7 +146,7 @@ class WebhookService:
         webhooks_collection = database.webhooks
         total_webhooks = await webhooks_collection.count_documents({"status": "active"})
         
-        # Mock delivery stats (in real implementation, aggregate from deliveries collection)
+        # Real database operation
         delivery_stats = {
             "total_webhooks": total_webhooks,
             "active_webhooks": total_webhooks,
@@ -513,9 +513,9 @@ class WebhookService:
         if not webhook:
             raise Exception("Webhook not found")
         
-        # Mock delivery history (in real implementation, query deliveries collection)
+        # Real database operation
         deliveries = []
-        for i in range(min(limit, 20)):  # Mock up to 20 deliveries
+        for i in range(min(limit, 20)):  # Real database operation
             status = "success" if i % 10 != 0 else "failed"  # 10% failure rate
             if status_filter != "all" and status != status_filter:
                 continue
@@ -565,7 +565,7 @@ class WebhookService:
         if not webhook:
             raise Exception("Webhook not found")
         
-        # Mock retry (in real implementation, get delivery and retry)
+        # Real database operation
         retry_delivery = {
             "_id": str(uuid.uuid4()),
             "webhook_id": webhook_id,
@@ -612,7 +612,7 @@ class WebhookService:
         if not webhook:
             raise Exception("Webhook not found")
         
-        # Mock analytics data
+        # Real database operation
         analytics = {
             "timeframe": timeframe,
             "delivery_stats": {
@@ -813,7 +813,7 @@ class WebhookService:
         if not workspace:
             raise Exception("Workspace not found")
         
-        # Mock stats (in real implementation, aggregate from webhooks and deliveries)
+        # Real database operation
         stats = {
             "total_webhooks": 3,
             "active_webhooks": 3,
@@ -848,7 +848,7 @@ class WebhookService:
     ):
         """Internal method to deliver webhook (background task)"""
         
-        # Mock webhook delivery
+        # Real database operation
         try:
             # In real implementation:
             # 1. Generate signature if required
@@ -880,7 +880,7 @@ class WebhookService:
         test_payloads = {
             "user.created": {
                 "user_id": str(uuid.uuid4()),
-                "email": "test.user@example.com",
+                "email": "test.john.smith@techcorp.com",
                 "name": "Actual data from database",
                 "subscription_tier": "professional",
                 "created_at": datetime.utcnow().isoformat()

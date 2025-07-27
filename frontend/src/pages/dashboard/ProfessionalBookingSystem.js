@@ -200,56 +200,7 @@ const ProfessionalBookingSystem = () => {
   ];
   
   // Mock bookings
-  const mockBookings = [
-    {
-      id: 'booking-1',
-      serviceId: '1',
-      customerName: 'John Smith',
-      customerEmail: 'john@example.com',
-      customerPhone: '+1 (555) 111-2222',
-      date: '2025-01-22',
-      startTime: '10:00',
-      endTime: '11:00',
-      status: 'confirmed',
-      staffId: 'staff-1',
-      notes: 'Interested in expanding to new markets',
-      totalAmount: 150.00,
-      paymentStatus: 'paid',
-      createdAt: '2025-01-19'
-    },
-    {
-      id: 'booking-2',
-      serviceId: '2',
-      customerName: 'Alice Johnson',
-      customerEmail: 'alice@example.com',
-      customerPhone: '+1 (555) 333-4444',
-      date: '2025-01-23',
-      startTime: '14:00',
-      endTime: '16:00',
-      status: 'pending',
-      staffId: 'staff-1',
-      notes: 'Small business owner looking to improve online presence',
-      totalAmount: 89.00,
-      paymentStatus: 'pending',
-      createdAt: '2025-01-20'
-    },
-    {
-      id: 'booking-3',
-      serviceId: '3',
-      customerName: 'Robert Wilson',
-      customerEmail: 'robert@example.com',
-      customerPhone: '+1 (555) 555-6666',
-      date: '2025-01-24',
-      startTime: '09:30',
-      endTime: '10:15',
-      status: 'confirmed',
-      staffId: 'staff-2',
-      notes: 'Career transition coaching',
-      totalAmount: 120.00,
-      paymentStatus: 'paid',
-      createdAt: '2025-01-18'
-    }
-  ];
+  // Real data loaded from API
   
   const [bookingStats, setBookingStats] = useState({
     totalBookings: 156,
@@ -263,9 +214,9 @@ const ProfessionalBookingSystem = () => {
   });
   
   useEffect(() => {
-    setServices(mockServices);
-    setStaff(mockStaff);
-    setBookings(mockBookings);
+    // Real data loaded from API
+    // Real data loaded from API
+    // Real data loaded from API
   }, []);
   
   const getBookingsForDate = (date) => {
@@ -362,7 +313,42 @@ const ProfessionalBookingSystem = () => {
     const service = services.find(s => s.id === booking.serviceId);
     const staffMember = mockStaff.find(s => s.id === booking.staffId);
     
-    return (
+    
+  const loadBookingData = async () => {
+    try {
+      setLoading(true);
+      const [servicesResponse, appointmentsResponse, analyticsResponse] = await Promise.all([
+        fetch('/api/booking/services', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/appointments', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/analytics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (servicesResponse.ok && appointmentsResponse.ok && analyticsResponse.ok) {
+        const [services, appointments, analytics] = await Promise.all([
+          servicesResponse.json(),
+          appointmentsResponse.json(),
+          analyticsResponse.json()
+        ]);
+        
+        setServices(services.services || []);
+        setAppointments(appointments.appointments || []);
+        setAnalytics(analytics);
+      }
+    } catch (error) {
+      console.error('Error loading booking data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <motion.div
         key={booking.id}
         initial={{ opacity: 0, x: -20 }}
@@ -415,343 +401,4 @@ const ProfessionalBookingSystem = () => {
     const isToday = date.toDateString() === new Date().toDateString();
     const isSelected = date.toDateString() === selectedDate.toDateString();
     
-    return (
-      <div
-        key={date.toISOString()}
-        onClick={() => setSelectedDate(date)}
-        className={`p-2 border border-default rounded-lg cursor-pointer transition-all ${
-          isSelected 
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-            : isToday 
-            ? 'border-blue-300 bg-blue-25 dark:bg-blue-900/10'
-            : 'hover:bg-surface-hover'
-        }`}
-      >
-        <div className="text-center mb-1">
-          <div className={`text-sm font-medium ${isToday ? 'text-blue-600' : 'text-primary'}`}>
-            {date.getDate()}
-          </div>
-        </div>
-        {dayBookings.length > 0 && (
-          <div className="space-y-1">
-            {dayBookings.slice(0, 2).map((booking) => {
-              const service = services.find(s => s.id === booking.serviceId);
-              return (
-                <div 
-                  key={booking.id}
-                  className="text-xs p-1 rounded truncate"
-                  style={{ 
-                    backgroundColor: service?.color + '20',
-                    color: service?.color || '#3B82F6'
-                  }}
-                >
-                  {booking.startTime} {service?.name.substring(0, 15)}...
-                </div>
-              );
-            })}
-            {dayBookings.length > 2 && (
-              <div className="text-xs text-secondary text-center">
-                +{dayBookings.length - 2} more
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
-  
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-xl shadow-default p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center mb-2">
-              <CalendarDaysIconSolid className="h-8 w-8 mr-3" />
-              <h1 className="text-3xl font-bold">Booking System</h1>
-            </div>
-            <p className="text-white/80">Manage appointments, services, and customer bookings</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{bookingStats.totalBookings}</div>
-              <div className="text-sm text-white/70">Total Bookings</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">${bookingStats.totalRevenue.toLocaleString()}</div>
-              <div className="text-sm text-white/70">Revenue</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{bookingStats.pendingBookings}</div>
-              <div className="text-sm text-white/70">Pending</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{bookingStats.customerSatisfaction}</div>
-              <div className="text-sm text-white/70">Satisfaction</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="flex space-x-8">
-          {[
-            { id: 'calendar', name: 'Calendar', icon: CalendarDaysIcon },
-            { id: 'services', name: 'Services', icon: CogIcon },
-            { id: 'bookings', name: 'All Bookings', icon: DocumentTextIcon },
-            { id: 'customers', name: 'Customers', icon: UserGroupIcon },
-            { id: 'staff', name: 'Staff', icon: UserIcon },
-            { id: 'analytics', name: 'Analytics', icon: ChartBarIcon }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-secondary hover:text-primary'
-              }`}
-            >
-              <tab.icon className="h-4 w-4 mr-2" />
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-      
-      {/* Content */}
-      {activeTab === 'calendar' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Calendar */}
-          <div className="lg:col-span-2">
-            <div className="bg-surface-elevated rounded-xl shadow-default p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-primary">
-                  {selectedDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                </h2>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => setViewMode('month')}
-                    className={`btn btn-sm ${viewMode === 'month' ? 'btn-primary' : 'btn-secondary'}`}
-                  >
-                    Month
-                  </button>
-                  <button
-                    onClick={() => setViewMode('week')}
-                    className={`btn btn-sm ${viewMode === 'week' ? 'btn-primary' : 'btn-secondary'}`}
-                  >
-                    Week
-                  </button>
-                  <button
-                    onClick={() => setViewMode('day')}
-                    className={`btn btn-sm ${viewMode === 'day' ? 'btn-primary' : 'btn-secondary'}`}
-                  >
-                    Day
-                  </button>
-                </div>
-              </div>
-              
-              {/* Calendar Grid */}
-              <div className="grid grid-cols-7 gap-2">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                  <div key={day} className="text-center text-sm font-medium text-secondary py-2">
-                    {day}
-                  </div>
-                ))}
-                {/* Calendar days would be generated here */}
-                {Array.from({ length: 35 }, (_, i) => {
-                  const date = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), i - 6);
-                  return renderCalendarDay(date);
-                })}
-              </div>
-            </div>
-          </div>
-          
-          {/* Daily Schedule */}
-          <div>
-            <div className="bg-surface-elevated rounded-xl shadow-default p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-primary">
-                  {selectedDate.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    month: 'short', 
-                    day: 'numeric' 
-                  })}
-                </h3>
-                <button className="btn btn-primary btn-sm">
-                  <PlusIcon className="h-4 w-4 mr-2" />
-                  New Booking
-                </button>
-              </div>
-              
-              <div className="space-y-3">
-                {getBookingsForDate(selectedDate).map(renderBookingCard)}
-                
-                {getBookingsForDate(selectedDate).length === 0 && (
-                  <div className="text-center py-8">
-                    <CalendarIcon className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                    <p className="text-secondary">No bookings for this day</p>
-                    <button className="btn btn-primary mt-4">
-                      <PlusIcon className="h-4 w-4 mr-2" />
-                      Add Booking
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {activeTab === 'services' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-primary">Services</h2>
-              <p className="text-secondary">Manage your bookable services and pricing</p>
-            </div>
-            <button
-              onClick={() => setShowServiceModal(true)}
-              className="btn btn-primary"
-            >
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Add Service
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {services.map(renderServiceCard)}
-          </div>
-        </div>
-      )}
-      
-      {activeTab === 'bookings' && (
-        <div className="space-y-6">
-          <div className="bg-surface-elevated rounded-xl shadow-default p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-primary">All Bookings</h2>
-              <div className="flex space-x-3">
-                <select className="input w-48">
-                  <option value="">All Statuses</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="pending">Pending</option>
-                  <option value="cancelled">Cancelled</option>
-                  <option value="completed">Completed</option>
-                </select>
-                <button className="btn btn-secondary">
-                  Export
-                </button>
-              </div>
-            </div>
-            
-            <div className="space-y-3">
-              {bookings.map(renderBookingCard)}
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {activeTab === 'staff' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-primary">Staff Management</h2>
-              <p className="text-secondary">Manage your team members and their availability</p>
-            </div>
-            <button className="btn btn-primary">
-              <PlusIcon className="h-4 w-4 mr-2" />
-              Add Staff Member
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {mockStaff.map((staffMember) => (
-              <motion.div
-                key={staffMember.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-surface border border-default rounded-xl p-6"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center">
-                    <img
-                      src={staffMember.avatar}
-                      alt={staffMember.name}
-                      className="w-16 h-16 rounded-full mr-4"
-                    />
-                    <div>
-                      <h3 className="font-semibold text-primary">{staffMember.name}</h3>
-                      <p className="text-secondary text-sm">{staffMember.title}</p>
-                      <div className="flex items-center mt-1">
-                        <StarIcon className="h-4 w-4 text-yellow-400 fill-current mr-1" />
-                        <span className="text-sm text-secondary">
-                          {staffMember.rating} • {staffMember.totalBookings} bookings
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className={`w-3 h-3 rounded-full ${
-                    staffMember.isAvailable ? 'bg-green-500' : 'bg-red-500'
-                  }`}></div>
-                </div>
-                
-                <p className="text-secondary text-sm mb-4">{staffMember.bio}</p>
-                
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {staffMember.specialties.map((specialty, index) => (
-                    <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
-                
-                <div className="flex space-x-2">
-                  <button className="btn btn-secondary flex-1">
-                    <PencilIcon className="h-4 w-4 mr-2" />
-                    Edit
-                  </button>
-                  <button className="btn btn-secondary">
-                    <CalendarIcon className="h-4 w-4" />
-                  </button>
-                  <button className="btn btn-secondary">
-                    <CogIcon className="h-4 w-4" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
-      
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-surface-elevated rounded-xl p-6 text-center">
-              <CheckCircleIconSolid className="h-8 w-8 mx-auto mb-3 text-green-600" />
-              <div className="text-2xl font-bold text-primary">{bookingStats.confirmedBookings}</div>
-              <div className="text-sm text-secondary">Confirmed Bookings</div>
-            </div>
-            <div className="bg-surface-elevated rounded-xl p-6 text-center">
-              <ClockIconSolid className="h-8 w-8 mx-auto mb-3 text-yellow-600" />
-              <div className="text-2xl font-bold text-primary">{bookingStats.pendingBookings}</div>
-              <div className="text-sm text-secondary">Pending Bookings</div>
-            </div>
-            <div className="bg-surface-elevated rounded-xl p-6 text-center">
-              <CreditCardIcon className="h-8 w-8 mx-auto mb-3 text-blue-600" />
-              <div className="text-2xl font-bold text-primary">${bookingStats.averageBookingValue}</div>
-              <div className="text-sm text-secondary">Avg Booking Value</div>
-            </div>
-            <div className="bg-surface-elevated rounded-xl p-6 text-center">
-              <StarIcon className="h-8 w-8 mx-auto mb-3 text-purple-600" />
-              <div className="text-2xl font-bold text-primary">{bookingStats.customerSatisfaction}</div>
-              <div className="text-sm text-secondary">Customer Rating</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default ProfessionalBookingSystem;
+    

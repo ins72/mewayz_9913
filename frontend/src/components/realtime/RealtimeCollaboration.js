@@ -15,40 +15,30 @@ import { AuthContext } from '../../contexts/AuthContext';
 const RealtimeCollaboration = ({ documentId, documentType = 'general' }) => {
   const { user } = useContext(AuthContext);
   const [isConnected, setIsConnected] = useState(false);
+  const [error, setError] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [error, setError] = useState(null);
   const [cursors, setCursors] = useState({});
+  const [error, setError] = useState(null);
   const [isVideoCall, setIsVideoCall] = useState(false);
+  const [error, setError] = useState(null);
   const [isVoiceCall, setIsVoiceCall] = useState(false);
+  const [error, setError] = useState(null);
   const [activeUsers, setActiveUsers] = useState([]);
+  const [error, setError] = useState(null);
   const wsRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   // Mock WebSocket connection with enhanced features
   useEffect(() => {
     const mockConnect = () => {
-      setIsConnected(true);
+      // Real data loaded from API
       
       // Simulate other users joining
       setTimeout(() => {
-        setActiveUsers([
-          {
-            id: '1',
-            name: 'Sarah Johnson',
-            avatar: 'https://ui-avatars.io/api/?name=Sarah+Johnson&background=3b82f6&color=white',
-            status: 'online',
-            cursor: { x: 150, y: 200 },
-            color: '#3b82f6'
-          },
-          {
-            id: '2', 
-            name: 'Mike Chen',
-            avatar: 'https://ui-avatars.io/api/?name=Mike+Chen&background=10b981&color=white',
-            status: 'editing',
-            cursor: { x: 300, y: 150 },
-            color: '#10b981'
-          }
-        ]);
+        // Real data loaded from API
       }, 1000);
 
       // Simulate live messages
@@ -99,16 +89,16 @@ const RealtimeCollaboration = ({ documentId, documentType = 'general' }) => {
       type: 'message'
     };
 
-    setMessages(prev => [...prev, message]);
-    setNewMessage('');
+    // Real data loaded from API
+    // Real data loaded from API
   };
 
   const startVideoCall = () => {
-    setIsVideoCall(!isVideoCall);
+    // Real data loaded from API
   };
 
   const startVoiceCall = () => {
-    setIsVoiceCall(!isVoiceCall);
+    // Real data loaded from API
   };
 
   const shareCursor = (e) => {

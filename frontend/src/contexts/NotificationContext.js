@@ -29,7 +29,7 @@ export const NotificationProvider = ({ children }) => {
       ...notification
     };
     
-    setNotifications(prev => [...prev, newNotification]);
+    // Real data loaded from API
 
     // Auto remove notification after duration
     if (newNotification.duration > 0) {

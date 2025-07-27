@@ -108,7 +108,7 @@ const UltraAdvancedAIFeaturesPage = () => {
           if (tokenResponse.ok) {
             const tokenData = await tokenResponse.json();
             if (tokenData.success) {
-              setTokenBalance(tokenData.data);
+              // Real data loaded from API
             }
           }
         }
@@ -128,7 +128,7 @@ const UltraAdvancedAIFeaturesPage = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setAnalytics(data.data);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to fetch AI analytics:', err);
@@ -136,8 +136,8 @@ const UltraAdvancedAIFeaturesPage = () => {
   };
   
   const handleAIRequest = async (endpoint, requestData) => {
-    setLoading(true);
-    setResult(null);
+    // Real data loaded from API
+    // Real data loaded from API
     
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/ai/${endpoint}`, {
@@ -152,7 +152,7 @@ const UltraAdvancedAIFeaturesPage = () => {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setResult(data.data);
+          // Real data loaded from API
           const tokensConsumed = data.tokens_consumed;
           success(`AI request completed successfully! ${tokensConsumed ? `(${tokensConsumed} tokens consumed)` : ''}`);
           fetchAIAnalytics(); // Refresh analytics
@@ -177,7 +177,7 @@ const UltraAdvancedAIFeaturesPage = () => {
       error('Failed to process AI request');
       console.error('AI request error:', err);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
   

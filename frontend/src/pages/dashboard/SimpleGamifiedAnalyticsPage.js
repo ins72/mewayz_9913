@@ -1,10 +1,39 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const SimpleGamifiedAnalyticsPage = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  
+  const loadAnalyticsData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/analytics/overview', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAnalytics(data);
+      } else {
+        console.error('Failed to load analytics data');
+      }
+    } catch (error) {
+      console.error('Error loading analytics data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div className="space-y-6">

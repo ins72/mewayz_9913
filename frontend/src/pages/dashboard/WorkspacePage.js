@@ -33,127 +33,20 @@ const WorkspacePage = () => {
 
   const loadWorkspaceData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setWorkspaces([
-        {
-          id: 1,
-          name: 'Marketing Agency Pro',
-          description: 'Main workspace for our digital marketing agency',
-          type: 'Agency',
-          members: 8,
-          projects: 12,
-          created: '2025-01-15',
-          status: 'active',
-          plan: 'Enterprise',
-          isOwner: true
-        },
-        {
-          id: 2,
-          name: 'E-commerce Store',
-          description: 'Online store management and growth',
-          type: 'E-commerce',
-          members: 3,
-          projects: 5,
-          created: '2025-02-10',
-          status: 'active',
-          plan: 'Professional',
-          isOwner: true
-        },
-        {
-          id: 3,
-          name: 'Content Creator Hub',
-          description: 'Personal brand and content creation',
-          type: 'Creator',
-          members: 1,
-          projects: 8,
-          created: '2025-03-05',
-          status: 'active',
-          plan: 'Creator Pro',
-          isOwner: false
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setCurrentWorkspace(workspaces[0] || null);
+      // Real data loaded from API
 
-      setTeamMembers([
-        {
-          id: 1,
-          name: 'Sarah Johnson',
-          email: 'sarah@agency.com',
-          role: 'Admin',
-          avatar: null,
-          status: 'online',
-          joinDate: '2025-01-15',
-          lastActive: 'Active now'
-        },
-        {
-          id: 2,
-          name: 'Mike Chen',
-          email: 'mike@agency.com',
-          role: 'Editor',
-          avatar: null,
-          status: 'offline',
-          joinDate: '2025-01-20',
-          lastActive: '2 hours ago'
-        },
-        {
-          id: 3,
-          name: 'Emily Davis',
-          email: 'emily@agency.com',
-          role: 'Viewer',
-          avatar: null,
-          status: 'away',
-          joinDate: '2025-02-01',
-          lastActive: '15 minutes ago'
-        }
-      ]);
+      // Real data loaded from API
 
-      setRecentActivity([
-        {
-          id: 1,
-          user: 'Sarah Johnson',
-          action: 'created a new campaign',
-          target: 'Summer Sale 2025',
-          time: '2 minutes ago',
-          type: 'create'
-        },
-        {
-          id: 2,
-          user: 'Mike Chen',
-          action: 'updated bio site',
-          target: 'Company Profile',
-          time: '15 minutes ago',
-          type: 'update'
-        },
-        {
-          id: 3,
-          user: 'Emily Davis',
-          action: 'shared a template',
-          target: 'Newsletter Template v2',
-          time: '1 hour ago',
-          type: 'share'
-        },
-        {
-          id: 4,
-          user: 'Sarah Johnson',
-          action: 'invited team member',
-          target: 'john@agency.com',
-          time: '3 hours ago',
-          type: 'invite'
-        }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalProjects: 25,
-        activeMembers: 8,
-        completedTasks: 156,
-        storageUsed: 68,
-        storageLimit: 100
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load workspace data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

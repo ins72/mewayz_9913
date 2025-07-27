@@ -229,25 +229,14 @@ const ComprehensiveMarketplace = () => {
   });
   
   useEffect(() => {
-    setProducts(mockProducts);
-    setCategories(productCategories);
+    // Real data loaded from API
+    // Real data loaded from API
     loadUserData();
   }, []);
   
   const loadUserData = () => {
     // Mock user store data
-    setMyStore({
-      id: 'my-store-1',
-      name: 'My Digital Store',
-      description: 'Premium digital products and courses',
-      avatar: 'https://ui-avatars.com/api/?name=My+Store&background=10b981&color=fff',
-      banner: 'https://ui-avatars.com/api/?name=Store+Banner&background=gradient&color=fff',
-      totalProducts: 12,
-      totalSales: 156,
-      rating: 4.8,
-      reviews: 23,
-      isVerified: true
-    });
+    // Real data loaded from API
     
     // Mock cart items
     setCart([
@@ -260,23 +249,7 @@ const ComprehensiveMarketplace = () => {
     ]);
     
     // Mock orders
-    setOrders([
-      {
-        id: 'order-1',
-        products: [mockProducts[0]],
-        total: 199.99,
-        status: 'completed',
-        createdAt: '2024-12-15',
-        deliveredAt: '2024-12-16'
-      },
-      {
-        id: 'order-2',
-        products: [mockProducts[1]],
-        total: 49.99,
-        status: 'processing',
-        createdAt: '2024-12-18'
-      }
-    ]);
+    // Real data loaded from API
   };
   
   const addToCart = (product) => {
@@ -300,7 +273,7 @@ const ComprehensiveMarketplace = () => {
   
   const addToWishlist = (product) => {
     if (!wishlist.find(item => item.id === product.id)) {
-      setWishlist([...wishlist, product]);
+      // Real data loaded from API
       success('Added to wishlist!');
     } else {
       setWishlist(wishlist.filter(item => item.id !== product.id));

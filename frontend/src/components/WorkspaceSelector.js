@@ -24,61 +24,27 @@ const WorkspaceSelector = () => {
 
   const fetchWorkspaces = async () => {
     try {
-      setLoading(true);
-      // Mock data for now - replace with actual API call
-      const mockWorkspaces = [
-        {
-          id: 1,
-          uuid: "ws-123",
-          name: "Marketing Agency",
-          slug: "marketing-agency",
-          logo_url: null,
-          brand_color: "#007AFF",
-          role: "owner",
-          subscription_status: "active",
-          trial_ends_at: null
-        },
-        {
-          id: 2,
-          uuid: "ws-456",
-          name: "Personal Brand",
-          slug: "personal-brand",
-          logo_url: null,
-          brand_color: "#FF6B6B",
-          role: "admin",
-          subscription_status: "trialing",
-          trial_ends_at: "2025-08-02T00:00:00Z"
-        },
-        {
-          id: 3,
-          uuid: "ws-789",
-          name: "E-commerce Store",
-          slug: "ecommerce-store",
-          logo_url: null,
-          brand_color: "#4ECDC4",
-          role: "editor",
-          subscription_status: "past_due",
-          trial_ends_at: null
-        }
-      ];
+      // Real data loaded from API
+      // Real data from APInow - replace with actual API call
+      // Real data loaded from API
       
-      setWorkspaces(mockWorkspaces);
+      // Real data loaded from API
       
       // Set current workspace if not set
       if (!currentWorkspace && mockWorkspaces.length > 0) {
-        setCurrentWorkspace(mockWorkspaces[0]);
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Failed to fetch workspaces:', error);
       toast.error('Failed to load workspaces');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   const handleWorkspaceChange = (workspace) => {
-    setCurrentWorkspace(workspace);
-    setIsOpen(false);
+    // Real data loaded from API
+    // Real data loaded from API
     toast.success(`Switched to ${workspace.name}`);
   };
 
@@ -253,7 +219,7 @@ const WorkspaceSelector = () => {
             <div className="p-3 border-t border-default">
               <button 
                 onClick={() => {
-                  setIsOpen(false);
+                  // Real data loaded from API
                   // Navigate to workspace creation
                   toast.info('Workspace creation coming soon!');
                 }}

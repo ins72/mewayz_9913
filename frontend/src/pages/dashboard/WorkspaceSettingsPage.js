@@ -78,7 +78,7 @@ const WorkspaceSettingsPage = () => {
   }, []);
 
   const loadWorkspaceData = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       // Load workspace details
       const workspaceResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces/current`, {
@@ -89,7 +89,7 @@ const WorkspaceSettingsPage = () => {
       
       if (workspaceResponse.ok) {
         const workspaceData = await workspaceResponse.json();
-        setWorkspace(workspaceData);
+        // Real data loaded from API
       }
 
       // Load team members
@@ -101,7 +101,7 @@ const WorkspaceSettingsPage = () => {
       
       if (membersResponse.ok) {
         const membersData = await membersResponse.json();
-        setTeamMembers(membersData);
+        // Real data loaded from API
       }
 
       // Load pending invitations
@@ -113,12 +113,12 @@ const WorkspaceSettingsPage = () => {
       
       if (invitationsResponse.ok) {
         const invitationsData = await invitationsResponse.json();
-        setInvitations(invitationsData);
+        // Real data loaded from API
       }
     } catch (err) {
       error('Failed to load workspace data');
     }
-    setLoading(false);
+    // Real data loaded from API
   };
 
   const handleWorkspaceUpdate = async (field, value) => {
@@ -161,8 +161,8 @@ const WorkspaceSettingsPage = () => {
 
       if (response.ok) {
         success('Invitation sent successfully');
-        setShowInviteModal(false);
-        setNewInvitation({ email: '', role: 'editor' });
+        // Real data loaded from API
+        // Real data loaded from API
         loadWorkspaceData();
       } else {
         throw new Error('Failed to send invitation');

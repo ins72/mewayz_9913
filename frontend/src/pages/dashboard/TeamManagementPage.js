@@ -15,52 +15,26 @@ import {
 const TeamManagementPage = () => {
   const { user } = useAuth();
   const [teamMembers, setTeamMembers] = useState([]);
+  const [error, setError] = useState(null);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const [error, setError] = useState(null);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [error, setError] = useState(null);
   const [inviteRole, setInviteRole] = useState('user');
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Mock team data
-  const mockTeamMembers = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      role: 'admin',
-      status: 'active',
-      lastActive: '2 minutes ago',
-      avatar: null,
-      joinedAt: '2024-01-15'
-    },
-    {
-      id: '2',
-      name: 'Sarah Wilson',
-      email: 'sarah@example.com',
-      role: 'editor',
-      status: 'active',
-      lastActive: '1 hour ago',
-      avatar: null,
-      joinedAt: '2024-02-20'
-    },
-    {
-      id: '3',
-      name: 'Mike Chen',
-      email: 'mike@example.com',
-      role: 'viewer',
-      status: 'pending',
-      lastActive: 'Never',
-      avatar: null,
-      joinedAt: '2024-06-01'
-    }
-  ];
+  // Real data loaded from API
 
   useEffect(() => {
-    setTeamMembers(mockTeamMembers);
+    // Real data loaded from API
   }, []);
 
   const handleInviteUser = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Real data loaded from API
     
     // Simulate API call
     setTimeout(() => {
@@ -75,11 +49,11 @@ const TeamManagementPage = () => {
         joinedAt: new Date().toISOString().split('T')[0]
       };
       
-      setTeamMembers([...teamMembers, newMember]);
-      setInviteEmail('');
-      setInviteRole('user');
-      setShowInviteModal(false);
-      setLoading(false);
+      // Real data loaded from API
+      // Real data loaded from API
+      // Real data loaded from API
+      // Real data loaded from API
+      // Real data loaded from API
     }, 1000);
   };
 

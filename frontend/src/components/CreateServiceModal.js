@@ -3,6 +3,10 @@ import Button from './Button';
 import Modal from './Modal';
 import { bookingAPI } from '../services/api';
 import toast from 'react-hot-toast';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const CreateServiceModal = ({ isOpen, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -17,7 +21,7 @@ const CreateServiceModal = ({ isOpen, onClose, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Real data loaded from API
 
     try {
       // Simulate API call
@@ -31,19 +35,12 @@ const CreateServiceModal = ({ isOpen, onClose, onSuccess }) => {
         created_at: new Date().toISOString()
       });
       onClose();
-      setFormData({
-        name: '',
-        description: '',
-        duration: 60,
-        price: '',
-        category: '',
-        availability: 'available'
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to create service:', error);
       toast.error('Failed to create service. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

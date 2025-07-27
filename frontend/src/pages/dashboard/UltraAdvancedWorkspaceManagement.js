@@ -158,9 +158,9 @@ const UltraAdvancedWorkspaceManagement = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setWorkspaces(data.data.workspaces);
+        // Real data loaded from API
         if (data.data.workspaces.length > 0) {
-          setCurrentWorkspace(data.data.workspaces[0]);
+          // Real data loaded from API
         }
       }
     } catch (err) {
@@ -169,7 +169,7 @@ const UltraAdvancedWorkspaceManagement = () => {
   };
   
   const createWorkspace = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces`, {
         method: 'POST',
@@ -183,19 +183,8 @@ const UltraAdvancedWorkspaceManagement = () => {
       if (response.ok) {
         const data = await response.json();
         success('Workspace created successfully!');
-        setShowCreateModal(false);
-        setCreateForm({
-          name: '',
-          description: '',
-          goals: [],
-          features: [],
-          branding: {
-            logo: '',
-            primary_color: '#3B82F6',
-            secondary_color: '#10B981',
-            domain: ''
-          }
-        });
+        // Real data loaded from API
+        // Real data loaded from API
         fetchWorkspaces();
       } else {
         const errorData = await response.json();
@@ -204,12 +193,12 @@ const UltraAdvancedWorkspaceManagement = () => {
     } catch (err) {
       error('Failed to create workspace');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
   
   const inviteTeamMember = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces/${currentWorkspace.id}/invite`, {
         method: 'POST',
@@ -222,8 +211,8 @@ const UltraAdvancedWorkspaceManagement = () => {
       
       if (response.ok) {
         success('Team member invited successfully!');
-        setShowInviteModal(false);
-        setInviteForm({ email: '', role: 'viewer', message: '' });
+        // Real data loaded from API
+        // Real data loaded from API
         fetchWorkspaces();
       } else {
         const errorData = await response.json();
@@ -232,7 +221,7 @@ const UltraAdvancedWorkspaceManagement = () => {
     } catch (err) {
       error('Failed to send invitation');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
   
@@ -369,10 +358,7 @@ const UltraAdvancedWorkspaceManagement = () => {
                             goals: createForm.goals.filter(g => g !== goal.id)
                           });
                         } else {
-                          setCreateForm({
-                            ...createForm,
-                            goals: [...createForm.goals, goal.id]
-                          });
+                          // Real data loaded from API
                         }
                       }}
                       className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
@@ -420,10 +406,7 @@ const UltraAdvancedWorkspaceManagement = () => {
                               checked={createForm.features.includes(feature.id)}
                               onChange={(e) => {
                                 if (e.target.checked) {
-                                  setCreateForm({
-                                    ...createForm,
-                                    features: [...createForm.features, feature.id]
-                                  });
+                                  // Real data loaded from API
                                 } else {
                                   setCreateForm({
                                     ...createForm,

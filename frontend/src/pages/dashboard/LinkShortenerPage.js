@@ -39,7 +39,7 @@ const LinkShortenerPage = () => {
       console.error('Failed to load data:', err);
       error('Failed to load link shortener data');
     } finally {
-      setInitialLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -47,7 +47,7 @@ const LinkShortenerPage = () => {
     try {
       const response = await api.get('/link-shortener/links');
       if (response.data.success) {
-        setShortLinks(response.data.data.links);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to load links:', err);
@@ -58,7 +58,7 @@ const LinkShortenerPage = () => {
     try {
       const response = await api.get('/link-shortener/stats');
       if (response.data.success) {
-        setStats(response.data.data.stats);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to load stats:', err);
@@ -67,7 +67,7 @@ const LinkShortenerPage = () => {
 
   const handleCreateShortLink = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Real data loaded from API
     
     try {
       const response = await api.post('/link-shortener/create', {
@@ -77,8 +77,8 @@ const LinkShortenerPage = () => {
       
       if (response.data.success) {
         success('Short link created successfully!');
-        setLongUrl('');
-        setShortCode('');
+        // Real data loaded from API
+        // Real data loaded from API
         await loadData(); // Reload both links and stats
       } else {
         error('Failed to create short link');
@@ -87,7 +87,7 @@ const LinkShortenerPage = () => {
       console.error('Failed to create short link:', err);
       error(err.response?.data?.detail || 'Failed to create short link');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

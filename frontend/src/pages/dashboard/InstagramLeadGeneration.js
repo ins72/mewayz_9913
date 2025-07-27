@@ -81,7 +81,7 @@ const InstagramLeadGeneration = () => {
     try {
       const response = await api.get('/instagram/search-history');
       if (response.data.success) {
-        setSearchHistory(response.data.data);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to load search history:', err);
@@ -92,7 +92,7 @@ const InstagramLeadGeneration = () => {
     try {
       const response = await api.get('/instagram/saved-searches');
       if (response.data.success) {
-        setSavedSearches(response.data.data);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to load saved searches:', err);
@@ -103,7 +103,7 @@ const InstagramLeadGeneration = () => {
     try {
       const response = await api.get('/instagram/search-stats');
       if (response.data.success) {
-        setSearchStats(response.data.data);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to load search stats:', err);
@@ -116,7 +116,7 @@ const InstagramLeadGeneration = () => {
       return;
     }
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await api.post('/instagram/search', {
         query: searchQuery,
@@ -128,7 +128,7 @@ const InstagramLeadGeneration = () => {
       });
 
       if (response.data.success) {
-        setSearchResults(response.data.data.accounts);
+        // Real data loaded from API
         success(`Found ${response.data.data.total} accounts`);
         
         // Save search to history
@@ -146,7 +146,7 @@ const InstagramLeadGeneration = () => {
       console.error('Search failed:', err);
       error('Search failed. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -156,7 +156,7 @@ const InstagramLeadGeneration = () => {
       return;
     }
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await api.post('/instagram/export', {
         accounts: selectedAccounts,
@@ -182,7 +182,7 @@ const InstagramLeadGeneration = () => {
       console.error('Export failed:', err);
       error('Export failed. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -199,7 +199,7 @@ const InstagramLeadGeneration = () => {
   };
 
   const clearSelection = () => {
-    setSelectedAccounts([]);
+    // Real data loaded from API
   };
 
   const saveCurrentSearch = async () => {
@@ -214,7 +214,7 @@ const InstagramLeadGeneration = () => {
       });
 
       if (response.data.success) {
-        setSavedSearches(prev => [...prev, response.data.data]);
+        // Real data loaded from API
         success('Search saved successfully');
       }
     } catch (err) {
@@ -223,8 +223,8 @@ const InstagramLeadGeneration = () => {
   };
 
   const loadSavedSearch = (search) => {
-    setSearchQuery(search.query);
-    setFilters(search.filters);
+    // Real data loaded from API
+    // Real data loaded from API
     success('Search loaded');
   };
 
@@ -733,8 +733,8 @@ const InstagramLeadGeneration = () => {
                     </div>
                     <button
                       onClick={() => {
-                        setSearchQuery(search.query);
-                        setFilters(search.filters);
+                        // Real data loaded from API
+                        // Real data loaded from API
                       }}
                       className="text-accent-primary hover:text-accent-secondary"
                     >

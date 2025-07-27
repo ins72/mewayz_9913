@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-07-27T08:09:39.735081",
+  "verification_type": "Database CRUD Operations",
+  "results": [
+    {
+      "test": "Database Health",
+      "status": 200,
+      "success": false,
+      "database_status": "sqlite"
+    },
+    {
+      "test": "System Metrics",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "User Registration",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "User Login",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "Create Workspace",
+      "status": 404,
+      "success": false,
+      "mock_data_found": []
+    },
+    {
+      "test": "Create Product",
+      "status": 405,
+      "success": false,
+      "mock_data_found": []
+    },
+    {
+      "test": "Dashboard Overview",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "Analytics Overview",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "E-commerce Dashboard",
+      "status": 404,
+      "success": false,
+      "mock_data_found": []
+    },
+    {
+      "test": "Marketing Analytics",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "CRM Contacts",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    },
+    {
+      "test": "Support Tickets",
+      "status": 200,
+      "success": true,
+      "mock_data_found": []
+    }
+  ],
+  "summary": {
+    "total_tests": 12,
+    "successful_tests": 8,
+    "tests_with_mock_data": 0,
+    "success_rate": 66.66666666666666
+  },
+  "recommendations": [
+    "Fix database connectivity issues"
+  ]
+}

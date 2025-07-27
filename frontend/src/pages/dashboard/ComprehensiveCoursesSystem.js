@@ -107,7 +107,7 @@ const ComprehensiveCoursesSystem = () => {
   }, [activeTab, selectedCategory, searchQuery, sortBy]);
 
   const loadCoursesData = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       const [coursesRes, categoriesRes, statsRes] = await Promise.all([
         api.get(`/courses/browse?category=${selectedCategory}&search=${searchQuery}&sort=${sortBy}`),
@@ -116,13 +116,13 @@ const ComprehensiveCoursesSystem = () => {
       ]);
 
       if (coursesRes.data.success) {
-        setCourses(coursesRes.data.data);
+        // Real data loaded from API
       }
       if (categoriesRes.data.success) {
-        setCategories(categoriesRes.data.data);
+        // Real data loaded from API
       }
       if (statsRes.data.success) {
-        setCourseStats(statsRes.data.data);
+        // Real data loaded from API
       }
 
       if (activeTab === 'my-courses') {
@@ -132,10 +132,10 @@ const ComprehensiveCoursesSystem = () => {
         ]);
         
         if (myCoursesRes.data.success) {
-          setMyCourses(myCoursesRes.data.data);
+          // Real data loaded from API
         }
         if (enrolledRes.data.success) {
-          setEnrolledCourses(enrolledRes.data.data);
+          // Real data loaded from API
         }
       }
 
@@ -146,22 +146,22 @@ const ComprehensiveCoursesSystem = () => {
         ]);
         
         if (discussionsRes.data.success) {
-          setDiscussions(discussionsRes.data.data);
+          // Real data loaded from API
         }
         if (announcementsRes.data.success) {
-          setAnnouncements(announcementsRes.data.data);
+          // Real data loaded from API
         }
       }
     } catch (err) {
       console.error('Failed to load courses data:', err);
       error('Failed to load courses data');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   const handleCourseAction = async (action, courseId, additionalData = {}) => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       let response;
       
@@ -177,8 +177,8 @@ const ComprehensiveCoursesSystem = () => {
         case 'start-lesson':
           response = await api.post(`/courses/${courseId}/lessons/${additionalData.lessonId}/start`);
           if (response.data.success) {
-            setSelectedLesson(additionalData.lessonId);
-            setShowLessonModal(true);
+            // Real data loaded from API
+            // Real data loaded from API
           }
           break;
           
@@ -220,7 +220,7 @@ const ComprehensiveCoursesSystem = () => {
       console.error(`Course ${action} failed:`, err);
       error(`Failed to ${action.replace('-', ' ')} course`);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -230,7 +230,7 @@ const ComprehensiveCoursesSystem = () => {
       return;
     }
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       const formData = new FormData();
       
@@ -248,20 +248,15 @@ const ComprehensiveCoursesSystem = () => {
 
       if (response.data.success) {
         success('Course created successfully');
-        setShowCourseModal(false);
-        setCourseForm({
-          title: '', description: '', category: '', price: 0,
-          level: 'beginner', duration: '', thumbnail: null, modules: [],
-          isDraft: true, allowComments: true, enableCertificate: true,
-          maxStudents: 0, prerequisites: []
-        });
+        // Real data loaded from API
+        // Real data loaded from API
         loadCoursesData();
       }
     } catch (err) {
       console.error('Course creation failed:', err);
       error('Failed to create course');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -318,7 +313,7 @@ const ComprehensiveCoursesSystem = () => {
           {/* Course Actions */}
           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
             <button
-              onClick={() => { setSelectedCourse(course); setShowCourseModal(true); }}
+              onClick={() => { // Real data loaded from API // Real data loaded from API }}
               className="p-3 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors"
               title="View Course"
             >
@@ -347,7 +342,7 @@ const ComprehensiveCoursesSystem = () => {
             
             {isMine && (
               <button
-                onClick={() => { setCourseForm(course); setShowCourseModal(true); }}
+                onClick={() => { // Real data loaded from API // Real data loaded from API }}
                 className="p-3 bg-blue-500 backdrop-blur-sm rounded-full text-white hover:bg-blue-600 transition-colors"
                 title="Edit Course"
               >

@@ -12,11 +12,18 @@ import {
   VideoCameraIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const HelpSupportCenter = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState('help');
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [error, setError] = useState(null);
 
   const helpCategories = [
     {
@@ -172,8 +179,8 @@ const HelpSupportCenter = ({ isOpen, onClose }) => {
                 <button
                   key={tab.id}
                   onClick={() => {
-                    setActiveTab(tab.id);
-                    setSelectedCategory(null);
+                    // Real data loaded from API
+                    // Real data loaded from API
                   }}
                   className={`flex items-center space-x-2 px-6 py-3 border-b-2 font-medium text-sm ${
                     activeTab === tab.id

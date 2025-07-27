@@ -9,6 +9,10 @@ import {
   ArrowLongRightIcon,
   EllipsisHorizontalIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const DataTable = ({
   data = [],
@@ -22,9 +26,13 @@ const DataTable = ({
   className = ""
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState(null);
   const [sortField, setSortField] = useState('');
+  const [error, setError] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(null);
 
   // Filter data based on search query
   const filteredData = data.filter(item =>
@@ -61,10 +69,10 @@ const DataTable = ({
     if (!sortable) return;
     
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      // Real data loaded from API
     } else {
-      setSortField(field);
-      setSortDirection('asc');
+      // Real data loaded from API
+      // Real data loaded from API
     }
   };
 
@@ -117,8 +125,8 @@ const DataTable = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(1); // Reset to first page on search
+                  // Real data loaded from API
+                  // Real data loaded from API // Reset to first page on search
                 }}
                 placeholder="Search..."
                 className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"

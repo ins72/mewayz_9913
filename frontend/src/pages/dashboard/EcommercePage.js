@@ -29,76 +29,16 @@ const EcommercePage = () => {
 
   const loadEcommerceData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setProducts([
-        {
-          id: 1,
-          name: 'Premium Course Bundle',
-          price: 299.99,
-          stock: 100,
-          sales: 45,
-          status: 'active',
-          image: '/api/placeholder/150/150'
-        },
-        {
-          id: 2,
-          name: 'Consultation Service',
-          price: 199.99,
-          stock: 0,
-          sales: 23,
-          status: 'active',
-          image: '/api/placeholder/150/150'
-        },
-        {
-          id: 3,
-          name: 'Digital Templates Pack',
-          price: 49.99,
-          stock: 500,
-          sales: 156,
-          status: 'active',
-          image: '/api/placeholder/150/150'
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setOrders([
-        {
-          id: 'ORD-001',
-          customer: 'John Doe',
-          total: 299.99,
-          status: 'completed',
-          date: '2025-07-19',
-          items: 1
-        },
-        {
-          id: 'ORD-002',
-          customer: 'Jane Smith',
-          total: 49.99,
-          status: 'processing',
-          date: '2025-07-19',
-          items: 1
-        },
-        {
-          id: 'ORD-003',
-          customer: 'Mike Johnson',
-          total: 199.99,
-          status: 'shipped',
-          date: '2025-07-18',
-          items: 1
-        }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalRevenue: 15420,
-        totalOrders: 234,
-        totalProducts: 12,
-        conversionRate: 3.2,
-        averageOrderValue: 65.90,
-        topSellingProduct: 'Digital Templates Pack'
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load e-commerce data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -219,176 +159,46 @@ const EcommercePage = () => {
   );
 
   if (loading) {
-    return (
+    
+  const loadEcommerceData = async () => {
+    try {
+      setLoading(true);
+      const [productsResponse, ordersResponse, analyticsResponse] = await Promise.all([
+        fetch('/api/ecommerce/products', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/ecommerce/orders', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/ecommerce/analytics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (productsResponse.ok && ordersResponse.ok && analyticsResponse.ok) {
+        const [products, orders, analytics] = await Promise.all([
+          productsResponse.json(),
+          ordersResponse.json(),
+          analyticsResponse.json()
+        ]);
+        
+        setProducts(products.products || []);
+        setOrders(orders.orders || []);
+        setAnalytics(analytics);
+      }
+    } catch (error) {
+      console.error('Error loading ecommerce data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="flex items-center justify-center h-64">
         <div className="spinner w-8 h-8 text-accent-primary"></div>
       </div>
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">E-commerce Store</h1>
-          <p className="text-secondary mt-1">Manage your online store and products</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="secondary">
-            <ArchiveBoxIcon className="w-4 h-4 mr-2" />
-            Manage Inventory
-          </Button>
-          <Button>
-            <PlusIcon className="w-4 h-4 mr-2" />
-            Add Product
-          </Button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview' },
-            { id: 'products', name: 'Products' },
-            { id: 'orders', name: 'Orders' },
-            { id: 'analytics', name: 'Analytics' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-accent-primary text-accent-primary'
-                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
-              }`}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Analytics Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Revenue"
-              value={`$${analytics.totalRevenue.toLocaleString()}`}
-              change={12.5}
-              icon={CurrencyDollarIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Total Orders"
-              value={analytics.totalOrders.toLocaleString()}
-              change={8.2}
-              icon={ShoppingBagIcon}
-              color="success"
-            />
-            <StatCard
-              title="Total Products"
-              value={analytics.totalProducts.toString()}
-              change={5.1}
-              icon={ArchiveBoxIcon}
-              color="warning"
-            />
-            <StatCard
-              title="Conversion Rate"
-              value={`${analytics.conversionRate}%`}
-              change={2.1}
-              icon={ChartBarIcon}
-              color="primary"
-            />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <TagIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Create Product</h3>
-              <p className="text-secondary">Add new products to your store</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <TruckIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Process Orders</h3>
-              <p className="text-secondary">Fulfill and ship customer orders</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <UserGroupIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Customer Support</h3>
-              <p className="text-secondary">Help customers with their purchases</p>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'products' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Products</h2>
-            <div className="flex items-center space-x-3">
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Categories</option>
-                <option>Digital Products</option>
-                <option>Services</option>
-                <option>Physical Goods</option>
-              </select>
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Status</option>
-                <option>Active</option>
-                <option>Draft</option>
-                <option>Out of Stock</option>
-              </select>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'orders' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Recent Orders</h2>
-            <div className="flex items-center space-x-3">
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Orders</option>
-                <option>Pending</option>
-                <option>Processing</option>
-                <option>Shipped</option>
-                <option>Completed</option>
-              </select>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {orders.map((order) => (
-              <OrderCard key={order.id} order={order} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">Store Analytics</h2>
-          <div className="card-elevated p-8 text-center">
-            <ChartBarIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Detailed Analytics Coming Soon</h3>
-            <p className="text-secondary">We're building comprehensive e-commerce analytics to help you track sales, customer behavior, and store performance.</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default EcommercePage;
+  

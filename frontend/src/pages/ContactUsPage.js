@@ -9,6 +9,10 @@ import {
   GlobeAltIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const ContactUsPage = () => {
   const [formData, setFormData] = useState({
@@ -19,23 +23,22 @@ const ContactUsPage = () => {
     category: 'general'
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    // Real data loaded from API
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Real data loaded from API
     
     // Simulate API call
     setTimeout(() => {
-      setSubmitted(true);
-      setLoading(false);
+      // Real data loaded from API
+      // Real data loaded from API
     }, 1500);
   };
 

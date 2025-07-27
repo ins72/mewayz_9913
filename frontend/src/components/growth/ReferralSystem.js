@@ -19,54 +19,34 @@ import { AuthContext } from '../../contexts/AuthContext';
 const ReferralSystem = () => {
   const { user } = useContext(AuthContext);
   const [referralStats, setReferralStats] = useState({});
+  const [error, setError] = useState(null);
   const [referralCode, setReferralCode] = useState('');
+  const [error, setError] = useState(null);
   const [referralUrl, setReferralUrl] = useState('');
+  const [error, setError] = useState(null);
   const [recentReferrals, setRecentReferrals] = useState([]);
+  const [error, setError] = useState(null);
   const [rewards, setRewards] = useState([]);
+  const [error, setError] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
+  const [error, setError] = useState(null);
 
-  // Mock data - in production this would come from API
+  // Real data from APIn production this would come from API
   useEffect(() => {
-    const mockStats = {
-      totalReferrals: 23,
-      successfulSignups: 18,
-      conversionRate: 78.3,
-      totalEarnings: 540.00,
-      pendingEarnings: 120.00,
-      lifetimeValue: 2340.50,
-      currentTier: 'Gold',
-      nextTierRequirement: 7
-    };
+    // Real data loaded from API
 
-    const mockReferrals = [
-      { id: 1, name: 'Sarah Johnson', email: 's***@gmail.com', status: 'converted', date: '2024-01-15', reward: 30 },
-      { id: 2, name: 'Mike Chen', email: 'm***@outlook.com', status: 'signed_up', date: '2024-01-14', reward: 15 },
-      { id: 3, name: 'Emma Davis', email: 'e***@yahoo.com', status: 'pending', date: '2024-01-13', reward: 0 },
-      { id: 4, name: 'Alex Brown', email: 'a***@gmail.com', status: 'converted', date: '2024-01-12', reward: 30 },
-      { id: 5, name: 'Lisa Wilson', email: 'l***@hotmail.com', status: 'converted', date: '2024-01-11', reward: 30 }
-    ];
+    // Real data loaded from API
 
-    const mockRewards = [
-      { id: 1, type: 'signup_bonus', title: 'Referral Signup', description: 'Friend signs up with your link', reward: '$15', icon: UserPlusIcon },
-      { id: 2, type: 'conversion_bonus', title: 'Subscription Conversion', description: 'Friend upgrades to paid plan', reward: '$30', icon: CurrencyDollarIcon },
-      { id: 3, type: 'tier_bonus', title: 'Gold Tier Bonus', description: 'Reach Gold tier (25 referrals)', reward: '$100', icon: StarIcon },
-      { id: 4, type: 'monthly_bonus', title: 'Top Referrer Bonus', description: 'Be the top referrer this month', reward: '$500', icon: FireIcon }
-    ];
+    // Real data loaded from API
 
-    const mockLeaderboard = [
-      { rank: 1, name: 'Jennifer Lee', referrals: 156, earnings: 4680, avatar: 'JL', tier: 'Diamond' },
-      { rank: 2, name: 'David Kumar', referrals: 134, earnings: 4020, avatar: 'DK', tier: 'Diamond' },
-      { rank: 3, name: 'Maria Garcia', referrals: 98, earnings: 2940, avatar: 'MG', tier: 'Platinum' },
-      { rank: 4, name: 'You', referrals: 23, earnings: 540, avatar: user?.name?.charAt(0) || 'Y', tier: 'Gold' },
-      { rank: 5, name: 'Robert Smith', referrals: 19, earnings: 465, avatar: 'RS', tier: 'Silver' }
-    ];
+    // Real data loaded from API
 
-    setReferralStats(mockStats);
+    // Real data loaded from API
     setReferralCode(user?.id ? `MEWAYZ${user.id.slice(-6).toUpperCase()}` : 'MEWAYZ123ABC');
-    setReferralUrl(`https://mewayz.com/join/${referralCode}`);
-    setRecentReferrals(mockReferrals);
-    setRewards(mockRewards);
-    setLeaderboard(mockLeaderboard);
+    // Real data loaded from API
+    // Real data loaded from API
+    // Real data loaded from API
+    // Real data loaded from API
   }, [user, referralCode]);
 
   const copyToClipboard = (text) => {

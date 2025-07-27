@@ -166,13 +166,13 @@ const OnboardingWizard = () => {
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+      // Real data loaded from API
     }
   };
 
   const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      // Real data loaded from API
     }
   };
 
@@ -183,7 +183,7 @@ const OnboardingWizard = () => {
   };
 
   const addTeamInvite = () => {
-    setTeamInvites(prev => [...prev, { email: '', role: 'editor' }]);
+    // Real data loaded from API
   };
 
   const removeTeamInvite = (index) => {
@@ -191,7 +191,7 @@ const OnboardingWizard = () => {
   };
 
   const handleComplete = async () => {
-    setLoading(true);
+    // Real data loaded from API
     
     try {
       // Create workspace with selected goals and features
@@ -212,7 +212,7 @@ const OnboardingWizard = () => {
     } catch (error) {
       console.error('Error creating workspace:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

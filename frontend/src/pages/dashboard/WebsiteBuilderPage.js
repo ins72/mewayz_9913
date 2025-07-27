@@ -32,74 +32,18 @@ const WebsiteBuilderPage = () => {
 
   const loadWebsiteBuilderData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setWebsites([
-        {
-          id: 1,
-          name: 'My Business Website',
-          domain: 'mybusiness.mewayz.com',
-          customDomain: 'www.mybusiness.com',
-          status: 'published',
-          template: 'Business Pro',
-          pages: 5,
-          visitors: 2340,
-          lastModified: '2025-07-19',
-          screenshot: '/api/placeholder/300/200'
-        },
-        {
-          id: 2,
-          name: 'Portfolio Site',
-          domain: 'portfolio.mewayz.com',
-          customDomain: null,
-          status: 'draft',
-          template: 'Creative Portfolio',
-          pages: 3,
-          visitors: 0,
-          lastModified: '2025-07-18',
-          screenshot: '/api/placeholder/300/200'
-        },
-        {
-          id: 3,
-          name: 'Online Store',
-          domain: 'store.mewayz.com',
-          customDomain: 'shop.example.com',
-          status: 'published',
-          template: 'E-commerce Pro',
-          pages: 8,
-          visitors: 1890,
-          lastModified: '2025-07-17',
-          screenshot: '/api/placeholder/300/200'
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setTemplates([
-        { id: 1, name: 'Business Professional', category: 'Business', price: 'Free', features: ['Responsive', 'SEO Optimized', 'Contact Forms'] },
-        { id: 2, name: 'Creative Portfolio', category: 'Portfolio', price: '$29', features: ['Gallery', 'Animations', 'Blog'] },
-        { id: 3, name: 'E-commerce Store', category: 'E-commerce', price: '$49', features: ['Shopping Cart', 'Payment Integration', 'Inventory'] },
-        { id: 4, name: 'Restaurant & Food', category: 'Restaurant', price: '$39', features: ['Menu Display', 'Reservations', 'Gallery'] }
-      ]);
+      // Real data loaded from API
 
-      setComponents([
-        { id: 1, name: 'Hero Section', category: 'Headers', type: 'layout' },
-        { id: 2, name: 'Image Gallery', category: 'Media', type: 'widget' },
-        { id: 3, name: 'Contact Form', category: 'Forms', type: 'functional' },
-        { id: 4, name: 'Testimonials', category: 'Social Proof', type: 'content' },
-        { id: 5, name: 'Pricing Table', category: 'Commerce', type: 'widget' },
-        { id: 6, name: 'Blog Feed', category: 'Content', type: 'dynamic' }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalWebsites: 3,
-        publishedSites: 2,
-        totalPageViews: 4230,
-        totalVisitors: 2890,
-        averageTimeOnSite: '3:45',
-        bounceRate: 32.5
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load website builder data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

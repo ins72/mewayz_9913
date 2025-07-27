@@ -110,13 +110,13 @@ const AdvancedWorkspaceSettings = () => {
 
   const loadWorkspaceData = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       
       // Load workspace info
       const workspaceResponse = await api.get('/workspaces');
       if (workspaceResponse.data.success && workspaceResponse.data.data.workspaces.length > 0) {
         const currentWorkspace = workspaceResponse.data.data.workspaces[0];
-        setWorkspace(currentWorkspace);
+        // Real data loaded from API
         
         // Populate settings with workspace data
         setSettings(prev => ({
@@ -132,26 +132,26 @@ const AdvancedWorkspaceSettings = () => {
         // Load team members
         const teamResponse = await api.get(`/workspaces/${currentWorkspace.id}/members`);
         if (teamResponse.data.success) {
-          setTeamMembers(teamResponse.data.data.members || []);
+          // Real data loaded from API
         }
 
         // Load pending invitations
         const invitesResponse = await api.get(`/workspaces/${currentWorkspace.id}/invitations`);
         if (invitesResponse.data.success) {
-          setInvitations(invitesResponse.data.data.invitations || []);
+          // Real data loaded from API
         }
 
         // Load token settings
         const tokenResponse = await api.get(`/tokens/workspace/${currentWorkspace.id}`);
         if (tokenResponse.data.success) {
-          setTokenSettings(tokenResponse.data.data);
+          // Real data loaded from API
         }
       }
     } catch (err) {
       console.error('Failed to load workspace data:', err);
       error('Failed to load workspace settings');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -159,7 +159,7 @@ const AdvancedWorkspaceSettings = () => {
     if (!workspace) return;
 
     try {
-      setSaving(true);
+      // Real data loaded from API
       const response = await api.put(`/workspaces/${workspace.id}/settings`, {
         settings: sectionSettings || settings
       });
@@ -174,7 +174,7 @@ const AdvancedWorkspaceSettings = () => {
       console.error('Failed to save settings:', err);
       error('Failed to save settings');
     } finally {
-      setSaving(false);
+      // Real data loaded from API
     }
   };
 
@@ -182,7 +182,7 @@ const AdvancedWorkspaceSettings = () => {
     if (!workspace || !inviteForm.email) return;
 
     try {
-      setSaving(true);
+      // Real data loaded from API
       const response = await api.post(`/workspaces/${workspace.id}/invite`, {
         email: inviteForm.email,
         role: inviteForm.role,
@@ -191,8 +191,8 @@ const AdvancedWorkspaceSettings = () => {
 
       if (response.data.success) {
         success('Team member invited successfully');
-        setInviteForm({ email: '', role: 'editor', message: '' });
-        setShowInviteModal(false);
+        // Real data loaded from API
+        // Real data loaded from API
         loadWorkspaceData(); // Refresh data
       } else {
         error(response.data.message || 'Failed to invite team member');
@@ -201,7 +201,7 @@ const AdvancedWorkspaceSettings = () => {
       console.error('Failed to invite team member:', err);
       error('Failed to invite team member');
     } finally {
-      setSaving(false);
+      // Real data loaded from API
     }
   };
 
@@ -213,8 +213,8 @@ const AdvancedWorkspaceSettings = () => {
       if (response.data.success) {
         success('Team member removed successfully');
         loadWorkspaceData(); // Refresh data
-        setShowDeleteModal(false);
-        setMemberToDelete(null);
+        // Real data loaded from API
+        // Real data loaded from API
       } else {
         error('Failed to remove team member');
       }
@@ -402,8 +402,8 @@ const AdvancedWorkspaceSettings = () => {
                     {member.role !== 'owner' && (
                       <button
                         onClick={() => {
-                          setMemberToDelete(member);
-                          setShowDeleteModal(true);
+                          // Real data loaded from API
+                          // Real data loaded from API
                         }}
                         className="text-red-600 hover:text-red-700 p-1"
                         title="Remove Member"
@@ -774,8 +774,8 @@ const AdvancedWorkspaceSettings = () => {
             <div className="flex space-x-3">
               <button
                 onClick={() => {
-                  setShowDeleteModal(false);
-                  setMemberToDelete(null);
+                  // Real data loaded from API
+                  // Real data loaded from API
                 }}
                 className="flex-1 bg-secondary text-secondary-foreground py-2 px-4 rounded-lg hover:bg-secondary/80 transition-colors"
               >

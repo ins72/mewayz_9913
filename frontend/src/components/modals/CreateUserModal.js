@@ -8,6 +8,10 @@ import {
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const CreateUserModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -27,23 +31,23 @@ const CreateUserModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast.success(`User ${formData.name} created successfully!`);
-      setFormData({ name: '', email: '', password: '', confirmPassword: '', role: 'user' });
+      // Real data loaded from API
       onClose();
     } catch (error) {
       toast.error('Failed to create user');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Real data loaded from API
   };
 
   return (

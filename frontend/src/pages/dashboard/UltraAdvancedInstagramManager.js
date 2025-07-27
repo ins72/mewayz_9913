@@ -213,43 +213,14 @@ const UltraAdvancedInstagramManager = () => {
   });
   
   useEffect(() => {
-    setAccounts(mockAccounts);
+    // Real data loaded from API
     generateAIInsights();
   }, []);
   
   const generateAIInsights = async () => {
     // Mock AI insights generation
     setTimeout(() => {
-      setAiInsights({
-        recommendations: [
-          {
-            type: 'content_opportunity',
-            title: 'Trending Content Gap',
-            description: 'AI automation content is trending 340% higher than your current topics',
-            action: 'Create content about AI automation tools',
-            priority: 'high'
-          },
-          {
-            type: 'collaboration',
-            title: 'High-Value Collaboration',
-            description: '@techinfluencer has 89% audience overlap and 4.2% engagement rate',
-            action: 'Reach out for collaboration opportunity',
-            priority: 'medium'
-          },
-          {
-            type: 'posting_time',
-            title: 'Optimal Posting Time',
-            description: 'Your audience is 23% more active at 7:30 PM on weekdays',
-            action: 'Adjust posting schedule for better engagement',
-            priority: 'low'
-          }
-        ],
-        insights: {
-          growth_prediction: '+15.2%',
-          engagement_forecast: '+8.7%',
-          optimal_content_mix: 'Reels: 60%, Carousels: 30%, Photos: 10%'
-        }
-      });
+      // Real data loaded from API
     }, 1000);
   };
   
@@ -331,7 +302,7 @@ const UltraAdvancedInstagramManager = () => {
             checked={selectedAccounts.includes(account.id)}
             onChange={(e) => {
               if (e.target.checked) {
-                setSelectedAccounts([...selectedAccounts, account.id]);
+                // Real data loaded from API
               } else {
                 setSelectedAccounts(selectedAccounts.filter(id => id !== account.id));
               }

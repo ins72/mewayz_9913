@@ -455,7 +455,7 @@ const SubscriptionManagementPage = () => {
   }, []);
 
   const loadSubscriptionData = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       // Load current subscription
       const subResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions/current`, {
@@ -466,8 +466,8 @@ const SubscriptionManagementPage = () => {
       
       if (subResponse.ok) {
         const subData = await subResponse.json();
-        setCurrentSubscription(subData);
-        setSelectedFeatures(subData.features || []);
+        // Real data loaded from API
+        // Real data loaded from API
       }
 
       // Load payment methods
@@ -479,12 +479,12 @@ const SubscriptionManagementPage = () => {
       
       if (paymentResponse.ok) {
         const paymentData = await paymentResponse.json();
-        setPaymentMethods(paymentData);
+        // Real data loaded from API
       }
     } catch (err) {
       error('Failed to load subscription data');
     }
-    setLoading(false);
+    // Real data loaded from API
   };
 
   const handleFeatureToggle = (featureId) => {

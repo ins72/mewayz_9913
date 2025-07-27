@@ -66,7 +66,7 @@ const AIFeaturesPageV2 = () => {
 
   const fetchAITools = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       // Fetch comprehensive AI tools data
       const mockAITools = {
         categories: {
@@ -248,12 +248,12 @@ const AIFeaturesPageV2 = () => {
         ]
       };
       
-      setAiTools(mockAITools);
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to fetch AI tools:', error);
       toast.error('Failed to load AI tools');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

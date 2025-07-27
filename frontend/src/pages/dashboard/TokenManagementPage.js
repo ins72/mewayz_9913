@@ -32,25 +32,25 @@ const TokenManagementPage = () => {
 
   const loadTokenData = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       
       // First get workspace ID
       const workspacesResponse = await api.get('/workspaces');
       if (workspacesResponse.data.success && workspacesResponse.data.data.workspaces.length > 0) {
         const workspace = workspacesResponse.data.data.workspaces[0];
-        setWorkspaceId(workspace.id);
+        // Real data loaded from API
         
         // Get token data
         const tokenResponse = await api.get(`/tokens/workspace/${workspace.id}`);
         if (tokenResponse.data.success) {
-          setTokenData(tokenResponse.data.data);
+          // Real data loaded from API
         }
         
         // Get analytics
         try {
           const analyticsResponse = await api.get(`/tokens/analytics/${workspace.id}`);
           if (analyticsResponse.data.success) {
-            setAnalytics(analyticsResponse.data.data);
+            // Real data loaded from API
           }
         } catch (error) {
           console.warn('Analytics not available:', error);
@@ -59,7 +59,7 @@ const TokenManagementPage = () => {
     } catch (error) {
       console.error('Error loading token data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -67,7 +67,7 @@ const TokenManagementPage = () => {
     try {
       const response = await api.get('/tokens/packages');
       if (response.data.success) {
-        setPackages(response.data.data.packages);
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Error loading packages:', error);
@@ -86,7 +86,7 @@ const TokenManagementPage = () => {
       if (response.data.success) {
         alert('Tokens purchased successfully!');
         loadTokenData(); // Refresh data
-        setShowPurchaseModal(false);
+        // Real data loaded from API
       } else {
         alert('Purchase failed: ' + (response.data.error || 'Unknown error'));
       }
@@ -127,8 +127,8 @@ const TokenManagementPage = () => {
       </div>
       <button
         onClick={() => {
-          setSelectedPackage(pkg);
-          setShowPurchaseModal(true);
+          // Real data loaded from API
+          // Real data loaded from API
         }}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
       >

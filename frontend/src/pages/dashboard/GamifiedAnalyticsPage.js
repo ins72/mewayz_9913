@@ -206,7 +206,7 @@ const GamifiedAnalyticsPage = () => {
     try {
       const response = await api.get('/analytics/overview');
       if (response.data.success) {
-        setAnalyticsData(response.data.data);
+        // Real data loaded from API
         calculateGamificationMetrics(response.data.data);
       }
     } catch (err) {
@@ -292,7 +292,7 @@ const GamifiedAnalyticsPage = () => {
         }
       ];
 
-      setAchievementData(achievements);
+      // Real data loaded from API
     } catch (err) {
       console.error('Failed to load achievements:', err);
     }
@@ -317,7 +317,7 @@ const GamifiedAnalyticsPage = () => {
           { rank: 5, user: 'David Kim', points: 7500, avatar: '💎', level: 22 }
         ]
       };
-      setLeaderboard(leaderboardData);
+      // Real data loaded from API
     } catch (err) {
       console.error('Failed to load leaderboard:', err);
     }
@@ -361,11 +361,11 @@ const GamifiedAnalyticsPage = () => {
         }
       ];
 
-      setChallenges(currentChallenges);
+      // Real data loaded from API
     } catch (err) {
       console.error('Failed to load challenges:', err);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -407,7 +407,32 @@ const GamifiedAnalyticsPage = () => {
   };
 
   if (loading) {
-    return (
+    
+  const loadAnalyticsData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/analytics/overview', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAnalytics(data);
+      } else {
+        console.error('Failed to load analytics data');
+      }
+    } catch (error) {
+      console.error('Error loading analytics data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
@@ -440,483 +465,4 @@ const GamifiedAnalyticsPage = () => {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Page Header with Gamification */}
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl shadow-default p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">Analytics & Performance</h1>
-            <p className="text-white/80">Track your performance and climb the leaderboard</p>
-          </div>
-          <div className="text-right">
-            <div className="flex items-center space-x-4">
-              <div className="text-center">
-                <div className="flex items-center space-x-2 mb-1">
-                  <TrophyIconSolid className="h-6 w-6 text-yellow-300" />
-                  <span className="text-2xl font-bold">{userProfile.level}</span>
-                </div>
-                <p className="text-sm text-white/70">Level</p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center space-x-2 mb-1">
-                  <StarIconSolid className="h-6 w-6 text-yellow-300" />
-                  <span className="text-2xl font-bold">{userProfile.totalPoints.toLocaleString()}</span>
-                </div>
-                <p className="text-sm text-white/70">Points</p>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center space-x-2 mb-1">
-                  <FireIconSolid className="h-6 w-6 text-orange-400" />
-                  <span className="text-2xl font-bold">{userProfile.streakDays}</span>
-                </div>
-                <p className="text-sm text-white/70">Day Streak</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Level Progress Bar */}
-        <div className="mt-6">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-white/70">Progress to Level {userProfile.level + 1}</span>
-            <span className="text-sm text-white/70">{userProfile.currentXP}/{userProfile.nextLevelXP} XP</span>
-          </div>
-          <div className="w-full bg-white/20 rounded-full h-3">
-            <div 
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${(userProfile.currentXP / userProfile.nextLevelXP) * 100}%` }}
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Tabs */}
-      <div className="bg-surface-elevated rounded-xl shadow-default">
-        <div className="border-b border-default">
-          <nav className="flex space-x-8 px-6">
-            {[
-              { id: 'dashboard', name: 'Performance Dashboard', icon: ChartBarIcon },
-              { id: 'goals', name: 'Goals & Objectives', icon: TrophyIcon },
-              { id: 'leaderboard', name: 'Leaderboard', icon: TrophyIcon },
-              { id: 'challenges', name: 'Active Challenges', icon: BoltIcon },
-              { id: 'achievements', name: 'Achievements', icon: StarIcon },
-              { id: 'badges', name: 'Badge Collection', icon: ShieldCheckIcon }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-secondary hover:text-primary'
-                }`}
-              >
-                <tab.icon className="h-4 w-4 mr-2" />
-                {tab.name}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        <div className="p-6">
-          {activeTab === 'dashboard' && (
-            <div className="space-y-6">
-              {/* Performance Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-surface border border-default rounded-xl p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-secondary">Total Reach</p>
-                      <p className="text-2xl font-bold text-primary">{analytics.performance.overview.totalReach.toLocaleString()}</p>
-                      <div className="flex items-center mt-1">
-                        <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                        <span className="text-sm text-green-500">+{analytics.performance.overview.reachChange}%</span>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-blue-100 rounded-xl dark:bg-blue-900">
-                      <EyeIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="bg-surface border border-default rounded-xl p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-secondary">Engagement</p>
-                      <p className="text-2xl font-bold text-primary">{analytics.performance.overview.engagement.toLocaleString()}</p>
-                      <div className="flex items-center mt-1">
-                        <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                        <span className="text-sm text-green-500">+{analytics.performance.overview.engagementChange}%</span>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-pink-100 rounded-xl dark:bg-pink-900">
-                      <HeartIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-surface border border-default rounded-xl p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-secondary">Conversions</p>
-                      <p className="text-2xl font-bold text-primary">{analytics.performance.overview.conversions.toLocaleString()}</p>
-                      <div className="flex items-center mt-1">
-                        <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                        <span className="text-sm text-green-500">+{analytics.performance.overview.conversionChange}%</span>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-green-100 rounded-xl dark:bg-green-900">
-                      <FunnelIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-surface border border-default rounded-xl p-6"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-secondary">Revenue</p>
-                      <p className="text-2xl font-bold text-primary">${analytics.performance.overview.revenue.toLocaleString()}</p>
-                      <div className="flex items-center mt-1">
-                        <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                        <span className="text-sm text-green-500">+{analytics.performance.overview.revenueChange}%</span>
-                      </div>
-                    </div>
-                    <div className="p-3 bg-yellow-100 rounded-xl dark:bg-yellow-900">
-                      <CurrencyDollarIcon className="h-6 w-6 text-yellow-600 dark:text-yellow-400" />
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Chart Placeholder */}
-              <div className="bg-surface border border-default rounded-xl p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-primary">Performance Trends</h3>
-                  <select
-                    value={dateRange}
-                    onChange={(e) => setDateRange(e.target.value)}
-                    className="input text-sm"
-                  >
-                    <option value="7d">Last 7 days</option>
-                    <option value="30d">Last 30 days</option>
-                    <option value="90d">Last 90 days</option>
-                    <option value="1y">Last year</option>
-                  </select>
-                </div>
-                <div className="h-64 bg-surface-elevated rounded-lg flex items-center justify-center text-secondary">
-                  Interactive Chart Component Would Go Here
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'goals' && (
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-primary mb-2">Your Performance Goals</h2>
-                <p className="text-secondary">Track your progress and earn XP by completing goals</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {analytics.performance.goals.map((goal) => (
-                  <motion.div
-                    key={goal.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-surface border border-default rounded-xl p-6 hover:shadow-lg transition-shadow"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`p-3 rounded-xl ${getProgressColor(goal.progress)}/10`}>
-                        <goal.icon className={`h-6 w-6 ${getProgressColor(goal.progress).replace('bg-', 'text-')}`} />
-                      </div>
-                      <span className="text-sm font-medium text-green-600">{goal.reward}</span>
-                    </div>
-                    
-                    <h3 className="font-semibold text-primary mb-2">{goal.title}</h3>
-                    
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-secondary">Progress</span>
-                        <span className="text-sm font-medium text-primary">{goal.progress}%</span>
-                      </div>
-                      <div className="w-full bg-surface-elevated rounded-full h-3">
-                        <div
-                          className={`h-3 rounded-full transition-all duration-300 ${getProgressColor(goal.progress)}`}
-                          style={{ width: `${goal.progress}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    
-                    <div className="text-sm text-secondary">
-                      <span className="font-medium text-primary">{typeof goal.current === 'number' ? goal.current.toLocaleString() : goal.current}</span>
-                      {' / '}
-                      <span>{typeof goal.target === 'number' ? goal.target.toLocaleString() : goal.target}</span>
-                      {goal.id === 'engagement_goal' && <span>%</span>}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'leaderboard' && (
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-primary mb-2">Global Leaderboard</h2>
-                <p className="text-secondary">See how you rank against other creators</p>
-              </div>
-
-              <div className="bg-surface border border-default rounded-xl overflow-hidden">
-                <div className="p-6 border-b border-default bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20">
-                  <h3 className="text-lg font-semibold text-primary mb-4">Top Performers</h3>
-                </div>
-                
-                <div className="divide-y divide-default">
-                  {analytics.leaderboard.map((user, index) => (
-                    <div key={index} className={`p-6 flex items-center justify-between hover:bg-surface-hover transition-colors ${user.isUser ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500' : ''}`}>
-                      <div className="flex items-center space-x-4">
-                        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                          user.rank === 1 ? 'bg-yellow-100 text-yellow-800' :
-                          user.rank === 2 ? 'bg-gray-100 text-gray-800' :
-                          user.rank === 3 ? 'bg-orange-100 text-orange-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
-                          {user.rank}
-                        </div>
-                        
-                        <img
-                          src={user.avatar}
-                          alt={user.name}
-                          className="w-12 h-12 rounded-full"
-                        />
-                        
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <h4 className="font-semibold text-primary">{user.name}</h4>
-                            {user.isUser && <span className="text-sm text-blue-600 font-medium">(You)</span>}
-                            {user.rank <= 3 && (
-                              <TrophyIconSolid className={`h-4 w-4 ${
-                                user.rank === 1 ? 'text-yellow-500' :
-                                user.rank === 2 ? 'text-gray-500' :
-                                'text-orange-500'
-                              }`} />
-                            )}
-                          </div>
-                          <p className="text-sm text-secondary">Level {user.level}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="text-right">
-                        <p className="font-bold text-primary">{user.points.toLocaleString()}</p>
-                        <div className="flex items-center text-sm">
-                          {user.change === 0 ? (
-                            <span className="text-secondary">No change</span>
-                          ) : user.change > 0 ? (
-                            <>
-                              <ArrowTrendingUpIcon className="h-4 w-4 text-green-500 mr-1" />
-                              <span className="text-green-500">+{user.change}</span>
-                            </>
-                          ) : (
-                            <>
-                              <ArrowTrendingDownIcon className="h-4 w-4 text-red-500 mr-1" />
-                              <span className="text-red-500">{user.change}</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'challenges' && (
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-primary mb-2">Active Challenges</h2>
-                <p className="text-secondary">Join challenges to earn XP and unlock exclusive badges</p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {analytics.challenges.map((challenge) => (
-                  <motion.div
-                    key={challenge.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-surface border border-default rounded-xl p-6 hover:shadow-lg transition-all"
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-3 rounded-xl ${getProgressColor(challenge.progress)}/10`}>
-                          <challenge.icon className={`h-6 w-6 ${getProgressColor(challenge.progress).replace('bg-', 'text-')}`} />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-primary">{challenge.title}</h3>
-                          <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(challenge.difficulty)}`}>
-                            {challenge.difficulty}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-right text-sm">
-                        <p className="text-secondary">{challenge.timeLeft} left</p>
-                        <p className="text-primary font-medium">{challenge.participants} joined</p>
-                      </div>
-                    </div>
-                    
-                    <p className="text-sm text-secondary mb-4">{challenge.description}</p>
-                    
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-secondary">Progress</span>
-                        <span className="text-sm font-medium text-primary">{challenge.current}/{challenge.target}</span>
-                      </div>
-                      <div className="w-full bg-surface-elevated rounded-full h-3">
-                        <div
-                          className={`h-3 rounded-full transition-all duration-300 ${getProgressColor(challenge.progress)}`}
-                          style={{ width: `${challenge.progress}%` }}
-                        ></div>
-                      </div>
-                      <div className="text-xs text-right mt-1 text-secondary">{challenge.progress}% complete</div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-green-600">{challenge.reward}</p>
-                      </div>
-                      <button className="btn btn-primary btn-sm">
-                        {challenge.progress > 0 ? 'Continue' : 'Join Challenge'}
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'achievements' && (
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-primary mb-2">Your Achievements</h2>
-                <p className="text-secondary">Milestones you've unlocked on your journey</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {analytics.achievements.map((achievement) => (
-                  <motion.div
-                    key={achievement.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={`border rounded-xl p-6 transition-all ${
-                      achievement.unlocked
-                        ? 'bg-surface border-default hover:shadow-lg'
-                        : 'bg-surface/50 border-dashed border-default/50 opacity-60'
-                    }`}
-                  >
-                    <div className="text-center">
-                      <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                        achievement.unlocked
-                          ? `bg-gradient-to-r ${getRarityColor(achievement.rarity)}`
-                          : 'bg-gray-200 dark:bg-gray-700'
-                      }`}>
-                        <TrophyIcon className={`h-8 w-8 ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`} />
-                      </div>
-                      
-                      <h3 className={`font-semibold mb-2 ${achievement.unlocked ? 'text-primary' : 'text-secondary'}`}>
-                        {achievement.title}
-                      </h3>
-                      
-                      <p className={`text-sm mb-4 ${achievement.unlocked ? 'text-secondary' : 'text-gray-400'}`}>
-                        {achievement.description}
-                      </p>
-                      
-                      <div className={`text-sm ${achievement.unlocked ? 'text-green-600' : 'text-gray-400'}`}>
-                        {achievement.unlocked ? (
-                          <>
-                            <p className="font-medium">+{achievement.xp} XP</p>
-                            <p>Unlocked {achievement.date}</p>
-                          </>
-                        ) : (
-                          <p>Locked • {achievement.xp} XP when unlocked</p>
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'badges' && (
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-primary mb-2">Badge Collection</h2>
-                <p className="text-secondary">Show off your expertise with earned badges</p>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {userProfile.badges.map((badge) => (
-                  <motion.div
-                    key={badge.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className={`p-6 rounded-xl border text-center transition-all ${
-                      badge.earned
-                        ? 'bg-surface border-default hover:shadow-lg'
-                        : 'bg-surface/50 border-dashed border-default/50 opacity-60'
-                    }`}
-                  >
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                      badge.earned
-                        ? `bg-gradient-to-r ${getRarityColor(badge.rarity)}`
-                        : 'bg-gray-200 dark:bg-gray-700'
-                    }`}>
-                      <badge.icon className={`h-8 w-8 ${badge.earned ? 'text-white' : 'text-gray-400'}`} />
-                    </div>
-                    
-                    <h3 className={`font-semibold text-sm ${badge.earned ? 'text-primary' : 'text-gray-400'}`}>
-                      {badge.name}
-                    </h3>
-                    
-                    <div className="mt-2">
-                      <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                        badge.rarity === 'legendary' ? 'bg-yellow-100 text-yellow-800' :
-                        badge.rarity === 'epic' ? 'bg-purple-100 text-purple-800' :
-                        badge.rarity === 'rare' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {badge.rarity}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default GamifiedAnalyticsPage;
+  

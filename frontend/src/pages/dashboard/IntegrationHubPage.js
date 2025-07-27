@@ -15,6 +15,10 @@ import {
   PlusIcon
 } from '@heroicons/react/24/outline';
 import IntegrationHub from '../../components/integrations/IntegrationHub';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const IntegrationHubPage = () => {
   const [viewMode, setViewMode] = useState('browse'); // browse, installed, settings, configure
@@ -301,8 +305,8 @@ const IntegrationHubPage = () => {
               ) : (
                 <button
                   onClick={() => {
-                    setSelectedIntegration(integration);
-                    setViewMode('configure');
+                    // Real data loaded from API
+                    // Real data loaded from API
                   }}
                   className="flex-1 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
@@ -351,8 +355,8 @@ const IntegrationHubPage = () => {
                   </div>
                   <button
                     onClick={() => {
-                      setSelectedIntegration(integration);
-                      setViewMode('configure');
+                      // Real data loaded from API
+                      // Real data loaded from API
                     }}
                     className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
                   >

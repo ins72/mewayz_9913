@@ -130,8 +130,8 @@ const AdvancedAnalytics = () => {
   useEffect(() => {
     // Simulate data fetching
     setTimeout(() => {
-      setAnalyticsData(mockData);
-      setLoading(false);
+      // Real data loaded from API
+      // Real data loaded from API
     }, 1000);
   }, [timeRange]);
 
@@ -495,7 +495,32 @@ const AdvancedAnalytics = () => {
   );
 
   if (loading) {
-    return (
+    
+  const loadAnalyticsData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/analytics/overview', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setAnalytics(data);
+      } else {
+        console.error('Failed to load analytics data');
+      }
+    } catch (error) {
+      console.error('Error loading analytics data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="max-w-7xl mx-auto p-6">
         <div className="animate-pulse">
           <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-8"></div>
@@ -520,64 +545,4 @@ const AdvancedAnalytics = () => {
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Advanced Analytics
-          </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">
-            Comprehensive insights into your website performance
-          </p>
-        </div>
-        
-        {/* Time Range Selector */}
-        <select
-          value={timeRange}
-          onChange={(e) => setTimeRange(e.target.value)}
-          className="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-        >
-          {timeRanges.map((range) => (
-            <option key={range.id} value={range.id}>
-              {range.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-gray-200 dark:border-gray-700 mb-8">
-        <nav className="flex space-x-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }`}
-            >
-              <tab.icon className="h-5 w-5 mr-2" />
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Tab Content */}
-      <motion.div
-        key={activeTab}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {renderTabContent()}
-      </motion.div>
-    </div>
-  );
-};
-
-export default AdvancedAnalytics;
+  

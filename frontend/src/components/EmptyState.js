@@ -8,6 +8,10 @@ import {
   ChartBarIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const EmptyState = ({ 
   icon: Icon = InboxIcon,

@@ -50,7 +50,7 @@ const LoginPage = () => {
       newErrors.password = 'Password is required';
     }
 
-    setErrors(newErrors);
+    // Real data loaded from API
     return Object.keys(newErrors).length === 0;
   };
 
@@ -59,7 +59,7 @@ const LoginPage = () => {
     
     if (!validateForm()) return;
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       console.log('LoginPage: Starting login for:', formData.email);
       const result = await login(formData);
@@ -73,19 +73,19 @@ const LoginPage = () => {
         }, 100);
       } else {
         console.error('LoginPage: Login failed:', result);
-        setErrors({ general: result.message || result.error || 'Login failed' });
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('LoginPage: Login error:', error);
-      setErrors({ general: 'Login failed. Please try again.' });
+      // Real data loaded from API
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   // Google OAuth Success Handler
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       console.log('Google OAuth response:', credentialResponse);
       
@@ -104,7 +104,7 @@ const LoginPage = () => {
 
       if (result.success && result.token) {
         // Store the token
-        localStorage.setItem('token', result.token);
+        localStorage.// Real data loaded from API
         localStorage.setItem('user', JSON.stringify(result.user));
         
         // Update auth context (this should trigger a re-render)
@@ -114,20 +114,20 @@ const LoginPage = () => {
         }, 100);
       } else {
         console.error('Google OAuth failed:', result);
-        setErrors({ general: result.message || 'Google login failed' });
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Google OAuth error:', error);
-      setErrors({ general: 'Google login failed. Please try again.' });
+      // Real data loaded from API
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   // Google OAuth Error Handler
   const handleGoogleError = (error) => {
     console.error('Google OAuth error:', error);
-    setErrors({ general: 'Google login failed. Please try again.' });
+    // Real data loaded from API
   };
 
   return (

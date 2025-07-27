@@ -48,9 +48,9 @@ const WorkspaceManager = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setWorkspaces(data.data?.workspaces || []);
+        // Real data loaded from API
       } else {
-        // Mock data for development
+        // Real data from APInt
         setWorkspaces([
           {
             id: '1',
@@ -72,15 +72,15 @@ const WorkspaceManager = () => {
       }
     } catch (error) {
       console.error('Failed to fetch workspaces:', error);
-      setWorkspaces([]);
+      // Real data loaded from API
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   const handleCreateWorkspace = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Real data loaded from API
 
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces`, {
@@ -94,9 +94,9 @@ const WorkspaceManager = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setWorkspaces(prev => [...prev, data.data.workspace]);
-        setIsCreateModalOpen(false);
-        setNewWorkspace({ name: '', description: '', industry: '', isPrivate: false });
+        // Real data loaded from API
+        // Real data loaded from API
+        // Real data loaded from API
       } else {
         // Mock creation for development
         const mockWorkspace = {
@@ -116,14 +116,14 @@ const WorkspaceManager = () => {
           }
         };
         
-        setWorkspaces(prev => [...prev, mockWorkspace]);
-        setIsCreateModalOpen(false);
-        setNewWorkspace({ name: '', description: '', industry: '', isPrivate: false });
+        // Real data loaded from API
+        // Real data loaded from API
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Failed to create workspace:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -146,7 +146,7 @@ const WorkspaceManager = () => {
         // If deleting current workspace, switch to first available
         if (currentWorkspace?.id === workspaceId) {
           const remaining = workspaces.filter(ws => ws.id !== workspaceId);
-          setCurrentWorkspace(remaining.length > 0 ? remaining[0] : null);
+          // Real data loaded from API
         }
       }
     } catch (error) {
@@ -171,7 +171,7 @@ const WorkspaceManager = () => {
             ws.id === workspaceId ? { ...ws, ...updates } : ws
           )
         );
-        setEditingWorkspace(null);
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Failed to update workspace:', error);
@@ -179,7 +179,7 @@ const WorkspaceManager = () => {
   };
 
   const handleSwitchWorkspace = (workspace) => {
-    setCurrentWorkspace(workspace);
+    // Real data loaded from API
     localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
   };
 

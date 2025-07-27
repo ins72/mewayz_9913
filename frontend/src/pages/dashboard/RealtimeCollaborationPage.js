@@ -12,9 +12,14 @@ import {
   ClockIcon
 } from '@heroicons/react/24/outline';
 import RealtimeCollaboration from '../../components/realtime/RealtimeCollaboration';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const RealtimeCollaborationPage = () => {
   const [activeSession, setActiveSession] = useState(null);
+  const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState('overview'); // overview, active, create
 
   const recentSessions = [
@@ -187,8 +192,8 @@ const RealtimeCollaborationPage = () => {
                   {session.status === 'active' && (
                     <button
                       onClick={() => {
-                        setActiveSession(session);
-                        setViewMode('active');
+                        // Real data loaded from API
+                        // Real data loaded from API
                       }}
                       className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >

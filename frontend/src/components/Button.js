@@ -1,6 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import LoadingSpinner from './LoadingSpinner';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const Button = ({
   children,

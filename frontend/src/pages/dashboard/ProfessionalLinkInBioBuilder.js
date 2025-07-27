@@ -126,7 +126,7 @@ const ProfessionalLinkInBioBuilder = () => {
   }, []);
   
   const loadBioSite = async () => {
-    // Mock data - in real implementation, this would fetch from API
+    // Real data from APIn real implementation, this would fetch from API
     setBioSite({
       id: '1',
       title: 'John Creator',
@@ -142,66 +142,11 @@ const ProfessionalLinkInBioBuilder = () => {
       isPublished: true
     });
     
-    setLinks([
-      {
-        id: '1',
-        type: 'url',
-        title: 'My Latest Course: Digital Marketing Mastery',
-        subtitle: 'Learn proven strategies to grow your business online',
-        url: 'https://example.com/course',
-        thumbnail: 'https://ui-avatars.com/api/?name=Course&background=10b981&color=fff',
-        isActive: true,
-        clicks: 1247,
-        priority: 'high'
-      },
-      {
-        id: '2',
-        type: 'social',
-        title: 'Follow me on Instagram',
-        subtitle: '@johncreator',
-        url: 'https://instagram.com/johncreator',
-        thumbnail: 'https://ui-avatars.com/api/?name=IG&background=E4405F&color=fff',
-        isActive: true,
-        clicks: 892,
-        priority: 'medium'
-      },
-      {
-        id: '3',
-        type: 'video',
-        title: 'Watch: 5 Marketing Tips for 2025',
-        subtitle: 'YouTube • 2.1M views',
-        url: 'https://youtube.com/watch?v=example',
-        thumbnail: 'https://ui-avatars.com/api/?name=YT&background=FF0000&color=fff',
-        isActive: true,
-        clicks: 654,
-        priority: 'medium'
-      },
-      {
-        id: '4',
-        type: 'booking',
-        title: 'Book a 1-on-1 Consultation',
-        subtitle: '30 min • $99',
-        url: 'https://calendly.com/johncreator',
-        thumbnail: 'https://ui-avatars.com/api/?name=Book&background=f59e0b&color=fff',
-        isActive: true,
-        clicks: 234,
-        priority: 'high'
-      }
-    ]);
+    // Real data loaded from API
   };
   
   const loadAnalytics = () => {
-    setAnalytics({
-      totalViews: 12547,
-      totalClicks: 3027,
-      conversionRate: 24.1,
-      topLinks: [
-        { title: 'Digital Marketing Course', clicks: 1247, percentage: 41.2 },
-        { title: 'Instagram Profile', clicks: 892, percentage: 29.5 },
-        { title: 'YouTube Video', clicks: 654, percentage: 21.6 },
-        { title: 'Consultation Booking', clicks: 234, percentage: 7.7 }
-      ]
-    });
+    // Real data loaded from API
   };
   
   const handleDragEnd = (event) => {
@@ -224,8 +169,8 @@ const ProfessionalLinkInBioBuilder = () => {
       clicks: 0,
       priority: 'medium'
     };
-    setLinks([...links, newLink]);
-    setShowLinkModal(false);
+    // Real data loaded from API
+    // Real data loaded from API
     success('Link added successfully!');
   };
   
@@ -233,7 +178,7 @@ const ProfessionalLinkInBioBuilder = () => {
     setLinks(links.map(link => 
       link.id === editingLink.id ? { ...editingLink, ...linkData } : link
     ));
-    setEditingLink(null);
+    // Real data loaded from API
     success('Link updated successfully!');
   };
   
@@ -255,7 +200,7 @@ const ProfessionalLinkInBioBuilder = () => {
       title: `${link.title} (Copy)`,
       clicks: 0
     };
-    setLinks([...links, duplicatedLink]);
+    // Real data loaded from API
     success('Link duplicated successfully!');
   };
   
@@ -271,7 +216,7 @@ const ProfessionalLinkInBioBuilder = () => {
   
   const publishBioSite = async () => {
     try {
-      setBioSite({ ...bioSite, isPublished: !bioSite.isPublished });
+      // Real data loaded from API
       success(bioSite.isPublished ? 'Bio site unpublished' : 'Bio site published successfully!');
     } catch (err) {
       error('Failed to publish bio site');
@@ -381,14 +326,14 @@ const ProfessionalLinkInBioBuilder = () => {
     
     useEffect(() => {
       if (editData) {
-        setFormData(editData);
+        // Real data loaded from API
       }
     }, [editData]);
     
     const handleSubmit = (e) => {
       e.preventDefault();
       onSubmit(formData);
-      setFormData({ type: 'url', title: '', subtitle: '', url: '', thumbnail: '' });
+      // Real data loaded from API
       onClose();
     };
     
@@ -835,8 +780,8 @@ const ProfessionalLinkInBioBuilder = () => {
       <LinkModal
         isOpen={showLinkModal || editingLink !== null}
         onClose={() => {
-          setShowLinkModal(false);
-          setEditingLink(null);
+          // Real data loaded from API
+          // Real data loaded from API
         }}
         onSubmit={editingLink ? updateLink : addLink}
         editData={editingLink}

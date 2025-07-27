@@ -1,0 +1,108 @@
+{
+  "timestamp": "2025-07-27T08:19:12.439456",
+  "test_type": "MongoDB CRUD Operations",
+  "base_url": "http://localhost:8002",
+  "results": [
+    {
+      "test": "System Health",
+      "status": 200,
+      "success": true
+    },
+    {
+      "test": "User Registration",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "User Login",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ Analytics Overview",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ E-commerce Products",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ CRM Contacts",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ Support Tickets",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ Workspaces",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ AI Services",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ Dashboard Overview",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "READ Marketing Analytics",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "CREATE Workspace",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "CREATE Product",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "CREATE Contact",
+      "status": 500,
+      "success": false
+    },
+    {
+      "test": "Public Website Builder Health",
+      "status": 200,
+      "success": true
+    },
+    {
+      "test": "Public Template Marketplace Health",
+      "status": 200,
+      "success": true
+    },
+    {
+      "test": "Public Team Management Health",
+      "status": 200,
+      "success": true
+    },
+    {
+      "test": "Public Webhook Health",
+      "status": 200,
+      "success": true
+    },
+    {
+      "test": "Public Workflow Automation Health",
+      "status": 200,
+      "success": true
+    }
+  ],
+  "summary": {
+    "total_tests": 19,
+    "successful_tests": 6,
+    "failed_tests": 13,
+    "success_rate": 31.57894736842105
+  }
+}

@@ -283,8 +283,8 @@ const ComprehensiveCRMSystem = () => {
   });
   
   useEffect(() => {
-    setContacts(mockContacts);
-    setDeals(mockDeals);
+    // Real data loaded from API
+    // Real data loaded from API
   }, []);
   
   const getScoreColor = (score) => {
@@ -328,7 +328,42 @@ const ComprehensiveCRMSystem = () => {
   const renderContactCard = (contact) => {
     const stageInfo = getStageInfo(contact.stage);
     
-    return (
+    
+  const loadCRMData = async () => {
+    try {
+      setLoading(true);
+      const [contactsResponse, dealsResponse, statsResponse] = await Promise.all([
+        fetch('/api/crm-management/contacts', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/crm-management/deals', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/crm-management/stats', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (contactsResponse.ok && dealsResponse.ok && statsResponse.ok) {
+        const [contacts, deals, stats] = await Promise.all([
+          contactsResponse.json(),
+          dealsResponse.json(),
+          statsResponse.json()
+        ]);
+        
+        setContacts(contacts.contacts || []);
+        setDeals(deals.deals || []);
+        setCrmStats(stats);
+      }
+    } catch (error) {
+      console.error('Error loading CRM data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <motion.div
         key={contact.id}
         initial={{ opacity: 0, y: 20 }}
@@ -445,419 +480,4 @@ const ComprehensiveCRMSystem = () => {
     const contact = contacts.find(c => c.id === deal.contactId);
     const stageInfo = getStageInfo(deal.stage);
     
-    return (
-      <motion.div
-        key={deal.id}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="bg-surface border border-default rounded-xl p-4 mb-3 hover:shadow-md transition-all"
-      >
-        <div className="flex items-start justify-between mb-3">
-          <div>
-            <h4 className="font-medium text-primary">{deal.title}</h4>
-            <p className="text-sm text-secondary">
-              {contact?.firstName} {contact?.lastName} • {contact?.company}
-            </p>
-          </div>
-          <div className="text-right">
-            <div className="font-bold text-primary">${deal.value.toLocaleString()}</div>
-            <div className="text-xs text-secondary">{deal.probability}% probability</div>
-          </div>
-        </div>
-        
-        <div className="flex items-center justify-between mb-3">
-          <div 
-            className="px-2 py-1 rounded-full text-xs font-medium text-white"
-            style={{ backgroundColor: stageInfo.color }}
-          >
-            {stageInfo.name}
-          </div>
-          <div className="text-sm text-secondary">
-            Close: {new Date(deal.expectedCloseDate).toLocaleDateString()}
-          </div>
-        </div>
-        
-        <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
-          <div 
-            className="h-2 rounded-full"
-            style={{ 
-              width: `${deal.probability}%`,
-              backgroundColor: stageInfo.color 
-            }}
-          ></div>
-        </div>
-        
-        <div className="flex items-center justify-between text-sm">
-          <div className="text-secondary">
-            Last activity: {new Date(deal.lastActivity).toLocaleDateString()}
-          </div>
-          <div className="flex space-x-1">
-            <button className="p-1 hover:bg-surface-hover rounded">
-              <EyeIcon className="h-4 w-4 text-blue-600" />
-            </button>
-            <button className="p-1 hover:bg-surface-hover rounded">
-              <PencilIcon className="h-4 w-4 text-green-600" />
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-  
-  const renderContactModal = () => {
-    if (!selectedContact) return null;
     
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-surface rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        >
-          <div className="p-6 border-b border-default">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src={selectedContact.avatar}
-                  alt={`${selectedContact.firstName} ${selectedContact.lastName}`}
-                  className="w-16 h-16 rounded-full mr-4"
-                />
-                <div>
-                  <h2 className="text-2xl font-bold text-primary">
-                    {selectedContact.firstName} {selectedContact.lastName}
-                  </h2>
-                  <p className="text-secondary">{selectedContact.position} at {selectedContact.company}</p>
-                  <div className="flex items-center space-x-3 mt-2">
-                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getScoreColor(selectedContact.score)}`}>
-                      Score: {selectedContact.score}
-                    </span>
-                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedContact.priority)}`}>
-                      {selectedContact.priority} priority
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedContact(null)}
-                className="p-2 hover:bg-surface-hover rounded-lg"
-              >
-                <XCircleIcon className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-          
-          <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-primary mb-4">Contact Information</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center">
-                      <EnvelopeIcon className="h-5 w-5 text-secondary mr-3" />
-                      <div>
-                        <div className="text-sm text-secondary">Email</div>
-                        <div className="font-medium text-primary">{selectedContact.email}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <PhoneIcon className="h-5 w-5 text-secondary mr-3" />
-                      <div>
-                        <div className="text-sm text-secondary">Phone</div>
-                        <div className="font-medium text-primary">{selectedContact.phone}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <MapPinIcon className="h-5 w-5 text-secondary mr-3" />
-                      <div>
-                        <div className="text-sm text-secondary">Location</div>
-                        <div className="font-medium text-primary">{selectedContact.location}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <GlobeAltIcon className="h-5 w-5 text-secondary mr-3" />
-                      <div>
-                        <div className="text-sm text-secondary">Website</div>
-                        <a href={selectedContact.website} className="font-medium text-blue-600 hover:underline">
-                          {selectedContact.website}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-primary mb-4">Notes</h3>
-                  <div className="bg-surface-elevated rounded-lg p-4">
-                    <p className="text-secondary">{selectedContact.notes}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-semibold text-primary mb-4">Tags & Interests</h3>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {selectedContact.tags.map((tag, index) => (
-                      <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedContact.interests.map((interest, index) => (
-                      <span key={index} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                        {interest}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="bg-surface-elevated rounded-xl p-4">
-                  <h4 className="font-semibold text-primary mb-4">Lead Score</h4>
-                  <div className="text-center">
-                    <div className={`text-3xl font-bold ${getScoreColor(selectedContact.score).split(' ')[0]}`}>
-                      {selectedContact.score}
-                    </div>
-                    <div className="text-sm text-secondary">out of 100</div>
-                  </div>
-                </div>
-                
-                <div className="bg-surface-elevated rounded-xl p-4">
-                  <h4 className="font-semibold text-primary mb-4">Engagement</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-secondary">Email Opens</span>
-                      <span className="font-medium text-primary">{selectedContact.emailOpens}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-secondary">Email Clicks</span>
-                      <span className="font-medium text-primary">{selectedContact.emailClicks}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-secondary">Activities</span>
-                      <span className="font-medium text-primary">{selectedContact.activities}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-secondary">Deals</span>
-                      <span className="font-medium text-primary">{selectedContact.deals}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <button className="btn btn-primary w-full">
-                    <EnvelopeIcon className="h-4 w-4 mr-2" />
-                    Send Email
-                  </button>
-                  <button className="btn btn-secondary w-full">
-                    <PhoneIcon className="h-4 w-4 mr-2" />
-                    Schedule Call
-                  </button>
-                  <button className="btn btn-secondary w-full">
-                    <CalendarIcon className="h-4 w-4 mr-2" />
-                    Add Task
-                  </button>
-                  <button className="btn btn-secondary w-full">
-                    <PencilIcon className="h-4 w-4 mr-2" />
-                    Edit Contact
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    );
-  };
-  
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-xl shadow-default p-6 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-center mb-2">
-              <UserGroupIconSolid className="h-8 w-8 mr-3" />
-              <h1 className="text-3xl font-bold">CRM & Lead Management</h1>
-            </div>
-            <p className="text-white/80">Manage contacts, deals, and customer relationships</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{crmStats.totalContacts.toLocaleString()}</div>
-              <div className="text-sm text-white/70">Total Contacts</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{crmStats.qualifiedLeads}</div>
-              <div className="text-sm text-white/70">Qualified Leads</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">${crmStats.averageDealSize.toLocaleString()}</div>
-              <div className="text-sm text-white/70">Avg Deal Size</div>
-            </div>
-            <div className="bg-white/20 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold mb-1">{crmStats.conversionRate}%</div>
-              <div className="text-sm text-white/70">Conversion Rate</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="flex space-x-8">
-          {[
-            { id: 'contacts', name: 'Contacts', icon: UserGroupIcon },
-            { id: 'pipeline', name: 'Sales Pipeline', icon: ArrowTrendingUpIcon },
-            { id: 'deals', name: 'Deals', icon: CurrencyDollarIcon },
-            { id: 'activities', name: 'Activities', icon: CalendarIcon },
-            { id: 'email', name: 'Email Campaigns', icon: EnvelopeIcon },
-            { id: 'analytics', name: 'Analytics', icon: ChartBarIcon }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
-                  : 'border-transparent text-secondary hover:text-primary'
-              }`}
-            >
-              <tab.icon className="h-4 w-4 mr-2" />
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-      
-      {/* Content */}
-      {activeTab === 'contacts' && (
-        <div className="space-y-6">
-          {/* Search and Filters */}
-          <div className="bg-surface-elevated rounded-xl shadow-default p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-4 flex-1">
-                <div className="relative flex-1 max-w-lg">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search contacts..."
-                    className="pl-10 input"
-                  />
-                </div>
-                <select
-                  value={filters.status}
-                  onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                  className="input w-48"
-                >
-                  <option value="">All Stages</option>
-                  {leadStages.map((stage) => (
-                    <option key={stage.id} value={stage.id}>{stage.name}</option>
-                  ))}
-                </select>
-                <select
-                  value={filters.source}
-                  onChange={(e) => setFilters({ ...filters, source: e.target.value })}
-                  className="input w-48"
-                >
-                  <option value="">All Sources</option>
-                  {contactSources.map((source) => (
-                    <option key={source.id} value={source.id}>{source.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-                  className="btn btn-secondary"
-                >
-                  {viewMode === 'grid' ? 'List View' : 'Grid View'}
-                </button>
-                <button
-                  onClick={() => setShowContactModal(true)}
-                  className="btn btn-primary"
-                >
-                  <PlusIcon className="h-4 w-4 mr-2" />
-                  Add Contact
-                </button>
-              </div>
-            </div>
-            
-            {/* Quick Stats */}
-            <div className="grid grid-cols-5 gap-4">
-              <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <div className="text-xl font-bold text-blue-600">{filteredContacts.length}</div>
-                <div className="text-xs text-secondary">Total</div>
-              </div>
-              <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <div className="text-xl font-bold text-green-600">
-                  {filteredContacts.filter(c => c.isQualified).length}
-                </div>
-                <div className="text-xs text-secondary">Qualified</div>
-              </div>
-              <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                <div className="text-xl font-bold text-red-600">
-                  {filteredContacts.filter(c => c.priority === 'high').length}
-                </div>
-                <div className="text-xs text-secondary">High Priority</div>
-              </div>
-              <div className="text-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                <div className="text-xl font-bold text-yellow-600">
-                  {filteredContacts.filter(c => c.stage === 'new').length}
-                </div>
-                <div className="text-xs text-secondary">New Leads</div>
-              </div>
-              <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <div className="text-xl font-bold text-purple-600">
-                  ${filteredContacts.reduce((sum, c) => sum + (c.value || 0), 0).toLocaleString()}
-                </div>
-                <div className="text-xs text-secondary">Total Value</div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Contacts Grid */}
-          <div className={viewMode === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' 
-            : 'space-y-3'
-          }>
-            {filteredContacts.map(renderContactCard)}
-          </div>
-          
-          {filteredContacts.length === 0 && (
-            <div className="text-center py-12">
-              <UserGroupIcon className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-medium text-primary">No contacts found</h3>
-              <p className="text-secondary">Try adjusting your search criteria</p>
-            </div>
-          )}
-        </div>
-      )}
-      
-      {activeTab === 'deals' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-primary">Active Deals</h2>
-              <p className="text-secondary">Track and manage your sales opportunities</p>
-            </div>
-            <button className="btn btn-primary">
-              <PlusIcon className="h-4 w-4 mr-2" />
-              New Deal
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {deals.map(renderDealCard)}
-          </div>
-        </div>
-      )}
-      
-      {renderContactModal()}
-    </div>
-  );
-};
-
-export default ComprehensiveCRMSystem;

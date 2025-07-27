@@ -1,0 +1,29 @@
+{
+  "total_tests": 41,
+  "passed": 19,
+  "failed": 22,
+  "errors": [
+    "\u274c User Login: FAILED - Status: 422",
+    "\u274c Create Workspace: FAILED - Status: 403",
+    "\u274c Get Workspaces: FAILED - Status: 403",
+    "\u274c Get Blog Posts: FAILED - Status: 403",
+    "\u274c Create Product: FAILED - Status: 403",
+    "\u274c Get Products: FAILED - Status: 403",
+    "\u274c E-commerce Dashboard: FAILED - Status: 403",
+    "\u274c Get Orders: FAILED - Status: 403",
+    "\u274c Analytics Overview: FAILED - Status: 403",
+    "\u274c Business Intelligence: FAILED - Status: 403",
+    "\u274c Advanced Analytics: FAILED - Status: 403",
+    "\u274c AI Services Overview: FAILED - Status: 403",
+    "\u274c Dashboard Overview: FAILED - Status: 403",
+    "\u274c Dashboard Activity Summary: FAILED - Status: 403",
+    "\u274c Email Marketing Campaigns: FAILED - Status: 403",
+    "\u274c Marketing Analytics: FAILED - Status: 403",
+    "\u274c Social Media Accounts: FAILED - Status: 403",
+    "\u274c CRM Contacts: FAILED - Status: 403",
+    "\u274c CRM Deals: FAILED - Status: 403",
+    "\u274c Support Tickets: FAILED - Status: 403",
+    "\u274c Knowledge Base: FAILED - Status: 403",
+    "\u274c Automation Workflows: FAILED - Status: 403"
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-07-27T07:05:21.305537",
+  "issues": [
+    {
+      "type": "connection_error",
+      "endpoint": "/api/health",
+      "description": "Cannot connect to Health endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/",
+      "description": "Cannot connect to Root endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/docs",
+      "description": "Cannot connect to Docs endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/openapi.json",
+      "description": "Cannot connect to OpenAPI endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/api/dashboard/overview",
+      "description": "Cannot connect to Dashboard endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/api/analytics/overview",
+      "description": "Cannot connect to Analytics endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/api/workspaces",
+      "description": "Cannot connect to Workspaces endpoint",
+      "severity": "critical"
+    },
+    {
+      "type": "connection_error",
+      "endpoint": "/api/ecommerce/products",
+      "description": "Cannot connect to Products endpoint",
+      "severity": "critical"
+    }
+  ],
+  "fixes": [
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/api/health",
+        "description": "Cannot connect to Health endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/",
+        "description": "Cannot connect to Root endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/docs",
+        "description": "Cannot connect to Docs endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/openapi.json",
+        "description": "Cannot connect to OpenAPI endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/api/dashboard/overview",
+        "description": "Cannot connect to Dashboard endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/api/analytics/overview",
+        "description": "Cannot connect to Analytics endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/api/workspaces",
+        "description": "Cannot connect to Workspaces endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    },
+    {
+      "issue": {
+        "type": "connection_error",
+        "endpoint": "/api/ecommerce/products",
+        "description": "Cannot connect to Products endpoint",
+        "severity": "critical"
+      },
+      "fix": "Check server connectivity and restart if needed",
+      "priority": "critical"
+    }
+  ],
+  "summary": {
+    "total_issues": 8,
+    "critical": 8,
+    "high": 0,
+    "medium": 0,
+    "low": 0,
+    "total_fixes": 8
+  }
+}

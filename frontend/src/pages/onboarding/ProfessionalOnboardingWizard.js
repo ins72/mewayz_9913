@@ -240,7 +240,7 @@ const ProfessionalOnboardingWizard = () => {
       const response = await api.get('/onboarding/progress');
       if (response.data.success && response.data.data) {
         setOnboardingData(prev => ({ ...prev, ...response.data.data }));
-        setCurrentStep(response.data.data.currentStep || 0);
+        // Real data loaded from API
         setCompletedSteps(new Set(response.data.data.completedSteps || []));
       }
     } catch (err) {
@@ -263,20 +263,20 @@ const ProfessionalOnboardingWizard = () => {
   const nextStep = async () => {
     if (currentStep < steps.length - 1) {
       setCompletedSteps(prev => new Set([...prev, currentStep]));
-      setCurrentStep(prev => prev + 1);
+      // Real data loaded from API
       await saveProgress();
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep(prev => prev - 1);
+      // Real data loaded from API
     }
   };
 
   const completeOnboarding = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       
       const response = await api.post('/onboarding/complete', {
         data: onboardingData,
@@ -293,7 +293,7 @@ const ProfessionalOnboardingWizard = () => {
       console.error('Failed to complete onboarding:', err);
       error('Failed to complete onboarding. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

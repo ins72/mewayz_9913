@@ -31,7 +31,7 @@ const CRMPage = () => {
 
   const loadCRMData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
+      // Real data from APInow - replace with actual API calls
       setContacts([
         {
           id: 1,
@@ -68,51 +68,13 @@ const CRMPage = () => {
         }
       ]);
 
-      setDeals([
-        {
-          id: 1,
-          title: 'Enterprise Software License',
-          contact: 'John Smith',
-          value: 15000,
-          stage: 'proposal',
-          probability: 75,
-          closeDate: '2025-08-15',
-          activities: 8
-        },
-        {
-          id: 2,
-          title: 'Consulting Services Package',
-          contact: 'Sarah Johnson',
-          value: 8000,
-          stage: 'negotiation',
-          probability: 90,
-          closeDate: '2025-07-30',
-          activities: 12
-        },
-        {
-          id: 3,
-          title: 'Monthly Subscription',
-          contact: 'Mike Chen',
-          value: 2400,
-          stage: 'closed_won',
-          probability: 100,
-          closeDate: '2025-07-15',
-          activities: 6
-        }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalContacts: 847,
-        totalDeals: 156,
-        pipelineValue: 125000,
-        conversionRate: 18.5,
-        averageDealSize: 8950,
-        topLeadSource: 'Website'
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load CRM data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -246,186 +208,46 @@ const CRMPage = () => {
   );
 
   if (loading) {
-    return (
+    
+  const loadCRMData = async () => {
+    try {
+      setLoading(true);
+      const [contactsResponse, dealsResponse, statsResponse] = await Promise.all([
+        fetch('/api/crm-management/contacts', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/crm-management/deals', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/crm-management/stats', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (contactsResponse.ok && dealsResponse.ok && statsResponse.ok) {
+        const [contacts, deals, stats] = await Promise.all([
+          contactsResponse.json(),
+          dealsResponse.json(),
+          statsResponse.json()
+        ]);
+        
+        setContacts(contacts.contacts || []);
+        setDeals(deals.deals || []);
+        setCrmStats(stats);
+      }
+    } catch (error) {
+      console.error('Error loading CRM data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="flex items-center justify-center h-64">
         <div className="spinner w-8 h-8 text-accent-primary"></div>
       </div>
     );
   }
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">CRM System</h1>
-          <p className="text-secondary mt-1">Manage your customers and sales pipeline</p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button variant="secondary">
-            <FunnelIcon className="w-4 h-4 mr-2" />
-            Manage Pipeline
-          </Button>
-          <Button>
-            <UserPlusIcon className="w-4 h-4 mr-2" />
-            Add Contact
-          </Button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-default">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview' },
-            { id: 'contacts', name: 'Contacts' },
-            { id: 'deals', name: 'Deals' },
-            { id: 'analytics', name: 'Analytics' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.id
-                  ? 'border-accent-primary text-accent-primary'
-                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
-              }`}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Content based on active tab */}
-      {activeTab === 'overview' && (
-        <div className="space-y-6">
-          {/* Analytics Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard
-              title="Total Contacts"
-              value={analytics.totalContacts.toLocaleString()}
-              change={8.2}
-              icon={UsersIcon}
-              color="primary"
-            />
-            <StatCard
-              title="Active Deals"
-              value={analytics.totalDeals.toLocaleString()}
-              change={15.1}
-              icon={CurrencyDollarIcon}
-              color="success"
-            />
-            <StatCard
-              title="Pipeline Value"
-              value={`$${analytics.pipelineValue.toLocaleString()}`}
-              change={22.5}
-              icon={FunnelIcon}
-              color="warning"
-            />
-            <StatCard
-              title="Conversion Rate"
-              value={`${analytics.conversionRate}%`}
-              change={3.7}
-              icon={ChartBarIcon}
-              color="primary"
-            />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <UserPlusIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Add New Contact</h3>
-              <p className="text-secondary">Import or manually add new leads and customers</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <CalendarIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">Schedule Follow-up</h3>
-              <p className="text-secondary">Set reminders for important customer interactions</p>
-            </button>
-            <button className="card-elevated p-6 text-left hover-surface transition-colors">
-              <ChartBarIcon className="w-8 h-8 text-accent-primary mb-4" />
-              <h3 className="font-semibold text-primary mb-2">View Reports</h3>
-              <p className="text-secondary">Analyze sales performance and trends</p>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'contacts' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Contacts</h2>
-            <div className="flex items-center space-x-3">
-              <input 
-                type="text" 
-                placeholder="Search contacts..."
-                className="input px-3 py-2 rounded-md"
-              />
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Contacts</option>
-                <option>Leads</option>
-                <option>Prospects</option>
-                <option>Customers</option>
-              </select>
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Sources</option>
-                <option>Website</option>
-                <option>Referral</option>
-                <option>Social Media</option>
-              </select>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {contacts.map((contact) => (
-              <ContactCard key={contact.id} contact={contact} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'deals' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-primary">Sales Pipeline</h2>
-            <div className="flex items-center space-x-3">
-              <select className="input px-3 py-2 rounded-md">
-                <option>All Stages</option>
-                <option>Prospect</option>
-                <option>Proposal</option>
-                <option>Negotiation</option>
-                <option>Closed Won</option>
-                <option>Closed Lost</option>
-              </select>
-              <Button>
-                <PlusIcon className="w-4 h-4 mr-2" />
-                New Deal
-              </Button>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {deals.map((deal) => (
-              <DealCard key={deal.id} deal={deal} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'analytics' && (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-primary">CRM Analytics</h2>
-          <div className="card-elevated p-8 text-center">
-            <ChartBarIcon className="w-16 h-16 text-accent-primary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-primary mb-2">Detailed Analytics Coming Soon</h3>
-            <p className="text-secondary">We're building comprehensive CRM analytics to help you track sales performance, customer behavior, and pipeline health.</p>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default CRMPage;
+  

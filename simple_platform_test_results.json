@@ -1,0 +1,72 @@
+{
+  "timestamp": "2025-07-27T07:31:08.450956",
+  "results": [
+    {
+      "name": "Health Check",
+      "endpoint": "/api/health",
+      "status": 200,
+      "success": true,
+      "response": "{\"status\":\"healthy\",\"timestamp\":\"2025-07-27T00:30:54.177262\",\"uptime_seconds\":331.236549,\"production_ready\":true}"
+    },
+    {
+      "name": "Root Endpoint",
+      "endpoint": "/",
+      "status": 200,
+      "success": true,
+      "response": "{\"service\":\"mewayz-professional-api\",\"status\":\"running\",\"version\":\"2.0.0\",\"timestamp\":\"2025-07-27T00:30:56.210867\",\"production_ready\":true}"
+    },
+    {
+      "name": "API Docs",
+      "endpoint": "/docs",
+      "status": 200,
+      "success": true,
+      "response": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"http"
+    },
+    {
+      "name": "OpenAPI Spec",
+      "endpoint": "/openapi.json",
+      "status": 200,
+      "success": true,
+      "response": "{\"openapi\":\"3.1.0\",\"info\":{\"title\":\"Mewayz Professional Platform API\",\"description\":\"Complete CRUD operations for Mewayz Professional Platform\",\"version\":\"2.0.0\"},\"paths\":{\"/\":{\"get\":{\"summary\":\"Root\""
+    },
+    {
+      "name": "Dashboard",
+      "endpoint": "/api/dashboard/overview",
+      "status": 401,
+      "success": false,
+      "response": "{\"detail\":\"Not authenticated\"}"
+    },
+    {
+      "name": "Analytics",
+      "endpoint": "/api/analytics/overview",
+      "status": 404,
+      "success": false,
+      "response": "{\"detail\":\"Not Found\"}"
+    },
+    {
+      "name": "Workspaces",
+      "endpoint": "/api/workspaces",
+      "status": 404,
+      "success": false,
+      "response": "{\"detail\":\"Not Found\"}"
+    },
+    {
+      "name": "Products",
+      "endpoint": "/api/ecommerce/products",
+      "status": 404,
+      "success": false,
+      "response": "{\"detail\":\"Not Found\"}"
+    }
+  ],
+  "summary": {
+    "total_tests": 8,
+    "passed_tests": 4,
+    "failed_tests": 4,
+    "success_rate": 50.0
+  },
+  "issues": [
+    "Missing endpoint: Analytics",
+    "Missing endpoint: Workspaces",
+    "Missing endpoint: Products"
+  ]
+}

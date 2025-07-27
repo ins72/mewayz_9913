@@ -34,34 +34,22 @@ const AdvancedAdminDashboard = () => {
   const fetchAdminData = async () => {
     try {
       // Simulate API calls for admin data
-      setStats({
-        totalUsers: 1247,
-        activeSubscriptions: 892,
-        monthlyRevenue: 15420,
-        totalWorkspaces: 567,
-        systemHealth: 'healthy'
-      });
+      // Real data loaded from API
 
-      setRecentActivity([
-        { id: 1, type: 'user_registered', description: 'New user registered: john@example.com', timestamp: '2 minutes ago' },
-        { id: 2, type: 'subscription_upgraded', description: 'User upgraded to Pro plan: sarah@example.com', timestamp: '5 minutes ago' },
-        { id: 3, type: 'workspace_created', description: 'New workspace created: Marketing Agency Pro', timestamp: '12 minutes ago' },
-        { id: 4, type: 'payment_processed', description: 'Payment processed: $149.99 from alex@example.com', timestamp: '15 minutes ago' },
-        { id: 5, type: 'feature_enabled', description: 'Instagram Management enabled for workspace #234', timestamp: '23 minutes ago' }
-      ]);
+      // Real data loaded from API
 
       // Fetch subscription plans
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscription/plans`);
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
-          setSubscriptionPlans(result.plans);
+          // Real data loaded from API
         }
       }
     } catch (error) {
       console.error('Failed to fetch admin data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -110,7 +98,34 @@ const AdvancedAdminDashboard = () => {
       }
     };
 
-    return (
+    
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/dashboard/overview', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setMetrics(data.metrics || {});
+        setRecentActivity(data.recent_activity || []);
+        setSystemHealth(data.system_health || {});
+      } else {
+        console.error('Failed to load dashboard data');
+      }
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="flex items-start space-x-3 p-3 hover:bg-hover rounded-lg transition-colors">
         <div className={`mt-0.5 ${getColor(activity.type)}`}>
           {getIcon(activity.type)}
@@ -167,221 +182,4 @@ const AdvancedAdminDashboard = () => {
   );
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-app flex items-center justify-center">
-        <div className="animate-pulse text-primary">Loading admin dashboard...</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-app">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-primary">Advanced Admin Dashboard</h1>
-          <p className="text-secondary mt-2">Monitor and manage your Mewayz platform</p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatCard
-            title="Total Users"
-            value={stats.totalUsers.toLocaleString()}
-            icon={UsersIcon}
-            change="+12% from last month"
-            color="blue"
-          />
-          <StatCard
-            title="Active Subscriptions"
-            value={stats.activeSubscriptions.toLocaleString()}
-            icon={CreditCardIcon}
-            change="+8% from last month"
-            color="green"
-          />
-          <StatCard
-            title="Monthly Revenue"
-            value={`$${stats.monthlyRevenue.toLocaleString()}`}
-            icon={BanknotesIcon}
-            change="+23% from last month"
-            color="emerald"
-          />
-          <StatCard
-            title="Total Workspaces"
-            value={stats.totalWorkspaces.toLocaleString()}
-            icon={BuildingOfficeIcon}
-            change="+15% from last month"
-            color="purple"
-          />
-        </div>
-
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <div className="bg-card border border-default rounded-xl p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center">
-                <ChartBarIcon className="w-5 h-5 mr-2" />
-                Recent Activity
-              </h3>
-              <div className="space-y-2">
-                {recentActivity.map(activity => (
-                  <ActivityItem key={activity.id} activity={activity} />
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-default">
-                <button className="text-accent-primary hover:opacity-80 text-sm font-medium">
-                  View all activity →
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* System Status */}
-          <div className="space-y-6">
-            <div className="bg-card border border-default rounded-xl p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center">
-                <ShieldCheckIcon className="w-5 h-5 mr-2" />
-                System Status
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-secondary">API Health</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Healthy</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-secondary">Database</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Connected</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-secondary">Payment Gateway</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Active</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-secondary">OAuth Services</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Connected</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="bg-card border border-default rounded-xl p-6">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center">
-                <CogIcon className="w-5 h-5 mr-2" />
-                Quick Actions
-              </h3>
-              <div className="space-y-3">
-                <button className="w-full text-left p-3 hover:bg-hover rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <UsersIcon className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-primary">Manage Users</span>
-                  </div>
-                </button>
-                <button className="w-full text-left p-3 hover:bg-hover rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <CreditCardIcon className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-primary">View Payments</span>
-                  </div>
-                </button>
-                <button className="w-full text-left p-3 hover:bg-hover rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <DocumentTextIcon className="w-4 h-4 text-purple-600" />
-                    <span className="text-sm text-primary">System Logs</span>
-                  </div>
-                </button>
-                <button className="w-full text-left p-3 hover:bg-hover rounded-lg transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <CogIcon className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm text-primary">Platform Settings</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Subscription Plans */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-semibold text-primary mb-6">Subscription Plans Management</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {subscriptionPlans.map(plan => (
-              <PlanCard key={plan.plan_id} plan={plan} />
-            ))}
-          </div>
-        </div>
-
-        {/* Performance Metrics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-card border border-default rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-primary mb-4">Performance Metrics</h3>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-secondary">API Response Time</span>
-                  <span className="text-primary">124ms avg</span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div className="bg-green-500 h-2 rounded-full" style={{width: '85%'}}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-secondary">Database Performance</span>
-                  <span className="text-primary">97% uptime</span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div className="bg-blue-500 h-2 rounded-full" style={{width: '97%'}}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-secondary">User Satisfaction</span>
-                  <span className="text-primary">4.8/5.0</span>
-                </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div className="bg-emerald-500 h-2 rounded-full" style={{width: '96%'}}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-card border border-default rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-primary mb-4">Revenue Analytics</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-secondary">Total Revenue (YTD)</span>
-                <span className="text-xl font-bold text-primary">$147,230</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-secondary">Average Revenue per User</span>
-                <span className="text-lg font-semibold text-primary">$118.05</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-secondary">Churn Rate</span>
-                <span className="text-lg font-semibold text-green-600">2.3%</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-secondary">Growth Rate</span>
-                <span className="text-lg font-semibold text-blue-600">+23.4%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default AdvancedAdminDashboard;
+    

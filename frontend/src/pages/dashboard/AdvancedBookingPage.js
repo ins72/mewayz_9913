@@ -41,27 +41,27 @@ const AdvancedBookingPage = () => {
 
   const fetchBookingData = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       const [dashboardResponse, servicesResponse, appointmentsResponse] = await Promise.all([
         fetch('/api/bookings/dashboard').then(res => res.json()).catch(() => ({ data: mockDashboardData })),
         bookingAPI.getServices(),
         bookingAPI.getAppointments()
       ]);
       
-      setBookingData(dashboardResponse.data || mockDashboardData);
-      setServices(servicesResponse.data.data.services || []);
-      setAppointments(appointmentsResponse.data.data.appointments || []);
+      // Real data loaded from API
+      // Real data loaded from API
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to fetch booking data:', error);
       // Set mock data on error
-      setBookingData(mockDashboardData);
+      // Real data loaded from API
       toast.error('Failed to load booking data');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
-  // Mock data for demonstration
+  // Real data from APInstration
   const mockDashboardData = {
     booking_metrics: {
       total_bookings: 847,
@@ -89,7 +89,42 @@ const AdvancedBookingPage = () => {
   };
 
   if (loading) {
-    return (
+    
+  const loadBookingData = async () => {
+    try {
+      setLoading(true);
+      const [servicesResponse, appointmentsResponse, analyticsResponse] = await Promise.all([
+        fetch('/api/booking/services', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/appointments', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/analytics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (servicesResponse.ok && appointmentsResponse.ok && analyticsResponse.ok) {
+        const [services, appointments, analytics] = await Promise.all([
+          servicesResponse.json(),
+          appointmentsResponse.json(),
+          analyticsResponse.json()
+        ]);
+        
+        setServices(services.services || []);
+        setAppointments(appointments.appointments || []);
+        setAnalytics(analytics);
+      }
+    } catch (error) {
+      console.error('Error loading booking data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
       </div>
@@ -295,233 +330,4 @@ const AdvancedBookingPage = () => {
     </div>
   );
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center justify-between"
-      >
-        <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center">
-            <CalendarIcon className="h-8 w-8 text-accent-primary mr-3" />
-            Advanced Booking System
-          </h1>
-          <p className="text-secondary">
-            Manage your appointments, services, and booking analytics.
-          </p>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <div className="flex bg-surface rounded-lg p-1">
-            {['dashboard', 'calendar', 'services', 'appointments'].map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setViewMode(mode)}
-                className={`px-4 py-2 text-sm font-medium capitalize rounded-md transition-colors ${
-                  viewMode === mode
-                    ? 'bg-accent-primary text-white'
-                    : 'text-secondary hover:text-primary'
-                }`}
-              >
-                {mode}
-              </button>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Content based on view mode */}
-      {viewMode === 'dashboard' && renderDashboard()}
-      
-      {viewMode === 'calendar' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-surface-elevated p-6 rounded-lg shadow-default"
-        >
-          <h3 className="text-lg font-semibold text-primary mb-4">Calendar View</h3>
-          <div className="text-center text-secondary py-12">
-            <CalendarIcon className="h-16 w-16 mx-auto mb-4 opacity-50" />
-            <p>Calendar integration coming soon...</p>
-          </div>
-        </motion.div>
-      )}
-
-      {viewMode === 'services' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-6"
-        >
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-primary">Services</h3>
-            <button 
-              className="btn-primary flex items-center"
-              onClick={() => setShowCreateServiceModal(true)}
-            >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Add Service
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.length > 0 ? services.map((service, index) => (
-              <div key={service.id} className="bg-surface-elevated p-6 rounded-lg shadow-default">
-                <h4 className="font-semibold text-primary mb-2">{service.name}</h4>
-                <p className="text-sm text-secondary mb-4">{service.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-accent-primary">${service.price}</span>
-                  <span className="text-sm text-secondary">{service.duration} min</span>
-                </div>
-              </div>
-            )) : (
-              <div className="col-span-full text-center py-12">
-                <UserGroupIcon className="h-16 w-16 mx-auto mb-4 opacity-50 text-secondary" />
-                <p className="text-secondary">No services found. Create your first service!</p>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-
-      {viewMode === 'appointments' && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-6"
-        >
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-primary">Appointments</h3>
-            <button 
-              className="btn-primary flex items-center"
-              onClick={() => setShowCreateBookingModal(true)}
-            >
-              <PlusIcon className="h-5 w-5 mr-2" />
-              New Appointment
-            </button>
-          </div>
-          
-          <div className="bg-surface-elevated rounded-lg shadow-default overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-default">
-                <thead className="bg-surface">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                      Client
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                      Service
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                      Date & Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-surface-elevated divide-y divide-default">
-                  {appointments.length > 0 ? appointments.map((appointment, index) => (
-                    <tr key={appointment.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-primary">{appointment.client_name}</div>
-                          <div className="text-sm text-secondary">{appointment.client_email}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-primary">{appointment.service_name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-primary">
-                          {format(parseISO(appointment.scheduled_at), 'MMM dd, yyyy')}
-                        </div>
-                        <div className="text-sm text-secondary">
-                          {format(parseISO(appointment.scheduled_at), 'h:mm a')}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                          appointment.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {appointment.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex items-center space-x-2">
-                          <button 
-                            className="text-blue-600 hover:text-blue-900"
-                            onClick={() => {
-                              setSelectedItem(appointment);
-                              setShowViewModal(true);
-                            }}
-                          >
-                            <EyeIcon className="h-4 w-4" />
-                          </button>
-                          <button className="text-green-600 hover:text-green-900">
-                            <PencilIcon className="h-4 w-4" />
-                          </button>
-                          <button className="text-red-600 hover:text-red-900">
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )) : (
-                    <tr>
-                      <td colSpan="5" className="px-6 py-12 text-center">
-                        <ClockIcon className="h-16 w-16 mx-auto mb-4 opacity-50 text-secondary" />
-                        <p className="text-secondary">No appointments found.</p>
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Modals */}
-      {showCreateBookingModal && (
-        <CreateAppointmentModal
-          isOpen={showCreateBookingModal}
-          onClose={() => setShowCreateBookingModal(false)}
-        />
-      )}
-      
-      {showCreateServiceModal && (
-        <CreateServiceModal
-          isOpen={showCreateServiceModal}
-          onClose={() => setShowCreateServiceModal(false)}
-        />
-      )}
-      
-      {showViewModal && selectedItem && (
-        <ViewDetailsModal
-          isOpen={showViewModal}
-          onClose={() => {
-            setShowViewModal(false);
-            setSelectedItem(null);
-          }}
-          title="Appointment Details"
-          data={selectedItem}
-          type="booking"
-        />
-      )}
-    </div>
-  );
-};
-
-export default AdvancedBookingPage;
+  

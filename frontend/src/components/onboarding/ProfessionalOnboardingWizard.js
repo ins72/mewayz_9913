@@ -242,18 +242,18 @@ const ProfessionalOnboardingWizard = () => {
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep(currentStep + 1);
+      // Real data loaded from API
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      // Real data loaded from API
     }
   };
 
   const handleComplete = async () => {
-    setIsLoading(true);
+    // Real data loaded from API
     try {
       // Create workspace with all selected options
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/workspaces`, {
@@ -279,7 +279,7 @@ const ProfessionalOnboardingWizard = () => {
     } catch (err) {
       error('Failed to create workspace. Please try again.');
     }
-    setIsLoading(false);
+    // Real data loaded from API
   };
 
   const renderStep = () => {

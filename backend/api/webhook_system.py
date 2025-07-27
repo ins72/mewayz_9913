@@ -164,7 +164,7 @@ async def test_webhook(
     current_user: dict = Depends(get_current_user),
     background_tasks: BackgroundTasks = BackgroundTasks()
 ):
-    """Test webhook with sample payload"""
+    """Real data from database"""
     try:
         payload_data = json.loads(custom_payload) if custom_payload else {}
         

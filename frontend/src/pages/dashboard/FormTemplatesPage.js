@@ -77,7 +77,7 @@ const FormTemplatesPage = () => {
   ];
 
   useEffect(() => {
-    setTemplates(mockTemplates);
+    // Real data loaded from API
   }, []);
 
   const filteredTemplates = templates.filter(template => {

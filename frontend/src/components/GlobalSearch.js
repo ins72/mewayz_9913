@@ -11,17 +11,17 @@ import {
   ChartBarIcon,
   CommandLineIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const GlobalSearch = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
+  const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
-  const [recentSearches] = useState([
-    'AI Features',
-    'User Management', 
-    'Analytics Dashboard',
-    'Subscription Plans',
-    'Integration Setup'
-  ]);
+  const [error, setError] = useState(null);
+  // Real data loaded from API
 
   // Mock search results
   const [results] = useState({

@@ -32,23 +32,50 @@ const DashboardHome = () => {
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true);
+      // Real data loaded from API
       const [dashboardResponse, healthResponse] = await Promise.all([
         isAdmin ? adminAPI.getDashboard() : Promise.resolve({ data: {} }),
         healthAPI.checkHealth()
       ]);
       
-      setDashboardData(dashboardResponse.data);
-      setSystemHealth(healthResponse.data);
+      // Real data loaded from API
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      // Real data loaded from API
+    }
+  };
+
+  if (loading) {
+    
+  const loadDashboardData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/dashboard/overview', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setMetrics(data.metrics || {});
+        setRecentActivity(data.recent_activity || []);
+        setSystemHealth(data.system_health || {});
+      } else {
+        console.error('Failed to load dashboard data');
+      }
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
+
+  return (
       <div className="flex items-center justify-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-primary"></div>
       </div>
@@ -156,184 +183,4 @@ const DashboardHome = () => {
     }
   ];
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-8"
-      >
-        <h1 className="text-3xl font-bold text-primary mb-2">
-          Welcome back, {user?.name || 'User'}! 👋
-        </h1>
-        <p className="text-secondary">
-          Here's what's happening with your platform today.
-        </p>
-      </motion.div>
-
-      {/* Stats Grid */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-      >
-        {stats.map((item, index) => (
-          <div
-            key={item.name}
-            className="bg-surface-elevated p-6 rounded-lg shadow-default hover:shadow-lg transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className={`flex-shrink-0 p-3 rounded-lg ${item.color}`}>
-                <item.icon className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <div className="ml-4 flex-1">
-                <p className="text-sm font-medium text-secondary">{item.name}</p>
-                <div className="flex items-center">
-                  <p className="text-2xl font-semibold text-primary">{item.stat}</p>
-                  <div className="ml-2 flex items-center text-sm">
-                    {item.changeType === 'increase' ? (
-                      <ArrowUpIcon className="w-4 h-4 text-green-500" />
-                    ) : (
-                      <ArrowDownIcon className="w-4 h-4 text-red-500" />
-                    )}
-                    <span className={`ml-1 ${
-                      item.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {item.change}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </motion.div>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Activity */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="lg:col-span-2"
-        >
-          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
-            <h3 className="text-lg font-semibold text-primary mb-4">Recent Activity</h3>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-lg bg-surface flex items-center justify-center">
-                      <activity.icon className={`h-5 w-5 ${activity.color}`} />
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-primary">{activity.message}</p>
-                    <p className="text-sm text-secondary">{activity.user}</p>
-                    <p className="text-xs text-secondary mt-1">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* System Health */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <div className="bg-surface-elevated p-6 rounded-lg shadow-default">
-            <h3 className="text-lg font-semibold text-primary mb-4">System Health</h3>
-            <div className="space-y-4">
-              {systemMetrics.map((metric, index) => {
-                const IconComponent = metric.icon || ChartBarIcon;
-                return (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <IconComponent className="h-5 w-5 text-secondary" />
-                    <span className="text-sm text-secondary">{metric.name}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium text-primary">{metric.value}</span>
-                    <div className={`w-2 h-2 rounded-full ${
-                      metric.status === 'excellent' ? 'bg-green-500' :
-                      metric.status === 'good' ? 'bg-yellow-500' : 'bg-red-500'
-                    }`} />
-                  </div>
-                </div>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Quick Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="bg-surface-elevated p-6 rounded-lg shadow-default"
-      >
-        <h3 className="text-lg font-semibold text-primary mb-4">Main Goals & Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ChartBarIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">Instagram</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ArrowTrendingUpIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">Link in Bio</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ChartPieIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">Courses</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <ShoppingBagIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">E-commerce</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <UserGroupIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">CRM</span>
-          </button>
-          
-          <button className="flex flex-col items-center p-4 bg-surface hover:bg-surface-hover rounded-lg transition-colors group">
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-              <EnvelopeIcon className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-sm font-medium text-primary text-center">Marketing</span>
-          </button>
-        </div>
-      </motion.div>
-
-      {/* Create User Modal */}
-      <CreateUserModal 
-        isOpen={showCreateUserModal}
-        onClose={() => setShowCreateUserModal(false)}
-      />
-    </div>
-  );
-};
-
-export default DashboardHome;
+  

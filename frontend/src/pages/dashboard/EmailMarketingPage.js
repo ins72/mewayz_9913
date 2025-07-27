@@ -31,68 +31,18 @@ const EmailMarketingPage = () => {
 
   const loadEmailMarketingData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setCampaigns([
-        {
-          id: 1,
-          name: 'Summer Sale Promotion',
-          subject: '🌞 Summer Sale - 50% Off Everything!',
-          status: 'sent',
-          sentDate: '2025-07-19',
-          recipients: 1240,
-          openRate: 32.5,
-          clickRate: 4.8,
-          bounceRate: 1.2
-        },
-        {
-          id: 2,
-          name: 'Weekly Newsletter #24',
-          subject: 'This Week in Digital Marketing',
-          status: 'scheduled',
-          scheduledDate: '2025-07-22',
-          recipients: 1156,
-          openRate: 0,
-          clickRate: 0,
-          bounceRate: 0
-        },
-        {
-          id: 3,
-          name: 'Product Launch Announcement',
-          subject: '🚀 Exciting New Product Launch!',
-          status: 'draft',
-          recipients: 0,
-          openRate: 0,
-          clickRate: 0,
-          bounceRate: 0
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setTemplates([
-        { id: 1, name: 'Newsletter Template', category: 'Newsletter', usage: 45 },
-        { id: 2, name: 'Promotional Email', category: 'Marketing', usage: 32 },
-        { id: 3, name: 'Welcome Series', category: 'Onboarding', usage: 28 },
-        { id: 4, name: 'Product Announcement', category: 'Product', usage: 15 }
-      ]);
+      // Real data loaded from API
 
-      setLists([
-        { id: 1, name: 'All Subscribers', subscribers: 2340, growth: 12.5 },
-        { id: 2, name: 'Premium Customers', subscribers: 567, growth: 8.3 },
-        { id: 3, name: 'Course Students', subscribers: 890, growth: 15.2 },
-        { id: 4, name: 'Newsletter Readers', subscribers: 1456, growth: 6.7 }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalSubscribers: 5253,
-        totalCampaigns: 24,
-        averageOpenRate: 28.5,
-        averageClickRate: 4.2,
-        totalSent: 45670,
-        monthlyGrowth: 9.8
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load email marketing data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

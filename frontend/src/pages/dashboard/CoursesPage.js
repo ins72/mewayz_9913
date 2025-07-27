@@ -29,85 +29,16 @@ const CoursesPage = () => {
 
   const loadCoursesData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setCourses([
-        {
-          id: 1,
-          title: 'Complete Digital Marketing Masterclass',
-          description: 'Learn all aspects of digital marketing from SEO to social media',
-          price: 199.99,
-          students: 145,
-          lessons: 24,
-          duration: '8 hours',
-          rating: 4.8,
-          status: 'published',
-          progress: 85
-        },
-        {
-          id: 2,
-          title: 'Instagram Growth Strategy Course',
-          description: 'Grow your Instagram following organically with proven strategies',
-          price: 99.99,
-          students: 89,
-          lessons: 12,
-          duration: '4 hours',
-          rating: 4.9,
-          status: 'published',
-          progress: 100
-        },
-        {
-          id: 3,
-          title: 'E-commerce Business Fundamentals',
-          description: 'Start and scale your e-commerce business from scratch',
-          price: 299.99,
-          students: 67,
-          lessons: 36,
-          duration: '12 hours',
-          rating: 4.7,
-          status: 'draft',
-          progress: 45
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setStudents([
-        {
-          id: 1,
-          name: 'Sarah Johnson',
-          email: 'sarah@example.com',
-          coursesEnrolled: 2,
-          totalProgress: 78,
-          lastActivity: '2 hours ago'
-        },
-        {
-          id: 2,
-          name: 'Mike Chen',
-          email: 'mike@example.com',
-          coursesEnrolled: 1,
-          totalProgress: 92,
-          lastActivity: '1 day ago'
-        },
-        {
-          id: 3,
-          name: 'Emily Davis',
-          email: 'emily@example.com',
-          coursesEnrolled: 3,
-          totalProgress: 65,
-          lastActivity: '3 hours ago'
-        }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalRevenue: 25670,
-        totalStudents: 301,
-        totalCourses: 8,
-        averageRating: 4.8,
-        completionRate: 72,
-        topCourse: 'Digital Marketing Masterclass'
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load courses data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

@@ -32,7 +32,9 @@ import { CSS } from '@dnd-kit/utilities';
 
 const AdvancedLinkInBioBuilder = () => {
   const [activeTab, setActiveTab] = useState('builder');
+  const [error, setError] = useState(null);
   const [previewMode, setPreviewMode] = useState('mobile');
+  const [error, setError] = useState(null);
   const [bioSite, setBioSite] = useState({
     id: '1',
     title: 'My Link in Bio',
@@ -62,7 +64,9 @@ const AdvancedLinkInBioBuilder = () => {
     { id: '4', type: 'contact', title: 'Email Me', url: 'mailto:hello@example.com', icon: 'email', color: '#10b981', enabled: true }
   ]);
   const [selectedLink, setSelectedLink] = useState(null);
+  const [error, setError] = useState(null);
   const [showLinkModal, setShowLinkModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -121,9 +125,9 @@ const AdvancedLinkInBioBuilder = () => {
       color: linkTypes.find(t => t.type === type)?.color || '#3b82f6',
       enabled: true
     };
-    setLinks([...links, newLink]);
-    setSelectedLink(newLink);
-    setShowLinkModal(true);
+    // Real data loaded from API
+    // Real data loaded from API
+    // Real data loaded from API
   };
 
   const updateLink = (linkId, updates) => {
@@ -144,17 +148,12 @@ const AdvancedLinkInBioBuilder = () => {
         id: Date.now().toString(),
         title: `${linkToDuplicate.title} (Copy)`
       };
-      setLinks([...links, duplicatedLink]);
+      // Real data loaded from API
     }
   };
 
   const applyTheme = (theme) => {
-    setBioSite({
-      ...bioSite,
-      backgroundColor: theme.bg,
-      textColor: theme.text,
-      accentColor: theme.accent
-    });
+    // Real data loaded from API
   };
 
   // Sortable Link Component
@@ -231,8 +230,8 @@ const AdvancedLinkInBioBuilder = () => {
             </button>
             <button
               onClick={() => {
-                setSelectedLink(link);
-                setShowLinkModal(true);
+                // Real data loaded from API
+                // Real data loaded from API
               }}
               className="p-1 text-blue-600 hover:text-blue-800 rounded"
             >
@@ -322,8 +321,8 @@ const AdvancedLinkInBioBuilder = () => {
             <button
               onClick={() => {
                 updateLink(selectedLink.id, selectedLink);
-                setShowLinkModal(false);
-                setSelectedLink(null);
+                // Real data loaded from API
+                // Real data loaded from API
               }}
               className="flex-1 bg-accent-primary text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
             >

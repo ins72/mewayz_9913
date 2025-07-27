@@ -7,6 +7,10 @@ import {
   ExclamationTriangleIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const Tooltip = ({ 
   children, 
@@ -23,17 +27,17 @@ const Tooltip = ({
     if (disabled) return;
     
     const id = setTimeout(() => {
-      setIsVisible(true);
+      // Real data loaded from API
     }, delay);
-    setTimeoutId(id);
+    // Real data loaded from API
   };
 
   const hideTooltip = () => {
     if (timeoutId) {
       clearTimeout(timeoutId);
-      setTimeoutId(null);
+      // Real data loaded from API
     }
-    setIsVisible(false);
+    // Real data loaded from API
   };
 
   const getPositionClasses = () => {

@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-07-27T08:10:45.056847",
+  "base_url": "http://localhost:8001",
+  "results": {
+    "total_tests": 30,
+    "passed": 14,
+    "failed": 16,
+    "errors": [
+      "\u274c /api/dashboard/overview: Expected 401, got 200",
+      "\u274c /api/analytics/overview: Expected 401, got 200",
+      "\u274c /api/ecommerce/products: Expected 401, got 200",
+      "\u274c /api/crm-management/contacts: Expected 401, got 200",
+      "\u274c /api/support-system/tickets: Expected 401, got 200",
+      "\u274c /api/workspace/: Expected 401, got 200",
+      "\u274c /api/ai/services: Expected 401, got 200",
+      "\u274c /api/marketing/analytics: Expected 401, got 200",
+      "\u274c /api/workspace/: Expected 401, got 405",
+      "\u274c /api/workspace/: Expected 401, got 200",
+      "\u274c /api/ecommerce/products: Expected 401, got 405",
+      "\u274c /api/ecommerce/products: Expected 401, got 200",
+      "\u274c /api/crm-management/contacts: Expected 401, got 405",
+      "\u274c /api/crm-management/contacts: Expected 401, got 200",
+      "\u274c /api/auth/register: Expected 422, got 200",
+      "\u274c /api/auth/login: Expected 422, got 200"
+    ]
+  },
+  "success_rate": 46.666666666666664,
+  "production_ready": false,
+  "recommendation": "Significant issues need to be fixed before production"
+}

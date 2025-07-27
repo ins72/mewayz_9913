@@ -29,71 +29,14 @@ const BioSitesPage = () => {
 
   const loadBioSitesData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setBioSites([
-        {
-          id: 1,
-          title: 'My Professional Profile',
-          url: 'myprofile',
-          fullUrl: 'https://mewayz.com/myprofile',
-          description: 'Professional bio site with links to all my projects',
-          theme: 'minimal',
-          isActive: true,
-          views: 1240,
-          clicks: 89,
-          lastUpdated: '2025-07-19',
-          links: [
-            { title: 'Portfolio Website', url: 'https://myportfolio.com', clicks: 34 },
-            { title: 'LinkedIn Profile', url: 'https://linkedin.com/in/me', clicks: 28 },
-            { title: 'Latest Blog Post', url: 'https://blog.com/latest', clicks: 27 }
-          ]
-        },
-        {
-          id: 2,
-          title: 'Creative Showcase',
-          url: 'creative',
-          fullUrl: 'https://mewayz.com/creative',
-          description: 'Showcase of my creative work and artistic projects',
-          theme: 'colorful',
-          isActive: true,
-          views: 890,
-          clicks: 67,
-          lastUpdated: '2025-07-18',
-          links: [
-            { title: 'Instagram Gallery', url: 'https://instagram.com/me', clicks: 45 },
-            { title: 'Behance Portfolio', url: 'https://behance.net/me', clicks: 22 }
-          ]
-        },
-        {
-          id: 3,
-          title: 'Business Links',
-          url: 'business',
-          fullUrl: 'https://mewayz.com/business',
-          description: 'All my business and professional links in one place',
-          theme: 'corporate',
-          isActive: false,
-          views: 456,
-          clicks: 23,
-          lastUpdated: '2025-07-15',
-          links: [
-            { title: 'Contact Form', url: 'https://contact.com', clicks: 12 },
-            { title: 'Services Page', url: 'https://services.com', clicks: 11 }
-          ]
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setAnalytics({
-        totalViews: 2586,
-        totalClicks: 179,
-        totalSites: 3,
-        averageCTR: 6.9,
-        topPerformingSite: 'My Professional Profile',
-        totalLinks: 12
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load bio sites data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

@@ -17,6 +17,10 @@ import {
   ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../contexts/AuthContext';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const OnboardingWizard = ({ isOpen, onComplete, onClose }) => {
   const { user, updateUser } = useContext(AuthContext);
@@ -183,7 +187,7 @@ const OnboardingWizard = ({ isOpen, onComplete, onClose }) => {
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
+      // Real data loaded from API
     } else {
       handleComplete();
     }
@@ -191,7 +195,7 @@ const OnboardingWizard = ({ isOpen, onComplete, onClose }) => {
 
   const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
+      // Real data loaded from API
     }
   };
 

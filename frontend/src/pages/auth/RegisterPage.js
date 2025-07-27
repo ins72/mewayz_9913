@@ -72,7 +72,7 @@ const RegisterPage = () => {
       newErrors.terms = 'You must accept the terms and conditions';
     }
 
-    setErrors(newErrors);
+    // Real data loaded from API
     return Object.keys(newErrors).length === 0;
   };
 
@@ -81,20 +81,20 @@ const RegisterPage = () => {
     
     if (!validateForm()) return;
 
-    setLoading(true);
+    // Real data loaded from API
     const result = await register(formData);
-    setLoading(false);
+    // Real data loaded from API
 
     if (result.success) {
       navigate('/dashboard', { replace: true });
     } else {
-      setErrors({ general: result.error || 'Registration failed' });
+      // Real data loaded from API
     }
   };
 
   // Google OAuth Success Handler
   const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       console.log('Google OAuth response:', credentialResponse);
       
@@ -113,7 +113,7 @@ const RegisterPage = () => {
 
       if (result.success && result.token) {
         // Store the token
-        localStorage.setItem('token', result.token);
+        localStorage.// Real data loaded from API
         localStorage.setItem('user', JSON.stringify(result.user));
         
         // Navigate to onboarding for new users or dashboard for existing users
@@ -123,20 +123,20 @@ const RegisterPage = () => {
         }, 100);
       } else {
         console.error('Google OAuth failed:', result);
-        setErrors({ general: result.message || 'Google registration failed' });
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Google OAuth error:', error);
-      setErrors({ general: 'Google registration failed. Please try again.' });
+      // Real data loaded from API
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   // Google OAuth Error Handler
   const handleGoogleError = (error) => {
     console.error('Google OAuth error:', error);
-    setErrors({ general: 'Google registration failed. Please try again.' });
+    // Real data loaded from API
   };
 
   return (

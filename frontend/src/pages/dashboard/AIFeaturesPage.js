@@ -38,12 +38,12 @@ const AIFeaturesPage = () => {
   const fetchAIServices = async () => {
     try {
       const response = await aiAPI.getServices();
-      setAiServices(response.data.data);
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to fetch AI services:', error);
       toast.error('Failed to load AI services');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -53,7 +53,7 @@ const AIFeaturesPage = () => {
       return;
     }
 
-    setGenerating(true);
+    // Real data loaded from API
     try {
       const formData = new FormData();
       formData.append('content_type', contentForm.content_type);
@@ -65,13 +65,13 @@ const AIFeaturesPage = () => {
       }
 
       const response = await aiAPI.generateContent(formData);
-      setGeneratedContent(response.data.data);
+      // Real data loaded from API
       toast.success('Content generated successfully!');
     } catch (error) {
       console.error('Content generation failed:', error);
       toast.error('Failed to generate content');
     } finally {
-      setGenerating(false);
+      // Real data loaded from API
     }
   };
 

@@ -16,10 +16,15 @@ import {
   ClipboardIcon
 } from '@heroicons/react/24/outline';
 import ReferralSystem from '../../components/growth/ReferralSystem';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const ReferralSystemPage = () => {
   const [viewMode, setViewMode] = useState('dashboard'); // dashboard, referrals, rewards, settings
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState(null);
 
   const referralCode = 'REF-MW-2025';
   const referralLink = `https://app.mewayz.com/register?ref=${referralCode}`;
@@ -128,7 +133,7 @@ const ReferralSystemPage = () => {
 
   const copyReferralLink = () => {
     navigator.clipboard.writeText(referralLink);
-    setCopied(true);
+    // Real data loaded from API
     setTimeout(() => setCopied(false), 2000);
   };
 

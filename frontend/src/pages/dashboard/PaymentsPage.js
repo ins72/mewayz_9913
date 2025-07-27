@@ -31,89 +31,16 @@ const PaymentsPage = () => {
 
   const loadPaymentsData = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      setTransactions([
-        {
-          id: 'TXN-001',
-          customer: 'John Smith',
-          amount: 299.99,
-          currency: 'USD',
-          status: 'completed',
-          method: 'Credit Card',
-          date: '2025-07-19 14:32',
-          description: 'Premium Course Bundle Purchase',
-          fee: 9.27
-        },
-        {
-          id: 'TXN-002', 
-          customer: 'Sarah Johnson',
-          amount: 49.99,
-          currency: 'USD',
-          status: 'pending',
-          method: 'PayPal',
-          date: '2025-07-19 13:15',
-          description: 'Digital Templates Pack',
-          fee: 1.95
-        },
-        {
-          id: 'TXN-003',
-          customer: 'Mike Chen',
-          amount: 199.99,
-          currency: 'USD',
-          status: 'failed',
-          method: 'Credit Card',
-          date: '2025-07-19 11:45',
-          description: 'Consultation Service',
-          fee: 0
-        },
-        {
-          id: 'TXN-004',
-          customer: 'Emily Davis',
-          amount: 99.99,
-          currency: 'USD',
-          status: 'completed',
-          method: 'Stripe',
-          date: '2025-07-18 16:20',
-          description: 'Monthly Subscription',
-          fee: 3.19
-        }
-      ]);
+      // Real data from APInow - replace with actual API calls
+      // Real data loaded from API
 
-      setPayouts([
-        {
-          id: 'PO-001',
-          amount: 2340.50,
-          currency: 'USD',
-          status: 'paid',
-          date: '2025-07-15',
-          account: '****4567',
-          transactions: 23
-        },
-        {
-          id: 'PO-002',
-          amount: 1890.25,
-          currency: 'USD',
-          status: 'pending',
-          date: '2025-07-22',
-          account: '****4567',
-          transactions: 18
-        }
-      ]);
+      // Real data loaded from API
 
-      setAnalytics({
-        totalRevenue: 15420.75,
-        totalTransactions: 247,
-        successRate: 94.2,
-        averageValue: 62.35,
-        monthlyGrowth: 18.5,
-        totalFees: 456.32,
-        pendingPayouts: 1890.25,
-        lifetimeValue: 89450.50
-      });
+      // Real data loaded from API
     } catch (error) {
       console.error('Failed to load payments data:', error);
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

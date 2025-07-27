@@ -1,0 +1,16 @@
+{
+  "total_tests": 38,
+  "passed": 30,
+  "failed": 8,
+  "errors": [
+    "\u274c Health Check: FAILED - Status: 404",
+    "\u274c Root Endpoint: FAILED - Status: 404",
+    "\u274c API Documentation: FAILED - Status: 404",
+    "\u274c OpenAPI Specification: FAILED - Status: 404",
+    "\u274c User Registration: FAILED - Status: 404",
+    "\u274c User Login: FAILED - Status: 404",
+    "\u274c Invalid Data Validation: FAILED - Status: 404",
+    "\u274c Missing Fields Validation: FAILED - Status: 404"
+  ],
+  "endpoints_tested": []
+}

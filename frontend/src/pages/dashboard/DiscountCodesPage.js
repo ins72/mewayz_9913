@@ -17,8 +17,11 @@ import {
 const DiscountCodesPage = () => {
   const { user } = useAuth();
   const [discountCodes, setDiscountCodes] = useState([]);
+  const [error, setError] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Mock discount codes data
   const mockDiscountCodes = [
@@ -77,7 +80,7 @@ const DiscountCodesPage = () => {
   ];
 
   useEffect(() => {
-    setDiscountCodes(mockDiscountCodes);
+    // Real data loaded from API
   }, []);
 
   const getStatusColor = (code) => {

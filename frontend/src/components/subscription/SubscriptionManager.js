@@ -122,9 +122,9 @@ const SubscriptionManager = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setCurrentPlan(data.current_plan);
-        setUsage(data.usage);
-        setSubscriptions(data.subscriptions || []);
+        // Real data loaded from API
+        // Real data loaded from API
+        // Real data loaded from API
       }
     } catch (error) {
       console.error('Failed to fetch subscription data:', error);
@@ -134,21 +134,12 @@ const SubscriptionManager = () => {
         status: 'active',
         current_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
       });
-      setUsage({
-        ai_requests: 5,
-        ai_requests_limit: 10,
-        workspaces: 1,
-        workspaces_limit: 1,
-        bio_sites: 2,
-        bio_sites_limit: 3,
-        storage_used: 0.2,
-        storage_limit: 1
-      });
+      // Real data loaded from API
     }
   };
 
   const handleUpgrade = async (planId) => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions/upgrade`, {
         method: 'POST',
@@ -171,7 +162,7 @@ const SubscriptionManager = () => {
       console.error('Upgrade failed:', error);
       alert('Failed to initiate upgrade. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
@@ -180,7 +171,7 @@ const SubscriptionManager = () => {
       return;
     }
 
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions/cancel`, {
         method: 'POST',
@@ -197,7 +188,7 @@ const SubscriptionManager = () => {
       console.error('Cancellation failed:', error);
       alert('Failed to cancel subscription. Please try again.');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 

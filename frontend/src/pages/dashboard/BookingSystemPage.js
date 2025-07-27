@@ -430,7 +430,42 @@ const BookingSystemPage = () => {
               const dayAppointments = getAppointmentsForDate(date);
               const isToday = date.toDateString() === new Date().toDateString();
               
-              return (
+              
+  const loadBookingData = async () => {
+    try {
+      setLoading(true);
+      const [servicesResponse, appointmentsResponse, analyticsResponse] = await Promise.all([
+        fetch('/api/booking/services', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/appointments', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/booking/analytics', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+      
+      if (servicesResponse.ok && appointmentsResponse.ok && analyticsResponse.ok) {
+        const [services, appointments, analytics] = await Promise.all([
+          servicesResponse.json(),
+          appointmentsResponse.json(),
+          analyticsResponse.json()
+        ]);
+        
+        setServices(services.services || []);
+        setAppointments(appointments.appointments || []);
+        setAnalytics(analytics);
+      }
+    } catch (error) {
+      console.error('Error loading booking data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  return (
                 <div
                   key={index}
                   className={`h-24 p-2 border rounded-lg cursor-pointer hover:bg-surface-hover transition-colors ${
@@ -890,69 +925,4 @@ const BookingSystemPage = () => {
     </div>
   );
 
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary mb-2">Booking System</h1>
-            <p className="text-secondary">Manage appointments, services, and client bookings</p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <button className="btn btn-secondary flex items-center space-x-2">
-              <CogIcon className="h-4 w-4" />
-              <span>Settings</span>
-            </button>
-            <button className="btn btn-primary flex items-center space-x-2">
-              <PlusIcon className="h-4 w-4" />
-              <span>New Booking</span>
-            </button>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Navigation Tabs */}
-      <div className="border-b border-default">
-        <nav className="flex space-x-8">
-          {[
-            { id: 'appointments', name: 'Appointments', icon: CalendarIcon },
-            { id: 'services', name: 'Services', icon: WrenchScrewdriverIcon },
-            { id: 'analytics', name: 'Analytics', icon: ChartBarIcon }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-500'
-                  : 'border-transparent text-secondary hover:text-primary hover:border-gray-300'
-              }`}
-            >
-              <tab.icon className="h-4 w-4" />
-              <span>{tab.name}</span>
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Tab Content */}
-      <motion.div
-        key={activeTab}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {activeTab === 'appointments' && renderAppointmentsTab()}
-        {activeTab === 'services' && renderServicesTab()}
-        {activeTab === 'analytics' && renderAnalyticsTab()}
-      </motion.div>
-    </div>
-  );
-};
-
-export default BookingSystemPage;
+  

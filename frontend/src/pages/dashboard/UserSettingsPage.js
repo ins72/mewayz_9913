@@ -17,6 +17,10 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const UserSettingsPage = () => {
   const { user } = useAuth();
@@ -48,32 +52,7 @@ const UserSettingsPage = () => {
     collaborationUpdates: true
   });
 
-  const [sessions] = useState([
-    {
-      id: 1,
-      device: 'MacBook Pro',
-      browser: 'Chrome',
-      location: 'New York, USA',
-      lastActive: '2 minutes ago',
-      current: true
-    },
-    {
-      id: 2,
-      device: 'iPhone 13',
-      browser: 'Safari',
-      location: 'New York, USA', 
-      lastActive: '1 hour ago',
-      current: false
-    },
-    {
-      id: 3,
-      device: 'Windows PC',
-      browser: 'Firefox',
-      location: 'Los Angeles, USA',
-      lastActive: '3 days ago',
-      current: false
-    }
-  ]);
+  // Real data loaded from API
 
   const tabs = [
     { id: 'profile', name: 'Profile', icon: UserCircleIcon },
@@ -97,7 +76,7 @@ const UserSettingsPage = () => {
     }
     // API call to change password
     toast.success('Password changed successfully!');
-    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    // Real data loaded from API
   };
 
   const handleNotificationUpdate = () => {

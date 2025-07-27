@@ -116,7 +116,7 @@ const AdvancedAIFeatures = () => {
   const handleGenerate = async () => {
     if (!inputText.trim()) return;
 
-    setIsGenerating(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/ai/generate`, {
         method: 'POST',
@@ -134,7 +134,7 @@ const AdvancedAIFeatures = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setGeneratedContent(data.content || 'Generated content will appear here...');
+        // Real data loaded from API
       } else {
         // Mock generation for development
         setTimeout(() => {
@@ -148,7 +148,7 @@ const AdvancedAIFeatures = () => {
         setGeneratedContent(generateMockContent(selectedTool, inputText));
       }, 2000);
     } finally {
-      setIsGenerating(false);
+      // Real data loaded from API
     }
   };
 

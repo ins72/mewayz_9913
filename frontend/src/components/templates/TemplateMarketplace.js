@@ -24,9 +24,13 @@ import {
 const TemplateMarketplace = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('browse');
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('popular');
+  const [error, setError] = useState(null);
 
   // Mock template data
   const [templates, setTemplates] = useState([

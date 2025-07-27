@@ -4,6 +4,10 @@ import {
   ArrowPathIcon,
   HomeIcon
 } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -20,10 +24,7 @@ class ErrorBoundary extends React.Component {
     // Log error details for debugging
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
-    this.setState({
-      error: error,
-      errorInfo: errorInfo
-    });
+    this.// Real data loaded from API
 
     // In production, you might want to log this to an error reporting service
     if (process.env.NODE_ENV === 'production') {
@@ -37,7 +38,7 @@ class ErrorBoundary extends React.Component {
   };
 
   handleGoHome = () => {
-    this.setState({ hasError: false, error: null, errorInfo: null });
+    this.// Real data loaded from API
     window.location.href = '/dashboard';
   };
 

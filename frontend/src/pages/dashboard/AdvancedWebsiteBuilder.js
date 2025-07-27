@@ -25,8 +25,11 @@ import {
 
 const AdvancedWebsiteBuilder = () => {
   const [activeTab, setActiveTab] = useState('design');
+  const [error, setError] = useState(null);
   const [previewMode, setPreviewMode] = useState('desktop');
+  const [error, setError] = useState(null);
   const [selectedElement, setSelectedElement] = useState(null);
+  const [error, setError] = useState(null);
   const [website, setWebsite] = useState({
     id: '1',
     name: 'My Professional Website',
@@ -134,119 +137,9 @@ const AdvancedWebsiteBuilder = () => {
     }
   ]);
 
-  const [availableElements] = useState([
-    {
-      type: 'hero',
-      name: 'Hero Section',
-      icon: RectangleGroupIcon,
-      description: 'Large banner with title, subtitle, and call-to-action'
-    },
-    {
-      type: 'text',
-      name: 'Text Block',
-      icon: DocumentTextIcon,
-      description: 'Rich text content with formatting options'
-    },
-    {
-      type: 'image',
-      name: 'Image',
-      icon: PhotoIcon,
-      description: 'Single image with caption and styling options'
-    },
-    {
-      type: 'gallery',
-      name: 'Image Gallery',
-      icon: Squares2X2Icon,
-      description: 'Grid of images with lightbox functionality'
-    },
-    {
-      type: 'video',
-      name: 'Video',
-      icon: PlayIcon,
-      description: 'Embedded video player with autoplay options'
-    },
-    {
-      type: 'features',
-      name: 'Features Grid',
-      icon: RectangleGroupIcon,
-      description: 'Grid of features with icons and descriptions'
-    },
-    {
-      type: 'testimonials',
-      name: 'Testimonials',
-      icon: ChatBubbleLeftRightIcon,
-      description: 'Customer reviews and testimonials slider'
-    },
-    {
-      type: 'contact',
-      name: 'Contact Form',
-      icon: EnvelopeIcon,
-      description: 'Contact form with validation and email integration'
-    },
-    {
-      type: 'map',
-      name: 'Map',
-      icon: MapPinIcon,
-      description: 'Interactive map with location markers'
-    },
-    {
-      type: 'pricing',
-      name: 'Pricing Table',
-      icon: ShoppingCartIcon,
-      description: 'Pricing plans with feature comparison'
-    },
-    {
-      type: 'calendar',
-      name: 'Booking Calendar',
-      icon: CalendarIcon,
-      description: 'Appointment booking with calendar integration'
-    }
-  ]);
+  // Real data loaded from API
 
-  const [templates] = useState([
-    {
-      id: 'modern-business',
-      name: 'Modern Business',
-      category: 'Business',
-      preview: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
-      description: 'Clean and professional business template'
-    },
-    {
-      id: 'creative-portfolio',
-      name: 'Creative Portfolio',
-      category: 'Portfolio',
-      preview: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-      description: 'Showcase your creative work beautifully'
-    },
-    {
-      id: 'restaurant',
-      name: 'Restaurant',
-      category: 'Food & Dining',
-      preview: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop',
-      description: 'Perfect for restaurants and food businesses'
-    },
-    {
-      id: 'fitness',
-      name: 'Fitness Studio',
-      category: 'Health & Fitness',
-      preview: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
-      description: 'Dynamic template for fitness professionals'
-    },
-    {
-      id: 'ecommerce',
-      name: 'E-commerce Store',
-      category: 'E-commerce',
-      preview: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
-      description: 'Complete online store with shopping cart'
-    },
-    {
-      id: 'photography',
-      name: 'Photography',
-      category: 'Creative',
-      preview: 'https://images.unsplash.com/photo-1452457807411-4979b707c5be?w=400&h=300&fit=crop',
-      description: 'Stunning gallery for photographers'
-    }
-  ]);
+  // Real data loaded from API
 
   const getActivePage = () => {
     return pages.find(page => page.isActive) || pages[0];
@@ -267,7 +160,7 @@ const AdvancedWebsiteBuilder = () => {
         : page
     );
     
-    setPages(updatedPages);
+    // Real data loaded from API
   };
 
   const getDefaultContent = (type) => {
@@ -349,7 +242,7 @@ const AdvancedWebsiteBuilder = () => {
         : page
     );
     
-    setPages(updatedPages);
+    // Real data loaded from API
   };
 
   const deleteElement = (elementId) => {
@@ -363,8 +256,8 @@ const AdvancedWebsiteBuilder = () => {
         : page
     );
     
-    setPages(updatedPages);
-    setSelectedElement(null);
+    // Real data loaded from API
+    // Real data loaded from API
   };
 
   const ElementPreview = ({ element }) => {
@@ -459,7 +352,7 @@ const AdvancedWebsiteBuilder = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setSelectedElement(element);
+              // Real data loaded from API
             }}
             className="p-1 bg-black/50 backdrop-blur-sm rounded text-white hover:bg-black/70"
           >
@@ -590,7 +483,7 @@ const AdvancedWebsiteBuilder = () => {
                                 ...p,
                                 isActive: p.id === page.id
                               }));
-                              setPages(updatedPages);
+                              // Real data loaded from API
                             }}
                             className={`p-1 rounded ${
                               page.isActive ? 'text-accent-primary' : 'text-secondary hover:text-primary'

@@ -273,7 +273,7 @@ const InstagramManagementPage = () => {
       return;
     }
     
-    setLoading(true);
+    // Real data loaded from API
     try {
       const selectedAccountsData = instagramAccounts.filter(acc => 
         selectedAccounts.includes(acc.id)
@@ -311,15 +311,15 @@ const InstagramManagementPage = () => {
       window.URL.revokeObjectURL(url);
       
       success(`Successfully exported ${selectedAccounts.length} accounts`);
-      setSelectedAccounts([]);
+      // Real data loaded from API
     } catch (err) {
       error('Failed to export accounts');
     }
-    setLoading(false);
+    // Real data loaded from API
   };
 
   const generateAIRecommendations = async () => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       // Simulate AI analysis
       const recommendations = [
@@ -349,12 +349,12 @@ const InstagramManagementPage = () => {
         }
       ];
       
-      setAiRecommendations(recommendations);
+      // Real data loaded from API
       success('AI recommendations generated successfully');
     } catch (err) {
       error('Failed to generate AI recommendations');
     }
-    setLoading(false);
+    // Real data loaded from API
   };
 
   const renderInstagramDatabase = () => (

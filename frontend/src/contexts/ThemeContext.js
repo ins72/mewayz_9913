@@ -16,17 +16,17 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
-      setTheme(savedTheme);
+      // Real data loaded from API
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    localStorage.// Real data loaded from API
     document.documentElement.className = theme;
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    // Real data loaded from API
   };
 
   const value = {

@@ -1,0 +1,10 @@
+{
+  "total_tests": 6,
+  "passed": 5,
+  "failed": 1,
+  "errors": [
+    "\u274c User Login: FAILED - Status: 500"
+  ],
+  "authenticated_tests": 0,
+  "public_tests": 6
+}

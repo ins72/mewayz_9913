@@ -36,21 +36,21 @@ const WorkspaceInvitationPage = () => {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/invitations/${token}`);
       if (response.ok) {
         const data = await response.json();
-        setInvitation(data);
+        // Real data loaded from API
       } else if (response.status === 404) {
-        setInvitation({ error: 'Invitation not found or expired' });
+        // Real data loaded from API
       } else {
         throw new Error('Failed to fetch invitation');
       }
     } catch (err) {
-      setInvitation({ error: 'Failed to load invitation' });
+      // Real data loaded from API
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
 
   const handleAcceptInvitation = async () => {
-    setAccepting(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/invitations/${token}/accept`, {
         method: 'POST',
@@ -72,12 +72,12 @@ const WorkspaceInvitationPage = () => {
       }
     } catch (err) {
       error('Failed to accept invitation. Please try again.');
-      setAccepting(false);
+      // Real data loaded from API
     }
   };
 
   const handleDeclineInvitation = async () => {
-    setDeclining(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/invitations/${token}/decline`, {
         method: 'POST',
@@ -95,7 +95,7 @@ const WorkspaceInvitationPage = () => {
       }
     } catch (err) {
       error('Failed to decline invitation. Please try again.');
-      setDeclining(false);
+      // Real data loaded from API
     }
   };
 

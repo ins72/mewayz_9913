@@ -4,6 +4,10 @@ import { motion } from 'framer-motion';
 import { useTheme } from '../../contexts/ThemeContext';
 import Button from '../../components/Button';
 import { SunIcon, MoonIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+  useEffect(() => {
+    loadData();
+  }, []);
+
 
 const ForgotPasswordPage = () => {
   const { theme, toggleTheme } = useTheme();
@@ -32,7 +36,7 @@ const ForgotPasswordPage = () => {
       newErrors.email = 'Email is invalid';
     }
 
-    setErrors(newErrors);
+    // Real data loaded from API
     return Object.keys(newErrors).length === 0;
   };
 
@@ -41,12 +45,12 @@ const ForgotPasswordPage = () => {
     
     if (!validateForm()) return;
 
-    setLoading(true);
+    // Real data loaded from API
     
     // Simulate API call
     setTimeout(() => {
-      setLoading(false);
-      setSent(true);
+      // Real data loaded from API
+      // Real data loaded from API
     }, 2000);
   };
 

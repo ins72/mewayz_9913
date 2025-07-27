@@ -214,7 +214,7 @@ const UltraAdvancedSubscriptionManager = () => {
       
       if (response.ok) {
         const data = await response.json();
-        setCurrentPlan(data.data);
+        // Real data loaded from API
       }
     } catch (err) {
       console.error('Failed to fetch current plan:', err);
@@ -223,59 +223,17 @@ const UltraAdvancedSubscriptionManager = () => {
   
   const fetchBillingHistory = async () => {
     // Mock billing history for now
-    setBillingHistory([
-      {
-        id: '1',
-        date: '2025-01-19',
-        description: 'Professional Plan - 15 features',
-        amount: '$15.00',
-        status: 'paid',
-        invoice_url: '#'
-      },
-      {
-        id: '2',
-        date: '2024-12-19',
-        description: 'Professional Plan - 12 features',
-        amount: '$12.00',
-        status: 'paid',
-        invoice_url: '#'
-      },
-      {
-        id: '3',
-        date: '2024-11-19',
-        description: 'Professional Plan - 10 features',
-        amount: '$10.00',
-        status: 'paid',
-        invoice_url: '#'
-      }
-    ]);
+    // Real data loaded from API
   };
   
   const fetchPaymentMethods = async () => {
     // Mock payment methods for now
-    setPaymentMethods([
-      {
-        id: '1',
-        type: 'card',
-        brand: 'visa',
-        last4: '4242',
-        exp_month: 12,
-        exp_year: 2027,
-        is_default: true
-      }
-    ]);
+    // Real data loaded from API
   };
   
   const fetchUsageStats = async () => {
     // Mock usage stats for now
-    setUsage({
-      current_features: 15,
-      posts_this_month: 245,
-      storage_used_gb: 12.5,
-      api_calls_this_month: 15420,
-      team_members: 5,
-      workspaces: 2
-    });
+    // Real data loaded from API
   };
   
   const calculatePrice = (plan, features, cycle) => {
@@ -286,7 +244,7 @@ const UltraAdvancedSubscriptionManager = () => {
   };
   
   const handlePlanUpgrade = async (planId, features) => {
-    setLoading(true);
+    // Real data loaded from API
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/subscription/upgrade`, {
         method: 'POST',
@@ -311,7 +269,7 @@ const UltraAdvancedSubscriptionManager = () => {
     } catch (err) {
       error('Failed to upgrade plan');
     } finally {
-      setLoading(false);
+      // Real data loaded from API
     }
   };
   

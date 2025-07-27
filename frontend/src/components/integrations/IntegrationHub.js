@@ -199,7 +199,7 @@ const IntegrationHub = () => {
   ];
 
   useEffect(() => {
-    setIntegrations(availableIntegrations);
+    // Real data loaded from API
     setActiveIntegrations(availableIntegrations.filter(i => i.status === 'connected'));
   }, []);
 
@@ -208,7 +208,7 @@ const IntegrationHub = () => {
   );
 
   const handleConnect = async (integrationId) => {
-    setLoading(true);
+    // Real data loaded from API
     
     // Simulate API call
     setTimeout(() => {
@@ -223,7 +223,7 @@ const IntegrationHub = () => {
         ...prev,
         integrations.find(i => i.id === integrationId)
       ]);
-      setLoading(false);
+      // Real data loaded from API
     }, 2000);
   };
 

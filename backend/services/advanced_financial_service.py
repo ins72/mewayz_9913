@@ -344,10 +344,7 @@ class AdvancedFinancialService:
                 ]
             }
         }
-# Global service instance
-advanced_financial_service = AdvancedFinancialService()
 
-    
     async def _get_metric_from_db(self, metric_type: str, min_val: int = 0, max_val: int = 100):
         """Get metric from database instead of random generation"""
         try:
@@ -408,7 +405,6 @@ advanced_financial_service = AdvancedFinancialService()
         except:
             return min_val
 
-    
     async def _get_real_metric_from_db(self, metric_type: str, min_val, max_val):
         """Get real metrics from database"""
         try:
@@ -441,7 +437,7 @@ advanced_financial_service = AdvancedFinancialService()
                 return (min_val + max_val) // 2 if isinstance(min_val, int) else (min_val + max_val) / 2
         except:
             return (min_val + max_val) // 2 if isinstance(min_val, int) else (min_val + max_val) / 2
-    
+
     async def _get_real_choice_from_db(self, choices: list):
         """Get real choice based on database patterns"""
         try:
@@ -501,3 +497,6 @@ advanced_financial_service = AdvancedFinancialService()
             return items
         except:
             return items
+
+# Global service instance
+advanced_financial_service = AdvancedFinancialService()
